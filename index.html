@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AGM Sales — EXEED CRM</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
+</head>
+<body>
+  <button class="nav-fab" onclick="toggleSidebar()" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
+  <div class="nav-backdrop" onclick="closeSidebar()"></div>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">A</div>
+        <div class="sidebar-title">
+          <span class="sidebar-title-main">AGM Sales</span>
+          <span class="sidebar-title-sub">EXEED CRM</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
+        <a href="#" class="nav-item active">
+          <span class="material-symbols-outlined">home</span>
+          <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">task_alt</span>
+          <span>Activities</span>
+        </a>
+
+        <div class="nav-group-label">CALL CENTER</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">monitoring</span>
+          <span>Call Center Dashb…</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">person_add</span>
+          <span>Today's Leads</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">phone_callback</span>
+          <span>Callbacks</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">supervisor_account</span>
+          <span>Call Center Manag…</span>
+        </a>
+
+        <div class="nav-group-label">SALES</div>
+        <a href="lead-detail.html" class="nav-item">
+          <span class="material-symbols-outlined">leaderboard</span>
+          <span>Leads</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">handshake</span>
+          <span>Deals</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">request_quote</span>
+          <span>Quotes</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">directions_car</span>
+          <span>Test Drives</span>
+        </a>
+
+        <div class="nav-group-label">CUSTOMERS</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">business</span>
+          <span>Accounts</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">contacts</span>
+          <span>Contacts</span>
+        </a>
+
+        <div class="nav-group-label">OPERATIONS</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">admin_panel_settings</span>
+          <span>Sales Admin</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">payments</span>
+          <span>Payments</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">description</span>
+          <span>Documents</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">inventory</span>
+          <span>JAFZA Orders</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">build</span>
+          <span>Vehicle Prep</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">store</span>
+          <span>Vendors</span>
+        </a>
+
+        <div class="nav-group-label">DELIVERIES</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <span>Delivery Dashboard</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">today</span>
+          <span>Today's Deliveries</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">block</span>
+          <span>Readiness Blockers</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span>Completed Delive…</span>
+        </a>
+
+        <div class="nav-group-label">MANAGEMENT</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">storefront</span>
+          <span>Showroom Dashb…</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">add_circle</span>
+          <span>Add-on Penetration</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">warning</span>
+          <span>SLA & Exceptions</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">bar_chart</span>
+          <span>Team Performance</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">groups</span>
+          <span>Showroom Team</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-header">
+        <div class="page-breadcrumb">AGM &bull; EXEED</div>
+        <h1 class="page-title">Choose your view</h1>
+        <p class="page-subtitle">One connected order-to-delivery journey. Each role sees only the work they need to action next.</p>
+      </div>
+
+      <div class="journey-steps">
+        <a href="#frontline" class="journey-step">LEAD INTAKE</a>
+        <span class="journey-chevron material-symbols-outlined">chevron_right</span>
+        <a href="#frontline" class="journey-step">SALES ACTION</a>
+        <span class="journey-chevron material-symbols-outlined">chevron_right</span>
+        <a href="#frontline" class="journey-step">SHOWROOM ARRIVAL</a>
+        <span class="journey-chevron material-symbols-outlined">chevron_right</span>
+        <a href="#frontline" class="journey-step">DELIVERY HANDOVER</a>
+        <span class="journey-chevron material-symbols-outlined">chevron_right</span>
+        <a href="#backoffice" class="journey-step">BACK-OFFICE OPS</a>
+        <span class="journey-chevron material-symbols-outlined">chevron_right</span>
+        <a href="#management" class="journey-step">MANAGEMENT OVERSIGHT</a>
+      </div>
+
+      <!-- Section 1: Frontline Journey Roles -->
+      <section class="section" id="frontline">
+        <div class="section-header">
+          <div class="section-label"><span class="section-number">1</span> &middot; FRONTLINE JOURNEY ROLES</div>
+          <div class="section-trail">Lead &rarr; Test drive &rarr; Delivery</div>
+        </div>
+        <div class="card-grid card-grid-5">
+          <div class="role-card">
+            <div class="card-banner banner-blue">
+              <span class="material-symbols-outlined banner-icon">headset_mic</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Call Center Agent</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Action inbound leads, qualify customers with live call guidance, and hand over complete lead packs to sales.</p>
+              <ul class="card-stats">
+                <li>18 leads assigned</li>
+                <li>7 not actioned</li>
+                <li>5 callbacks due</li>
+                <li>3 ready for handover</li>
+              </ul>
+              <a href="call-center-agent.html" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+
+          <div class="role-card">
+            <div class="card-banner banner-amber">
+              <span class="material-symbols-outlined banner-icon">star</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Sales Executive</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Manage active leads, first contact, discovery, test drives, offers and customer follow-up.</p>
+              <ul class="card-stats">
+                <li>7 active leads</li>
+                <li>3 due today</li>
+                <li>2 SLA due soon</li>
+                <li>1 quote awaiting response</li>
+              </ul>
+              <a href="sales-executive.html" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+
+          <div class="role-card">
+            <div class="card-banner banner-light">
+              <span class="material-symbols-outlined banner-icon">groups</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Brand Host</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Manage today's arrivals, walk-ins, customer check-in, wait time and showroom handover.</p>
+              <ul class="card-stats">
+                <li>4 appointments</li>
+                <li>1 waiting</li>
+                <li>2 walk-ins</li>
+                <li>1 handover pending</li>
+              </ul>
+              <a href="brand-host.html" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+
+          <div class="role-card">
+            <div class="card-banner banner-light">
+              <span class="material-symbols-outlined banner-icon">search</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Delivery Specialist</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Own registration, insurance, vehicle inspection, delivery readiness and final handover execution.</p>
+              <ul class="card-stats">
+                <li>6 deliveries today</li>
+                <li>2 blocked</li>
+                <li>6 readiness blockers</li>
+                <li>1 open issue</li>
+              </ul>
+              <a href="delivery-consultant.html" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+
+          <div class="role-card">
+            <div class="card-banner banner-light">
+              <span class="material-symbols-outlined banner-icon">verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Showroom Manager</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Monitor showroom flow, SLA breaches, exceptions, team workload, add-on penetration and blockers.</p>
+              <ul class="card-stats">
+                <li>4 exceptions</li>
+                <li>1 SLA breached</li>
+                <li>3 waiting customers</li>
+                <li>2 approvals pending</li>
+              </ul>
+              <a href="#" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Back-Office Operations -->
+      <section class="section" id="backoffice">
+        <div class="section-header">
+          <div class="section-label"><span class="section-number">2</span> &middot; BACK-OFFICE OPERATIONS</div>
+          <div class="section-trail">Signed deal &rarr; Documents &rarr; Payments &rarr; Registration</div>
+        </div>
+        <div class="card-grid card-grid-2">
+          <div class="role-card">
+            <div class="card-banner banner-light">
+              <span class="material-symbols-outlined banner-icon">admin_panel_settings</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Sales Admin</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Manage signed deals, customer documents, JAFZA vehicle ordering, workshop prep, accessories, maintenance contracts and branch vendor coordination.</p>
+              <ul class="card-stats">
+                <li>12 deals awaiting document review</li>
+                <li>6 vehicles to order from JAFZA</li>
+                <li>4 workshop prep pending</li>
+                <li>3 vendor actions overdue</li>
+              </ul>
+              <a href="#" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+
+          <div class="role-card">
+            <div class="card-banner banner-light">
+              <span class="material-symbols-outlined banner-icon">receipt_long</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Cashier & Accounts Admin</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Validate payments, approve receipts, confirm cheques, release payment status and clear deals for registration.</p>
+              <ul class="card-stats">
+                <li>9 payments pending validation</li>
+                <li>3 cheques awaiting approval</li>
+                <li>2 payment exceptions</li>
+                <li>7 cleared for registration</li>
+              </ul>
+              <a href="#" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Management & Control -->
+      <section class="section" id="management">
+        <div class="section-header">
+          <div class="section-label"><span class="section-number">3</span> &middot; MANAGEMENT & CONTROL</div>
+          <div class="section-trail">Oversight &middot; SLA &middot; Coaching</div>
+        </div>
+        <div class="card-grid card-grid-3">
+          <div class="role-card">
+            <div class="card-banner banner-blue-tall">
+              <span class="material-symbols-outlined banner-icon">verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">Call Center Manager</h3>
+                <span class="material-symbols-outlined card-link-icon">open_in_new</span>
+              </div>
+              <p class="card-desc">Monitor all leads assigned to call center agents, call actioning, qualification quality, SLA risk and handover readiness.</p>
+              <ul class="card-stats">
+                <li>86 leads assigned today</li>
+                <li>24 not actioned</li>
+                <li>18 callbacks due</li>
+                <li>11 SLA overdue</li>
+                <li>32 ready for sales handover</li>
+              </ul>
+              <a href="call-center-manager.html" class="card-action">Open dashboard <span class="material-symbols-outlined">chevron_right</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="page-footer">
+        <a href="#" class="footer-link">
+          <span class="material-symbols-outlined">chevron_right</span>
+          Open print / PDF pack
+        </a>
+        <a href="#" class="footer-link">
+          <span class="material-symbols-outlined">chevron_right</span>
+          Open shareable HTML
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+
+  <script>
+    function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
+    function closeSidebar(){ document.body.classList.remove('sb-rail'); }
+  </script>
+</body>
+</html>

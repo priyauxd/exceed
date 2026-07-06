@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brand Host — AGM Sales EXEED CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --ink: #2d3340;
+      --ink-secondary: #6b7289;
+      --ink-muted: #9ea3b5;
+      --border: #eceef4;
+      --border-soft: #f1f2f7;
+      --blue: #17293d;
+      --blue-soft: #e9edf2;
+      --red: #e76e6e;
+      --red-soft: #fdf0f0;
+      --amber: #e8a84c;
+      --amber-soft: #fdf6eb;
+      --green: #5cb97f;
+      --green-soft: #edf8f1;
+      --purple: #8b7bdf;
+      --purple-soft: #f1effc;
+      --teal: #4fb8a8;
+      --teal-soft: #ecf8f6;
+      --sidebar-w: 228px;
+      --topbar-h: 42px;
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--ink);
+      font-size: 13px; line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .topbar {
+      height: var(--topbar-h);
+      background: linear-gradient(135deg, #0a0e14, #16293c);
+      color: #fff;
+      display: flex; align-items: center;
+      padding: 0 18px; gap: 12px;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      font-size: 13px;
+    }
+    .topbar .waffle { font-size: 16px; opacity: .7; cursor: pointer; }
+    .topbar .app-name { font-weight: 600; opacity: .95; }
+    .topbar .sep { width: 1px; height: 18px; background: rgba(255,255,255,.25); }
+    .topbar .org { opacity: .85; font-size: 12px; }
+    .topbar .search {
+      flex: 1; max-width: 360px; margin: 0 auto;
+      background: rgba(255,255,255,.15); border: none; border-radius: 8px;
+      padding: 6px 14px 6px 30px; color: #fff; font-size: 12px;
+      font-family: inherit; outline: none;
+    }
+    .topbar .search::placeholder { color: rgba(255,255,255,.6); }
+    .topbar .spacer { flex: 1; }
+    .topbar .actions { display: flex; align-items: center; gap: 12px; }
+    .topbar .copilot {
+      display: flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,.13); padding: 4px 10px;
+      border-radius: 6px; font-size: 11px; cursor: pointer;
+    }
+    .topbar .avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      display: grid; place-items: center; font-size: 10px; font-weight: 600;
+    }
+
+    .notif-bell {
+      position: relative; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 6px; transition: background .15s;
+    }
+    .notif-bell:hover { background: rgba(255,255,255,.15); }
+    .notif-bell .material-symbols-outlined { font-size: 18px; }
+    .notif-bell .bell-badge {
+      position: absolute; top: 1px; right: 0;
+      font-size: 9px; font-weight: 700; color: #fff;
+      background: var(--red); min-width: 16px; height: 16px;
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; padding: 0 4px;
+      border: 2px solid #16293c;
+    }
+
+    .notif-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 29;
+    }
+    .notif-dropdown {
+      display: none; position: fixed;
+      top: var(--topbar-h); right: 80px;
+      width: 400px; max-height: 480px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: 0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+      z-index: 30; overflow: hidden;
+      animation: dropdown-in .2s ease-out;
+    }
+    @keyframes dropdown-in { 0%{opacity:0;transform:translateY(-8px)} 100%{opacity:1;transform:translateY(0)} }
+    .notif-dropdown.open, .notif-overlay.open { display: block; }
+    .notif-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .notif-head-left {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+    }
+    .notif-head-left .material-symbols-outlined { font-size: 18px; color: var(--blue); }
+    .notif-badge {
+      font-size: 10px; font-weight: 700; color: #fff;
+      background: var(--red); padding: 2px 7px; border-radius: 8px;
+    }
+    .notif-actions button {
+      border: none; background: none; font-family: inherit;
+      font-size: 11px; color: var(--blue); cursor: pointer;
+      padding: 4px 10px; border-radius: 6px; font-weight: 600;
+    }
+    .notif-actions button:hover { background: var(--blue-soft); }
+    .notif-list { max-height: 380px; overflow-y: auto; }
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border-soft);
+      transition: background .1s; cursor: pointer;
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item:hover { background: #f5f7fd; }
+    .notif-item.unread { background: #f5f8ff; }
+    .notif-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+    .notif-item.unread .notif-dot { background: var(--blue); }
+    .ni-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .ni-icon.danger { background: var(--red-soft); color: var(--red); }
+    .ni-icon.warn { background: var(--amber-soft); color: var(--amber); }
+    .ni-icon.info { background: var(--blue-soft); color: var(--blue); }
+    .ni-icon.success { background: var(--green-soft); color: var(--green); }
+    .ni-icon .material-symbols-outlined { font-size: 15px; }
+    .ni-body { flex: 1; min-width: 0; }
+    .ni-title { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .ni-text { font-size: 11.5px; color: var(--ink-secondary); line-height: 1.5; }
+    .ni-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .ni-time { font-size: 10px; color: var(--ink-muted); }
+    .ni-action {
+      font-size: 10px; font-weight: 600; color: var(--blue);
+      text-decoration: none; padding: 2px 8px;
+      background: var(--blue-soft); border-radius: 4px;
+    }
+    .ni-dismiss {
+      border: none; background: none; color: var(--ink-muted);
+      font-size: 14px; cursor: pointer; opacity: 0;
+      transition: opacity .15s; flex-shrink: 0; padding: 0; margin-top: 2px;
+    }
+    .notif-item:hover .ni-dismiss { opacity: .6; }
+    .ni-dismiss:hover { opacity: 1 !important; }
+    .notif-footer {
+      padding: 10px 16px; border-top: 1px solid var(--border); text-align: center;
+    }
+    .notif-footer a { font-size: 12px; font-weight: 600; color: var(--blue); text-decoration: none; }
+
+    .shell { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: var(--sidebar-w); background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
+      overflow-y: auto; z-index: 10;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .sb-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .sb-logo {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: linear-gradient(135deg, #0a0e14, #16293c);
+      color: #fff; display: grid; place-items: center;
+      font-weight: 700; font-size: 13px;
+    }
+    .sb-name { font-weight: 600; font-size: 13px; line-height: 1.2; }
+    .sb-sub { font-size: 10px; color: var(--ink-muted); }
+    .sb-nav { padding: 8px; }
+    .sb-group {
+      font-size: 10px; font-weight: 600; color: var(--ink-muted);
+      padding: 14px 10px 4px; letter-spacing: .07em; text-transform: uppercase;
+    }
+    .sb-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; border-radius: 8px;
+      color: var(--ink-secondary); text-decoration: none;
+      font-size: 12.5px; transition: all .12s;
+      border-left: 2px solid transparent;
+    }
+    .sb-item:hover { background: var(--blue-soft); color: var(--blue); }
+    .sb-item.active {
+      background: var(--blue-soft); color: var(--blue);
+      font-weight: 600; border-left-color: var(--blue);
+    }
+    .sb-item .material-symbols-outlined { font-size: 18px; }
+
+    .main {
+      margin-left: var(--sidebar-w); margin-top: var(--topbar-h);
+      flex: 1; display: flex; flex-direction: column; min-width: 0;
+    }
+
+    .cmdbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 16px; height: 34px;
+      display: flex; align-items: center; gap: 3px;
+      font-size: 11px; color: var(--ink-muted); overflow-x: auto;
+    }
+    .cmdbar .ro {
+      font-size: 10px; color: var(--ink-muted);
+      padding: 3px 8px; background: var(--bg); border-radius: 4px; white-space: nowrap;
+    }
+    .cmd-sep { width: 1px; height: 14px; background: var(--border); margin: 0 3px; }
+    .cb {
+      display: flex; align-items: center; gap: 3px;
+      padding: 3px 6px; border: none; background: none;
+      color: var(--ink-muted); font-size: 11px; cursor: pointer;
+      border-radius: 4px; white-space: nowrap; font-family: inherit;
+    }
+    .cb:hover { background: var(--bg); color: var(--ink-secondary); }
+    .cb .material-symbols-outlined { font-size: 13px; }
+
+    .page { padding: 22px 28px 48px; }
+
+    .greeting { margin-bottom: 20px; }
+    .greeting-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--blue); margin-bottom: 4px;
+    }
+    .greeting h1 {
+      font-size: 24px; font-weight: 700; color: var(--ink);
+      letter-spacing: -.02em; margin-bottom: 4px;
+    }
+    .greeting-sub { font-size: 13.5px; color: var(--ink-secondary); }
+
+    .metrics-row {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      gap: 10px; margin-bottom: 18px;
+    }
+    .metric-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 16px;
+      transition: box-shadow .2s;
+    }
+    .metric-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .mc-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 8px; font-size: 15px;
+    }
+    .mc-icon.blue { background: var(--blue-soft); color: var(--blue); }
+    .mc-icon.amber { background: var(--amber-soft); color: var(--amber); }
+    .mc-icon.green { background: var(--green-soft); color: var(--green); }
+    .mc-icon.teal { background: var(--teal-soft); color: var(--teal); }
+    .mc-lbl {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 4px;
+    }
+    .mc-val { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+    .mc-val.txt-amber { color: var(--amber); }
+
+    .q-panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+    .q-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 18px; border-bottom: 1px solid var(--border);
+    }
+    .q-head h3 { font-size: 14px; font-weight: 700; }
+    .q-loc {
+      font-size: 11px; color: var(--ink-muted);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .q-loc .material-symbols-outlined { font-size: 14px; }
+    .qt-table { width: 100%; border-collapse: collapse; }
+    .qt-table th {
+      text-align: left; padding: 9px 14px;
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .07em;
+      color: var(--ink-muted); background: #fafbfd;
+      border-bottom: 1px solid var(--border);
+    }
+    .qt-table td {
+      padding: 11px 14px; font-size: 12.5px;
+      border-bottom: 1px solid var(--border-soft); vertical-align: middle;
+    }
+    .qt-table tbody tr { transition: background .1s; cursor: pointer; }
+    .qt-table tbody tr:hover { background: #f8f9fd; }
+    .qt-table tbody tr:last-child td { border-bottom: none; }
+    .qt-table tbody tr.urg { background: #fef7f7; }
+    .qt-table tbody tr.urg:hover { background: #fdf0f0; }
+
+    .st-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 10px; font-size: 10.5px; font-weight: 600;
+    }
+    .st-badge.blocked { background: var(--red-soft); color: var(--red); }
+    .st-badge.in-progress { background: var(--green-soft); color: #3d8a5b; }
+    .st-badge.pending { background: var(--bg); color: var(--ink-muted); }
+
+    .wait-time { font-size: 12px; font-weight: 600; color: var(--red); }
+    .wait-time .material-symbols-outlined { font-size: 14px; vertical-align: -2px; }
+
+    .next-action { font-weight: 600; text-decoration: none; font-size: 12px; }
+    .next-action.urgent { color: var(--red); }
+    .next-action.normal { color: var(--blue); }
+    .next-action:hover { text-decoration: underline; }
+    .open-arrow { color: var(--blue); font-weight: 600; font-size: 12px; text-decoration: none; }
+
+    @media (max-width: 1200px) {
+      .metrics-row { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── Collapsible icon-rail sidebar ── */
+    .sidebar, .main { transition: width .25s ease, margin-left .25s ease; }
+    .topbar .waffle { cursor: pointer; }
+    .sb-toggle { display: flex; align-items: center; gap: 9px; width: 100%; border: none; background: none; cursor: pointer; padding: 8px 10px; margin-bottom: 4px; color: var(--ink-secondary); border-radius: 8px; font-family: inherit; }
+    .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); }
+    .sb-toggle .material-symbols-outlined { font-size: 20px; }
+    body.sb-rail .sidebar { width: 60px; }
+    body.sb-rail .main { margin-left: 60px; }
+    body.sb-rail .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
+    body.sb-rail .sb-item .material-symbols-outlined { font-size: 18px; }
+    body.sb-rail .sb-group { display: none; }
+    body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
+    body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
+    body.sb-rail .sb-toggle { justify-content: center; padding: 8px 0; }
+    @media (max-width: 640px) { .topbar .search { display: none; } }
+  
+    /* ── Copilot assistant ── */
+    .copilot-ask { background: linear-gradient(135deg,#f7f7fd,#eef1f9); border:1px solid #e4e6f2; border-radius:12px; padding:14px 16px; margin-bottom:20px; }
+    .copilot-ask-head { display:flex; align-items:center; gap:8px; margin-bottom:11px; flex-wrap:wrap; }
+    .copilot-ask-badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:#5b54d6; letter-spacing:.04em; }
+    .copilot-ask-sub { font-size:11px; color:var(--ink-muted); }
+    .cp-pro { display:flex; align-items:flex-start; gap:10px; background:#f4f3ff; border:1px solid #e0ddf7; border-radius:8px; padding:10px 12px; margin-bottom:12px; }
+    .cp-pro > .material-symbols-outlined { color:#5b54d6; font-size:19px; flex-shrink:0; margin-top:1px; }
+    .cp-pro-body { flex:1; font-size:12.5px; color:var(--ink); line-height:1.55; }
+    .cp-pro-tag { font-size:9px; font-weight:700; letter-spacing:.05em; color:#5b54d6; background:#fff; border:1px solid #e0ddf7; border-radius:4px; padding:1px 6px; margin-right:6px; text-transform:uppercase; }
+    .cp-pro-action { flex-shrink:0; font-size:11.5px; font-weight:600; background:#5b54d6; color:#fff; border:none; border-radius:6px; padding:7px 13px; cursor:pointer; font-family:inherit; white-space:nowrap; text-decoration:none; display:inline-block; }
+    .cp-pro-action:hover { background:#4a43c4; }
+    .copilot-input-row { display:flex; gap:8px; align-items:center; }
+    .copilot-input { flex:1; border:1px solid var(--border); border-radius:8px; padding:9px 12px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; background:var(--surface); }
+    .copilot-input:focus { border-color:#5b54d6; box-shadow:0 0 0 3px rgba(91,84,214,.12); }
+    .copilot-send { border:none; background:var(--blue); color:#fff; border-radius:8px; padding:9px 15px; font-size:12.5px; font-weight:600; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:5px; }
+    .copilot-send:hover { filter:brightness(1.15); }
+    .copilot-chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+    .copilot-chip { font-size:11.5px; color:var(--ink-secondary); background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:5px 12px; cursor:pointer; transition:all .12s; }
+    .copilot-chip:hover { border-color:#5b54d6; color:#5b54d6; background:#f4f3ff; }
+    .copilot-answer { margin-top:12px; background:var(--surface); border:1px solid #e4e6f2; border-radius:8px; padding:13px 15px; display:none; }
+    .copilot-answer.show { display:block; animation:cop-in .25s ease; }
+    @keyframes cop-in { from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:none;} }
+    .copilot-answer-head { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:#5b54d6; margin-bottom:8px; letter-spacing:.04em; }
+    .copilot-answer-body { font-size:12.5px; color:var(--ink); line-height:1.6; }
+    .copilot-answer-actions { margin-top:11px; display:flex; gap:8px; flex-wrap:wrap; }
+    .copilot-answer-actions button { font-size:11.5px; font-weight:600; border:1px solid var(--border); background:var(--surface); color:var(--ink-secondary); border-radius:6px; padding:6px 12px; cursor:pointer; font-family:inherit; }
+    .copilot-answer-actions button.primary { background:#5b54d6; color:#fff; border-color:#5b54d6; }
+    .copilot-answer-cite { margin-top:10px; font-size:10.5px; color:var(--ink-muted); display:flex; align-items:center; gap:5px; border-top:1px solid var(--border); padding-top:8px; }
+  
+    /* ── Copilot dropdown ── */
+    .copilot-dd-overlay { position: fixed; inset: 0; z-index: 45; display: none; }
+    .copilot-dd-overlay.open { display: block; }
+    .copilot-dd { position: fixed !important; top: calc(var(--topbar-h) + 6px); right: 14px; width: 420px; max-width: calc(100vw - 24px); max-height: calc(100vh - var(--topbar-h) - 20px); overflow-y: auto; background: #fff !important; border: 1px solid #e4e6f2; box-shadow: 0 16px 48px rgba(20,24,34,.22); margin: 0 !important; z-index: 46; display: none; }
+    .copilot-dd.open { display: block; animation: cop-in .2s ease; }
+    .copilot-dd-close { margin-left: auto; border: none; background: none; font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 0 2px; }
+    .copilot-dd-close:hover { color: var(--ink); }
+    .topbar .copilot { cursor: pointer; }
+  
+    .greeting .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
+    @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
+    .greeting-sub .date { font-weight: 600; color: var(--ink); }
+    </style>
+</head>
+<body>
+  <div class="copilot-dd-overlay open" id="copilotOverlay" onclick="toggleCopilot()"></div>
+  <div class="nav-backdrop" onclick="closeSidebar()"></div>
+
+  <div class="topbar">
+    <span class="waffle" onclick="toggleSidebar()">&#9783;</span>
+    <span class="app-name">Dynamics 365</span>
+    <span class="sep"></span>
+    <img src="logo.png" alt="Al Ghurair" class="tb-logo" style="height:20px;width:auto;display:block;opacity:.95" /><span class="sep"></span><span class="org">AGM Sales</span>
+    <input class="search" type="text" placeholder="&#128269; Search..." />
+    <span class="spacer"></span>
+    <div class="actions">
+      <div class="copilot" id="copilotBtn" onclick="toggleCopilot()">&#10024; Copilot</div>
+      <span style="opacity:.7;font-size:14px">&#9881;</span>
+      <div class="notif-bell" id="bellBtn" onclick="toggleNotif()">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="bell-badge" id="bellBadge">2</span>
+      </div>
+      <span style="opacity:.7;font-size:14px">&#10067;</span>
+      <div class="avatar">ES</div>
+    </div>
+  </div>
+
+  <div class="notif-overlay" id="notifOverlay" onclick="toggleNotif()"></div>
+  <div class="notif-dropdown" id="notifDropdown">
+    <div class="notif-head">
+      <div class="notif-head-left">
+        <span class="material-symbols-outlined">notifications</span>
+        Notifications
+        <span class="notif-badge" id="notifBadge">2</span>
+      </div>
+      <div class="notif-actions"><button onclick="markAllRead()">Mark all read</button></div>
+    </div>
+    <div class="notif-list">
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon warn"><span class="material-symbols-outlined">schedule</span></div>
+        <div class="ni-body">
+          <div class="ni-title">Customer waiting 4 min &mdash; Hiren Patel</div>
+          <div class="ni-text">Test drive appointment at 11:00. Mariam Saeed not yet notified.</div>
+          <div class="ni-meta"><span class="ni-time">4 min ago</span><a href="#" class="ni-action">Notify exec</a></div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon info"><span class="material-symbols-outlined">person</span></div>
+        <div class="ni-body">
+          <div class="ni-title">Walk-in arrived &mdash; Omar Bilal</div>
+          <div class="ni-text">No appointment. Needs exec assignment for quote enquiry.</div>
+          <div class="ni-meta"><span class="ni-time">12 min ago</span><a href="#" class="ni-action">Assign exec</a></div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+    </div>
+    <div class="notif-footer"><a href="#">View all notifications</a></div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-logo">A</div>
+        <div><span class="sb-name">AGM Sales</span><br><span class="sb-sub">EXEED CRM</span></div>
+      </div>
+      <nav class="sb-nav">
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
+        <a href="index.html" class="sb-item"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="#" class="sb-item active"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">task_alt</span>Activities</a>
+        <div class="sb-group">Call Center</div>
+        <a href="call-center-agent.html" class="sb-item"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today&rsquo;s Leads</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Callbacks</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manag&hellip;</a>
+        <div class="sb-group">Sales</div>
+        <a href="lead-detail.html" class="sb-item"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">handshake</span>Deals</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">request_quote</span>Quotes</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Test Drives</a>
+        <div class="sb-group">Customers</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">business</span>Accounts</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">contacts</span>Contacts</a>
+        <div class="sb-group">Operations</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">admin_panel_settings</span>Sales Admin</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">payments</span>Payments</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">description</span>Documents</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">inventory</span>JAFZA Orders</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">build</span>Vehicle Prep</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">store</span>Vendors</a>
+        <div class="sb-group">Deliveries</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">local_shipping</span>Delivery Dashboard</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">today</span>Today&rsquo;s Deliveries</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">block</span>Readiness Blockers</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">check_circle</span>Completed Delive&hellip;</a>
+        <div class="sb-group">Management</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">storefront</span>Showroom Dashb&hellip;</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">add_circle</span>Add-on Penetration</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">warning</span>SLA &amp; Exceptions</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">bar_chart</span>Team Performance</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">groups</span>Showroom Team</a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <div class="cmdbar">
+        <span class="ro"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle">info</span> Read-only &middot; Status: <b>Qualified</b></span>
+        <div class="cmd-sep"></div>
+        <button class="cb"><span class="material-symbols-outlined">arrow_back</span></button>
+        <button class="cb"><span class="material-symbols-outlined">share</span></button>
+        <div class="cmd-sep"></div>
+        <button class="cb"><span class="material-symbols-outlined">person_add</span> Assign</button>
+        <button class="cb"><span class="material-symbols-outlined">block</span> Disqualify</button>
+        <button class="cb"><span class="material-symbols-outlined">forward_to_inbox</span> Assign Lead To Sales E&hellip;</button>
+        <button class="cb"><span class="material-symbols-outlined">replay</span> Reactivate Lead</button>
+        <button class="cb"><span class="material-symbols-outlined">refresh</span> Refresh</button>
+        <button class="cb"><span class="material-symbols-outlined">lock</span> Check Access</button>
+        <button class="cb"><span class="material-symbols-outlined">account_tree</span> Process</button>
+        <button class="cb"><span class="material-symbols-outlined">bookmark</span> Follow</button>
+        <button class="cb"><span class="material-symbols-outlined">bolt</span> Flow</button>
+        <button class="cb"><span class="material-symbols-outlined">more_horiz</span></button>
+        <button class="cb" style="margin-left:auto"><span class="material-symbols-outlined">ios_share</span> Share</button>
+      </div>
+
+      <div class="page">
+        <div class="greeting" style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <h1>Good afternoon, Layla <span class="wave">&#128075;</span></h1>
+            <div class="greeting-sub"><span class="date">Tuesday, 30 Jun 2026</span> &middot; <strong>4 appointments</strong> today, <strong style="color:var(--red)">1 customer waiting</strong> and 1 walk-in on the floor.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+            <button class="btn-soft" onclick="doRefresh(this)" style="padding:7px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:11px;color:var(--ink-secondary);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px"><span class="material-symbols-outlined" style="font-size:14px">refresh</span> Refresh</button>
+            <span class="last-refreshed" id="lastRefreshed" style="font-size:11px;color:var(--ink-muted);white-space:nowrap"></span>
+          </div>
+        </div>
+
+        <!-- Ask Copilot -->
+        <div class="copilot-ask copilot-dd open" id="copilotDD">
+          <div class="copilot-ask-head">
+            <span class="copilot-ask-badge">&#10024; COPILOT</span>
+            <span class="copilot-ask-sub">Grounded on your dashboard &middot; updated just now</span>
+            <button class="copilot-dd-close" onclick="toggleCopilot()" aria-label="Close">&times;</button>
+          </div>
+          <div class="cp-pro">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <div class="cp-pro-body"><span class="cp-pro-tag">Proactive</span><strong>Hiren Patel</strong> has waited 4 min for his 11:00 test drive and his exec (Mariam) hasn&rsquo;t been notified. Notify now to protect the greet-on-arrival SLA.</div>
+            <a href="lead-detail.html?lead=Hiren+Patel" class="cp-pro-action">Notify exec</a>
+          </div>
+          <div class="copilot-input-row">
+            <input class="copilot-input" id="copilotInput" placeholder="Ask about the floor… e.g. who's waiting?" onkeydown="if(event.key==='Enter')askCopilot()" />
+            <button class="copilot-send" onclick="askCopilot()"><span class="material-symbols-outlined" style="font-size:16px">send</span> Ask</button>
+          </div>
+          <div class="copilot-chips"><span class="copilot-chip" onclick="askCopilot('waiting')">Who's waiting?</span><span class="copilot-chip" onclick="askCopilot('prep')">What should I prepare next?</span><span class="copilot-chip" onclick="askCopilot('assign')">Any unassigned arrivals?</span></div>
+          <div class="copilot-answer" id="copilotAnswer">
+            <div class="copilot-answer-head"><span class="material-symbols-outlined" style="font-size:14px">auto_awesome</span> COPILOT</div>
+            <div class="copilot-answer-body" id="copilotAnswerBody"></div>
+            <div class="copilot-answer-actions" id="copilotAnswerActions"></div>
+            <div class="copilot-answer-cite" id="copilotAnswerCite"></div>
+          </div>
+        </div>
+
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="mc-icon blue"><span class="material-symbols-outlined">event</span></div>
+            <div class="mc-lbl">Appointments Today</div>
+            <div class="mc-val">4</div>
+          </div>
+          <div class="metric-card">
+            <div class="mc-icon blue"><span class="material-symbols-outlined">group</span></div>
+            <div class="mc-lbl">Expected Arrivals</div>
+            <div class="mc-val">2</div>
+          </div>
+          <div class="metric-card">
+            <div class="mc-icon amber"><span class="material-symbols-outlined">directions_walk</span></div>
+            <div class="mc-lbl">Walk-ins</div>
+            <div class="mc-val">1</div>
+          </div>
+          <div class="metric-card">
+            <div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div>
+            <div class="mc-lbl">Waiting Now</div>
+            <div class="mc-val txt-amber">1</div>
+          </div>
+          <div class="metric-card">
+            <div class="mc-icon green"><span class="material-symbols-outlined">directions_car</span></div>
+            <div class="mc-lbl">Test Drives</div>
+            <div class="mc-val">2</div>
+          </div>
+          <div class="metric-card">
+            <div class="mc-icon teal"><span class="material-symbols-outlined">local_shipping</span></div>
+            <div class="mc-lbl">Deliveries Today</div>
+            <div class="mc-val">1</div>
+          </div>
+        </div>
+
+        <div class="q-panel">
+          <div class="q-head">
+            <h3>Today&rsquo;s arrivals</h3>
+            <div class="q-loc"><span class="material-symbols-outlined">location_on</span> SZR &mdash; Sheikh Zayed Road</div>
+          </div>
+          <table class="qt-table">
+            <thead><tr>
+              <th>Time</th><th>Customer</th><th>Purpose</th><th>Assigned Exec</th><th>Status</th><th>Wait</th><th>Next Action</th><th></th>
+            </tr></thead>
+            <tbody>
+              <tr class="urg">
+                <td>11:00</td>
+                <td><strong>Hiren Patel</strong></td>
+                <td>Test Drive</td>
+                <td>Mariam Saeed</td>
+                <td><span class="st-badge blocked">Blocked</span></td>
+                <td><span class="wait-time"><span class="material-symbols-outlined">timer</span> 4 min</span></td>
+                <td><a href="lead-detail.html?lead=Hiren+Patel" class="next-action urgent">Notify exec &mdash; customer waiting</a></td>
+                <td><a href="lead-detail.html?lead=Hiren+Patel" class="open-arrow">Open &rarr;</a></td>
+              </tr>
+              <tr>
+                <td>11:15</td>
+                <td><strong>Omar Bilal</strong></td>
+                <td>Quote</td>
+                <td>Unassigned</td>
+                <td><span class="st-badge in-progress">In progress</span></td>
+                <td>&mdash;</td>
+                <td><a href="lead-detail.html?lead=Omar+Bilal" class="next-action normal">Check-in &amp; assign exec</a></td>
+                <td><a href="lead-detail.html?lead=Omar+Bilal" class="open-arrow">Open &rarr;</a></td>
+              </tr>
+              <tr>
+                <td>16:00</td>
+                <td><strong>Linda George</strong></td>
+                <td>Delivery</td>
+                <td>Mariam Saeed</td>
+                <td><span class="st-badge pending">Pending</span></td>
+                <td>&mdash;</td>
+                <td><a href="lead-detail.html?lead=Linda+George" class="next-action normal">Prepare welcome</a></td>
+                <td><a href="lead-detail.html?lead=Linda+George" class="open-arrow">Open &rarr;</a></td>
+              </tr>
+              <tr>
+                <td>14:30</td>
+                <td><strong>Maya Hassan</strong></td>
+                <td>Visit</td>
+                <td>Omar Al Khoury</td>
+                <td><span class="st-badge pending">Pending</span></td>
+                <td>&mdash;</td>
+                <td><a href="lead-detail.html?lead=Maya+Hassan" class="next-action normal">Prepare welcome</a></td>
+                <td><a href="lead-detail.html?lead=Maya+Hassan" class="open-arrow">Open &rarr;</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleNotif() {
+      document.getElementById('notifDropdown').classList.toggle('open');
+      document.getElementById('notifOverlay').classList.toggle('open');
+    }
+    function markAllRead() {
+      document.querySelectorAll('.notif-item.unread').forEach(n => n.classList.remove('unread'));
+      updateBadge();
+    }
+    function dismissNotif(btn) {
+      const item = btn.closest('.notif-item');
+      item.style.transition = 'all .2s';
+      item.style.opacity = '0';
+      item.style.maxHeight = '0';
+      item.style.padding = '0 16px';
+      setTimeout(() => { item.remove(); updateBadge(); }, 200);
+    }
+    function updateBadge() {
+      const count = document.querySelectorAll('.notif-item.unread').length;
+      const bb = document.getElementById('bellBadge');
+      const nb = document.getElementById('notifBadge');
+      if (count > 0) { bb.textContent = count; nb.textContent = count; bb.style.display = ''; nb.style.display = ''; }
+      else { bb.style.display = 'none'; nb.style.display = 'none'; }
+    }
+  </script>
+
+
+  <script>
+    function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
+    function closeSidebar(){ document.body.classList.remove('sb-rail'); }
+  </script>
+
+  <script>
+    function doRefresh(btn){
+      var el=document.getElementById('lastRefreshed');
+      var t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      if(el) el.textContent='Last refreshed '+t;
+      if(btn){var i=btn.querySelector('.material-symbols-outlined');if(i){i.style.transition='transform .6s ease';i.style.transform='rotate(360deg)';setTimeout(function(){i.style.transition='none';i.style.transform='none';},650);}}
+    }
+    (function(){var el=document.getElementById('lastRefreshed');if(el)el.textContent='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
+  </script>
+
+  <script>
+    var copilotLabels = {"waiting": "Who's waiting and for how long?", "prep": "What should I prepare next?", "assign": "Any unassigned arrivals?"};
+    var copilotAnswers = {"waiting": {"body": "<strong>1 customer waiting:</strong> Hiren Patel (11:00 test drive, 4 min &mdash; exec not notified, blocked). Notify Mariam immediately. Next arrival: Omar Bilal (11:15, quote, unassigned).", "cite": "Based on: Today\u2019s arrivals \u00b7 wait times", "actions": ["Notify exec", "Open arrivals"]}, "prep": {"body": "Prepare for: <strong>Linda George</strong> delivery at 16:00 (welcome pack) and <strong>Maya Hassan</strong> visit at 14:30. Pre-stage refreshments and confirm the assigned exec is on the floor.", "cite": "Based on: Today\u2019s arrivals \u00b7 upcoming", "actions": ["View schedule"]}, "assign": {"body": "<strong>1 unassigned arrival:</strong> Omar Bilal (11:15, quote). Check him in and assign an available sales exec to avoid a wait-time breach.", "cite": "Based on: Arrivals \u00b7 Assigned Exec = Unassigned", "actions": ["Check in &amp; assign", "Open"]}};
+    function copilotMatch(q){ q=(q||'').toLowerCase(); if(/assign|unassigned/.test(q)) return 'assign'; if(/prep|prepare|next|welcome/.test(q)) return 'prep'; return 'waiting'; }
+
+    function toggleCopilot(){ var dd=document.getElementById('copilotDD'),ov=document.getElementById('copilotOverlay'); var o=dd.classList.toggle('open'); if(ov)ov.classList.toggle('open',o); }
+    function copilotRender(intent){
+      var a=copilotAnswers[intent]; if(!a) return;
+      document.getElementById('copilotAnswerBody').innerHTML=a.body;
+      document.getElementById('copilotAnswerCite').innerHTML='<span class="material-symbols-outlined" style="font-size:12px">database</span> '+a.cite;
+      document.getElementById('copilotAnswerActions').innerHTML=a.actions.map(function(x,i){return '<button class="'+(i===0?'primary':'')+'">'+x+'</button>';}).join('');
+      document.getElementById('copilotAnswer').classList.add('show');
+    }
+    function askCopilot(intent){
+      var input=document.getElementById('copilotInput');
+      if(typeof intent==='string' && copilotAnswers[intent]){ input.value=copilotLabels[intent]||input.value; }
+      else { intent=copilotMatch(input.value); }
+      copilotRender(intent);
+    }
+  </script>
+</body>
+</html>

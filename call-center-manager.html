@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Call Center Manager — AGM Sales</title>
+  <link rel="stylesheet" href="d365-shell.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
+  <style>
+    .dash-header { display: flex; align-items: flex-start; justify-content: space-between; }
+    .dash-header-left { flex: 1; }
+
+    .alert-banner-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .alert-banner-flex .alert-left { flex: 1; }
+    .alert-banner-flex .alert-left .alert-detail {
+      font-size: 12px;
+      color: var(--d365-text-secondary);
+      margin-top: 2px;
+    }
+    .alert-banner-flex .alert-sub {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .agent-table .data-table td { font-size: 12px; padding: 8px 10px; }
+    .agent-table .data-table th { font-size: 9px; padding: 6px 10px; }
+    .agent-name { font-weight: 600; font-size: 12px; }
+    .agent-shift { font-size: 10px; color: var(--d365-text-muted); display: block; }
+
+    .cell-red { background: var(--d365-red-light); color: var(--d365-red); font-weight: 600; }
+    .cell-center { text-align: center; }
+
+    .quality-score { font-weight: 700; font-size: 13px; }
+    .quality-high { color: var(--d365-green); }
+    .quality-mid { color: var(--d365-orange); }
+    .quality-low { color: var(--d365-red); }
+
+    .manager-action { font-size: 11px; color: var(--d365-blue); }
+
+    .lead-table .data-table td { font-size: 12px; padding: 8px 10px; }
+    .lead-table .data-table th { font-size: 9px; padding: 6px 10px; }
+
+    .source-campaign { font-size: 11px; color: var(--d365-text-secondary); }
+
+    .open-link {
+      color: var(--d365-blue);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .open-link:hover { text-decoration: underline; }
+
+    .bottom-panels .panel { margin-bottom: 0; }
+
+    .qa-panel { margin-top: 16px; }
+    .qa-panel .data-table td { font-size: 12px; padding: 8px 10px; }
+    .qa-panel .data-table th { font-size: 9px; padding: 6px 10px; }
+
+    .filter-bar { flex-wrap: wrap; }
+
+    /* ── Ask Copilot ── */
+    .copilot-ask { background: linear-gradient(135deg, #f6f7fc, #eef1f9); border: 1px solid #e2e7f2; border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+    .copilot-ask-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .copilot-ask-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: #5b54d6; letter-spacing: .04em; }
+    .copilot-ask-sub { font-size: 11px; color: var(--d365-text-muted); }
+    .cp-pro { display: flex; align-items: flex-start; gap: 10px; background: #f4f3ff; border: 1px solid #e0ddf7; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+    .cp-pro > .material-symbols-outlined { color: #5b54d6; font-size: 19px; flex-shrink: 0; margin-top: 1px; }
+    .cp-pro-body { flex: 1; font-size: 12.5px; color: var(--d365-text); line-height: 1.55; }
+    .cp-pro-tag { font-size: 9px; font-weight: 700; letter-spacing: .05em; color: #5b54d6; background: #fff; border: 1px solid #e0ddf7; border-radius: 4px; padding: 1px 6px; margin-right: 6px; text-transform: uppercase; }
+    .cp-pro-action { flex-shrink: 0; font-size: 11.5px; font-weight: 600; background: #5b54d6; color: #fff; border: none; border-radius: 6px; padding: 7px 13px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .cp-pro-action:hover { background: #4a43c4; }
+    .copilot-input-row { display: flex; gap: 8px; align-items: center; }
+    .copilot-input { flex: 1; border: 1px solid var(--d365-border); border-radius: 8px; padding: 9px 12px; font-size: 13px; font-family: inherit; color: var(--d365-text); outline: none; background: #fff; }
+    .copilot-input:focus { border-color: #5b54d6; box-shadow: 0 0 0 3px rgba(91,84,214,.12); }
+    .copilot-send { border: none; background: #17293d; color: #fff; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; }
+    .copilot-send:hover { background: #0f1d2c; }
+    .copilot-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .copilot-chip { font-size: 11.5px; color: var(--d365-text-secondary); background: #fff; border: 1px solid var(--d365-border); border-radius: 16px; padding: 5px 12px; cursor: pointer; transition: all .12s; }
+    .copilot-chip:hover { border-color: #5b54d6; color: #5b54d6; background: #f4f3ff; }
+    .copilot-answer { margin-top: 12px; background: #fff; border: 1px solid #e2e7f2; border-radius: 8px; padding: 14px 16px; display: none; }
+    .copilot-answer.show { display: block; animation: cop-in .25s ease; }
+    @keyframes cop-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    .copilot-answer-head { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #5b54d6; margin-bottom: 8px; letter-spacing: .04em; }
+    .copilot-answer-body { font-size: 13px; color: var(--d365-text); line-height: 1.65; }
+    .copilot-answer-actions { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .copilot-answer-actions button { font-size: 11.5px; font-weight: 600; border: 1px solid var(--d365-border); background: #fff; color: var(--d365-text-secondary); border-radius: 6px; padding: 6px 12px; cursor: pointer; font-family: inherit; }
+    .copilot-answer-actions button.primary { background: #5b54d6; color: #fff; border-color: #5b54d6; }
+    .copilot-answer-cite { margin-top: 10px; font-size: 10.5px; color: var(--d365-text-muted); display: flex; align-items: center; gap: 5px; border-top: 1px solid var(--d365-border); padding-top: 8px; }
+
+    /* ── Copilot dropdown ── */
+    .copilot-dd-overlay { position: fixed; inset: 0; z-index: 45; display: none; }
+    .copilot-dd-overlay.open { display: block; }
+    .copilot-dd { position: fixed !important; top: 46px; right: 14px; width: 420px; max-width: calc(100vw - 24px); max-height: calc(100vh - 60px); overflow-y: auto; background: #fff !important; box-shadow: 0 16px 48px rgba(20,24,34,.22); margin: 0 !important; z-index: 46; display: none; }
+    .copilot-dd.open { display: block; animation: cop-in .2s ease; }
+    .copilot-dd-close { margin-left: auto; border: none; background: none; font-size: 20px; line-height: 1; color: var(--d365-text-muted); cursor: pointer; padding: 0 2px; }
+    .copilot-dd-close:hover { color: var(--d365-text); }
+    .topbar .copilot-btn { cursor: pointer; }
+  
+    .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
+    @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
+    .dash-subtitle .date { font-weight: 600; color: var(--d365-text); }
+    </style>
+</head>
+<body>
+  <div class="copilot-dd-overlay open" id="copilotOverlay" onclick="toggleCopilot()"></div>
+  <div class="nav-backdrop" onclick="closeSidebar()"></div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <span class="waffle" onclick="toggleSidebar()">&#9783;</span>
+    <span class="app-name">Dynamics 365</span>
+    <span class="divider"></span>
+    <img src="logo.png" alt="Al Ghurair" class="tb-logo" style="height:20px;width:auto;display:block;opacity:.95" /><span class="divider"></span><span class="org-name">AGM Sales</span>
+    <input class="search-box" placeholder="Search..." />
+    <span class="spacer"></span>
+    <div class="top-actions">
+      <div class="copilot-btn" id="copilotBtn" onclick="toggleCopilot()">&#10024; Copilot</div>
+      <span>&#9881;</span>
+      <span>&#128276;</span>
+      <div class="avatar">ES</div>
+    </div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">A</div>
+        <div class="sidebar-title">
+          <span class="sidebar-title-main">AGM Sales</span>
+          <span class="sidebar-title-sub">EXEED CRM</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">home</span>
+          <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">task_alt</span>
+          <span>Activities</span>
+        </a>
+
+        <div class="nav-group-label">CALL CENTER</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">monitoring</span>
+          <span>Call Center Dashb...</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">person_add</span>
+          <span>Today's Leads</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">phone_callback</span>
+          <span>Callbacks</span>
+        </a>
+        <a href="call-center-manager.html" class="nav-item active">
+          <span class="material-symbols-outlined">supervisor_account</span>
+          <span>Call Center Manag...</span>
+        </a>
+
+        <div class="nav-group-label">SALES</div>
+        <a href="lead-detail.html" class="nav-item">
+          <span class="material-symbols-outlined">leaderboard</span>
+          <span>Leads</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">handshake</span>
+          <span>Deals</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">request_quote</span>
+          <span>Quotes</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">directions_car</span>
+          <span>Test Drives</span>
+        </a>
+
+        <div class="nav-group-label">CUSTOMERS</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">business</span>
+          <span>Accounts</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">contacts</span>
+          <span>Contacts</span>
+        </a>
+
+        <div class="nav-group-label">OPERATIONS</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">admin_panel_settings</span>
+          <span>Sales Admin</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">payments</span>
+          <span>Payments</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">description</span>
+          <span>Documents</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">inventory</span>
+          <span>JAFZA Orders</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">build</span>
+          <span>Vehicle Prep</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">store</span>
+          <span>Vendors</span>
+        </a>
+
+        <div class="nav-group-label">DELIVERIES</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">local_shipping</span>
+          <span>Delivery Dashboard</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">today</span>
+          <span>Today's Deliveries</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">block</span>
+          <span>Readiness Blockers</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">check_circle</span>
+          <span>Completed Delive...</span>
+        </a>
+
+        <div class="nav-group-label">MANAGEMENT</div>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">storefront</span>
+          <span>Showroom Dashb...</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">add_circle</span>
+          <span>Add-on Penetration</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">warning</span>
+          <span>SLA &amp; Exceptions</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">bar_chart</span>
+          <span>Team Performance</span>
+        </a>
+        <a href="#" class="nav-item">
+          <span class="material-symbols-outlined">groups</span>
+          <span>Showroom Team</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Area -->
+    <div class="main-area">
+      <div class="command-bar">
+        <span class="read-only">Read-only view</span>
+        <div class="cmd-sep"></div>
+        <button class="cmd-btn"><span class="material-symbols-outlined" style="font-size:14px">download</span> Export</button>
+        <button class="cmd-btn"><span class="material-symbols-outlined" style="font-size:14px">print</span> Print</button>
+        <button class="cmd-btn"><span class="material-symbols-outlined" style="font-size:14px">share</span> Share</button>
+      </div>
+
+      <div class="page-content">
+
+        <!-- Dashboard Header -->
+        <div class="dash-header">
+          <div class="dash-header-left">
+            <div class="dash-role">CALL CENTER MANAGER</div>
+            <div class="dash-title">Good afternoon, Eman <span class="wave">&#128075;</span></div>
+            <div class="dash-subtitle"><span class="date">Tuesday, 30 Jun 2026</span> &middot; <strong>86 leads</strong> assigned across 6 agents &middot; <strong style="color:var(--d365-red)">24 not actioned</strong> and <strong style="color:var(--d365-red)">11 SLA-overdue</strong> need attention.</div>
+          </div>
+          <div class="dash-header-actions">
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px"><button class="btn-outline" onclick="doRefresh(this)">&#8635; Refresh</button><span class="last-refreshed" id="lastRefreshed" style="font-size:11px;color:var(--d365-text-muted);white-space:nowrap"></span></div>
+          </div>
+        </div>
+
+        <!-- Ask Copilot -->
+        <div class="copilot-ask copilot-dd open" id="copilotDD">
+          <div class="copilot-ask-head">
+            <span class="copilot-ask-badge">&#10024; ASK COPILOT</span>
+            <span class="copilot-ask-sub">Grounded on this dashboard &middot; live call-center data</span>
+            <button class="copilot-dd-close" onclick="toggleCopilot()" aria-label="Close">&times;</button>
+          </div>
+          <div class="cp-pro">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <div class="cp-pro-body"><span class="cp-pro-tag">Proactive</span><strong>Agent A &middot; Ahmed</strong> has 11 uncalled leads and 3 breach within 10 min. Reassigning 7 to Nadia keeps the team within SLA.</div>
+            <button class="cp-pro-action" onclick="askCopilot('reassign')">Show plan</button>
+          </div>
+          <div class="copilot-input-row">
+            <input class="copilot-input" id="copilotInput" placeholder="Ask about your call center… e.g. which agents are at SLA risk?" onkeydown="if(event.key==='Enter')askCopilot()" />
+            <button class="copilot-send" onclick="askCopilot()"><span class="material-symbols-outlined" style="font-size:16px">send</span> Ask</button>
+          </div>
+          <div class="copilot-chips">
+            <span class="copilot-chip" onclick="askCopilot('sla')">Who&rsquo;s at SLA risk?</span>
+            <span class="copilot-chip" onclick="askCopilot('quality')">Which agents are below 70% quality?</span>
+            <span class="copilot-chip" onclick="askCopilot('reassign')">Where should I rebalance workload?</span>
+            <span class="copilot-chip" onclick="askCopilot('summary')">Summarize today&rsquo;s performance</span>
+            <span class="copilot-chip" onclick="askCopilot('returns')">Why are leads returned by sales?</span>
+          </div>
+          <div class="copilot-answer" id="copilotAnswer">
+            <div class="copilot-answer-head"><span class="material-symbols-outlined" style="font-size:14px">auto_awesome</span> COPILOT</div>
+            <div class="copilot-answer-body" id="copilotAnswerBody"></div>
+            <div class="copilot-answer-actions" id="copilotAnswerActions"></div>
+            <div class="copilot-answer-cite" id="copilotAnswerCite"></div>
+          </div>
+        </div>
+
+        <!-- KPI Row 1 -->
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="kpi-label">Assigned Today</div>
+            <div class="kpi-value">86</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Actioned</div>
+            <div class="kpi-value">62</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Not Actioned</div>
+            <div class="kpi-value red">24</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">In Call</div>
+            <div class="kpi-value">5</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Connected</div>
+            <div class="kpi-value">41</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">No Answer</div>
+            <div class="kpi-value">12</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Callbacks Due</div>
+            <div class="kpi-value orange">47</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Qual Complete</div>
+            <div class="kpi-value">17</div>
+          </div>
+        </div>
+
+        <!-- KPI Row 2 -->
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="kpi-label">Ready Handover</div>
+            <div class="kpi-value">32</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Sent to Sales</div>
+            <div class="kpi-value">28</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Returned by Sales</div>
+            <div class="kpi-value">4</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">SLA Due Soon</div>
+            <div class="kpi-value orange">9</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">SLA Overdue</div>
+            <div class="kpi-value red">11</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Avg 1st Call</div>
+            <div class="kpi-value">3m 41s</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Agent Utilization</div>
+            <div class="kpi-value">82%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Qual Completion %</div>
+            <div class="kpi-value">71%</div>
+          </div>
+        </div>
+
+        <!-- Alert Banner -->
+        <div class="alert-row">
+          <div class="alert-banner info">
+            <div class="alert-banner-flex">
+              <div class="alert-left">
+                <div class="alert-title">&#128276; NEXT BEST ACTION</div>
+                <div class="alert-sub">Reassign 7 uncalled leads from Agent A</div>
+                <div class="alert-detail">Agent A has 14 assigned leads, 7 not actioned, and 3 are due within 10 minutes. Agent B is available.</div>
+              </div>
+              <button class="btn-primary">Reassign leads</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Agent Performance Table -->
+        <div class="panel agent-table" style="margin-bottom:16px">
+          <div class="panel-header">
+            <span>Agent performance</span>
+            <span class="count">6 agents on shift</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Assigned</th>
+                  <th>Actioned</th>
+                  <th>Not Actioned</th>
+                  <th>Connected</th>
+                  <th>No Answer</th>
+                  <th>Callbacks</th>
+                  <th>Qual Done</th>
+                  <th>Ready</th>
+                  <th>Sent</th>
+                  <th>Returned</th>
+                  <th>SLA Overdue</th>
+                  <th>Avg 1st Call</th>
+                  <th>Quality</th>
+                  <th>Status</th>
+                  <th>Manager Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="agent-name">Agent A &middot; Ahmed</span><span class="agent-shift">08:00&ndash;17:00</span></td>
+                  <td>14</td>
+                  <td>3</td>
+                  <td class="cell-red">11</td>
+                  <td>2</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>1</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>2</td>
+                  <td>7</td>
+                  <td>9m 12s</td>
+                  <td><span class="quality-score quality-low">58</span></td>
+                  <td><span class="badge badge-sla-risk">SLA risk</span></td>
+                  <td><span class="manager-action">Reassign 7 uncalled leads</span></td>
+                </tr>
+                <tr>
+                  <td><span class="agent-name">Agent B &middot; Nadia</span><span class="agent-shift">08:00&ndash;17:00</span></td>
+                  <td>12</td>
+                  <td>12</td>
+                  <td>0</td>
+                  <td>9</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>8</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>2m 45s</td>
+                  <td><span class="quality-score quality-high">94</span></td>
+                  <td><span class="badge badge-on-track">On track</span></td>
+                  <td><span class="manager-action">Balance workload &middot; take from Agent A</span></td>
+                </tr>
+                <tr>
+                  <td><span class="agent-name">Agent C &middot; Priya</span><span class="agent-shift">09:00&ndash;18:00</span></td>
+                  <td>13</td>
+                  <td>10</td>
+                  <td>3</td>
+                  <td>7</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>3m 05s</td>
+                  <td><span class="quality-score quality-mid">78</span></td>
+                  <td><span class="badge badge-needs-review">Needs support</span></td>
+                  <td><span class="manager-action">Coach on model interest capture</span></td>
+                </tr>
+                <tr>
+                  <td><span class="agent-name">Agent D &middot; Omar</span><span class="agent-shift">10:00&ndash;19:00</span></td>
+                  <td>15</td>
+                  <td>11</td>
+                  <td>4</td>
+                  <td>8</td>
+                  <td>3</td>
+                  <td>5</td>
+                  <td>6</td>
+                  <td>5</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td>4m 18s</td>
+                  <td><span class="quality-score quality-mid">65</span></td>
+                  <td><span class="badge badge-coaching">High return rate</span></td>
+                  <td><span class="manager-action">Coach on qualification completeness</span></td>
+                </tr>
+                <tr>
+                  <td><span class="agent-name">Agent E &middot; Fatima</span><span class="agent-shift">12:00&ndash;21:00</span></td>
+                  <td>16</td>
+                  <td>14</td>
+                  <td>2</td>
+                  <td>10</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>9</td>
+                  <td>8</td>
+                  <td>7</td>
+                  <td>1</td>
+                  <td>1</td>
+                  <td>3m 33s</td>
+                  <td><span class="quality-score quality-high">88</span></td>
+                  <td><span class="badge badge-on-track">On track</span></td>
+                  <td><span class="manager-action">&mdash;</span></td>
+                </tr>
+                <tr>
+                  <td><span class="agent-name">Agent F &middot; Yousef</span><span class="agent-shift">12:00&ndash;21:00</span></td>
+                  <td>16</td>
+                  <td>12</td>
+                  <td>4</td>
+                  <td>5</td>
+                  <td>5</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td>0</td>
+                  <td>0</td>
+                  <td>5m 02s</td>
+                  <td><span class="quality-score quality-low">62</span></td>
+                  <td><span class="badge badge-coaching">Low qualification quality</span></td>
+                  <td><span class="manager-action">Review last 5 qualification packs</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Lead Queue by Agent -->
+        <div class="panel lead-table" style="margin-bottom:16px">
+          <div class="panel-header">
+            <span>Lead queue by agent</span>
+            <span class="count">14 of 14</span>
+          </div>
+          <div class="filter-bar">
+            <span class="filter-tab active">All</span>
+            <span class="filter-tab">Not actioned</span>
+            <span class="filter-tab">In call</span>
+            <span class="filter-tab">No answer</span>
+            <span class="filter-tab">Callback due</span>
+            <span class="filter-tab">Qualification incomplete</span>
+            <span class="filter-tab">Ready for handover</span>
+            <span class="filter-tab">Sent to sales</span>
+            <span class="filter-tab">SLA overdue</span>
+            <span class="filter-tab">Returned by sales</span>
+            <span class="filter-tab">Duplicate review</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Source &middot; Campaign</th>
+                  <th>Agent</th>
+                  <th>Created</th>
+                  <th>1st Call</th>
+                  <th>Last Action</th>
+                  <th>Qualification</th>
+                  <th>Handover</th>
+                  <th>SLA</th>
+                  <th>Next Action</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="customer-name">Hiren Patel</div>
+                    <div class="customer-id">L-2026-04832</div>
+                    <div class="customer-phone">+971 50 123</div>
+                  </td>
+                  <td><span class="source-campaign">AGM website &middot; Ramadan LX</span></td>
+                  <td>Nadia</td>
+                  <td>12 min ago</td>
+                  <td>&mdash;</td>
+                  <td>Booked showroom visit</td>
+                  <td><span class="badge badge-complete">Complete</span></td>
+                  <td>Ready</td>
+                  <td><span class="sla-text green">On track</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Approve handover</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Maya Hassan</div>
+                    <div class="customer-id">L-2026-04831</div>
+                    <div class="customer-phone">+971 55 998 2210</div>
+                  </td>
+                  <td><span class="source-campaign">Instagram &middot; TXL Flagship</span></td>
+                  <td>Ahmed</td>
+                  <td>1h 40m ago</td>
+                  <td>Not started</td>
+                  <td>&mdash;</td>
+                  <td>Not started</td>
+                  <td>N/A</td>
+                  <td><span class="badge badge-breached">Breached</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Reassign</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Reem Al Zaabi</div>
+                    <div class="customer-id">L-2026-04830</div>
+                    <div class="customer-phone">+971 55 774</div>
+                  </td>
+                  <td><span class="source-campaign">AGM website &middot; RX Family</span></td>
+                  <td>Ahmed</td>
+                  <td>1h 10m ago</td>
+                  <td>Not started</td>
+                  <td>&mdash;</td>
+                  <td>Not started</td>
+                  <td>N/A</td>
+                  <td><span class="badge badge-overdue">Overdue</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Reassign</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Karim Saleh</div>
+                    <div class="customer-id">L-2026-04829</div>
+                    <div class="customer-phone">+971 52 447 1100</div>
+                  </td>
+                  <td><span class="source-campaign">Google &middot; VX Executive</span></td>
+                  <td>Fatima</td>
+                  <td>24 min ago</td>
+                  <td>Connected</td>
+                  <td>Sent WhatsApp</td>
+                  <td><span class="badge badge-in-progress">In progress</span></td>
+                  <td>Pending</td>
+                  <td><span class="sla-text green">On track</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Complete qualification</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Rania Nassar</div>
+                    <div class="customer-id">L-2026-04828</div>
+                    <div class="customer-phone">+971 50 962</div>
+                  </td>
+                  <td><span class="source-campaign">Facebook &middot; LX Family</span></td>
+                  <td>Priya</td>
+                  <td>35 min ago</td>
+                  <td>No answer</td>
+                  <td>Retry #2</td>
+                  <td><span class="badge badge-in-progress">In progress</span></td>
+                  <td>N/A</td>
+                  <td><span class="badge badge-due-soon">Due soon</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Approve WA sequence</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Bilal Chaudhry</div>
+                    <div class="customer-id">L-2026-04827</div>
+                    <div class="customer-phone">+971 55 118</div>
+                  </td>
+                  <td><span class="source-campaign">Referral &middot; Loyalty</span></td>
+                  <td>Nadia</td>
+                  <td>50 min ago</td>
+                  <td>Connected</td>
+                  <td>Booked TD</td>
+                  <td><span class="badge badge-complete">Complete</span></td>
+                  <td><span class="badge badge-sent">Sent</span></td>
+                  <td><span class="sla-text green">On track</span></td>
+                  <td>&mdash;</td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Sara Ali</div>
+                    <div class="customer-id">L-2026-04826</div>
+                    <div class="customer-phone">+971 52 887</div>
+                  </td>
+                  <td><span class="source-campaign">AGM website &middot; Ramadan LX</span></td>
+                  <td>Omar</td>
+                  <td>2h 20m ago</td>
+                  <td>Connected</td>
+                  <td>Handed over</td>
+                  <td>Complete</td>
+                  <td><span class="badge badge-returned">Returned</span></td>
+                  <td><span class="badge badge-overdue">Overdue</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Review return &middot; reassign</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Ali Farooq</div>
+                    <div class="customer-id">L-2026-04824</div>
+                    <div class="customer-phone">+971 55 442</div>
+                  </td>
+                  <td><span class="source-campaign">Instagram &middot; TXL Flagship</span></td>
+                  <td>Yousef</td>
+                  <td>1h 05m ago</td>
+                  <td>Connected</td>
+                  <td>Handed over</td>
+                  <td>Complete</td>
+                  <td><span class="badge badge-returned">Returned</span></td>
+                  <td><span class="badge badge-overdue">Overdue</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Review return &middot; coaching</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Layla Habib</div>
+                    <div class="customer-id">L-2026-04823</div>
+                    <div class="customer-phone">+971 50 834 1122</div>
+                  </td>
+                  <td><span class="source-campaign">Walk-in ref &middot; Referral</span></td>
+                  <td>Nadia</td>
+                  <td>3h 05m ago</td>
+                  <td>Callback</td>
+                  <td>Callback due 15:00</td>
+                  <td><span class="badge badge-in-progress">In progress</span></td>
+                  <td>N/A</td>
+                  <td><span class="badge badge-due-soon">Due soon</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Ensure callback</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Marwan Younis</div>
+                    <div class="customer-id">L-2026-04822</div>
+                    <div class="customer-phone">+971 55 991</div>
+                  </td>
+                  <td><span class="source-campaign">Google &middot; VX Executive</span></td>
+                  <td>Ahmed</td>
+                  <td>2h 40m ago</td>
+                  <td>No answer</td>
+                  <td>Retry #3</td>
+                  <td>Not started</td>
+                  <td>N/A</td>
+                  <td><span class="badge badge-overdue">Overdue</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Escalate &middot; move to WA nurture</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Amina Al Suwaidi</div>
+                    <div class="customer-id">L-2026-04821</div>
+                    <div class="customer-phone">+971 50 339</div>
+                  </td>
+                  <td><span class="source-campaign">AGM website &middot; LX Family</span></td>
+                  <td>Fatima</td>
+                  <td>18 min ago</td>
+                  <td>Connected</td>
+                  <td>Booked TD</td>
+                  <td>Complete</td>
+                  <td>Ready</td>
+                  <td><span class="sla-text green">On track</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Approve handover</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Tarek Shami</div>
+                    <div class="customer-id">L-2026-04819</div>
+                    <div class="customer-phone">+971 52 118</div>
+                  </td>
+                  <td><span class="source-campaign">Facebook &middot; TXL Flagship</span></td>
+                  <td>Priya</td>
+                  <td>1h 22m ago</td>
+                  <td>Connected</td>
+                  <td>Sent brochure</td>
+                  <td><span class="badge badge-in-progress">In progress</span></td>
+                  <td>Pending</td>
+                  <td><span class="badge badge-due-soon">Due soon</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Complete qualification</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Yousef Rahman</div>
+                    <div class="customer-id">L-2026-04815</div>
+                    <div class="customer-phone">+971 52 118</div>
+                  </td>
+                  <td><span class="source-campaign">Instagram &middot; LX Family</span></td>
+                  <td>Nadia</td>
+                  <td>55 min ago</td>
+                  <td>Connected</td>
+                  <td>Handed over</td>
+                  <td>Complete</td>
+                  <td><span class="badge badge-sent">Sent</span></td>
+                  <td><span class="sla-text green">On track</span></td>
+                  <td>&mdash;</td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="customer-name">Noura Khan</div>
+                    <div class="customer-id">L-2026-04814</div>
+                    <div class="customer-phone">+971 55 213</div>
+                  </td>
+                  <td><span class="source-campaign">AGM website &middot; RX Family</span></td>
+                  <td>Omar</td>
+                  <td>40 min ago</td>
+                  <td>Connected</td>
+                  <td>Sent quote intro</td>
+                  <td><span class="badge badge-in-progress">In progress</span></td>
+                  <td>N/A</td>
+                  <td><span class="sla-text green">On track</span></td>
+                  <td><a href="lead-detail.html" class="action-link">Complete qualification</a></td>
+                  <td><a href="lead-detail.html" class="open-link">Open &rarr;</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Bottom Panels: SLA Risk + Returned by Sales -->
+        <div class="bottom-panels">
+
+          <!-- SLA Risk Panel -->
+          <div class="panel">
+            <div class="panel-header">
+              <span>SLA risk</span>
+              <span class="count">8 leads</span>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Agent</th>
+                    <th>Since Created</th>
+                    <th>Status</th>
+                    <th>Blocker</th>
+                    <th>Recommendation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="customer-name">Maya Hassan</td>
+                    <td>Ahmed</td>
+                    <td>1h 40m ago</td>
+                    <td><span class="badge badge-breached">Breached</span></td>
+                    <td>Agent not actioning</td>
+                    <td><a href="lead-detail.html" class="action-link">Reassign</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Reem Al Zaabi</td>
+                    <td>Ahmed</td>
+                    <td>1h 10m ago</td>
+                    <td><span class="badge badge-overdue">Overdue</span></td>
+                    <td>Agent not actioning</td>
+                    <td><a href="lead-detail.html" class="action-link">Reassign</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Rania Nassar</td>
+                    <td>Priya</td>
+                    <td>35 min ago</td>
+                    <td><span class="badge badge-due-soon">Due soon</span></td>
+                    <td>Qualification incomplete</td>
+                    <td><a href="lead-detail.html" class="action-link">Approve WA sequence</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Sara Ali</td>
+                    <td>Omar</td>
+                    <td>2h 20m ago</td>
+                    <td><span class="badge badge-overdue">Overdue</span></td>
+                    <td>Retry not sent</td>
+                    <td><a href="lead-detail.html" class="action-link">Review return &middot; reassign</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Ali Farooq</td>
+                    <td>Yousef</td>
+                    <td>1h 05m ago</td>
+                    <td><span class="badge badge-overdue">Overdue</span></td>
+                    <td>Retry not sent</td>
+                    <td><a href="lead-detail.html" class="action-link">Review return &middot; coaching</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Layla Habib</td>
+                    <td>Nadia</td>
+                    <td>3h 05m ago</td>
+                    <td><span class="badge badge-due-soon">Due soon</span></td>
+                    <td>Qualification incomplete</td>
+                    <td><a href="lead-detail.html" class="action-link">Ensure callback</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Marwan Younis</td>
+                    <td>Ahmed</td>
+                    <td>2h 40m ago</td>
+                    <td><span class="badge badge-overdue">Overdue</span></td>
+                    <td>Qualification incomplete</td>
+                    <td><a href="lead-detail.html" class="action-link">Escalate &middot; move to WA nurture</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Tarek Shami</td>
+                    <td>Priya</td>
+                    <td>1h 22m ago</td>
+                    <td><span class="badge badge-due-soon">Due soon</span></td>
+                    <td>Qualification incomplete</td>
+                    <td><a href="lead-detail.html" class="action-link">Complete qualification</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Returned by Sales Panel -->
+          <div class="panel">
+            <div class="panel-header">
+              <span>Returned by sales</span>
+              <span class="count">2 leads</span>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Original Agent</th>
+                    <th>Returned By</th>
+                    <th>Reason</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="customer-name">Sara Ali</td>
+                    <td>Omar</td>
+                    <td>Mariam</td>
+                    <td>Missing preferred showroom</td>
+                    <td><a href="lead-detail.html" class="action-link">Assign back &rarr;</a></td>
+                  </tr>
+                  <tr>
+                    <td class="customer-name">Ali Farooq</td>
+                    <td>Yousef</td>
+                    <td>Ahmad</td>
+                    <td>Missing model interest</td>
+                    <td><a href="lead-detail.html" class="action-link">Assign back &rarr;</a></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Call Quality Review Panel -->
+        <div class="panel qa-panel">
+          <div class="panel-header">
+            <span>&#127911; Call quality review &mdash; sample</span>
+            <span class="count">Random 5 of today</span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Sample</th>
+                  <th>Agent</th>
+                  <th>Customer</th>
+                  <th>Transcript</th>
+                  <th>AI Summary</th>
+                  <th>Mandatory Qs</th>
+                  <th>Language OK</th>
+                  <th>No Budget/Timeline</th>
+                  <th>No Unsupported Promises</th>
+                  <th>Handover</th>
+                  <th>Coaching</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>QA-501</td>
+                  <td>Nadia</td>
+                  <td class="customer-name">Hiren Patel</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>8/8</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>High</td>
+                  <td>None</td>
+                  <td><span class="badge badge-passed">Passed</span></td>
+                </tr>
+                <tr>
+                  <td>QA-502</td>
+                  <td>Priya</td>
+                  <td class="customer-name">Rania Nassar</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>6/8</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Medium</td>
+                  <td colspan="1">Model interest specificity</td>
+                  <td colspan="1"><span class="badge badge-needs-review">Needs review</span></td>
+                </tr>
+                <tr>
+                  <td>QA-503</td>
+                  <td>Ahmed</td>
+                  <td class="customer-name">Maya Hassan</td>
+                  <td>No</td>
+                  <td>No</td>
+                  <td>0/8</td>
+                  <td>No</td>
+                  <td>Yes</td>
+                  <td>N/A</td>
+                  <td colspan="1">Not called within SLA</td>
+                  <td colspan="1"><span class="badge badge-failed">Failed</span></td>
+                </tr>
+                <tr>
+                  <td>QA-504</td>
+                  <td>Omar</td>
+                  <td class="customer-name">Sara Ali</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>5/8</td>
+                  <td>Yes</td>
+                  <td>No</td>
+                  <td>Yes</td>
+                  <td colspan="1">Do not ask &mdash; competitor</td>
+                  <td colspan="1"><span class="badge badge-coaching">Coaching required</span></td>
+                </tr>
+                <tr>
+                  <td>QA-505</td>
+                  <td>Fatima</td>
+                  <td class="customer-name">Karim Saleh</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>8/8</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>Yes</td>
+                  <td>High</td>
+                  <td>None</td>
+                  <td><span class="badge badge-passed">Passed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /page-content -->
+    </div><!-- /main-area -->
+
+  </div><!-- /app-shell -->
+
+  <script>
+    document.querySelectorAll('tr').forEach(function(tr) {
+      var nameEl = tr.querySelector('.customer-name');
+      if (!nameEl) return;
+      var q = 'lead-detail.html?lead=' + encodeURIComponent(nameEl.textContent.trim());
+      tr.querySelectorAll('a.action-link, a.open-link').forEach(function(a) {
+        if (a.getAttribute('href') && a.getAttribute('href').indexOf('lead-detail.html') === 0) a.setAttribute('href', q);
+      });
+    });
+  </script>
+
+
+  <script>
+    var copilotAnswers = {
+      sla: { body: "<strong>11 leads are SLA-overdue</strong> and 9 are due soon. The overdue cases concentrate on <strong>Agent A &middot; Ahmed</strong>, who has 11 of 14 leads not actioned (avg first-call 9m 12s) &mdash; 3 breach within the next 10 minutes. <strong>Recommend:</strong> reassign the 3 imminent breaches now, then prioritise Ahmed&rsquo;s queue.", cite: "Based on: SLA Overdue (11), SLA Due Soon (9), Agent performance &middot; Agent A", actions: ["Reassign 3 breaching leads","Notify Agent A"] },
+      quality: { body: "<strong>3 agents are below 70% quality:</strong> Agent A &middot; Ahmed (58 &middot; SLA risk), Agent F &middot; Yousef (62 &middot; high return rate) and Agent D &middot; Omar (65). The common driver is <strong>incomplete qualification</strong> before handover. <strong>Recommend:</strong> targeted coaching on qualification completeness; Ahmed also needs workload relief.", cite: "Based on: Agent performance &middot; Quality column (6 agents on shift)", actions: ["Schedule coaching","Open agent scorecards"] },
+      reassign: { body: "<strong>Rebalance from Agent A &middot; Ahmed &rarr; Agent B &middot; Nadia.</strong> Ahmed has 11 uncalled leads and is at SLA risk; Nadia has 0 pending, 94 quality and 2m 45s avg first-call. Moving <strong>7 leads</strong> keeps both within SLA while the team holds 82% utilisation.", cite: "Based on: Not Actioned (24), Agent A vs Agent B, Agent Utilization (82%)", actions: ["Reassign 7 leads","Preview allocation"] },
+      summary: { body: "<strong>86 leads assigned, 62 actioned (72%).</strong> Watch-items: <strong>24 not actioned</strong>, <strong>11 SLA-overdue</strong> and 47 callbacks due. Qualification completion is 71% with 32 ready for handover. <strong>Top performer:</strong> Nadia (94). <strong>Main risk:</strong> Ahmed (58 quality, 11 uncalled).", cite: "Based on: KPI row + Agent performance table", actions: ["Export summary","Message team"] },
+      returns: { body: "<strong>4 leads were returned by sales.</strong> Recurring reasons are <strong>missing preferred showroom</strong> and <strong>incomplete discovery fields</strong> at handover. Returns cluster on agents with lower qualification completeness (Ahmed, Yousef). <strong>Recommend:</strong> enforce mandatory discovery fields before &ldquo;Ready for handover&rdquo;.", cite: "Based on: Returned by Sales (4), qualification completeness", actions: ["View returned leads","Update handover checklist"] }
+    };
+    var copilotLabels = { sla:"Who’s at SLA risk?", quality:"Which agents are below 70% quality?", reassign:"Where should I rebalance workload?", summary:"Summarize today’s performance", returns:"Why are leads returned by sales?" };
+    function copilotMatch(q){
+      q=(q||'').toLowerCase();
+      if(/sla|overdue|breach|due|late/.test(q)) return 'sla';
+      if(/quality|coach|below|score|weak|low perform/.test(q)) return 'quality';
+      if(/reassign|rebalance|workload|distribute|allocate|balance/.test(q)) return 'reassign';
+      if(/return|reject|sent back|bounce/.test(q)) return 'returns';
+      return 'summary';
+    }
+    function toggleCopilot(){ var dd=document.getElementById('copilotDD'),ov=document.getElementById('copilotOverlay'); var o=dd.classList.toggle('open'); if(ov)ov.classList.toggle('open',o); }
+    function askCopilot(intent){
+      var input=document.getElementById('copilotInput');
+      if(typeof intent==='string' && copilotAnswers[intent]){ input.value=copilotLabels[intent]||input.value; }
+      else { intent=copilotMatch(input.value); }
+      var a=copilotAnswers[intent];
+      document.getElementById('copilotAnswerBody').innerHTML=a.body;
+      document.getElementById('copilotAnswerCite').innerHTML='<span class="material-symbols-outlined" style="font-size:12px">database</span> '+a.cite;
+      document.getElementById('copilotAnswerActions').innerHTML=a.actions.map(function(x,i){return '<button class="'+(i===0?'primary':'')+'">'+x+'</button>';}).join('');
+      document.getElementById('copilotAnswer').classList.add('show');
+    }
+
+    function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
+    function closeSidebar(){ document.body.classList.remove('sb-rail'); }
+  </script>
+
+  <script>
+    function doRefresh(btn){
+      var el=document.getElementById('lastRefreshed');
+      var t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      if(el) el.textContent='Last refreshed '+t;
+      if(btn){var i=btn.querySelector('.material-symbols-outlined');if(i){i.style.transition='transform .6s ease';i.style.transform='rotate(360deg)';setTimeout(function(){i.style.transition='none';i.style.transform='none';},650);}}
+    }
+    (function(){var el=document.getElementById('lastRefreshed');if(el)el.textContent='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
+  </script>
+</body>
+</html>

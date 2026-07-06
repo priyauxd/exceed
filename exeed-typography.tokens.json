@@ -1,0 +1,199 @@
+{
+  "typography": {
+    "display": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontWeight": "700",
+        "fontSize": "28",
+        "lineHeight": "34",
+        "letterSpacing": "-0.02em"
+      }
+    },
+    "heading": {
+      "h1": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "700",
+          "fontSize": "24",
+          "lineHeight": "30",
+          "letterSpacing": "-0.02em"
+        }
+      },
+      "h2": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "700",
+          "fontSize": "20",
+          "lineHeight": "26",
+          "letterSpacing": "-0.02em"
+        }
+      },
+      "h3": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "700",
+          "fontSize": "18",
+          "lineHeight": "24",
+          "letterSpacing": "-0.02em"
+        }
+      }
+    },
+    "title": {
+      "card": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "700",
+          "fontSize": "15",
+          "lineHeight": "20",
+          "letterSpacing": "0"
+        }
+      },
+      "section": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "700",
+          "fontSize": "14",
+          "lineHeight": "20",
+          "letterSpacing": "0"
+        }
+      }
+    },
+    "kpi": {
+      "value": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "700",
+          "fontSize": "24",
+          "lineHeight": "26",
+          "letterSpacing": "-0.01em"
+        }
+      }
+    },
+    "body": {
+      "regular": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "400",
+          "fontSize": "13",
+          "lineHeight": "20",
+          "letterSpacing": "0"
+        }
+      },
+      "medium": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "500",
+          "fontSize": "13",
+          "lineHeight": "20",
+          "letterSpacing": "0"
+        }
+      },
+      "semibold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "600",
+          "fontSize": "13",
+          "lineHeight": "20",
+          "letterSpacing": "0"
+        }
+      },
+      "small": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "400",
+          "fontSize": "12.5",
+          "lineHeight": "18",
+          "letterSpacing": "0"
+        }
+      },
+      "small-semibold": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "600",
+          "fontSize": "12.5",
+          "lineHeight": "18",
+          "letterSpacing": "0"
+        }
+      }
+    },
+    "label": {
+      "default": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "500",
+          "fontSize": "11.5",
+          "lineHeight": "16",
+          "letterSpacing": "0"
+        }
+      },
+      "strong": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "Inter",
+          "fontWeight": "600",
+          "fontSize": "11",
+          "lineHeight": "16",
+          "letterSpacing": "0"
+        }
+      }
+    },
+    "eyebrow": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontWeight": "600",
+        "fontSize": "10",
+        "lineHeight": "14",
+        "letterSpacing": "0.06em"
+      }
+    },
+    "caption": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontWeight": "600",
+        "fontSize": "9.5",
+        "lineHeight": "12",
+        "letterSpacing": "0"
+      }
+    },
+    "micro": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "Inter",
+        "fontWeight": "700",
+        "fontSize": "8",
+        "lineHeight": "10",
+        "letterSpacing": "0.04em"
+      }
+    },
+    "mono": {
+      "id": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "SF Mono",
+          "fontWeight": "400",
+          "fontSize": "10.5",
+          "lineHeight": "14",
+          "letterSpacing": "0"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "EXEED \u2014 AGM Typography"
+  }
+}

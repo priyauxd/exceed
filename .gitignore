@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+*.log
+npm-debug.log*
+.env
+.env.*
+
+# unused full-page screenshot renders (not used by the app)
+agents.png
+brand-host.png
+call-center-agent.png
+call-center-manager.png
+sales-executive.png

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "exceed-crm",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["/private/tmp/claude-501/-Users-priyamvada-Documents-exceed/db5486ce-a7c6-4321-aa82-0f3c875cd484/scratchpad/server.js"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}

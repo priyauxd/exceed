@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Call Center Agent — AGM Sales EXEED CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-warm: #fefdfb;
+      --ink: #2d3340;
+      --ink-secondary: #6b7289;
+      --ink-muted: #9ea3b5;
+      --border: #eceef4;
+      --border-soft: #f1f2f7;
+      --blue: #17293d;
+      --blue-soft: #e9edf2;
+      --blue-muted: #98a6b6;
+      --red: #e76e6e;
+      --red-soft: #fdf0f0;
+      --amber: #e8a84c;
+      --amber-soft: #fdf6eb;
+      --green: #5cb97f;
+      --green-soft: #edf8f1;
+      --purple: #8b7bdf;
+      --purple-soft: #f1effc;
+      --teal: #4fb8a8;
+      --teal-soft: #ecf8f6;
+      --sidebar-w: 228px;
+      --topbar-h: 42px;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      height: var(--topbar-h);
+      background: linear-gradient(135deg, #0a0e14, #16293c);
+      color: #fff;
+      display: flex; align-items: center;
+      padding: 0 18px; gap: 12px;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      font-size: 13px;
+    }
+    .topbar .waffle { font-size: 16px; opacity: .7; cursor: pointer; }
+    .topbar .app-name { font-weight: 600; opacity: .95; }
+    .topbar .sep { width: 1px; height: 18px; background: rgba(255,255,255,.25); }
+    .topbar .org { opacity: .85; font-size: 12px; }
+    .topbar .search {
+      flex: 1; max-width: 360px; margin: 0 auto;
+      background: rgba(255,255,255,.15); border: none; border-radius: 8px;
+      padding: 6px 14px 6px 30px; color: #fff; font-size: 12px;
+      font-family: inherit; outline: none;
+    }
+    .topbar .search::placeholder { color: rgba(255,255,255,.6); }
+    .topbar .spacer { flex: 1; }
+    .topbar .actions { display: flex; align-items: center; gap: 12px; }
+    .topbar .copilot {
+      display: flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,.13); padding: 4px 10px;
+      border-radius: 6px; font-size: 11px; cursor: pointer;
+    }
+    .topbar .avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      display: grid; place-items: center; font-size: 10px; font-weight: 600;
+    }
+
+    /* ── Sidebar ── */
+    .shell { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
+      overflow-y: auto; z-index: 10;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .sb-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .sb-logo {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: linear-gradient(135deg, #0a0e14, #16293c);
+      color: #fff; display: grid; place-items: center;
+      font-weight: 700; font-size: 13px;
+    }
+    .sb-name { font-weight: 600; font-size: 13px; line-height: 1.2; }
+    .sb-sub { font-size: 10px; color: var(--ink-muted); }
+    .sb-nav { padding: 8px; }
+    .sb-group {
+      font-size: 10px; font-weight: 600; color: var(--ink-muted);
+      padding: 14px 10px 4px; letter-spacing: .07em; text-transform: uppercase;
+    }
+    .sb-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; border-radius: 8px;
+      color: var(--ink-secondary); text-decoration: none;
+      font-size: 12.5px; transition: all .12s;
+      border-left: 2px solid transparent;
+    }
+    .sb-item:hover { background: var(--blue-soft); color: var(--blue); }
+    .sb-item.active {
+      background: var(--blue-soft); color: var(--blue);
+      font-weight: 600; border-left-color: var(--blue);
+    }
+    .sb-item .material-symbols-outlined { font-size: 18px; }
+
+    /* ── Main ── */
+    .main {
+      margin-left: var(--sidebar-w); margin-top: var(--topbar-h);
+      flex: 1; display: flex; flex-direction: column; min-width: 0;
+    }
+
+    /* Command bar */
+    .cmdbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 16px; height: 34px;
+      display: flex; align-items: center; gap: 3px;
+      font-size: 11px; color: var(--ink-muted); overflow-x: auto;
+    }
+    .cmdbar .ro {
+      font-size: 10px; color: var(--ink-muted);
+      padding: 3px 8px; background: var(--bg); border-radius: 4px;
+      white-space: nowrap;
+    }
+    .cmd-sep { width: 1px; height: 14px; background: var(--border); margin: 0 3px; }
+    .cb {
+      display: flex; align-items: center; gap: 3px;
+      padding: 3px 6px; border: none; background: none;
+      color: var(--ink-muted); font-size: 11px; cursor: pointer;
+      border-radius: 4px; white-space: nowrap; font-family: inherit;
+    }
+    .cb:hover { background: var(--bg); color: var(--ink-secondary); }
+    .cb .material-symbols-outlined { font-size: 13px; }
+
+    .page { padding: 22px 28px 48px; }
+
+    /* ── Greeting ── */
+    .greeting {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    .greeting-left { flex: 1; }
+    .greeting h1 {
+      font-size: 24px; font-weight: 700; color: var(--ink);
+      letter-spacing: -.02em; margin-bottom: 4px;
+    }
+    .greeting h1 .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
+    @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
+    .greeting-sub {
+      font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6;
+    }
+    .greeting-sub .date { font-weight: 600; color: var(--ink); }
+    .greeting-right { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .shift-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 20px;
+      font-size: 12px; color: var(--ink-secondary);
+    }
+    .shift-pill .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 3px rgba(92,185,127,.2);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 3px rgba(92,185,127,.2); } 50% { box-shadow: 0 0 0 6px rgba(92,185,127,.1); } }
+    .shift-pill .tm { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .btn-soft {
+      padding: 7px 14px; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--surface);
+      font-size: 11px; color: var(--ink-secondary);
+      cursor: pointer; font-family: inherit;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .btn-soft:hover { background: var(--bg); }
+    .btn-soft .material-symbols-outlined { font-size: 14px; }
+
+    /* ── Notification Bell (topbar) ── */
+    .notif-bell {
+      position: relative; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 6px;
+      transition: background .15s;
+    }
+    .notif-bell:hover { background: rgba(255,255,255,.15); }
+    .notif-bell .material-symbols-outlined { font-size: 18px; }
+    .notif-bell .bell-badge {
+      position: absolute; top: 1px; right: 0;
+      font-size: 9px; font-weight: 700; color: #fff;
+      background: var(--red); min-width: 16px; height: 16px;
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; padding: 0 4px;
+      border: 2px solid #16293c;
+      animation: badge-pop .3s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes badge-pop { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+    /* ── Notification Dropdown ── */
+    .notif-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 29;
+    }
+    .notif-dropdown {
+      display: none; position: fixed;
+      top: var(--topbar-h); right: 80px;
+      width: 400px; max-height: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: 0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+      z-index: 30; overflow: hidden;
+      animation: dropdown-in .2s ease-out;
+    }
+    @keyframes dropdown-in { 0%{opacity:0;transform:translateY(-8px)} 100%{opacity:1;transform:translateY(0)} }
+    .notif-dropdown.open, .notif-overlay.open { display: block; }
+    .notif-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .notif-head-left {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+    }
+    .notif-head-left .material-symbols-outlined { font-size: 18px; color: var(--blue); }
+    .notif-badge {
+      font-size: 10px; font-weight: 700; color: #fff;
+      background: var(--red); padding: 2px 7px;
+      border-radius: 8px; min-width: 18px; text-align: center;
+    }
+    .notif-actions { display: flex; gap: 4px; }
+    .notif-actions button {
+      border: none; background: none; font-family: inherit;
+      font-size: 11px; color: var(--blue); cursor: pointer;
+      padding: 4px 10px; border-radius: 6px; font-weight: 600;
+    }
+    .notif-actions button:hover { background: var(--blue-soft); }
+    .notif-list { max-height: 380px; overflow-y: auto; }
+    .notif-list::-webkit-scrollbar { width: 3px; }
+    .notif-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border-soft);
+      transition: background .1s; cursor: pointer;
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item:hover { background: #f5f7fd; }
+    .notif-item.unread { background: #f5f8ff; }
+    .notif-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 7px;
+    }
+    .notif-item.unread .notif-dot { background: var(--blue); }
+    .ni-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ni-icon.danger { background: var(--red-soft); color: var(--red); }
+    .ni-icon.warn { background: var(--amber-soft); color: var(--amber); }
+    .ni-icon.info { background: var(--blue-soft); color: var(--blue); }
+    .ni-icon.success { background: var(--green-soft); color: var(--green); }
+    .ni-icon .material-symbols-outlined { font-size: 15px; }
+    .ni-body { flex: 1; min-width: 0; }
+    .ni-title { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .ni-text { font-size: 11.5px; color: var(--ink-secondary); line-height: 1.5; }
+    .ni-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .ni-time { font-size: 10px; color: var(--ink-muted); }
+    .ni-action {
+      font-size: 10px; font-weight: 600; color: var(--blue);
+      text-decoration: none; padding: 2px 8px;
+      background: var(--blue-soft); border-radius: 4px;
+    }
+    .ni-action:hover { background: #dde8ff; }
+    .ni-dismiss {
+      border: none; background: none; color: var(--ink-muted);
+      font-size: 14px; cursor: pointer; opacity: 0;
+      transition: opacity .15s; flex-shrink: 0; padding: 0; margin-top: 2px;
+    }
+    .notif-item:hover .ni-dismiss { opacity: .6; }
+    .ni-dismiss:hover { opacity: 1 !important; }
+    .notif-footer {
+      padding: 10px 16px; border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .notif-footer a {
+      font-size: 12px; font-weight: 600; color: var(--blue);
+      text-decoration: none;
+    }
+    .notif-footer a:hover { text-decoration: underline; }
+
+    /* ── KPI Row ── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      transition: box-shadow .2s;
+    }
+    .metric-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .mc-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 8px; font-size: 15px;
+    }
+    .mc-icon.blue { background: var(--blue-soft); color: var(--blue); }
+    .mc-icon.red { background: var(--red-soft); color: var(--red); }
+    .mc-icon.amber { background: var(--amber-soft); color: var(--amber); }
+    .mc-icon.green { background: var(--green-soft); color: var(--green); }
+    .mc-icon.teal { background: var(--teal-soft); color: var(--teal); }
+    .mc-icon.purple { background: var(--purple-soft); color: var(--purple); }
+    .mc-lbl {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 4px;
+    }
+    .mc-val { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+    .mc-val.txt-red { color: var(--red); }
+    .mc-val.txt-green { color: var(--green); }
+    .mc-sub { font-size: 10.5px; color: var(--ink-muted); margin-top: 3px; }
+
+    /* ── Dial cards ── */
+    .dial-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex; flex-direction: column; align-items: center;
+      transition: box-shadow .2s;
+    }
+    .dial-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .dial-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 6px;
+      text-align: center;
+    }
+    .dial-wrap { position: relative; width: 120px; height: 65px; }
+    .dial-svg { width: 120px; height: 65px; overflow: visible; }
+    .dial-bg {
+      fill: none; stroke: var(--border); stroke-width: 10;
+      stroke-linecap: round;
+    }
+    .dial-fill {
+      fill: none; stroke-width: 10; stroke-linecap: round;
+      transition: stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);
+    }
+    .dial-center {
+      position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      text-align: center;
+    }
+    .dial-value { font-size: 22px; font-weight: 700; line-height: 1; }
+    .dial-sub { font-size: 10px; color: var(--ink-muted); margin-top: 4px; text-align: center; }
+
+    /* ── Layout ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 14px;
+    }
+
+    /* ── Queue panel ── */
+    .q-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .q-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 18px; border-bottom: 1px solid var(--border);
+    }
+    .q-head h3 { font-size: 14px; font-weight: 700; }
+    .q-cnt {
+      font-size: 11px; color: var(--ink-muted);
+      background: var(--bg); padding: 3px 10px; border-radius: 10px;
+    }
+    .q-filters {
+      display: flex; align-items: center; gap: 5px;
+      padding: 8px 18px; border-bottom: 1px solid var(--border-soft);
+      background: #fcfcfe;
+    }
+    .q-filters .material-symbols-outlined { font-size: 15px; color: var(--ink-muted); margin-right: 2px; }
+    .qt {
+      padding: 4px 12px; border-radius: 14px;
+      font-size: 11px; font-weight: 500;
+      border: 1px solid transparent; background: transparent;
+      color: var(--ink-muted); cursor: pointer;
+      transition: all .12s; font-family: inherit;
+    }
+    .qt:hover { background: var(--blue-soft); color: var(--blue); }
+    .qt.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    .qt-table { width: 100%; border-collapse: collapse; }
+    .qt-table th {
+      text-align: left; padding: 9px 14px;
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .07em;
+      color: var(--ink-muted); background: #fafbfd;
+      border-bottom: 1px solid var(--border);
+    }
+    .qt-table td {
+      padding: 11px 14px; font-size: 12.5px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: middle;
+    }
+    .qt-table tbody tr { transition: background .1s; cursor: pointer; }
+    .qt-table tbody tr:hover { background: #f8f9fd; }
+    .qt-table tbody tr:last-child td { border-bottom: none; }
+    .qt-table tbody tr.urg { background: #fef7f7; }
+    .qt-table tbody tr.urg:hover { background: #fdf0f0; }
+
+    .c-name { font-weight: 600; font-size: 12.5px; color: var(--ink); }
+    .c-phone { font-size: 10.5px; color: var(--ink-muted); margin-top: 1px; }
+    .c-id { font-size: 9.5px; color: #bbb; font-family: 'SF Mono', monospace; }
+
+    .src {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11.5px; color: var(--ink-secondary);
+    }
+    .src-dot {
+      width: 16px; height: 16px; border-radius: 4px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; color: #fff;
+    }
+    .src-dot.web { background: var(--blue); }
+    .src-dot.ig { background: #c13584; }
+    .src-dot.ggl { background: #4285f4; }
+    .src-dot.walk { background: #9ea3b5; }
+    .src-dot.fb { background: #1877f2; }
+    .src-dot.ref { background: var(--green); }
+
+    .mdl {
+      display: inline-block; padding: 2px 8px;
+      background: var(--bg); border-radius: 5px;
+      font-size: 11px; font-weight: 500; color: var(--ink);
+    }
+
+    .sla-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 10px;
+      font-size: 10.5px; font-weight: 600;
+    }
+    .sla-tag.ok { background: var(--green-soft); color: #3d8a5b; }
+    .sla-tag.wrn { background: var(--amber-soft); color: #8a6420; }
+    .sla-tag.brch { background: var(--red-soft); color: var(--red); }
+    .sla-tag .blink {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: currentColor;
+      animation: bk 1.5s infinite;
+    }
+    @keyframes bk { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    .st-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 10px; font-size: 10.5px; font-weight: 600;
+    }
+    .st-badge.new { background: var(--blue-soft); color: var(--blue); }
+    .st-badge.na { background: var(--red-soft); color: var(--red); }
+    .st-badge.cb { background: var(--amber-soft); color: #8a6420; }
+    .st-badge.ho { background: var(--green-soft); color: #3d8a5b; }
+    .st-badge.ic { background: var(--purple-soft); color: var(--purple); }
+
+    .act-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 5px 12px; border-radius: 7px;
+      font-size: 11px; font-weight: 600; text-decoration: none;
+      transition: all .12s; white-space: nowrap;
+    }
+    .act-btn.open { background: var(--blue-soft); color: var(--blue); }
+    .act-btn.open:hover { background: #dde8ff; }
+    .act-btn.hand { background: var(--green-soft); color: #3d8a5b; }
+    .act-btn.hand:hover { background: #d5f0de; }
+    .st-badge.ip { background: var(--purple-soft); color: var(--purple); }
+    .act-btn .material-symbols-outlined { font-size: 14px; }
+
+    /* ── Sidebar cards ── */
+    .side { display: flex; flex-direction: column; gap: 10px; }
+    .sc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .sc-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 14px; border-bottom: 1px solid var(--border-soft);
+    }
+    .sc-head h4 {
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .sc-head h4 .material-symbols-outlined { font-size: 16px; }
+    .sc-head .sc-cnt {
+      font-size: 10px; font-weight: 600;
+      background: var(--bg); padding: 2px 8px; border-radius: 8px;
+      color: var(--ink-muted);
+    }
+    .sc-row {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-soft);
+      transition: background .1s; cursor: pointer;
+    }
+    .sc-row:last-child { border-bottom: none; }
+    .sc-row:hover { background: #f9fafd; }
+    .sc-row-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+    .sc-row .r-name { font-weight: 600; font-size: 12.5px; }
+    .sc-row .r-detail { font-size: 11px; color: var(--ink-secondary); }
+    .sc-row .r-link {
+      display: inline-flex; align-items: center; gap: 3px;
+      margin-top: 5px; font-size: 11px; font-weight: 600;
+      color: var(--blue); text-decoration: none;
+    }
+    .sc-row .r-link:hover { text-decoration: underline; }
+    .tc {
+      font-size: 10px; font-weight: 700;
+      padding: 3px 9px; border-radius: 6px; flex-shrink: 0;
+    }
+    .tc.urg { background: var(--red-soft); color: var(--red); }
+    .tc.norm { background: var(--blue-soft); color: var(--blue); }
+    .qb {
+      font-size: 9.5px; font-weight: 700;
+      padding: 3px 9px; border-radius: 8px;
+      background: var(--green-soft); color: #3d8a5b;
+    }
+
+    /* ── AI card ── */
+    .ai {
+      background: linear-gradient(135deg, #f3f1fe, #f9f0fd, #fef0f5);
+      border: 1px solid #ddd5f5;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .ai-top {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 14px 0;
+    }
+    .ai-pill {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .08em;
+      background: linear-gradient(135deg, #7c6dd8, #a78bfa);
+      color: #fff; padding: 3px 10px; border-radius: 8px;
+    }
+    .ai-title { font-size: 12px; font-weight: 700; color: #5b46b5; }
+    .ai-body {
+      padding: 10px 14px 14px;
+      font-size: 12px; color: #6b5ba0; line-height: 1.6;
+    }
+    .ai-body strong { color: #4c3a96; }
+    .ai-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 8px; padding: 7px 14px;
+      background: linear-gradient(135deg, #7c6dd8, #a78bfa);
+      color: #fff; border: none; border-radius: 8px;
+      font-size: 11px; font-weight: 600; cursor: pointer;
+      transition: transform .15s, box-shadow .15s;
+      text-decoration: none; font-family: inherit;
+    }
+    .ai-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(124,109,216,.25); }
+    .ai-btn .material-symbols-outlined { font-size: 14px; }
+
+    /* ── Inline Notifications ── */
+    .inline-notifs {
+      display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px;
+    }
+    .inline-notif {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border-radius: var(--radius);
+      animation: notif-slide .3s ease-out;
+      transition: all .25s;
+    }
+    @keyframes notif-slide { 0%{opacity:0;transform:translateY(-8px)} 100%{opacity:1;transform:translateY(0)} }
+    .inline-notif.danger { background: var(--red-soft); border: 1px solid #f5d0d0; }
+    .inline-notif.warn { background: var(--amber-soft); border: 1px solid #f5e4c4; }
+    .inline-notif.info { background: var(--blue-soft); border: 1px solid #d0dffa; }
+    .inline-notif.success { background: var(--green-soft); border: 1px solid #c4e8d0; }
+    .inline-notif .in-icon {
+      width: 30px; height: 30px; border-radius: 8px; background: #fff;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .inline-notif.danger .in-icon { color: var(--red); }
+    .inline-notif.warn .in-icon { color: var(--amber); }
+    .inline-notif.info .in-icon { color: var(--blue); }
+    .inline-notif.success .in-icon { color: var(--green); }
+    .inline-notif .in-icon .material-symbols-outlined { font-size: 16px; }
+    .inline-notif .in-body { flex: 1; min-width: 0; }
+    .inline-notif .in-title { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+    .inline-notif .in-text { font-size: 11.5px; color: var(--ink-secondary); margin-top: 1px; }
+    .inline-notif .in-action {
+      font-size: 11px; font-weight: 600; text-decoration: none;
+      padding: 6px 14px; border-radius: 7px; white-space: nowrap;
+      background: #fff; flex-shrink: 0;
+    }
+    .inline-notif.danger .in-action { color: var(--red); }
+    .inline-notif.warn .in-action { color: #8a6420; }
+    .inline-notif.info .in-action { color: var(--blue); }
+    .inline-notif.success .in-action { color: #3d8a5b; }
+    .inline-notif .in-close {
+      border: none; background: none; font-size: 16px; cursor: pointer;
+      color: var(--ink-muted); opacity: .5; flex-shrink: 0; padding: 0 4px;
+      transition: opacity .15s;
+    }
+    .inline-notif .in-close:hover { opacity: 1; }
+
+    @media (max-width: 1200px) {
+      .metrics-row { grid-template-columns: repeat(3, 1fr); }
+      .dash-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── Collapsible icon-rail sidebar ── */
+    .sidebar, .main { transition: width .25s ease, margin-left .25s ease; }
+    .topbar .waffle { cursor: pointer; }
+    .sb-toggle { display: flex; align-items: center; gap: 9px; width: 100%; border: none; background: none; cursor: pointer; padding: 8px 10px; margin-bottom: 4px; color: var(--ink-secondary); border-radius: 8px; font-family: inherit; }
+    .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); }
+    .sb-toggle .material-symbols-outlined { font-size: 20px; }
+    body.sb-rail .sidebar { width: 60px; }
+    body.sb-rail .main { margin-left: 60px; }
+    body.sb-rail .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
+    body.sb-rail .sb-item .material-symbols-outlined { font-size: 18px; }
+    body.sb-rail .sb-group { display: none; }
+    body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
+    body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
+    body.sb-rail .sb-toggle { justify-content: center; padding: 8px 0; }
+    @media (max-width: 640px) { .topbar .search { display: none; } }
+  
+    /* ── Copilot assistant ── */
+    .copilot-ask { background: linear-gradient(135deg,#f7f7fd,#eef1f9); border:1px solid #e4e6f2; border-radius:12px; padding:14px 16px; margin-bottom:20px; }
+    .copilot-ask-head { display:flex; align-items:center; gap:8px; margin-bottom:11px; flex-wrap:wrap; }
+    .copilot-ask-badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:#5b54d6; letter-spacing:.04em; }
+    .copilot-ask-sub { font-size:11px; color:var(--ink-muted); }
+    .cp-pro { display:flex; align-items:flex-start; gap:10px; background:#f4f3ff; border:1px solid #e0ddf7; border-radius:8px; padding:10px 12px; margin-bottom:12px; }
+    .cp-pro > .material-symbols-outlined { color:#5b54d6; font-size:19px; flex-shrink:0; margin-top:1px; }
+    .cp-pro-body { flex:1; font-size:12.5px; color:var(--ink); line-height:1.55; }
+    .cp-pro-tag { font-size:9px; font-weight:700; letter-spacing:.05em; color:#5b54d6; background:#fff; border:1px solid #e0ddf7; border-radius:4px; padding:1px 6px; margin-right:6px; text-transform:uppercase; }
+    .cp-pro-action { flex-shrink:0; font-size:11.5px; font-weight:600; background:#5b54d6; color:#fff; border:none; border-radius:6px; padding:7px 13px; cursor:pointer; font-family:inherit; white-space:nowrap; text-decoration:none; display:inline-block; }
+    .cp-pro-action:hover { background:#4a43c4; }
+    .copilot-input-row { display:flex; gap:8px; align-items:center; }
+    .copilot-input { flex:1; border:1px solid var(--border); border-radius:8px; padding:9px 12px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; background:var(--surface); }
+    .copilot-input:focus { border-color:#5b54d6; box-shadow:0 0 0 3px rgba(91,84,214,.12); }
+    .copilot-send { border:none; background:var(--blue); color:#fff; border-radius:8px; padding:9px 15px; font-size:12.5px; font-weight:600; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:5px; }
+    .copilot-send:hover { filter:brightness(1.15); }
+    .copilot-chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+    .copilot-chip { font-size:11.5px; color:var(--ink-secondary); background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:5px 12px; cursor:pointer; transition:all .12s; }
+    .copilot-chip:hover { border-color:#5b54d6; color:#5b54d6; background:#f4f3ff; }
+    .copilot-answer { margin-top:12px; background:var(--surface); border:1px solid #e4e6f2; border-radius:8px; padding:13px 15px; display:none; }
+    .copilot-answer.show { display:block; animation:cop-in .25s ease; }
+    @keyframes cop-in { from{opacity:0;transform:translateY(-4px);} to{opacity:1;transform:none;} }
+    .copilot-answer-head { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:#5b54d6; margin-bottom:8px; letter-spacing:.04em; }
+    .copilot-answer-body { font-size:12.5px; color:var(--ink); line-height:1.6; }
+    .copilot-answer-actions { margin-top:11px; display:flex; gap:8px; flex-wrap:wrap; }
+    .copilot-answer-actions button { font-size:11.5px; font-weight:600; border:1px solid var(--border); background:var(--surface); color:var(--ink-secondary); border-radius:6px; padding:6px 12px; cursor:pointer; font-family:inherit; }
+    .copilot-answer-actions button.primary { background:#5b54d6; color:#fff; border-color:#5b54d6; }
+    .copilot-answer-cite { margin-top:10px; font-size:10.5px; color:var(--ink-muted); display:flex; align-items:center; gap:5px; border-top:1px solid var(--border); padding-top:8px; }
+  
+    /* ── Copilot dropdown ── */
+    .copilot-dd-overlay { position: fixed; inset: 0; z-index: 45; display: none; }
+    .copilot-dd-overlay.open { display: block; }
+    .copilot-dd { position: fixed !important; top: calc(var(--topbar-h) + 6px); right: 14px; width: 420px; max-width: calc(100vw - 24px); max-height: calc(100vh - var(--topbar-h) - 20px); overflow-y: auto; background: #fff !important; border: 1px solid #e4e6f2; box-shadow: 0 16px 48px rgba(20,24,34,.22); margin: 0 !important; z-index: 46; display: none; }
+    .copilot-dd.open { display: block; animation: cop-in .2s ease; }
+    .copilot-dd-close { margin-left: auto; border: none; background: none; font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 0 2px; }
+    .copilot-dd-close:hover { color: var(--ink); }
+    .topbar .copilot { cursor: pointer; }
+    </style>
+</head>
+<body>
+  <div class="copilot-dd-overlay open" id="copilotOverlay" onclick="toggleCopilot()"></div>
+  <div class="nav-backdrop" onclick="closeSidebar()"></div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <span class="waffle" onclick="toggleSidebar()">&#9783;</span>
+    <span class="app-name">Dynamics 365</span>
+    <span class="sep"></span>
+    <img src="logo.png" alt="Al Ghurair" class="tb-logo" style="height:20px;width:auto;display:block;opacity:.95" /><span class="sep"></span><span class="org">AGM Sales</span>
+    <input class="search" type="text" placeholder="&#128269; Search..." />
+    <span class="spacer"></span>
+    <div class="actions">
+      <div class="copilot" id="copilotBtn" onclick="toggleCopilot()">&#10024; Copilot</div>
+      <span style="opacity:.7;font-size:14px">&#9881;</span>
+      <div class="notif-bell" id="bellBtn" onclick="toggleNotif()">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="bell-badge" id="bellBadge">4</span>
+      </div>
+      <span style="opacity:.7;font-size:14px">&#10067;</span>
+      <div class="avatar">NA</div>
+    </div>
+  </div>
+
+  <!-- Notification overlay + dropdown -->
+  <div class="notif-overlay" id="notifOverlay" onclick="toggleNotif()"></div>
+  <div class="notif-dropdown" id="notifDropdown">
+    <div class="notif-head">
+      <div class="notif-head-left">
+        <span class="material-symbols-outlined">notifications</span>
+        Notifications
+        <span class="notif-badge" id="notifBadge">4</span>
+      </div>
+      <div class="notif-actions">
+        <button onclick="markAllRead()">Mark all read</button>
+      </div>
+    </div>
+    <div class="notif-list" id="notifList">
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon danger"><span class="material-symbols-outlined">warning</span></div>
+        <div class="ni-body">
+          <div class="ni-title">SLA breached &mdash; manager notified</div>
+          <div class="ni-text">Maya Hassan (L-2026-04831) passed the 1-hour first-contact SLA.</div>
+          <div class="ni-meta">
+            <span class="ni-time">12 min ago</span>
+            <a href="lead-detail.html?lead=Maya+Hassan" class="ni-action">Open lead</a>
+          </div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon warn"><span class="material-symbols-outlined">undo</span></div>
+        <div class="ni-body">
+          <div class="ni-title">Lead returned by Sales Executive</div>
+          <div class="ni-text">Sara Ali (L-2026-04826) &mdash; missing preferred showroom.</div>
+          <div class="ni-meta">
+            <span class="ni-time">28 min ago</span>
+            <a href="lead-detail.html?lead=Sara+Ali" class="ni-action">Complete lead</a>
+          </div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon info"><span class="material-symbols-outlined">person_add</span></div>
+        <div class="ni-body">
+          <div class="ni-title">2 new leads assigned to you</div>
+          <div class="ni-text">Hiren Patel (AGM website) and Karim Saleh (Google Search) added to your queue.</div>
+          <div class="ni-meta">
+            <span class="ni-time">45 min ago</span>
+            <a href="lead-detail.html" class="ni-action">View queue</a>
+          </div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon success"><span class="material-symbols-outlined">check_circle</span></div>
+        <div class="ni-body">
+          <div class="ni-title">Handover accepted by Sales</div>
+          <div class="ni-text">Ahmad Rizk (L-2026-04810) was accepted by Mariam K. Test drive booked.</div>
+          <div class="ni-meta">
+            <span class="ni-time">1h ago</span>
+          </div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item">
+        <span class="notif-dot"></span>
+        <div class="ni-icon info"><span class="material-symbols-outlined">schedule</span></div>
+        <div class="ni-body">
+          <div class="ni-title">Follow-up reminder: Aisha Khalifa</div>
+          <div class="ni-text">Scheduled follow-up at 14:30 for EXEED RX enquiry.</div>
+          <div class="ni-meta">
+            <span class="ni-time">2h ago</span>
+            <a href="lead-detail.html?lead=Aisha+Khalifa" class="ni-action">Open lead</a>
+          </div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item">
+        <span class="notif-dot"></span>
+        <div class="ni-icon success"><span class="material-symbols-outlined">trending_up</span></div>
+        <div class="ni-body">
+          <div class="ni-title">SLA compliance improved to 92%</div>
+          <div class="ni-text">Your 1st-contact SLA is up +2pp vs last week. Keep it up!</div>
+          <div class="ni-meta">
+            <span class="ni-time">3h ago</span>
+          </div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+    </div>
+    <div class="notif-footer">
+      <a href="#">View all notifications</a>
+    </div>
+  </div>
+
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-logo">A</div>
+        <div><span class="sb-name">AGM Sales</span><br><span class="sb-sub">EXEED CRM</span></div>
+      </div>
+      <nav class="sb-nav">
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
+        <a href="index.html" class="sb-item"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">task_alt</span>Activities</a>
+        <div class="sb-group">Call Center</div>
+        <a href="#" class="sb-item active"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today's Leads</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Follow-ups</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manag&hellip;</a>
+        <div class="sb-group">Sales</div>
+        <a href="lead-detail.html" class="sb-item"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">handshake</span>Deals</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">request_quote</span>Quotes</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Test Drives</a>
+        <div class="sb-group">Customers</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">business</span>Accounts</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">contacts</span>Contacts</a>
+        <div class="sb-group">Operations</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">admin_panel_settings</span>Sales Admin</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">payments</span>Payments</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">description</span>Documents</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">inventory</span>JAFZA Orders</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">build</span>Vehicle Prep</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">store</span>Vendors</a>
+        <div class="sb-group">Deliveries</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">local_shipping</span>Delivery Dashboard</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">today</span>Today's Deliveries</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">block</span>Readiness Blockers</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">check_circle</span>Completed Delive&hellip;</a>
+        <div class="sb-group">Management</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">storefront</span>Showroom Dashb&hellip;</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">add_circle</span>Add-on Penetration</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">warning</span>SLA &amp; Exceptions</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">bar_chart</span>Team Performance</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">groups</span>Showroom Team</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="cmdbar">
+        <span class="ro"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle">info</span> Read-only &middot; Status: <b>Qualified</b></span>
+        <div class="cmd-sep"></div>
+        <button class="cb"><span class="material-symbols-outlined">arrow_back</span></button>
+        <button class="cb"><span class="material-symbols-outlined">share</span></button>
+        <div class="cmd-sep"></div>
+        <button class="cb"><span class="material-symbols-outlined">person_add</span> Assign</button>
+        <button class="cb"><span class="material-symbols-outlined">block</span> Disqualify</button>
+        <button class="cb"><span class="material-symbols-outlined">forward_to_inbox</span> Assign Lead</button>
+        <button class="cb"><span class="material-symbols-outlined">replay</span> Reactivate</button>
+        <button class="cb"><span class="material-symbols-outlined">refresh</span> Refresh</button>
+        <button class="cb"><span class="material-symbols-outlined">lock</span> Check Access</button>
+        <button class="cb"><span class="material-symbols-outlined">account_tree</span> Process</button>
+        <button class="cb"><span class="material-symbols-outlined">bookmark</span> Follow</button>
+        <button class="cb"><span class="material-symbols-outlined">bolt</span> Flow</button>
+        <button class="cb"><span class="material-symbols-outlined">more_horiz</span></button>
+        <button class="cb" style="margin-left:auto"><span class="material-symbols-outlined">ios_share</span> Share</button>
+      </div>
+
+      <div class="page">
+        <!-- Greeting -->
+        <div class="greeting">
+          <div class="greeting-left">
+            <h1>Good afternoon, Nadia <span class="wave">&#128075;</span></h1>
+            <div class="greeting-sub">
+              <span class="date">Tuesday, 30 Jun 2026</span> &middot; You have <strong style="color:var(--red)">7 leads</strong> waiting for action and <strong style="color:var(--green)">3 ready</strong> to hand over.
+            </div>
+          </div>
+          <div class="greeting-right">
+            <div class="shift-pill">
+              <span class="dot"></span> On shift &middot; <span class="tm" id="timer">03:12:47</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px"><button class="btn-soft" onclick="doRefresh(this)"><span class="material-symbols-outlined">refresh</span> Refresh</button><span class="last-refreshed" id="lastRefreshed" style="font-size:11px;color:var(--ink-muted);white-space:nowrap"></span></div>
+          </div>
+        </div>
+
+        <!-- Ask Copilot -->
+        <div class="copilot-ask copilot-dd open" id="copilotDD">
+          <div class="copilot-ask-head">
+            <span class="copilot-ask-badge">&#10024; COPILOT</span>
+            <span class="copilot-ask-sub">Grounded on your dashboard &middot; updated just now</span>
+            <button class="copilot-dd-close" onclick="toggleCopilot()" aria-label="Close">&times;</button>
+          </div>
+          <div class="cp-pro">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <div class="cp-pro-body"><span class="cp-pro-tag">Proactive</span>SLA breached &mdash; <strong>Maya Hassan</strong> passed the 1-hour first-contact window and is still not actioned. She&rsquo;s a hot Instagram lead on EXEED TXL &mdash; call her first.</div>
+            <a href="lead-detail.html?lead=Maya+Hassan" class="cp-pro-action">Open lead</a>
+          </div>
+          <div class="copilot-input-row">
+            <input class="copilot-input" id="copilotInput" placeholder="Ask about your queue… e.g. what should I do first?" onkeydown="if(event.key==='Enter')askCopilot()" />
+            <button class="copilot-send" onclick="askCopilot()"><span class="material-symbols-outlined" style="font-size:16px">send</span> Ask</button>
+          </div>
+          <div class="copilot-chips"><span class="copilot-chip" onclick="askCopilot('priority')">What should I do first?</span><span class="copilot-chip" onclick="askCopilot('sla')">Which leads are at SLA risk?</span><span class="copilot-chip" onclick="askCopilot('handover')">What's ready to hand over?</span><span class="copilot-chip" onclick="askCopilot('draft')">Draft a follow-up for Aisha</span></div>
+          <div class="copilot-answer" id="copilotAnswer">
+            <div class="copilot-answer-head"><span class="material-symbols-outlined" style="font-size:14px">auto_awesome</span> COPILOT</div>
+            <div class="copilot-answer-body" id="copilotAnswerBody"></div>
+            <div class="copilot-answer-actions" id="copilotAnswerActions"></div>
+            <div class="copilot-answer-cite" id="copilotAnswerCite"></div>
+          </div>
+        </div>
+
+        <!-- Inline Notifications -->
+        <div class="inline-notifs" id="inlineNotifs">
+          <div class="inline-notif danger">
+            <div class="in-icon"><span class="material-symbols-outlined">warning</span></div>
+            <div class="in-body">
+              <div class="in-title">SLA breached &mdash; Maya Hassan</div>
+              <div class="in-text">L-2026-04831 passed the 1-hour first-contact SLA. Manager notified.</div>
+            </div>
+            <a href="lead-detail.html?lead=Maya+Hassan" class="in-action">Open lead</a>
+            <button class="in-close" onclick="dismissInline(this)">&times;</button>
+          </div>
+          <div class="inline-notif warn">
+            <div class="in-icon"><span class="material-symbols-outlined">undo</span></div>
+            <div class="in-body">
+              <div class="in-title">Lead returned by Sales Executive</div>
+              <div class="in-text">Sara Ali (L-2026-04826) &mdash; missing preferred showroom. Complete and resubmit.</div>
+            </div>
+            <a href="lead-detail.html?lead=Sara+Ali" class="in-action">Complete lead</a>
+            <button class="in-close" onclick="dismissInline(this)">&times;</button>
+          </div>
+          <div class="inline-notif info">
+            <div class="in-icon"><span class="material-symbols-outlined">person_add</span></div>
+            <div class="in-body">
+              <div class="in-title">2 new leads assigned to you</div>
+              <div class="in-text">Hiren Patel (AGM website) and Karim Saleh (Google Search) added to your queue.</div>
+            </div>
+            <a href="#" class="in-action">View queue</a>
+            <button class="in-close" onclick="dismissInline(this)">&times;</button>
+          </div>
+          <div class="inline-notif success">
+            <div class="in-icon"><span class="material-symbols-outlined">check_circle</span></div>
+            <div class="in-body">
+              <div class="in-title">Handover accepted &mdash; Ahmad Rizk</div>
+              <div class="in-text">L-2026-04810 accepted by Mariam K. Test drive booked for tomorrow.</div>
+            </div>
+            <button class="in-close" onclick="dismissInline(this)">&times;</button>
+          </div>
+        </div>
+
+        <!-- KPI Row -->
+        <div class="metrics-row">
+          <div class="dial-card">
+            <div class="dial-label">1st-Contact SLA</div>
+            <div class="dial-wrap">
+              <svg class="dial-svg" viewBox="0 0 120 65">
+                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
+                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" id="dialSLA"
+                  stroke="url(#gradTeal)" stroke-dasharray="157" stroke-dashoffset="157" />
+                <defs>
+                  <linearGradient id="gradTeal" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#5cb97f" />
+                    <stop offset="100%" stop-color="#4fb8a8" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="dial-center">
+                <div class="dial-value" style="color:#3d8a5b">92%</div>
+              </div>
+            </div>
+            <div class="dial-sub"><span style="color:var(--green)">&uarr;</span> +2pp WoW</div>
+          </div>
+          <div class="dial-card">
+            <div class="dial-label">Avg. Handle Time</div>
+            <div class="dial-wrap">
+              <svg class="dial-svg" viewBox="0 0 120 65">
+                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
+                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" id="dialTime"
+                  stroke="url(#gradPurple)" stroke-dasharray="157" stroke-dashoffset="157" />
+                <defs>
+                  <linearGradient id="gradPurple" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#a78bfa" />
+                    <stop offset="100%" stop-color="#7c6dd8" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="dial-center">
+                <div class="dial-value" style="color:#7c6dd8">4m 12s</div>
+              </div>
+            </div>
+            <div class="dial-sub"><span style="color:var(--green)">&darr;</span> &minus;18s vs yday</div>
+          </div>
+          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
+            <div class="mc-icon blue"><span class="material-symbols-outlined">group</span></div>
+            <div class="mc-lbl">Leads Assigned</div>
+            <div class="mc-val">18</div>
+          </a>
+          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
+            <div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div>
+            <div class="mc-lbl">Not Actioned</div>
+            <div class="mc-val txt-red">7</div>
+            <div class="mc-sub">Action now</div>
+          </a>
+          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
+            <div class="mc-icon amber"><span class="material-symbols-outlined">schedule</span></div>
+            <div class="mc-lbl">Callbacks Due</div>
+            <div class="mc-val">5</div>
+            <div class="mc-sub">Next: 14:30</div>
+          </a>
+          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
+            <div class="mc-icon green"><span class="material-symbols-outlined">check_circle</span></div>
+            <div class="mc-lbl">Ready for Handover</div>
+            <div class="mc-val">3</div>
+            <div class="mc-sub">Push to Sales</div>
+          </a>
+        </div>
+
+        <!-- Main grid -->
+        <div class="dash-grid">
+          <!-- Lead queue -->
+          <div class="q-panel">
+            <div class="q-head">
+              <h3>Today's lead queue</h3>
+              <span class="q-cnt">9 of 9</span>
+            </div>
+            <div class="q-filters">
+              <span class="material-symbols-outlined">filter_list</span>
+              <button class="qt on">All</button>
+              <button class="qt">New</button>
+              <button class="qt">Not actioned</button>
+              <button class="qt">Follow-ups</button>
+              <button class="qt">Ready to hand over</button>
+            </div>
+            <table class="qt-table">
+              <thead><tr>
+                <th>Customer</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Status</th><th style="text-align:right">Action</th>
+              </tr></thead>
+              <tbody>
+                <tr>
+                  <td><div class="c-name">Hiren Patel</div><div class="c-phone">+971 50 123 4567</div><div class="c-id">L-2026-04832</div></td>
+                  <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
+                  <td><span class="mdl">EXEED LX Premium</span></td>
+                  <td><span class="sla-tag ok"><span class="blink"></span>12 min left</span></td>
+                  <td><span class="st-badge new">New</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Hiren+Patel" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                </tr>
+                <tr class="urg">
+                  <td><div class="c-name">Maya Hassan</div><div class="c-phone">+971 55 998 2210</div><div class="c-id">L-2026-04831</div></td>
+                  <td><span class="src"><span class="src-dot ig">I</span>Instagram Ads</span></td>
+                  <td><span class="mdl">EXEED TXL Flagship</span></td>
+                  <td><span class="sla-tag brch"><span class="blink"></span>SLA breached</span></td>
+                  <td><span class="st-badge na">Not actioned</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Maya+Hassan" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Karim Saleh</div><div class="c-phone">+971 52 447 1100</div><div class="c-id">L-2026-04829</div></td>
+                  <td><span class="src"><span class="src-dot ggl">G</span>Google Search</span></td>
+                  <td><span class="mdl">EXEED VX</span></td>
+                  <td><span class="sla-tag ok"><span class="blink"></span>1h 20m left</span></td>
+                  <td><span class="st-badge new">New</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Karim+Saleh" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Aisha Khalifa</div><div class="c-phone">+971 50 887 6631</div><div class="c-id">L-2026-04825</div></td>
+                  <td><span class="src"><span class="src-dot walk">R</span>Walk-in ref.</span></td>
+                  <td><span class="mdl">EXEED RX</span></td>
+                  <td><span class="sla-tag wrn"><span class="blink"></span>Due 14:30</span></td>
+                  <td><span class="st-badge cb">Follow-up</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Aisha+Khalifa" class="act-btn open"><span class="material-symbols-outlined">event</span>View follow-up</a></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Linda George</div><div class="c-phone">+971 56 220 7788</div><div class="c-id">L-2026-04820</div></td>
+                  <td><span class="src"><span class="src-dot fb">f</span>Facebook Ads</span></td>
+                  <td><span class="mdl">EXEED LX</span></td>
+                  <td><span class="sla-tag wrn"><span class="blink"></span>Due 15:15</span></td>
+                  <td><span class="st-badge cb">Follow-up</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Linda+George" class="act-btn open"><span class="material-symbols-outlined">event</span>View follow-up</a></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Omar Nasser</div><div class="c-phone">+971 55 331 9987</div><div class="c-id">L-2026-04818</div></td>
+                  <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
+                  <td><span class="mdl">EXEED TXL</span></td>
+                  <td><span class="sla-tag ok">Qualified</span></td>
+                  <td><span class="st-badge ho">Ready to hand over</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand"><span class="material-symbols-outlined">send</span>Hand over</a></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Fatima Al Ali</div><div class="c-phone">+971 50 662 4411</div><div class="c-id">L-2026-04817</div></td>
+                  <td><span class="src"><span class="src-dot ref">R</span>Referral</span></td>
+                  <td><span class="mdl">EXEED VX</span></td>
+                  <td><span class="sla-tag ok">Qualified</span></td>
+                  <td><span class="st-badge ho">Ready to hand over</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand"><span class="material-symbols-outlined">send</span>Hand over</a></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Yousef Rahman</div><div class="c-phone">+971 52 118 3344</div><div class="c-id">L-2026-04815</div></td>
+                  <td><span class="src"><span class="src-dot ig">I</span>Instagram Ads</span></td>
+                  <td><span class="mdl">EXEED LX</span></td>
+                  <td><span class="sla-tag ok">Qualified</span></td>
+                  <td><span class="st-badge ho">Ready to hand over</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand"><span class="material-symbols-outlined">send</span>Hand over</a></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Reem Al Zaabi</div><div class="c-phone">+971 55 774 8823</div><div class="c-id">L-2026-04814</div></td>
+                  <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
+                  <td><span class="mdl">EXEED RX</span></td>
+                  <td><span class="sla-tag ok">In progress</span></td>
+                  <td><span class="st-badge ip">In progress</span></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Reem+Al+Zaabi" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="side">
+            <div class="sc">
+              <div class="sc-head">
+                <h4><span class="material-symbols-outlined" style="color:var(--amber)">schedule</span> Follow-ups due</h4>
+                <span class="sc-cnt">2</span>
+              </div>
+              <div class="sc-row">
+                <div class="sc-row-top"><span class="r-name">Aisha Khalifa</span><span class="tc urg">14:30</span></div>
+                <div class="r-detail">EXEED RX &middot; Due 14:30</div>
+                <a href="lead-detail.html?lead=Aisha+Khalifa" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">open_in_new</span> Open lead</a>
+              </div>
+              <div class="sc-row">
+                <div class="sc-row-top"><span class="r-name">Linda George</span><span class="tc norm">15:15</span></div>
+                <div class="r-detail">EXEED LX &middot; Due 15:15</div>
+                <a href="lead-detail.html?lead=Linda+George" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">open_in_new</span> Open lead</a>
+              </div>
+            </div>
+
+            <div class="sc">
+              <div class="sc-head">
+                <h4><span class="material-symbols-outlined" style="color:var(--green)">check_circle</span> Ready to hand over</h4>
+                <span class="sc-cnt">3</span>
+              </div>
+              <div class="sc-row">
+                <div class="sc-row-top"><span class="r-name">Omar Nasser</span><span class="qb">Qualified</span></div>
+                <div class="r-detail">EXEED TXL &middot; AGM website</div>
+                <a href="lead-detail.html" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a>
+              </div>
+              <div class="sc-row">
+                <div class="sc-row-top"><span class="r-name">Fatima Al Ali</span><span class="qb">Qualified</span></div>
+                <div class="r-detail">EXEED VX &middot; Referral</div>
+                <a href="lead-detail.html" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a>
+              </div>
+              <div class="sc-row">
+                <div class="sc-row-top"><span class="r-name">Yousef Rahman</span><span class="qb">Qualified</span></div>
+                <div class="r-detail">EXEED LX &middot; Instagram Ads</div>
+                <a href="lead-detail.html" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a>
+              </div>
+            </div>
+
+            <div class="ai">
+              <div class="ai-top">
+                <span class="ai-pill">&#10024; AI Copilot</span>
+                <span class="ai-title">Lead Qualification Assist</span>
+              </div>
+              <div class="ai-body">
+                Next best action for <strong>Hiren Patel</strong>: confirm intent, capture budget band, propose showroom slot within 24h.
+                <br>
+                <a href="lead-detail.html?lead=Hiren+Patel" class="ai-btn"><span class="material-symbols-outlined">open_in_new</span> Open lead with suggestions</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const arc = 157;
+      document.getElementById('dialSLA').style.strokeDashoffset = arc - (arc * 0.92);
+      document.getElementById('dialTime').style.strokeDashoffset = arc - (arc * 0.52);
+    });
+
+    function toggleNotif() {
+      const dd = document.getElementById('notifDropdown');
+      const ov = document.getElementById('notifOverlay');
+      dd.classList.toggle('open');
+      ov.classList.toggle('open');
+    }
+
+    function markAllRead() {
+      document.querySelectorAll('.notif-item.unread').forEach(n => n.classList.remove('unread'));
+      updateBadge();
+    }
+
+    function dismissNotif(btn) {
+      const item = btn.closest('.notif-item');
+      item.style.transition = 'all .2s';
+      item.style.opacity = '0';
+      item.style.maxHeight = '0';
+      item.style.padding = '0 16px';
+      setTimeout(() => { item.remove(); updateBadge(); }, 200);
+    }
+
+    function updateBadge() {
+      const count = document.querySelectorAll('.notif-item.unread').length;
+      const bellBadge = document.getElementById('bellBadge');
+      const notifBadge = document.getElementById('notifBadge');
+      if (count > 0) {
+        bellBadge.textContent = count;
+        notifBadge.textContent = count;
+        bellBadge.style.display = '';
+        notifBadge.style.display = '';
+      } else {
+        bellBadge.style.display = 'none';
+        notifBadge.style.display = 'none';
+      }
+    }
+
+    let sec = 3*3600 + 12*60 + 47;
+    setInterval(() => {
+      sec++;
+      const h = String(Math.floor(sec/3600)).padStart(2,'0');
+      const m = String(Math.floor((sec%3600)/60)).padStart(2,'0');
+      const s = String(sec%60).padStart(2,'0');
+      document.getElementById('timer').textContent = h+':'+m+':'+s;
+    }, 1000);
+
+    function dismissInline(btn) {
+      const notif = btn.closest('.inline-notif');
+      notif.style.opacity = '0';
+      notif.style.transform = 'translateX(40px)';
+      notif.style.maxHeight = notif.offsetHeight + 'px';
+      setTimeout(() => {
+        notif.style.maxHeight = '0';
+        notif.style.padding = '0 16px';
+        notif.style.margin = '0';
+        notif.style.borderWidth = '0';
+      }, 150);
+      setTimeout(() => notif.remove(), 400);
+    }
+
+    // Filter tabs
+    document.querySelectorAll('.qt').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.qt').forEach(x => x.classList.remove('on'));
+        t.classList.add('on');
+      });
+    });
+
+    // Dismiss alerts
+    document.querySelectorAll('.a-close').forEach(b => {
+      b.addEventListener('click', () => {
+        const a = b.closest('.alert');
+        a.style.transition = 'all .25s';
+        a.style.opacity = '0';
+        a.style.transform = 'translateY(-8px)';
+        setTimeout(() => a.remove(), 250);
+      });
+    });
+  </script>
+
+
+  <script>
+    function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
+    function closeSidebar(){ document.body.classList.remove('sb-rail'); }
+  </script>
+
+  <script>
+    function doRefresh(btn){
+      var el=document.getElementById('lastRefreshed');
+      var t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      if(el) el.textContent='Last refreshed '+t;
+      if(btn){var i=btn.querySelector('.material-symbols-outlined');if(i){i.style.transition='transform .6s ease';i.style.transform='rotate(360deg)';setTimeout(function(){i.style.transition='none';i.style.transform='none';},650);}}
+    }
+    (function(){var el=document.getElementById('lastRefreshed');if(el)el.textContent='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
+  </script>
+
+  <script>
+    var copilotLabels = {"priority": "What should I do first?", "sla": "Which leads are at SLA risk?", "handover": "What's ready to hand over?", "draft": "Draft a follow-up for Aisha Khalifa"};
+    var copilotAnswers = {"priority": {"body": "Work your <strong>7 not-actioned leads</strong> first. Highest priority: <strong>Maya Hassan</strong> (SLA breached), then <strong>Karim Saleh</strong> (1h 20m left). Two follow-ups are due at 14:30 (Aisha Khalifa) and 15:15 (Linda George).", "cite": "Based on: Not Actioned (7), Today\u2019s lead queue, Follow-ups due", "actions": ["Open Maya Hassan", "View queue"]}, "sla": {"body": "<strong>1 breached</strong> (Maya Hassan) and <strong>2 approaching</strong> &mdash; Aisha Khalifa (14:30) and Linda George (15:15). Action the breach now to limit exposure and protect first-contact SLA.", "cite": "Based on: SLA tags in Today\u2019s lead queue", "actions": ["Open Maya Hassan", "Snooze"]}, "handover": {"body": "<strong>3 qualified leads ready:</strong> Omar Nasser (EXEED TXL), Fatima Al Ali (EXEED VX), Yousef Rahman (EXEED LX). All have complete discovery &mdash; hand to Sales now to keep the SLA clock green.", "cite": "Based on: Ready to hand over (3)", "actions": ["Hand over all", "Review"]}, "draft": {"body": "Suggested <strong>WhatsApp (EN)</strong> to Aisha Khalifa: &ldquo;Hi Aisha, following up on your EXEED RX enquiry &mdash; I can hold a test-drive slot this weekend at SZR. Which day works for you?&rdquo; Review before sending.", "cite": "Based on: Follow-up due 14:30 \u00b7 preferred channel WhatsApp", "actions": ["Send via WhatsApp", "Edit draft"]}};
+    function copilotMatch(q){ q=(q||'').toLowerCase(); if(/sla|breach|overdue|due/.test(q)) return 'sla'; if(/hand|qualif/.test(q)) return 'handover'; if(/draft|message|follow|whatsapp|email/.test(q)) return 'draft'; return 'priority'; }
+
+    function toggleCopilot(){ var dd=document.getElementById('copilotDD'),ov=document.getElementById('copilotOverlay'); var o=dd.classList.toggle('open'); if(ov)ov.classList.toggle('open',o); }
+    function copilotRender(intent){
+      var a=copilotAnswers[intent]; if(!a) return;
+      document.getElementById('copilotAnswerBody').innerHTML=a.body;
+      document.getElementById('copilotAnswerCite').innerHTML='<span class="material-symbols-outlined" style="font-size:12px">database</span> '+a.cite;
+      document.getElementById('copilotAnswerActions').innerHTML=a.actions.map(function(x,i){return '<button class="'+(i===0?'primary':'')+'">'+x+'</button>';}).join('');
+      document.getElementById('copilotAnswer').classList.add('show');
+    }
+    function askCopilot(intent){
+      var input=document.getElementById('copilotInput');
+      if(typeof intent==='string' && copilotAnswers[intent]){ input.value=copilotLabels[intent]||input.value; }
+      else { intent=copilotMatch(input.value); }
+      copilotRender(intent);
+    }
+  </script>
+</body>
+</html>
