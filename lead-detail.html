@@ -1806,20 +1806,6 @@
       }
       } // end overview tab
       html += '</div>'; // dp-main-scroll
-
-      // Step-nav bar — stuck to the bottom of the left widget
-      var gate = stepProgress(l, stepIdx);
-      var gateDone = gate.done >= gate.total, isLastStep = stepIdx === 7;
-      var nextBtnHtml = gateDone
-        ? (isLastStep ? 'Journey complete <span class="material-symbols-outlined">check</span>' : 'Save &amp; continue <span class="material-symbols-outlined">arrow_forward</span>')
-        : '<span class="material-symbols-outlined" style="font-size:15px">lock</span> Complete '+(gate.total - gate.done)+' more to continue';
-      html += '<div class="dp-main-foot">' +
-        '<button class="dp-bottom-btn ghost" onclick="navStep(-1)"><span class="material-symbols-outlined">arrow_back</span> Previous step</button>' +
-        '<div style="display:flex;gap:8px">' +
-          '<button class="dp-bottom-btn outline">Skip for now</button>' +
-          '<button class="dp-bottom-btn fill'+(gateDone?'':' locked')+'" id="dpNextBtn" onclick="navStep(1)">'+nextBtnHtml+'</button>' +
-        '</div>' +
-      '</div>';
       html += '</div>'; // dp-main
 
       // Right sidebar: KPI snapshot + SLA tracker + AI card + activity
