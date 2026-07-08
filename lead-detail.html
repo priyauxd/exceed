@@ -169,6 +169,10 @@
     .slaw-viewall .material-symbols-outlined { font-size: 16px; }
     .slaw-all { margin-top: 8px; border-top: 1px solid var(--border-soft); padding-top: 8px; }
     .slaw-all-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border-soft); }
+    .slaw-all-row.active { background: var(--blue-soft); border-radius: var(--borderRadiusMedium); padding: 6px 8px; margin: 0 -8px; border-bottom: none; grid-template-columns: auto 1fr auto auto; }
+    .slaw-all-row.active .slaw-all-name { color: var(--blue); }
+    .slaw-all-row.done { opacity: .5; }
+    .slaw-all-mark { font-size: 8.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; color: #fff; background: var(--blue); padding: 1px 6px; border-radius: var(--borderRadiusCircular); }
     .slaw-all-row:last-child { border-bottom: none; }
     .slaw-all-name { font-size: 11.5px; font-weight: 600; color: var(--ink); }
     .slaw-all-tgt { font-size: 10.5px; color: var(--ink-muted); font-family: var(--fontFamilyMonospace); }
@@ -501,6 +505,7 @@
     .td-empty-spark { position: absolute; top: -6px; right: -2px; font-size: 20px; }
     .td-empty-title { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
     .td-empty-sub { font-size: 13px; color: var(--ink-secondary); line-height: 1.6; max-width: 420px; margin: 8px auto 20px; }
+    .td-empty-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 18px; }
     .td-book-btn { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 15px; font-weight: 700; color: #fff; background: #17293d; border: none; border-radius: var(--radius-sm); padding: 13px 26px; cursor: pointer; box-shadow: var(--shadow8); transition: background .12s, transform .1s; }
     .td-book-btn:hover { background: #0f1d2c; transform: translateY(-1px); }
     .td-book-btn.sm { font-size: 13px; padding: 9px 16px; box-shadow: none; }
@@ -529,6 +534,32 @@
     .td-loc { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-secondary); }
     .td-loc .material-symbols-outlined { font-size: 15px; color: var(--ink-muted); }
     .td-badge { font-size: 10.5px; font-weight: 700; padding: 3px 11px; border-radius: var(--borderRadiusCircular); background: var(--green-soft); color: #2f7a4f; }
+    .td-badge.booked { background: var(--blue-soft); color: var(--blue); }
+    .td-badge.progress { background: var(--amber-soft); color: #8a6420; }
+    .td-badge.complete { background: var(--green-soft); color: #2f7a4f; }
+    .waiver-fs { position: fixed; inset: 0; background: var(--bg); z-index: 60; display: flex; flex-direction: column; opacity: 0; visibility: hidden; transition: opacity .2s; }
+    .waiver-fs.open { opacity: 1; visibility: visible; }
+    .wv-fs-header { display: flex; align-items: center; gap: 12px; padding: 13px 24px; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .wv-fs-titles { flex: 1; }
+    .wv-fs-close { border: 1px solid var(--border); background: var(--surface); cursor: pointer; color: var(--ink-secondary); width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all .12s; }
+    .wv-fs-close:hover { background: var(--bg); color: var(--ink); }
+    .wv-fs-body { flex: 1; overflow-y: auto; padding: 28px 24px; }
+    .wv-sheet { max-width: 720px; margin: 0 auto; }
+    .wv-fs-footer { display: flex; align-items: center; gap: 10px; padding: 13px 24px; background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
+    .wv-doc { border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 20px 24px; background: var(--surface); box-shadow: var(--shadow2); }
+    .wv-title { font-size: 14px; font-weight: 800; text-align: center; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1.5px solid var(--ink); }
+    .wv-grid { display: flex; flex-direction: column; gap: 1px; }
+    .wv-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .wv-cell { display: flex; flex-direction: column; gap: 1px; padding: 6px 0; }
+    .wv-k { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); }
+    .wv-v { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+    .wv-legal { font-size: 10.5px; line-height: 1.55; color: var(--ink-secondary); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-soft); }
+    .wv-sign { margin-top: 14px; }
+    .wv-sign-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 6px; }
+    .wv-sign-label { font-size: 11px; font-weight: 700; color: var(--ink); }
+    .wv-sign-hint { font-size: 10.5px; color: var(--ink-muted); }
+    .wv-canvas { width: 100%; height: 120px; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); background: var(--bg); touch-action: none; cursor: crosshair; display: block; }
+    #waiverDownload { display: inline-flex; align-items: center; gap: 5px; text-decoration: none; margin-right: auto; }
     .td-table th.td-act, .td-table td.td-act { text-align: right; }
     .td-resched { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-secondary); background: none; border: none; cursor: pointer; padding: 4px 6px; border-radius: var(--borderRadiusMedium); }
     .td-resched:hover { color: var(--blue); background: var(--blue-soft); }
@@ -564,6 +595,7 @@
     .sw-nav .cp-btn .material-symbols-outlined { font-size: 15px; }
     .sw-dt { display: grid; grid-template-columns: 1fr 1.25fr; gap: 24px; }
     @media (max-width: 640px){ .sw-dt { grid-template-columns: 1fr; } }
+    .la-booking .sw-dt { grid-template-columns: 1fr; gap: 16px; }
     .sw-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
     .sw-cal-head button { border: none; background: none; cursor: pointer; color: var(--ink-secondary); display: flex; padding: 2px; border-radius: 4px; }
     .sw-cal-head button:hover { background: var(--bg); }
@@ -654,7 +686,7 @@
     /* Lead info one-liner */
     .dp-kpiline { display: flex; flex-wrap: wrap; gap: 8px 30px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-soft); font-size: 12.5px; align-items: baseline; }
     .dp-kpi-card { border: 1px solid var(--border-soft); border-radius: var(--radius-md); background: var(--surface); padding: 6px 14px; margin-bottom: 14px; box-shadow: var(--shadow2); }
-    .dp-kpi-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-secondary); padding: 9px 0 8px; border-bottom: 1px solid var(--border-soft); }
+    .dp-kpi-head { font-size: 13px; font-weight: 700; color: var(--ink); padding: 9px 0 4px; }
     .dp-kpi-item { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); }
     .dp-kpi-item:last-child { border-bottom: none; }
     .dp-kpi-l { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
@@ -798,6 +830,10 @@
     .la-disc { display: flex; flex-direction: column; gap: 7px; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 10px 12px; background: var(--surface); }
     .la-disc-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink); cursor: pointer; }
     .la-disc-item input { accent-color: var(--blue); width: 15px; height: 15px; }
+    .la-radio { display: flex; flex-direction: column; gap: 7px; }
+    .la-radio-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink); cursor: pointer; padding: 8px 11px; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); background: var(--surface); }
+    .la-radio-item:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); }
+    .la-radio-item input { accent-color: var(--blue); width: 15px; height: 15px; }
     .cp-input::placeholder, .cp-textarea::placeholder { color: var(--ink-muted); }
     .cp-textarea { resize: vertical; min-height: 62px; }
     .cp-footer { display: flex; gap: 10px; justify-content: flex-end; padding: 14px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
@@ -1065,7 +1101,24 @@
     </div>
     <div class="cp-footer">
       <button class="cp-btn" onclick="closeLogActivity()">Cancel</button>
-      <button class="cp-btn primary" onclick="submitLogActivity()">Save activity</button>
+      <button class="cp-btn" onclick="submitLogActivity(false)">Save</button>
+      <button class="cp-btn primary" onclick="submitLogActivity(true)">Save &amp; close</button>
+    </div>
+  </div>
+
+  <div class="waiver-fs" id="waiverPanel" role="dialog" aria-label="Test drive waiver">
+    <div class="wv-fs-header">
+      <div class="wv-fs-titles">
+        <div class="cp-title">Test Drive Authorization</div>
+        <div class="cp-sub">Sign online on this device, or download to sign on paper</div>
+      </div>
+      <button class="wv-fs-close" title="Close" onclick="closeWaiver()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="wv-fs-body" id="waiverBody"></div>
+    <div class="wv-fs-footer">
+      <a class="cp-btn" id="waiverDownload" href="test-drive-waiver.pdf" download="Test-Drive-Waiver.pdf"><span class="material-symbols-outlined" style="font-size:16px">download</span> Download PDF</a>
+      <button class="cp-btn" onclick="clearWaiverSig()">Clear</button>
+      <button class="cp-btn primary" onclick="confirmWaiver()">Sign &amp; confirm</button>
     </div>
   </div>
 
@@ -1141,52 +1194,120 @@
 
     // ── Test-drive booking flow ──
     var tdBookView = 'empty'; // 'empty' | 'wizard' | 'list'
-    var tdSchedStep = 1, tdEditIdx = -1;
+    var tdEditIdx = -1;
     var tdSched = { model:null, date:null, time:null };
     var tdBookings = [];
+    var tdDemoSeeded = false;
     var tdCalY = 2026, tdCalM = 9; // October 2026
     function schedRerender(){ renderDetail(selectedIdx, currentStep); }
-    function bookStart(){ tdEditIdx = -1; tdSched = { model:null, date:null, time:null }; tdSchedStep = 1; tdBookView = 'wizard'; schedRerender(); }
+    function bookStart(){ tdEditIdx = -1; tdSched = { model:null, date:null, time:null }; tdBookView = 'wizard'; schedRerender(); }
     function bookCancel(){ tdBookView = tdBookings.length ? 'list' : 'empty'; schedRerender(); }
-    function schedNext(){ if (tdSchedStep < 3) tdSchedStep++; schedRerender(); }
-    function schedBack(){ if (tdSchedStep > 1) tdSchedStep--; else bookCancel(); }
     function calNav(d){ tdCalM += d; if (tdCalM < 0){ tdCalM = 11; tdCalY--; } if (tdCalM > 11){ tdCalM = 0; tdCalY++; } schedRerender(); }
     function selectCalDay(iso){ tdSched.date = iso; schedRerender(); }
     function selectTimeSlot(t){ tdSched.time = t; schedRerender(); }
-    function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdSchedStep = 2; tdBookView = 'wizard'; schedRerender(); }
+    function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdBookView = 'wizard'; schedRerender(); }
+    function tdSetStatus(i, s){ if (!tdBookings[i]) return; tdBookings[i].status = s; showToast(s === 'Complete' ? 'Test drive completed' : 'Waiver signed — drive in progress'); schedRerender(); }
+    function tdDownload(i){ showToast('Test drive report downloaded'); }
+
+    var waiverIdx = -1, waiverSigned = false, waiverSigCtx = null;
+    function openWaiver(i){
+      if (!tdBookings[i]) return;
+      waiverIdx = i; waiverSigned = false;
+      var l = leads[selectedIdx], b = tdBookings[i];
+      var row = function(a, av, c, cv){ return '<div class="wv-row"><div class="wv-cell"><span class="wv-k">'+a+'</span><span class="wv-v">'+(av||'—')+'</span></div>'+(c?'<div class="wv-cell"><span class="wv-k">'+c+'</span><span class="wv-v">'+(cv||'—')+'</span></div>':'')+'</div>'; };
+      var body =
+        '<div class="wv-sheet">' +
+        '<div class="wv-doc">' +
+          '<div class="wv-title">Test Drive Authorization Request</div>' +
+          '<div class="wv-grid">' +
+            row('Vehicle model', b.model, 'Sales in charge', l.owner) +
+            row('VIN no.', '056192', 'Registration', 'DXB E 92967') +
+            row('Start date', tdFmtDate(b.date), 'Start time', b.time) +
+            row('Customer name', l.name, 'Contact no.', l.phone) +
+            row('Location', b.location, 'Accompanied by', l.owner) +
+          '</div>' +
+          '<div class="wv-legal">I confirm that I have received the above vehicle in good condition for test drive purposes, that I am the owner of the above licence and legally allowed to drive the demonstration vehicle. I will not drive off-road unless authorised, and I agree to reimburse any expenses from damage due to my negligence. In case of an accident that is my fault, I agree to pay the insurance excess.</div>' +
+        '</div>' +
+        '<div class="wv-sign">' +
+          '<div class="wv-sign-head"><span class="wv-sign-label">Customer signature</span><span class="wv-sign-hint">Sign with finger or stylus</span></div>' +
+          '<canvas id="waiverCanvas" class="wv-canvas"></canvas>' +
+        '</div>' +
+        '</div>';
+      document.getElementById('waiverBody').innerHTML = body;
+      document.getElementById('waiverPanel').classList.add('open');
+      requestAnimationFrame(initWaiverSig);
+    }
+    function initWaiverSig(){
+      var cv = document.getElementById('waiverCanvas');
+      if (!cv) return;
+      var rect = cv.getBoundingClientRect();
+      cv.width = rect.width; cv.height = rect.height;
+      var ctx = cv.getContext('2d');
+      ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1b2733';
+      waiverSigCtx = ctx;
+      var drawing = false;
+      var pos = function(e){ var r = cv.getBoundingClientRect(); var p = e.touches ? e.touches[0] : e; return { x: p.clientX - r.left, y: p.clientY - r.top }; };
+      var start = function(e){ e.preventDefault(); drawing = true; waiverSigned = true; var p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+      var move = function(e){ if (!drawing) return; e.preventDefault(); var p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
+      var end = function(){ drawing = false; };
+      cv.addEventListener('mousedown', start); cv.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
+      cv.addEventListener('touchstart', start, {passive:false}); cv.addEventListener('touchmove', move, {passive:false}); cv.addEventListener('touchend', end);
+    }
+    function clearWaiverSig(){ var cv = document.getElementById('waiverCanvas'); if (cv && waiverSigCtx){ waiverSigCtx.clearRect(0,0,cv.width,cv.height); waiverSigned = false; } }
+    function confirmWaiver(){
+      if (!waiverSigned){ showToast('Please sign, or use Download PDF to sign on paper'); return; }
+      if (tdBookings[waiverIdx]){ tdBookings[waiverIdx].status = 'In progress'; tdBookings[waiverIdx].waiverSigned = true; }
+      closeWaiver();
+      showToast('Waiver signed — drive in progress');
+      schedRerender();
+    }
+    function closeWaiver(){
+      document.getElementById('waiverPanel').classList.remove('open');
+      waiverIdx = -1; waiverSigCtx = null;
+    }
     function schedDone(){
-      if (!tdSched.date || !tdSched.time){ tdSchedStep = 2; schedRerender(); return; }
+      if (!tdSched.date || !tdSched.time){ schedRerender(); return; }
       var l = leads[selectedIdx];
-      var booking = { model:tdSched.model || l.model, date:tdSched.date, time:tdSched.time, location:l.showroom, status:'Confirmed' };
+      var booking = { model:tdSched.model || l.model, date:tdSched.date, time:tdSched.time, location:l.showroom, status:'Booked' };
       if (tdEditIdx >= 0){ tdBookings[tdEditIdx] = booking; showToast('Test drive rescheduled'); }
-      else { tdBookings.push(booking); showToast('Test drive booked — confirmation sent'); }
+      else {
+        tdBookings.push(booking); showToast('Test drive booked — confirmation sent');
+        // First booking seeds a couple of prior drives so the list shows the full lifecycle of statuses.
+        if (!tdDemoSeeded){
+          tdDemoSeeded = true;
+          tdBookings.push({ model:'EXEED TXL Flagship', date:'2026-07-07', time:'16:00', location:l.showroom, status:'In progress', waiverSigned:true });
+          tdBookings.push({ model:'EXEED RX', date:'2026-07-05', time:'14:30', location:l.showroom, status:'Complete', waiverSigned:true });
+        }
+      }
       l.activities = l.activities || [];
       l.activities.unshift({ type:'visit', text:'Test drive '+(tdEditIdx>=0?'rescheduled':'booked')+' — '+tdFmtDate(booking.date)+' '+booking.time, time:'2026-07-08 12:00' });
       tdEditIdx = -1; tdBookView = 'list';
       schedRerender();
     }
     function tdFmtDate(iso){ if (!iso) return '—'; var p = iso.split('-'); return new Date(+p[0], +p[1]-1, +p[2]).toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' }); }
-    function schedCalendarHtml(){
+    function schedCalendarHtml(navFn, dayFn){
+      navFn = navFn || 'calNav'; dayFn = dayFn || 'selectCalDay';
       var first = new Date(tdCalY, tdCalM, 1);
       var startDay = (first.getDay() + 6) % 7; // Mon=0
       var days = new Date(tdCalY, tdCalM + 1, 0).getDate();
       var name = first.toLocaleString('en-US', { month:'long', year:'numeric' });
-      var h = '<div class="sw-cal-head"><button onclick="calNav(-1)"><span class="material-symbols-outlined">chevron_left</span></button><span>'+name+'</span><button onclick="calNav(1)"><span class="material-symbols-outlined">chevron_right</span></button></div>';
+      var h = '<div class="sw-cal-head"><button onclick="'+navFn+'(-1)"><span class="material-symbols-outlined">chevron_left</span></button><span>'+name+'</span><button onclick="'+navFn+'(1)"><span class="material-symbols-outlined">chevron_right</span></button></div>';
       h += '<div class="sw-cal-grid">';
       ['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(function(d){ h += '<span class="sw-cal-dow">'+d+'</span>'; });
       for (var i=0;i<startDay;i++) h += '<span></span>';
       for (var d=1; d<=days; d++){
         var iso = tdCalY+'-'+String(tdCalM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-        h += '<button class="sw-cal-day'+(tdSched.date===iso?' sel':'')+'" onclick="selectCalDay(\''+iso+'\')">'+d+'</button>';
+        h += '<button class="sw-cal-day'+(tdSched.date===iso?' sel':'')+'" onclick="'+dayFn+'(\''+iso+'\')">'+d+'</button>';
       }
       return h + '</div>';
     }
-    function schedSlotsHtml(){
+    function schedSlotsHtml(slotFn){
+      slotFn = slotFn || 'selectTimeSlot';
       var slots = []; for (var hh=8; hh<=19; hh++){ slots.push(hh+':00'); slots.push(hh+':30'); }
       var title = tdSched.date ? new Date(+tdSched.date.split('-')[0], +tdSched.date.split('-')[1]-1, +tdSched.date.split('-')[2]).toLocaleDateString('en-US',{month:'long',day:'numeric'}) : 'Select a date';
       return '<div class="sw-slots-title">'+title+'</div><div class="sw-slots-grid">' + slots.map(function(t,i){
         var booked = (i*3) % 7 === 0;
-        return '<button class="sw-slot'+(booked?' booked':'')+(tdSched.time===t?' sel':'')+'"'+(booked?' disabled':' onclick="selectTimeSlot(\''+t+'\')"')+'>'+t+'</button>';
+        return '<button class="sw-slot'+(booked?' booked':'')+(tdSched.time===t?' sel':'')+'"'+(booked?' disabled':' onclick="'+slotFn+'(\''+t+'\')"')+'>'+t+'</button>';
       }).join('') + '</div>';
     }
 
@@ -1196,29 +1317,33 @@
       return bookingEmptyState(l);
     }
     function bookingEmptyState(l){
-      var cards = [
-        ['&#128663;','01','Pick the car','Choose the model to try'],
-        ['&#128197;','02','Choose a slot','Date &amp; time that works'],
-        ['&#128205;','03','Come in','Meet us at the showroom']
-      ];
       return '<div class="td-empty">' +
         '<div class="td-empty-badge">&#128663;<span class="td-empty-spark">&#10024;</span></div>' +
         '<div class="td-empty-title">Take it for a spin &#127937;</div>' +
-        '<div class="td-empty-sub">No test drives booked yet. Schedule one and it will show up here with the date, time, and showroom location. &#128221;</div>' +
+        '<div class="td-empty-sub">No test drives booked yet.</div>' +
         '<button class="td-book-btn" onclick="bookStart()"><span class="material-symbols-outlined">add</span> Book a test drive</button>' +
-        '<div class="td-step-cards">' + cards.map(function(c){
-          return '<div class="td-scard"><div class="td-scard-top"><span class="td-scard-ic">'+c[0]+'</span><span class="td-scard-n">'+c[1]+'</span></div><div class="td-scard-t">'+c[2]+'</div><div class="td-scard-s">'+c[3]+'</div></div>';
-        }).join('') + '</div>' +
+        '<div class="td-empty-hint">Pick the car &middot; choose a slot &middot; come in</div>' +
       '</div>';
     }
     function bookingsTable(l){
       var rows = tdBookings.map(function(b,i){
+        var status = b.status || 'Booked';
+        var badgeCls = status === 'Complete' ? 'complete' : (status === 'In progress' ? 'progress' : 'booked');
+        var actions;
+        if (status === 'In progress') {
+          actions = '<button class="td-resched" onclick="tdSetStatus('+i+',\'Complete\')"><span class="material-symbols-outlined">check_circle</span>Complete</button>';
+        } else if (status === 'Complete') {
+          actions = '<button class="td-resched" onclick="tdDownload('+i+')"><span class="material-symbols-outlined">download</span>Download</button>';
+        } else {
+          actions = '<button class="td-resched" onclick="reschedule('+i+')"><span class="material-symbols-outlined">edit</span>Reschedule</button>' +
+            '<button class="td-resched" onclick="openWaiver('+i+')"><span class="material-symbols-outlined">draw</span>Sign waiver</button>';
+        }
         return '<tr>' +
           '<td><span class="td-veh"><span class="td-veh-ic material-symbols-outlined">directions_car</span><strong>'+b.model+'</strong></span></td>' +
           '<td><div class="td-dt"><span><span class="material-symbols-outlined">calendar_today</span>'+tdFmtDate(b.date)+'</span><span class="td-dt-time"><span class="material-symbols-outlined">schedule</span>'+b.time+'</span></div></td>' +
           '<td><span class="td-loc"><span class="material-symbols-outlined">location_on</span>'+b.location+'</span></td>' +
-          '<td><span class="td-badge">'+b.status+'</span></td>' +
-          '<td class="td-act"><button class="td-resched" onclick="reschedule('+i+')"><span class="material-symbols-outlined">edit</span>Reschedule</button></td>' +
+          '<td><span class="td-badge '+badgeCls+'">'+status+'</span></td>' +
+          '<td class="td-act">'+actions+'</td>' +
         '</tr>';
       }).join('');
       return '<div class="td-list">' +
@@ -1228,34 +1353,17 @@
     }
     function bookingWizard(l){
       if (!tdSched.model) tdSched.model = l.model;
-      var steps = ['Vehicle','Date & time','Confirmation'];
-      var head = '<div class="sw-steps">' + steps.map(function(s,i){
-        var n=i+1, cls = tdSchedStep>n?'done':(tdSchedStep===n?'on':'');
-        return '<div class="sw-step '+cls+'"><span class="sw-dot">'+(tdSchedStep>n?'<span class="material-symbols-outlined">check</span>':n)+'</span><span class="sw-slabel">'+s+'</span></div>';
-      }).join('') + '</div>';
-      var body;
-      if (tdSchedStep === 1){
-        var carSvg = '<svg viewBox="0 0 240 100" class="sw-car-svg"><ellipse cx="122" cy="88" rx="104" ry="9" fill="#d6dbe2" opacity="0.7"/><path d="M18 70 Q22 46 50 44 L72 42 Q90 26 120 26 Q152 26 176 44 L210 48 Q228 52 228 66 L228 72 L18 72 Z" fill="#c3ccd6"/><path d="M76 43 Q92 31 118 31 L118 44 Z" fill="#eef2f6"/><path d="M122 31 Q150 31 172 45 L122 45 Z" fill="#eef2f6"/><rect x="30" y="60" width="196" height="5" rx="2" fill="#aab4c0"/><circle cx="66" cy="72" r="15" fill="#2d3340"/><circle cx="66" cy="72" r="7" fill="#9aa3ad"/><circle cx="190" cy="72" r="15" fill="#2d3340"/><circle cx="190" cy="72" r="7" fill="#9aa3ad"/></svg>';
-        body = '<div class="td-wiz-body"><label class="cp-label">Vehicle</label>' +
-          '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
-          '<div class="td-car-frame">'+carSvg+'</div>' +
-          '<div class="sw-nav"><button class="cp-btn" onclick="schedBack()"><span class="material-symbols-outlined">chevron_left</span> Back</button>' +
-          '<button class="dp-tdc-cta sw-next" onclick="schedNext()">Next <span class="material-symbols-outlined">chevron_right</span></button></div></div>';
-      } else if (tdSchedStep === 2){
-        var canNext = tdSched.date && tdSched.time;
-        body = '<div class="td-wiz-body"><div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml()+'</div>' +
-          '<div class="sw-slots">'+schedSlotsHtml()+'</div></div>' +
-          '<div class="td-gradbar"><span>free</span><div class="td-gradbar-track"></div><span>booked</span></div>' +
-          '<div class="sw-nav"><button class="cp-btn" onclick="schedBack()"><span class="material-symbols-outlined">chevron_left</span> Back</button>' +
-          '<button class="dp-tdc-cta sw-next'+(canNext?'':' locked')+'"'+(canNext?' onclick="schedNext()"':'')+'>Next <span class="material-symbols-outlined">chevron_right</span></button></div></div>';
-      } else {
-        body = '<div class="td-wiz-body"><div class="sw-confirm"><p>We are waiting for you on the <strong>'+tdSched.model+'</strong> test drive in our showroom at <strong>'+l.showroom+'</strong> on <strong>'+tdFmtDate(tdSched.date)+'</strong> at <strong>'+(tdSched.time||'—')+'</strong>.</p>' +
-          '<label class="cp-label">Please leave your contacts to confirm the booking</label>' +
-          '<div class="sw-contacts"><input class="cp-input" placeholder="Name" value="'+l.name+'"><input class="cp-input" placeholder="Phone" value="'+l.phone+'"></div></div>' +
-          '<div class="sw-nav"><button class="cp-btn" onclick="schedBack()"><span class="material-symbols-outlined">chevron_left</span> Back</button>' +
-          '<button class="dp-tdc-cta sw-next" onclick="schedDone()">Done</button></div></div>';
-      }
-      return '<div class="td-wiz"><div class="td-wiz-head"><span class="td-wiz-title">Book a test drive</span><button class="td-wiz-cancel" onclick="bookCancel()">Cancel</button></div>'+head+body+'</div>';
+      var canBook = tdSched.date && tdSched.time;
+      var body = '<div class="td-wiz-body">' +
+        '<label class="cp-label">Vehicle</label>' +
+        '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
+        '<label class="cp-label" style="margin-top:14px">Date &amp; time</label>' +
+        '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml()+'</div><div class="sw-slots">'+schedSlotsHtml()+'</div></div>' +
+        '<div class="td-gradbar"><span>free</span><div class="td-gradbar-track"></div><span>booked</span></div>' +
+        '<div class="sw-nav"><button class="cp-btn" onclick="bookCancel()">Cancel</button>' +
+          '<button class="dp-tdc-cta sw-next'+(canBook?'':' locked')+'"'+(canBook?' onclick="schedDone()"':'')+'>Book test drive</button></div>' +
+      '</div>';
+      return '<div class="td-wiz"><div class="td-wiz-head"><span class="td-wiz-title">Book a test drive</span><button class="td-wiz-cancel" onclick="bookCancel()">Cancel</button></div>'+body+'</div>';
     }
     var selectedIds = new Set();
 
@@ -1639,18 +1747,28 @@
         return '<span class="slaw-all-pill '+m[1]+'">'+m[0]+'</span>';
       }
       var bp = l.bpfStage || 1;
-      var rows = [
-        ['First response', '30 min', cls],
-        ['First call attempt', 'Day 1', bp >= 1 ? 'ok' : 'pending'],
-        ['WhatsApp on no-answer', 'Immediate', bp >= 1 ? 'ok' : 'pending'],
-        ['Lead qualification', 'Day 2', bp >= 3 ? 'ok' : (bp === 2 ? 'wrn' : 'pending')],
-        ['Test drive scheduling', 'Day 4', bp >= 4 ? 'ok' : 'pending'],
-        ['Proposal turnaround', '48 hrs', bp >= 6 ? 'ok' : 'pending'],
-        ['Recovery / re-engage', 'Day 10', 'pending'],
-        ['Post-delivery follow-up', '+3 / 7 / 30 d', bp >= 8 ? 'ok' : 'pending']
+      var defs = [
+        ['First response', '30 min', 1],
+        ['First contact', 'Day 1', 2],
+        ['Lead qualification', '1 hr', 3],
+        ['Test drive scheduling', 'Day 4', 4],
+        ['Proposal turnaround', '48 hrs', 5],
+        ['Quote approval', '24 hrs', 6],
+        ['Delivery prep', '3 days', 7],
+        ['Post-delivery follow-up', '+30 d', 8]
       ];
+      var rows = defs.map(function(d){
+        var st = d[2];
+        var status = bp > st ? 'ok' : (bp === st ? (cls === 'brch' ? 'brch' : 'wrn') : 'pending');
+        var group = bp === st ? 0 : (bp < st ? 1 : 2);
+        return { name:d[0], tgt:d[1], status:status, group:group };
+      });
+      rows.sort(function(a,b){ return a.group - b.group; });
       return rows.map(function(r){
-        return '<div class="slaw-all-row"><span class="slaw-all-name">'+r[0]+'</span><span class="slaw-all-tgt">'+r[1]+'</span>'+pill(r[2])+'</div>';
+        var rc = r.group === 0 ? ' active' : (r.group === 2 ? ' done' : '');
+        return '<div class="slaw-all-row'+rc+'">' +
+          (r.group === 0 ? '<span class="slaw-all-mark">Active</span>' : '') +
+          '<span class="slaw-all-name">'+r.name+'</span><span class="slaw-all-tgt">'+r.tgt+'</span>'+pill(r.status)+'</div>';
       }).join('');
     }
 
@@ -1854,7 +1972,6 @@
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Convert prob.</span><span class="dp-kpi-v" style="color:var(--green)">'+l.convertProb+'%</span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Profile completion</span><span class="dp-kpi-v">'+l.profileComplete+'%</span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Preferred channel</span><span class="dp-kpi-v">'+l.channel+' <span class="dp-kpi-sub">&middot; '+langAbbr+'</span></span></div>' +
-        '<div class="dp-kpi-item"><span class="dp-kpi-l">Source</span><span class="dp-kpi-v">'+l.source+'</span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Campaign</span><span class="dp-kpi-v">'+(l.campaign && l.campaign !== '—' ? l.campaign : '—')+'</span></div>' +
       '</div>';
       html += slaWidget(l, sd);
@@ -1944,20 +2061,27 @@
       'Not interested':       { disq: true }
     };
 
-    var laNotesOpts   = ['Customer requested a callback', 'Customer busy — call later', 'Left voicemail', 'Number not reachable', 'Will confirm availability'];
     var laReasons     = ['Bought elsewhere', 'Budget constraints', 'Not the right time', 'Chose competitor', 'No longer interested'];
     var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
     var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
     var laDiscoveryQs = ['Budget confirmed', 'Preferred model discussed', 'Trade-in captured', 'Finance interest noted', 'Timeline to purchase'];
 
+    var laToday = '2026-07-08';
+    var laNoReasons = ['Call not picked up', 'Invalid number'];
+
     function laSelect(id, label, opts, req) {
       return '<div class="cp-field"><label class="cp-label">' + label + (req ? ' <span class="req">*</span>' : '') + '</label>' +
         '<select class="cp-select" id="' + id + '">' + opts.map(function(o){ return '<option>' + o + '</option>'; }).join('') + '</select></div>';
     }
+    function laRadioGroup(name, label, opts) {
+      return '<div class="cp-field"><label class="cp-label">' + label + ' <span class="req">*</span></label><div class="la-radio">' +
+        opts.map(function(o, i){ return '<label class="la-radio-item"><input type="radio" name="' + name + '" value="' + o + '"' + (i === 0 ? ' checked' : '') + '><span>' + o + '</span></label>'; }).join('') +
+      '</div></div>';
+    }
     function laDateTime(label) {
       return '<span class="la-sublabel">' + label + ' <span class="req">*</span></span>' +
         '<div class="cp-grid2">' +
-          '<div class="cp-field"><input class="cp-input" type="date" id="laDate"></div>' +
+          '<div class="cp-field"><input class="cp-input" type="date" id="laDate" value="' + laToday + '"></div>' +
           '<div class="cp-field"><input class="cp-input" type="time" id="laTime"></div>' +
         '</div>';
     }
@@ -1966,10 +2090,26 @@
         laDiscoveryQs.map(function(q, i){ return '<label class="la-disc-item"><input type="checkbox" id="laDisc' + i + '"><span>' + q + '</span></label>'; }).join('') +
       '</div></div>';
     }
+    // Calendar/slot booking picker embedded in the Log activity panel (re-renders the panel's dynamic area).
+    function laCalNav(d){ tdCalM += d; if (tdCalM < 0){ tdCalM = 11; tdCalY--; } if (tdCalM > 11){ tdCalM = 0; tdCalY++; } renderLaFields(); }
+    function laSelectCalDay(iso){ tdSched.date = iso; renderLaFields(); }
+    function laSelectTimeSlot(t){ tdSched.time = t; renderLaFields(); }
+    function laBookingPicker() {
+      var l = leads[selectedIdx];
+      if (!tdSched.model) tdSched.model = l.model;
+      return '<div class="la-booking">' +
+        '<label class="cp-label">Vehicle</label>' +
+        '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
+        '<label class="cp-label" style="margin-top:14px">Date &amp; time</label>' +
+        '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml('laCalNav','laSelectCalDay')+'</div><div class="sw-slots">'+schedSlotsHtml('laSelectTimeSlot')+'</div></div>' +
+        '<div class="td-gradbar"><span>free</span><div class="td-gradbar-track"></div><span>booked</span></div>' +
+      '</div>';
+    }
     function laGather() {
       var g = function(id){ var e = document.getElementById(id); return e ? e.value : ''; };
       var disc = laDiscoveryQs.filter(function(q, i){ var e = document.getElementById('laDisc' + i); return e && e.checked; });
-      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), disc: disc };
+      var noReason = (document.querySelector('input[name="laNoReason"]:checked') || {}).value || '';
+      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), noReason: noReason, disc: disc };
     }
     function laFmtDT(date, time) { if (!date) return ''; return tdFmtDate(date) + (time ? ' · ' + time : ''); }
 
@@ -1978,19 +2118,21 @@
       if (!host) return;
       var html = '';
       if (laAnswer === 'no') {
-        html += laSelect('laNote', 'Predefined note', laNotesOpts, true);
+        html += laRadioGroup('laNoReason', 'Reason', laNoReasons);
         html += laDateTime('Reschedule call');
       } else if (laAnswer === 'yes' && laOutcome) {
-        if (laOutcome === 'Handover to showroom' || laOutcome === 'Book test drive') {
+        if (laOutcome === 'Book test drive') {
+          html += laDiscovery();
+          html += laSelect('laLoc', 'Location', laLocations, true);
+          html += laBookingPicker();
+        } else if (laOutcome === 'Handover to showroom') {
           html += laDiscovery();
           html += laSelect('laLoc', 'Location', laLocations, true);
           html += laDateTime('Date & time');
           html += laSelect('laCar', 'Car', laCars, true);
         } else if (laOutcome === 'Needs time') {
-          html += laSelect('laNote', 'Predefined note', laNotesOpts, true);
           html += laDateTime('Reschedule call');
         } else if (laOutcome === 'Not interested') {
-          html += laSelect('laNote', 'Predefined note', laNotesOpts, true);
           html += laSelect('laReason', 'Reason', laReasons, true);
         }
       }
@@ -2031,6 +2173,7 @@
     function setLaOutcome(btn) {
       laOutcome = btn.getAttribute('data-out');
       document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.toggle('on', c === btn); });
+      if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: null, time: null }; }
       renderLaFields();
       updateLaHint();
     }
@@ -2051,7 +2194,7 @@
       document.getElementById('logPanel').classList.remove('open');
     }
 
-    function submitLogActivity() {
+    function submitLogActivity(close) {
       var e = document.getElementById('laError');
       if (!laAnswer) { e.textContent = 'Please record whether the customer answered.'; e.style.display = 'block'; return; }
       if (laAnswer === 'yes' && !laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
@@ -2064,18 +2207,23 @@
 
       if (laAnswer === 'no') {
         l.attempts = Math.min((l.attempts || 1) + 1, 5);
-        l.nextCall = { date: f.date, time: f.time, note: f.note };
-        l.activities.unshift({ type: 'call', text: ['No answer', f.note, when ? 'callback ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-        showToast('Missed attempt logged' + (when ? ' · callback ' + when : ''));
+        l.nextCall = { date: f.date, time: f.time, note: f.noReason };
+        l.activities.unshift({ type: 'call', text: [f.noReason || 'No answer', when ? 'callback ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+        showToast('Logged: ' + (f.noReason || 'no answer') + (when ? ' · callback ' + when : ''));
       } else {
         var r = laRoutes[laOutcome];
         if (laOutcome === 'Book test drive' || laOutcome === 'Handover to showroom') {
           if (f.disc.length) { l.discovery = Math.max(l.discovery || 0, Math.round(f.disc.length / laDiscoveryQs.length * 100)); l.discoveryAnswers = f.disc; }
-          var car = f.car || l.model, loc = f.loc || l.showroom;
+          var loc = f.loc || l.showroom;
+          var bkWhen = when;
           if (laOutcome === 'Book test drive') {
-            tdBookings.push({ model: car, date: f.date, time: f.time, location: loc, status: 'Confirmed' });
-            l.activities.unshift({ type: 'visit', text: ['Test drive booked', car + ' @ ' + loc, when, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+            if (!tdSched.date || !tdSched.time) { e.textContent = 'Please pick a date and time for the test drive.'; e.style.display = 'block'; return; }
+            var bmodel = tdSched.model || l.model;
+            bkWhen = laFmtDT(tdSched.date, tdSched.time);
+            tdBookings.push({ model: bmodel, date: tdSched.date, time: tdSched.time, location: loc, status: 'Booked' });
+            l.activities.unshift({ type: 'visit', text: ['Test drive booked', bmodel + ' @ ' + loc, bkWhen, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           } else {
+            var car = f.car || l.model;
             l.handover = 'Scheduled — ' + loc;
             l.handoverBooking = { location: loc, date: f.date, time: f.time, car: car };
             l.activities.unshift({ type: 'visit', text: ['Handover to showroom', loc, car, when, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
@@ -2083,7 +2231,7 @@
           l.nextCall = null; l.disqReason = null;
           l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
           currentStep = Math.min(r.n - 1, 7);
-          showToast('Moved to ' + r.name + (when ? ' · ' + when : ''));
+          showToast('Moved to ' + r.name + (bkWhen ? ' · ' + bkWhen : ''));
         } else if (r.disq) {
           l.disqReason = f.reason;
           l.activities.unshift({ type: 'call', text: ['Not interested', f.reason, f.note, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
@@ -2097,9 +2245,10 @@
           showToast('Moved to ' + r.name + (when ? ' · call back ' + when : ''));
         }
       }
-      closeLogActivity();
       renderDetail(selectedIdx, currentStep);
       renderLeads('all');
+      if (close === false) { openLogActivity(); showToast('Saved — log another'); }
+      else { closeLogActivity(); }
     }
 
     function dpFieldHtml(o) {
