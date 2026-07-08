@@ -662,6 +662,56 @@
     .dp-essential { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; }
     .dp-essential-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
     .dp-essential-sub { font-size: 11px; color: var(--ink-muted); margin-bottom: 12px; }
+    /* Proposals */
+    .prop-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .prop-add-btn { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 12px; font-weight: 600; color: #fff; background: var(--ink); border: none; border-radius: 8px; padding: 7px 12px; cursor: pointer; flex-shrink: 0; }
+    .prop-add-btn:hover { background: #0f1722; }
+    .prop-add-btn .material-symbols-outlined { font-size: 16px; }
+    .prop-empty { display: flex; align-items: center; gap: 12px; padding: 22px 18px; background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius-md); font-size: 12.5px; color: var(--ink-secondary); }
+    .prop-empty .material-symbols-outlined { font-size: 28px; color: var(--blue); flex-shrink: 0; }
+    .prop-card { border: 1px solid var(--border-soft); border-radius: var(--radius-md); margin-bottom: 14px; overflow: hidden; box-shadow: var(--shadow2); background: var(--surface); }
+    .prop-card:last-child { margin-bottom: 0; }
+    .prop-card.quote { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+    .prop-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); }
+    .prop-name { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink); }
+    .prop-name .material-symbols-outlined { font-size: 16px; color: var(--blue); }
+    .prop-head-actions { display: flex; align-items: center; gap: 6px; }
+    .prop-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; background: var(--blue-soft); color: var(--blue); padding: 4px 10px; border-radius: 20px; }
+    .prop-badge .material-symbols-outlined { font-size: 13px; }
+    .prop-conv { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 11.5px; font-weight: 600; color: var(--blue); background: var(--blue-soft); border: none; border-radius: 7px; padding: 6px 11px; cursor: pointer; }
+    .prop-conv:hover { background: var(--blue); color: #fff; }
+    .prop-conv .material-symbols-outlined { font-size: 15px; }
+    .prop-del { border: none; background: none; cursor: pointer; color: var(--ink-muted); padding: 4px; border-radius: 6px; display: flex; }
+    .prop-del:hover { color: var(--red); background: var(--red-soft); }
+    .prop-del .material-symbols-outlined { font-size: 16px; }
+    .prop-body { padding: 14px; }
+    .prop-params { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; margin-bottom: 14px; }
+    .prop-p { display: flex; flex-direction: column; gap: 3px; }
+    .prop-p-l { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); }
+    .prop-inp { width: 100%; padding: 6px 9px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 12.5px; color: var(--ink); background: var(--surface); box-sizing: border-box; }
+    .prop-inp:focus { outline: none; border-color: var(--blue); }
+    .prop-down { display: flex; align-items: center; gap: 6px; }
+    .prop-inp-sm { width: 52px; flex-shrink: 0; }
+    .prop-down-pct { font-size: 12px; color: var(--ink-secondary); font-weight: 600; margin-left: -2px; }
+    .prop-down-amt { font-size: 12px; font-weight: 700; color: var(--ink); margin-left: auto; }
+    .prop-loans { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .prop-loan { background: var(--blue-soft); border-radius: 7px; padding: 8px 11px; }
+    .prop-loan-l { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); font-weight: 700; }
+    .prop-loan-v { display: block; font-size: 15px; font-weight: 800; color: var(--ink); }
+    table.prop-emi { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 4px; }
+    .prop-emi th { background: #5a2020; color: #fff; font-weight: 700; padding: 7px 8px; text-align: center; font-size: 11px; }
+    .prop-emi th:first-child { background: transparent; color: var(--ink-muted); text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .03em; }
+    .prop-rate { display: inline-block; margin-left: 4px; color: var(--blue); font-weight: 700; }
+    .prop-emi td { padding: 7px 8px; text-align: center; border-bottom: 1px solid var(--border-soft); }
+    .prop-emi tr:last-child td { border-bottom: none; }
+    .prop-emi td:first-child { text-align: left; color: var(--ink-secondary); font-weight: 600; }
+    .prop-emi td:not(:first-child) { font-weight: 700; color: var(--ink); }
+    .prop-addons { margin-top: 12px; }
+    .prop-addons-title { font-size: 9.5px; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); font-weight: 700; margin-bottom: 4px; }
+    .prop-addon { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12.5px; color: var(--ink); cursor: pointer; border-bottom: 1px solid var(--border-soft); }
+    .prop-addon input { accent-color: var(--blue); width: 15px; height: 15px; }
+    .prop-addon-price { margin-left: auto; font-weight: 600; color: var(--ink-secondary); }
+    .prop-addon-total { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; background: var(--blue); color: #fff; padding: 9px 12px; border-radius: 7px; font-size: 12.5px; font-weight: 700; }
     .dp-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
     .dp-info-label { font-size: 9.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 2px; }
     .dp-info-value { font-size: 12.5px; color: var(--ink); }
@@ -2394,6 +2444,109 @@
       return h + '</div>';
     }
 
+    // ── Proposals (Propose stage): multiple financing proposals, each convertible to a quotation ──
+    var PROP_RATE = 0.021; // flat annual rate
+    var propAddOns = [
+      { k:'insurance', label:'Insurance', price:4800 },
+      { k:'service',   label:'Service Contract', price:3500 },
+      { k:'tinting',   label:'Tinting', price:1200 },
+      { k:'ceramic',   label:'Ceramic Coating', price:2559 }
+    ];
+    function propEmi(loan, years){ return Math.round(loan * (1 + PROP_RATE * years) / (years * 12)); }
+    function propAddTotal(p){ return propAddOns.reduce(function(s,a){ return s + (p.addOns[a.k] ? a.price : 0); }, 0); }
+    function propFmt(n){ return (n||0).toLocaleString('en-US'); }
+
+    function addProposal(){
+      var l = leads[selectedIdx]; l.proposals = l.proposals || [];
+      l.proposals.push({ id:'P-2026-'+(1001 + l.proposals.length), model:l.model, nsp:169999, downPct:20, year:'2025', pdi:0, addOns:{ insurance:false, service:false, tinting:true, ceramic:true }, isQuote:false });
+      renderDetail(selectedIdx, currentStep);
+    }
+    function removeProposal(i){ var l = leads[selectedIdx]; if (l.proposals) { l.proposals.splice(i,1); renderDetail(selectedIdx, currentStep); } }
+    function toggleProposalAddon(i, k){ var p = leads[selectedIdx].proposals[i]; if (p){ p.addOns[k] = !p.addOns[k]; renderDetail(selectedIdx, currentStep); } }
+    function setProposalField(i, field, value){
+      var p = leads[selectedIdx].proposals[i]; if (!p) return;
+      if (field === 'nsp' || field === 'downPct' || field === 'pdi') { p[field] = Math.max(0, parseInt((''+value).replace(/[^0-9]/g,'')) || 0); }
+      else { p[field] = value; }
+      renderDetail(selectedIdx, currentStep);
+    }
+    function toggleProposalSelect(i){ var p = leads[selectedIdx].proposals[i]; if (p){ p._sel = !p._sel; renderDetail(selectedIdx, currentStep); } }
+    function clearPropSelection(){ (leads[selectedIdx].proposals || []).forEach(function(p){ p._sel = false; }); renderDetail(selectedIdx, currentStep); }
+    function convertSelectedProposals(){
+      var n = 0;
+      (leads[selectedIdx].proposals || []).forEach(function(p){ if (p._sel && !p.isQuote){ p.isQuote = true; p._sel = false; n++; } });
+      if (n) showToast(n + ' proposal' + (n !== 1 ? 's' : '') + ' converted to quotation');
+      renderDetail(selectedIdx, currentStep);
+    }
+
+    function renderProposalCard(p, i){
+      var down = Math.round(p.nsp * p.downPct / 100);
+      var loan = p.nsp - down - (p.pdi || 0);
+      var addTotal = propAddTotal(p);
+      var loanWith = loan + addTotal;
+      var terms = [5,4,3,2];
+      var emiRows = terms.map(function(y){
+        return '<tr><td>'+y+' Years</td><td>'+propFmt(propEmi(loan,y))+'</td><td>'+propFmt(propEmi(loanWith,y))+'</td></tr>';
+      }).join('');
+      var addonRows = propAddOns.map(function(a){
+        return '<label class="prop-addon"><input type="checkbox"'+(p.addOns[a.k]?' checked':'')+' onchange="toggleProposalAddon('+i+',\''+a.k+'\')"><span>'+a.label+'</span><span class="prop-addon-price">'+propFmt(a.price)+'</span></label>';
+      }).join('');
+      return '<div class="prop-card'+(p.isQuote?' quote':'')+(p._sel?' selected':'')+'">' +
+        '<div class="prop-card-head">' +
+          '<div class="prop-name-wrap">' +
+            (p.isQuote ? '' : '<label class="prop-sel" title="Select to convert"><input type="checkbox"'+(p._sel?' checked':'')+' onchange="toggleProposalSelect('+i+')"></label>') +
+            '<span class="prop-name"><span class="material-symbols-outlined">description</span>'+p.id+'</span>' +
+          '</div>' +
+          '<div class="prop-head-actions">' +
+            (p.isQuote ? '<span class="prop-badge"><span class="material-symbols-outlined">verified</span>Quotation</span>' : '') +
+            '<button class="prop-del" onclick="removeProposal('+i+')" title="Remove"><span class="material-symbols-outlined">delete</span></button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="prop-body">' +
+          '<div class="prop-params">' +
+            '<div class="prop-p"><span class="prop-p-l">Vehicle model</span><input class="prop-inp" value="'+p.model+'" onchange="setProposalField('+i+',\'model\',this.value)"></div>' +
+            '<div class="prop-p"><span class="prop-p-l">Year</span><input class="prop-inp" value="'+p.year+'" onchange="setProposalField('+i+',\'year\',this.value)"></div>' +
+            '<div class="prop-p"><span class="prop-p-l">Vehicle price (NSP)</span><input class="prop-inp" value="'+propFmt(p.nsp)+'" onchange="setProposalField('+i+',\'nsp\',this.value)"></div>' +
+            '<div class="prop-p"><span class="prop-p-l">PDI / discount</span><input class="prop-inp" value="'+propFmt(p.pdi)+'" onchange="setProposalField('+i+',\'pdi\',this.value)"></div>' +
+            '<div class="prop-p"><span class="prop-p-l">Down payment</span><div class="prop-down"><input class="prop-inp prop-inp-sm" value="'+p.downPct+'" onchange="setProposalField('+i+',\'downPct\',this.value)"><span class="prop-down-pct">%</span><span class="prop-down-amt">AED '+propFmt(down)+'</span></div></div>' +
+          '</div>' +
+          '<div class="prop-loans">' +
+            '<div class="prop-loan"><span class="prop-loan-l">Loan amount</span><span class="prop-loan-v">'+propFmt(loan)+'</span></div>' +
+            '<div class="prop-loan"><span class="prop-loan-l">With adds on</span><span class="prop-loan-v">'+propFmt(loanWith)+'</span></div>' +
+          '</div>' +
+          '<table class="prop-emi"><thead><tr><th>Payment plan EMI <span class="prop-rate">2%</span></th><th>Without adds on</th><th>With adds on</th></tr></thead><tbody>'+emiRows+'</tbody></table>' +
+          '<div class="prop-addons"><div class="prop-addons-title">Adds on</div>'+addonRows+
+            '<div class="prop-addon-total"><span>Total adds on</span><span>'+propFmt(addTotal)+'</span></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function proposalsPanel(l){
+      l.proposals = l.proposals || [];
+      var quotes = l.proposals.filter(function(p){ return p.isQuote; }).length;
+      var head = '<div class="prop-head">' +
+        '<div><div class="dp-essential-title">Proposals</div>' +
+        '<div class="dp-essential-sub" style="margin:0">'+l.proposals.length+' proposal'+(l.proposals.length!==1?'s':'')+' &middot; '+quotes+' quotation'+(quotes!==1?'s':'')+'</div></div>' +
+        '<button class="prop-add-btn" onclick="addProposal()"><span class="material-symbols-outlined">add</span> New proposal</button>' +
+      '</div>';
+      if (!l.proposals.length) {
+        return '<div class="dp-essential" style="margin-bottom:14px">' + head +
+          '<div class="prop-empty"><span class="material-symbols-outlined">request_quote</span><div>No proposals yet. Create one or more financing proposals, then select any of them to convert into a quotation.</div></div>' +
+        '</div>';
+      }
+      var selCount = l.proposals.filter(function(p){ return p._sel && !p.isQuote; }).length;
+      var bulk = selCount
+        ? '<div class="prop-bulk">' +
+            '<span class="prop-bulk-n"><span class="material-symbols-outlined">check_circle</span>'+selCount+' selected</span>' +
+            '<div class="prop-bulk-actions">' +
+              '<button class="prop-bulk-clear" onclick="clearPropSelection()">Clear</button>' +
+              '<button class="prop-bulk-convert" onclick="convertSelectedProposals()"><span class="material-symbols-outlined">receipt_long</span>Convert to quotation</button>' +
+            '</div>' +
+          '</div>'
+        : '<div class="prop-hint"><span class="material-symbols-outlined">check_box</span>Select one or more proposals to convert into a quotation.</div>';
+      return '<div class="dp-essential" style="margin-bottom:14px">' + head + bulk + l.proposals.map(renderProposalCard).join('') + '</div>';
+    }
+
     function leadTabPanel(l, tab) {
       function card(title, sub, body) {
         return '<div class="dp-essential" style="margin-bottom:14px">' +
@@ -2413,20 +2566,7 @@
         return testDriveBookingFlow(l);
       }
       if (tab === 'proposals') {
-        var hasProp = l.bpfStage >= 6;
-        return card('Proposals &amp; quotes', hasProp ? '1 active proposal' : 'No proposals raised yet',
-          hasProp
-            ? rows([
-                ['Quote number', 'Q-2026-0'+(1000 + selectedIdx)],
-                ['Model', l.model],
-                ['List price', 'AED 182,000'],
-                ['Discount', 'AED 7,000'],
-                ['Net price', 'AED 175,000'],
-                ['Validity', '2026-07-14'],
-                ['Status', 'Sent to customer'],
-                ['Approval', 'Sales Manager — approved']
-              ])
-            : '<div class="dp-essential-sub" style="margin:0">Proposals become available once the lead reaches the <strong>Propose</strong> stage.</div>');
+        return proposalsPanel(l);
       }
       // related
       var relItems = [
