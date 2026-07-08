@@ -152,6 +152,12 @@
     .slaw-big { font-size: 24px; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
     .slaw-sub { font-size: 10px; color: var(--ink-secondary); margin-top: 3px; }
     .slaw-info { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border-soft); }
+    .slaw-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+    .slaw-meta-item { background: var(--bg); border: 1px solid var(--border-soft); border-radius: 6px; padding: 7px 9px; }
+    .slaw-meta-l { display: block; font-size: 9.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 2px; }
+    .slaw-meta-v { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink); }
+    .slaw-note { display: flex; gap: 6px; margin-top: 10px; padding: 8px 10px; background: var(--blue-soft); border-radius: 6px; font-size: 11px; line-height: 1.4; color: var(--ink-secondary); }
+    .slaw-note .material-symbols-outlined { font-size: 15px; color: var(--blue); flex-shrink: 0; }
     .slaw-irow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
     .slaw-ilabel { font-size: 10.5px; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); }
     .slaw-ival { font-size: 12.5px; font-weight: 600; color: var(--ink); text-align: right; }
@@ -281,7 +287,7 @@
     .dp-fh-label { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; }
     .dp-fh-av { position: relative; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
     .dp-fh-dot { position: absolute; right: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: var(--green); border: 2px solid var(--surface); }
-    .dp-idcard { border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 16px; background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; }
+    .dp-idcard { position: sticky; top: 0; z-index: 20; border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 16px; background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; }
     .dp-lead-head { display: flex; align-items: center; gap: 14px; }
     .dp-head-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
     .dp-kebab { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--ink-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; align-self: flex-start; transition: background .12s, border-color .12s; }
@@ -429,9 +435,14 @@
     @media (max-width: 720px) { .dp-if-fields { grid-template-columns: 1fr; } }
     .dp-if-fields .dp-if-wide { grid-column: 1 / -1; }
     .dp-intake-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-soft); }
+    .dp-if-more { margin-top: 8px; }
+    .dp-if-morebtn { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; padding: 4px 8px; border: none; background: none; cursor: pointer; font-family: inherit; font-size: 11.5px; font-weight: 600; color: var(--blue); border-radius: 6px; }
+    .dp-if-morebtn:hover { background: var(--blue-soft); }
+    .dp-if-morebtn .material-symbols-outlined { font-size: 16px; }
     .dp-if { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
     .dp-if-label { font-size: 11.5px; color: var(--ink-secondary); font-weight: 500; }
     .dp-if-req { color: var(--red); margin-left: 2px; font-weight: 700; }
+    .dp-if-opt { margin-left: 6px; font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); background: var(--bg); border: 1px solid var(--border-soft); border-radius: 10px; padding: 1px 6px; }
     .dp-if-area { min-height: 54px; resize: vertical; padding: 6px 9px; line-height: 1.4; }
     .dp-if-lookup { position: relative; display: block; width: 100%; }
     .dp-if-lookup .dp-if-input { padding-right: 28px; }
@@ -643,6 +654,7 @@
     /* Lead info one-liner */
     .dp-kpiline { display: flex; flex-wrap: wrap; gap: 8px 30px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-soft); font-size: 12.5px; align-items: baseline; }
     .dp-kpi-card { border: 1px solid var(--border-soft); border-radius: var(--radius-md); background: var(--surface); padding: 6px 14px; margin-bottom: 14px; box-shadow: var(--shadow2); }
+    .dp-kpi-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-secondary); padding: 9px 0 8px; border-bottom: 1px solid var(--border-soft); }
     .dp-kpi-item { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); }
     .dp-kpi-item:last-child { border-bottom: none; }
     .dp-kpi-l { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
@@ -780,6 +792,12 @@
     .la-hint { font-size: 11.5px; color: var(--blue); margin-top: 4px; }
     .la-hint.ok { color: #2f7a4f; font-weight: 600; }
     .la-hint.danger { color: var(--red); font-weight: 600; }
+    .la-attempts { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: var(--ink-secondary); background: var(--bg); border: 1px solid var(--border-soft); border-radius: var(--borderRadiusCircular); padding: 5px 12px; margin-bottom: 14px; }
+    .la-attempts .material-symbols-outlined { font-size: 15px; color: var(--blue); }
+    .la-sublabel { display: block; font-size: 11px; font-weight: 600; color: var(--ink-secondary); margin-bottom: 5px; }
+    .la-disc { display: flex; flex-direction: column; gap: 7px; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 10px 12px; background: var(--surface); }
+    .la-disc-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink); cursor: pointer; }
+    .la-disc-item input { accent-color: var(--blue); width: 15px; height: 15px; }
     .cp-input::placeholder, .cp-textarea::placeholder { color: var(--ink-muted); }
     .cp-textarea { resize: vertical; min-height: 62px; }
     .cp-footer { display: flex; gap: 10px; justify-content: flex-end; padding: 14px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
@@ -900,7 +918,7 @@
             <button class="filter-chip" onclick="filterLeads(this,'new')">New <span style="font-weight:400;opacity:.7;margin-left:2px">5</span></button>
             <button class="filter-chip" onclick="filterLeads(this,'contacted')">Contacted <span style="font-weight:400;opacity:.7;margin-left:2px">3</span></button>
             <button class="filter-chip" onclick="filterLeads(this,'qualified')">Qualified <span style="font-weight:400;opacity:.7;margin-left:2px">2</span></button>
-            <button class="filter-chip" onclick="filterLeads(this,'nurture')">Nurture <span style="font-weight:400;opacity:.7;margin-left:2px">2</span></button>
+            <button class="filter-chip" onclick="filterLeads(this,'visit')">Visit <span style="font-weight:400;opacity:.7;margin-left:2px">2</span></button>
             <input class="filter-search" type="text" placeholder="Search leads..." oninput="searchLeads(this.value)" />
           </div>
           <div class="leads-table-wrap" id="tableWrap">
@@ -980,7 +998,6 @@
       <div class="cp-section-title">Performance</div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Lead Source <span class="req">*</span></label><select class="cp-select" id="clSource"><option>Walk In</option><option>Call</option><option>Contact Form</option><option>External Referrals</option><option>Others</option></select></div>
-        <div class="cp-field"><label class="cp-label">Campaign</label><select class="cp-select" id="clCampaign"><option>—</option><option>ICL - Performance 2026</option><option>LV - Performance 2026</option></select></div>
       </div>
       <div class="cp-field"><label class="cp-label">Channel <span class="req">*</span></label><select class="cp-select" id="clChannel"><option>WhatsApp</option><option>Call</option><option>Website</option><option>Social Media</option><option>Email</option><option>Print Media</option></select></div>
 
@@ -995,18 +1012,15 @@
       </div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Company</label><select class="cp-select" id="clCompany"><option>6651</option><option>6661</option><option>6681</option></select></div>
-        <div class="cp-field"><label class="cp-label">Business Operation</label><select class="cp-select" id="clBizOp"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
+        <div class="cp-field"><label class="cp-label">Showroom</label><select class="cp-select" id="clBizOp"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
       </div>
 
       <div class="cp-section-title">Internal</div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Lead Type <span class="req">*</span></label><select class="cp-select" id="clLeadType"><option>Buy (New)</option><option>Buy (Used)</option><option>Lease</option></select></div>
-        <div class="cp-field"><label class="cp-label">Lead Stage</label><select class="cp-select" id="clStage"><option>New</option><option>Qualify</option><option>Nurture</option><option>Visit</option></select></div>
+        <div class="cp-field"><label class="cp-label">Lead Stage</label><select class="cp-select" id="clStage"><option>New</option><option>Qualify</option><option>Visit</option></select></div>
       </div>
-      <div class="cp-grid2">
-        <div class="cp-field"><label class="cp-label">Lead Temperature <span class="req">*</span></label><select class="cp-select" id="clTemp"><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
-        <div class="cp-field"><label class="cp-label">Urgency <span class="req">*</span></label><select class="cp-select" id="clUrgency"><option>Immediately</option><option>&lt; 1 month</option><option>&gt; 1 month</option></select></div>
-      </div>
+      <div class="cp-field"><label class="cp-label">Lead Temperature <span class="req">*</span></label><select class="cp-select" id="clTemp"><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
       <div class="cp-field"><label class="cp-label">Call Status</label><select class="cp-select" id="clCallStatus"><option>Not Called</option><option>No Answer 1</option><option>No Answer 2</option><option>No Answer 3</option><option>Call Back</option><option>Follow up</option><option>Answered</option></select></div>
       <div class="cp-field"><label class="cp-label">Description <span class="req">*</span></label><textarea class="cp-textarea" id="clDesc" placeholder="Free text — enquiry details, budget, timeline…"></textarea></div>
       <div id="clError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
@@ -1027,6 +1041,7 @@
       <button class="dp-header-btn" title="Close" onclick="closeLogActivity()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <div class="cp-body">
+      <div class="la-attempts" id="laAttempts"><span class="material-symbols-outlined">call</span><span id="laAttemptsText">1 of 5 attempts done</span></div>
       <div class="cp-field">
         <label class="cp-label">Did the customer answer?</label>
         <div class="la-yn-row">
@@ -1037,12 +1052,13 @@
       <div class="cp-field" id="laOutcomeWrap">
         <label class="cp-label">Outcome</label>
         <div class="la-chips" id="laChips">
-          <button class="la-chip" data-out="Interested" onclick="setLaOutcome(this)">Interested</button>
-          <button class="la-chip" data-out="Needs time" onclick="setLaOutcome(this)">Needs time</button>
-          <button class="la-chip" data-out="Compare" onclick="setLaOutcome(this)">Compare</button>
+          <button class="la-chip" data-out="Handover to showroom" onclick="setLaOutcome(this)">Handover to showroom</button>
           <button class="la-chip" data-out="Book test drive" onclick="setLaOutcome(this)">Book test drive</button>
+          <button class="la-chip" data-out="Needs time" onclick="setLaOutcome(this)">Needs time</button>
+          <button class="la-chip" data-out="Not interested" onclick="setLaOutcome(this)">Not interested</button>
         </div>
       </div>
+      <div id="laDynamic"></div>
       <div class="cp-field"><label class="cp-label">Notes</label><textarea class="cp-textarea" id="laNotes" placeholder="Conversation summary…"></textarea></div>
       <div class="la-hint" id="laHint">Saving will move the lead to the next stage.</div>
       <div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
@@ -1065,15 +1081,15 @@
       { id:'L-2026-04805', name:'Omar Mansoor', initials:'OM', av:'av2', phone:'+971 55 890 1234', email:'omar.m@email.com', emiratesId:'784-1989-4567890-1', source:'Google Search', srcClass:'ggl', srcIcon:'G', model:'EXEED RX', sla:'On track', slaClass:'ok', slaTime:'Met on time', stage:'Qualified', stageClass:'qualified', stageNum:'Qualified', intent:'High', intentClass:'high', owner:'Mariam K.', bpfStage:5, score:91, profileComplete:90, convertProb:82, discovery:78, channel:'Phone', lang:'English', campaign:'Google SEM Q3', temp:'Hot', existing:'No', showroom:'EXEED Sharjah', handover:'Accepted by Mariam K.', preferred:'Phone', nps:'—', activities:[{type:'call',text:'Discussed finance options, ready to proceed…',time:'2026-07-03 14:00'},{type:'visit',text:'Test drove RX, loved the interior, comparing…',time:'2026-07-01 16:45'},{type:'whatsapp',text:'Sent quote and finance breakdown…',time:'2026-07-03 15:30'}] },
       { id:'L-2026-04800', name:'Layla Ibrahim', initials:'LI', av:'av1', phone:'+971 50 901 2345', email:'layla.i@email.com', emiratesId:'784-1994-5678901-2', source:'AGM website', srcClass:'web', srcIcon:'W', model:'EXEED LX Premium', sla:'45 min left', slaClass:'wrn', slaTime:'Due 11:30', stage:'Contacted', stageClass:'contacted', stageNum:'Contacted', intent:'Med', intentClass:'med', owner:'Nadia A.', bpfStage:3, score:62, profileComplete:55, convertProb:48, discovery:35, channel:'Email', lang:'English', campaign:'Website Organic', temp:'Warm', existing:'No', showroom:'EXEED Dubai', handover:'Accepted by Nadia A.', preferred:'Email', nps:'—', activities:[{type:'email',text:'Email follow-up sent with LX Premium specs…',time:'2026-07-03 10:00'}] },
       { id:'L-2026-04795', name:'Rashid Al Maktoum', initials:'RM', av:'av3', phone:'+971 56 012 3456', email:'rashid.m@email.com', emiratesId:'784-1986-7890123-4', source:'Referral', srcClass:'ref', srcIcon:'R', model:'EXEED VX', sla:'On track', slaClass:'ok', slaTime:'Met on time', stage:'Qualified', stageClass:'qualified', stageNum:'Qualified', intent:'High', intentClass:'high', owner:'Priyamvada K.', bpfStage:6, score:94, profileComplete:95, convertProb:88, discovery:90, channel:'Phone', lang:'Arabic', campaign:'VIP Referral', temp:'Hot', existing:'Yes · NPS 10', showroom:'EXEED Abu Dhabi', handover:'Accepted by Priyamvada K.', preferred:'Phone', nps:'10', activities:[{type:'call',text:'Ready to proceed with VX order, finance approved…',time:'2026-07-04 09:00'},{type:'visit',text:'Final showroom visit, selected color/trim…',time:'2026-07-03 11:00'},{type:'whatsapp',text:'Sent final quote with accessories package…',time:'2026-07-03 12:00'}] },
-      { id:'L-2026-04790', name:'Noura Al Shamsi', initials:'NS', av:'av4', phone:'+971 50 123 4568', email:'noura.s@email.com', emiratesId:'784-1995-8901234-5', source:'Instagram', srcClass:'ig', srcIcon:'IG', model:'EXEED TXL', sla:'On track', slaClass:'ok', slaTime:'On track', stage:'Nurture', stageClass:'nurture', stageNum:'Nurture', intent:'Low', intentClass:'low', owner:'Mariam K.', bpfStage:4, score:35, profileComplete:30, convertProb:18, discovery:25, channel:'WhatsApp', lang:'Arabic', campaign:'Instagram Brand', temp:'Cold', existing:'No', showroom:'EXEED Sharjah', handover:'Accepted', preferred:'WhatsApp', nps:'—', activities:[{type:'whatsapp',text:'Sent TXL launch invite for next month event…',time:'2026-07-01 14:00'}] },
-      { id:'L-2026-04785', name:'Youssef Khoury', initials:'YK', av:'av6', phone:'+971 55 234 5679', email:'youssef.k@email.com', emiratesId:'784-1992-9012345-6', source:'Facebook', srcClass:'fb', srcIcon:'FB', model:'EXEED RX', sla:'On track', slaClass:'ok', slaTime:'On track', stage:'Nurture', stageClass:'nurture', stageNum:'Nurture', intent:'Med', intentClass:'med', owner:'Nadia A.', bpfStage:4, score:44, profileComplete:42, convertProb:28, discovery:30, channel:'Email', lang:'English', campaign:'Facebook Retarget', temp:'Warm', existing:'No', showroom:'EXEED Dubai', handover:'Accepted', preferred:'Email', nps:'—', activities:[{type:'email',text:'Sent comparison guide RX vs competition…',time:'2026-07-02 09:00'}] }
+      { id:'L-2026-04790', name:'Noura Al Shamsi', initials:'NS', av:'av4', phone:'+971 50 123 4568', email:'noura.s@email.com', emiratesId:'784-1995-8901234-5', source:'Instagram', srcClass:'ig', srcIcon:'IG', model:'EXEED TXL', sla:'On track', slaClass:'ok', slaTime:'On track', stage:'Visit', stageClass:'nurture', stageNum:'Visit', intent:'Low', intentClass:'low', owner:'Mariam K.', bpfStage:4, score:35, profileComplete:30, convertProb:18, discovery:25, channel:'WhatsApp', lang:'Arabic', campaign:'Instagram Brand', temp:'Cold', existing:'No', showroom:'EXEED Sharjah', handover:'Accepted', preferred:'WhatsApp', nps:'—', activities:[{type:'whatsapp',text:'Sent TXL launch invite for next month event…',time:'2026-07-01 14:00'}] },
+      { id:'L-2026-04785', name:'Youssef Khoury', initials:'YK', av:'av6', phone:'+971 55 234 5679', email:'youssef.k@email.com', emiratesId:'784-1992-9012345-6', source:'Facebook', srcClass:'fb', srcIcon:'FB', model:'EXEED RX', sla:'On track', slaClass:'ok', slaTime:'On track', stage:'Visit', stageClass:'nurture', stageNum:'Visit', intent:'Med', intentClass:'med', owner:'Nadia A.', bpfStage:4, score:44, profileComplete:42, convertProb:28, discovery:30, channel:'Email', lang:'English', campaign:'Facebook Retarget', temp:'Warm', existing:'No', showroom:'EXEED Dubai', handover:'Accepted', preferred:'Email', nps:'—', activities:[{type:'email',text:'Sent comparison guide RX vs competition…',time:'2026-07-02 09:00'}] }
     ];
 
     var journeySteps = [
       {name:'New',icon:'fiber_new'},
       {name:'Contact',icon:'forum'},
       {name:'Qualify',icon:'fact_check'},
-      {name:'Nurture → Visit',icon:'storefront'},
+      {name:'Visit',icon:'storefront'},
       {name:'Propose',icon:'request_quote'},
       {name:'Accepted',icon:'handshake'},
       {name:'Ready for delivery',icon:'local_shipping'},
@@ -1084,11 +1100,23 @@
       {title:'New Lead Intake', fields:['customer','emiratesId','mobile','email','lang','preferred','source','model','temp','showroom','handover','existing'], checklist:['Lead pack received from call center','No duplicate match','Accept or return lead with reason'], aiTitle:'Accept this qualified lead', aiDesc:'Call center has handed over a <strong>Hot</strong> lead with all mandatory fields filled. Accept to start the SLA clock with you as the owner.', aiBtns:['Accept Lead','Return to Call Center'], aiNote:'Lead must be accepted or returned with a reason.'},
       {title:'First Contact', fields:['customer','mobile','email','showroom','channel'], checklist:['First contact within SLA window','Customer acknowledged','SLA status recorded'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
       {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Introduction call/message sent','Customer responded','Interest level confirmed','Appointment offered'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
-      {title:'Nurture & Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Customer arrived at showroom','Welcome & refreshments','Vehicle walkthrough started','Test drive offered'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
+      {title:'Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Customer arrived at showroom','Welcome & refreshments','Vehicle walkthrough started','Test drive offered'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
       {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Needs assessment completed','Budget discussion done','Trade-in evaluated','Finance options presented','Test drive completed'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
       {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['Quote generated','Finance breakdown shared','Trade-in value confirmed','Customer reviewed offer','Negotiation logged'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
       {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:['Booking deposit received','Order confirmed in system','Delivery date agreed','Insurance arranged','Registration initiated'], aiTitle:'Confirm the booking', aiDesc:'Customer is ready to proceed. <strong>Collect the deposit</strong> and confirm the order in the system.', aiBtns:['Confirm Booking','Hold Order'], aiNote:'Deposit must be received to proceed.'},
       {title:'Close — Won / Lost', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:['Welcome & red-carpet greeting','Document signing','Feature orientation completed','Keys & documents handed over','3 / 7 / 30 day follow-ups scheduled'], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
+    ];
+
+    // Per-stage SLA (indexed to journeySteps). show = date/time fields to surface, items = list of SLA activities, note = advisory.
+    var stageSla = [
+      { sla:{name:'First response', target:'30 min', scale:['0m','15m','30m']}, show:[], items:[{t:'Within 30 min', a:'Log first call attempt'}], note:'If the customer does not respond, an automated WhatsApp message is sent to the customer.' },
+      { sla:{name:'First contact', target:'Day 1', scale:['Now','','Day 1']}, show:[], items:[{t:'Within 30 min', a:'Log first call attempt'},{t:'Day 1', a:'Log second call attempt'},{t:'Day 2', a:'Log third call attempt'},{t:'Day 4', a:'Log fourth call attempt'}] },
+      { sla:{name:'Qualification', target:'1 hr', scale:['0h','','1h']}, show:[], items:[{t:'Within 1 hour of assignment', a:'Log activity to reach out to the customer'}] },
+      { sla:{name:'Test drive scheduling', target:'Day 4', scale:['Now','','Day 4']}, show:['Appointment'], items:[] },
+      { sla:{name:'Proposal turnaround', target:'48 hrs', scale:['0h','24h','48h']}, show:[], items:[{t:'Day 2', a:'Log follow-up with customer on proposal'},{t:'Day 3', a:'Log follow-up with customer on proposal'}] },
+      { sla:{name:'Quote approval', target:'24 hrs', scale:['0h','12h','24h']}, show:[], items:[] },
+      { sla:{name:'Delivery prep', target:'3 days', scale:['Day 0','','Day 3']}, show:[], items:[] },
+      { sla:{name:'Post-delivery follow-up', target:'+30 d', scale:['+3d','+7d','+30d']}, show:[], items:[] }
     ];
 
     var logPrompts = [
@@ -1102,7 +1130,7 @@
       {title:'Log the handover', desc:'Record delivery, feature orientation and the follow-ups scheduled.'}
     ];
 
-    var selectedIdx = -1, isExpanded = false, currentStep = 0, leadTab = 'overview', stepperStyle = 'circles';
+    var selectedIdx = -1, isExpanded = false, currentStep = 0, leadTab = 'overview';
     var tdMode = 'start';
     var tdChecks = { checkin:true, license:true, waiver:false, vehicle:true, route:true, briefing:false };
     function setTdMode(m){ tdMode = m; renderDetail(selectedIdx, currentStep); }
@@ -1357,14 +1385,14 @@
     // ── Sales pipeline (from Miro: Lead → Opportunity → Deal → Post-deal) ──
     var pipeGroups = [
       { obj:'Lead',        color:'#5cb97f', stages:['New','Contact','Qualify'] },
-      { obj:'Opportunity', color:'#2a6797', stages:['Nurture → Visit'] },
+      { obj:'Opportunity', color:'#2a6797', stages:['Visit'] },
       { obj:'Deal',        color:'#e76e6e', stages:['Propose','Accepted'] },
       { obj:'Post-deal',   color:'#8b7bdf', stages:['Prep for delivery','Ready for delivery','Close Won/Lost'] }
     ];
     var pipeAssign = {
-      'Hiren Patel':'Nurture → Visit','Priya Musale':'New','Sara Ali':'New','Maya Hassan':'Contact',
+      'Hiren Patel':'Visit','Priya Musale':'New','Sara Ali':'New','Maya Hassan':'Contact',
       'Ahmad Rizk':'Propose','Karim Saleh':'New','Fatima Al Zaabi':'Qualify','Omar Mansoor':'Accepted',
-      'Layla Ibrahim':'Contact','Rashid Al Maktoum':'Ready for delivery','Noura Al Shamsi':'Nurture → Visit','Youssef Khoury':'Qualify'
+      'Layla Ibrahim':'Contact','Rashid Al Maktoum':'Ready for delivery','Noura Al Shamsi':'Visit','Youssef Khoury':'Qualify'
     };
     function pipeOf(l) { return l.pipe || pipeAssign[l.name] || 'New'; }
     function renderPipeline() {
@@ -1418,6 +1446,15 @@
       }
       l[prop] = val;
       renderLeads('all');
+    }
+
+    function toggleIntakeMore(btn, id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var open = el.style.display === 'none';
+      el.style.display = open ? '' : 'none';
+      btn.querySelector('.dp-if-morelbl').textContent = open ? 'Show less' : 'Show more';
+      btn.querySelector('.material-symbols-outlined').textContent = open ? 'expand_less' : 'expand_more';
     }
 
     function editField(el) {
@@ -1479,18 +1516,27 @@
       var sub = slaNum ? 'mins left' : (l.slaTime || '');
       var cls = l.slaClass === 'brch' ? 'brch' : (l.slaClass === 'wrn' ? 'wrn' : 'ok');
       var created = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time.split(' ')[0] : '—';
+      var createdDT = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time : '—';
+      var assignedDT = (l.owner && l.owner !== 'Unassigned') ? (createdDT + ' · ' + l.owner) : 'Pending assignment';
       var slaPct = cls === 'brch' ? 100 : (cls === 'wrn' ? 82 : Math.max(8, Math.min(70, slaNum ? Math.round((30 - Math.min(30, +slaNum)) / 30 * 100) : 40)));
       var slaState = cls === 'brch' ? 'Breached' : (cls === 'wrn' ? 'Due soon' : 'On track');
-      // Follow-up cadence (from the SLA cadence table). Position derived from lead state.
-      var cadence = [
-        {t:'Day 1 · within 30 min', a:'First call attempt'},
-        {t:'Day 1 · later slot', a:'Second call attempt'},
-        {t:'Day 2', a:'Third call attempt'},
-        {t:'Day 4', a:'Fourth call attempt'},
-        {t:'Day 10', a:'Final nurture / recovery message → recovery queue'}
-      ];
-      var doneUpto = cls === 'brch' ? 0 : Math.min(cadence.length, (l.bpfStage || 1)); // rough progress
-      var curIdx = cls === 'brch' ? 0 : Math.min(cadence.length - 1, doneUpto);
+      // Per-stage SLA config (based on the lead's current stage).
+      var si = Math.min(Math.max((l.bpfStage || 1) - 1, 0), stageSla.length - 1);
+      var ssla = stageSla[si] || { show:[], items:[] };
+      var showValMap = {
+        'Record created': created + ' · 09:12',
+        'Assignment': (l.owner && l.owner !== 'Unassigned') ? created + ' · 09:20' : 'Pending assignment',
+        'Appointment': (l.handoverBooking && l.handoverBooking.date) ? tdFmtDate(l.handoverBooking.date) + (l.handoverBooking.time ? ' · ' + l.handoverBooking.time : '')
+          : ((l.nextCall && l.nextCall.date) ? tdFmtDate(l.nextCall.date) + (l.nextCall.time ? ' · ' + l.nextCall.time : '') : 'Not scheduled')
+      };
+      var showRows = ssla.show.map(function(k){
+        return '<div class="slaw-irow"><span class="slaw-ilabel">' + k + ' date/time</span><span class="slaw-ival">' + (showValMap[k] || '—') + '</span></div>';
+      }).join('');
+      var noteHtml = ssla.note ? '<div class="slaw-note"><span class="material-symbols-outlined">smart_toy</span>' + ssla.note + '</div>' : '';
+      // List of SLA activities for this stage. Progress derived from attempts logged.
+      var cadence = ssla.items;
+      var doneUpto = cls === 'brch' ? 0 : Math.min(cadence.length, (l.attempts || 1) - 1);
+      var curIdx = Math.min(cadence.length - 1, Math.max(0, doneUpto));
       var cadHtml = cadence.map(function(c, i){
         var st = i < curIdx ? 'done' : (i === curIdx ? (cls === 'brch' ? 'missed' : 'current') : 'upcoming');
         var icon = st === 'done' ? 'check_circle' : (st === 'missed' ? 'error' : (st === 'current' ? 'radio_button_checked' : 'radio_button_unchecked'));
@@ -1499,6 +1545,17 @@
           '<div class="slaw-cad-body"><div class="slaw-cad-t">'+c.t+'</div><div class="slaw-cad-a">'+c.a+'</div></div>' +
         '</div>';
       }).join('');
+      var cadSection = cadence.length
+        ? '<div class="slaw-cadence">' +
+            '<div class="slaw-cad-head" onclick="toggleCadence()">List of SLA <span class="material-symbols-outlined" id="cadCaret">expand_more</span></div>' +
+            '<div id="cadList" style="display:none">' + cadHtml + '</div>' +
+          '</div>'
+        : '';
+
+      var nextStep = 'Call / WhatsApp customer';
+      if (l.disqualified) nextStep = 'Disqualified' + (l.disqReason ? ' — ' + l.disqReason : '');
+      else if (l.nextCall && l.nextCall.date) nextStep = 'Call back ' + tdFmtDate(l.nextCall.date) + (l.nextCall.time ? ' · ' + l.nextCall.time : '');
+      else if (l.handoverBooking) nextStep = 'Showroom handover — ' + l.handoverBooking.location + (l.handoverBooking.date ? ' · ' + tdFmtDate(l.handoverBooking.date) : '') + (l.handoverBooking.time ? ' · ' + l.handoverBooking.time : '');
 
       var statusIcon = cls === 'brch' ? 'error' : (cls === 'wrn' ? 'schedule' : 'check_circle');
       var escalationHtml = cls === 'brch'
@@ -1509,19 +1566,22 @@
           '<span class="slaw-status-pill '+cls+'"><span class="material-symbols-outlined">'+statusIcon+'</span>'+slaState+'</span></div>' +
         '<div class="slaw-hero '+cls+'"><div class="slaw-hero-big">'+l.sla+'</div>' +
           (l.slaTime ? '<div class="slaw-hero-sub">'+l.slaTime+'</div>' : '') + '</div>' +
+        '<div class="slaw-meta">' +
+          '<div class="slaw-meta-item"><span class="slaw-meta-l">Created</span><span class="slaw-meta-v">'+createdDT+'</span></div>' +
+          '<div class="slaw-meta-item"><span class="slaw-meta-l">Assigned</span><span class="slaw-meta-v">'+assignedDT+'</span></div>' +
+        '</div>' +
         '<div class="slaw-graph">' +
-          '<div class="slaw-graph-head"><span>First response &middot; 30 min target</span></div>' +
+          '<div class="slaw-graph-head"><span>'+((ssla.sla&&ssla.sla.name)||'First response')+' &middot; '+((ssla.sla&&ssla.sla.target)||'30 min')+' target</span></div>' +
           '<div class="slaw-track"><div class="slaw-fill '+cls+'" style="width:'+slaPct+'%"></div><span class="slaw-thumb '+cls+'" style="left:'+slaPct+'%"></span><span class="slaw-target" style="left:100%"></span></div>' +
-          '<div class="slaw-scale"><span>0m</span><span>15m</span><span>30m &#9873;</span></div>' +
+          '<div class="slaw-scale">'+((ssla.sla&&ssla.sla.scale)||['0m','15m','30m']).map(function(s,i,a){return '<span>'+s+(i===a.length-1&&s?' &#9873;':'')+'</span>';}).join('')+'</div>' +
         '</div>' +
         escalationHtml +
         '<div class="slaw-info">' +
-          '<div class="slaw-irow"><span class="slaw-ilabel">Next step</span><span class="slaw-ival">Call / WhatsApp customer</span></div>' +
+          showRows +
+          '<div class="slaw-irow"><span class="slaw-ilabel">Next step</span><span class="slaw-ival">' + nextStep + '</span></div>' +
         '</div>' +
-        '<div class="slaw-cadence">' +
-          '<div class="slaw-cad-head" onclick="toggleCadence()">Follow-up cadence <span class="material-symbols-outlined" id="cadCaret">expand_more</span></div>' +
-          '<div id="cadList" style="display:none">' + cadHtml + '</div>' +
-        '</div>' +
+        noteHtml +
+        cadSection +
         '<div class="slaw-viewall" id="slaViewAll" onclick="toggleAllSlas()">View all SLAs <span class="material-symbols-outlined" id="slaViewCaret">expand_more</span></div>' +
         '<div class="slaw-all" id="slaAll" style="display:none">' + allSlaRows(l, cls) + '</div>' +
       '</div>';
@@ -1665,44 +1725,25 @@
       // 2-column layout: main (left widget: stepper + tabs + content + step-nav) + sidebar (SLA/AI/timeline)
       html += '<div class="dp-layout"><div class="dp-main"><div class="dp-main-scroll">';
 
-      // Process stage — top of the unified left widget (style toggle: circles vs chevrons)
+      // Process stage — top of the unified left widget (circle stepper)
       html += '<div class="dp-journey-card">';
-      html += '<div class="dp-stepper-toggle">' +
-        '<button class="dp-st-btn'+(stepperStyle==='circles'?' on':'')+'" onclick="setStepperStyle(\'circles\')" title="Circle stepper"><span class="material-symbols-outlined">radio_button_checked</span></button>' +
-        '<button class="dp-st-btn'+(stepperStyle==='chevrons'?' on':'')+'" onclick="setStepperStyle(\'chevrons\')" title="Chevron pipeline"><span class="material-symbols-outlined">double_arrow</span></button>' +
-      '</div>';
-      if (stepperStyle === 'chevrons') {
-        html += '<div class="dp-chevrons">';
-        journeySteps.forEach(function(js, si) {
-          var isDone = si < l.bpfStage-1;
-          var isCurrent = si === l.bpfStage-1;
-          var cls = isDone ? 'done' : (isCurrent ? 'active' : 'pending');
-          if (si === stepIdx) cls += ' viewing';
-          var node = isDone ? '<span class="material-symbols-outlined">check</span>' : (si+1);
-          html += '<div class="dp-chev '+cls+'" onclick="switchStep('+si+')" title="'+js.name+'">' +
-            '<span class="chev-num">'+node+'</span><span class="chev-name">'+js.name+'</span>' +
-          '</div>';
-        });
-        html += '</div>';
-      } else {
-        html += '<div class="dp-journey">';
-        journeySteps.forEach(function(js, si) {
-          var isDone = si < l.bpfStage-1;
-          var isCurrent = si === l.bpfStage-1;
-          var cls = isDone ? 'done' : (isCurrent ? 'active' : 'pending');
-          if (si === stepIdx) cls += ' viewing';
-          var node = isDone ? '<span class="material-symbols-outlined">check</span>' : (si+1);
-          html += '<div class="dp-j-step '+cls+'" onclick="switchStep('+si+')">' +
-            '<div class="j-num">'+node+'</div>' +
-            '<span class="j-name">'+js.name+'</span>' +
-          '</div>';
-        });
-        html += '</div>';
-      }
+      html += '<div class="dp-journey">';
+      journeySteps.forEach(function(js, si) {
+        var isDone = si < l.bpfStage-1;
+        var isCurrent = si === l.bpfStage-1;
+        var cls = isDone ? 'done' : (isCurrent ? 'active' : 'pending');
+        if (si === stepIdx) cls += ' viewing';
+        var node = isDone ? '<span class="material-symbols-outlined">check</span>' : (si+1);
+        html += '<div class="dp-j-step '+cls+'" onclick="switchStep('+si+')">' +
+          '<div class="j-num">'+node+'</div>' +
+          '<span class="j-name">'+js.name+'</span>' +
+        '</div>';
+      });
+      html += '</div>';
       html += '</div>';
 
       // Form tabs (above the step) — synced with the identity-card tab bar
-      html += tabBarHtml();
+      html += tabBarHtml(null, ['overview','discovery','testdrive','proposals']);
 
       if (leadTab !== 'overview') {
         html += leadTabPanel(l, leadTab);
@@ -1763,44 +1804,42 @@
           return '<div class="dp-if'+(o.type==='textarea'?' dp-if-wide':'')+'"><label class="dp-if-label">'+o.label+star+'</label>'+ctrl+'</div>';
         };
         var groups = [
-          { title:'Customer Details', fields:[
+          { title:'Customer Details', moreId:'intakeCustMore', fields:[
             {label:'First Name', prop:'firstName', val:fn, req:true},
-            {label:'Middle Name', val:''},
             {label:'Last Name', prop:'lastName', val:ln, req:true},
-            {label:'Mobile Phone', prop:'phone', val:l.phone, type:'phone', req:true},
+            {label:'Mobile Phone', prop:'phone', val:l.phone, type:'phone', req:true}
+          ], more:[
+            {label:'Emirates ID', val:l.emiratesId},
             {label:'Email', prop:'email', val:l.email},
-            {label:'Nationality', type:'lookup', val:'UAE'},
-            {label:'EID', val:l.emiratesId}
+            {label:'Nationality', type:'lookup', val:'UAE'}
           ]},
-          { title:'Lead Qualification', fields:[
-            {label:'Lead Source', type:'lookup', val:l.source, req:true},
-            {label:'Source', prop:'source', type:'lookup', val:l.source, req:true},
-            {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true},
-            {label:'Urgency', type:'select', val:'Immediately', opts:['Immediately','< 1 month','> 1 month'], req:true},
-            {label:'Call Status', type:'select', val:'Not Called', opts:['Not Called','No Answer 1','No Answer 2','Call Back','Follow up','Answered'], req:true},
-            {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
-            {label:'Duplicate Lead', type:'select', val:'No', opts:['No','Yes — flagged']},
-            {label:'Description', type:'textarea', val:'', req:true}
-          ]},
-          { title:'Campaign', fields:[
-            {label:'Campaign ID', val:''},
-            {label:'Campaign Name', type:'lookup', val:l.campaign && l.campaign!=='—' ? l.campaign : ''}
-          ]},
-          { title:'Organization', fields:[
-            {label:'Company', type:'lookup', val:'AGM Sales', req:true},
-            {label:'Business Operation', type:'lookup', val:'Abudhabi Corniche', req:true}
-          ]},
-          { title:'Vehicle Interest', fields:[
+          { title:'Vehicle', moreId:'intakeVehMore', fields:[
+            {label:'Model', prop:'model', type:'lookup', val:l.model}
+          ], more:[
             {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
-            {label:'Model', prop:'model', type:'lookup', val:l.model},
             {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
             {label:'Model Year', type:'select', val:'2026', opts:['2026','2025','2024']},
             {label:'Model Code', val:''},
             {label:'Trade-in Interested', type:'select', val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']}
+          ]},
+          { title:'Lead Qualification', fields:[
+            {label:'Lead Source', type:'lookup', val:l.source, req:true},
+            {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true},
+            {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
+            {label:'Description', type:'textarea', val:'', req:true}
+          ]},
+          { title:'Organization', fields:[
+            {label:'Company', type:'lookup', val:'AGM Sales', req:true},
+            {label:'Showroom', type:'lookup', val:'Abudhabi Corniche', req:true}
           ]}
         ];
         var renderGroup = function(g){
-          return '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">' + g.fields.map(fld).join('') + '</div></div>';
+          var out = '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">' + g.fields.map(fld).join('') + '</div>';
+          if (g.more && g.more.length) {
+            out += '<div class="dp-if-more" id="'+g.moreId+'" style="display:none"><div class="dp-if-fields">' + g.more.map(fld).join('') + '</div></div>';
+            out += '<button type="button" class="dp-if-morebtn" onclick="toggleIntakeMore(this,\''+g.moreId+'\')"><span class="material-symbols-outlined">expand_more</span><span class="dp-if-morelbl">Show more</span></button>';
+          }
+          return out + '</div>';
         };
         html += '<div class="dp-intake"><div class="dp-intake-groups">' + groups.map(renderGroup).join('') + '</div></div>';
       }
@@ -1811,12 +1850,12 @@
       // Right sidebar: KPI snapshot + SLA tracker + AI card + activity
       html += '<div class="dp-side">';
       html += '<div class="dp-kpi-card">' +
-        '<div class="dp-kpi-item"><span class="dp-kpi-l">Stage</span><span class="dp-kpi-v" style="color:var(--blue)">'+l.stageNum+'</span></div>' +
+        '<div class="dp-kpi-head">Lead Snapshot</div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Convert prob.</span><span class="dp-kpi-v" style="color:var(--green)">'+l.convertProb+'%</span></div>' +
-        '<div class="dp-kpi-item"><span class="dp-kpi-l">Profile</span><span class="dp-kpi-v">'+l.profileComplete+'%</span></div>' +
-        '<div class="dp-kpi-item"><span class="dp-kpi-l">Discovery</span><span class="dp-kpi-v" style="color:'+(l.discovery<50?'var(--amber)':'var(--green)')+'">'+l.discovery+'% <span class="dp-kpi-sub">('+discDone+'/8)</span></span></div>' +
-        '<div class="dp-kpi-item"><span class="dp-kpi-l">Channel</span><span class="dp-kpi-v">'+l.channel+' <span class="dp-kpi-sub">&middot; '+langAbbr+'</span></span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Profile completion</span><span class="dp-kpi-v">'+l.profileComplete+'%</span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Preferred channel</span><span class="dp-kpi-v">'+l.channel+' <span class="dp-kpi-sub">&middot; '+langAbbr+'</span></span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Source</span><span class="dp-kpi-v">'+l.source+'</span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Campaign</span><span class="dp-kpi-v">'+(l.campaign && l.campaign !== '—' ? l.campaign : '—')+'</span></div>' +
       '</div>';
       html += slaWidget(l, sd);
       html += '<div class="dp-ai-card">' +
@@ -1883,13 +1922,8 @@
       renderDetail(selectedIdx, si);
     }
 
-    function setStepperStyle(s) {
-      stepperStyle = s;
-      renderDetail(selectedIdx, currentStep);
-    }
-
     function tabBarHtml(extraClass, keys) {
-      var tabs = [['overview','Overview'],['discovery','Discovery Questions'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
+      var tabs = [['overview','Details'],['discovery','Discovery Questions'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
       if (keys) tabs = tabs.filter(function(t){ return keys.indexOf(t[0]) !== -1; });
       return '<div class="dp-tabs '+(extraClass||'')+'">' + tabs.map(function(t){
         return '<button class="dp-tab'+(leadTab===t[0]?' active':'')+'" onclick="switchLeadTab(\''+t[0]+'\')">'+t[1]+'</button>';
@@ -1902,13 +1936,66 @@
     }
 
     var laAnswer = null, laOutcome = null;
-    // outcome -> {stage number, journey name}
+    // outcome -> {stage number, journey name} or {disq:true}
     var laRoutes = {
-      'Interested':      { n: 3, name: 'Qualify' },
-      'Book test drive': { n: 3, name: 'Qualify' },
-      'Needs time':      { n: 2, name: 'Contact' },
-      'Compare':         { n: 2, name: 'Contact' }
+      'Handover to showroom': { n: 3, name: 'Qualify' },
+      'Book test drive':      { n: 3, name: 'Qualify' },
+      'Needs time':           { n: 2, name: 'Contact' },
+      'Not interested':       { disq: true }
     };
+
+    var laNotesOpts   = ['Customer requested a callback', 'Customer busy — call later', 'Left voicemail', 'Number not reachable', 'Will confirm availability'];
+    var laReasons     = ['Bought elsewhere', 'Budget constraints', 'Not the right time', 'Chose competitor', 'No longer interested'];
+    var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
+    var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
+    var laDiscoveryQs = ['Budget confirmed', 'Preferred model discussed', 'Trade-in captured', 'Finance interest noted', 'Timeline to purchase'];
+
+    function laSelect(id, label, opts, req) {
+      return '<div class="cp-field"><label class="cp-label">' + label + (req ? ' <span class="req">*</span>' : '') + '</label>' +
+        '<select class="cp-select" id="' + id + '">' + opts.map(function(o){ return '<option>' + o + '</option>'; }).join('') + '</select></div>';
+    }
+    function laDateTime(label) {
+      return '<span class="la-sublabel">' + label + ' <span class="req">*</span></span>' +
+        '<div class="cp-grid2">' +
+          '<div class="cp-field"><input class="cp-input" type="date" id="laDate"></div>' +
+          '<div class="cp-field"><input class="cp-input" type="time" id="laTime"></div>' +
+        '</div>';
+    }
+    function laDiscovery() {
+      return '<div class="cp-field"><label class="cp-label">Discovery questions</label><div class="la-disc">' +
+        laDiscoveryQs.map(function(q, i){ return '<label class="la-disc-item"><input type="checkbox" id="laDisc' + i + '"><span>' + q + '</span></label>'; }).join('') +
+      '</div></div>';
+    }
+    function laGather() {
+      var g = function(id){ var e = document.getElementById(id); return e ? e.value : ''; };
+      var disc = laDiscoveryQs.filter(function(q, i){ var e = document.getElementById('laDisc' + i); return e && e.checked; });
+      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), disc: disc };
+    }
+    function laFmtDT(date, time) { if (!date) return ''; return tdFmtDate(date) + (time ? ' · ' + time : ''); }
+
+    function renderLaFields() {
+      var host = document.getElementById('laDynamic');
+      if (!host) return;
+      var html = '';
+      if (laAnswer === 'no') {
+        html += laSelect('laNote', 'Predefined note', laNotesOpts, true);
+        html += laDateTime('Reschedule call');
+      } else if (laAnswer === 'yes' && laOutcome) {
+        if (laOutcome === 'Handover to showroom' || laOutcome === 'Book test drive') {
+          html += laDiscovery();
+          html += laSelect('laLoc', 'Location', laLocations, true);
+          html += laDateTime('Date & time');
+          html += laSelect('laCar', 'Car', laCars, true);
+        } else if (laOutcome === 'Needs time') {
+          html += laSelect('laNote', 'Predefined note', laNotesOpts, true);
+          html += laDateTime('Reschedule call');
+        } else if (laOutcome === 'Not interested') {
+          html += laSelect('laNote', 'Predefined note', laNotesOpts, true);
+          html += laSelect('laReason', 'Reason', laReasons, true);
+        }
+      }
+      host.innerHTML = html;
+    }
 
     function openLogActivity() {
       if (selectedIdx < 0) return;
@@ -1921,6 +2008,9 @@
       document.getElementById('laOutcomeWrap').style.display = '';
       document.getElementById('laNotes').value = '';
       document.getElementById('laError').style.display = 'none';
+      document.getElementById('laDynamic').innerHTML = '';
+      var att = leads[selectedIdx].attempts || 1;
+      document.getElementById('laAttemptsText').textContent = att + ' of 5 attempts done';
       updateLaHint();
       document.getElementById('logOverlay').classList.add('show');
       document.getElementById('logPanel').classList.add('open');
@@ -1934,19 +2024,25 @@
       // No answer -> disqualify path, hide outcome
       document.getElementById('laOutcomeWrap').style.display = (v === 'no') ? 'none' : '';
       if (v === 'no') { laOutcome = null; document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); }); }
+      renderLaFields();
       updateLaHint();
     }
 
     function setLaOutcome(btn) {
       laOutcome = btn.getAttribute('data-out');
       document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.toggle('on', c === btn); });
+      renderLaFields();
       updateLaHint();
     }
 
     function updateLaHint() {
       var h = document.getElementById('laHint');
-      if (laAnswer === 'no') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; return; }
-      if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) { h.textContent = 'Saving will move the lead to ' + laRoutes[laOutcome].name + '.'; h.className = 'la-hint ok'; return; }
+      if (laAnswer === 'no') { h.textContent = 'Saving will log a missed attempt and schedule a callback.'; h.className = 'la-hint'; return; }
+      if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
+        var r = laRoutes[laOutcome];
+        if (r.disq) { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; return; }
+        h.textContent = 'Saving will move the lead to ' + r.name + '.'; h.className = 'la-hint ok'; return;
+      }
       h.textContent = 'Saving will move the lead to the next stage.'; h.className = 'la-hint';
     }
 
@@ -1962,18 +2058,44 @@
       e.style.display = 'none';
       var l = leads[selectedIdx];
       var notes = document.getElementById('laNotes').value.trim();
+      var f = laGather();
+      var when = laFmtDT(f.date, f.time);
       l.activities = l.activities || [];
 
       if (laAnswer === 'no') {
-        l.activities.unshift({ type: 'call', text: 'No answer — ' + (notes || 'customer did not answer'), time: '2026-07-07 12:00' });
-        l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
-        showToast('Lead disqualified');
+        l.attempts = Math.min((l.attempts || 1) + 1, 5);
+        l.nextCall = { date: f.date, time: f.time, note: f.note };
+        l.activities.unshift({ type: 'call', text: ['No answer', f.note, when ? 'callback ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+        showToast('Missed attempt logged' + (when ? ' · callback ' + when : ''));
       } else {
         var r = laRoutes[laOutcome];
-        l.activities.unshift({ type: 'call', text: laOutcome + (notes ? ' — ' + notes : ''), time: '2026-07-07 12:00' });
-        l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
-        currentStep = Math.min(r.n - 1, 7);
-        showToast('Moved to ' + r.name);
+        if (laOutcome === 'Book test drive' || laOutcome === 'Handover to showroom') {
+          if (f.disc.length) { l.discovery = Math.max(l.discovery || 0, Math.round(f.disc.length / laDiscoveryQs.length * 100)); l.discoveryAnswers = f.disc; }
+          var car = f.car || l.model, loc = f.loc || l.showroom;
+          if (laOutcome === 'Book test drive') {
+            tdBookings.push({ model: car, date: f.date, time: f.time, location: loc, status: 'Confirmed' });
+            l.activities.unshift({ type: 'visit', text: ['Test drive booked', car + ' @ ' + loc, when, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          } else {
+            l.handover = 'Scheduled — ' + loc;
+            l.handoverBooking = { location: loc, date: f.date, time: f.time, car: car };
+            l.activities.unshift({ type: 'visit', text: ['Handover to showroom', loc, car, when, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          }
+          l.nextCall = null; l.disqReason = null;
+          l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
+          currentStep = Math.min(r.n - 1, 7);
+          showToast('Moved to ' + r.name + (when ? ' · ' + when : ''));
+        } else if (r.disq) {
+          l.disqReason = f.reason;
+          l.activities.unshift({ type: 'call', text: ['Not interested', f.reason, f.note, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
+          showToast('Lead disqualified' + (f.reason ? ' — ' + f.reason : ''));
+        } else {
+          l.nextCall = { date: f.date, time: f.time, note: f.note }; l.disqReason = null;
+          l.activities.unshift({ type: 'call', text: ['Needs time', f.note, when ? 'call back ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
+          currentStep = Math.min(r.n - 1, 7);
+          showToast('Moved to ' + r.name + (when ? ' · call back ' + when : ''));
+        }
       }
       closeLogActivity();
       renderDetail(selectedIdx, currentStep);
@@ -1982,8 +2104,8 @@
 
     function dpFieldHtml(o) {
       var esc = function(v){ return v != null ? String(v).replace(/"/g,'&quot;') : ''; };
-      var star = o.req ? '<span class="dp-if-req">*</span>' : '';
-      var ctrl, wide = false;
+      var star = o.req ? '<span class="dp-if-req">*</span>' : (o.optional ? '<span class="dp-if-opt">Optional</span>' : '');
+      var ctrl, wide = !!o.wide;
       switch (o.type) {
         case 'select': ctrl = '<select class="dp-if-input">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+x+'</option>';}).join('')+'</select>'; break;
         case 'lookup': ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'"><span class="material-symbols-outlined dp-if-lk">search</span></div>'; break;
@@ -2002,6 +2124,20 @@
         return '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">'+g.fields.map(dpFieldHtml).join('')+'</div></div>';
       }).join('') + '</div></div>';
     }
+    function discoveryQuestionsForm(l) {
+      var mg = (['LX','TXL','RX','VX'].filter(function(m){ return new RegExp('\\b'+m+'\\b').test(l.model || ''); })[0]) || '—';
+      var q = function(label, opts, req, val){ return { label:label, type:'select', val: val || '—', opts:['—'].concat(opts), req:req, optional:!req, wide:true }; };
+      return dpFormSections([
+        { title:'Call Center — Discovery Questions', fields:[
+          q('What is the main reason for the enquiry today?', ['Book test drive','Visit showroom','Ask about model/features','Check availability','Request brochure/video','Speak to sales executive','Other (specify)'], true),
+          q('Which EXEED model or vehicle type are you asking about?', ['LX','TXL','RX','VX','SUV - not sure','Open to recommendation','Other (specify)'], true, mg),
+          q('Which showroom / area is most convenient?', ['SZR','Deira','Abu Dhabi','Sharjah / Northern Emirates','Any showroom','Home / office visit requested','Other (specify)'], true),
+          q('When should the sales executive best contact or meet you?', ['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other (specify)'], true),
+          q('Preferred communication channel?', ['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other (specify)'], false)
+        ]}
+      ]);
+    }
+
     function discoveryTestDriveForm(l) {
       var done = l.bpfStage >= 5;
       return dpFormSections([
@@ -2035,7 +2171,7 @@
         { title:'Business', fields:[
           {label:'Business', type:'lookup', val:'AGM Sales', req:true},
           {label:'Business Facility', type:'lookup', val:l.showroom, req:true},
-          {label:'Business Operation', type:'lookup', val:'Abudhabi Corniche'},
+          {label:'Showroom', type:'lookup', val:'Abudhabi Corniche'},
           {label:'TAMM registration', val:''}
         ]},
         { title:'Execution', fields:[
@@ -2122,7 +2258,7 @@
         }).join('') + '</div>';
       }
       if (tab === 'discovery') {
-        return discoveryTestDriveForm(l);
+        return discoveryQuestionsForm(l);
       }
       if (tab === 'testdrive') {
         return testDriveBookingFlow(l);
@@ -2210,7 +2346,7 @@
       document.getElementById('cpSubmit').textContent = 'Create lead';
       ['clFirst','clLast','clEmail','clDesc'].forEach(function(id){ document.getElementById(id).value = ''; });
       document.getElementById('clMobile').value = '+971 ';
-      ['clLang','clPrefChannel','clSource','clCampaign','clChannel','clBrand','clModel','clShowroom','clExec','clCompany','clBizOp','clLeadType','clStage','clTemp','clUrgency','clCallStatus'].forEach(function(id){ var e=document.getElementById(id); if(e) e.selectedIndex=0; });
+      ['clLang','clPrefChannel','clSource','clChannel','clBrand','clModel','clShowroom','clExec','clCompany','clBizOp','clLeadType','clStage','clTemp','clCallStatus'].forEach(function(id){ var e=document.getElementById(id); if(e) e.selectedIndex=0; });
       document.getElementById('clError').style.display = 'none';
       openLeadPanel();
     }
@@ -2225,14 +2361,14 @@
       document.getElementById('clEmail').value = (l.email && l.email !== '—') ? l.email : '';
       document.getElementById('clDesc').value = (l.activities && l.activities[0]) ? l.activities[0].text : 'Existing lead.';
       setSelect('clLang', l.lang); setSelect('clPrefChannel', l.preferred);
-      setSelect('clSource', l.source); setSelect('clCampaign', l.campaign);
+      setSelect('clSource', l.source);
       setSelect('clChannel', l.channel);
       setSelect('clBrand', /mhero/i.test(l.model) ? 'MHero' : (/lepas/i.test(l.model) ? 'Lepas' : 'Exeed'));
       setSelect('clModel', l.model);
       setSelect('clShowroom', l.showroom); setSelect('clExec', l.owner);
       setSelect('clCompany', l.company); setSelect('clBizOp', l.bizOp);
       setSelect('clLeadType', l.leadType); setSelect('clStage', l.stage);
-      setSelect('clTemp', l.temp); setSelect('clUrgency', l.urgency);
+      setSelect('clTemp', l.temp);
       setSelect('clCallStatus', l.callStatus);
       document.getElementById('cpTitle').textContent = 'Edit lead';
       document.querySelector('.cp-sub').textContent = 'Update this lead’s details';
@@ -2261,11 +2397,11 @@
       var srcMap = {'Walk In':['walk','W'],'Call':['ref','C'],'Contact Form':['web','W'],'External Referrals':['ref','R'],'Others':['walk','O']};
       var sm = srcMap[srcVal] || ['web','W'];
       var stageVal = document.getElementById('clStage').value;
-      var stageDisp = {'New':['New','new'],'Qualify':['Qualified','qualified'],'Nurture':['Nurture','nurture'],'Visit':['Contacted','contacted']};
+      var stageDisp = {'New':['New','new'],'Qualify':['Qualified','qualified'],'Visit':['Visit','nurture']};
       var sd2 = stageDisp[stageVal] || [stageVal, 'new'];
-      var urgency = document.getElementById('clUrgency').value;
-      var intentMap = {'Immediately':['High','high'],'< 1 month':['Med','med'],'> 1 month':['Low','low']};
-      var im = intentMap[urgency] || ['Med','med'];
+      var tempVal = document.getElementById('clTemp').value;
+      var intentMap = {'Hot':['High','high'],'Warm':['Med','med'],'Cold':['Low','low']};
+      var im = intentMap[tempVal] || ['Med','med'];
       var brand = document.getElementById('clBrand').value;
       var modelVal = document.getElementById('clModel').value;
       var fullModel = modelVal.toLowerCase().indexOf(brand.toLowerCase()) === 0 ? modelVal : (brand + ' ' + modelVal);
@@ -2275,10 +2411,10 @@
         source: srcVal, srcClass: sm[0], srcIcon: sm[1], model: fullModel,
         stage: sd2[0], stageClass: sd2[1], stageNum: sd2[0], intent: im[0], intentClass: im[1],
         owner: document.getElementById('clExec').value, channel: document.getElementById('clChannel').value,
-        lang: document.getElementById('clLang').value, campaign: document.getElementById('clCampaign').value,
+        lang: document.getElementById('clLang').value,
         temp: document.getElementById('clTemp').value, showroom: document.getElementById('clShowroom').value,
         preferred: document.getElementById('clPrefChannel').value, leadType: document.getElementById('clLeadType').value,
-        urgency: urgency, company: document.getElementById('clCompany').value, bizOp: document.getElementById('clBizOp').value,
+        company: document.getElementById('clCompany').value, bizOp: document.getElementById('clBizOp').value,
         callStatus: document.getElementById('clCallStatus').value
       };
       if (editingId) {
