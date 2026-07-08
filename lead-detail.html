@@ -317,6 +317,32 @@
 
     /* Genesys CTI softphone */
     .cti-panel { position: fixed; right: 20px; bottom: 20px; width: 260px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow16); z-index: 80; overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .2s, transform .2s, visibility .2s; }
+    /* Sales Copilot — ambient side rail + docked drawer */
+    .copilot-rail { position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 88; width: 42px; height: 140px; border-radius: 16px 0 0 16px; background: linear-gradient(160deg, #6a5cff, #a35cff 70%, #ff6ec7); box-shadow: -6px 0 24px rgba(96,60,220,.42); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer; color: #fff; overflow: hidden; transition: width .18s ease, box-shadow .18s ease, transform .3s cubic-bezier(.4,0,.2,1), opacity .2s; }
+    .copilot-rail:hover { width: 56px; box-shadow: -10px 0 32px rgba(96,60,220,.62); }
+    .copilot-rail.tuck { transform: translateY(-50%) translateX(110%); opacity: 0; pointer-events: none; }
+    .copilot-rail-ic { font-size: 22px; z-index: 1; }
+    .copilot-rail-label { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; z-index: 1; }
+    .copilot-rail-pulse { position: absolute; inset: 0; background: radial-gradient(60% 50% at 50% 50%, rgba(255,255,255,.5), transparent 70%); opacity: 0; animation: copilotPulse 2.8s ease-in-out infinite; }
+    @keyframes copilotPulse { 0%,100% { opacity: 0; } 50% { opacity: .8; } }
+    .copilot-panel { position: fixed; right: 0; top: 0; bottom: 0; z-index: 89; width: 360px; max-width: 92vw; background: var(--surface); border-left: 1px solid var(--border); box-shadow: -14px 0 44px rgba(20,24,34,.20); display: flex; flex-direction: column; overflow: hidden; transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
+    .copilot-panel.open { transform: translateX(0); }
+    .copilot-head { display: flex; align-items: center; gap: 8px; padding: 15px 16px; background: linear-gradient(135deg, #6a5cff, #a35cff); color: #fff; flex-shrink: 0; }
+    .copilot-head .material-symbols-outlined { font-size: 20px; }
+    .copilot-title { font-size: 13.5px; font-weight: 700; flex: 1; }
+    .copilot-head-btn { border: none; background: rgba(255,255,255,.2); color: #fff; width: 26px; height: 26px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .copilot-head-btn:hover { background: rgba(255,255,255,.32); }
+    .copilot-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .copilot-msg { font-size: 12.5px; line-height: 1.5; color: var(--ink); background: var(--bg); border-radius: 12px; padding: 10px 12px; max-width: 90%; }
+    .copilot-msg.me { align-self: flex-end; background: #efeafe; color: #4432a8; }
+    .copilot-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .copilot-chip { font-family: inherit; font-size: 11.5px; font-weight: 600; color: #6a5cff; background: #efeafe; border: none; border-radius: 20px; padding: 6px 12px; cursor: pointer; transition: .12s; }
+    .copilot-chip:hover { background: #6a5cff; color: #fff; }
+    .copilot-foot { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border-soft); flex-shrink: 0; }
+    .copilot-input { flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-family: inherit; font-size: 12.5px; outline: none; color: var(--ink); }
+    .copilot-input:focus { border-color: #6a5cff; }
+    .copilot-send { border: none; background: #6a5cff; color: #fff; width: 40px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .copilot-send:hover { background: #5a4cf0; }
     .cti-panel.open { opacity: 1; visibility: visible; transform: translateY(0); }
     .cti-head { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: linear-gradient(135deg, #0a0e14, #16293c); color: #fff; }
     .cti-brand { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
@@ -731,7 +757,44 @@
     .prop-del { border: none; background: none; cursor: pointer; color: var(--ink-muted); padding: 4px; border-radius: 6px; display: flex; }
     .prop-del:hover { color: var(--red); background: var(--red-soft); }
     .prop-del .material-symbols-outlined { font-size: 16px; }
+    /* Quotation-style proposal cards (vehicle photo grid) */
+    .qgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 12px; }
+    .qcard { position: relative; display: flex; flex-direction: column; border: 1.5px solid var(--border-soft); border-radius: 16px; background: var(--surface); overflow: hidden; box-shadow: var(--shadow2); transition: border-color .15s, box-shadow .15s; }
+    .qcard:hover { box-shadow: 0 6px 22px rgba(24,44,86,.10); }
+    .qcard.best { border-color: #6c5ce7; }
+    .qcard.selected { border-color: #6c5ce7; box-shadow: 0 0 0 2px rgba(108,92,231,.20); }
+    .qcard.isquote { border-color: var(--blue); }
+    .qc-best { position: absolute; top: 10px; right: 10px; z-index: 2; background: #6c5ce7; color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .02em; padding: 4px 11px; border-radius: 20px; box-shadow: 0 2px 8px rgba(108,92,231,.4); }
+    .qc-badge { position: absolute; top: 10px; right: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 3px; background: var(--blue); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px; }
+    .qc-badge .material-symbols-outlined { font-size: 13px; }
+    .qc-check { position: absolute; top: 10px; left: 10px; z-index: 2; display: flex; background: rgba(255,255,255,.92); border-radius: 7px; padding: 4px; box-shadow: var(--shadow2); cursor: pointer; }
+    .qc-check input { width: 16px; height: 16px; accent-color: #6c5ce7; cursor: pointer; margin: 0; }
+    .qc-photo { height: 92px; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg, #eef1f5, #eef1f5 10px, #e7ebf0 10px, #e7ebf0 20px); color: var(--ink-muted); font-size: 11px; letter-spacing: .05em; }
+    .qc-photo img { width: 82%; height: 82%; object-fit: contain; }
+    .qc-body { padding: 10px 12px 12px; display: flex; flex-direction: column; }
+    .qc-draft { font-size: 10px; color: var(--ink-muted); font-weight: 600; }
+    .qc-model { font-size: 13.5px; font-weight: 800; color: var(--ink); margin-top: 1px; letter-spacing: -.01em; }
+    .qc-sub { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; }
+    .qc-price { font-size: 16px; font-weight: 800; color: var(--blue); margin-top: 7px; letter-spacing: -.02em; }
+    .qc-emi { font-size: 10.5px; color: var(--ink-secondary); margin-top: 1px; }
+    .qc-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .qc-chip { font-size: 10px; font-weight: 600; color: var(--ink-secondary); background: var(--bg); border-radius: 20px; padding: 2px 9px; }
+    .qc-share { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; }
+    .qc-sbtn { display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-family: inherit; font-size: 10px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 6px 2px; cursor: pointer; transition: .12s; }
+    .qc-sbtn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
+    .qc-sbtn .material-symbols-outlined { font-size: 13px; }
+    .qc-cta { margin-top: 8px; font-family: inherit; font-size: 12px; font-weight: 700; color: #fff; background: var(--blue); border: none; border-radius: 9px; padding: 9px; cursor: pointer; transition: .12s; }
+    .qc-cta:hover { background: var(--blue-dark); }
+    .qc-cta.done { display: flex; align-items: center; justify-content: center; gap: 5px; background: var(--green-soft); color: #2f7a4f; cursor: default; }
+    .qc-cta.done .material-symbols-outlined { font-size: 16px; }
     .prop-body { padding: 14px; }
+    .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
+    .prop-build-img { width: 96px; height: 62px; object-fit: cover; border-radius: 8px; background: #eef1f5; flex-shrink: 0; }
+    .prop-build-model { font-size: 13px; font-weight: 800; color: var(--ink); }
+    .prop-build-colors { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
+    .prop-build-c { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--ink-secondary); font-weight: 600; }
+    .prop-build-dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+    .prop-build-spec { font-size: 10.5px; color: var(--ink-muted); margin-top: 5px; }
     .prop-params { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; margin-bottom: 14px; }
     .prop-p { display: flex; flex-direction: column; gap: 3px; }
     .prop-p-l { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); }
@@ -1199,12 +1262,7 @@
       </div>
       <div class="cp-field" id="laOutcomeWrap" style="display:none">
         <label class="cp-label">Outcome</label>
-        <div class="la-chips" id="laChips">
-          <button class="la-chip" data-out="Handover to showroom" onclick="setLaOutcome(this)">Handover to showroom</button>
-          <button class="la-chip" data-out="Book test drive" onclick="setLaOutcome(this)">Book test drive</button>
-          <button class="la-chip" data-out="Needs time" onclick="setLaOutcome(this)">Needs time</button>
-          <button class="la-chip" data-out="Not interested" onclick="setLaOutcome(this)">Not interested</button>
-        </div>
+        <div class="la-chips" id="laChips"></div>
       </div>
       <div id="laDynamic"></div>
       <div class="la-hint" id="laHint" style="display:none"></div>
@@ -1229,6 +1287,31 @@
       <a class="cp-btn" id="waiverDownload" href="test-drive-waiver.pdf" download="Test-Drive-Waiver.pdf"><span class="material-symbols-outlined" style="font-size:16px">download</span> Download PDF</a>
       <button class="cp-btn" onclick="clearWaiverSig()">Clear</button>
       <button class="cp-btn primary" onclick="confirmWaiver()">Sign &amp; confirm</button>
+    </div>
+  </div>
+
+  <div class="copilot-rail" id="copilotRail" onclick="toggleCopilot()" title="Sales Copilot" role="button" aria-label="Open Sales Copilot">
+    <span class="copilot-rail-pulse"></span>
+    <span class="material-symbols-outlined copilot-rail-ic">auto_awesome</span>
+    <span class="copilot-rail-label">Copilot</span>
+  </div>
+  <div class="copilot-panel" id="copilotPanel" role="dialog" aria-label="Sales Copilot">
+    <div class="copilot-head">
+      <span class="material-symbols-outlined">auto_awesome</span>
+      <span class="copilot-title">Sales Copilot</span>
+      <button class="copilot-head-btn" onclick="toggleCopilot()"><span class="material-symbols-outlined" style="font-size:16px">close</span></button>
+    </div>
+    <div class="copilot-body" id="copilotBody">
+      <div class="copilot-msg">Hi 👋 I can help with this lead — summarise activity, draft a follow-up, or suggest the next best action.</div>
+      <div class="copilot-chips">
+        <button class="copilot-chip" onclick="copilotAsk('Summarise this lead')">Summarise this lead</button>
+        <button class="copilot-chip" onclick="copilotAsk('Draft a follow-up message')">Draft follow-up</button>
+        <button class="copilot-chip" onclick="copilotAsk('What is the next best action?')">Next best action</button>
+      </div>
+    </div>
+    <div class="copilot-foot">
+      <input class="copilot-input" id="copilotInput" placeholder="Ask Copilot…" onkeydown="if(event.key==='Enter')copilotSend()">
+      <button class="copilot-send" onclick="copilotSend()"><span class="material-symbols-outlined" style="font-size:18px">send</span></button>
     </div>
   </div>
 
@@ -1505,7 +1588,7 @@
         if (i === selectedIdx) tr.classList.add('selected');
         if (selectedIds.has(l.id)) tr.classList.add('row-checked');
         tr.setAttribute('data-idx', i);
-        tr.onclick = function() { toggleRowExpand(i, this); };
+        tr.onclick = function() { openPanelFull(i); };
         tr.innerHTML =
           '<td class="chk-cell" onclick="event.stopPropagation()"><input type="checkbox" class="lead-check" data-id="'+l.id+'" '+(selectedIds.has(l.id)?'checked':'')+' onclick="toggleSelect(\''+l.id+'\',this)"></td>'+
           '<td><div class="lead-cell"><div class="lead-av '+l.av+'">'+l.initials+'</div><div class="c-name">'+l.name+'</div></div></td>'+
@@ -1595,6 +1678,29 @@
       t.classList.add('show');
       clearTimeout(toastTimer);
       toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+    }
+
+    function toggleCopilot(){
+      var p = document.getElementById('copilotPanel'), r = document.getElementById('copilotRail');
+      var open = p.classList.toggle('open');
+      r.classList.toggle('tuck', open);
+      if (open) setTimeout(function(){ var i = document.getElementById('copilotInput'); if (i) i.focus(); }, 240);
+    }
+    function copilotAsk(q){ document.getElementById('copilotInput').value = q; copilotSend(); }
+    function copilotSend(){
+      var inp = document.getElementById('copilotInput'), q = (inp.value || '').trim(); if (!q) return;
+      var body = document.getElementById('copilotBody');
+      body.insertAdjacentHTML('beforeend', '<div class="copilot-msg me">' + q.replace(/</g,'&lt;') + '</div>');
+      inp.value = '';
+      var l = selectedIdx >= 0 ? leads[selectedIdx] : null;
+      var reply;
+      if (!l) { reply = 'Open a lead first and I\'ll tailor suggestions to it.'; }
+      else if (/summar/i.test(q)) { reply = '<strong>'+l.name+'</strong> · '+l.stageNum+' stage. Source: '+l.source+', channel: '+l.channel+'. Convert probability '+l.convertProb+'%, discovery '+l.discovery+'%. Last activity: '+((l.activities&&l.activities[0])?l.activities[0].text:'—'); }
+      else if (/follow|draft|message/i.test(q)) { reply = 'Suggested WhatsApp: “Hi '+l.name.split(' ')[0]+', thanks for your interest in the '+l.model+'. I\'d love to book a quick test drive this week — what day suits you?”'; }
+      else if (/next|action|best/i.test(q)) { reply = 'Next best action for '+l.name+': log the outstanding call within SLA, then '+(l.bpfStage>=4?'share a tailored proposal from the configurator.':'book a showroom appointment.'); }
+      else { reply = 'For <strong>'+l.name+'</strong> ('+l.stageNum+'), I\'d prioritise the SLA follow-up and share the EXEED ES brochure. Ask me to summarise, draft a message, or suggest the next action.'; }
+      setTimeout(function(){ body.insertAdjacentHTML('beforeend', '<div class="copilot-msg">' + reply + '</div>'); body.scrollTop = body.scrollHeight; }, 380);
+      body.scrollTop = body.scrollHeight;
     }
     function toggleCheck(ci, el) {
       if (selectedIdx < 0) return;
@@ -2197,6 +2303,15 @@
       'Not interested':       { disq: true }
     };
 
+    // Outcome chips differ by whether the customer answered.
+    var laYesOutcomes = ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'];
+    var laNoOutcomes  = ['Disqualify Customer', 'Send WhatsApp', 'Call customer'];
+    function renderOutcomeChips() {
+      var host = document.getElementById('laChips'); if (!host) return;
+      var outs = laAnswer === 'yes' ? laYesOutcomes : (laAnswer === 'no' ? laNoOutcomes : []);
+      host.innerHTML = outs.map(function(o){ return '<button class="la-chip'+(laOutcome===o?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>'; }).join('');
+    }
+
     var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
     var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
     var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
@@ -2266,9 +2381,12 @@
       var host = document.getElementById('laDynamic');
       if (!host) return;
       var html = '';
-      if (laAnswer === 'no') {
-        html += laRadioGroup('laNoReason', 'Reason', laNoReasons);
-        html += laDateTime('Reschedule call');
+      if (laAnswer === 'no' && laOutcome) {
+        if (laOutcome === 'Disqualify Customer') {
+          html += laSelect('laReason', 'Reason', laReasons, true);
+        } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Call customer') {
+          html += laDateTime('Schedule next');
+        }
       } else if (laAnswer === 'yes' && laOutcome) {
         if (laOutcome === 'Book test drive') {
           html += laDiscovery();
@@ -2292,7 +2410,7 @@
       laAnswer = null; laOutcome = null;
       document.getElementById('laYes').classList.remove('on');
       document.getElementById('laNo').classList.remove('on','no');
-      document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); });
+      document.getElementById('laChips').innerHTML = '';
       document.getElementById('laOutcomeWrap').style.display = 'none';
       document.getElementById('laError').style.display = 'none';
       document.getElementById('laDynamic').innerHTML = '';
@@ -2306,7 +2424,10 @@
     function updateLaHint() {
       var h = document.getElementById('laHint');
       if (!h) return;
-      if (laAnswer === 'no') { h.textContent = 'Saving will log a missed attempt and schedule a callback.'; h.className = 'la-hint'; h.style.display = ''; return; }
+      if (laAnswer === 'no' && laOutcome) {
+        if (laOutcome === 'Disqualify Customer') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
+        h.textContent = 'Saving will log a missed attempt and schedule the next follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
+      }
       if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
         var r = laRoutes[laOutcome];
         if (r.disq) { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
@@ -2317,12 +2438,13 @@
 
     function setLaAnswer(v) {
       laAnswer = v;
+      laOutcome = null;
       document.getElementById('laYes').classList.toggle('on', v === 'yes');
       var no = document.getElementById('laNo');
       no.classList.toggle('on', v === 'no'); no.classList.toggle('no', v === 'no');
-      // Outcome only appears when the customer answered (Yes).
-      document.getElementById('laOutcomeWrap').style.display = (v === 'yes') ? '' : 'none';
-      if (v !== 'yes') { laOutcome = null; document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); }); }
+      // Outcome chips appear for both answers (different sets per answer).
+      document.getElementById('laOutcomeWrap').style.display = v ? '' : 'none';
+      renderOutcomeChips();
       renderLaFields();
       updateLaHint();
     }
@@ -2343,7 +2465,7 @@
     function submitLogActivity(close) {
       var e = document.getElementById('laError');
       if (!laAnswer) { e.textContent = 'Please record whether the customer answered.'; e.style.display = 'block'; return; }
-      if (laAnswer === 'yes' && !laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
+      if (!laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
       e.style.display = 'none';
       var l = leads[selectedIdx];
       var notes = '';
@@ -2353,9 +2475,17 @@
 
       if (laAnswer === 'no') {
         l.attempts = Math.min((l.attempts || 1) + 1, 5);
-        l.nextCall = { date: f.date, time: f.time, note: f.noReason };
-        l.activities.unshift({ type: 'call', text: [f.noReason || 'No answer', when ? 'callback ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-        showToast('Logged: ' + (f.noReason || 'no answer') + (when ? ' · callback ' + when : ''));
+        if (laOutcome === 'Disqualify Customer') {
+          l.disqReason = f.reason; l.nextCall = null;
+          l.activities.unshift({ type: 'call', text: ['No answer — Disqualified', f.reason].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
+          showToast('Lead disqualified' + (f.reason ? ' — ' + f.reason : ''));
+        } else {
+          l.nextCall = { date: f.date, time: f.time, note: laOutcome };
+          var actType = laOutcome === 'Send WhatsApp' ? 'whatsapp' : 'call';
+          l.activities.unshift({ type: actType, text: ['No answer — ' + laOutcome, when ? 'next ' + when : ''].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast(laOutcome + (when ? ' · next ' + when : '') + ' scheduled');
+        }
       } else {
         var r = laRoutes[laOutcome];
         if (laOutcome === 'Book test drive' || laOutcome === 'Handover to showroom') {
@@ -2647,12 +2777,60 @@
     function propAddTotal(p){ return propAddOns.reduce(function(s,a){ return s + (p.addOns[a.k] ? a.price : 0); }, 0); }
     function propFmt(n){ return (n||0).toLocaleString('en-US'); }
 
+    // "New proposal" opens the EXEED configurator in a separate browser window; built proposals flow back here.
     function addProposal(){
-      var l = leads[selectedIdx]; l.proposals = l.proposals || [];
-      l.proposals.push({ id:'P-2026-'+(1001 + l.proposals.length), model:l.model, nsp:169999, downPct:20, year:'2025', pdi:0, addOns:{ insurance:false, service:false, tinting:true, ceramic:true }, isQuote:false });
-      renderDetail(selectedIdx, currentStep);
+      window.open('proposal-builder.html?lead=' + selectedIdx, 'exeedProposalBuilder', 'width=1280,height=860');
     }
+    // Pull any proposals built in the configurator window into their target leads.
+    function importProposalQueue(){
+      var q; try { q = JSON.parse(localStorage.getItem('exeedProposalQueue') || '[]'); } catch(e){ return; }
+      if (!q || !q.length) return;
+      var addedToOpen = 0;
+      q.forEach(function(entry){
+        var idx = (entry.lead == null) ? selectedIdx : parseInt(entry.lead, 10);
+        if (isNaN(idx) || !leads[idx]) return;
+        var l = leads[idx]; l.proposals = l.proposals || [];
+        var p = entry.proposal; p.id = 'P-2026-' + (1001 + l.proposals.length);
+        l.proposals.push(p);
+        if (idx === selectedIdx) addedToOpen++;
+      });
+      try { localStorage.setItem('exeedProposalQueue', '[]'); } catch(e){}
+      if (selectedIdx >= 0) renderDetail(selectedIdx, currentStep);
+      showToast(q.length + ' proposal' + (q.length !== 1 ? 's' : '') + ' added from configurator');
+    }
+    window.addEventListener('focus', importProposalQueue);
+    window.addEventListener('storage', function(e){ if (e.key === 'exeedProposalQueue') importProposalQueue(); });
     function removeProposal(i){ var l = leads[selectedIdx]; if (l.proposals) { l.proposals.splice(i,1); renderDetail(selectedIdx, currentStep); } }
+    function downloadProposal(i){
+      var l = leads[selectedIdx], p = l.proposals[i]; if (!p) return;
+      var down = Math.round(p.nsp * p.downPct/100), loan = p.nsp - down - (p.pdi||0), at = propAddTotal(p);
+      var doc = p.isQuote ? 'QUOTATION' : 'PROPOSAL';
+      var lines = [
+        'EXEED — ' + doc + '  ' + p.id,
+        'AGM Sales · ' + l.name + ' (' + l.id + ')',
+        '----------------------------------------',
+        'Model:            ' + p.model,
+        'Year:             ' + (p.year || '2026'),
+        (p.extColor ? 'Exterior:         ' + p.extColor : ''),
+        (p.intColor ? 'Interior:         ' + p.intColor : ''),
+        (p.range ? 'Range / Power:    ' + p.range + (p.power ? ' · ' + p.power : '') : ''),
+        '----------------------------------------',
+        'Vehicle price:    AED ' + propFmt(p.nsp),
+        'PDI / discount:   AED ' + propFmt(p.pdi || 0),
+        'Down payment:     ' + p.downPct + '%  (AED ' + propFmt(down) + ')',
+        'Loan amount:      AED ' + propFmt(loan),
+        'Add-ons total:    AED ' + propFmt(at),
+        '',
+        'EMI (2% flat)     Without / With adds-on',
+        [5,4,3,2].map(function(y){ return '  ' + y + ' Years:        AED ' + propFmt(propEmi(loan,y)) + ' / AED ' + propFmt(propEmi(loan+at,y)); }).join('\n')
+      ].filter(Boolean).join('\n');
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([lines], { type:'text/plain' }));
+      a.download = (p.isQuote ? 'Quotation-' : 'Proposal-') + p.id + '.txt';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+      showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' downloaded');
+    }
     function toggleProposalAddon(i, k){ var p = leads[selectedIdx].proposals[i]; if (p){ p.addOns[k] = !p.addOns[k]; renderDetail(selectedIdx, currentStep); } }
     function setProposalField(i, field, value){
       var p = leads[selectedIdx].proposals[i]; if (!p) return;
@@ -2665,55 +2843,54 @@
     function convertSelectedProposals(){
       var n = 0;
       (leads[selectedIdx].proposals || []).forEach(function(p){ if (p._sel && !p.isQuote){ p.isQuote = true; p._sel = false; n++; } });
-      if (n) showToast(n + ' proposal' + (n !== 1 ? 's' : '') + ' converted to quotation');
+      if (n) showToast(n + ' quotation' + (n !== 1 ? 's' : '') + ' generated');
       renderDetail(selectedIdx, currentStep);
     }
+
+    function createQuotation(i){ var p = leads[selectedIdx].proposals[i]; if (p){ p.isQuote = true; p._sel = false; showToast('Quotation created — ' + p.id); renderDetail(selectedIdx, currentStep); } }
+    function shareProposal(i, ch){ var p = leads[selectedIdx].proposals[i]; if (p) showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' sent via ' + ch); }
 
     function renderProposalCard(p, i){
       var down = Math.round(p.nsp * p.downPct / 100);
       var loan = p.nsp - down - (p.pdi || 0);
-      var addTotal = propAddTotal(p);
-      var loanWith = loan + addTotal;
-      var terms = [5,4,3,2];
-      var emiRows = terms.map(function(y){
-        return '<tr><td>'+y+' Years</td><td>'+propFmt(propEmi(loan,y))+'</td><td>'+propFmt(propEmi(loanWith,y))+'</td></tr>';
-      }).join('');
-      var addonRows = propAddOns.map(function(a){
-        return '<label class="prop-addon"><input type="checkbox"'+(p.addOns[a.k]?' checked':'')+' onchange="toggleProposalAddon('+i+',\''+a.k+'\')"><span>'+a.label+'</span><span class="prop-addon-price">'+propFmt(a.price)+'</span></label>';
-      }).join('');
-      return '<div class="prop-card'+(p.isQuote?' quote':'')+(p._sel?' selected':'')+'">' +
-        '<div class="prop-card-head">' +
-          '<div class="prop-name-wrap">' +
-            (p.isQuote ? '' : '<label class="prop-sel" title="Select to convert"><input type="checkbox"'+(p._sel?' checked':'')+' onchange="toggleProposalSelect('+i+')"></label>') +
-            '<span class="prop-name"><span class="material-symbols-outlined">description</span>'+p.id+'</span>' +
+      var monthly = propEmi(loan + propAddTotal(p), 5);
+      var modelName = (p.model || '').split(' · ')[0];
+      var subLine = [p.trim, p.extColor].filter(Boolean).join(' · ');
+      var draft = 'Draft ' + ('0' + (i + 1)).slice(-2) + (p.tag ? ' · ' + p.tag : '');
+      var chips = propAddOns.filter(function(a){ return p.addOns && p.addOns[a.k]; }).slice(0,3)
+        .map(function(a){ return '<span class="qc-chip">' + a.label + '</span>'; }).join('');
+      return '<div class="qcard'+(p._sel?' selected':'')+(p.isQuote?' isquote':'')+(p.bestFit?' best':'')+'">' +
+        (p.bestFit && !p.isQuote ? '<span class="qc-best">Best fit</span>' : '') +
+        (p.isQuote ? '<span class="qc-badge"><span class="material-symbols-outlined">verified</span>Quotation</span>' : '') +
+        '<label class="qc-check" title="Select"><input type="checkbox"'+(p._sel?' checked':'')+' onchange="toggleProposalSelect('+i+')"></label>' +
+        '<div class="qc-photo">' + (p.image ? '<img src="'+p.image+'" alt="">' : '<span>vehicle photo</span>') + '</div>' +
+        '<div class="qc-body">' +
+          '<div class="qc-draft">'+draft+'</div>' +
+          '<div class="qc-model">'+(modelName || p.model)+'</div>' +
+          (subLine ? '<div class="qc-sub">'+subLine+'</div>' : '') +
+          '<div class="qc-price">AED '+propFmt(p.nsp)+'</div>' +
+          '<div class="qc-emi">AED '+propFmt(monthly)+' / mo &middot; 60 mo</div>' +
+          (chips ? '<div class="qc-chips">'+chips+'</div>' : '') +
+          '<div class="qc-share">' +
+            '<button class="qc-sbtn" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">picture_as_pdf</span>PDF</button>' +
+            '<button class="qc-sbtn" onclick="shareProposal('+i+',\'WhatsApp\')"><span class="material-symbols-outlined">chat</span>WhatsApp</button>' +
+            '<button class="qc-sbtn" onclick="shareProposal('+i+',\'Email\')"><span class="material-symbols-outlined">mail</span>Email</button>' +
           '</div>' +
-          '<div class="prop-head-actions">' +
-            (p.isQuote ? '<span class="prop-badge"><span class="material-symbols-outlined">verified</span>Quotation</span>' : '') +
-            '<button class="prop-del" onclick="removeProposal('+i+')" title="Remove"><span class="material-symbols-outlined">delete</span></button>' +
-          '</div>' +
-        '</div>' +
-        '<div class="prop-body">' +
-          '<div class="prop-params">' +
-            '<div class="prop-p"><span class="prop-p-l">Vehicle model</span><input class="prop-inp" value="'+p.model+'" onchange="setProposalField('+i+',\'model\',this.value)"></div>' +
-            '<div class="prop-p"><span class="prop-p-l">Year</span><input class="prop-inp" value="'+p.year+'" onchange="setProposalField('+i+',\'year\',this.value)"></div>' +
-            '<div class="prop-p"><span class="prop-p-l">Vehicle price (NSP)</span><input class="prop-inp" value="'+propFmt(p.nsp)+'" onchange="setProposalField('+i+',\'nsp\',this.value)"></div>' +
-            '<div class="prop-p"><span class="prop-p-l">PDI / discount</span><input class="prop-inp" value="'+propFmt(p.pdi)+'" onchange="setProposalField('+i+',\'pdi\',this.value)"></div>' +
-            '<div class="prop-p"><span class="prop-p-l">Down payment</span><div class="prop-down"><input class="prop-inp prop-inp-sm" value="'+p.downPct+'" onchange="setProposalField('+i+',\'downPct\',this.value)"><span class="prop-down-pct">%</span><span class="prop-down-amt">AED '+propFmt(down)+'</span></div></div>' +
-          '</div>' +
-          '<div class="prop-loans">' +
-            '<div class="prop-loan"><span class="prop-loan-l">Loan amount</span><span class="prop-loan-v">'+propFmt(loan)+'</span></div>' +
-            '<div class="prop-loan"><span class="prop-loan-l">With adds on</span><span class="prop-loan-v">'+propFmt(loanWith)+'</span></div>' +
-          '</div>' +
-          '<table class="prop-emi"><thead><tr><th>Payment plan EMI <span class="prop-rate">2%</span></th><th>Without adds on</th><th>With adds on</th></tr></thead><tbody>'+emiRows+'</tbody></table>' +
-          '<div class="prop-addons"><div class="prop-addons-title">Adds on</div>'+addonRows+
-            '<div class="prop-addon-total"><span>Total adds on</span><span>'+propFmt(addTotal)+'</span></div>' +
-          '</div>' +
+          (p.isQuote
+            ? '<button class="qc-cta done" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">verified</span> Quotation ready</button>'
+            : '<button class="qc-cta" onclick="createQuotation('+i+')">Create Quotation</button>') +
         '</div>' +
       '</div>';
     }
 
     function proposalsPanel(l){
       l.proposals = l.proposals || [];
+      if (!l.proposals.length && !l._propSeeded) {
+        l._propSeeded = true;
+        l.proposals.push({ id:'P-2026-1001', tag:'Value', model:'EXEED ES · Standard Range', trim:'Standard Range', year:'2026', extColor:'Pearl White', extHex:'#eceff2', image:'assets/es/ext-white.png', intColor:'Black & Gray', intHex:'#2c2c30', range:'520 km', power:'204 hp', nsp:159900, downPct:20, pdi:0, addOns:{ insurance:false, service:false, tinting:true, ceramic:true }, isQuote:false });
+        l.proposals.push({ id:'P-2026-1002', tag:'Best fit', bestFit:true, model:'EXEED ES · Long Range', trim:'Long Range', year:'2026', extColor:'Matte Gray', extHex:'#6d737a', image:'assets/es/ext-matte-gray.png', intColor:'Black & Gray', intHex:'#2c2c30', range:'620 km', power:'279 hp', nsp:179900, downPct:20, pdi:0, addOns:{ insurance:false, service:true, tinting:true, ceramic:true }, isQuote:false });
+        l.proposals.push({ id:'P-2026-1003', tag:'Premium', model:'EXEED ES · AWD Performance', trim:'AWD Performance', year:'2026', extColor:'Passion Red', extHex:'#9d1f28', image:'assets/es/ext-red.png', intColor:'Red', intHex:'#9d1f28', range:'580 km', power:'517 hp', nsp:209900, downPct:15, pdi:0, addOns:{ insurance:true, service:true, tinting:true, ceramic:true }, isQuote:false });
+      }
       var quotes = l.proposals.filter(function(p){ return p.isQuote; }).length;
       var head = '<div class="prop-head">' +
         '<div><div class="dp-essential-title">Proposals</div>' +
@@ -2731,11 +2908,11 @@
             '<span class="prop-bulk-n"><span class="material-symbols-outlined">check_circle</span>'+selCount+' selected</span>' +
             '<div class="prop-bulk-actions">' +
               '<button class="prop-bulk-clear" onclick="clearPropSelection()">Clear</button>' +
-              '<button class="prop-bulk-convert" onclick="convertSelectedProposals()"><span class="material-symbols-outlined">receipt_long</span>Convert to quotation</button>' +
+              '<button class="prop-bulk-convert" onclick="convertSelectedProposals()"><span class="material-symbols-outlined">receipt_long</span>Generate quotation</button>' +
             '</div>' +
           '</div>'
-        : '<div class="prop-hint"><span class="material-symbols-outlined">check_box</span>Select one or more proposals to convert into a quotation.</div>';
-      return '<div class="dp-essential" style="margin-bottom:14px">' + head + bulk + l.proposals.map(renderProposalCard).join('') + '</div>';
+        : '<div class="prop-hint"><span class="material-symbols-outlined">check_box</span>Tick one or more cards to generate a quotation.</div>';
+      return '<div class="dp-essential" style="margin-bottom:14px">' + head + bulk + '<div class="qgrid">' + l.proposals.map(renderProposalCard).join('') + '</div></div>';
     }
 
     function leadTabPanel(l, tab) {

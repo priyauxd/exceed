@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build a Proposal — EXEED ES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c; --ink2:#5b626c; --muted:#9aa1ac; --line:#e7eaee; --bg:#f4f6f8;
+    --panel:#ffffff; --panel2:#ffffff; --summary-bg:#fbfcfd;
+    --stage1:#ffffff; --stage2:#e6eaef;
+    --topbar-bg:rgba(255,255,255,.86); --dock-bg:rgba(255,255,255,.82);
+    --btn-text:#ffffff; --card-shadow:rgba(20,24,34,.12);
+    --swatch-inset:rgba(0,0,0,.08); --swatch-gap:#ffffff;
+    --emi-th:#3a1216; --accent2:#c0122e; --card-hover:#c8ccd2; --sel-border:#14171c;
+    --addon-bg:#e9edf2; --addon-text:#14171c; --radius:16px;
+  }
+  body.dark{
+    --ink:#d5dae2; --ink2:#98a0ac; --muted:#6b727d; --line:#252b34; --bg:#12151b;
+    --panel:#171b22; --panel2:#22272f; --summary-bg:#1c212a;
+    --stage1:#20252e; --stage2:#0e1116;
+    --topbar-bg:rgba(18,21,27,.82); --dock-bg:rgba(23,27,34,.72);
+    --btn-text:#11141a; --card-shadow:rgba(0,0,0,.45);
+    --swatch-inset:rgba(255,255,255,.14); --swatch-gap:#0e1116;
+    --emi-th:#4a1620; --accent2:#e0233f; --card-hover:#3a424e; --sel-border:#4b5563;
+    --addon-bg:#2c333d; --addon-text:#d5dae2;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; transition:background .25s, color .25s; color-scheme:light;}
+  body.dark{color-scheme:dark;}
+  .mi{font-family:'Material Icons Outlined'; font-style:normal; line-height:1; vertical-align:middle;}
+
+  /* Top bar */
+  .topbar{position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:24px; height:60px; padding:0 24px; background:var(--topbar-bg); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
+  .theme-toggle{width:38px; height:38px; border-radius:11px; border:1px solid var(--line); background:var(--panel); color:var(--ink2); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.15s;}
+  .theme-toggle:hover{color:var(--ink); border-color:var(--ink2);}
+  .theme-toggle .mi{font-size:19px;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.14em; font-size:15px;}
+  .brand small{font-weight:600; letter-spacing:.02em; font-size:11px; color:var(--ink2);}
+  .steps{display:flex; align-items:center; gap:4px; margin:0 auto;}
+  .step{display:flex; align-items:center; gap:7px; padding:7px 14px; border-radius:30px; font-size:12.5px; font-weight:600; color:var(--muted); cursor:pointer; white-space:nowrap; transition:.15s;}
+  .step .n{width:19px; height:19px; border-radius:50%; background:var(--panel2); color:var(--ink2); font-size:10.5px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+  .step:hover{color:var(--ink);}
+  .step.active{background:var(--ink); color:var(--btn-text);}
+  .step.active .n{background:var(--btn-text); color:var(--ink);}
+  .step.done{color:var(--ink);}
+  .step.done .n{background:#1f9e5a; color:#fff;}
+  .topbar-right{display:flex; align-items:center; gap:14px;}
+  .price-chip{text-align:right;}
+  .price-chip .l{font-size:9px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:700;}
+  .price-chip .v{font-size:21px; font-weight:800; letter-spacing:-.02em; line-height:1.1;}
+
+  /* Layout */
+  .wrap{display:grid; grid-template-columns:1fr 380px; height:calc(100vh - 60px); overflow:hidden;}
+  @media(max-width:1024px){ .wrap{grid-template-columns:1fr; height:auto; overflow:visible;} .stage,.summary{height:auto !important; overflow:visible !important;} .steps{display:none;} }
+
+  /* Stage */
+  .stage{position:relative; display:flex; flex-direction:column; height:100%; overflow:hidden; background:radial-gradient(120% 85% at 50% 2%, var(--stage1), var(--stage2) 72%); transition:background .25s;}
+  .stage-badge{position:absolute; top:18px; left:26px; display:flex; flex-direction:column; gap:2px; z-index:2;}
+  .stage-badge .m{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;}
+  .stage-badge .t{font-size:12px; color:var(--ink2);}
+  .stage-img-wrap{flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:26px 30px 4px;}
+  .stage-img{max-width:92%; max-height:100%; object-fit:contain; filter:drop-shadow(0 34px 44px rgba(20,24,34,.22)); transition:opacity .35s ease, transform .5s ease;}
+  .stage-img.swap{opacity:0; transform:translateY(8px) scale(.99);}
+  .stage-caption{text-align:center; padding:0 24px 14px; flex-shrink:0;}
+  .stage-caption .big{font-size:22px; font-weight:800; letter-spacing:-.02em;}
+  .stage-caption .sub{font-size:12.5px; color:var(--ink2); margin-top:3px;}
+
+  /* Selector dock */
+  .dock{flex-shrink:0; padding:14px 28px 18px; border-top:1px solid var(--line); background:var(--dock-bg); backdrop-filter:blur(10px);}
+  .dock-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .dock-h .t{font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2);}
+  .swatches{display:flex; gap:14px; flex-wrap:wrap;}
+  .swatch{display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; width:74px;}
+  .swatch .dot{width:44px; height:44px; border-radius:50%; box-shadow:inset 0 0 0 1px var(--swatch-inset), 0 3px 10px rgba(0,0,0,.28); position:relative; transition:.15s;}
+  .swatch.on .dot{box-shadow:inset 0 0 0 1px var(--swatch-inset), 0 0 0 2px var(--swatch-gap), 0 0 0 4px var(--sel-border);}
+  .swatch .nm{font-size:11px; font-weight:600; color:var(--ink2); text-align:center; line-height:1.25;}
+  .swatch.on .nm{color:var(--ink);}
+
+  .cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px;}
+  .card{border:1.5px solid var(--line); border-radius:14px; padding:15px; cursor:pointer; background:var(--panel); transition:.15s; position:relative;}
+  .card:hover{border-color:var(--card-hover);}
+  .card.on{border-color:var(--sel-border); box-shadow:0 8px 24px var(--card-shadow);}
+  .card .cn{font-size:15px; font-weight:800;}
+  .card .cs{font-size:12px; color:var(--ink2); margin-top:3px;}
+  .card .cp{font-size:14px; font-weight:800; margin-top:10px;}
+  .card .specs{display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;}
+  .card .specs span{font-size:11px; color:var(--ink2); display:inline-flex; align-items:center; gap:4px;}
+  .card .check{position:absolute; top:12px; right:12px; width:20px; height:20px; border-radius:50%; background:var(--ink); color:var(--btn-text); display:none; align-items:center; justify-content:center;}
+  .card.on .check{display:flex;}
+  .card .check .mi{font-size:14px;}
+
+  .dock-nav{display:flex; justify-content:space-between; align-items:center; margin-top:18px;}
+  .btn{display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:13.5px; font-weight:700; padding:11px 20px; border-radius:11px; border:none; cursor:pointer; transition:.15s;}
+  .btn.ghost{background:none; color:var(--ink2); padding-left:6px;}
+  .btn.ghost:hover{color:var(--ink);}
+  .btn.dark{background:var(--ink); color:var(--btn-text);}
+  .btn.dark:hover{opacity:.88;}
+  .btn.dark .mi{font-size:18px;}
+
+  /* Summary panel */
+  .summary{margin:12px; border:1px solid var(--line); border-radius:18px; background:var(--summary-bg); padding:16px 18px; display:flex; flex-direction:column; height:calc(100% - 24px); overflow-y:auto;}
+  .sum-title{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2); margin-bottom:9px;}
+  .sum-hero{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--panel2); margin-bottom:11px;}
+  .sum-hero img{width:100%; height:78px; object-fit:cover; background:var(--stage2);}
+  .sum-hero .cap{padding:8px 12px;}
+  .sum-hero .cap .m{font-size:13px; font-weight:800;}
+  .sum-hero .cap .t{font-size:11.5px; color:var(--ink2); margin-top:1px;}
+  .sum-rows{display:flex; flex-direction:column; gap:1px; margin-bottom:11px;}
+  .sum-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:5.5px 0; border-bottom:1px solid var(--line);}
+  .sum-row .k{font-size:11.5px; color:var(--ink2);}
+  .sum-row .v{font-size:12px; font-weight:700; display:flex; align-items:center; gap:7px;}
+  .sum-row .v .cdot{width:13px; height:13px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
+
+  .fin{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:11px 12px; margin-bottom:11px;}
+  .fin-l{display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;}
+  .fin-l .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+  .fin-l .v{font-size:12.5px; font-weight:800;}
+  .fin-range{width:100%; accent-color:var(--accent2); cursor:pointer;}
+  .emi-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:5px;}
+  .emi-table th{background:var(--emi-th); color:#fff; font-weight:700; padding:5px; font-size:10px;}
+  .emi-table th:first-child{background:transparent; color:var(--muted); text-align:left; text-transform:uppercase; font-size:9px; letter-spacing:.04em;}
+  .emi-table td{padding:4px 5px; text-align:center; border-bottom:1px solid var(--line); font-weight:700;}
+  .emi-table td:first-child{text-align:left; color:var(--ink2); font-weight:600;}
+  .addons{display:flex; flex-direction:column; gap:1px; margin-bottom:10px;}
+  .addon{display:flex; align-items:center; gap:9px; padding:5px 2px; font-size:12px; border-bottom:1px solid var(--line); cursor:pointer;}
+  .addon input{accent-color:var(--accent2); width:15px; height:15px;}
+  .addon .ap{margin-left:auto; font-weight:700; color:var(--ink2);}
+  .addon-total{display:flex; justify-content:space-between; background:var(--addon-bg); color:var(--addon-text); padding:9px 13px; border-radius:10px; font-size:12.5px; font-weight:800; margin-bottom:11px;}
+
+  .save-btn{width:100%; justify-content:center; background:var(--accent2); color:#fff; font-size:14.5px; padding:14px;}
+  .save-btn:hover{background:#a30f27;}
+  .save-hint{text-align:center; font-size:11px; color:var(--muted); margin-top:9px;}
+
+  /* Saved toast overlay */
+  .saved-ov{position:fixed; inset:0; background:rgba(15,18,24,.5); backdrop-filter:blur(3px); display:none; align-items:center; justify-content:center; z-index:60;}
+  .saved-ov.show{display:flex;}
+  .saved-card{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:34px 32px; max-width:400px; text-align:center; box-shadow:0 30px 80px rgba(0,0,0,.6);}
+  .saved-card .ic{width:64px; height:64px; border-radius:50%; background:rgba(31,158,90,.16); color:#3ddc84; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;}
+  .saved-card .ic .mi{font-size:34px;}
+  .saved-card h3{font-size:20px; font-weight:800;}
+  .saved-card p{font-size:13.5px; color:var(--ink2); margin:8px 0 22px; line-height:1.5;}
+  .saved-actions{display:flex; gap:10px; justify-content:center;}
+</style>
+</head>
+<body class="dark">
+  <div class="topbar">
+    <div class="brand">EXEED <small>&middot; Configurator</small></div>
+    <div class="steps" id="steps"></div>
+    <div class="topbar-right">
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme"><span class="mi" id="themeIcon">dark_mode</span></button>
+      <div class="price-chip"><div class="l">Total price</div><div class="v" id="topPrice">AED 0</div></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- Stage + dock -->
+    <div class="stage">
+      <div class="stage-badge"><span class="m">EXEED ES</span><span class="t">Fully Electric SUV &middot; 2026</span></div>
+      <div class="stage-img-wrap"><img class="stage-img" id="stageImg" src="assets/es/ext-white.png" alt="EXEED ES"></div>
+      <div class="stage-caption"><div class="big" id="stageBig">EXEED ES</div><div class="sub" id="stageSub">Choose your configuration</div></div>
+      <div class="dock">
+        <div class="dock-h"><span class="t" id="dockTitle">Select</span></div>
+        <div id="dockBody"></div>
+        <div class="dock-nav">
+          <button class="btn ghost" id="backBtn" onclick="go(-1)"><span class="mi">chevron_left</span> Back</button>
+          <button class="btn dark" id="nextBtn" onclick="go(1)">Continue <span class="mi">chevron_right</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <aside class="summary">
+      <div class="sum-title">Your build</div>
+      <div class="sum-hero"><img id="sumImg" src="assets/es/ext-white.png" alt=""><div class="cap"><div class="m" id="sumModel">EXEED ES</div><div class="t" id="sumTrim">—</div></div></div>
+      <div class="sum-rows" id="sumRows"></div>
+      <div class="fin">
+        <div class="fin-l"><span class="k">Down payment</span><span class="v" id="downLbl">20% · AED 0</span></div>
+        <input class="fin-range" id="downRange" type="range" min="0" max="50" step="5" value="20" oninput="setDown(this.value)">
+        <table class="emi-table"><thead><tr><th>EMI @ 2%</th><th>Without</th><th>With adds</th></tr></thead><tbody id="emiBody"></tbody></table>
+      </div>
+      <div class="addons" id="addons"></div>
+      <div class="addon-total"><span>Total adds on</span><span id="addTotal">AED 0</span></div>
+      <button class="btn save-btn" onclick="saveProposal()"><span class="mi">description</span> Build proposal</button>
+      <div class="save-hint">Adds to the lead's proposal list in the CRM</div>
+    </aside>
+  </div>
+
+  <div class="saved-ov" id="savedOv">
+    <div class="saved-card">
+      <div class="ic"><span class="mi">check_circle</span></div>
+      <h3>Proposal added</h3>
+      <p id="savedText">The proposal has been sent to the CRM and will appear in the lead's Proposals list.</p>
+      <div class="saved-actions">
+        <button class="btn dark" onclick="buildAnother()">Build another</button>
+        <button class="btn ghost" onclick="window.close()">Close window</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var RATE = 0.021;
+  var TRIMS = [
+    { id:'std', name:'Standard Range', range:'520 km', power:'204 hp', accel:'7.9s', price:159900 },
+    { id:'lr',  name:'Long Range',     range:'620 km', power:'279 hp', accel:'6.5s', price:179900 },
+    { id:'awd', name:'AWD Performance',range:'580 km', power:'517 hp', accel:'3.9s', price:209900 }
+  ];
+  var EXT = [
+    { id:'white',  name:'Pearl White',     hex:'#eceff2', img:'assets/es/ext-white.png' },
+    { id:'silver', name:'Titanium Silver', hex:'#c3c8ce', img:'assets/es/ext-silver.png' },
+    { id:'gray',   name:'Matte Gray',      hex:'#6d737a', img:'assets/es/ext-matte-gray.png' },
+    { id:'red',    name:'Passion Red',     hex:'#9d1f28', img:'assets/es/ext-red.png' },
+    { id:'green',  name:'Forest Green',    hex:'#2f4638', img:'assets/es/ext-green.png' }
+  ];
+  var INT = [
+    { id:'blackgray', name:'Black & Gray', hex:'#2c2c30', img:'assets/es/int-black-gray.png' },
+    { id:'red',       name:'Red',          hex:'#9d1f28', img:'assets/es/int-red.jpeg' }
+  ];
+  var ADDONS = [
+    { k:'insurance', label:'Insurance', price:4800 },
+    { k:'service',   label:'Service Contract', price:3500 },
+    { k:'tinting',   label:'Tinting', price:1200 },
+    { k:'ceramic',   label:'Ceramic Coating', price:2559 }
+  ];
+  var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
+
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', downPct:20, addOns:{ insurance:false, service:false, tinting:true, ceramic:true } };
+
+  function fmt(n){ return (n||0).toLocaleString('en-US'); }
+  function trim(){ return TRIMS.filter(function(t){return t.id===state.trim;})[0]; }
+  function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
+  function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
+  function emi(loan,y){ return Math.round(loan*(1+RATE*y)/(y*12)); }
+  function addTotal(){ return ADDONS.reduce(function(s,a){return s+(state.addOns[a.k]?a.price:0);},0); }
+
+  function leadTarget(){ var m=location.search.match(/lead=(\d+)/); return m?parseInt(m[1],10):null; }
+
+  function renderSteps(){
+    document.getElementById('steps').innerHTML = STEPS.map(function(s,i){
+      var cls = i===state.step?'active':(i<state.step?'done':'');
+      return '<div class="step '+cls+'" onclick="goTo('+i+')"><span class="n">'+(i<state.step?'<span class=\'mi\' style=\'font-size:12px\'>check</span>':(i+1))+'</span>'+s+'</div>';
+    }).join('');
+  }
+
+  function setStageImg(src){
+    var img = document.getElementById('stageImg');
+    if (img.getAttribute('src') === src) return;
+    img.classList.add('swap');
+    setTimeout(function(){ img.setAttribute('src', src); img.classList.remove('swap'); }, 180);
+  }
+
+  function renderDock(){
+    var body = document.getElementById('dockBody');
+    var title = document.getElementById('dockTitle');
+    if (state.step === 0){ // Model
+      title.textContent = 'Select model';
+      body.innerHTML = '<div class="cards">' +
+        '<div class="card on"><span class="check"><span class="mi">check</span></span><div class="cn">EXEED ES</div><div class="cs">Fully electric SUV</div><div class="specs"><span><span class="mi" style="font-size:14px">bolt</span>Up to 620 km</span><span><span class="mi" style="font-size:14px">speed</span>517 hp</span></div></div>' +
+        '</div>';
+    } else if (state.step === 1){ // Trim
+      title.textContent = 'Select trim';
+      body.innerHTML = '<div class="cards">' + TRIMS.map(function(t){
+        return '<div class="card'+(state.trim===t.id?' on':'')+'" onclick="pick(\'trim\',\''+t.id+'\')"><span class="check"><span class="mi">check</span></span>' +
+          '<div class="cn">'+t.name+'</div><div class="cs">EXEED ES</div>' +
+          '<div class="specs"><span><span class="mi" style="font-size:14px">bolt</span>'+t.range+'</span><span><span class="mi" style="font-size:14px">speed</span>'+t.power+'</span><span><span class="mi" style="font-size:14px">timer</span>'+t.accel+'</span></div>' +
+          '<div class="cp">AED '+fmt(t.price)+'</div></div>';
+      }).join('') + '</div>';
+    } else if (state.step === 2){ // Exterior
+      title.textContent = 'Exterior colour';
+      body.innerHTML = '<div class="swatches">' + EXT.map(function(c){
+        return '<div class="swatch'+(state.ext===c.id?' on':'')+'" onclick="pick(\'ext\',\''+c.id+'\')"><span class="dot" style="background:'+c.hex+'"></span><span class="nm">'+c.name+'</span></div>';
+      }).join('') + '</div>';
+    } else if (state.step === 3){ // Interior
+      title.textContent = 'Interior';
+      body.innerHTML = '<div class="swatches">' + INT.map(function(c){
+        return '<div class="swatch'+(state.int===c.id?' on':'')+'" onclick="pick(\'int\',\''+c.id+'\')"><span class="dot" style="background:'+c.hex+'"></span><span class="nm">'+c.name+'</span></div>';
+      }).join('') + '</div>';
+    } else { // Finance
+      title.textContent = 'Finance & summary';
+      body.innerHTML = '<div style="font-size:13px; color:var(--ink2); line-height:1.6">Review your build and adjust the finance options in the summary panel, then <strong style="color:var(--ink)">Build proposal</strong> to send it to the CRM.</div>';
+    }
+    document.getElementById('nextBtn').style.visibility = state.step === STEPS.length-1 ? 'hidden' : 'visible';
+    document.getElementById('backBtn').style.visibility = state.step === 0 ? 'hidden' : 'visible';
+  }
+
+  function renderStage(){
+    var t = trim(), c = ext(), ic = intr();
+    if (state.step === 3){ setStageImg(ic.img); document.getElementById('stageBig').textContent = ic.name; document.getElementById('stageSub').textContent = 'Interior'; }
+    else { setStageImg(c.img); document.getElementById('stageBig').textContent = 'EXEED ES · ' + t.name; document.getElementById('stageSub').textContent = c.name + ' · ' + ic.name; }
+  }
+
+  function renderSummary(){
+    var t = trim(), c = ext(), ic = intr();
+    var down = Math.round(t.price * state.downPct/100);
+    var loan = t.price - down, at = addTotal(), loanW = loan + at;
+    document.getElementById('sumImg').src = c.img;
+    document.getElementById('sumModel').textContent = 'EXEED ES';
+    document.getElementById('sumTrim').textContent = t.name + ' · 2026';
+    document.getElementById('sumRows').innerHTML =
+      row('Trim', t.name) +
+      row('Range', t.range) + row('Power', t.power) +
+      rowColor('Exterior', c.name, c.hex) +
+      rowColor('Interior', ic.name, ic.hex) +
+      row('Vehicle price', 'AED ' + fmt(t.price));
+    document.getElementById('topPrice').textContent = 'AED ' + fmt(t.price);
+    document.getElementById('downLbl').textContent = state.downPct + '% · AED ' + fmt(down);
+    document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
+      return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loan,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
+    }).join('');
+    document.getElementById('addons').innerHTML = ADDONS.map(function(a){
+      return '<label class="addon"><input type="checkbox"'+(state.addOns[a.k]?' checked':'')+' onchange="toggleAdd(\''+a.k+'\')"><span>'+a.label+'</span><span class="ap">AED '+fmt(a.price)+'</span></label>';
+    }).join('');
+    document.getElementById('addTotal').textContent = 'AED ' + fmt(at);
+  }
+  function row(k,v){ return '<div class="sum-row"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'; }
+  function rowColor(k,v,hex){ return '<div class="sum-row"><span class="k">'+k+'</span><span class="v"><span class="cdot" style="background:'+hex+'"></span>'+v+'</span></div>'; }
+
+  function renderAll(){ renderSteps(); renderDock(); renderStage(); renderSummary(); }
+  function pick(kind,val){ state[kind]=val; renderAll(); }
+  function toggleAdd(k){ state.addOns[k]=!state.addOns[k]; renderSummary(); }
+  function setDown(v){ state.downPct=+v; renderSummary(); }
+  function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
+  function goTo(i){ state.step=i; renderAll(); }
+
+  function saveProposal(){
+    var t = trim(), c = ext(), ic = intr();
+    var proposal = {
+      model:'EXEED ES · '+t.name, trim:t.name, year:'2026',
+      extColor:c.name, extHex:c.hex, image:c.img,
+      intColor:ic.name, intHex:ic.hex,
+      range:t.range, power:t.power,
+      nsp:t.price, downPct:state.downPct, pdi:0,
+      addOns:{ insurance:!!state.addOns.insurance, service:!!state.addOns.service, tinting:!!state.addOns.tinting, ceramic:!!state.addOns.ceramic },
+      isQuote:false
+    };
+    try {
+      var q = JSON.parse(localStorage.getItem('exeedProposalQueue')||'[]');
+      q.push({ lead: leadTarget(), proposal: proposal, ts: Date.now() });
+      localStorage.setItem('exeedProposalQueue', JSON.stringify(q));
+    } catch(e){}
+    try { if (window.opener && !window.opener.closed && window.opener.importProposalQueue) window.opener.importProposalQueue(); } catch(e){}
+    document.getElementById('savedText').textContent = t.name + ' · ' + c.name + ' proposal sent to the CRM.';
+    document.getElementById('savedOv').classList.add('show');
+  }
+  function buildAnother(){ document.getElementById('savedOv').classList.remove('show'); state.step=1; renderAll(); }
+
+  function toggleTheme(){
+    var dark = document.body.classList.toggle('dark');
+    document.getElementById('themeIcon').textContent = dark ? 'light_mode' : 'dark_mode';
+    try { localStorage.setItem('exeedBuilderTheme', dark ? 'dark' : 'light'); } catch(e){}
+  }
+  (function(){
+    var saved; try { saved = localStorage.getItem('exeedBuilderTheme'); } catch(e){}
+    var dark = saved !== 'light'; // default dark
+    document.body.classList.toggle('dark', dark);
+    document.getElementById('themeIcon').textContent = dark ? 'light_mode' : 'dark_mode';
+  })();
+
+  renderAll();
+</script>
+</body>
+</html>
