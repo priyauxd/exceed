@@ -116,23 +116,28 @@
     .lx-open:hover { filter: brightness(1.15); }
     .lx-open .material-symbols-outlined { font-size: 15px; }
     /* SLA Tracker widget */
-    .dp-sla-widget { border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; background: var(--surface); box-shadow: var(--shadow2); }
-    .slaw-head { font-size: 13px; font-weight: 700; }
-    .slaw-head-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-    .slaw-status-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 9px 3px 6px; border-radius: var(--borderRadiusCircular); }
+    .dp-sla-widget { border: 1px solid var(--border-soft); border-radius: 14px; padding: 14px; margin-bottom: 14px; background: var(--surface); box-shadow: 0 4px 16px rgba(24,44,86,.06); }
+    .slaw-head { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
+    .slaw-head .material-symbols-outlined { font-size: 17px; color: var(--blue); }
+    .slaw-head-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+    .slaw-status-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 4px 11px 4px 8px; border-radius: var(--borderRadiusCircular); box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
     .slaw-status-pill .material-symbols-outlined { font-size: 14px; }
     .slaw-status-pill.ok { background: var(--green-soft); color: #0e700e; }
     .slaw-status-pill.wrn { background: var(--amber-soft); color: var(--amber); }
     .slaw-status-pill.brch { background: var(--red-soft); color: var(--red); }
-    .slaw-hero { border-radius: var(--radius-sm); padding: 8px 11px; margin-bottom: 10px; border: 1px solid var(--border-soft); }
-    .slaw-hero.ok { background: var(--green-soft); border-color: #cdebd6; }
-    .slaw-hero.wrn { background: var(--amber-soft); border-color: #f4e2bf; }
-    .slaw-hero.brch { background: var(--red-soft); border-color: #f6d5d5; }
-    .slaw-hero-big { font-size: 16px; font-weight: 700; line-height: 1.15; color: var(--ink); }
+    .slaw-hero { position: relative; border-radius: 11px; padding: 12px 14px 12px 17px; margin-bottom: 12px; border: 1px solid var(--border-soft); overflow: hidden; }
+    .slaw-hero::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; }
+    .slaw-hero.ok { background: linear-gradient(135deg, var(--green-soft), #f4fbf6); border-color: #cdebd6; }
+    .slaw-hero.ok::before { background: #46a56b; }
+    .slaw-hero.wrn { background: linear-gradient(135deg, var(--amber-soft), #fdf8ee); border-color: #f4e2bf; }
+    .slaw-hero.wrn::before { background: #d4873a; }
+    .slaw-hero.brch { background: linear-gradient(135deg, var(--red-soft), #fdf4f4); border-color: #f6d5d5; }
+    .slaw-hero.brch::before { background: var(--red); }
+    .slaw-hero-big { font-size: 19px; font-weight: 800; line-height: 1.1; letter-spacing: -.02em; color: var(--ink); }
     .slaw-hero.ok .slaw-hero-big { color: #0e700e; }
     .slaw-hero.wrn .slaw-hero-big { color: #8a6420; }
     .slaw-hero.brch .slaw-hero-big { color: var(--red); }
-    .slaw-hero-sub { font-size: 11px; color: var(--ink-secondary); margin-top: 2px; }
+    .slaw-hero-sub { font-size: 11px; color: var(--ink-secondary); margin-top: 3px; }
     .slaw-escalate { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 8px 10px; border-radius: var(--borderRadiusMedium); margin-bottom: 14px; }
     .slaw-escalate .material-symbols-outlined { font-size: 15px; }
     .slaw-escalate.brch { background: var(--red-soft); color: var(--red); }
@@ -153,9 +158,10 @@
     .slaw-sub { font-size: 10px; color: var(--ink-secondary); margin-top: 3px; }
     .slaw-info { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border-soft); }
     .slaw-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-    .slaw-meta-item { background: var(--bg); border: 1px solid var(--border-soft); border-radius: 6px; padding: 7px 9px; }
-    .slaw-meta-l { display: block; font-size: 9.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 2px; }
-    .slaw-meta-v { display: block; font-size: 11.5px; font-weight: 600; color: var(--ink); }
+    .slaw-meta-item { background: linear-gradient(180deg, var(--surface), var(--bg)); border: 1px solid var(--border-soft); border-radius: 10px; padding: 9px 11px; transition: border-color .15s ease, box-shadow .15s ease; }
+    .slaw-meta-item:hover { border-color: var(--border); box-shadow: 0 2px 8px rgba(24,44,86,.06); }
+    .slaw-meta-l { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-bottom: 3px; font-weight: 700; }
+    .slaw-meta-v { display: block; font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.3; }
     .slaw-note { display: flex; gap: 6px; margin-top: 10px; padding: 8px 10px; background: var(--blue-soft); border-radius: 6px; font-size: 11px; line-height: 1.4; color: var(--ink-secondary); }
     .slaw-note .material-symbols-outlined { font-size: 15px; color: var(--blue); flex-shrink: 0; }
     .slaw-irow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
@@ -438,7 +444,16 @@
     .dp-if-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 30px; }
     @media (max-width: 720px) { .dp-if-fields { grid-template-columns: 1fr; } }
     .dp-if-fields .dp-if-wide { grid-column: 1 / -1; }
-    .dp-intake-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-soft); }
+    .dp-intake-title { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-soft); }
+    .dp-intake-expand { border: none; background: none; cursor: pointer; color: var(--ink-muted); padding: 2px; border-radius: 6px; display: flex; align-items: center; }
+    .dp-intake-expand:hover { color: var(--blue); background: var(--blue-soft); }
+    .dp-intake-expand.on { color: var(--blue); }
+    .dp-intake-expand .material-symbols-outlined { font-size: 18px; }
+    .dp-intake-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .dp-intake-heading { font-size: 13px; font-weight: 700; color: var(--ink); }
+    .dp-intake-all { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 11.5px; font-weight: 600; color: var(--blue); background: var(--blue-soft); border: none; border-radius: 7px; padding: 6px 11px; cursor: pointer; }
+    .dp-intake-all:hover { background: var(--blue); color: #fff; }
+    .dp-intake-all .material-symbols-outlined { font-size: 16px; }
     .dp-if-more { margin-top: 8px; }
     .dp-if-morebtn { display: inline-flex; align-items: center; gap: 4px; margin-top: 8px; padding: 4px 8px; border: none; background: none; cursor: pointer; font-family: inherit; font-size: 11.5px; font-weight: 600; color: var(--blue); border-radius: 6px; }
     .dp-if-morebtn:hover { background: var(--blue-soft); }
@@ -456,6 +471,8 @@
     .dp-if-upload:hover { border-color: var(--blue); color: var(--blue); }
     .dp-if-action { border: none; background: var(--blue); color: #fff; }
     .dp-if-action:hover { background: var(--blue-dark); }
+    .dp-if-action.dp-if-link { background: var(--blue-soft); color: var(--blue); justify-content: flex-start; }
+    .dp-if-action.dp-if-link:hover { background: var(--blue); color: #fff; }
     .dp-if-upload .material-symbols-outlined, .dp-if-action .material-symbols-outlined { font-size: 16px; }
     .dp-if-sign { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; height: 30px; padding: 0 10px; border: 1px dashed var(--colorNeutralStroke1); border-radius: var(--borderRadiusMedium); color: var(--ink-muted); background: var(--colorNeutralBackground3); cursor: pointer; }
     .dp-if-sign.done { border-style: solid; border-color: transparent; background: var(--green-soft); color: #0e700e; }
@@ -500,12 +517,22 @@
     .dp-tdc-foot { font-size: 11px; color: var(--ink-muted); text-align: center; margin-top: 8px; }
     .dp-tdc-wa { margin: 4px 0 16px; }
     /* Test-drive empty state */
-    .td-empty { text-align: center; padding: 24px 16px 8px; }
-    .td-empty-badge { position: relative; width: 84px; height: 84px; margin: 0 auto 16px; border-radius: 22px; background: linear-gradient(180deg, #eef6f1, #fff); box-shadow: var(--shadow8); display: flex; align-items: center; justify-content: center; font-size: 40px; }
-    .td-empty-spark { position: absolute; top: -6px; right: -2px; font-size: 20px; }
-    .td-empty-title { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
-    .td-empty-sub { font-size: 13px; color: var(--ink-secondary); line-height: 1.6; max-width: 420px; margin: 8px auto 20px; }
-    .td-empty-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 18px; }
+    .td-empty { text-align: center; padding: 44px 24px 30px; position: relative; }
+    .td-empty::before { content: ''; position: absolute; inset: 0; background: radial-gradient(130% 70% at 50% 0%, var(--blue-soft), transparent 62%); opacity: .55; pointer-events: none; }
+    .td-empty > * { position: relative; z-index: 1; }
+    .td-empty-hero { width: 112px; height: 112px; margin: 0 auto 22px; display: flex; align-items: center; justify-content: center; }
+    .td-empty-badge { position: relative; width: 94px; height: 94px; border-radius: 27px; background: linear-gradient(160deg, #ffffff, #eaf1fb); box-shadow: 0 14px 34px rgba(24,44,86,.16), inset 0 1px 0 rgba(255,255,255,.9); border: 1px solid rgba(255,255,255,.75); display: flex; align-items: center; justify-content: center; font-size: 46px; animation: tdFloat 3.6s ease-in-out infinite; }
+    @keyframes tdFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .td-empty-spark { position: absolute; top: -8px; right: -4px; font-size: 22px; animation: tdTwinkle 2.4s ease-in-out infinite; }
+    @keyframes tdTwinkle { 0%,100% { opacity: .55; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.12); } }
+    .td-empty-title { font-size: 23px; font-weight: 800; color: var(--ink); letter-spacing: -.02em; }
+    .td-empty-sub { font-size: 13px; color: var(--ink-secondary); line-height: 1.6; max-width: 340px; margin: 9px auto 22px; }
+    .td-empty .td-book-btn { box-shadow: 0 10px 26px rgba(20,35,55,.22); transition: transform .15s ease, box-shadow .15s ease; }
+    .td-empty .td-book-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 32px rgba(20,35,55,.28); }
+    .td-empty-steps { display: flex; align-items: center; gap: 8px; margin: 4px 0 22px; flex-wrap: wrap; justify-content: center; }
+    .td-empty-step { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 600; color: var(--ink-secondary); background: var(--surface); border: 1px solid var(--border-soft); border-radius: 20px; padding: 6px 12px; box-shadow: var(--shadow2); }
+    .td-empty-step .material-symbols-outlined { font-size: 15px; color: var(--blue); }
+    .td-empty-arrow { color: var(--ink-muted); font-size: 16px; }
     .td-book-btn { display: inline-flex; align-items: center; gap: 6px; font-family: inherit; font-size: 15px; font-weight: 700; color: #fff; background: #17293d; border: none; border-radius: var(--radius-sm); padding: 13px 26px; cursor: pointer; box-shadow: var(--shadow8); transition: background .12s, transform .1s; }
     .td-book-btn:hover { background: #0f1d2c; transform: translateY(-1px); }
     .td-book-btn.sm { font-size: 13px; padding: 9px 16px; box-shadow: none; }
@@ -595,25 +622,30 @@
     .sw-nav .cp-btn .material-symbols-outlined { font-size: 15px; }
     .sw-dt { display: grid; grid-template-columns: 1fr 1.25fr; gap: 24px; }
     @media (max-width: 640px){ .sw-dt { grid-template-columns: 1fr; } }
-    .la-booking .sw-dt { grid-template-columns: 1fr; gap: 16px; }
-    .sw-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
-    .sw-cal-head button { border: none; background: none; cursor: pointer; color: var(--ink-secondary); display: flex; padding: 2px; border-radius: 4px; }
-    .sw-cal-head button:hover { background: var(--bg); }
-    .sw-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
-    .sw-cal-dow { font-size: 9.5px; font-weight: 700; color: var(--ink-muted); text-align: center; padding-bottom: 4px; text-transform: uppercase; }
-    .sw-cal-day { border: none; background: none; font-family: inherit; font-size: 12px; color: var(--ink); aspect-ratio: 1; border-radius: 50%; cursor: pointer; transition: background .1s; }
+    .la-booking .sw-dt { grid-template-columns: 1fr; gap: 14px; }
+    .la-dt-group { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: var(--surface); margin-top: 16px; }
+    .la-dt-group > .cp-label { margin-bottom: 12px; }
+    .la-dt-group .sw-cal, .la-dt-group .sw-slots { border: none; box-shadow: none; padding: 0; background: transparent; }
+    .la-dt-group .sw-slots { border-top: 1px solid var(--border-soft); padding-top: 14px; }
+    .sw-cal, .sw-slots { border: 1px solid var(--border-soft); border-radius: 12px; padding: 14px; background: var(--surface); box-shadow: var(--shadow2); }
+    .sw-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; font-size: 13.5px; font-weight: 700; color: var(--ink); }
+    .sw-cal-head button { border: 1px solid var(--border-soft); background: var(--surface); cursor: pointer; color: var(--ink-secondary); display: flex; padding: 4px; border-radius: 8px; transition: all .12s; }
+    .sw-cal-head button:hover { background: var(--blue-soft); color: var(--blue); border-color: var(--blue-soft); }
+    .sw-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+    .sw-cal-dow { font-size: 9px; font-weight: 700; color: var(--ink-muted); text-align: center; padding-bottom: 8px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .03em; border-bottom: 1px solid var(--border-soft); }
+    .sw-cal-day { border: 1px solid transparent; background: none; font-family: inherit; font-size: 12.5px; color: var(--ink); height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; transition: background .12s, border-color .12s; }
     .sw-cal-day:hover { background: var(--blue-soft); }
-    .sw-cal-day.sel { background: var(--blue); color: #fff; font-weight: 700; }
+    .sw-cal-day.sel { background: var(--blue); color: #fff; font-weight: 700; border-color: var(--blue); }
     .sw-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 10px; color: var(--ink-muted); }
     .sw-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
     .sw-legend i.free { background: #46a56b; } .sw-legend i.booked { background: var(--red); }
-    .sw-slots-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
-    .sw-slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 6px; }
-    .sw-slot { border: 1px solid transparent; background: none; font-family: inherit; font-size: 12.5px; font-weight: 600; color: #2f7a4f; padding: 6px 4px; border-radius: var(--borderRadiusMedium); cursor: pointer; text-align: center; }
-    .sw-slot:hover { background: var(--green-soft); }
-    .sw-slot.booked { color: var(--red); cursor: not-allowed; text-decoration: line-through; opacity: .75; }
-    .sw-slot.booked:hover { background: none; }
-    .sw-slot.sel { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .sw-slots-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+    .sw-slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 7px; }
+    .sw-slot { border: 1px solid var(--border-soft); background: var(--surface); font-family: inherit; font-size: 12.5px; font-weight: 600; color: #2f7a4f; padding: 8px 4px; border-radius: 8px; cursor: pointer; text-align: center; transition: background .12s, border-color .12s, box-shadow .12s; }
+    .sw-slot:hover { background: var(--green-soft); border-color: #9fd6b4; }
+    .sw-slot.booked { color: var(--ink-muted); cursor: not-allowed; text-decoration: line-through; background: var(--bg); border-color: var(--border-soft); }
+    .sw-slot.booked:hover { background: var(--bg); border-color: var(--border-soft); }
+    .sw-slot.sel { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 2px 8px rgba(38,109,211,.25); }
     .sw-confirm p { font-size: 13px; color: var(--ink); line-height: 1.6; margin-bottom: 16px; }
     .sw-contacts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
     .sw-hint { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
@@ -782,6 +814,8 @@
     /* Checklist */
     .dp-checklist { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; }
     .dp-checklist-title { font-size: 12px; font-weight: 700; }
+    .dp-checklist-title.done { text-decoration: line-through; color: var(--ink-muted); }
+    .dp-checklist-title.done strong { color: var(--ink-muted); }
     .dp-checklist-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
     .dp-checklist-prog { font-size: 11px; font-weight: 700; color: var(--ink-secondary); white-space: nowrap; }
     .dp-checklist-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
@@ -869,6 +903,11 @@
     .cp-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-muted); margin: 20px 0 11px; }
     .cp-section-title:first-child { margin-top: 0; }
     .cp-field { margin-bottom: 13px; }
+    #logPanel .cp-body { padding: 20px; }
+    #logPanel .cp-body > * { margin-bottom: 18px; }
+    #logPanel .cp-body > *:last-child { margin-bottom: 0; }
+    #laDynamic > .cp-field, #laDynamic > .la-dqcard, #laDynamic > .la-booking { margin-bottom: 16px; }
+    #laDynamic > .cp-field:last-child, #laDynamic > .la-booking:last-child { margin-bottom: 0; }
     .cp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .cp-label { display: block; font-size: 11px; font-weight: 600; color: var(--ink-secondary); margin-bottom: 5px; }
     .cp-label .req { color: var(--red); margin-left: 1px; }
@@ -895,6 +934,14 @@
     .la-disc { display: flex; flex-direction: column; gap: 7px; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); padding: 10px 12px; background: var(--surface); }
     .la-disc-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink); cursor: pointer; }
     .la-disc-item input { accent-color: var(--blue); width: 15px; height: 15px; }
+    .la-dqcard { border: 1px solid var(--border-soft); border-radius: var(--radius-md); background: var(--surface); padding: 0 14px 10px; margin-bottom: 13px; box-shadow: var(--shadow2); }
+    .la-dqcard-head { display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-secondary); padding: 11px 0 9px; border-bottom: 1px solid var(--border-soft); margin-bottom: 4px; }
+    .la-dqcard-head .material-symbols-outlined { font-size: 16px; color: var(--blue); }
+    .la-dq { padding: 9px 0; border-bottom: 1px solid var(--border-soft); }
+    .la-dq:last-child { border-bottom: none; padding-bottom: 2px; }
+    .la-dq-q { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; }
+    .la-dq-n { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; background: var(--blue-soft); color: var(--blue); font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+    .la-dq-label { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.35; }
     .la-radio { display: flex; flex-direction: column; gap: 7px; }
     .la-radio-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink); cursor: pointer; padding: 8px 11px; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); background: var(--surface); }
     .la-radio-item:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); }
@@ -1150,7 +1197,7 @@
           <button class="la-yn" id="laNo" onclick="setLaAnswer('no')"><span class="material-symbols-outlined">close</span> No</button>
         </div>
       </div>
-      <div class="cp-field" id="laOutcomeWrap">
+      <div class="cp-field" id="laOutcomeWrap" style="display:none">
         <label class="cp-label">Outcome</label>
         <div class="la-chips" id="laChips">
           <button class="la-chip" data-out="Handover to showroom" onclick="setLaOutcome(this)">Handover to showroom</button>
@@ -1160,14 +1207,12 @@
         </div>
       </div>
       <div id="laDynamic"></div>
-      <div class="cp-field"><label class="cp-label">Notes</label><textarea class="cp-textarea" id="laNotes" placeholder="Conversation summary…"></textarea></div>
-      <div class="la-hint" id="laHint">Saving will move the lead to the next stage.</div>
+      <div class="la-hint" id="laHint" style="display:none"></div>
       <div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
     </div>
     <div class="cp-footer">
-      <button class="cp-btn" onclick="closeLogActivity()">Cancel</button>
-      <button class="cp-btn" onclick="submitLogActivity(false)">Save</button>
-      <button class="cp-btn primary" onclick="submitLogActivity(true)">Save &amp; close</button>
+      <button class="cp-btn" onclick="closeLogActivity()">Close</button>
+      <button class="cp-btn primary" onclick="submitLogActivity(true)">Save</button>
     </div>
   </div>
 
@@ -1210,19 +1255,21 @@
       {name:'Visit',icon:'storefront'},
       {name:'Propose',icon:'request_quote'},
       {name:'Accepted',icon:'handshake'},
+      {name:'Prep for delivery',icon:'inventory_2'},
       {name:'Ready for delivery',icon:'local_shipping'},
       {name:'Close',icon:'flag'}
     ];
 
     var stepDetails = [
-      {title:'New Lead Intake', fields:['customer','emiratesId','mobile','email','lang','preferred','source','model','temp','showroom','handover','existing'], checklist:['Lead pack received from call center','No duplicate match','Accept or return lead with reason'], aiTitle:'Accept this qualified lead', aiDesc:'Call center has handed over a <strong>Hot</strong> lead with all mandatory fields filled. Accept to start the SLA clock with you as the owner.', aiBtns:['Accept Lead','Return to Call Center'], aiNote:'Lead must be accepted or returned with a reason.'},
-      {title:'First Contact', fields:['customer','mobile','email','showroom','channel'], checklist:['First contact within SLA window','Customer acknowledged','SLA status recorded'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
-      {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Introduction call/message sent','Customer responded','Interest level confirmed','Appointment offered'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
-      {title:'Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Customer arrived at showroom','Welcome & refreshments','Vehicle walkthrough started','Test drive offered'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
-      {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Needs assessment completed','Budget discussion done','Trade-in evaluated','Finance options presented','Test drive completed'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
-      {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['Quote generated','Finance breakdown shared','Trade-in value confirmed','Customer reviewed offer','Negotiation logged'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
-      {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:['Booking deposit received','Order confirmed in system','Delivery date agreed','Insurance arranged','Registration initiated'], aiTitle:'Confirm the booking', aiDesc:'Customer is ready to proceed. <strong>Collect the deposit</strong> and confirm the order in the system.', aiBtns:['Confirm Booking','Hold Order'], aiNote:'Deposit must be received to proceed.'},
-      {title:'Close — Won / Lost', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:['Welcome & red-carpet greeting','Document signing','Feature orientation completed','Keys & documents handed over','3 / 7 / 30 day follow-ups scheduled'], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
+      {title:'New Lead Intake', fields:['customer','emiratesId','mobile','email','lang','preferred','source','model','temp','showroom','handover','existing'], checklist:['Leads created successfully','Log activities on attempts to reach out to customers'], aiTitle:'Accept this qualified lead', aiDesc:'Call center has handed over a <strong>Hot</strong> lead with all mandatory fields filled. Accept to start the SLA clock with you as the owner.', aiBtns:['Accept Lead','Return to Call Center'], aiNote:'Lead must be accepted or returned with a reason.'},
+      {title:'First Contact', fields:['customer','mobile','email','showroom','channel'], checklist:['Complete customer discovery questions (5 Qns)','Log activities on attempts to reach out to customers','Qualify or disqualify customers based on responses'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
+      {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Log activities on attempts to reach out to customers','Share brochures and video recording with customers','Book an appointment with the customer','Survey link shared'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
+      {title:'Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Complete customer profile with E-ID / UAE Pass','Initiate test drive with customer','Complete customer discovery questions (10 Qns)','Record Trade-in Interests','Check stocks and create proposals for customers','Automated — Post Visit & Test Drive Surveys'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
+      {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Convert selected proposal into quotation','Share quotation to customers via Docusign'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
+      {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['Receive signed agreement from customer','Collect booking payment','Book vehicle stock'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
+      {title:'Preparation for Delivery', fields:['customer','model','showroom'], checklist:['Back office team — VIN Assignment','Back office team — RTA Registration','Back office team — Pre-delivery inspection'], aiTitle:'Hand off to back office', aiDesc:'The deal is booked. <strong>Back office</strong> completes VIN assignment, RTA registration and the pre-delivery inspection before the car is ready.', aiBtns:['Notify Back Office','View Checklist'], aiNote:'All back-office tasks must be completed before the car is ready for delivery.'},
+      {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:['Schedule a delivery with customer'], aiTitle:'Confirm the booking', aiDesc:'Vehicle is prepared. <strong>Schedule the delivery</strong> appointment with the customer.', aiBtns:['Schedule Delivery','Hold Order'], aiNote:'A delivery appointment must be scheduled to proceed.'},
+      {title:'Close — Won / Lost', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:['Demo vehicle features','First service briefing','Generate a delivery note','Automated — Post Delivery Surveys'], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
     ];
 
     // Per-stage SLA (indexed to journeySteps). show = date/time fields to surface, items = list of SLA activities, note = advisory.
@@ -1234,6 +1281,7 @@
       { sla:{name:'Proposal turnaround', target:'48 hrs', scale:['0h','24h','48h']}, show:[], items:[{t:'Day 2', a:'Log follow-up with customer on proposal'},{t:'Day 3', a:'Log follow-up with customer on proposal'}] },
       { sla:{name:'Quote approval', target:'24 hrs', scale:['0h','12h','24h']}, show:[], items:[] },
       { sla:{name:'Delivery prep', target:'3 days', scale:['Day 0','','Day 3']}, show:[], items:[] },
+      { sla:{name:'Delivery scheduling', target:'Day 2', scale:['Now','','Day 2']}, show:['Appointment'], items:[] },
       { sla:{name:'Post-delivery follow-up', target:'+30 d', scale:['+3d','+7d','+30d']}, show:[], items:[] }
     ];
 
@@ -1244,6 +1292,7 @@
       {title:'Log the showroom visit', desc:'Record arrival, the vehicle walkthrough and whether a test drive was taken.'},
       {title:'Log the discovery outcome', desc:'Capture needs, budget and finance discussion from this session.'},
       {title:'Log the negotiation', desc:'Record the offer shared and the customer’s response.'},
+      {title:'Log delivery preparation', desc:'Record back-office VIN assignment, RTA registration and pre-delivery inspection progress.'},
       {title:'Log the booking activity', desc:'Record deposit collection and order confirmation.'},
       {title:'Log the handover', desc:'Record delivery, feature orientation and the follow-ups scheduled.'}
     ];
@@ -1350,6 +1399,7 @@
       schedRerender();
     }
     function tdFmtDate(iso){ if (!iso) return '—'; var p = iso.split('-'); return new Date(+p[0], +p[1]-1, +p[2]).toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' }); }
+    function tdEndTime(t){ if (!t) return ''; var p = t.split(':'); var h = (parseInt(p[0],10) + 1) % 24; return String(h).padStart(2,'0') + ':' + (p[1] || '00'); }
     function schedCalendarHtml(navFn, dayFn){
       navFn = navFn || 'calNav'; dayFn = dayFn || 'selectCalDay';
       var first = new Date(tdCalY, tdCalM, 1);
@@ -1383,11 +1433,17 @@
     }
     function bookingEmptyState(l){
       return '<div class="td-empty">' +
-        '<div class="td-empty-badge">&#128663;<span class="td-empty-spark">&#10024;</span></div>' +
+        '<div class="td-empty-hero"><div class="td-empty-badge">&#128663;<span class="td-empty-spark">&#10024;</span></div></div>' +
         '<div class="td-empty-title">Take it for a spin &#127937;</div>' +
-        '<div class="td-empty-sub">No test drives booked yet.</div>' +
+        '<div class="td-empty-sub">No test drives booked yet — schedule one to get started.</div>' +
+        '<div class="td-empty-steps">' +
+          '<span class="td-empty-step"><span class="material-symbols-outlined">directions_car</span>Pick the car</span>' +
+          '<span class="td-empty-arrow material-symbols-outlined">arrow_forward</span>' +
+          '<span class="td-empty-step"><span class="material-symbols-outlined">event</span>Choose a slot</span>' +
+          '<span class="td-empty-arrow material-symbols-outlined">arrow_forward</span>' +
+          '<span class="td-empty-step"><span class="material-symbols-outlined">location_on</span>Come in</span>' +
+        '</div>' +
         '<button class="td-book-btn" onclick="bookStart()"><span class="material-symbols-outlined">add</span> Book a test drive</button>' +
-        '<div class="td-empty-hint">Pick the car &middot; choose a slot &middot; come in</div>' +
       '</div>';
     }
     function bookingsTable(l){
@@ -1405,7 +1461,7 @@
         }
         return '<tr>' +
           '<td><span class="td-veh"><span class="td-veh-ic material-symbols-outlined">directions_car</span><strong>'+b.model+'</strong></span></td>' +
-          '<td><div class="td-dt"><span><span class="material-symbols-outlined">calendar_today</span>'+tdFmtDate(b.date)+'</span><span class="td-dt-time"><span class="material-symbols-outlined">schedule</span>'+b.time+'</span></div></td>' +
+          '<td><div class="td-dt"><span><span class="material-symbols-outlined">calendar_today</span>'+tdFmtDate(b.date)+'</span><span class="td-dt-time"><span class="material-symbols-outlined">schedule</span>'+b.time+' &ndash; '+tdEndTime(b.time)+'</span></div></td>' +
           '<td><span class="td-loc"><span class="material-symbols-outlined">location_on</span>'+b.location+'</span></td>' +
           '<td><span class="td-badge '+badgeCls+'">'+status+'</span></td>' +
           '<td class="td-act">'+actions+'</td>' +
@@ -1424,7 +1480,6 @@
         '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
         '<label class="cp-label" style="margin-top:14px">Date &amp; time</label>' +
         '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml()+'</div><div class="sw-slots">'+schedSlotsHtml()+'</div></div>' +
-        '<div class="td-gradbar"><span>free</span><div class="td-gradbar-track"></div><span>booked</span></div>' +
         '<div class="sw-nav"><button class="cp-btn" onclick="bookCancel()">Cancel</button>' +
           '<button class="dp-tdc-cta sw-next'+(canBook?'':' locked')+'"'+(canBook?' onclick="schedDone()"':'')+'>Book test drive</button></div>' +
       '</div>';
@@ -1546,9 +1601,7 @@
       var l = leads[selectedIdx];
       l.checks = l.checks || {};
       var key = currentStep + '-' + ci;
-      var sd = stepDetails[currentStep];
-      var def = currentStep < l.bpfStage-1 || (currentStep === l.bpfStage-1 && ci < sd.checklist.length - 1);
-      var done = !((key in l.checks) ? l.checks[key] : def);
+      var done = !((key in l.checks) ? l.checks[key] : false);
       l.checks[key] = done;
       el.classList.toggle('done', done); el.classList.toggle('pending', !done);
       var ic = el.querySelector('.material-symbols-outlined'); if (ic) ic.textContent = done ? 'check_box' : 'check_box_outline_blank';
@@ -1626,8 +1679,23 @@
       if (!el) return;
       var open = el.style.display === 'none';
       el.style.display = open ? '' : 'none';
-      btn.querySelector('.dp-if-morelbl').textContent = open ? 'Show less' : 'Show more';
-      btn.querySelector('.material-symbols-outlined').textContent = open ? 'expand_less' : 'expand_more';
+      btn.classList.toggle('on', open);
+      var lbl = btn.querySelector('.dp-if-morelbl'); if (lbl) lbl.textContent = open ? 'Show less' : 'Show more';
+      var icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) icon.textContent = btn.classList.contains('dp-intake-expand') ? (open ? 'unfold_less' : 'unfold_more') : (open ? 'expand_less' : 'expand_more');
+    }
+
+    function expandAllIntake(btn) {
+      var mores = document.querySelectorAll('.dp-if-more');
+      var expand = Array.prototype.some.call(mores, function(m){ return m.style.display === 'none'; });
+      mores.forEach(function(m){ m.style.display = expand ? '' : 'none'; });
+      document.querySelectorAll('.dp-intake-expand').forEach(function(b){
+        b.classList.toggle('on', expand);
+        var ic = b.querySelector('.material-symbols-outlined'); if (ic) ic.textContent = expand ? 'unfold_less' : 'unfold_more';
+      });
+      btn.classList.toggle('on', expand);
+      var lbl = btn.querySelector('.dp-intake-all-lbl'); if (lbl) lbl.textContent = expand ? 'Collapse all' : 'Expand all';
+      var bic = btn.querySelector('.material-symbols-outlined'); if (bic) bic.textContent = expand ? 'unfold_less' : 'unfold_more';
     }
 
     function editField(el) {
@@ -1735,7 +1803,7 @@
         ? '<div class="slaw-escalate brch"><span class="material-symbols-outlined">campaign</span>Breached &mdash; escalated to manager</div>'
         : (cls === 'wrn' ? '<div class="slaw-escalate wrn"><span class="material-symbols-outlined">notification_important</span>Action soon to avoid breach</div>' : '');
       return '<div class="dp-sla-widget">' +
-        '<div class="slaw-head-row"><span class="slaw-head">SLA Tracker</span>' +
+        '<div class="slaw-head-row"><span class="slaw-head"><span class="material-symbols-outlined">timer</span>SLA Tracker</span>' +
           '<span class="slaw-status-pill '+cls+'"><span class="material-symbols-outlined">'+statusIcon+'</span>'+slaState+'</span></div>' +
         '<div class="slaw-hero '+cls+'"><div class="slaw-hero-big">'+l.sla+'</div>' +
           (l.slaTime ? '<div class="slaw-hero-sub">'+l.slaTime+'</div>' : '') + '</div>' +
@@ -1860,7 +1928,7 @@
     }
     function openPanel(idx) {
       selectedIdx = idx;
-      currentStep = Math.min(leads[idx].bpfStage - 1, 7);
+      currentStep = Math.min(leads[idx].bpfStage - 1, 8);
       var panel = document.getElementById('detailPanel');
       document.querySelectorAll('.leads-table tbody tr').forEach(function(tr) {
         tr.classList.remove('selected');
@@ -1948,8 +2016,7 @@
       var doneCount = 0, itemsHtml = '';
       sd.checklist.forEach(function(item, ci) {
         var key = stepIdx + '-' + ci;
-        var def = stepIdx < l.bpfStage-1 || (stepIdx === l.bpfStage-1 && ci < sd.checklist.length - 1);
-        var isDone = (l.checks && key in l.checks) ? l.checks[key] : def;
+        var isDone = !!(l.checks && l.checks[key]);
         if (isDone) doneCount++;
         itemsHtml += '<div class="dp-check-item '+(isDone?'done':'pending')+'" style="cursor:pointer" onclick="toggleCheck('+ci+', this)">' +
           '<span class="material-symbols-outlined">'+(isDone?'check_box':'check_box_outline_blank')+'</span>' +
@@ -1958,15 +2025,15 @@
       var clTotal = sd.checklist.length, clPct = clTotal ? Math.round(doneCount/clTotal*100) : 0;
       html += '<div class="dp-checklist">' +
         '<div class="dp-checklist-head">' +
-          '<span class="dp-checklist-title">' + (nextName ? 'Complete to move to <strong>'+nextName+'</strong>' : 'Complete to finish the journey') + '</span>' +
+          '<span class="dp-checklist-title'+(clTotal && doneCount>=clTotal?' done':'')+'" id="clTitle">' + (nextName ? 'Complete to move to <strong>'+nextName+'</strong>' : 'Complete to finish the journey') + '</span>' +
           '<span class="dp-checklist-prog" id="clProg">'+doneCount+' / '+clTotal+'</span>' +
         '</div>' +
         '<div class="dp-checklist-bar"><div class="dp-checklist-bar-fill" id="clBar" style="width:'+clPct+'%"></div></div>' +
         itemsHtml +
       '</div>';
 
-      // New-stage intake form — grouped by pattern (mandatory* + optional fields)
-      if (stepIdx === 0) {
+      // Detail form — same grouped intake form is shown on every stage.
+      {
         var nameParts = (l.name || '').split(' ');
         var fn = nameParts.shift() || '', ln = nameParts.join(' ');
         var esc = function(v){ return v != null ? String(v).replace(/"/g,'&quot;') : ''; };
@@ -1990,9 +2057,9 @@
           { title:'Customer Details', moreId:'intakeCustMore', fields:[
             {label:'First Name', prop:'firstName', val:fn, req:true},
             {label:'Last Name', prop:'lastName', val:ln, req:true},
-            {label:'Mobile Phone', prop:'phone', val:l.phone, type:'phone', req:true}
+            {label:'Mobile Phone', prop:'phone', val:l.phone, type:'phone', req:true},
+            {label:'Emirates ID', val:l.emiratesId}
           ], more:[
-            {label:'Emirates ID', val:l.emiratesId},
             {label:'Email', prop:'email', val:l.email},
             {label:'Nationality', type:'lookup', val:'UAE'}
           ]},
@@ -2006,25 +2073,28 @@
             {label:'Trade-in Interested', type:'select', val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']}
           ]},
           { title:'Lead Qualification', fields:[
+            {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
             {label:'Lead Source', type:'lookup', val:l.source, req:true},
             {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true},
-            {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
-            {label:'Description', type:'textarea', val:'', req:true}
+            {label:'Description', val:'', req:true}
           ]},
           { title:'Organization', fields:[
-            {label:'Company', type:'lookup', val:'AGM Sales', req:true},
             {label:'Showroom', type:'lookup', val:'Abudhabi Corniche', req:true}
           ]}
         ];
         var renderGroup = function(g){
+          var hasMore = g.more && g.more.length;
           var out = '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">' + g.fields.map(fld).join('') + '</div>';
-          if (g.more && g.more.length) {
+          if (hasMore) {
             out += '<div class="dp-if-more" id="'+g.moreId+'" style="display:none"><div class="dp-if-fields">' + g.more.map(fld).join('') + '</div></div>';
-            out += '<button type="button" class="dp-if-morebtn" onclick="toggleIntakeMore(this,\''+g.moreId+'\')"><span class="material-symbols-outlined">expand_more</span><span class="dp-if-morelbl">Show more</span></button>';
           }
           return out + '</div>';
         };
-        html += '<div class="dp-intake"><div class="dp-intake-groups">' + groups.map(renderGroup).join('') + '</div></div>';
+        var intakeHasMore = groups.some(function(g){ return g.more && g.more.length; });
+        var intakeToolbar = '<div class="dp-intake-toolbar"><span class="dp-intake-heading">'+sd.title+'</span>' +
+          (intakeHasMore ? '<button type="button" class="dp-intake-all" onclick="expandAllIntake(this)"><span class="material-symbols-outlined">unfold_more</span><span class="dp-intake-all-lbl">Expand all</span></button>' : '') +
+        '</div>';
+        html += '<div class="dp-intake">' + intakeToolbar + '<div class="dp-intake-groups">' + groups.map(renderGroup).join('') + '</div></div>';
       }
       } // end overview tab
       html += '</div>'; // dp-main-scroll
@@ -2075,8 +2145,7 @@
       var sd = stepDetails[si], total = sd.checklist.length, done = 0;
       sd.checklist.forEach(function(item, ci) {
         var key = si + '-' + ci;
-        var def = si < l.bpfStage-1 || (si === l.bpfStage-1 && ci < total - 1);
-        var isDone = (l.checks && key in l.checks) ? l.checks[key] : def;
+        var isDone = !!(l.checks && l.checks[key]);
         if (isDone) done++;
       });
       return { done: done, total: total };
@@ -2086,9 +2155,10 @@
       var l = leads[selectedIdx], p = stepProgress(l, currentStep);
       var prog = document.getElementById('clProg'); if (prog) prog.textContent = p.done + ' / ' + p.total;
       var bar = document.getElementById('clBar'); if (bar) bar.style.width = (p.total ? Math.round(p.done/p.total*100) : 0) + '%';
+      var title = document.getElementById('clTitle'); if (title) title.classList.toggle('done', p.total > 0 && p.done >= p.total);
       var btn = document.getElementById('dpNextBtn'); if (!btn) return;
       btn.style.background = ''; btn.style.cursor = '';
-      var allDone = p.done >= p.total, isLast = currentStep === 7;
+      var allDone = p.done >= p.total, isLast = currentStep === 8;
       if (allDone) {
         btn.classList.remove('locked');
         btn.innerHTML = isLast ? 'Journey complete <span class="material-symbols-outlined">check</span>'
@@ -2105,7 +2175,8 @@
     }
 
     function tabBarHtml(extraClass, keys) {
-      var tabs = [['overview','Details'],['discovery','Discovery Questions'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
+      var overviewLabel = (extraClass === 'dp-idtabs') ? 'Main' : 'Details';
+      var tabs = [['overview',overviewLabel],['discovery','Discovery Questions'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
       if (keys) tabs = tabs.filter(function(t){ return keys.indexOf(t[0]) !== -1; });
       return '<div class="dp-tabs '+(extraClass||'')+'">' + tabs.map(function(t){
         return '<button class="dp-tab'+(leadTab===t[0]?' active':'')+'" onclick="switchLeadTab(\''+t[0]+'\')">'+t[1]+'</button>';
@@ -2126,10 +2197,17 @@
       'Not interested':       { disq: true }
     };
 
-    var laReasons     = ['Bought elsewhere', 'Budget constraints', 'Not the right time', 'Chose competitor', 'No longer interested'];
+    var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
     var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
     var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
-    var laDiscoveryQs = ['Budget confirmed', 'Preferred model discussed', 'Trade-in captured', 'Finance interest noted', 'Timeline to purchase'];
+    // Call Center discovery questions — shared by the Discovery Questions tab and the Log activity panel.
+    var discoveryCallCenterQs = [
+      { label:'What is the main reason for the enquiry today?', opts:['Book test drive','Visit showroom','Ask about model/features','Check availability','Request brochure/video','Speak to sales executive','Other (specify)'], req:true },
+      { label:'Which EXEED model or vehicle type are you asking about?', opts:['LX','TXL','RX','VX','SUV - not sure','Open to recommendation','Other (specify)'], req:true, model:true },
+      { label:'Which showroom / area is most convenient?', opts:['SZR','Deira','Abu Dhabi','Sharjah / Northern Emirates','Any showroom','Home / office visit requested','Other (specify)'], req:true },
+      { label:'When should the sales executive best contact or meet you?', opts:['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other (specify)'], req:true },
+      { label:'Preferred communication channel?', opts:['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other (specify)'], req:false }
+    ];
 
     var laToday = '2026-07-08';
     var laNoReasons = ['Call not picked up', 'Invalid number'];
@@ -2151,9 +2229,15 @@
         '</div>';
     }
     function laDiscovery() {
-      return '<div class="cp-field"><label class="cp-label">Discovery questions</label><div class="la-disc">' +
-        laDiscoveryQs.map(function(q, i){ return '<label class="la-disc-item"><input type="checkbox" id="laDisc' + i + '"><span>' + q + '</span></label>'; }).join('') +
-      '</div></div>';
+      return '<div class="la-dqcard">' +
+        '<div class="la-dqcard-head"><span class="material-symbols-outlined">quiz</span>Discovery questions</div>' +
+        discoveryCallCenterQs.map(function(q, i){
+          return '<div class="la-dq">' +
+            '<div class="la-dq-q"><span class="la-dq-n">'+(i+1)+'</span><span class="la-dq-label">'+q.label+(q.req?' <span class="req">*</span>':'')+'</span></div>' +
+            '<select class="cp-select" id="laDiscQ'+i+'"><option>—</option>'+q.opts.map(function(o){ return '<option>'+o+'</option>'; }).join('')+'</select>' +
+          '</div>';
+        }).join('') +
+      '</div>';
     }
     // Calendar/slot booking picker embedded in the Log activity panel (re-renders the panel's dynamic area).
     function laCalNav(d){ tdCalM += d; if (tdCalM < 0){ tdCalM = 11; tdCalY--; } if (tdCalM > 11){ tdCalM = 0; tdCalY++; } renderLaFields(); }
@@ -2165,14 +2249,14 @@
       return '<div class="la-booking">' +
         '<label class="cp-label">Vehicle</label>' +
         '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
-        '<label class="cp-label" style="margin-top:14px">Date &amp; time</label>' +
-        '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml('laCalNav','laSelectCalDay')+'</div><div class="sw-slots">'+schedSlotsHtml('laSelectTimeSlot')+'</div></div>' +
-        '<div class="td-gradbar"><span>free</span><div class="td-gradbar-track"></div><span>booked</span></div>' +
+        '<div class="la-dt-group"><label class="cp-label">Date &amp; time</label>' +
+          '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml('laCalNav','laSelectCalDay')+'</div><div class="sw-slots">'+schedSlotsHtml('laSelectTimeSlot')+'</div></div>' +
+        '</div>' +
       '</div>';
     }
     function laGather() {
       var g = function(id){ var e = document.getElementById(id); return e ? e.value : ''; };
-      var disc = laDiscoveryQs.filter(function(q, i){ var e = document.getElementById('laDisc' + i); return e && e.checked; });
+      var disc = discoveryCallCenterQs.filter(function(q, i){ var e = document.getElementById('laDiscQ' + i); return e && e.value && e.value !== '—'; });
       var noReason = (document.querySelector('input[name="laNoReason"]:checked') || {}).value || '';
       return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), noReason: noReason, disc: disc };
     }
@@ -2188,13 +2272,10 @@
       } else if (laAnswer === 'yes' && laOutcome) {
         if (laOutcome === 'Book test drive') {
           html += laDiscovery();
-          html += laSelect('laLoc', 'Location', laLocations, true);
           html += laBookingPicker();
         } else if (laOutcome === 'Handover to showroom') {
           html += laDiscovery();
-          html += laSelect('laLoc', 'Location', laLocations, true);
           html += laDateTime('Date & time');
-          html += laSelect('laCar', 'Car', laCars, true);
         } else if (laOutcome === 'Needs time') {
           html += laDateTime('Reschedule call');
         } else if (laOutcome === 'Not interested') {
@@ -2212,8 +2293,7 @@
       document.getElementById('laYes').classList.remove('on');
       document.getElementById('laNo').classList.remove('on','no');
       document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); });
-      document.getElementById('laOutcomeWrap').style.display = '';
-      document.getElementById('laNotes').value = '';
+      document.getElementById('laOutcomeWrap').style.display = 'none';
       document.getElementById('laError').style.display = 'none';
       document.getElementById('laDynamic').innerHTML = '';
       var att = leads[selectedIdx].attempts || 1;
@@ -2223,14 +2303,26 @@
       document.getElementById('logPanel').classList.add('open');
     }
 
+    function updateLaHint() {
+      var h = document.getElementById('laHint');
+      if (!h) return;
+      if (laAnswer === 'no') { h.textContent = 'Saving will log a missed attempt and schedule a callback.'; h.className = 'la-hint'; h.style.display = ''; return; }
+      if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
+        var r = laRoutes[laOutcome];
+        if (r.disq) { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
+        h.textContent = 'Saving will move the lead to ' + r.name + '.'; h.className = 'la-hint ok'; h.style.display = ''; return;
+      }
+      h.style.display = 'none';
+    }
+
     function setLaAnswer(v) {
       laAnswer = v;
       document.getElementById('laYes').classList.toggle('on', v === 'yes');
       var no = document.getElementById('laNo');
       no.classList.toggle('on', v === 'no'); no.classList.toggle('no', v === 'no');
-      // No answer -> disqualify path, hide outcome
-      document.getElementById('laOutcomeWrap').style.display = (v === 'no') ? 'none' : '';
-      if (v === 'no') { laOutcome = null; document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); }); }
+      // Outcome only appears when the customer answered (Yes).
+      document.getElementById('laOutcomeWrap').style.display = (v === 'yes') ? '' : 'none';
+      if (v !== 'yes') { laOutcome = null; document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); }); }
       renderLaFields();
       updateLaHint();
     }
@@ -2241,17 +2333,6 @@
       if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: null, time: null }; }
       renderLaFields();
       updateLaHint();
-    }
-
-    function updateLaHint() {
-      var h = document.getElementById('laHint');
-      if (laAnswer === 'no') { h.textContent = 'Saving will log a missed attempt and schedule a callback.'; h.className = 'la-hint'; return; }
-      if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
-        var r = laRoutes[laOutcome];
-        if (r.disq) { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; return; }
-        h.textContent = 'Saving will move the lead to ' + r.name + '.'; h.className = 'la-hint ok'; return;
-      }
-      h.textContent = 'Saving will move the lead to the next stage.'; h.className = 'la-hint';
     }
 
     function closeLogActivity() {
@@ -2265,7 +2346,7 @@
       if (laAnswer === 'yes' && !laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
       e.style.display = 'none';
       var l = leads[selectedIdx];
-      var notes = document.getElementById('laNotes').value.trim();
+      var notes = '';
       var f = laGather();
       var when = laFmtDT(f.date, f.time);
       l.activities = l.activities || [];
@@ -2278,7 +2359,7 @@
       } else {
         var r = laRoutes[laOutcome];
         if (laOutcome === 'Book test drive' || laOutcome === 'Handover to showroom') {
-          if (f.disc.length) { l.discovery = Math.max(l.discovery || 0, Math.round(f.disc.length / laDiscoveryQs.length * 100)); l.discoveryAnswers = f.disc; }
+          if (f.disc.length) { l.discovery = Math.max(l.discovery || 0, Math.round(f.disc.length / discoveryCallCenterQs.length * 100)); l.discoveryAnswers = f.disc; }
           var loc = f.loc || l.showroom;
           var bkWhen = when;
           if (laOutcome === 'Book test drive') {
@@ -2295,7 +2376,7 @@
           }
           l.nextCall = null; l.disqReason = null;
           l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
-          currentStep = Math.min(r.n - 1, 7);
+          currentStep = Math.min(r.n - 1, 8);
           showToast('Moved to ' + r.name + (bkWhen ? ' · ' + bkWhen : ''));
         } else if (r.disq) {
           l.disqReason = f.reason;
@@ -2306,7 +2387,7 @@
           l.nextCall = { date: f.date, time: f.time, note: f.note }; l.disqReason = null;
           l.activities.unshift({ type: 'call', text: ['Needs time', f.note, when ? 'call back ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
-          currentStep = Math.min(r.n - 1, 7);
+          currentStep = Math.min(r.n - 1, 8);
           showToast('Moved to ' + r.name + (when ? ' · call back ' + when : ''));
         }
       }
@@ -2326,6 +2407,7 @@
         case 'date': ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'" placeholder="dd/mm/yyyy, --:--"><span class="material-symbols-outlined dp-if-lk">calendar_today</span></div>'; break;
         case 'image': ctrl = '<button class="dp-if-upload"><span class="material-symbols-outlined">upload_file</span>'+(o.val||'Upload image')+'</button>'; break;
         case 'action': ctrl = '<button class="dp-if-action"><span class="material-symbols-outlined">play_circle</span>'+(o.val||'Start / Stop')+'</button>'; break;
+        case 'link': ctrl = '<button class="dp-if-action dp-if-link"><span class="material-symbols-outlined">open_in_new</span>'+(o.val||'Open')+'</button>'; break;
         case 'sign': ctrl = o.val ? '<div class="dp-if-sign done"><span class="material-symbols-outlined">draw</span>Signed</div>' : '<div class="dp-if-sign">Tap to sign</div>'; break;
         case 'check': ctrl = '<label class="dp-if-check"><input type="checkbox"'+(o.val?' checked':'')+'>'+(o.note||'Accepted')+'</label>'; break;
         case 'textarea': ctrl = '<textarea class="dp-if-input dp-if-area">'+(o.val||'')+'</textarea>'; wide = true; break;
@@ -2338,17 +2420,111 @@
         return '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">'+g.fields.map(dpFieldHtml).join('')+'</div></div>';
       }).join('') + '</div></div>';
     }
+
+    // Per-stage Details form (Qualify / Visit) — same grouped style as the New intake form.
+    function qualifyDetailsForm(l) {
+      return dpFormSections([
+        { title:'Qualification', fields:[
+          {label:'Outcome', type:'select', val:'Qualify', opts:['Qualify','Disqualify'], req:true},
+          {label:'Pass to showroom', type:'select', val:'Yes', opts:['Yes','No'], req:true}
+        ]},
+        { title:'Follow-up', fields:[
+          {label:'Follow up — New Task', type:'link', val:'Create task'}
+        ]},
+        { title:'Customer info', fields:[
+          {label:'Lead ID', val:l.id},
+          {label:'Topic', val:l.model+' enquiry'},
+          {label:'Middle Name', val:''},
+          {label:'Email', val:l.email},
+          {label:'EID', val:l.emiratesId},
+          {label:'Nationality', type:'lookup', val:'UAE'},
+          {label:'Trade-in Interested', type:'select', val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']},
+          {label:'Duplicate Lead', type:'select', val:'No', opts:['No','Yes — flagged']},
+          {label:'Call Status', type:'select', val:'Answered', opts:['Not Called','No Answer 1','No Answer 2','Call Back','Follow up','Answered']}
+        ]},
+        { title:'Campaign', fields:[
+          {label:'Campaign ID', val:''},
+          {label:'Campaign Name', type:'lookup', val:(l.campaign && l.campaign!=='—')?l.campaign:''}
+        ]},
+        { title:'Organization & Address', fields:[
+          {label:'Company', type:'lookup', val:'AGM Sales'},
+          {label:'Website', val:''},
+          {label:'Address 1: Fax', val:''},
+          {label:'Street 1', val:''},
+          {label:'Street 2', val:''},
+          {label:'Street 3', val:''},
+          {label:'City', val:'Dubai'},
+          {label:'State / Province', val:''},
+          {label:'ZIP / Postal code', val:''},
+          {label:'Country / Region', type:'lookup', val:'United Arab Emirates'}
+        ]},
+        { title:'Activity & Links', fields:[
+          {label:'Timelines — Block', type:'link', val:'View timeline'},
+          {label:'Test drive — appointment', type:'link', val:'View test drive'},
+          {label:'Test drive slot — calendar', type:'link', val:'Open calendar'},
+          {label:'Related — activities', type:'link', val:'View related'}
+        ]}
+      ]);
+    }
+
+    function visitDetailsForm(l) {
+      return dpFormSections([
+        { title:'Customer info', fields:[
+          {label:'Customer Visited?', type:'select', val:'Yes', opts:['Yes','No'], req:true},
+          {label:'Trade-in Interested?', type:'select', val:l.existing!=='No'?'Yes':'No', opts:['Yes','No'], req:true},
+          {label:'Potential customer', type:'select', val:'Yes', opts:['Yes','No'], req:true},
+          {label:'Currency', type:'select', val:'AED', opts:['AED','USD','EUR'], req:true}
+        ]},
+        { title:'Opportunity', fields:[
+          {label:'Topic', val:l.model+' — showroom visit'},
+          {label:'Contact', type:'lookup', val:l.name},
+          {label:'Follow up date', type:'date', val:''},
+          {label:'Originating Lead', type:'lookup', val:l.id},
+          {label:'Est. Close date', type:'date', val:''},
+          {label:'Purchase timeframe', type:'select', val:'< 1 month', opts:['Immediately','< 1 month','1-3 months','> 3 months']},
+          {label:'Budget Amount', val:''},
+          {label:'Description', type:'textarea', val:''},
+          {label:'Customer visited', type:'check', val:true, note:'Visited showroom'},
+          {label:'Interest', type:'select', val:'High', opts:['High','Medium','Low']},
+          {label:'Follow up — New Task', type:'link', val:'Create task'}
+        ]},
+        { title:'Vehicle', fields:[
+          {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
+          {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
+          {label:'Model', type:'lookup', val:l.model},
+          {label:'Model Class', val:''},
+          {label:'Variant', val:''},
+          {label:'Device', type:'lookup', val:''},
+          {label:'Scheduled delivery date', type:'date', val:''},
+          {label:'Pre-delivery Inspection', type:'select', val:'Not started', opts:['Not started','Scheduled','Passed']}
+        ]},
+        { title:'Needs assessment', fields:[
+          {label:'Current Situation', type:'textarea', val:''},
+          {label:'Customer Need', type:'textarea', val:''},
+          {label:'Proposed solution', type:'textarea', val:''}
+        ]},
+        { title:'Organization', fields:[
+          {label:'Timelines — Block', type:'link', val:'View timeline'},
+          {label:'Business Operation', type:'lookup', val:'Abudhabi Corniche'}
+        ]},
+        { title:'Questionnaire & Links', fields:[
+          {label:'Test drive — create / view', type:'link', val:'Open test drive'},
+          {label:'Questionnaire — Finance option', type:'link', val:'Open'},
+          {label:'Questionnaire — Purpose of vehicle', type:'link', val:'Open'},
+          {label:'Questionnaire — Trade-in interested', type:'link', val:'Open'},
+          {label:'Questionnaire — Trade-in rejected reason', type:'link', val:'Open'},
+          {label:'Qualification questionnaire', type:'link', val:'Open'},
+          {label:'Deal Tab — create / view deal', type:'link', val:'Open deals'},
+          {label:'Related — activities', type:'link', val:'View related'}
+        ]}
+      ]);
+    }
     function discoveryQuestionsForm(l) {
       var mg = (['LX','TXL','RX','VX'].filter(function(m){ return new RegExp('\\b'+m+'\\b').test(l.model || ''); })[0]) || '—';
-      var q = function(label, opts, req, val){ return { label:label, type:'select', val: val || '—', opts:['—'].concat(opts), req:req, optional:!req, wide:true }; };
       return dpFormSections([
-        { title:'Call Center — Discovery Questions', fields:[
-          q('What is the main reason for the enquiry today?', ['Book test drive','Visit showroom','Ask about model/features','Check availability','Request brochure/video','Speak to sales executive','Other (specify)'], true),
-          q('Which EXEED model or vehicle type are you asking about?', ['LX','TXL','RX','VX','SUV - not sure','Open to recommendation','Other (specify)'], true, mg),
-          q('Which showroom / area is most convenient?', ['SZR','Deira','Abu Dhabi','Sharjah / Northern Emirates','Any showroom','Home / office visit requested','Other (specify)'], true),
-          q('When should the sales executive best contact or meet you?', ['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other (specify)'], true),
-          q('Preferred communication channel?', ['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other (specify)'], false)
-        ]}
+        { title:'Call Center — Discovery Questions', fields: discoveryCallCenterQs.map(function(q){
+          return { label:q.label, type:'select', val: q.model ? mg : '—', opts:['—'].concat(q.opts), req:q.req, optional:!q.req, wide:true };
+        }) }
       ]);
     }
 
