@@ -672,6 +672,21 @@
     .prop-card { border: 1px solid var(--border-soft); border-radius: var(--radius-md); margin-bottom: 14px; overflow: hidden; box-shadow: var(--shadow2); background: var(--surface); }
     .prop-card:last-child { margin-bottom: 0; }
     .prop-card.quote { border-color: var(--blue); box-shadow: 0 0 0 1px var(--blue); }
+    .prop-card.selected { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+    .prop-name-wrap { display: flex; align-items: center; gap: 9px; }
+    .prop-sel { display: flex; align-items: center; cursor: pointer; }
+    .prop-sel input { accent-color: var(--blue); width: 16px; height: 16px; cursor: pointer; }
+    .prop-hint { display: flex; align-items: center; gap: 7px; font-size: 11.5px; color: var(--ink-muted); background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; }
+    .prop-hint .material-symbols-outlined { font-size: 16px; }
+    .prop-bulk { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--ink); color: #fff; border-radius: 8px; padding: 9px 12px; margin-bottom: 12px; }
+    .prop-bulk-n { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; }
+    .prop-bulk-n .material-symbols-outlined { font-size: 16px; color: var(--yuzu-400, #6cc6a8); }
+    .prop-bulk-actions { display: flex; align-items: center; gap: 8px; }
+    .prop-bulk-clear { font-family: inherit; font-size: 11.5px; font-weight: 600; color: #cfd6de; background: none; border: none; cursor: pointer; padding: 6px 8px; border-radius: 6px; }
+    .prop-bulk-clear:hover { background: rgba(255,255,255,.12); color: #fff; }
+    .prop-bulk-convert { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 11.5px; font-weight: 700; color: var(--ink); background: #fff; border: none; border-radius: 7px; padding: 7px 12px; cursor: pointer; }
+    .prop-bulk-convert:hover { background: var(--blue-soft); }
+    .prop-bulk-convert .material-symbols-outlined { font-size: 15px; }
     .prop-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); }
     .prop-name { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink); }
     .prop-name .material-symbols-outlined { font-size: 16px; color: var(--blue); }
