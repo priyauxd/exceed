@@ -6,24 +6,16 @@
   <title>Leads — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="fluent-tokens.css" rel="stylesheet" />
   <style>
+    /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
+       Only app-shell + EXEED signature vars are kept local here. */
     :root {
-      --bg: #f7f8fb; --surface: #ffffff; --ink: #2d3340;
-      --ink-secondary: #6b7289; --ink-muted: #9ea3b5;
-      --border: #eceef4; --border-soft: #f1f2f7;
-      /* EXEED brand — Option 1 (accented light). Navy chrome, azure primary, cyan signature accent. */
       --exeed-navy: #00203f; --exeed-cyan: #00b7bb; --exeed-azure: #2a6797;
-      --blue: #17293d; --blue-soft: #e9edf2; --blue-muted: #98a6b6;
-      --red: #e76e6e; --red-soft: #fdf0f0;
-      --amber: #e8a84c; --amber-soft: #fdf6eb;
-      --green: #5cb97f; --green-soft: #edf8f1;
-      --purple: #8b7bdf; --purple-soft: #f1effc;
-      --teal: #4fb8a8; --teal-soft: #ecf8f6;
       --sidebar-w: 228px; --topbar-h: 42px;
-      --radius: 12px; --radius-sm: 8px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); font-size: 13px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow: hidden; height: 100vh; }
+    body { font-family: var(--fontFamilyBase); background: var(--bg); color: var(--ink); font-size: var(--fontSizeBase200); line-height: 1.45; -webkit-font-smoothing: antialiased; overflow: hidden; height: 100vh; }
 
     /* ── Topbar ── */
     .topbar { height: var(--topbar-h); background: linear-gradient(135deg, #0a0e14, #16293c); color: #fff; display: flex; align-items: center; padding: 0 18px; gap: 12px; position: fixed; top: 0; left: 0; right: 0; z-index: 20; font-size: 13px; }
@@ -85,6 +77,141 @@
     .filter-search { margin-left: auto; padding: 6px 12px 6px 32px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-family: inherit; color: var(--ink); outline: none; width: 200px; transition: border-color .15s; background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ea3b5' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 10px center; }
     .filter-search:focus { border-color: var(--blue); }
     .filter-search::placeholder { color: var(--ink-muted); }
+    /* View toggle + Sales pipeline (kanban) */
+    .view-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .vt { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border: none; background: var(--surface); font-size: 11.5px; color: var(--ink-secondary); cursor: pointer; font-family: inherit; }
+    .vt + .vt { border-left: 1px solid var(--border); }
+    .vt.on { background: var(--blue); color: #fff; }
+    .vt .material-symbols-outlined { font-size: 15px; }
+    .pipeline-wrap { flex: 1; overflow: auto; padding: 16px 24px 24px; }
+    .pipeline-wrap::-webkit-scrollbar { height: 8px; width: 8px; }
+    .pipeline-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .pipeline-board { display: flex; gap: 18px; align-items: flex-start; min-width: min-content; }
+    .pipe-group { display: flex; flex-direction: column; }
+    .pipe-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; padding: 0 2px 8px; }
+    .pipe-cols { display: flex; gap: 12px; }
+    .pipe-col { width: 220px; flex-shrink: 0; background: var(--bg); border-radius: 10px; padding: 8px; border-top: 3px solid transparent; }
+    .pipe-col-head { display: flex; align-items: center; justify-content: space-between; padding: 5px 6px 10px; }
+    .pipe-col-name { font-size: 11.5px; font-weight: 700; color: var(--ink); }
+    .pipe-col-count { font-size: 10px; font-weight: 700; color: var(--ink-secondary); background: var(--surface); border-radius: 10px; padding: 1px 8px; }
+    .pipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-bottom: 8px; cursor: pointer; transition: box-shadow .12s, transform .12s; }
+    .pipe-card:hover { box-shadow: 0 4px 14px rgba(20,24,34,.1); transform: translateY(-1px); }
+    .pipe-card:last-child { margin-bottom: 0; }
+    .pipe-card-top { display: flex; align-items: center; gap: 8px; }
+    .pipe-card-name { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.2; }
+    .pipe-card-model { font-size: 10.5px; color: var(--ink-secondary); margin-top: 1px; }
+    .pipe-card-meta { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; gap: 6px; }
+    .pipe-card-owner { font-size: 10px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pipe-empty { font-size: 10.5px; color: var(--ink-muted); text-align: center; padding: 14px 0; }
+    /* Inline row expand */
+    .leads-table tbody tr.expanded { background: var(--blue-soft); }
+    .lead-expand-row td { padding: 0 !important; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .lead-expand-inner { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+    .lx-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 24px; padding: 16px 24px 12px; }
+    .lx-item .lx-label { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 2px; }
+    .lx-item .lx-val { font-size: 12.5px; color: var(--ink); }
+    .lx-foot { display: flex; align-items: center; justify-content: space-between; padding: 4px 24px 16px; gap: 12px; flex-wrap: wrap; }
+    .lx-stage { font-size: 12px; color: var(--ink-secondary); }
+    .lx-open { display: inline-flex; align-items: center; gap: 5px; background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .lx-open:hover { filter: brightness(1.15); }
+    .lx-open .material-symbols-outlined { font-size: 15px; }
+    /* SLA Tracker widget */
+    .dp-sla-widget { border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 12px; margin-bottom: 14px; background: var(--surface); box-shadow: var(--shadow2); }
+    .slaw-head { font-size: 13px; font-weight: 700; }
+    .slaw-head-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .slaw-status-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 9px 3px 6px; border-radius: var(--borderRadiusCircular); }
+    .slaw-status-pill .material-symbols-outlined { font-size: 14px; }
+    .slaw-status-pill.ok { background: var(--green-soft); color: #0e700e; }
+    .slaw-status-pill.wrn { background: var(--amber-soft); color: var(--amber); }
+    .slaw-status-pill.brch { background: var(--red-soft); color: var(--red); }
+    .slaw-hero { border-radius: var(--radius-sm); padding: 8px 11px; margin-bottom: 10px; border: 1px solid var(--border-soft); }
+    .slaw-hero.ok { background: var(--green-soft); border-color: #cdebd6; }
+    .slaw-hero.wrn { background: var(--amber-soft); border-color: #f4e2bf; }
+    .slaw-hero.brch { background: var(--red-soft); border-color: #f6d5d5; }
+    .slaw-hero-big { font-size: 16px; font-weight: 700; line-height: 1.15; color: var(--ink); }
+    .slaw-hero.ok .slaw-hero-big { color: #0e700e; }
+    .slaw-hero.wrn .slaw-hero-big { color: #8a6420; }
+    .slaw-hero.brch .slaw-hero-big { color: var(--red); }
+    .slaw-hero-sub { font-size: 11px; color: var(--ink-secondary); margin-top: 2px; }
+    .slaw-escalate { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; padding: 8px 10px; border-radius: var(--borderRadiusMedium); margin-bottom: 14px; }
+    .slaw-escalate .material-symbols-outlined { font-size: 15px; }
+    .slaw-escalate.brch { background: var(--red-soft); color: var(--red); }
+    .slaw-escalate.wrn { background: var(--amber-soft); color: #8a6420; }
+    .slaw-policy { display: flex; gap: 6px; font-size: 10.5px; color: var(--ink-secondary); line-height: 1.45; margin-bottom: 14px; }
+    .slaw-policy .material-symbols-outlined { font-size: 14px; color: var(--ink-muted); flex-shrink: 0; margin-top: 1px; }
+    .slaw-policy strong { color: var(--ink); }
+    .slaw-box { border: 1.5px solid var(--ink); border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+    .slaw-days { display: flex; gap: 16px; padding: 9px 12px; flex-wrap: wrap; }
+    .slaw-day { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink); cursor: default; }
+    .slaw-day input { width: 14px; height: 14px; accent-color: var(--blue); }
+    .slaw-note { font-size: 11px; font-style: italic; color: var(--ink); background: #eef0f2; padding: 8px 12px; border-top: 1.5px solid var(--ink); line-height: 1.4; }
+    .slaw-body { display: flex; align-items: center; gap: 16px; }
+    .slaw-circle { width: 92px; height: 92px; border-radius: 50%; border: 3px solid var(--green); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
+    .slaw-circle.wrn { border-color: var(--amber); }
+    .slaw-circle.brch { border-color: var(--red); }
+    .slaw-big { font-size: 24px; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+    .slaw-sub { font-size: 10px; color: var(--ink-secondary); margin-top: 3px; }
+    .slaw-info { margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--border-soft); }
+    .slaw-irow { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .slaw-ilabel { font-size: 10.5px; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); }
+    .slaw-ival { font-size: 12.5px; font-weight: 600; color: var(--ink); text-align: right; }
+    .slaw-ival.ok { color: #3d8a5b; }
+    .slaw-ival.wrn { color: var(--amber); }
+    .slaw-ival.brch { color: var(--red); }
+    .slaw-viewall { display: inline-flex; align-items: center; gap: 2px; font-size: 10.5px; color: var(--blue); font-weight: 600; cursor: pointer; margin-top: 12px; padding: 4px 6px; margin-left: -6px; border-radius: var(--borderRadiusMedium); user-select: none; }
+    .slaw-viewall:hover { background: var(--blue-soft); }
+    .slaw-viewall .material-symbols-outlined { font-size: 16px; }
+    .slaw-all { margin-top: 8px; border-top: 1px solid var(--border-soft); padding-top: 8px; }
+    .slaw-all-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border-soft); }
+    .slaw-all-row:last-child { border-bottom: none; }
+    .slaw-all-name { font-size: 11.5px; font-weight: 600; color: var(--ink); }
+    .slaw-all-tgt { font-size: 10.5px; color: var(--ink-muted); font-family: var(--fontFamilyMonospace); }
+    .slaw-all-pill { font-size: 9.5px; font-weight: 700; padding: 2px 7px; border-radius: var(--borderRadiusCircular); white-space: nowrap; }
+    .slaw-all-pill.ok { background: var(--green-soft); color: #0e700e; }
+    .slaw-all-pill.wrn { background: var(--amber-soft); color: var(--amber); }
+    .slaw-all-pill.brch { background: var(--red-soft); color: var(--red); }
+    .slaw-all-pill.pending { background: var(--colorNeutralBackground4); color: var(--ink-secondary); }
+    .slaw-graph { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+    .slaw-graph-head { display: flex; justify-content: space-between; align-items: center; font-size: 11px; font-weight: 600; color: var(--ink-secondary); margin-bottom: 10px; }
+    .slaw-graph-state { font-weight: 700; }
+    .slaw-graph-state.ok { color: #3d8a5b; }
+    .slaw-graph-state.wrn { color: var(--amber); }
+    .slaw-graph-state.brch { color: var(--red); }
+    .slaw-track { position: relative; height: 6px; background: var(--border); border-radius: 4px; }
+    .slaw-fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; transition: width .4s ease; }
+    .slaw-fill.ok { background: linear-gradient(90deg, #5cb97f, #46a56b); }
+    .slaw-fill.wrn { background: linear-gradient(90deg, #e8a84c, #d4873a); }
+    .slaw-fill.brch { background: linear-gradient(90deg, #e76e6e, #d45b5b); }
+    .slaw-thumb { position: absolute; top: 50%; width: 13px; height: 13px; border-radius: 50%; background: var(--surface); border: 3px solid #46a56b; transform: translate(-50%, -50%); box-shadow: 0 1px 4px rgba(20,24,34,.10); }
+    .slaw-thumb.wrn { border-color: #d4873a; }
+    .slaw-thumb.brch { border-color: #d45b5b; }
+    .slaw-target { position: absolute; top: 50%; width: 2px; height: 12px; background: var(--ink-muted); transform: translate(-50%, -50%); border-radius: 2px; }
+    .slaw-scale { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--ink-muted); margin-top: 7px; }
+    .slaw-note-box { font-size: 11px; color: var(--ink-secondary); background: var(--colorNeutralBackground3); border: 1px solid var(--border-soft); border-radius: var(--borderRadiusMedium); padding: 8px 10px; line-height: 1.45; margin-bottom: 14px; }
+    .slaw-note-box strong { color: var(--ink); }
+    /* Follow-up cadence timeline */
+    .slaw-cadence { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+    .slaw-cad-head { display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 8px; cursor: pointer; user-select: none; }
+    .slaw-cad-head:hover { color: var(--ink-secondary); }
+    .slaw-cad-head .material-symbols-outlined { font-size: 16px; }
+    .slaw-cad-item { position: relative; display: flex; gap: 8px; padding-bottom: 9px; }
+    .slaw-cad-item::before { content: ''; position: absolute; left: 8px; top: 18px; bottom: 0; width: 1.5px; background: var(--border); }
+    .slaw-cad-item:last-of-type::before { display: none; }
+    .slaw-cad-dot { font-size: 17px; flex-shrink: 0; z-index: 1; color: var(--ink-muted); }
+    .slaw-cad-item.done .slaw-cad-dot { color: var(--green); }
+    .slaw-cad-item.done::before { background: var(--green); }
+    .slaw-cad-item.current .slaw-cad-dot { color: var(--blue); }
+    .slaw-cad-item.missed .slaw-cad-dot { color: var(--red); }
+    .slaw-cad-t { font-size: 11.5px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+    .slaw-cad-item.upcoming .slaw-cad-t { color: var(--ink-secondary); font-weight: 600; }
+    .slaw-cad-a { font-size: 11px; color: var(--ink-secondary); line-height: 1.4; margin-top: 1px; }
+    .slaw-cad-item.upcoming .slaw-cad-a { color: var(--ink-muted); }
+    .open-cell { text-align: right; padding-right: 20px; white-space: nowrap; }
+    .open-lead-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--ink-muted); cursor: pointer; padding: 3px 9px; border-radius: 6px; transition: all .12s; }
+    .leads-table tbody tr:hover .open-lead-link { color: var(--blue); background: var(--blue-soft); }
+    .open-lead-link .material-symbols-outlined { font-size: 15px; }
+    .dp-fullview-btn { width: auto !important; gap: 4px; font-size: 11px; font-weight: 600; color: var(--blue); padding: 4px 9px; }
+    .dp-fullview-btn:hover { background: var(--blue-soft); color: var(--blue); }
     .leads-table-wrap { flex: 1; overflow-y: auto; }
     .leads-table-wrap::-webkit-scrollbar { width: 4px; }
     .leads-table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -108,7 +235,12 @@
     .lead-av.av5 { background: linear-gradient(135deg, #e76e6e, #d45b5b); }
     .lead-av.av6 { background: linear-gradient(135deg, #4fb8a8, #3da89a); }
     .c-name { font-weight: 600; font-size: 12.5px; color: var(--ink); }
-    .c-id { font-size: 9.5px; color: #bbb; font-family: 'SF Mono','Consolas',monospace; margin-top: 1px; }
+    .id-copy { display: inline-flex; align-items: center; gap: 6px; font-family: var(--fontFamilyMonospace); font-size: 11px; color: var(--ink-secondary); padding: 3px 6px; margin: -3px -6px; border-radius: var(--borderRadiusMedium); cursor: pointer; transition: background .1s, color .1s; }
+    .id-copy:hover { background: var(--blue-soft); color: var(--blue); }
+    .id-copy.copied { background: var(--green-soft); color: var(--green); }
+    .id-copy-ico { font-size: 14px; opacity: 0; transition: opacity .1s; }
+    .leads-table tbody tr:hover .id-copy-ico, .id-copy:hover .id-copy-ico { opacity: 1; }
+    .id-copy.copied .id-copy-ico { opacity: 1; }
     .src { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--ink-secondary); }
     .src-dot { width: 16px; height: 16px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #fff; }
     .src-dot.web { background: var(--blue); } .src-dot.ig { background: #c13584; } .src-dot.ggl { background: #4285f4; } .src-dot.walk { background: #9ea3b5; } .src-dot.fb { background: #1877f2; } .src-dot.ref { background: var(--green); }
@@ -139,11 +271,57 @@
     .dp-page { padding: 20px; }
 
     /* Lead header */
-    .dp-lead-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
-    .dp-av { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: #fff; flex-shrink: 0; }
-    .dp-name { font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
-    .dp-badges { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
-    .badge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 10px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+    .dp-formhead { display: flex; align-items: center; justify-content: flex-end; gap: 0; margin-left: auto; align-self: flex-start; flex-shrink: 0; }
+    .dp-fh-field, .dp-fh-owner { padding: 0 20px; border-left: 1px solid var(--border); }
+    .dp-fh-field:first-child { border-left: none; }
+    .dp-fh-owner { display: flex; align-items: center; gap: 10px; }
+    .dp-fh-val { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+    .dp-fh-val.mono { font-family: 'SF Mono','Consolas',monospace; font-size: 12px; }
+    .dp-fh-val.link { color: var(--blue); font-weight: 600; }
+    .dp-fh-label { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; }
+    .dp-fh-av { position: relative; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .dp-fh-dot { position: absolute; right: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: var(--green); border: 2px solid var(--surface); }
+    .dp-idcard { border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 16px; background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; }
+    .dp-lead-head { display: flex; align-items: center; gap: 14px; }
+    .dp-head-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+    .dp-kebab { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--ink-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; align-self: flex-start; transition: background .12s, border-color .12s; }
+    .dp-kebab:hover { background: var(--bg); border-color: var(--ink-muted); }
+    .dp-kebab .material-symbols-outlined { font-size: 20px; }
+    .dp-av { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #fff; flex-shrink: 0; }
+    .dp-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .dp-meta-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .dp-call { display: inline-flex; align-items: center; gap: 5px; font-family: var(--fontFamilyBase); font-size: 11.5px; font-weight: 600; color: var(--blue); background: var(--blue-soft); border: 1px solid transparent; border-radius: var(--borderRadiusCircular); padding: 3px 11px 3px 9px; cursor: pointer; transition: background .12s; }
+    .dp-call:hover { background: #dde5ec; }
+    .dp-call .material-symbols-outlined { font-size: 15px; }
+    .dp-if-phone { display: flex; gap: 6px; align-items: stretch; }
+    .dp-if-phone .dp-if-input { flex: 1; min-width: 0; }
+    .dp-if-call { flex-shrink: 0; width: 30px; border: none; border-radius: var(--borderRadiusMedium); background: var(--blue); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s; }
+    .dp-if-call:hover { background: var(--blue-dark); }
+    .dp-if-call .material-symbols-outlined { font-size: 17px; }
+
+    /* Genesys CTI softphone */
+    .cti-panel { position: fixed; right: 20px; bottom: 20px; width: 260px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow16); z-index: 80; overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .2s, transform .2s, visibility .2s; }
+    .cti-panel.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .cti-head { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: linear-gradient(135deg, #0a0e14, #16293c); color: #fff; }
+    .cti-brand { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
+    .cti-brand .material-symbols-outlined { font-size: 16px; color: #ff6a3d; }
+    .cti-status { font-size: 10.5px; font-weight: 600; opacity: .85; }
+    .cti-status.live { color: #7ee2a8; opacity: 1; }
+    .cti-body { text-align: center; padding: 16px 12px 8px; }
+    .cti-av { width: 48px; height: 48px; border-radius: 50%; margin: 0 auto 8px; background: linear-gradient(135deg, #2f76ac, #00203f); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; }
+    .cti-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+    .cti-num { font-size: 12px; color: var(--ink-secondary); font-family: var(--fontFamilyMonospace); margin-top: 2px; }
+    .cti-timer { font-size: 13px; font-weight: 700; color: var(--blue); margin-top: 6px; font-family: var(--fontFamilyMonospace); }
+    .cti-controls { display: flex; justify-content: center; gap: 12px; padding: 10px 12px 14px; }
+    .cti-ctrl { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--ink-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s; }
+    .cti-ctrl:hover { background: var(--border-soft); }
+    .cti-ctrl .material-symbols-outlined { font-size: 20px; }
+    .cti-ctrl.hangup { background: #d13438; border-color: #d13438; color: #fff; }
+    .cti-ctrl.hangup:hover { background: #b02a2e; }
+    .cti-foot { font-size: 9.5px; color: var(--ink-muted); text-align: center; padding: 0 12px 12px; line-height: 1.4; }
+    .dp-name { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+    .dp-badges { display: inline-flex; gap: 5px; flex-wrap: wrap; }
+    .badge { display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: var(--borderRadiusMedium); font-size: 10px; font-weight: 600; }
     .badge.green { background: var(--green-soft); color: #3d8a5b; }
     .badge.red { background: var(--red-soft); color: var(--red); }
     .badge.amber { background: var(--amber-soft); color: #8a6420; }
@@ -151,7 +329,7 @@
     .badge.purple { background: var(--purple-soft); color: var(--purple); }
     .badge.teal { background: var(--teal-soft); color: #2d8a7a; }
     .badge .material-symbols-outlined { font-size: 11px; }
-    .dp-sub { font-size: 11.5px; color: var(--ink-secondary); margin-top: 3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .dp-sub { font-size: 11.5px; color: var(--ink-secondary); display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .dp-sub .mid { font-family: 'SF Mono','Consolas',monospace; font-size: 10.5px; color: var(--ink-muted); background: var(--bg); padding: 1px 7px; border-radius: 4px; }
 
     /* SLA box */
@@ -185,15 +363,37 @@
 
     /* Sales journey stepper */
     .dp-journey-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 14px; }
-    .dp-journey { display: flex; margin-bottom: 22px; position: relative; padding: 2px 0; }
+    .dp-journey-card { position: relative; background: none; border: none; box-shadow: none; border-radius: 0; padding: 28px 2px 16px; margin-bottom: 14px; border-bottom: 1px solid var(--border-soft); }
+    /* stepper style toggle */
+    .dp-stepper-toggle { position: absolute; top: 0; right: 0; display: inline-flex; border: 1px solid var(--border); border-radius: var(--borderRadiusMedium); overflow: hidden; }
+    .dp-st-btn { border: none; background: var(--surface); color: var(--ink-muted); width: 28px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .dp-st-btn + .dp-st-btn { border-left: 1px solid var(--border); }
+    .dp-st-btn:hover { background: var(--bg); }
+    .dp-st-btn.on { background: var(--blue-soft); color: var(--blue); }
+    .dp-st-btn .material-symbols-outlined { font-size: 15px; }
+    /* chevron pipeline (D365 BPF style) */
+    .dp-chevrons { display: flex; overflow-x: auto; }
+    .dp-chev { flex: 1 1 0; min-width: 74px; position: relative; display: flex; align-items: center; justify-content: center; gap: 5px; height: 38px; padding: 0 8px 0 20px; margin-left: -12px; background: var(--colorNeutralBackground4); color: var(--ink-secondary); font-size: 10.5px; font-weight: 600; cursor: pointer; clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%, 13px 50%); transition: background .15s; }
+    .dp-chev:first-child { margin-left: 0; padding-left: 12px; clip-path: polygon(0 0, calc(100% - 13px) 0, 100% 50%, calc(100% - 13px) 100%, 0 100%); }
+    .dp-chev:hover { filter: brightness(.97); }
+    .dp-chev .chev-num { flex-shrink: 0; width: 16px; height: 16px; border-radius: 50%; background: rgba(0,0,0,.10); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; }
+    .dp-chev .chev-num .material-symbols-outlined { font-size: 12px; }
+    .dp-chev .chev-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dp-chev.done { background: var(--green-soft); color: #2f7a4f; }
+    .dp-chev.done .chev-num { background: #46a56b; color: #fff; }
+    .dp-chev.active { background: linear-gradient(135deg, #2f76ac, #17293d); color: #fff; }
+    .dp-chev.active .chev-num { background: rgba(255,255,255,.25); color: #fff; }
+    .dp-chev.viewing { outline: 2px solid var(--exeed-cyan); outline-offset: -2px; }
+    .dp-journey { display: flex; position: relative; padding: 2px 0; }
     .dp-j-step { flex: 1; position: relative; text-align: center; cursor: pointer; min-width: 0; }
     .dp-j-step::before { content: ''; position: absolute; top: 15px; left: -50%; width: 100%; height: 3px; background: var(--border); border-radius: 3px; z-index: 0; transition: background .4s ease; }
     .dp-j-step:first-child::before { display: none; }
     .dp-j-step.done::before, .dp-j-step.active::before { background: linear-gradient(90deg, #5cb97f, #46a56b); }
     .dp-j-step .j-num { position: relative; z-index: 1; width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--surface); border: 2px solid var(--border); color: var(--ink-muted); transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, background .2s; }
     .dp-j-step .j-num .material-symbols-outlined { font-size: 19px; font-variation-settings: 'wght' 700; }
-    .dp-j-step.done .j-num { background: linear-gradient(135deg, #63c088, #46a56b); border-color: transparent; color: #fff; box-shadow: 0 3px 8px rgba(70,165,107,.32); }
-    .dp-j-step.active .j-num { background: linear-gradient(135deg, #2f76ac, #00203f); border-color: transparent; color: #fff; box-shadow: 0 0 0 5px rgba(0,183,187,.20), 0 4px 10px rgba(0,32,63,.4); }
+    .dp-j-step.done .j-num { background: linear-gradient(135deg, #63c088, #46a56b); border-color: transparent; color: #fff; box-shadow: 0 3px 8px rgba(70,165,107,.16); }
+    .dp-j-step.active .j-num { background: linear-gradient(135deg, #2f76ac, #00203f); border-color: transparent; color: #fff; box-shadow: 0 0 0 5px rgba(0,183,187,.20), 0 4px 10px rgba(0,32,63,.16); animation: dp-node-pulse 2.2s ease-in-out infinite; }
+    @keyframes dp-node-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(0,183,187,.18), 0 4px 10px rgba(0,32,63,.16); } 50% { box-shadow: 0 0 0 8px rgba(0,183,187,.08), 0 4px 12px rgba(0,32,63,.18); } }
     .dp-j-step.viewing .j-num { outline: 2.5px solid var(--exeed-cyan); outline-offset: 2px; }
     .dp-j-step:hover .j-num { transform: translateY(-2px); }
     .dp-j-step .j-name { font-size: 9px; font-weight: 600; color: var(--ink-muted); display: block; line-height: 1.25; padding: 0 3px; letter-spacing: -.01em; }
@@ -201,12 +401,157 @@
     .dp-j-step.active .j-name { color: var(--blue); font-weight: 700; }
     .dp-j-step .j-status { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--blue); display: block; margin-top: 3px; }
 
+    /* Form tabs */
+    .dp-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
+    .dp-tab { appearance: none; background: none; border: none; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-secondary); padding: 8px 14px 10px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .12s, border-color .12s; }
+    .dp-tab:hover { color: var(--blue); }
+    .dp-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    /* Identity-card tab strip (synced with the form tabs) */
+    .dp-idtabs { margin: 14px -20px -18px; padding: 2px 20px 0; border-top: 1px solid var(--border-soft); border-bottom: none; gap: 0; overflow-x: auto; }
+    .dp-idtabs .dp-tab { padding: 10px 14px 12px; }
+
+    /* Related records list */
+    .dp-rel-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; }
+    @media (max-width: 700px) { .dp-rel-list { grid-template-columns: 1fr; } }
+    .dp-rel-item { display: flex; align-items: flex-start; gap: 10px; }
+    .dp-rel-item .material-symbols-outlined { font-size: 20px; color: var(--blue); margin-top: 1px; }
+    .dp-rel-label { font-size: 9.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .dp-rel-val { font-size: 12.5px; color: var(--ink); font-weight: 500; }
+
+    /* New-stage intake form (Fluent high-density) */
+    .dp-intake { margin-top: 16px; border: 1px solid var(--border-soft); border-radius: var(--radius-md); background: var(--surface); padding: 16px 18px; box-shadow: var(--shadow2); }
+    .dp-intake-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 28px; }
+    @media (max-width: 760px) { .dp-intake-grid { grid-template-columns: 1fr; } }
+    .dp-intake-groups { display: block; }
+    .dp-intake-col { margin-bottom: 22px; }
+    .dp-intake-col:last-child { margin-bottom: 0; }
+    .dp-if-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 30px; }
+    @media (max-width: 720px) { .dp-if-fields { grid-template-columns: 1fr; } }
+    .dp-if-fields .dp-if-wide { grid-column: 1 / -1; }
+    .dp-intake-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border-soft); }
+    .dp-if { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+    .dp-if-label { font-size: 11.5px; color: var(--ink-secondary); font-weight: 500; }
+    .dp-if-req { color: var(--red); margin-left: 2px; font-weight: 700; }
+    .dp-if-area { min-height: 54px; resize: vertical; padding: 6px 9px; line-height: 1.4; }
+    .dp-if-lookup { position: relative; display: block; width: 100%; }
+    .dp-if-lookup .dp-if-input { padding-right: 28px; }
+    .dp-if-lk { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 15px; color: var(--ink-muted); pointer-events: none; }
+    .dp-if-upload, .dp-if-action { display: inline-flex; align-items: center; gap: 5px; width: 100%; justify-content: center; font-family: inherit; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: var(--borderRadiusMedium); cursor: pointer; }
+    .dp-if-upload { border: 1px dashed var(--colorNeutralStroke1); background: var(--colorNeutralBackground3); color: var(--ink-secondary); }
+    .dp-if-upload:hover { border-color: var(--blue); color: var(--blue); }
+    .dp-if-action { border: none; background: var(--blue); color: #fff; }
+    .dp-if-action:hover { background: var(--blue-dark); }
+    .dp-if-upload .material-symbols-outlined, .dp-if-action .material-symbols-outlined { font-size: 16px; }
+    .dp-if-sign { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; height: 30px; padding: 0 10px; border: 1px dashed var(--colorNeutralStroke1); border-radius: var(--borderRadiusMedium); color: var(--ink-muted); background: var(--colorNeutralBackground3); cursor: pointer; }
+    .dp-if-sign.done { border-style: solid; border-color: transparent; background: var(--green-soft); color: #0e700e; }
+    .dp-if-sign .material-symbols-outlined { font-size: 15px; }
+    .dp-if-check { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink); cursor: pointer; }
+    .dp-if-check input { width: 15px; height: 15px; accent-color: var(--blue); }
+
+    /* Test Drive Control Center */
+    .dp-tdc { border: 1px solid var(--border-soft); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow2); }
+    .dp-tdc-head { background: linear-gradient(135deg, #0a0e14, #16293c); color: #fff; padding: 14px 18px; }
+    .dp-tdc-title { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; }
+    .dp-tdc-title .material-symbols-outlined { font-size: 20px; color: var(--exeed-cyan); }
+    .dp-tdc-sub { font-size: 11.5px; opacity: .8; margin-top: 3px; }
+    .dp-tdc-modes { display: flex; gap: 6px; padding: 12px 18px 0; background: var(--surface); }
+    .dp-tdc-mode { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--borderRadiusMedium); background: var(--surface); color: var(--ink-secondary); cursor: pointer; transition: all .12s; }
+    .dp-tdc-mode .material-symbols-outlined { font-size: 17px; }
+    .dp-tdc-mode:hover { background: var(--bg); }
+    .dp-tdc-mode.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .dp-tdc-body { padding: 16px 18px 18px; background: var(--surface); }
+    .dp-tdc-hint { font-size: 12px; color: var(--ink-secondary); margin-bottom: 14px; }
+    .dp-tdc-meter { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .dp-tdc-meter-bar { flex: 1; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .dp-tdc-meter-fill { height: 100%; background: var(--amber); border-radius: 4px; transition: width .3s ease; }
+    .dp-tdc-meter-fill.full { background: linear-gradient(90deg, #5cb97f, #46a56b); }
+    .dp-tdc-meter-label { font-size: 11px; font-weight: 700; color: var(--ink-secondary); white-space: nowrap; }
+    .dp-tdc-checks { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .tdc-item { display: flex; align-items: center; gap: 11px; padding: 11px 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; transition: background .12s, border-color .12s; }
+    .tdc-item:hover { background: var(--bg); }
+    .tdc-item .tdc-check { font-size: 21px; color: var(--ink-muted); flex-shrink: 0; }
+    .tdc-item.done { border-color: #cdebd6; background: var(--green-soft); }
+    .tdc-item.done .tdc-check { color: #46a56b; }
+    .tdc-item.warn { border-color: #f4e2bf; background: var(--amber-soft); }
+    .tdc-item-body { flex: 1; min-width: 0; }
+    .tdc-item-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .tdc-item-sub { font-size: 11px; color: #8a6420; margin-top: 2px; }
+    .tdc-item-action { flex-shrink: 0; font-family: inherit; font-size: 11.5px; font-weight: 600; color: var(--blue); background: var(--surface); border: 1px solid var(--blue); border-radius: var(--borderRadiusMedium); padding: 5px 12px; cursor: pointer; }
+    .tdc-item-action:hover { background: var(--blue-soft); }
+    .dp-tdc-cta { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; font-family: inherit; font-size: 13px; font-weight: 600; padding: 11px; border: none; border-radius: var(--borderRadiusMedium); background: var(--blue); color: #fff; cursor: pointer; transition: background .12s; }
+    .dp-tdc-cta:hover { background: var(--blue-dark); }
+    .dp-tdc-cta .material-symbols-outlined { font-size: 18px; }
+    .dp-tdc-cta.locked { background: var(--colorNeutralBackground5); color: var(--ink-muted); cursor: not-allowed; }
+    .dp-tdc-foot { font-size: 11px; color: var(--ink-muted); text-align: center; margin-top: 8px; }
+    .dp-tdc-wa { margin: 4px 0 16px; }
+    /* Schedule wizard */
+    .sw-steps { display: flex; align-items: center; margin-bottom: 18px; }
+    .sw-step { display: flex; align-items: center; gap: 7px; }
+    .sw-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--ink-muted); background: var(--surface); flex-shrink: 0; }
+    .sw-dot .material-symbols-outlined { font-size: 13px; }
+    .sw-step.on .sw-dot { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .sw-step.done .sw-dot { border-color: #46a56b; background: #46a56b; color: #fff; }
+    .sw-slabel { font-size: 12px; font-weight: 600; color: var(--ink-secondary); white-space: nowrap; }
+    .sw-step.on .sw-slabel { color: var(--blue); }
+    .sw-step.done .sw-slabel { color: #2f7a4f; }
+    .sw-line { flex: 1; height: 2px; background: var(--border); margin: 0 10px; }
+    .sw-body { display: flex; flex-direction: column; gap: 10px; }
+    .sw-car { display: flex; justify-content: center; padding: 10px 0; }
+    .sw-car-svg { width: 220px; height: auto; }
+    .sw-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; }
+    .sw-nav .dp-tdc-cta { width: auto; padding: 9px 20px; }
+    .sw-nav .cp-btn { display: inline-flex; align-items: center; gap: 4px; }
+    .sw-nav .cp-btn .material-symbols-outlined { font-size: 15px; }
+    .sw-dt { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+    @media (max-width: 640px){ .sw-dt { grid-template-columns: 1fr; } }
+    .sw-cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+    .sw-cal-head button { border: none; background: none; cursor: pointer; color: var(--ink-secondary); display: flex; padding: 2px; border-radius: 4px; }
+    .sw-cal-head button:hover { background: var(--bg); }
+    .sw-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .sw-cal-dow { font-size: 9.5px; font-weight: 700; color: var(--ink-muted); text-align: center; padding-bottom: 4px; text-transform: uppercase; }
+    .sw-cal-day { border: none; background: none; font-family: inherit; font-size: 12px; color: var(--ink); aspect-ratio: 1; border-radius: 50%; cursor: pointer; transition: background .1s; }
+    .sw-cal-day:hover { background: var(--blue-soft); }
+    .sw-cal-day.sel { background: var(--blue); color: #fff; font-weight: 700; }
+    .sw-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 10px; color: var(--ink-muted); }
+    .sw-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+    .sw-legend i.free { background: #46a56b; } .sw-legend i.booked { background: var(--red); }
+    .sw-slots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; max-height: 230px; overflow-y: auto; }
+    .sw-slot { border: 1px solid var(--border); background: var(--surface); font-family: inherit; font-size: 11.5px; font-weight: 600; color: #2f7a4f; padding: 5px 6px; border-radius: var(--borderRadiusMedium); cursor: pointer; }
+    .sw-slot:hover { border-color: var(--blue); }
+    .sw-slot.booked { color: var(--red); background: var(--red-soft); border-color: transparent; cursor: not-allowed; text-decoration: line-through; }
+    .sw-slot.sel { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .sw-confirm p { font-size: 13px; color: var(--ink); line-height: 1.6; margin-bottom: 16px; }
+    .sw-contacts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px; }
+    .sw-hint { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
+    .sw-table-wrap { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .sw-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .sw-table th { text-align: left; padding: 8px 12px; background: var(--bg); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); border-bottom: 1px solid var(--border); }
+    .sw-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-soft); color: var(--ink); }
+    .sw-table tr:last-child td { border-bottom: none; }
+    .sw-badge { font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: var(--borderRadiusCircular); background: var(--green-soft); color: #0e700e; }
+    .sw-td-act { text-align: right; }
+    .sw-td-act .tdc-item-action { display: inline-flex; align-items: center; gap: 4px; }
+    .sw-td-act .material-symbols-outlined { font-size: 14px; }
+    .dp-if-input { width: 100%; padding: 5px 9px; font-family: inherit; font-size: 12.5px; color: var(--ink); background: var(--colorNeutralBackground3); border: 1px solid transparent; border-bottom-color: var(--colorNeutralStrokeAccessible); border-radius: var(--borderRadiusMedium); outline: none; transition: background .1s, border-color .1s; box-sizing: border-box; }
+    .dp-if-input:hover { background: var(--colorNeutralBackground4); }
+    .dp-if-input:focus { background: var(--surface); border-color: var(--border); border-bottom: 2px solid var(--colorCompoundBrandStroke); padding-bottom: 4px; }
+
+    /* Log activity action card */
+    .dp-logcard { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px 18px; margin-top: 14px; background: var(--surface); }
+    .dp-logcard-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+    .dp-logcard-desc { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.5; margin-bottom: 14px; }
+    .dp-logcard-desc strong { color: var(--ink); }
+    .dp-log-btn { appearance: none; border: 1px solid var(--colorBrandBackground); font-family: inherit; background: var(--colorBrandBackground); color: var(--colorNeutralForegroundOnBrand); font-size: var(--fontSizeBase300); font-weight: 600; padding: 5px 14px; border-radius: var(--borderRadiusMedium); cursor: pointer; transition: background .1s; white-space: nowrap; }
+    .dp-log-btn:hover { background: var(--colorBrandBackgroundHover); border-color: var(--colorBrandBackgroundHover); }
+
     /* Step detail */
     .dp-step-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .dp-step-label { font-size: 11px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: .05em; }
     .dp-step-title { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
-    .dp-step-actions { display: flex; gap: 6px; }
-    .dp-step-badge { padding: 4px 12px; border-radius: 10px; font-size: 10.5px; font-weight: 600; }
+    .dp-step-actions { display: flex; gap: 10px; align-items: center; }
+    .dp-step-hint { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--ink-secondary); min-width: 0; }
+    .dp-step-hint .material-symbols-outlined { font-size: 18px; color: var(--blue); flex-shrink: 0; }
+    .dp-step-badge { padding: 3px 10px; border-radius: var(--borderRadiusMedium); font-size: 10.5px; font-weight: 600; }
     .dp-step-badge.completed { background: var(--green-soft); color: #3d8a5b; }
     .dp-step-badge.progress { background: var(--blue-soft); color: var(--blue); }
     .dp-step-badge.pending { background: var(--bg); color: var(--ink-muted); }
@@ -218,6 +563,8 @@
     .dp-content-grid.single { grid-template-columns: 1fr; }
 
     /* Essential info */
+    .dp-step-content { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; align-items: start; }
+    @media (max-width: 1200px) { .dp-step-content { grid-template-columns: 1fr; } }
     .dp-essential { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; }
     .dp-essential-title { font-size: 12px; font-weight: 700; margin-bottom: 3px; }
     .dp-essential-sub { font-size: 11px; color: var(--ink-muted); margin-bottom: 12px; }
@@ -225,10 +572,38 @@
     .dp-info-label { font-size: 9.5px; font-weight: 500; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 2px; }
     .dp-info-value { font-size: 12.5px; color: var(--ink); }
     .dp-info-value.link { color: var(--blue); cursor: pointer; }
+    .editable { cursor: text; border-radius: 5px; padding: 1px 5px; margin: -1px -5px; outline: none; transition: background .12s, box-shadow .12s; }
+    .editable:hover { background: var(--blue-soft); }
+    .editable:focus { background: #fff; box-shadow: 0 0 0 2px var(--blue); cursor: text; }
+    .dp-name.editable { display: inline-block; }
+    /* 2-column layout: main + top-right sidebar */
+    .dp-layout { display: flex; flex-wrap: wrap; gap: 18px; align-items: stretch; }
+    .dp-main { flex: 2.8 1 340px; min-width: 0; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-md); box-shadow: var(--shadow2); display: flex; flex-direction: column; }
+    .dp-main-scroll { flex: 1; padding: 16px 18px 8px; min-width: 0; }
+    .dp-main-foot { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--radius-md) var(--radius-md); }
+    .dp-side { flex: 1 1 240px; min-width: 230px; }
+    /* Header metrics (top-right corner) */
+    .dp-head-metrics { display: flex; gap: 28px; margin-left: auto; flex-shrink: 0; padding-top: 2px; text-align: right; }
+    .dp-hm-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 3px; }
+    .dp-hm-val { font-size: 22px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+    .dp-hm-val.green { color: #3d8a5b; }
+    .dp-hm-val.amber { color: var(--amber); }
+    .dp-hm-sub { font-size: 9.5px; color: var(--ink-muted); margin-top: 1px; }
+    /* Lead info one-liner */
+    .dp-kpiline { display: flex; flex-wrap: wrap; gap: 8px 30px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border-soft); font-size: 12.5px; align-items: baseline; }
+    .dp-kpi-card { border: 1px solid var(--border-soft); border-radius: var(--radius-md); background: var(--surface); padding: 6px 14px; margin-bottom: 14px; box-shadow: var(--shadow2); }
+    .dp-kpi-item { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); }
+    .dp-kpi-item:last-child { border-bottom: none; }
+    .dp-kpi-l { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .dp-kpi-v { font-size: 13px; font-weight: 700; color: var(--ink); text-align: right; }
+    .dp-kpi-sub { font-size: 10.5px; font-weight: 600; color: var(--ink-muted); }
+    .kli { white-space: nowrap; }
+    .kli-l { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .kli-v { font-weight: 700; color: var(--ink); }
     .dp-info-value .hot-badge { display: inline-block; padding: 1px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; background: var(--red-soft); color: var(--red); margin-left: 4px; }
 
     /* AI card */
-    .dp-ai-card { background: linear-gradient(135deg, #f3f1fe, #f9f0fd); border: 1px solid #ddd5f5; border-radius: var(--radius-sm); padding: 14px; }
+    .dp-ai-card { background: linear-gradient(135deg, #f3f1fe, #f9f0fd); border: 1px solid #ddd5f5; border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow2); }
     .dp-ai-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
     .dp-ai-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #7c6dd8; display: flex; align-items: center; gap: 5px; }
     .dp-ai-label .material-symbols-outlined { font-size: 14px; }
@@ -238,7 +613,7 @@
     .dp-ai-desc strong { color: #4c3a96; }
     .dp-ai-btn { display: block; width: 100%; padding: 9px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; text-align: center; margin-bottom: 6px; transition: all .15s; }
     .dp-ai-btn.primary { background: linear-gradient(135deg, #7c6dd8, #a78bfa); color: #fff; }
-    .dp-ai-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(124,109,216,.25); }
+    .dp-ai-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(124,109,216,.12); }
     .dp-ai-btn.secondary { background: #fff; color: #7c6dd8; border: 1px solid #c5b8e8; }
     .dp-ai-btn.secondary:hover { background: #f5f0ff; }
     .dp-ai-note { font-size: 10px; color: #8b7bba; margin-top: 8px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; }
@@ -246,7 +621,15 @@
 
     /* Checklist */
     .dp-checklist { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; }
-    .dp-checklist-title { font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+    .dp-checklist-title { font-size: 12px; font-weight: 700; }
+    .dp-checklist-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .dp-checklist-prog { font-size: 11px; font-weight: 700; color: var(--ink-secondary); white-space: nowrap; }
+    .dp-checklist-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 10px; }
+    .dp-checklist-bar-fill { height: 100%; background: var(--green); border-radius: 3px; transition: width .3s ease; }
+    .dp-bottom-btn.fill.locked { background: var(--bg); color: var(--ink-muted); box-shadow: none; cursor: default; }
+    .dp-bottom-btn.fill.locked .material-symbols-outlined { color: var(--ink-muted); }
+    @keyframes dp-nudge { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-4px)} 60%{transform:translateX(4px)} }
+    .dp-bottom-btn.nudge { animation: dp-nudge .32s; }
     .dp-check-item { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 12.5px; }
     .dp-check-item .material-symbols-outlined { font-size: 18px; }
     .dp-check-item.done { color: var(--ink-muted); text-decoration: line-through; }
@@ -258,6 +641,9 @@
     .dp-act-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .dp-act-title { font-size: 11.5px; font-weight: 700; }
     .dp-act-more { font-size: 10.5px; color: var(--ink-muted); }
+    .dp-act-actions { font-size: 10.5px; color: var(--ink-muted); }
+    .dp-act-actions a { color: var(--blue); font-weight: 600; cursor: pointer; text-decoration: none; padding: 0 2px; }
+    .dp-act-actions a:hover { text-decoration: underline; }
     .dp-act-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); }
     .dp-act-item:last-child { border-bottom: none; }
     .dp-act-type { padding: 2px 8px; border-radius: 6px; font-size: 9px; font-weight: 700; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
@@ -269,8 +655,11 @@
     .dp-act-time { font-size: 9.5px; color: var(--ink-muted); margin-top: 2px; }
 
     /* Bottom nav */
-    .dp-bottom { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
-    .dp-bottom-btn { padding: 7px 18px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; transition: all .12s; }
+    .dp-bottom { display: flex; align-items: center; gap: 18px; padding: 12px 20px; border-top: 1px solid var(--border); background: var(--surface); flex-shrink: 0; }
+    .dp-bottom-inner { flex: 2 1 360px; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .dp-bottom-spacer { flex: 1 1 320px; min-width: 0; }
+    @media (max-width: 900px) { .dp-bottom-spacer { display: none; } }
+    .dp-bottom-btn { padding: 6px 16px; border-radius: var(--borderRadiusMedium); font-size: var(--fontSizeBase300); font-weight: 600; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; transition: all .1s; }
     .dp-bottom-btn.ghost { border: none; background: none; color: var(--ink-secondary); }
     .dp-bottom-btn.ghost:hover { color: var(--ink); background: var(--bg); }
     .dp-bottom-btn.outline { border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary); }
@@ -279,7 +668,7 @@
     .dp-bottom-btn.fill:hover { background: #0f1d2c; }
     .dp-bottom-btn .material-symbols-outlined { font-size: 15px; }
 
-    .panel-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.15); z-index: 14; }
+    .panel-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.06); z-index: 14; }
     .panel-overlay.show { display: block; }
 
     @media (max-width: 1100px) {
@@ -293,7 +682,7 @@
     /* Confirm dialog + toast */
     .confirm-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.45); display: none; align-items: center; justify-content: center; z-index: 60; }
     .confirm-overlay.show { display: flex; }
-    .confirm-box { background: #fff; border-radius: 14px; width: 360px; max-width: 90vw; padding: 24px; text-align: center; box-shadow: 0 20px 60px rgba(20,24,34,.3); animation: cop-in .2s ease; }
+    .confirm-box { background: #fff; border-radius: 14px; width: 360px; max-width: 90vw; padding: 24px; text-align: center; box-shadow: 0 20px 60px rgba(20,24,34,.12); animation: cop-in .2s ease; }
     @keyframes cop-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
     .confirm-icon { width: 48px; height: 48px; border-radius: 50%; background: var(--red-soft); color: var(--red); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
     .confirm-icon .material-symbols-outlined { font-size: 26px; }
@@ -304,12 +693,12 @@
     .confirm-btn.cancel:hover { border-color: var(--ink-muted); }
     .confirm-btn.danger { background: var(--red); color: #fff; border-color: var(--red); }
     .confirm-btn.danger:hover { background: #d85a5a; }
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 500; padding: 11px 18px; border-radius: 10px; box-shadow: 0 8px 28px rgba(20,24,34,.3); display: flex; align-items: center; gap: 8px; opacity: 0; visibility: hidden; transition: all .3s ease; z-index: 70; }
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 500; padding: 11px 18px; border-radius: 10px; box-shadow: 0 8px 28px rgba(20,24,34,.12); display: flex; align-items: center; gap: 8px; opacity: 0; visibility: hidden; transition: all .3s ease; z-index: 70; }
     .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
     .toast .material-symbols-outlined { font-size: 18px; color: var(--green); }
     .create-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.35); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 40; }
     .create-overlay.show { opacity: 1; visibility: visible; }
-    .create-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 460px; max-width: 92vw; background: var(--surface); box-shadow: -8px 0 32px rgba(20,24,34,.14); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); z-index: 50; display: flex; flex-direction: column; }
+    .create-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 460px; max-width: 92vw; background: var(--surface); box-shadow: -8px 0 32px rgba(20,24,34,.06); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); z-index: 50; display: flex; flex-direction: column; }
     .create-panel.open { transform: translateX(0); }
     .cp-header { display: flex; align-items: flex-start; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .cp-title { font-size: 15px; font-weight: 700; color: var(--ink); }
@@ -323,15 +712,30 @@
     .cp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .cp-label { display: block; font-size: 11px; font-weight: 600; color: var(--ink-secondary); margin-bottom: 5px; }
     .cp-label .req { color: var(--red); margin-left: 1px; }
-    .cp-input, .cp-select, .cp-textarea { width: 100%; padding: 8px 11px; border: 1px solid var(--border); border-radius: 8px; font-size: 12.5px; font-family: inherit; color: var(--ink); outline: none; background: var(--surface); transition: border-color .15s; box-sizing: border-box; }
-    .cp-input:focus, .cp-select:focus, .cp-textarea:focus { border-color: var(--blue); }
+    .cp-input, .cp-select, .cp-textarea { width: 100%; padding: 6px 11px; border: 1px solid transparent; border-bottom-color: var(--colorNeutralStrokeAccessible); border-radius: var(--borderRadiusMedium); font-size: var(--fontSizeBase300); font-family: inherit; color: var(--ink); outline: none; background: var(--colorNeutralBackground3); transition: background .1s, border-color .1s; box-sizing: border-box; }
+    .cp-input:hover, .cp-select:hover, .cp-textarea:hover { background: var(--colorNeutralBackground4); }
+    .cp-input:focus, .cp-select:focus, .cp-textarea:focus { background: var(--surface); border-color: var(--border); border-bottom: 2px solid var(--colorCompoundBrandStroke); padding-bottom: 5px; }
+    /* Log activity — Yes/No + outcome chips */
+    .la-yn-row { display: flex; gap: 10px; }
+    .la-yn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-family: inherit; font-size: 13px; font-weight: 600; padding: 9px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--ink-secondary); cursor: pointer; transition: all .12s; }
+    .la-yn .material-symbols-outlined { font-size: 17px; }
+    .la-yn:hover { background: var(--bg); }
+    .la-yn.on { border-color: #46a56b; background: var(--green-soft); color: #2f7a4f; }
+    .la-yn.on.no { border-color: var(--red); background: var(--red-soft); color: var(--red); }
+    .la-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .la-chip { font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--borderRadiusCircular); background: var(--surface); color: var(--ink-secondary); cursor: pointer; transition: all .12s; }
+    .la-chip:hover { border-color: var(--blue); color: var(--blue); }
+    .la-chip.on { background: var(--green-soft); border-color: #46a56b; color: #2f7a4f; }
+    .la-hint { font-size: 11.5px; color: var(--blue); margin-top: 4px; }
+    .la-hint.ok { color: #2f7a4f; font-weight: 600; }
+    .la-hint.danger { color: var(--red); font-weight: 600; }
     .cp-input::placeholder, .cp-textarea::placeholder { color: var(--ink-muted); }
     .cp-textarea { resize: vertical; min-height: 62px; }
     .cp-footer { display: flex; gap: 10px; justify-content: flex-end; padding: 14px 20px; border-top: 1px solid var(--border); flex-shrink: 0; }
-    .cp-btn { padding: 8px 18px; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary); transition: all .12s; }
-    .cp-btn:hover { border-color: var(--ink-muted); }
-    .cp-btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .cp-btn.primary:hover { background: #0f1d2c; border-color: #0f1d2c; }
+    .cp-btn { padding: 6px 16px; border-radius: var(--borderRadiusMedium); font-size: var(--fontSizeBase300); font-weight: 600; cursor: pointer; font-family: inherit; border: 1px solid var(--colorNeutralStroke1); background: var(--surface); color: var(--ink); transition: all .1s; }
+    .cp-btn:hover { background: var(--colorNeutralBackground1Hover); }
+    .cp-btn.primary { background: var(--colorBrandBackground); color: #fff; border-color: var(--colorBrandBackground); }
+    .cp-btn.primary:hover { background: var(--colorBrandBackgroundHover); border-color: var(--colorBrandBackgroundHover); }
 
     /* ── Collapsible icon-rail sidebar ── */
     .sidebar, .main { transition: width .25s ease, margin-left .25s ease; }
@@ -356,8 +760,6 @@
   <div class="topbar">
     <span class="waffle" onclick="toggleSidebar()">&#9783;</span>
     <span class="app-name">Dynamics 365</span>
-    <span class="sep"></span>
-    <img src="logo.png" alt="Al Ghurair" class="tb-logo" style="height:20px;width:auto;display:block;opacity:.95" />
     <span class="sep"></span>
     <span class="org">AGM Sales</span>
     <input class="search" type="text" placeholder="&#128269; Search..." />
@@ -432,13 +834,17 @@
             <div class="list-title-row">
               <h1>My Active Leads <span class="lead-count">12 leads</span></h1>
               <div class="list-actions">
+                <div class="view-toggle">
+                  <button class="vt on" id="vtList" onclick="setView('list')"><span class="material-symbols-outlined">table_rows</span> List</button>
+                  <button class="vt" id="vtPipe" onclick="setView('pipeline')"><span class="material-symbols-outlined">view_kanban</span> Pipeline</button>
+                </div>
                 <button class="list-btn"><span class="material-symbols-outlined">filter_list</span> Filter</button>
                 <button class="list-btn"><span class="material-symbols-outlined">sort</span> Sort</button>
                 <button class="list-btn primary" onclick="openCreateLead()"><span class="material-symbols-outlined">add</span> New lead</button>
               </div>
             </div>
           </div>
-          <div class="list-filters">
+          <div class="list-filters" id="listFilters">
             <button class="filter-chip on" onclick="filterLeads(this,'all')">All <span style="font-weight:400;opacity:.7;margin-left:2px">12</span></button>
             <button class="filter-chip" onclick="filterLeads(this,'new')">New <span style="font-weight:400;opacity:.7;margin-left:2px">5</span></button>
             <button class="filter-chip" onclick="filterLeads(this,'contacted')">Contacted <span style="font-weight:400;opacity:.7;margin-left:2px">3</span></button>
@@ -446,31 +852,21 @@
             <button class="filter-chip" onclick="filterLeads(this,'nurture')">Nurture <span style="font-weight:400;opacity:.7;margin-left:2px">2</span></button>
             <input class="filter-search" type="text" placeholder="Search leads..." oninput="searchLeads(this.value)" />
           </div>
-          <div class="leads-table-wrap">
+          <div class="leads-table-wrap" id="tableWrap">
             <table class="leads-table" id="leadsTable">
-              <thead><tr><th class="chk-cell"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th><th>Lead</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Stage</th><th>Intent</th><th>Owner</th></tr></thead>
+              <thead><tr><th class="chk-cell"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th><th>Lead</th><th>Lead ID</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Stage</th><th>Mobile</th><th>Owner</th><th></th></tr></thead>
               <tbody id="leadsBody"></tbody>
             </table>
+          </div>
+          <div class="pipeline-wrap" id="pipelineWrap" style="display:none">
+            <div class="pipeline-board" id="pipelineBoard"></div>
           </div>
         </div>
 
         <div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
 
         <div class="detail-panel" id="detailPanel">
-          <div class="dp-header">
-            <span class="dp-header-title" id="dpTitle">Lead details</span>
-            <button class="dp-header-btn" title="Edit lead" onclick="openEditLead(selectedIdx)"><span class="material-symbols-outlined">edit</span></button>
-            <button class="dp-header-btn" title="Expand" onclick="toggleExpand()"><span class="material-symbols-outlined" id="expandIcon">open_in_full</span></button>
-            <button class="dp-header-btn" title="Close" onclick="closePanel()"><span class="material-symbols-outlined">close</span></button>
-          </div>
           <div class="dp-body" id="dpBody"></div>
-          <div class="dp-bottom" id="dpBottom" style="display:none">
-            <button class="dp-bottom-btn ghost" onclick="navStep(-1)"><span class="material-symbols-outlined">arrow_back</span> Previous step</button>
-            <div style="display:flex;gap:8px">
-              <button class="dp-bottom-btn outline">Skip for now</button>
-              <button class="dp-bottom-btn fill" id="dpNextBtn" onclick="navStep(1)">Save &amp; continue <span class="material-symbols-outlined">arrow_forward</span></button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -488,6 +884,23 @@
     </div>
   </div>
   <div class="toast" id="toast"></div>
+
+  <!-- Genesys CTI softphone (Channel Integration Framework hand-off) -->
+  <div class="cti-panel" id="ctiPanel">
+    <div class="cti-head"><span class="cti-brand"><span class="material-symbols-outlined">headset_mic</span>Genesys CTI</span><span class="cti-status" id="ctiStatus">Connecting…</span></div>
+    <div class="cti-body">
+      <div class="cti-av" id="ctiAv">?</div>
+      <div class="cti-name" id="ctiName">—</div>
+      <div class="cti-num" id="ctiNum">—</div>
+      <div class="cti-timer" id="ctiTimer">00:00</div>
+    </div>
+    <div class="cti-controls">
+      <button class="cti-ctrl" title="Mute"><span class="material-symbols-outlined">mic_off</span></button>
+      <button class="cti-ctrl" title="Keypad"><span class="material-symbols-outlined">dialpad</span></button>
+      <button class="cti-ctrl hangup" title="End call" onclick="closeCti()"><span class="material-symbols-outlined">call_end</span></button>
+    </div>
+    <div class="cti-foot">Call handled by Genesys &middot; logged to activity timeline</div>
+  </div>
 
   <div class="create-overlay" id="createOverlay" onclick="closeCreateLead()"></div>
   <div class="create-panel" id="createPanel" role="dialog" aria-label="Create lead">
@@ -553,6 +966,42 @@
     </div>
   </div>
 
+  <div class="create-overlay" id="logOverlay" onclick="closeLogActivity()"></div>
+  <div class="create-panel" id="logPanel" role="dialog" aria-label="Log activity" style="max-width:460px">
+    <div class="cp-header">
+      <div style="flex:1">
+        <div class="cp-title">Log activity</div>
+        <div class="cp-sub" id="logSub">Record the outcome of this step</div>
+      </div>
+      <button class="dp-header-btn" title="Close" onclick="closeLogActivity()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="cp-body">
+      <div class="cp-field">
+        <label class="cp-label">Did the customer answer?</label>
+        <div class="la-yn-row">
+          <button class="la-yn" id="laYes" onclick="setLaAnswer('yes')"><span class="material-symbols-outlined">check</span> Yes</button>
+          <button class="la-yn" id="laNo" onclick="setLaAnswer('no')"><span class="material-symbols-outlined">close</span> No</button>
+        </div>
+      </div>
+      <div class="cp-field" id="laOutcomeWrap">
+        <label class="cp-label">Outcome</label>
+        <div class="la-chips" id="laChips">
+          <button class="la-chip" data-out="Interested" onclick="setLaOutcome(this)">Interested</button>
+          <button class="la-chip" data-out="Needs time" onclick="setLaOutcome(this)">Needs time</button>
+          <button class="la-chip" data-out="Compare" onclick="setLaOutcome(this)">Compare</button>
+          <button class="la-chip" data-out="Book test drive" onclick="setLaOutcome(this)">Book test drive</button>
+        </div>
+      </div>
+      <div class="cp-field"><label class="cp-label">Notes</label><textarea class="cp-textarea" id="laNotes" placeholder="Conversation summary…"></textarea></div>
+      <div class="la-hint" id="laHint">Saving will move the lead to the next stage.</div>
+      <div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
+    </div>
+    <div class="cp-footer">
+      <button class="cp-btn" onclick="closeLogActivity()">Cancel</button>
+      <button class="cp-btn primary" onclick="submitLogActivity()">Save activity</button>
+    </div>
+  </div>
+
   <script>
     var leads = [
       { id:'L-2026-04832', name:'Hiren Patel', initials:'HP', av:'av2', phone:'+971 50 482 9120', email:'hiren.patel@email.ae', emiratesId:'784-1985-9123847-2', source:'Website — Configurator', srcClass:'web', srcIcon:'W', model:'EXEED LX · Luxury', sla:'Met', slaClass:'ok', slaTime:'Completed 09:33', stage:'Discovery', stageClass:'qualified', stageNum:'Discovery', intent:'High', intentClass:'high', owner:'Mariam Saeed', bpfStage:5, score:72, profileComplete:84, convertProb:72, discovery:62, channel:'WhatsApp', lang:'English', campaign:'Ramadan EXEED LX Promo', temp:'Hot', existing:'Yes · NPS 9', showroom:'SZR Showroom — Dubai', handover:'Accepted by Mariam Saeed', preferred:'WhatsApp', nps:'9', activities:[{type:'whatsapp',text:'Customer confirmed weekend availability fo…',time:'2026-06-29 18:12'},{type:'call',text:'Discovery call — budget AED 3-4k/month, comp…',time:'2026-06-28 10:18'},{type:'visit',text:'Walk-in — viewed LX & TXL, took broch…',time:'2026-06-26 14:05'}] },
@@ -570,28 +1019,134 @@
     ];
 
     var journeySteps = [
-      {name:'Handover',icon:'handshake'},
-      {name:'SLA',icon:'timer'},
-      {name:'First Contact',icon:'call'},
-      {name:'Reception',icon:'storefront'},
-      {name:'Discovery',icon:'search'},
-      {name:'Offer',icon:'request_quote'},
-      {name:'Booking',icon:'event_available'},
-      {name:'Delivery',icon:'local_shipping'}
+      {name:'New',icon:'fiber_new'},
+      {name:'Contact',icon:'forum'},
+      {name:'Qualify',icon:'fact_check'},
+      {name:'Nurture → Visit',icon:'storefront'},
+      {name:'Propose',icon:'request_quote'},
+      {name:'Accepted',icon:'handshake'},
+      {name:'Ready for delivery',icon:'local_shipping'},
+      {name:'Close',icon:'flag'}
     ];
 
     var stepDetails = [
-      {title:'Qualified Lead Handover', fields:['customer','emiratesId','mobile','email','lang','preferred','source','model','temp','showroom','handover','existing'], checklist:['Lead pack received from call center','No duplicate match','Accept or return lead with reason'], aiTitle:'Accept this qualified lead', aiDesc:'Call center has handed over a <strong>Hot</strong> lead with all mandatory fields filled. Accept to start the SLA clock with you as the owner.', aiBtns:['Accept Lead','Return to Call Center'], aiNote:'Lead must be accepted or returned with a reason.'},
-      {title:'SLA Compliance', fields:['customer','mobile','email','showroom','channel'], checklist:['First contact within SLA window','Customer acknowledged','SLA status recorded'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
-      {title:'First Contact', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Introduction call/message sent','Customer responded','Interest level confirmed','Appointment offered'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
-      {title:'Reception & Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Customer arrived at showroom','Welcome & refreshments','Vehicle walkthrough started','Test drive offered'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
-      {title:'Discovery & Needs Analysis', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Needs assessment completed','Budget discussion done','Trade-in evaluated','Finance options presented','Test drive completed'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
-      {title:'Offer & Quotation', fields:['customer','model','source','showroom'], checklist:['Quote generated','Finance breakdown shared','Trade-in value confirmed','Customer reviewed offer','Negotiation logged'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
-      {title:'Booking & Confirmation', fields:['customer','model','showroom'], checklist:['Booking deposit received','Order confirmed in system','Delivery date agreed','Insurance arranged','Registration initiated'], aiTitle:'Confirm the booking', aiDesc:'Customer is ready to proceed. <strong>Collect the deposit</strong> and confirm the order in the system.', aiBtns:['Confirm Booking','Hold Order'], aiNote:'Deposit must be received to proceed.'},
-      {title:'Red-Carpet Delivery & Loyalty', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:['Welcome & red-carpet greeting','Document signing','Feature orientation completed','Keys & documents handed over','3 / 7 / 30 day follow-ups scheduled'], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
+      {title:'New Lead Intake', fields:['customer','emiratesId','mobile','email','lang','preferred','source','model','temp','showroom','handover','existing'], checklist:['Lead pack received from call center','No duplicate match','Accept or return lead with reason'], aiTitle:'Accept this qualified lead', aiDesc:'Call center has handed over a <strong>Hot</strong> lead with all mandatory fields filled. Accept to start the SLA clock with you as the owner.', aiBtns:['Accept Lead','Return to Call Center'], aiNote:'Lead must be accepted or returned with a reason.'},
+      {title:'First Contact', fields:['customer','mobile','email','showroom','channel'], checklist:['First contact within SLA window','Customer acknowledged','SLA status recorded'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
+      {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Introduction call/message sent','Customer responded','Interest level confirmed','Appointment offered'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
+      {title:'Nurture & Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Customer arrived at showroom','Welcome & refreshments','Vehicle walkthrough started','Test drive offered'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
+      {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Needs assessment completed','Budget discussion done','Trade-in evaluated','Finance options presented','Test drive completed'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
+      {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['Quote generated','Finance breakdown shared','Trade-in value confirmed','Customer reviewed offer','Negotiation logged'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
+      {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:['Booking deposit received','Order confirmed in system','Delivery date agreed','Insurance arranged','Registration initiated'], aiTitle:'Confirm the booking', aiDesc:'Customer is ready to proceed. <strong>Collect the deposit</strong> and confirm the order in the system.', aiBtns:['Confirm Booking','Hold Order'], aiNote:'Deposit must be received to proceed.'},
+      {title:'Close — Won / Lost', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:['Welcome & red-carpet greeting','Document signing','Feature orientation completed','Keys & documents handed over','3 / 7 / 30 day follow-ups scheduled'], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
     ];
 
-    var selectedIdx = -1, isExpanded = false, currentStep = 0;
+    var logPrompts = [
+      {title:'Log the outcome of first contact', desc:'Attempt to reach the customer within SLA, then record whether they answered. Answering moves the lead to <strong>Contact</strong>.'},
+      {title:'Log the contact outcome', desc:'Record the result of your outreach and confirm the customer acknowledged the conversation.'},
+      {title:'Log the qualification call', desc:'Capture the customer’s interest level and whether an appointment was offered.'},
+      {title:'Log the showroom visit', desc:'Record arrival, the vehicle walkthrough and whether a test drive was taken.'},
+      {title:'Log the discovery outcome', desc:'Capture needs, budget and finance discussion from this session.'},
+      {title:'Log the negotiation', desc:'Record the offer shared and the customer’s response.'},
+      {title:'Log the booking activity', desc:'Record deposit collection and order confirmation.'},
+      {title:'Log the handover', desc:'Record delivery, feature orientation and the follow-ups scheduled.'}
+    ];
+
+    var selectedIdx = -1, isExpanded = false, currentStep = 0, leadTab = 'overview', stepperStyle = 'circles';
+    var tdMode = 'start';
+    var tdChecks = { checkin:true, license:true, waiver:false, vehicle:true, route:true, briefing:false };
+    function setTdMode(m){ tdMode = m; renderDetail(selectedIdx, currentStep); }
+    function toggleTdCheck(k){ tdChecks[k] = !tdChecks[k]; renderDetail(selectedIdx, currentStep); }
+    function signWaiver(e){ if(e) e.stopPropagation(); tdChecks.waiver = true; renderDetail(selectedIdx, currentStep); showToast('Waiver signed'); }
+    function tdStart(){ showToast('Test drive started — timer running'); }
+    function tdDecline(){ showToast('Logged — follow-up scheduled'); }
+
+    // ── Schedule test-drive wizard ──
+    var tdSchedStep = 1, tdSchedView = 'wizard', tdEditIdx = -1;
+    var tdSched = { model:null, date:null, time:null };
+    var tdBookings = [];
+    var tdCalY = 2026, tdCalM = 6; // July 2026
+    function schedRerender(){ renderDetail(selectedIdx, currentStep); }
+    function schedStepGo(n){ tdSchedStep = n; schedRerender(); }
+    function schedNext(){ if (tdSchedStep < 3) tdSchedStep++; schedRerender(); }
+    function schedBack(){ if (tdSchedStep > 1) tdSchedStep--; schedRerender(); }
+    function calNav(d){ tdCalM += d; if (tdCalM < 0){ tdCalM = 11; tdCalY--; } if (tdCalM > 11){ tdCalM = 0; tdCalY++; } schedRerender(); }
+    function selectCalDay(iso){ tdSched.date = iso; schedRerender(); }
+    function selectTimeSlot(t){ tdSched.time = t; schedRerender(); }
+    function newBooking(){ tdEditIdx = -1; tdSched = { model:null, date:null, time:null }; tdSchedStep = 1; tdSchedView = 'wizard'; schedRerender(); }
+    function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdSchedStep = 2; tdSchedView = 'wizard'; schedRerender(); }
+    function schedDone(){
+      if (!tdSched.date || !tdSched.time){ tdSchedStep = 2; schedRerender(); return; }
+      var l = leads[selectedIdx];
+      var booking = { model:tdSched.model || l.model, date:tdSched.date, time:tdSched.time, location:l.showroom, status:'Confirmed' };
+      if (tdEditIdx >= 0){ tdBookings[tdEditIdx] = booking; showToast('Test drive rescheduled'); }
+      else { tdBookings.push(booking); showToast('Test drive booked — confirmation sent'); }
+      l.activities = l.activities || [];
+      l.activities.unshift({ type:'visit', text:'Test drive '+(tdEditIdx>=0?'rescheduled':'booked')+' — '+booking.date+' '+booking.time, time:'2026-07-07 12:00' });
+      tdEditIdx = -1; tdSchedView = 'list';
+      schedRerender();
+    }
+    function schedCalendarHtml(){
+      var first = new Date(tdCalY, tdCalM, 1);
+      var startDay = (first.getDay() + 6) % 7; // Mon=0
+      var days = new Date(tdCalY, tdCalM + 1, 0).getDate();
+      var name = first.toLocaleString('en-US', { month:'long', year:'numeric' });
+      var h = '<div class="sw-cal-head"><button onclick="calNav(-1)"><span class="material-symbols-outlined">chevron_left</span></button><span>'+name+'</span><button onclick="calNav(1)"><span class="material-symbols-outlined">chevron_right</span></button></div>';
+      h += '<div class="sw-cal-grid">';
+      ['Mo','Tu','We','Th','Fr','Sa','Su'].forEach(function(d){ h += '<span class="sw-cal-dow">'+d+'</span>'; });
+      for (var i=0;i<startDay;i++) h += '<span></span>';
+      for (var d=1; d<=days; d++){
+        var iso = tdCalY+'-'+String(tdCalM+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+        h += '<button class="sw-cal-day'+(tdSched.date===iso?' sel':'')+'" onclick="selectCalDay(\''+iso+'\')">'+d+'</button>';
+      }
+      return h + '</div>';
+    }
+    function schedSlotsHtml(){
+      var slots = []; for (var hh=8; hh<=19; hh++){ slots.push(hh+':00'); slots.push(hh+':30'); }
+      return '<div class="sw-slots-grid">' + slots.map(function(t,i){
+        var booked = (i*3) % 7 === 0;
+        return '<button class="sw-slot'+(booked?' booked':'')+(tdSched.time===t?' sel':'')+'"'+(booked?' disabled':' onclick="selectTimeSlot(\''+t+'\')"')+'>'+t+'</button>';
+      }).join('') + '</div>';
+    }
+    function scheduleWizard(l){
+      if (tdSchedView === 'list' && tdBookings.length){
+        var rows = tdBookings.map(function(b,i){
+          return '<tr><td><strong>'+b.model+'</strong></td><td>'+b.date+'</td><td>'+b.time+'</td><td>'+b.location+'</td>' +
+            '<td><span class="sw-badge">'+b.status+'</span></td>' +
+            '<td class="sw-td-act"><button class="tdc-item-action" onclick="reschedule('+i+')"><span class="material-symbols-outlined">event_repeat</span>Reschedule</button></td></tr>';
+        }).join('');
+        return '<div class="sw-hint">Scheduled test drives</div>' +
+          '<div class="sw-table-wrap"><table class="sw-table"><thead><tr><th>Vehicle</th><th>Date</th><th>Time</th><th>Location</th><th>Status</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>' +
+          '<button class="dp-tdc-cta" style="margin-top:14px" onclick="newBooking()"><span class="material-symbols-outlined">add</span>Schedule another</button>';
+      }
+      if (!tdSched.model) tdSched.model = l.model;
+      var steps = ['Vehicle','Date & time','Confirmation'];
+      var head = '<div class="sw-steps">' + steps.map(function(s,i){
+        var n=i+1, cls = tdSchedStep>n?'done':(tdSchedStep===n?'on':'');
+        return '<div class="sw-step '+cls+'"><span class="sw-dot">'+(tdSchedStep>n?'<span class="material-symbols-outlined">check</span>':n)+'</span><span class="sw-slabel">'+s+'</span></div>';
+      }).join('<span class="sw-line"></span>') + '</div>';
+      var body;
+      if (tdSchedStep === 1){
+        var carSvg = '<svg viewBox="0 0 240 90" class="sw-car-svg"><path d="M18 66 Q22 44 48 42 L70 40 Q88 26 118 26 Q150 26 172 42 L206 46 Q224 50 224 64 L224 68 L18 68 Z" fill="#cfd6de"/><path d="M74 41 Q90 30 116 30 L116 42 Z" fill="#eef1f5"/><path d="M120 30 Q146 30 166 43 L120 43 Z" fill="#eef1f5"/><circle cx="64" cy="68" r="13" fill="#2d3340"/><circle cx="64" cy="68" r="6" fill="#8a929c"/><circle cx="184" cy="68" r="13" fill="#2d3340"/><circle cx="184" cy="68" r="6" fill="#8a929c"/></svg>';
+        body = '<div class="sw-body"><label class="cp-label">Vehicle</label>' +
+          '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
+          '<div class="sw-car">'+carSvg+'</div>' +
+          '<div class="sw-nav"><span></span><button class="dp-tdc-cta sw-next" onclick="schedNext()">Next <span class="material-symbols-outlined">arrow_forward</span></button></div></div>';
+      } else if (tdSchedStep === 2){
+        var canNext = tdSched.date && tdSched.time;
+        body = '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml()+
+          '<div class="sw-legend"><span><i class="free"></i>free</span><span><i class="booked"></i>booked</span></div></div>' +
+          '<div class="sw-slots">'+schedSlotsHtml()+'</div></div>' +
+          '<div class="sw-nav"><button class="cp-btn" onclick="schedBack()"><span class="material-symbols-outlined">arrow_back</span> Back</button>' +
+          '<button class="dp-tdc-cta sw-next'+(canNext?'':' locked')+'"'+(canNext?' onclick="schedNext()"':'')+'>Next <span class="material-symbols-outlined">arrow_forward</span></button></div>';
+      } else {
+        body = '<div class="sw-confirm"><p>We are waiting for you on the <strong>'+tdSched.model+'</strong> test drive in our showroom at <strong>'+l.showroom+'</strong> on <strong>'+(tdSched.date||'—')+'</strong> at <strong>'+(tdSched.time||'—')+'</strong>.</p>' +
+          '<label class="cp-label">Please, leave your contacts to confirm the booking</label>' +
+          '<div class="sw-contacts"><input class="cp-input" placeholder="Name" value="'+l.name+'"><input class="cp-input" placeholder="Phone" value="'+l.phone+'"></div></div>' +
+          '<div class="sw-nav"><button class="cp-btn" onclick="schedBack()"><span class="material-symbols-outlined">arrow_back</span> Back</button>' +
+          '<button class="dp-tdc-cta sw-next" onclick="schedDone()"><span class="material-symbols-outlined">check</span> Done</button></div>';
+      }
+      return '<div class="sw">'+head+body+'</div>';
+    }
     var selectedIds = new Set();
 
     function renderLeads(filter, search) {
@@ -612,18 +1167,35 @@
         if (i === selectedIdx) tr.classList.add('selected');
         if (selectedIds.has(l.id)) tr.classList.add('row-checked');
         tr.setAttribute('data-idx', i);
-        tr.onclick = function() { openPanel(i); };
+        tr.onclick = function() { toggleRowExpand(i, this); };
         tr.innerHTML =
           '<td class="chk-cell" onclick="event.stopPropagation()"><input type="checkbox" class="lead-check" data-id="'+l.id+'" '+(selectedIds.has(l.id)?'checked':'')+' onclick="toggleSelect(\''+l.id+'\',this)"></td>'+
-          '<td><div class="lead-cell"><div class="lead-av '+l.av+'">'+l.initials+'</div><div><div class="c-name">'+l.name+'</div><div class="c-id">'+l.id+'</div></div></div></td>'+
+          '<td><div class="lead-cell"><div class="lead-av '+l.av+'">'+l.initials+'</div><div class="c-name">'+l.name+'</div></div></td>'+
+          '<td class="id-cell"><span class="id-copy" title="Click to copy Lead ID" onclick="event.stopPropagation();copyLeadId(\''+l.id+'\',this)"><span class="id-text">'+l.id+'</span><span class="material-symbols-outlined id-copy-ico">content_copy</span></span></td>'+
           '<td><span class="src"><span class="src-dot '+l.srcClass+'">'+l.srcIcon+'</span>'+l.source.split(' —')[0]+'</span></td>'+
           '<td><span class="mdl">'+l.model+'</span></td>'+
           '<td><span class="sla-tag '+l.slaClass+'">'+(l.slaClass==='brch'?'<span class="blink"></span>':'<span style="width:5px;height:5px;border-radius:50%;background:currentColor"></span>')+l.sla+'</span></td>'+
           '<td><span class="st-badge '+l.stageClass+'">'+l.stage+'</span></td>'+
-          '<td><span class="intent-dot '+l.intentClass+'"></span>'+l.intent+'</td>'+
-          '<td style="font-size:11.5px;color:var(--ink-secondary)">'+l.owner+'</td>';
+          '<td class="id-cell"><span class="id-copy" title="Click to copy mobile" onclick="event.stopPropagation();copyLeadId(\''+l.phone+'\',this)"><span class="id-text" style="font-family:var(--fontFamilyBase);color:var(--ink-secondary)">'+l.phone+'</span><span class="material-symbols-outlined id-copy-ico">content_copy</span></span></td>'+
+          '<td style="font-size:11.5px;color:var(--ink-secondary)">'+l.owner+'</td>'+
+          '<td class="open-cell" onclick="event.stopPropagation();openPanelFull('+i+')"><span class="open-lead-link" title="Open full details view"><span class="material-symbols-outlined">open_in_new</span> Open</span></td>';
         tbody.appendChild(tr);
       });
+    }
+
+    function copyLeadId(id, el) {
+      function done() {
+        var ico = el.querySelector('.id-copy-ico');
+        if (ico) { ico.textContent = 'check'; el.classList.add('copied'); setTimeout(function(){ ico.textContent = 'content_copy'; el.classList.remove('copied'); }, 1200); }
+        showToast('Copied ' + id);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(id).then(done, done);
+      } else {
+        var ta = document.createElement('textarea'); ta.value = id; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch(e) {}
+        document.body.removeChild(ta); done();
+      }
     }
 
     function toggleSelect(id, cb) {
@@ -697,6 +1269,256 @@
       l.checks[key] = done;
       el.classList.toggle('done', done); el.classList.toggle('pending', !done);
       var ic = el.querySelector('.material-symbols-outlined'); if (ic) ic.textContent = done ? 'check_box' : 'check_box_outline_blank';
+      updateStepGate();
+    }
+
+    // ── Sales pipeline (from Miro: Lead → Opportunity → Deal → Post-deal) ──
+    var pipeGroups = [
+      { obj:'Lead',        color:'#5cb97f', stages:['New','Contact','Qualify'] },
+      { obj:'Opportunity', color:'#2a6797', stages:['Nurture → Visit'] },
+      { obj:'Deal',        color:'#e76e6e', stages:['Propose','Accepted'] },
+      { obj:'Post-deal',   color:'#8b7bdf', stages:['Prep for delivery','Ready for delivery','Close Won/Lost'] }
+    ];
+    var pipeAssign = {
+      'Hiren Patel':'Nurture → Visit','Priya Musale':'New','Sara Ali':'New','Maya Hassan':'Contact',
+      'Ahmad Rizk':'Propose','Karim Saleh':'New','Fatima Al Zaabi':'Qualify','Omar Mansoor':'Accepted',
+      'Layla Ibrahim':'Contact','Rashid Al Maktoum':'Ready for delivery','Noura Al Shamsi':'Nurture → Visit','Youssef Khoury':'Qualify'
+    };
+    function pipeOf(l) { return l.pipe || pipeAssign[l.name] || 'New'; }
+    function renderPipeline() {
+      var board = document.getElementById('pipelineBoard'); var html = '';
+      pipeGroups.forEach(function(g) {
+        html += '<div class="pipe-group"><div class="pipe-group-label" style="color:'+g.color+'">'+g.obj+'</div><div class="pipe-cols">';
+        g.stages.forEach(function(stage) {
+          var items = leads.filter(function(l){ return pipeOf(l) === stage; });
+          html += '<div class="pipe-col" style="border-top-color:'+g.color+'"><div class="pipe-col-head"><span class="pipe-col-name">'+stage+'</span><span class="pipe-col-count">'+items.length+'</span></div>';
+          if (items.length === 0) html += '<div class="pipe-empty">No leads</div>';
+          items.forEach(function(l) {
+            var idx = leads.indexOf(l);
+            html += '<div class="pipe-card" onclick="openPanel('+idx+')">' +
+              '<div class="pipe-card-top"><div class="lead-av '+l.av+'" style="width:26px;height:26px;font-size:9.5px">'+l.initials+'</div>' +
+              '<div style="min-width:0"><div class="pipe-card-name">'+l.name+'</div><div class="pipe-card-model">'+l.model+'</div></div></div>' +
+              '<div class="pipe-card-meta"><span class="sla-tag '+l.slaClass+'" style="font-size:9.5px;padding:2px 7px">'+l.sla+'</span><span class="pipe-card-owner">'+l.owner+'</span></div>' +
+            '</div>';
+          });
+          html += '</div>';
+        });
+        html += '</div></div>';
+      });
+      board.innerHTML = html;
+    }
+    function setView(v) {
+      var isPipe = v === 'pipeline';
+      document.getElementById('tableWrap').style.display = isPipe ? 'none' : '';
+      document.getElementById('listFilters').style.display = isPipe ? 'none' : '';
+      document.getElementById('pipelineWrap').style.display = isPipe ? '' : 'none';
+      document.getElementById('vtList').classList.toggle('on', !isPipe);
+      document.getElementById('vtPipe').classList.toggle('on', isPipe);
+      if (isPipe) renderPipeline();
+    }
+
+    function editKeydown(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); e.target.blur(); } }
+    function editIntake(el) {
+      if (selectedIdx < 0) return;
+      var l = leads[selectedIdx];
+      var prop = el.getAttribute('data-prop');
+      if (!prop) return;
+      var val = (el.value != null ? el.value : '').trim();
+      if (prop === 'firstName' || prop === 'lastName') {
+        var parts = (l.name || '').split(' ');
+        var fn = parts.shift() || '', ln = parts.join(' ');
+        if (prop === 'firstName') fn = val; else ln = val;
+        l.name = (fn + ' ' + ln).trim();
+        l.initials = ((fn.charAt(0) || '') + (ln.charAt(0) || '')).toUpperCase();
+        renderDetail(selectedIdx, currentStep);
+        renderLeads('all');
+        return;
+      }
+      l[prop] = val;
+      renderLeads('all');
+    }
+
+    function editField(el) {
+      if (selectedIdx < 0) return;
+      var l = leads[selectedIdx];
+      if (el.dataset.prop) {
+        var prop = el.dataset.prop, val = el.textContent.replace(/\s+/g, ' ').trim();
+        if (prop === 'name' && !val) { el.textContent = l.name; return; }
+        l[prop] = val;
+        if (prop === 'name') {
+          var parts = val.split(' ');
+          l.initials = ((parts[0] || '').charAt(0) + ((parts[1] || '').charAt(0) || '')).toUpperCase();
+          var t = document.getElementById('dpTitle'); if (t) t.textContent = val;
+          var av = document.querySelector('.dp-av'); if (av) av.textContent = l.initials;
+          document.querySelectorAll('.dp-name, [data-prop="name"]').forEach(function(n){ if (n !== el) n.textContent = val; });
+        }
+        renderLeads('all');
+        var pw = document.getElementById('pipelineWrap'); if (pw && pw.style.display !== 'none') renderPipeline();
+      } else if (el.dataset.custom) {
+        l.custom = l.custom || {}; l.custom[el.dataset.custom] = el.innerHTML;
+      }
+    }
+
+    // ── Inline row expand (slide-down info + redirect) ──
+    function lxField(label, val) { return '<div class="lx-item"><div class="lx-label">'+label+'</div><div class="lx-val">'+(val || '—')+'</div></div>'; }
+    function expandContent(l, i) {
+      return '<div class="lx-grid">' +
+        lxField('Mobile', l.phone) + lxField('Email', l.email) + lxField('Lead source', l.source) +
+        lxField('Model interest', l.model) + lxField('Preferred channel', l.preferred) + lxField('Language', l.lang) +
+        lxField('Temperature', l.temp) + lxField('Assigned showroom', l.showroom) + lxField('Campaign', l.campaign) +
+      '</div>' +
+      '<div class="lx-foot"><span class="lx-stage">Stage <strong>'+l.stage+'</strong> &middot; SLA '+l.sla+' &middot; Owner '+l.owner+'</span>' +
+      '<button class="lx-open" onclick="event.stopPropagation();openPanelFull('+i+')">Open full details <span class="material-symbols-outlined">arrow_forward</span></button></div>';
+    }
+    function collapseExpand(row) {
+      var inner = row.querySelector('.lead-expand-inner');
+      if (inner) inner.style.maxHeight = '0px';
+      setTimeout(function(){ if (row.parentNode) row.parentNode.removeChild(row); }, 260);
+    }
+    function toggleRowExpand(i, tr) {
+      var next = tr.nextElementSibling;
+      if (next && next.classList.contains('lead-expand-row')) { collapseExpand(next); tr.classList.remove('expanded'); return; }
+      document.querySelectorAll('.lead-expand-row').forEach(function(r){ collapseExpand(r); });
+      document.querySelectorAll('.leads-table tbody tr.expanded').forEach(function(r){ r.classList.remove('expanded'); });
+      var exp = document.createElement('tr');
+      exp.className = 'lead-expand-row';
+      exp.innerHTML = '<td colspan="'+tr.children.length+'"><div class="lead-expand-inner">'+ expandContent(leads[i], i) +'</div></td>';
+      tr.parentNode.insertBefore(exp, tr.nextSibling);
+      tr.classList.add('expanded');
+      var inner = exp.querySelector('.lead-expand-inner');
+      inner.style.maxHeight = '0px';
+      requestAnimationFrame(function(){ inner.style.maxHeight = inner.scrollHeight + 'px'; });
+    }
+
+    // ── SLA Tracker widget ──
+    function slaWidget(l, sd) {
+      var slaNum = (String(l.sla).match(/\d+/) || [''])[0];
+      var big = slaNum || l.sla;
+      var sub = slaNum ? 'mins left' : (l.slaTime || '');
+      var cls = l.slaClass === 'brch' ? 'brch' : (l.slaClass === 'wrn' ? 'wrn' : 'ok');
+      var created = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time.split(' ')[0] : '—';
+      var slaPct = cls === 'brch' ? 100 : (cls === 'wrn' ? 82 : Math.max(8, Math.min(70, slaNum ? Math.round((30 - Math.min(30, +slaNum)) / 30 * 100) : 40)));
+      var slaState = cls === 'brch' ? 'Breached' : (cls === 'wrn' ? 'Due soon' : 'On track');
+      // Follow-up cadence (from the SLA cadence table). Position derived from lead state.
+      var cadence = [
+        {t:'Day 1 · within 30 min', a:'First call attempt'},
+        {t:'Day 1 · later slot', a:'Second call attempt'},
+        {t:'Day 2', a:'Third call attempt'},
+        {t:'Day 4', a:'Fourth call attempt'},
+        {t:'Day 10', a:'Final nurture / recovery message → recovery queue'}
+      ];
+      var doneUpto = cls === 'brch' ? 0 : Math.min(cadence.length, (l.bpfStage || 1)); // rough progress
+      var curIdx = cls === 'brch' ? 0 : Math.min(cadence.length - 1, doneUpto);
+      var cadHtml = cadence.map(function(c, i){
+        var st = i < curIdx ? 'done' : (i === curIdx ? (cls === 'brch' ? 'missed' : 'current') : 'upcoming');
+        var icon = st === 'done' ? 'check_circle' : (st === 'missed' ? 'error' : (st === 'current' ? 'radio_button_checked' : 'radio_button_unchecked'));
+        return '<div class="slaw-cad-item '+st+'">' +
+          '<span class="material-symbols-outlined slaw-cad-dot">'+icon+'</span>' +
+          '<div class="slaw-cad-body"><div class="slaw-cad-t">'+c.t+'</div><div class="slaw-cad-a">'+c.a+'</div></div>' +
+        '</div>';
+      }).join('');
+
+      var statusIcon = cls === 'brch' ? 'error' : (cls === 'wrn' ? 'schedule' : 'check_circle');
+      var escalationHtml = cls === 'brch'
+        ? '<div class="slaw-escalate brch"><span class="material-symbols-outlined">campaign</span>Breached &mdash; escalated to manager</div>'
+        : (cls === 'wrn' ? '<div class="slaw-escalate wrn"><span class="material-symbols-outlined">notification_important</span>Action soon to avoid breach</div>' : '');
+      return '<div class="dp-sla-widget">' +
+        '<div class="slaw-head-row"><span class="slaw-head">SLA Tracker</span>' +
+          '<span class="slaw-status-pill '+cls+'"><span class="material-symbols-outlined">'+statusIcon+'</span>'+slaState+'</span></div>' +
+        '<div class="slaw-hero '+cls+'"><div class="slaw-hero-big">'+l.sla+'</div>' +
+          (l.slaTime ? '<div class="slaw-hero-sub">'+l.slaTime+'</div>' : '') + '</div>' +
+        '<div class="slaw-graph">' +
+          '<div class="slaw-graph-head"><span>First response &middot; 30 min target</span></div>' +
+          '<div class="slaw-track"><div class="slaw-fill '+cls+'" style="width:'+slaPct+'%"></div><span class="slaw-thumb '+cls+'" style="left:'+slaPct+'%"></span><span class="slaw-target" style="left:100%"></span></div>' +
+          '<div class="slaw-scale"><span>0m</span><span>15m</span><span>30m &#9873;</span></div>' +
+        '</div>' +
+        escalationHtml +
+        '<div class="slaw-info">' +
+          '<div class="slaw-irow"><span class="slaw-ilabel">Next step</span><span class="slaw-ival">Call / WhatsApp customer</span></div>' +
+        '</div>' +
+        '<div class="slaw-cadence">' +
+          '<div class="slaw-cad-head" onclick="toggleCadence()">Follow-up cadence <span class="material-symbols-outlined" id="cadCaret">expand_more</span></div>' +
+          '<div id="cadList" style="display:none">' + cadHtml + '</div>' +
+        '</div>' +
+        '<div class="slaw-viewall" id="slaViewAll" onclick="toggleAllSlas()">View all SLAs <span class="material-symbols-outlined" id="slaViewCaret">expand_more</span></div>' +
+        '<div class="slaw-all" id="slaAll" style="display:none">' + allSlaRows(l, cls) + '</div>' +
+      '</div>';
+    }
+
+    var ctiTimerInt = null;
+    function openCti(number, name) {
+      var p = document.getElementById('ctiPanel');
+      var init = (name || '?').split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+      document.getElementById('ctiAv').textContent = init;
+      document.getElementById('ctiName').textContent = name || '';
+      document.getElementById('ctiNum').textContent = number || '';
+      document.getElementById('ctiStatus').textContent = 'Connecting…';
+      document.getElementById('ctiStatus').className = 'cti-status';
+      document.getElementById('ctiTimer').textContent = '00:00';
+      p.classList.add('open');
+      clearInterval(ctiTimerInt);
+      // hand-off to Genesys CTI adapter: simulate connect, then start call timer
+      setTimeout(function(){
+        var st = document.getElementById('ctiStatus'); if (!st) return;
+        st.textContent = 'On call'; st.className = 'cti-status live';
+        var sec = 0;
+        ctiTimerInt = setInterval(function(){
+          sec++;
+          var t = document.getElementById('ctiTimer'); if (!t) { clearInterval(ctiTimerInt); return; }
+          t.textContent = String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0');
+        }, 1000);
+      }, 1400);
+    }
+    function closeCti() {
+      clearInterval(ctiTimerInt);
+      document.getElementById('ctiPanel').classList.remove('open');
+      // log the outbound call to the lead's activity timeline
+      if (selectedIdx >= 0) {
+        var l = leads[selectedIdx];
+        l.activities = l.activities || [];
+        l.activities.unshift({ type: 'call', text: 'Outbound call via Genesys CTI', time: '2026-07-07 12:00' });
+        renderDetail(selectedIdx, currentStep);
+        showToast('Call logged to timeline');
+      }
+    }
+
+    function toggleCadence() {
+      var list = document.getElementById('cadList'), caret = document.getElementById('cadCaret');
+      if (!list) return;
+      var open = list.style.display !== 'none';
+      list.style.display = open ? 'none' : 'block';
+      if (caret) caret.textContent = open ? 'expand_more' : 'expand_less';
+    }
+
+    function allSlaRows(l, cls) {
+      function pill(st) {
+        var map = { ok:['Met','ok'], wrn:['Due soon','wrn'], brch:['Breached','brch'], pending:['Pending','pending'] };
+        var m = map[st] || map.pending;
+        return '<span class="slaw-all-pill '+m[1]+'">'+m[0]+'</span>';
+      }
+      var bp = l.bpfStage || 1;
+      var rows = [
+        ['First response', '30 min', cls],
+        ['First call attempt', 'Day 1', bp >= 1 ? 'ok' : 'pending'],
+        ['WhatsApp on no-answer', 'Immediate', bp >= 1 ? 'ok' : 'pending'],
+        ['Lead qualification', 'Day 2', bp >= 3 ? 'ok' : (bp === 2 ? 'wrn' : 'pending')],
+        ['Test drive scheduling', 'Day 4', bp >= 4 ? 'ok' : 'pending'],
+        ['Proposal turnaround', '48 hrs', bp >= 6 ? 'ok' : 'pending'],
+        ['Recovery / re-engage', 'Day 10', 'pending'],
+        ['Post-delivery follow-up', '+3 / 7 / 30 d', bp >= 8 ? 'ok' : 'pending']
+      ];
+      return rows.map(function(r){
+        return '<div class="slaw-all-row"><span class="slaw-all-name">'+r[0]+'</span><span class="slaw-all-tgt">'+r[1]+'</span>'+pill(r[2])+'</div>';
+      }).join('');
+    }
+
+    function toggleAllSlas() {
+      var box = document.getElementById('slaAll'), caret = document.getElementById('slaViewCaret'), link = document.getElementById('slaViewAll');
+      if (!box) return;
+      var open = box.style.display !== 'none';
+      box.style.display = open ? 'none' : 'block';
+      if (caret) caret.textContent = open ? 'expand_more' : 'expand_less';
+      if (link) link.firstChild.textContent = open ? 'View all SLAs ' : 'Hide SLAs ';
     }
 
     function filterLeads(btn, filter) {
@@ -706,6 +1528,11 @@
     }
     function searchLeads(val) { renderLeads('all', val); }
 
+    function openPanelFull(idx) {
+      openPanel(idx);
+      var p = document.getElementById('detailPanel');
+      if (!p.classList.contains('expanded')) toggleExpand();
+    }
     function openPanel(idx) {
       selectedIdx = idx;
       currentStep = Math.min(leads[idx].bpfStage - 1, 7);
@@ -714,10 +1541,8 @@
         tr.classList.remove('selected');
         if (parseInt(tr.getAttribute('data-idx')) === idx) tr.classList.add('selected');
       });
-      document.getElementById('dpTitle').textContent = leads[idx].name;
       renderDetail(idx, currentStep);
       panel.classList.add('open');
-      document.getElementById('dpBottom').style.display = 'flex';
       if (window.innerWidth < 1100) document.getElementById('panelOverlay').classList.add('show');
     }
 
@@ -728,113 +1553,205 @@
 
       var html = '<div class="dp-page">';
 
-      // Lead header + SLA box
-      html += '<div class="dp-lead-head">' +
-        '<div class="dp-av lead-av '+l.av+'">'+l.initials+'</div>' +
-        '<div style="flex:1;min-width:0">' +
-          '<div class="dp-name">'+l.name+'</div>' +
-          '<div class="dp-badges">' +
-            '<span class="badge '+(l.stageClass==='na'?'red':'green')+'">'+l.stage+'</span>' +
-            (l.temp==='Hot'?'<span class="badge red"><span class="material-symbols-outlined">local_fire_department</span>Hot</span>':'') +
-            (l.temp==='Warm'?'<span class="badge amber"><span class="material-symbols-outlined">thermostat</span>Warm</span>':'') +
-            (l.existing!=='No'?'<span class="badge teal"><span class="material-symbols-outlined">verified</span>Existing Customer</span>':'') +
-            (l.nps!=='—'?'<span class="badge blue">NPS '+l.nps+'</span>':'') +
+      // Lead identity card — name + badges on line 1, owner/location on line 2, quick fields top-right, KPIs below
+      var ownerInit = l.owner.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+      var langAbbr = (l.lang || '').slice(0,2).toUpperCase();
+      var discDone = Math.floor(l.discovery/12.5);
+      html += '<div class="dp-idcard">' +
+        '<div class="dp-lead-head">' +
+          '<div class="dp-av lead-av '+l.av+'">'+l.initials+'</div>' +
+          '<div class="dp-head-info">' +
+            '<div class="dp-name-row">' +
+              '<span class="dp-name editable" contenteditable="true" spellcheck="false" data-prop="name" onblur="editField(this)" onkeydown="editKeydown(event)">'+l.name+'</span>' +
+            '</div>' +
+            '<div class="dp-meta-row">' +
+              '<span class="dp-sub"><span class="material-symbols-outlined" style="font-size:13px">person</span>'+l.owner+'<span style="color:var(--border)">|</span><span class="material-symbols-outlined" style="font-size:13px">location_on</span>'+l.showroom+'</span>' +
+              '<button class="dp-call" onclick="openCti(\''+l.phone+'\',\''+l.name.replace(/\'/g,"")+'\')" title="Click to call via Genesys CTI"><span class="material-symbols-outlined">call</span>'+l.phone+'</button>' +
+            '</div>' +
           '</div>' +
-          '<div class="dp-sub"><span class="material-symbols-outlined" style="font-size:13px">person</span>'+l.owner+'<span style="color:var(--border)">|</span><span class="material-symbols-outlined" style="font-size:13px">location_on</span>'+l.showroom+'<span style="color:var(--border)">|</span><span class="mid">'+l.id+'</span></div>' +
+          '<div class="dp-formhead">' +
+            '<div class="dp-fh-field"><div class="dp-fh-val mono">'+l.id+'</div><div class="dp-fh-label">Lead ID</div></div>' +
+            '<div class="dp-fh-field"><div class="dp-fh-val">'+(l.source && l.source !== '—' ? l.source : '- - -')+'</div><div class="dp-fh-label">Lead Source</div></div>' +
+            '<div class="dp-fh-field"><div class="dp-fh-val">'+l.temp+'</div><div class="dp-fh-label">Rating</div></div>' +
+            '<div class="dp-fh-owner"><span class="dp-fh-av lead-av '+l.av+'">'+ownerInit+'<span class="dp-fh-dot"></span></span>' +
+              '<div><div class="dp-fh-val link">'+l.owner+'</div><div class="dp-fh-label">Owner</div></div>' +
+            '</div>' +
+          '</div>' +
         '</div>' +
-        (function(){ var s = sd.sla || {label:'ACCEPT LEAD SLA', value:l.sla, detail:l.slaTime, cls:slaBoxClass}; return '<div class="dp-sla-box '+(s.cls||'')+'">' +
-          '<div class="dp-sla-label">'+s.label+'</div>' +
-          '<div class="dp-sla-big">'+s.value+'</div>' +
-          '<div class="dp-sla-detail">'+s.detail+'</div>' +
-          '<div class="dp-sla-link">View all SLAs &#x25BE;</div>' +
-        '</div>'; })() +
+        tabBarHtml('dp-idtabs', ['overview','related']) +
       '</div>';
 
-      // KPI strip
-      html += '<div class="dp-kpis">' +
-        '<div class="dp-kpi"><div class="dp-kpi-label">Stage</div><div class="dp-kpi-val blue">'+l.stageNum+'</div></div>' +
-        '<div class="dp-kpi"><div class="dp-kpi-label">Convert prob.</div><div class="dp-kpi-val green">'+l.convertProb+'%</div></div>' +
-        '<div class="dp-kpi"><div class="dp-kpi-label">Profile complete</div><div class="dp-kpi-val">'+l.profileComplete+'%</div></div>' +
-        '<div class="dp-kpi"><div class="dp-kpi-label">Discovery</div><div class="dp-kpi-val '+(l.discovery<50?'amber':'green')+'">'+l.discovery+'%</div><div class="dp-kpi-sub">'+(8-Math.floor(l.discovery/12.5))+' of 8 pending</div></div>' +
-        '<div class="dp-kpi"><div class="dp-kpi-label">Channel</div><div class="dp-kpi-val" style="font-size:12px">'+l.channel+'</div><div class="dp-kpi-sub">'+l.lang+'</div></div>' +
-        '<div class="dp-kpi"><div class="dp-kpi-label">Lead source</div><div class="dp-kpi-val" style="font-size:11px">'+l.source+'</div><div class="dp-kpi-sub">'+l.campaign+'</div></div>' +
-      '</div>';
+      // 2-column layout: main (left widget: stepper + tabs + content + step-nav) + sidebar (SLA/AI/timeline)
+      html += '<div class="dp-layout"><div class="dp-main"><div class="dp-main-scroll">';
 
-      // Next best action banner
-      var nbaText = stepIdx === 0 ? 'Accept this lead to start the SLA clock' :
-                    stepIdx === 2 ? 'Call customer to confirm Saturday test drive (LX vs TXL)' :
-                    stepIdx === 4 ? 'Complete discovery — '+Math.round(100-l.discovery)+'% remaining' :
-                    stepIdx === 5 ? 'Generate and send quote to customer' :
-                    'Continue with the next required action';
-      html += '<div class="dp-nba-banner">' +
-        '<span class="material-symbols-outlined">lightbulb</span>' +
-        '<div class="dp-nba-banner-text"><strong>Next best action:</strong> '+nbaText+'</div>' +
-        '<span class="dp-nba-snooze">Snooze &#x25BE;</span>' +
+      // Process stage — top of the unified left widget (style toggle: circles vs chevrons)
+      html += '<div class="dp-journey-card">';
+      html += '<div class="dp-stepper-toggle">' +
+        '<button class="dp-st-btn'+(stepperStyle==='circles'?' on':'')+'" onclick="setStepperStyle(\'circles\')" title="Circle stepper"><span class="material-symbols-outlined">radio_button_checked</span></button>' +
+        '<button class="dp-st-btn'+(stepperStyle==='chevrons'?' on':'')+'" onclick="setStepperStyle(\'chevrons\')" title="Chevron pipeline"><span class="material-symbols-outlined">double_arrow</span></button>' +
       '</div>';
-
-      // Journey stepper
-      html += '<div class="dp-journey-label">SALES JOURNEY &nbsp; Step '+(stepIdx+1)+' of 8 — '+journeySteps[stepIdx].name+'</div>';
-      html += '<div class="dp-journey">';
-      journeySteps.forEach(function(js, si) {
-        var isDone = si < l.bpfStage-1;
-        var isCurrent = si === l.bpfStage-1;
-        var cls = isDone ? 'done' : (isCurrent ? 'active' : 'pending');
-        if (si === stepIdx) cls += ' viewing';
-        var node = isDone ? '<span class="material-symbols-outlined">check</span>' : (si+1);
-        var statusHtml = isCurrent ? '<span class="j-status">In progress</span>' : '';
-        html += '<div class="dp-j-step '+cls+'" onclick="switchStep('+si+')">' +
-          '<div class="j-num">'+node+'</div>' +
-          '<span class="j-name">'+js.name+'</span>' +
-          statusHtml +
-        '</div>';
-      });
+      if (stepperStyle === 'chevrons') {
+        html += '<div class="dp-chevrons">';
+        journeySteps.forEach(function(js, si) {
+          var isDone = si < l.bpfStage-1;
+          var isCurrent = si === l.bpfStage-1;
+          var cls = isDone ? 'done' : (isCurrent ? 'active' : 'pending');
+          if (si === stepIdx) cls += ' viewing';
+          var node = isDone ? '<span class="material-symbols-outlined">check</span>' : (si+1);
+          html += '<div class="dp-chev '+cls+'" onclick="switchStep('+si+')" title="'+js.name+'">' +
+            '<span class="chev-num">'+node+'</span><span class="chev-name">'+js.name+'</span>' +
+          '</div>';
+        });
+        html += '</div>';
+      } else {
+        html += '<div class="dp-journey">';
+        journeySteps.forEach(function(js, si) {
+          var isDone = si < l.bpfStage-1;
+          var isCurrent = si === l.bpfStage-1;
+          var cls = isDone ? 'done' : (isCurrent ? 'active' : 'pending');
+          if (si === stepIdx) cls += ' viewing';
+          var node = isDone ? '<span class="material-symbols-outlined">check</span>' : (si+1);
+          html += '<div class="dp-j-step '+cls+'" onclick="switchStep('+si+')">' +
+            '<div class="j-num">'+node+'</div>' +
+            '<span class="j-name">'+js.name+'</span>' +
+          '</div>';
+        });
+        html += '</div>';
+      }
       html += '</div>';
+
+      // Form tabs (above the step) — synced with the identity-card tab bar
+      html += tabBarHtml();
+
+      if (leadTab !== 'overview') {
+        html += leadTabPanel(l, leadTab);
+      } else {
 
       // Step header
       var stepBadge = stepIdx < l.bpfStage-1 ? 'completed' : (stepIdx === l.bpfStage-1 ? 'progress' : 'pending');
       var stepBadgeText = stepIdx < l.bpfStage-1 ? 'Completed' : (stepIdx === l.bpfStage-1 ? 'In Progress' : 'Pending');
+      var lp = logPrompts[stepIdx] || logPrompts[0];
       html += '<div class="dp-step-header">' +
-        '<div><div class="dp-step-label">STEP '+(stepIdx+1)+' OF 8</div><div class="dp-step-title">'+sd.title+'</div></div>' +
-        '<div class="dp-step-actions"><span class="dp-step-badge '+stepBadge+'">'+stepBadgeText+'</span><button class="dp-view-btn"><span class="material-symbols-outlined" style="font-size:14px">visibility</span> View details</button></div>' +
+        '<span class="dp-step-hint"><span class="material-symbols-outlined">edit_note</span>'+lp.title+'</span>' +
+        '<div class="dp-step-actions">' +
+          '<button class="dp-log-btn" onclick="openLogActivity()">Log Activity</button></div>' +
       '</div>';
 
-      // Content grid
-      html += '<div class="dp-content-grid">';
-
-      // Left: Essential info + checklist
-      html += '<div>';
-      html += '<div class="dp-essential">' +
-        '<div class="dp-essential-title">Essential information for this step</div>' +
-        '<div class="dp-essential-sub">Only what you need right now. Everything else lives in "View details".</div>' +
-        '<div class="dp-info-grid">';
-      var fieldMap = {customer:['Customer',l.name], emiratesId:['Emirates ID',l.emiratesId], mobile:['Mobile',l.phone], email:['Email',l.email], lang:['Preferred Language',l.lang], preferred:['Preferred Channel',l.preferred], source:['Lead Source',l.source], model:['Model Interest','<span class="link">'+l.model+'</span>'], temp:['Lead Temperature',l.temp+(l.temp==='Hot'?'<span class="hot-badge">Hot</span>':'')], showroom:['Assigned Showroom',l.showroom], handover:['Handover Status',l.handover], existing:['Existing Customer',l.existing], channel:['Channel',l.channel]};
-      if (sd.infoFields) {
-        sd.infoFields.forEach(function(pair) {
-          html += '<div><div class="dp-info-label">'+pair[0]+'</div><div class="dp-info-value">'+pair[1]+'</div></div>';
-        });
-      } else {
-        sd.fields.forEach(function(f) {
-          var fd = fieldMap[f];
-          if (fd) html += '<div><div class="dp-info-label">'+fd[0]+'</div><div class="dp-info-value">'+fd[1]+'</div></div>';
-        });
-      }
-      html += '</div></div>';
-
-      // Checklist
-      html += '<div class="dp-checklist" style="margin-top:12px">' +
-        '<div class="dp-checklist-title">Required to complete this step</div>';
+      // Essential info + checklist side by side
+      // Checklist — gates progression to the next stage (kept in first fold)
+      var nextName = journeySteps[stepIdx+1] ? journeySteps[stepIdx+1].name : null;
+      var doneCount = 0, itemsHtml = '';
       sd.checklist.forEach(function(item, ci) {
         var key = stepIdx + '-' + ci;
         var def = stepIdx < l.bpfStage-1 || (stepIdx === l.bpfStage-1 && ci < sd.checklist.length - 1);
         var isDone = (l.checks && key in l.checks) ? l.checks[key] : def;
-        html += '<div class="dp-check-item '+(isDone?'done':'pending')+'" style="cursor:pointer" onclick="toggleCheck('+ci+', this)">' +
+        if (isDone) doneCount++;
+        itemsHtml += '<div class="dp-check-item '+(isDone?'done':'pending')+'" style="cursor:pointer" onclick="toggleCheck('+ci+', this)">' +
           '<span class="material-symbols-outlined">'+(isDone?'check_box':'check_box_outline_blank')+'</span>' +
           '<span>'+item+'</span></div>';
       });
-      html += '</div></div>';
+      var clTotal = sd.checklist.length, clPct = clTotal ? Math.round(doneCount/clTotal*100) : 0;
+      html += '<div class="dp-checklist">' +
+        '<div class="dp-checklist-head">' +
+          '<span class="dp-checklist-title">' + (nextName ? 'Complete to move to <strong>'+nextName+'</strong>' : 'Complete to finish the journey') + '</span>' +
+          '<span class="dp-checklist-prog" id="clProg">'+doneCount+' / '+clTotal+'</span>' +
+        '</div>' +
+        '<div class="dp-checklist-bar"><div class="dp-checklist-bar-fill" id="clBar" style="width:'+clPct+'%"></div></div>' +
+        itemsHtml +
+      '</div>';
 
-      // Right: AI card + activity
-      html += '<div>';
+      // New-stage intake form — grouped by pattern (mandatory* + optional fields)
+      if (stepIdx === 0) {
+        var nameParts = (l.name || '').split(' ');
+        var fn = nameParts.shift() || '', ln = nameParts.join(' ');
+        var esc = function(v){ return v != null ? String(v).replace(/"/g,'&quot;') : ''; };
+        var fld = function(o) {
+          var star = o.req ? '<span class="dp-if-req">*</span>' : '';
+          var ctrl;
+          if (o.type === 'select') {
+            ctrl = '<select class="dp-if-input" data-prop="'+(o.prop||'')+'" onchange="editIntake(this)">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+x+'</option>';}).join('')+'</select>';
+          } else if (o.type === 'textarea') {
+            ctrl = '<textarea class="dp-if-input dp-if-area" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" placeholder="Manual input…">'+(o.val||'')+'</textarea>';
+          } else if (o.type === 'lookup') {
+            ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}"><span class="material-symbols-outlined dp-if-lk">search</span></div>';
+          } else if (o.type === 'phone') {
+            ctrl = '<div class="dp-if-phone"><input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}"><button class="dp-if-call" onclick="openCti(\''+l.phone+'\',\''+l.name.replace(/\'/g,"")+'\')" title="Click to call via Genesys CTI"><span class="material-symbols-outlined">call</span></button></div>';
+          } else {
+            ctrl = '<input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}">';
+          }
+          return '<div class="dp-if'+(o.type==='textarea'?' dp-if-wide':'')+'"><label class="dp-if-label">'+o.label+star+'</label>'+ctrl+'</div>';
+        };
+        var groups = [
+          { title:'Customer Details', fields:[
+            {label:'First Name', prop:'firstName', val:fn, req:true},
+            {label:'Middle Name', val:''},
+            {label:'Last Name', prop:'lastName', val:ln, req:true},
+            {label:'Mobile Phone', prop:'phone', val:l.phone, type:'phone', req:true},
+            {label:'Email', prop:'email', val:l.email},
+            {label:'Nationality', type:'lookup', val:'UAE'},
+            {label:'EID', val:l.emiratesId}
+          ]},
+          { title:'Lead Qualification', fields:[
+            {label:'Lead Source', type:'lookup', val:l.source, req:true},
+            {label:'Source', prop:'source', type:'lookup', val:l.source, req:true},
+            {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true},
+            {label:'Urgency', type:'select', val:'Immediately', opts:['Immediately','< 1 month','> 1 month'], req:true},
+            {label:'Call Status', type:'select', val:'Not Called', opts:['Not Called','No Answer 1','No Answer 2','Call Back','Follow up','Answered'], req:true},
+            {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
+            {label:'Duplicate Lead', type:'select', val:'No', opts:['No','Yes — flagged']},
+            {label:'Description', type:'textarea', val:'', req:true}
+          ]},
+          { title:'Campaign', fields:[
+            {label:'Campaign ID', val:''},
+            {label:'Campaign Name', type:'lookup', val:l.campaign && l.campaign!=='—' ? l.campaign : ''}
+          ]},
+          { title:'Organization', fields:[
+            {label:'Company', type:'lookup', val:'AGM Sales', req:true},
+            {label:'Business Operation', type:'lookup', val:'Abudhabi Corniche', req:true}
+          ]},
+          { title:'Vehicle Interest', fields:[
+            {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
+            {label:'Model', prop:'model', type:'lookup', val:l.model},
+            {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
+            {label:'Model Year', type:'select', val:'2026', opts:['2026','2025','2024']},
+            {label:'Model Code', val:''},
+            {label:'Trade-in Interested', type:'select', val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']}
+          ]}
+        ];
+        var renderGroup = function(g){
+          return '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">' + g.fields.map(fld).join('') + '</div></div>';
+        };
+        html += '<div class="dp-intake"><div class="dp-intake-groups">' + groups.map(renderGroup).join('') + '</div></div>';
+      }
+      } // end overview tab
+      html += '</div>'; // dp-main-scroll
+
+      // Step-nav bar — stuck to the bottom of the left widget
+      var gate = stepProgress(l, stepIdx);
+      var gateDone = gate.done >= gate.total, isLastStep = stepIdx === 7;
+      var nextBtnHtml = gateDone
+        ? (isLastStep ? 'Journey complete <span class="material-symbols-outlined">check</span>' : 'Save &amp; continue <span class="material-symbols-outlined">arrow_forward</span>')
+        : '<span class="material-symbols-outlined" style="font-size:15px">lock</span> Complete '+(gate.total - gate.done)+' more to continue';
+      html += '<div class="dp-main-foot">' +
+        '<button class="dp-bottom-btn ghost" onclick="navStep(-1)"><span class="material-symbols-outlined">arrow_back</span> Previous step</button>' +
+        '<div style="display:flex;gap:8px">' +
+          '<button class="dp-bottom-btn outline">Skip for now</button>' +
+          '<button class="dp-bottom-btn fill'+(gateDone?'':' locked')+'" id="dpNextBtn" onclick="navStep(1)">'+nextBtnHtml+'</button>' +
+        '</div>' +
+      '</div>';
+      html += '</div>'; // dp-main
+
+      // Right sidebar: KPI snapshot + SLA tracker + AI card + activity
+      html += '<div class="dp-side">';
+      html += '<div class="dp-kpi-card">' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Stage</span><span class="dp-kpi-v" style="color:var(--blue)">'+l.stageNum+'</span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Convert prob.</span><span class="dp-kpi-v" style="color:var(--green)">'+l.convertProb+'%</span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Profile</span><span class="dp-kpi-v">'+l.profileComplete+'%</span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Discovery</span><span class="dp-kpi-v" style="color:'+(l.discovery<50?'var(--amber)':'var(--green)')+'">'+l.discovery+'% <span class="dp-kpi-sub">('+discDone+'/8)</span></span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Channel</span><span class="dp-kpi-v">'+l.channel+' <span class="dp-kpi-sub">&middot; '+langAbbr+'</span></span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Source</span><span class="dp-kpi-v">'+l.source+'</span></div>' +
+      '</div>';
+      html += slaWidget(l, sd);
       html += '<div class="dp-ai-card">' +
         '<div class="dp-ai-header">' +
           '<div class="dp-ai-label"><span class="material-symbols-outlined">auto_awesome</span> AI &middot; NEXT BEST ACTION</div>' +
@@ -848,9 +1765,9 @@
       html += '<div class="dp-ai-note"><span class="material-symbols-outlined">schedule</span> '+sd.aiNote+'</div>';
       html += '</div>';
 
-      // Recent activity
+      // Timeline of activities (common to all stages)
       html += '<div class="dp-activity">' +
-        '<div class="dp-act-header"><span class="dp-act-title">Recent activity</span><span class="dp-act-more">Latest '+(l.activities.length)+'</span></div>';
+        '<div class="dp-act-header"><span class="dp-act-title">Timeline of Activities</span><span class="dp-act-actions"><a onclick="return false">Add</a> | <a onclick="return false">Filter</a> | <a onclick="return false">Refresh</a></span></div>';
       l.activities.forEach(function(a) {
         html += '<div class="dp-act-item">' +
           '<span class="dp-act-type '+a.type+'">'+a.type.charAt(0).toUpperCase()+a.type.slice(1)+'</span>' +
@@ -863,10 +1780,34 @@
 
       document.getElementById('dpBody').innerHTML = html;
 
-      var nextBtn = document.getElementById('dpNextBtn');
-      if (nextBtn) {
-        if (stepIdx === 7) { nextBtn.innerHTML = 'Journey complete'; nextBtn.style.background = '#c8ccd0'; nextBtn.style.cursor = 'default'; }
-        else { nextBtn.innerHTML = 'Save &amp; continue <span class="material-symbols-outlined">arrow_forward</span>'; nextBtn.style.background = ''; nextBtn.style.cursor = ''; }
+      updateStepGate();
+    }
+
+    function stepProgress(l, si) {
+      var sd = stepDetails[si], total = sd.checklist.length, done = 0;
+      sd.checklist.forEach(function(item, ci) {
+        var key = si + '-' + ci;
+        var def = si < l.bpfStage-1 || (si === l.bpfStage-1 && ci < total - 1);
+        var isDone = (l.checks && key in l.checks) ? l.checks[key] : def;
+        if (isDone) done++;
+      });
+      return { done: done, total: total };
+    }
+    function updateStepGate() {
+      if (selectedIdx < 0) return;
+      var l = leads[selectedIdx], p = stepProgress(l, currentStep);
+      var prog = document.getElementById('clProg'); if (prog) prog.textContent = p.done + ' / ' + p.total;
+      var bar = document.getElementById('clBar'); if (bar) bar.style.width = (p.total ? Math.round(p.done/p.total*100) : 0) + '%';
+      var btn = document.getElementById('dpNextBtn'); if (!btn) return;
+      btn.style.background = ''; btn.style.cursor = '';
+      var allDone = p.done >= p.total, isLast = currentStep === 7;
+      if (allDone) {
+        btn.classList.remove('locked');
+        btn.innerHTML = isLast ? 'Journey complete <span class="material-symbols-outlined">check</span>'
+                               : 'Save &amp; continue <span class="material-symbols-outlined">arrow_forward</span>';
+      } else {
+        btn.classList.add('locked');
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:15px">lock</span> Complete '+(p.total - p.done)+' more to continue';
       }
     }
 
@@ -875,7 +1816,291 @@
       renderDetail(selectedIdx, si);
     }
 
+    function setStepperStyle(s) {
+      stepperStyle = s;
+      renderDetail(selectedIdx, currentStep);
+    }
+
+    function tabBarHtml(extraClass, keys) {
+      var tabs = [['overview','Overview'],['discovery','Discovery Questions'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
+      if (keys) tabs = tabs.filter(function(t){ return keys.indexOf(t[0]) !== -1; });
+      return '<div class="dp-tabs '+(extraClass||'')+'">' + tabs.map(function(t){
+        return '<button class="dp-tab'+(leadTab===t[0]?' active':'')+'" onclick="switchLeadTab(\''+t[0]+'\')">'+t[1]+'</button>';
+      }).join('') + '</div>';
+    }
+
+    function switchLeadTab(tab) {
+      leadTab = tab;
+      renderDetail(selectedIdx, currentStep);
+    }
+
+    var laAnswer = null, laOutcome = null;
+    // outcome -> {stage number, journey name}
+    var laRoutes = {
+      'Interested':      { n: 3, name: 'Qualify' },
+      'Book test drive': { n: 3, name: 'Qualify' },
+      'Needs time':      { n: 2, name: 'Contact' },
+      'Compare':         { n: 2, name: 'Contact' }
+    };
+
+    function openLogActivity() {
+      if (selectedIdx < 0) return;
+      var lp = logPrompts[currentStep] || logPrompts[0];
+      document.getElementById('logSub').innerHTML = lp.title;
+      laAnswer = null; laOutcome = null;
+      document.getElementById('laYes').classList.remove('on');
+      document.getElementById('laNo').classList.remove('on','no');
+      document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); });
+      document.getElementById('laOutcomeWrap').style.display = '';
+      document.getElementById('laNotes').value = '';
+      document.getElementById('laError').style.display = 'none';
+      updateLaHint();
+      document.getElementById('logOverlay').classList.add('show');
+      document.getElementById('logPanel').classList.add('open');
+    }
+
+    function setLaAnswer(v) {
+      laAnswer = v;
+      document.getElementById('laYes').classList.toggle('on', v === 'yes');
+      var no = document.getElementById('laNo');
+      no.classList.toggle('on', v === 'no'); no.classList.toggle('no', v === 'no');
+      // No answer -> disqualify path, hide outcome
+      document.getElementById('laOutcomeWrap').style.display = (v === 'no') ? 'none' : '';
+      if (v === 'no') { laOutcome = null; document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.remove('on'); }); }
+      updateLaHint();
+    }
+
+    function setLaOutcome(btn) {
+      laOutcome = btn.getAttribute('data-out');
+      document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.toggle('on', c === btn); });
+      updateLaHint();
+    }
+
+    function updateLaHint() {
+      var h = document.getElementById('laHint');
+      if (laAnswer === 'no') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; return; }
+      if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) { h.textContent = 'Saving will move the lead to ' + laRoutes[laOutcome].name + '.'; h.className = 'la-hint ok'; return; }
+      h.textContent = 'Saving will move the lead to the next stage.'; h.className = 'la-hint';
+    }
+
+    function closeLogActivity() {
+      document.getElementById('logOverlay').classList.remove('show');
+      document.getElementById('logPanel').classList.remove('open');
+    }
+
+    function submitLogActivity() {
+      var e = document.getElementById('laError');
+      if (!laAnswer) { e.textContent = 'Please record whether the customer answered.'; e.style.display = 'block'; return; }
+      if (laAnswer === 'yes' && !laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
+      e.style.display = 'none';
+      var l = leads[selectedIdx];
+      var notes = document.getElementById('laNotes').value.trim();
+      l.activities = l.activities || [];
+
+      if (laAnswer === 'no') {
+        l.activities.unshift({ type: 'call', text: 'No answer — ' + (notes || 'customer did not answer'), time: '2026-07-07 12:00' });
+        l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
+        showToast('Lead disqualified');
+      } else {
+        var r = laRoutes[laOutcome];
+        l.activities.unshift({ type: 'call', text: laOutcome + (notes ? ' — ' + notes : ''), time: '2026-07-07 12:00' });
+        l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
+        currentStep = Math.min(r.n - 1, 7);
+        showToast('Moved to ' + r.name);
+      }
+      closeLogActivity();
+      renderDetail(selectedIdx, currentStep);
+      renderLeads('all');
+    }
+
+    function dpFieldHtml(o) {
+      var esc = function(v){ return v != null ? String(v).replace(/"/g,'&quot;') : ''; };
+      var star = o.req ? '<span class="dp-if-req">*</span>' : '';
+      var ctrl, wide = false;
+      switch (o.type) {
+        case 'select': ctrl = '<select class="dp-if-input">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+x+'</option>';}).join('')+'</select>'; break;
+        case 'lookup': ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'"><span class="material-symbols-outlined dp-if-lk">search</span></div>'; break;
+        case 'date': ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'" placeholder="dd/mm/yyyy, --:--"><span class="material-symbols-outlined dp-if-lk">calendar_today</span></div>'; break;
+        case 'image': ctrl = '<button class="dp-if-upload"><span class="material-symbols-outlined">upload_file</span>'+(o.val||'Upload image')+'</button>'; break;
+        case 'action': ctrl = '<button class="dp-if-action"><span class="material-symbols-outlined">play_circle</span>'+(o.val||'Start / Stop')+'</button>'; break;
+        case 'sign': ctrl = o.val ? '<div class="dp-if-sign done"><span class="material-symbols-outlined">draw</span>Signed</div>' : '<div class="dp-if-sign">Tap to sign</div>'; break;
+        case 'check': ctrl = '<label class="dp-if-check"><input type="checkbox"'+(o.val?' checked':'')+'>'+(o.note||'Accepted')+'</label>'; break;
+        case 'textarea': ctrl = '<textarea class="dp-if-input dp-if-area">'+(o.val||'')+'</textarea>'; wide = true; break;
+        default: ctrl = '<input class="dp-if-input" type="text" value="'+esc(o.val)+'">';
+      }
+      return '<div class="dp-if'+(wide?' dp-if-wide':'')+'"><label class="dp-if-label">'+o.label+star+'</label>'+ctrl+'</div>';
+    }
+    function dpFormSections(sections) {
+      return '<div class="dp-intake"><div class="dp-intake-groups">' + sections.map(function(g){
+        return '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">'+g.fields.map(dpFieldHtml).join('')+'</div></div>';
+      }).join('') + '</div></div>';
+    }
+    function discoveryTestDriveForm(l) {
+      var done = l.bpfStage >= 5;
+      return dpFormSections([
+        { title:'Links', fields:[
+          {label:'Lead link', type:'lookup', val:l.id},
+          {label:'Opportunity link', type:'lookup', val: done ? 'OPP-'+l.id.slice(2) : ''},
+          {label:'Customer link', type:'lookup', val:l.name},
+          {label:'Contact link', type:'lookup', val:l.name}
+        ]},
+        { title:'Identification', fields:[
+          {label:'Identification type', type:'select', val:'Emirates ID', opts:['Emirates ID','Passport','Driving Licence']},
+          {label:'Identification number', val:l.emiratesId},
+          {label:'Identification image', type:'image', val: done ? 'eid_front.jpg' : ''},
+          {label:'Identification expires', type:'date', val:'2029-05-14'}
+        ]},
+        { title:'Vehicle', fields:[
+          {label:'Company', type:'lookup', val:'AGM Sales'},
+          {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas'], req:true},
+          {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
+          {label:'Model', type:'lookup', val:l.model},
+          {label:'Model code', val:''},
+          {label:'Device', type:'lookup', val: done ? 'DEMO-EXEED-LX-04' : '', req:true}
+        ]},
+        { title:'Schedule', fields:[
+          {label:'Name (Test drive ID)', val: done ? 'TD-2026-'+l.id.slice(-4) : ''},
+          {label:'Scheduled start', type:'date', val: done ? '2026-07-02, 17:00' : '', req:true},
+          {label:'Scheduled end', type:'date', val: done ? '2026-07-02, 17:30' : ''},
+          {label:'Scheduled duration', val:'30 min', req:true},
+          {label:'Test drive location', type:'lookup', val:l.showroom, req:true}
+        ]},
+        { title:'Business', fields:[
+          {label:'Business', type:'lookup', val:'AGM Sales', req:true},
+          {label:'Business Facility', type:'lookup', val:l.showroom, req:true},
+          {label:'Business Operation', type:'lookup', val:'Abudhabi Corniche'},
+          {label:'TAMM registration', val:''}
+        ]},
+        { title:'Execution', fields:[
+          {label:'Booking assistant', type:'select', val:'Select available demo…', opts:['Select available demo…','EXEED LX · DEMO-04 (available)','EXEED TXL · DEMO-02 (available)','EXEED RX · DEMO-07 (in use)']},
+          {label:'Start / Stop', type:'action', val:'Start drive'},
+          {label:'Actual start', type:'date', val: done ? '2026-07-02, 17:04' : ''},
+          {label:'Actual end', type:'date', val: done ? '2026-07-02, 17:41' : ''},
+          {label:'Actual duration', val: done ? '37 min' : ''},
+          {label:'Start Km', val: done ? '12,480' : ''},
+          {label:'End Km', val: done ? '12,498' : ''}
+        ]},
+        { title:'Status & sign-off', fields:[
+          {label:'Status', type:'select', val: done ? 'Completed' : 'Scheduled', opts:['Scheduled','In progress','Completed','Cancelled','No show']},
+          {label:'Status reason', type:'select', val: done ? 'Positive — proceed to proposal' : '—', opts:['—','Positive — proceed to proposal','Needs follow-up','Not interested']},
+          {label:'Terms & Conditions', type:'check', val: done, note:'Accepted by customer'},
+          {label:'Customer signature', type:'sign', val: done},
+          {label:'Sales executive signature', type:'sign', val: done},
+          {label:'Manager signature', type:'sign', val: false}
+        ]}
+      ]);
+    }
+
+    function testDriveControlCenter(l) {
+      var modes = [['start','play_circle','Start Now'],['schedule','event','Schedule Later'],['decline','block','Decline']];
+      var h = '<div class="dp-tdc">' +
+        '<div class="dp-tdc-head"><div class="dp-tdc-title"><span class="material-symbols-outlined">directions_car</span>Test Drive Control Center</div>' +
+        '<div class="dp-tdc-sub">'+l.name+' &middot; '+l.model+' &middot; '+l.showroom+'</div></div>' +
+        '<div class="dp-tdc-modes">' + modes.map(function(m){
+          return '<button class="dp-tdc-mode'+(tdMode===m[0]?' on':'')+'" onclick="setTdMode(\''+m[0]+'\')"><span class="material-symbols-outlined">'+m[1]+'</span>'+m[2]+'</button>';
+        }).join('') + '</div>';
+
+      if (tdMode === 'start') {
+        var items = [
+          {k:'checkin', t:'Customer checked in'},
+          {k:'license', t:'License / EID confirmed'},
+          {k:'waiver', t:'Waiver signed', sub:'Waiver required before drive can start.', action:'Sign waiver'},
+          {k:'vehicle', t:'Vehicle ready'},
+          {k:'route', t:'Route selected', sub:'Family comfort'},
+          {k:'briefing', t:'Briefing completed'}
+        ];
+        var done = items.filter(function(i){return tdChecks[i.k];}).length, total = items.length;
+        var allReady = done === total, pct = Math.round(done/total*100);
+        h += '<div class="dp-tdc-body">' +
+          '<div class="dp-tdc-hint">Confirm the readiness checklist, then start the drive. This is not a booking form.</div>' +
+          '<div class="dp-tdc-meter"><div class="dp-tdc-meter-bar"><div class="dp-tdc-meter-fill'+(allReady?' full':'')+'" style="width:'+pct+'%"></div></div><span class="dp-tdc-meter-label">'+done+' of '+total+' ready</span></div>' +
+          '<div class="dp-tdc-checks">';
+        items.forEach(function(i){
+          var on = !!tdChecks[i.k], pending = !on && i.k==='waiver';
+          h += '<div class="tdc-item'+(on?' done':'')+(pending?' warn':'')+'" onclick="toggleTdCheck(\''+i.k+'\')">' +
+            '<span class="material-symbols-outlined tdc-check">'+(on?'check_circle':'radio_button_unchecked')+'</span>' +
+            '<div class="tdc-item-body"><div class="tdc-item-title">'+i.t+'</div>'+(i.sub && !on ? '<div class="tdc-item-sub">'+i.sub+'</div>':'')+'</div>' +
+            (pending ? '<button class="tdc-item-action" onclick="signWaiver(event)">'+i.action+'</button>' : '') +
+          '</div>';
+        });
+        h += '</div>' +
+          '<button class="dp-tdc-cta'+(allReady?'':' locked')+'"'+(allReady?' onclick="tdStart()"':'')+'><span class="material-symbols-outlined">play_arrow</span>Start test drive now</button>' +
+          '<div class="dp-tdc-foot">'+(allReady?'All readiness items complete — you\'re good to go.':'Complete all readiness items to enable Start.')+'</div>' +
+        '</div>';
+      } else if (tdMode === 'schedule') {
+        h += '<div class="dp-tdc-body">' + scheduleWizard(l) + '</div>';
+      } else {
+        h += '<div class="dp-tdc-body">' +
+          '<div class="dp-if-fields">' +
+            dpFieldHtml({label:'Reason', type:'select', val:'Select reason…', opts:['Select reason…','Vehicle not available','Customer declined','No valid licence','Rescheduling','Not interested']}) +
+            dpFieldHtml({label:'Next best action', type:'select', val:'Schedule follow-up', opts:['Schedule follow-up','Send brochure','Offer home test drive','Return to call center']}) +
+            dpFieldHtml({label:'Notes', type:'textarea', val:''}) +
+          '</div>' +
+          '<button class="dp-tdc-cta" onclick="tdDecline()"><span class="material-symbols-outlined">save</span>Save and continue</button>' +
+        '</div>';
+      }
+      return h + '</div>';
+    }
+
+    function leadTabPanel(l, tab) {
+      function card(title, sub, body) {
+        return '<div class="dp-essential" style="margin-bottom:14px">' +
+          '<div class="dp-essential-title">'+title+'</div>' +
+          (sub?'<div class="dp-essential-sub">'+sub+'</div>':'') +
+          body + '</div>';
+      }
+      function rows(pairs) {
+        return '<div class="dp-info-grid">' + pairs.map(function(p){
+          return '<div><div class="dp-info-label">'+p[0]+'</div><div class="dp-info-value">'+p[1]+'</div></div>';
+        }).join('') + '</div>';
+      }
+      if (tab === 'discovery') {
+        return discoveryTestDriveForm(l);
+      }
+      if (tab === 'testdrive') {
+        return testDriveControlCenter(l);
+      }
+      if (tab === 'proposals') {
+        var hasProp = l.bpfStage >= 6;
+        return card('Proposals &amp; quotes', hasProp ? '1 active proposal' : 'No proposals raised yet',
+          hasProp
+            ? rows([
+                ['Quote number', 'Q-2026-0'+(1000 + selectedIdx)],
+                ['Model', l.model],
+                ['List price', 'AED 182,000'],
+                ['Discount', 'AED 7,000'],
+                ['Net price', 'AED 175,000'],
+                ['Validity', '2026-07-14'],
+                ['Status', 'Sent to customer'],
+                ['Approval', 'Sales Manager — approved']
+              ])
+            : '<div class="dp-essential-sub" style="margin:0">Proposals become available once the lead reaches the <strong>Propose</strong> stage.</div>');
+      }
+      // related
+      var relItems = [
+        ['account_circle', 'Account', l.name + ' Household'],
+        ['contacts', 'Primary contact', l.name],
+        ['directions_car', 'Opportunity', l.model + ' — ' + l.showroom],
+        ['event', 'Open activities', l.bpfStage >= 5 ? '2 tasks, 1 appointment' : '1 task'],
+        ['history', 'Closed activities', l.bpfStage + ' completed'],
+        ['description', 'Documents', 'Emirates ID, Trade-in valuation']
+      ];
+      return card('Related records', 'Linked records across the account',
+        '<div class="dp-rel-list">' + relItems.map(function(r){
+          return '<div class="dp-rel-item"><span class="material-symbols-outlined">'+r[0]+'</span>' +
+            '<div><div class="dp-rel-label">'+r[1]+'</div><div class="dp-rel-val">'+r[2]+'</div></div></div>';
+        }).join('') + '</div>');
+    }
+
     function navStep(dir) {
+      if (dir > 0 && selectedIdx >= 0) {
+        var p = stepProgress(leads[selectedIdx], currentStep);
+        if (p.done < p.total) {
+          var b = document.getElementById('dpNextBtn');
+          if (b) { b.classList.remove('nudge'); void b.offsetWidth; b.classList.add('nudge'); }
+          return;
+        }
+      }
       currentStep = Math.max(0, Math.min(7, currentStep + dir));
       renderDetail(selectedIdx, currentStep);
       document.getElementById('dpBody').scrollTop = 0;
@@ -884,8 +2109,6 @@
     function closePanel() {
       document.getElementById('detailPanel').classList.remove('open','expanded');
       document.getElementById('panelOverlay').classList.remove('show');
-      document.getElementById('expandIcon').textContent = 'open_in_full';
-      document.getElementById('dpBottom').style.display = 'none';
       isExpanded = false; selectedIdx = -1;
       document.querySelectorAll('.leads-table tbody tr').forEach(function(tr){tr.classList.remove('selected');});
     }
@@ -893,8 +2116,9 @@
     function toggleExpand() {
       var panel = document.getElementById('detailPanel');
       var icon = document.getElementById('expandIcon');
-      if (isExpanded) { panel.classList.remove('expanded'); icon.textContent = 'open_in_full'; isExpanded = false; }
-      else { panel.classList.add('expanded'); icon.textContent = 'close_fullscreen'; isExpanded = true; }
+      var label = document.getElementById('expandLabel');
+      if (isExpanded) { panel.classList.remove('expanded'); if (icon) icon.textContent = 'open_in_full'; if (label) label.textContent = 'Full view'; isExpanded = false; }
+      else { panel.classList.add('expanded'); if (icon) icon.textContent = 'close_fullscreen'; if (label) label.textContent = 'Exit full view'; isExpanded = true; }
     }
 
     var editingId = null;
@@ -1040,7 +2264,7 @@
         idx = 0;
         renderLeads('all');
       }
-      openPanel(idx);
+      openPanelFull(idx);
       document.querySelector('.leads-body') && document.querySelectorAll('.leads-table tbody tr').forEach(function(tr){
         if (parseInt(tr.getAttribute('data-idx')) === idx) tr.scrollIntoView({block:'nearest'});
       });
@@ -1051,5 +2275,6 @@
     function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
     function closeSidebar(){ document.body.classList.remove('sb-rail'); }
   </script>
+  <script src="copilot-widget.js" defer></script>
 </body>
 </html>

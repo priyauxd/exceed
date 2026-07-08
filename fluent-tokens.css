@@ -1,0 +1,177 @@
+/* ============================================================
+   Fluent UI React v9 — Design Token Layer (vanilla CSS port)
+   Faithful translation of webLightTheme tokens for the no-build
+   EXEED / Dynamics 365 mockup. Brand ramp = EXEED (navy/azure).
+   Ref: @fluentui/react-components tokens.* → CSS custom properties.
+   ============================================================ */
+:root {
+  /* ---- Neutral backgrounds (true-neutral, Fluent) ---- */
+  --colorNeutralBackground1: #ffffff;
+  --colorNeutralBackground1Hover: #f5f5f5;
+  --colorNeutralBackground1Pressed: #e0e0e0;
+  --colorNeutralBackground1Selected: #ebebeb;
+  --colorNeutralBackground2: #fafafa;
+  --colorNeutralBackground3: #f5f5f5;
+  --colorNeutralBackground4: #f0f0f0;
+  --colorNeutralBackground5: #ebebeb;
+  --colorNeutralBackground6: #e6e6e6;
+  --colorNeutralBackgroundDisabled: #f0f0f0;
+  --colorSubtleBackground: transparent;
+  --colorSubtleBackgroundHover: #f5f5f5;
+  --colorSubtleBackgroundPressed: #e0e0e0;
+
+  /* ---- Neutral foregrounds ---- */
+  --colorNeutralForeground1: #242424;
+  --colorNeutralForeground2: #424242;
+  --colorNeutralForeground3: #616161;
+  --colorNeutralForeground4: #707070;
+  --colorNeutralForegroundDisabled: #bdbdbd;
+  --colorNeutralForegroundOnBrand: #ffffff;
+
+  /* ---- Neutral strokes ---- */
+  --colorNeutralStroke1: #d1d1d1;
+  --colorNeutralStroke2: #e0e0e0;
+  --colorNeutralStroke3: #f0f0f0;
+  --colorNeutralStrokeAccessible: #616161;
+
+  /* ---- Brand ramp (EXEED navy/azure mapped onto Fluent brand slots) ---- */
+  --colorBrandBackground: #17293d;        /* primary button fill */
+  --colorBrandBackgroundHover: #0f1d2c;
+  --colorBrandBackgroundPressed: #0a141f;
+  --colorBrandBackgroundSelected: #1e3b52;
+  --colorBrandForeground1: #17293d;       /* links, brand text */
+  --colorBrandForeground2: #0f1d2c;
+  --colorBrandStroke1: #17293d;
+  --colorBrandStroke2: #98a6b6;
+  --colorBrandBackground2: #eaeef3;       /* subtle brand tint */
+  --colorBrandBackground2Hover: #dde5ec;
+  --colorCompoundBrandForeground1: #2a6797;
+  --colorCompoundBrandStroke: #2a6797;
+  --colorBrandAccent: #00b7bb;            /* EXEED signature cyan (glows/rings only) */
+
+  /* ---- Status (Fluent semantic palette) ---- */
+  --colorPaletteRedForeground1: #b10e1c;
+  --colorPaletteRedBackground3: #d13438;
+  --colorPaletteRedBackground1: #fdf3f4;
+  --colorPaletteYellowForeground1: #8a6420;
+  --colorPaletteYellowBackground3: #f2b100;
+  --colorPaletteYellowBackground1: #fff9e5;
+  --colorPaletteGreenForeground1: #0e700e;
+  --colorPaletteGreenBackground3: #107c10;
+  --colorPaletteGreenBackground1: #f1faf1;
+  --colorPalettePurpleForeground2: #5c2e91;
+  --colorPalettePurpleBackground2: #f2eaf8;
+
+  /* ---- Spacing scale ---- */
+  --spacingHorizontalXXS: 2px;
+  --spacingHorizontalXS: 4px;
+  --spacingHorizontalSNudge: 6px;
+  --spacingHorizontalS: 8px;
+  --spacingHorizontalMNudge: 10px;
+  --spacingHorizontalM: 12px;
+  --spacingHorizontalL: 16px;
+  --spacingHorizontalXL: 20px;
+  --spacingHorizontalXXL: 24px;
+  --spacingHorizontalXXXL: 32px;
+  --spacingVerticalXXS: 2px;
+  --spacingVerticalXS: 4px;
+  --spacingVerticalSNudge: 6px;
+  --spacingVerticalS: 8px;
+  --spacingVerticalMNudge: 10px;
+  --spacingVerticalM: 12px;
+  --spacingVerticalL: 16px;
+  --spacingVerticalXL: 20px;
+  --spacingVerticalXXL: 24px;
+
+  /* ---- Corner radius ---- */
+  --borderRadiusNone: 0;
+  --borderRadiusSmall: 2px;
+  --borderRadiusMedium: 4px;
+  --borderRadiusLarge: 6px;
+  --borderRadiusXLarge: 8px;
+  --borderRadiusCircular: 10000px;
+
+  /* ---- Elevation shadows ---- */
+  --shadow2: 0 1px 2px rgba(0,0,0,.05), 0 0 1px rgba(0,0,0,.03);
+  --shadow4: 0 2px 4px rgba(0,0,0,.05), 0 0 1px rgba(0,0,0,.03);
+  --shadow8: 0 4px 8px rgba(0,0,0,.06), 0 0 1px rgba(0,0,0,.03);
+  --shadow16: 0 8px 16px rgba(0,0,0,.07), 0 0 2px rgba(0,0,0,.03);
+  --shadow28: 0 14px 28px rgba(0,0,0,.09), 0 0 6px rgba(0,0,0,.04);
+  --shadow64: 0 24px 48px rgba(0,0,0,.10), 0 0 8px rgba(0,0,0,.05);
+
+  /* ---- Type ramp (family / size / line-height / weight) ---- */
+  --fontFamilyBase: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+  --fontFamilyNumeric: 'Segoe UI', 'Inter', sans-serif;
+  --fontFamilyMonospace: 'Cascadia Code', 'SF Mono', Consolas, monospace;
+  --fontSizeBase100: 10px;
+  --fontSizeBase200: 12px;
+  --fontSizeBase300: 14px;   /* body1 — Fluent base */
+  --fontSizeBase400: 16px;   /* subtitle2 */
+  --fontSizeBase500: 20px;   /* subtitle1 */
+  --fontSizeBase600: 24px;   /* title3 */
+  --lineHeightBase100: 14px;
+  --lineHeightBase200: 16px;
+  --lineHeightBase300: 20px;
+  --lineHeightBase400: 22px;
+  --lineHeightBase500: 26px;
+  --lineHeightBase600: 32px;
+  --fontWeightRegular: 400;
+  --fontWeightMedium: 500;
+  --fontWeightSemibold: 600;
+  --fontWeightBold: 700;
+
+  /* ============================================================
+     Semantic aliases — the app's existing variable names remapped
+     onto Fluent tokens so every screen shifts to the Fluent look.
+     ============================================================ */
+  --bg: var(--colorNeutralBackground3);
+  --surface: var(--colorNeutralBackground1);
+  --ink: var(--colorNeutralForeground1);
+  --ink-secondary: var(--colorNeutralForeground2);
+  --ink-muted: var(--colorNeutralForeground3);
+  --border: var(--colorNeutralStroke2);
+  --border-soft: var(--colorNeutralStroke3);
+
+  --blue: var(--colorBrandForeground1);
+  --blue-dark: var(--colorBrandBackgroundHover);
+  --blue-soft: var(--colorBrandBackground2);
+  --blue-muted: var(--colorBrandStroke2);
+
+  --red: var(--colorPaletteRedBackground3);
+  --red-soft: var(--colorPaletteRedBackground1);
+  --amber: var(--colorPaletteYellowForeground1);
+  --amber-soft: var(--colorPaletteYellowBackground1);
+  --green: var(--colorPaletteGreenBackground3);
+  --green-soft: var(--colorPaletteGreenBackground1);
+  --purple: var(--colorPalettePurpleForeground2);
+  --purple-soft: var(--colorPalettePurpleBackground2);
+  --teal: #0f6c6c;
+  --teal-soft: #e8f4f4;
+
+  --radius: var(--borderRadiusLarge);      /* cards → 6px */
+  --radius-sm: var(--borderRadiusMedium);  /* controls → 4px */
+  --radius-md: var(--borderRadiusXLarge);  /* prominent cards → 8px */
+}
+
+/* ---- Fluent base primitives ---- */
+.fluent-btn {
+  font-family: var(--fontFamilyBase);
+  font-size: var(--fontSizeBase300);
+  font-weight: var(--fontWeightSemibold);
+  line-height: var(--lineHeightBase300);
+  border-radius: var(--borderRadiusMedium);
+  padding: 5px 12px;
+  border: 1px solid var(--colorNeutralStroke1);
+  background: var(--colorNeutralBackground1);
+  color: var(--colorNeutralForeground1);
+  cursor: pointer;
+  transition: background .1s ease, border-color .1s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.fluent-btn:hover { background: var(--colorNeutralBackground1Hover); }
+.fluent-btn.primary { background: var(--colorBrandBackground); border-color: var(--colorBrandBackground); color: var(--colorNeutralForegroundOnBrand); }
+.fluent-btn.primary:hover { background: var(--colorBrandBackgroundHover); border-color: var(--colorBrandBackgroundHover); }
+.fluent-btn.subtle { background: var(--colorSubtleBackground); border-color: transparent; color: var(--colorNeutralForeground2); }
+.fluent-btn.subtle:hover { background: var(--colorSubtleBackgroundHover); }

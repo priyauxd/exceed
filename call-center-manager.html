@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="d365-shell.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
+  <link href="fluent-tokens.css" rel="stylesheet" />
   <style>
     .dash-header { display: flex; align-items: flex-start; justify-content: space-between; }
     .dash-header-left { flex: 1; }
@@ -96,10 +97,10 @@
     .copilot-answer-cite { margin-top: 10px; font-size: 10.5px; color: var(--d365-text-muted); display: flex; align-items: center; gap: 5px; border-top: 1px solid var(--d365-border); padding-top: 8px; }
 
     /* ── Copilot dropdown ── */
-    .copilot-dd-overlay { position: fixed; inset: 0; z-index: 45; display: none; }
-    .copilot-dd-overlay.open { display: block; }
-    .copilot-dd { position: fixed !important; top: 46px; right: 14px; width: 420px; max-width: calc(100vw - 24px); max-height: calc(100vh - 60px); overflow-y: auto; background: #fff !important; box-shadow: 0 16px 48px rgba(20,24,34,.22); margin: 0 !important; z-index: 46; display: none; }
-    .copilot-dd.open { display: block; animation: cop-in .2s ease; }
+    .copilot-dd-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.28); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 45; }
+    .copilot-dd-overlay.open { opacity: 1; visibility: visible; }
+    .copilot-dd { position: fixed !important; top: var(--topbar-h, 46px); right: 0; bottom: 0; width: 440px; max-width: 92vw; overflow-y: auto; background: #fff !important; border: none; border-left: 1px solid #e4e6f2; border-radius: 0 !important; box-shadow: -8px 0 32px rgba(20,24,34,.10); margin: 0 !important; z-index: 46; display: block; transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
+    .copilot-dd.open { transform: translateX(0); }
     .copilot-dd-close { margin-left: auto; border: none; background: none; font-size: 20px; line-height: 1; color: var(--d365-text-muted); cursor: pointer; padding: 0 2px; }
     .copilot-dd-close:hover { color: var(--d365-text); }
     .topbar .copilot-btn { cursor: pointer; }
@@ -110,7 +111,7 @@
     </style>
 </head>
 <body>
-  <div class="copilot-dd-overlay open" id="copilotOverlay" onclick="toggleCopilot()"></div>
+  <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
   <div class="nav-backdrop" onclick="closeSidebar()"></div>
 
   <!-- Topbar -->
@@ -124,7 +125,6 @@
     <div class="top-actions">
       <div class="copilot-btn" id="copilotBtn" onclick="toggleCopilot()">&#10024; Copilot</div>
       <span>&#9881;</span>
-      <span>&#128276;</span>
       <div class="avatar">ES</div>
     </div>
   </div>
@@ -295,7 +295,7 @@
         </div>
 
         <!-- Ask Copilot -->
-        <div class="copilot-ask copilot-dd open" id="copilotDD">
+        <div class="copilot-ask copilot-dd" id="copilotDD">
           <div class="copilot-ask-head">
             <span class="copilot-ask-badge">&#10024; ASK COPILOT</span>
             <span class="copilot-ask-sub">Grounded on this dashboard &middot; live call-center data</span>
@@ -1119,5 +1119,6 @@
     }
     (function(){var el=document.getElementById('lastRefreshed');if(el)el.textContent='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
   </script>
+  <script src="copilot-widget.js" defer></script>
 </body>
 </html>

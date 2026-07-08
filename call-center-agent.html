@@ -6,16 +6,17 @@
   <title>Call Center Agent — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="fluent-tokens.css" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f7f8fb;
+      --bg: #f5f5f5;
       --surface: #ffffff;
       --surface-warm: #fefdfb;
-      --ink: #2d3340;
-      --ink-secondary: #6b7289;
-      --ink-muted: #9ea3b5;
-      --border: #eceef4;
-      --border-soft: #f1f2f7;
+      --ink: #242424;
+      --ink-secondary: #424242;
+      --ink-muted: #616161;
+      --border: #e0e0e0;
+      --border-soft: #f0f0f0;
       --blue: #17293d;
       --blue-soft: #e9edf2;
       --blue-muted: #98a6b6;
@@ -37,7 +38,7 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
       background: var(--bg);
       color: var(--ink);
       font-size: 13px;
@@ -191,6 +192,8 @@
     }
     .btn-soft:hover { background: var(--bg); }
     .btn-soft .material-symbols-outlined { font-size: 14px; }
+    .btn-soft.btn-icon-only { padding: 6px; width: 30px; height: 30px; justify-content: center; gap: 0; }
+    .btn-soft.btn-icon-only .material-symbols-outlined { font-size: 17px; }
 
     /* ── Notification Bell (topbar) ── */
     .notif-bell {
@@ -432,8 +435,20 @@
     .qt-table tbody tr.urg:hover { background: #fdf0f0; }
 
     .c-name { font-weight: 600; font-size: 12.5px; color: var(--ink); }
-    .c-phone { font-size: 10.5px; color: var(--ink-muted); margin-top: 1px; }
-    .c-id { font-size: 9.5px; color: #bbb; font-family: 'SF Mono', monospace; }
+    .c-phone { font-size: 12px; color: var(--ink-secondary); }
+    .c-id { font-size: 11.5px; color: var(--ink-secondary); font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace; }
+    .copy-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 6px; margin: -3px -6px; border-radius: 4px; cursor: pointer; transition: background .1s, color .1s; white-space: nowrap; }
+    .qt-table td:nth-child(2), .qt-table td:nth-child(3), .qt-table th:nth-child(2), .qt-table th:nth-child(3) { white-space: nowrap; }
+    .copy-chip:hover { background: var(--blue-soft); color: var(--blue); }
+    .copy-chip:hover .cc-text { color: var(--blue); }
+    .copy-chip.copied { background: #edf8f1; }
+    .copy-chip.copied .cc-text { color: #0e700e; }
+    .cc-ico { font-size: 14px; opacity: 0; transition: opacity .1s; }
+    .qt-table tbody tr:hover .cc-ico, .copy-chip:hover .cc-ico { opacity: 1; }
+    .copy-chip.copied .cc-ico { opacity: 1; color: #0e700e; }
+    .cc-toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: #242424; color: #fff; font-size: 13px; font-weight: 500; padding: 11px 18px; border-radius: 8px; box-shadow: 0 8px 28px rgba(20,24,34,.12); display: flex; align-items: center; gap: 8px; opacity: 0; visibility: hidden; transition: all .3s ease; z-index: 200; }
+    .cc-toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .cc-toast .material-symbols-outlined { font-size: 18px; color: #5cb97f; }
 
     .src {
       display: inline-flex; align-items: center; gap: 5px;
@@ -447,7 +462,7 @@
     .src-dot.web { background: var(--blue); }
     .src-dot.ig { background: #c13584; }
     .src-dot.ggl { background: #4285f4; }
-    .src-dot.walk { background: #9ea3b5; }
+    .src-dot.walk { background: #616161; }
     .src-dot.fb { background: #1877f2; }
     .src-dot.ref { background: var(--green); }
 
@@ -483,17 +498,16 @@
     .st-badge.ic { background: var(--purple-soft); color: var(--purple); }
 
     .act-btn {
-      display: inline-flex; align-items: center; gap: 4px;
-      padding: 5px 12px; border-radius: 7px;
-      font-size: 11px; font-weight: 600; text-decoration: none;
-      transition: all .12s; white-space: nowrap;
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: var(--borderRadiusMedium);
+      text-decoration: none; transition: all .12s;
     }
     .act-btn.open { background: var(--blue-soft); color: var(--blue); }
     .act-btn.open:hover { background: #dde8ff; }
     .act-btn.hand { background: var(--green-soft); color: #3d8a5b; }
     .act-btn.hand:hover { background: #d5f0de; }
     .st-badge.ip { background: var(--purple-soft); color: var(--purple); }
-    .act-btn .material-symbols-outlined { font-size: 14px; }
+    .act-btn .material-symbols-outlined { font-size: 17px; }
 
     /* ── Sidebar cards ── */
     .side { display: flex; flex-direction: column; gap: 10px; }
@@ -577,7 +591,7 @@
       transition: transform .15s, box-shadow .15s;
       text-decoration: none; font-family: inherit;
     }
-    .ai-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(124,109,216,.25); }
+    .ai-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(124,109,216,.12); }
     .ai-btn .material-symbols-outlined { font-size: 14px; }
 
     /* ── Inline Notifications ── */
@@ -677,25 +691,35 @@
     .copilot-answer-cite { margin-top:10px; font-size:10.5px; color:var(--ink-muted); display:flex; align-items:center; gap:5px; border-top:1px solid var(--border); padding-top:8px; }
   
     /* ── Copilot dropdown ── */
-    .copilot-dd-overlay { position: fixed; inset: 0; z-index: 45; display: none; }
-    .copilot-dd-overlay.open { display: block; }
-    .copilot-dd { position: fixed !important; top: calc(var(--topbar-h) + 6px); right: 14px; width: 420px; max-width: calc(100vw - 24px); max-height: calc(100vh - var(--topbar-h) - 20px); overflow-y: auto; background: #fff !important; border: 1px solid #e4e6f2; box-shadow: 0 16px 48px rgba(20,24,34,.22); margin: 0 !important; z-index: 46; display: none; }
-    .copilot-dd.open { display: block; animation: cop-in .2s ease; }
+    .copilot-dd-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.28); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 45; }
+    .copilot-dd-overlay.open { opacity: 1; visibility: visible; }
+    .copilot-dd { position: fixed !important; top: var(--topbar-h); right: 0; bottom: 0; width: 440px; max-width: 92vw; overflow-y: auto; background: #fff !important; border: none; border-left: 1px solid #e4e6f2; border-radius: 0 !important; box-shadow: -8px 0 32px rgba(20,24,34,.08); margin: 0 !important; z-index: 46; display: block; transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
+    .copilot-dd.open { transform: translateX(0); }
     .copilot-dd-close { margin-left: auto; border: none; background: none; font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 0 2px; }
     .copilot-dd-close:hover { color: var(--ink); }
     .topbar .copilot { cursor: pointer; }
+  
+    /* Inline row expand (lead queue) */
+    .qt-table tbody tr.gx-open { background: var(--blue-soft); }
+    .gx-row td { padding: 0 !important; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .gx-inner { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+    .gx-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 20px; padding: 14px 18px 10px; }
+    .gx-label { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 2px; }
+    .gx-val { font-size: 12.5px; color: var(--ink); }
+    .gx-foot { padding: 2px 18px 14px; }
+    .gx-btn { display: inline-flex; align-items: center; gap: 5px; background: var(--blue); color: #fff; text-decoration: none; border-radius: 8px; padding: 8px 15px; font-size: 12px; font-weight: 600; }
+    .gx-btn .material-symbols-outlined { font-size: 15px; }
     </style>
 </head>
 <body>
-  <div class="copilot-dd-overlay open" id="copilotOverlay" onclick="toggleCopilot()"></div>
+  <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
   <div class="nav-backdrop" onclick="closeSidebar()"></div>
 
   <!-- Topbar -->
   <div class="topbar">
     <span class="waffle" onclick="toggleSidebar()">&#9783;</span>
     <span class="app-name">Dynamics 365</span>
-    <span class="sep"></span>
-    <img src="logo.png" alt="Al Ghurair" class="tb-logo" style="height:20px;width:auto;display:block;opacity:.95" /><span class="sep"></span><span class="org">AGM Sales</span>
+    <span class="sep"></span><span class="org">AGM Sales</span>
     <input class="search" type="text" placeholder="&#128269; Search..." />
     <span class="spacer"></span>
     <div class="actions">
@@ -714,26 +738,17 @@
   <div class="notif-overlay" id="notifOverlay" onclick="toggleNotif()"></div>
   <div class="notif-dropdown" id="notifDropdown">
     <div class="notif-head">
-      <div class="notif-head-left">
-        <span class="material-symbols-outlined">notifications</span>
-        Notifications
-        <span class="notif-badge" id="notifBadge">4</span>
-      </div>
-      <div class="notif-actions">
-        <button onclick="markAllRead()">Mark all read</button>
-      </div>
+      <div class="notif-head-left"><span class="material-symbols-outlined">notifications</span> Notifications <span class="notif-badge" id="notifBadge">4</span></div>
+      <div class="notif-actions"><button onclick="markAllRead()">Mark all read</button></div>
     </div>
     <div class="notif-list" id="notifList">
       <div class="notif-item unread">
         <span class="notif-dot"></span>
         <div class="ni-icon danger"><span class="material-symbols-outlined">warning</span></div>
         <div class="ni-body">
-          <div class="ni-title">SLA breached &mdash; manager notified</div>
-          <div class="ni-text">Maya Hassan (L-2026-04831) passed the 1-hour first-contact SLA.</div>
-          <div class="ni-meta">
-            <span class="ni-time">12 min ago</span>
-            <a href="lead-detail.html?lead=Maya+Hassan" class="ni-action">Open lead</a>
-          </div>
+          <div class="ni-title">SLA breached &mdash; Maya Hassan</div>
+          <div class="ni-text">L-2026-04831 passed the 1-hour first-contact SLA. Manager notified.</div>
+          <div class="ni-meta"><span class="ni-time">12 min ago</span><a href="lead-detail.html?lead=Maya+Hassan" class="ni-action">Open lead</a></div>
         </div>
         <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
       </div>
@@ -743,10 +758,7 @@
         <div class="ni-body">
           <div class="ni-title">Lead returned by Sales Executive</div>
           <div class="ni-text">Sara Ali (L-2026-04826) &mdash; missing preferred showroom.</div>
-          <div class="ni-meta">
-            <span class="ni-time">28 min ago</span>
-            <a href="lead-detail.html?lead=Sara+Ali" class="ni-action">Complete lead</a>
-          </div>
+          <div class="ni-meta"><span class="ni-time">28 min ago</span><a href="lead-detail.html?lead=Sara+Ali" class="ni-action">Complete lead</a></div>
         </div>
         <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
       </div>
@@ -756,10 +768,7 @@
         <div class="ni-body">
           <div class="ni-title">2 new leads assigned to you</div>
           <div class="ni-text">Hiren Patel (AGM website) and Karim Saleh (Google Search) added to your queue.</div>
-          <div class="ni-meta">
-            <span class="ni-time">45 min ago</span>
-            <a href="lead-detail.html" class="ni-action">View queue</a>
-          </div>
+          <div class="ni-meta"><span class="ni-time">42 min ago</span><a href="#" class="ni-action">View queue</a></div>
         </div>
         <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
       </div>
@@ -767,44 +776,16 @@
         <span class="notif-dot"></span>
         <div class="ni-icon success"><span class="material-symbols-outlined">check_circle</span></div>
         <div class="ni-body">
-          <div class="ni-title">Handover accepted by Sales</div>
-          <div class="ni-text">Ahmad Rizk (L-2026-04810) was accepted by Mariam K. Test drive booked.</div>
-          <div class="ni-meta">
-            <span class="ni-time">1h ago</span>
-          </div>
-        </div>
-        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
-      </div>
-      <div class="notif-item">
-        <span class="notif-dot"></span>
-        <div class="ni-icon info"><span class="material-symbols-outlined">schedule</span></div>
-        <div class="ni-body">
-          <div class="ni-title">Follow-up reminder: Aisha Khalifa</div>
-          <div class="ni-text">Scheduled follow-up at 14:30 for EXEED RX enquiry.</div>
-          <div class="ni-meta">
-            <span class="ni-time">2h ago</span>
-            <a href="lead-detail.html?lead=Aisha+Khalifa" class="ni-action">Open lead</a>
-          </div>
-        </div>
-        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
-      </div>
-      <div class="notif-item">
-        <span class="notif-dot"></span>
-        <div class="ni-icon success"><span class="material-symbols-outlined">trending_up</span></div>
-        <div class="ni-body">
-          <div class="ni-title">SLA compliance improved to 92%</div>
-          <div class="ni-text">Your 1st-contact SLA is up +2pp vs last week. Keep it up!</div>
-          <div class="ni-meta">
-            <span class="ni-time">3h ago</span>
-          </div>
+          <div class="ni-title">Handover accepted &mdash; Ahmad Rizk</div>
+          <div class="ni-text">L-2026-04810 accepted by Mariam K. Test drive booked for tomorrow.</div>
+          <div class="ni-meta"><span class="ni-time">1 hr ago</span></div>
         </div>
         <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
       </div>
     </div>
-    <div class="notif-footer">
-      <a href="#">View all notifications</a>
-    </div>
+    <div class="notif-footer"><a href="#">View all notifications</a></div>
   </div>
+
 
   <div class="shell">
     <!-- Sidebar -->
@@ -886,12 +867,12 @@
             <div class="shift-pill">
               <span class="dot"></span> On shift &middot; <span class="tm" id="timer">03:12:47</span>
             </div>
-            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px"><button class="btn-soft" onclick="doRefresh(this)"><span class="material-symbols-outlined">refresh</span> Refresh</button><span class="last-refreshed" id="lastRefreshed" style="font-size:11px;color:var(--ink-muted);white-space:nowrap"></span></div>
+            <div style="display:flex;flex-direction:row;align-items:center;gap:8px"><span class="last-refreshed" id="lastRefreshed" style="font-size:11px;color:var(--ink-muted);white-space:nowrap"></span><button class="btn-soft btn-icon-only" onclick="doRefresh(this)" title="Refresh"><span class="material-symbols-outlined">refresh</span></button></div>
           </div>
         </div>
 
         <!-- Ask Copilot -->
-        <div class="copilot-ask copilot-dd open" id="copilotDD">
+        <div class="copilot-ask copilot-dd" id="copilotDD">
           <div class="copilot-ask-head">
             <span class="copilot-ask-badge">&#10024; COPILOT</span>
             <span class="copilot-ask-sub">Grounded on your dashboard &middot; updated just now</span>
@@ -912,45 +893,6 @@
             <div class="copilot-answer-body" id="copilotAnswerBody"></div>
             <div class="copilot-answer-actions" id="copilotAnswerActions"></div>
             <div class="copilot-answer-cite" id="copilotAnswerCite"></div>
-          </div>
-        </div>
-
-        <!-- Inline Notifications -->
-        <div class="inline-notifs" id="inlineNotifs">
-          <div class="inline-notif danger">
-            <div class="in-icon"><span class="material-symbols-outlined">warning</span></div>
-            <div class="in-body">
-              <div class="in-title">SLA breached &mdash; Maya Hassan</div>
-              <div class="in-text">L-2026-04831 passed the 1-hour first-contact SLA. Manager notified.</div>
-            </div>
-            <a href="lead-detail.html?lead=Maya+Hassan" class="in-action">Open lead</a>
-            <button class="in-close" onclick="dismissInline(this)">&times;</button>
-          </div>
-          <div class="inline-notif warn">
-            <div class="in-icon"><span class="material-symbols-outlined">undo</span></div>
-            <div class="in-body">
-              <div class="in-title">Lead returned by Sales Executive</div>
-              <div class="in-text">Sara Ali (L-2026-04826) &mdash; missing preferred showroom. Complete and resubmit.</div>
-            </div>
-            <a href="lead-detail.html?lead=Sara+Ali" class="in-action">Complete lead</a>
-            <button class="in-close" onclick="dismissInline(this)">&times;</button>
-          </div>
-          <div class="inline-notif info">
-            <div class="in-icon"><span class="material-symbols-outlined">person_add</span></div>
-            <div class="in-body">
-              <div class="in-title">2 new leads assigned to you</div>
-              <div class="in-text">Hiren Patel (AGM website) and Karim Saleh (Google Search) added to your queue.</div>
-            </div>
-            <a href="#" class="in-action">View queue</a>
-            <button class="in-close" onclick="dismissInline(this)">&times;</button>
-          </div>
-          <div class="inline-notif success">
-            <div class="in-icon"><span class="material-symbols-outlined">check_circle</span></div>
-            <div class="in-body">
-              <div class="in-title">Handover accepted &mdash; Ahmad Rizk</div>
-              <div class="in-text">L-2026-04810 accepted by Mariam K. Test drive booked for tomorrow.</div>
-            </div>
-            <button class="in-close" onclick="dismissInline(this)">&times;</button>
           </div>
         </div>
 
@@ -1039,80 +981,80 @@
             </div>
             <table class="qt-table">
               <thead><tr>
-                <th>Customer</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Status</th><th style="text-align:right">Action</th>
+                <th>Customer</th><th>Phone</th><th>Lead ID</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Status</th><th style="text-align:right">Action</th>
               </tr></thead>
               <tbody>
                 <tr>
-                  <td><div class="c-name">Hiren Patel</div><div class="c-phone">+971 50 123 4567</div><div class="c-id">L-2026-04832</div></td>
+                  <td><div class="c-name">Hiren Patel</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 50 123 4567',this)"><span class="cc-text c-phone">+971 50 123 4567</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04832',this)"><span class="cc-text c-id">L-2026-04832</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
                   <td><span class="mdl">EXEED LX Premium</span></td>
                   <td><span class="sla-tag ok"><span class="blink"></span>12 min left</span></td>
                   <td><span class="st-badge new">New</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Hiren+Patel" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Hiren+Patel" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
                 </tr>
                 <tr class="urg">
-                  <td><div class="c-name">Maya Hassan</div><div class="c-phone">+971 55 998 2210</div><div class="c-id">L-2026-04831</div></td>
+                  <td><div class="c-name">Maya Hassan</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 55 998 2210',this)"><span class="cc-text c-phone">+971 55 998 2210</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04831',this)"><span class="cc-text c-id">L-2026-04831</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot ig">I</span>Instagram Ads</span></td>
                   <td><span class="mdl">EXEED TXL Flagship</span></td>
                   <td><span class="sla-tag brch"><span class="blink"></span>SLA breached</span></td>
                   <td><span class="st-badge na">Not actioned</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Maya+Hassan" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Maya+Hassan" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Karim Saleh</div><div class="c-phone">+971 52 447 1100</div><div class="c-id">L-2026-04829</div></td>
+                  <td><div class="c-name">Karim Saleh</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 52 447 1100',this)"><span class="cc-text c-phone">+971 52 447 1100</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04829',this)"><span class="cc-text c-id">L-2026-04829</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot ggl">G</span>Google Search</span></td>
                   <td><span class="mdl">EXEED VX</span></td>
                   <td><span class="sla-tag ok"><span class="blink"></span>1h 20m left</span></td>
                   <td><span class="st-badge new">New</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Karim+Saleh" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Karim+Saleh" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Aisha Khalifa</div><div class="c-phone">+971 50 887 6631</div><div class="c-id">L-2026-04825</div></td>
+                  <td><div class="c-name">Aisha Khalifa</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 50 887 6631',this)"><span class="cc-text c-phone">+971 50 887 6631</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04825',this)"><span class="cc-text c-id">L-2026-04825</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot walk">R</span>Walk-in ref.</span></td>
                   <td><span class="mdl">EXEED RX</span></td>
                   <td><span class="sla-tag wrn"><span class="blink"></span>Due 14:30</span></td>
                   <td><span class="st-badge cb">Follow-up</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Aisha+Khalifa" class="act-btn open"><span class="material-symbols-outlined">event</span>View follow-up</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Aisha+Khalifa" class="act-btn open" title="View follow-up"><span class="material-symbols-outlined">event</span></a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Linda George</div><div class="c-phone">+971 56 220 7788</div><div class="c-id">L-2026-04820</div></td>
+                  <td><div class="c-name">Linda George</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 56 220 7788',this)"><span class="cc-text c-phone">+971 56 220 7788</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04820',this)"><span class="cc-text c-id">L-2026-04820</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot fb">f</span>Facebook Ads</span></td>
                   <td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag wrn"><span class="blink"></span>Due 15:15</span></td>
                   <td><span class="st-badge cb">Follow-up</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Linda+George" class="act-btn open"><span class="material-symbols-outlined">event</span>View follow-up</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Linda+George" class="act-btn open" title="View follow-up"><span class="material-symbols-outlined">event</span></a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Omar Nasser</div><div class="c-phone">+971 55 331 9987</div><div class="c-id">L-2026-04818</div></td>
+                  <td><div class="c-name">Omar Nasser</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 55 331 9987',this)"><span class="cc-text c-phone">+971 55 331 9987</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04818',this)"><span class="cc-text c-id">L-2026-04818</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
                   <td><span class="mdl">EXEED TXL</span></td>
                   <td><span class="sla-tag ok">Qualified</span></td>
                   <td><span class="st-badge ho">Ready to hand over</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand"><span class="material-symbols-outlined">send</span>Hand over</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand" title="Hand over"><span class="material-symbols-outlined">send</span></a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Fatima Al Ali</div><div class="c-phone">+971 50 662 4411</div><div class="c-id">L-2026-04817</div></td>
+                  <td><div class="c-name">Fatima Al Ali</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 50 662 4411',this)"><span class="cc-text c-phone">+971 50 662 4411</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04817',this)"><span class="cc-text c-id">L-2026-04817</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot ref">R</span>Referral</span></td>
                   <td><span class="mdl">EXEED VX</span></td>
                   <td><span class="sla-tag ok">Qualified</span></td>
                   <td><span class="st-badge ho">Ready to hand over</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand"><span class="material-symbols-outlined">send</span>Hand over</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand" title="Hand over"><span class="material-symbols-outlined">send</span></a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Yousef Rahman</div><div class="c-phone">+971 52 118 3344</div><div class="c-id">L-2026-04815</div></td>
+                  <td><div class="c-name">Yousef Rahman</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 52 118 3344',this)"><span class="cc-text c-phone">+971 52 118 3344</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04815',this)"><span class="cc-text c-id">L-2026-04815</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot ig">I</span>Instagram Ads</span></td>
                   <td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag ok">Qualified</span></td>
                   <td><span class="st-badge ho">Ready to hand over</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand"><span class="material-symbols-outlined">send</span>Hand over</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand" title="Hand over"><span class="material-symbols-outlined">send</span></a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Reem Al Zaabi</div><div class="c-phone">+971 55 774 8823</div><div class="c-id">L-2026-04814</div></td>
+                  <td><div class="c-name">Reem Al Zaabi</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 55 774 8823',this)"><span class="cc-text c-phone">+971 55 774 8823</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04814',this)"><span class="cc-text c-id">L-2026-04814</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
                   <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
                   <td><span class="mdl">EXEED RX</span></td>
                   <td><span class="sla-tag ok">In progress</span></td>
                   <td><span class="st-badge ip">In progress</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Reem+Al+Zaabi" class="act-btn open"><span class="material-symbols-outlined">open_in_new</span>Open lead</a></td>
+                  <td style="text-align:right"><a href="lead-detail.html?lead=Reem+Al+Zaabi" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
                 </tr>
               </tbody>
             </table>
@@ -1184,42 +1126,6 @@
       document.getElementById('dialTime').style.strokeDashoffset = arc - (arc * 0.52);
     });
 
-    function toggleNotif() {
-      const dd = document.getElementById('notifDropdown');
-      const ov = document.getElementById('notifOverlay');
-      dd.classList.toggle('open');
-      ov.classList.toggle('open');
-    }
-
-    function markAllRead() {
-      document.querySelectorAll('.notif-item.unread').forEach(n => n.classList.remove('unread'));
-      updateBadge();
-    }
-
-    function dismissNotif(btn) {
-      const item = btn.closest('.notif-item');
-      item.style.transition = 'all .2s';
-      item.style.opacity = '0';
-      item.style.maxHeight = '0';
-      item.style.padding = '0 16px';
-      setTimeout(() => { item.remove(); updateBadge(); }, 200);
-    }
-
-    function updateBadge() {
-      const count = document.querySelectorAll('.notif-item.unread').length;
-      const bellBadge = document.getElementById('bellBadge');
-      const notifBadge = document.getElementById('notifBadge');
-      if (count > 0) {
-        bellBadge.textContent = count;
-        notifBadge.textContent = count;
-        bellBadge.style.display = '';
-        notifBadge.style.display = '';
-      } else {
-        bellBadge.style.display = 'none';
-        notifBadge.style.display = 'none';
-      }
-    }
-
     let sec = 3*3600 + 12*60 + 47;
     setInterval(() => {
       sec++;
@@ -1285,6 +1191,11 @@
     function copilotMatch(q){ q=(q||'').toLowerCase(); if(/sla|breach|overdue|due/.test(q)) return 'sla'; if(/hand|qualif/.test(q)) return 'handover'; if(/draft|message|follow|whatsapp|email/.test(q)) return 'draft'; return 'priority'; }
 
     function toggleCopilot(){ var dd=document.getElementById('copilotDD'),ov=document.getElementById('copilotOverlay'); var o=dd.classList.toggle('open'); if(ov)ov.classList.toggle('open',o); }
+
+    function toggleNotif(){ var dd=document.getElementById('notifDropdown'),ov=document.getElementById('notifOverlay'); if(!dd)return; dd.classList.toggle('open'); if(ov)ov.classList.toggle('open'); }
+    function markAllRead(){ document.querySelectorAll('.notif-item.unread').forEach(function(n){n.classList.remove('unread');}); updateBellBadge(); }
+    function dismissNotif(btn){ var item=btn.closest('.notif-item'); item.style.transition='all .2s'; item.style.opacity='0'; item.style.maxHeight='0'; item.style.padding='0 16px'; setTimeout(function(){ item.remove(); updateBellBadge(); },200); }
+    function updateBellBadge(){ var count=document.querySelectorAll('.notif-item.unread').length; ['bellBadge','notifBadge'].forEach(function(id){ var b=document.getElementById(id); if(!b)return; if(count>0){ b.textContent=count; b.style.display=''; } else { b.style.display='none'; } }); }
     function copilotRender(intent){
       var a=copilotAnswers[intent]; if(!a) return;
       document.getElementById('copilotAnswerBody').innerHTML=a.body;
@@ -1297,6 +1208,52 @@
       if(typeof intent==='string' && copilotAnswers[intent]){ input.value=copilotLabels[intent]||input.value; }
       else { intent=copilotMatch(input.value); }
       copilotRender(intent);
+    }
+  </script>
+
+  <script>
+    (function(){
+      var table = document.querySelector('.qt-table');
+      if (!table) return;
+      function txt(tr, sel){ var e = tr.querySelector(sel); return e ? e.textContent.replace(/\s+/g,' ').trim() : ''; }
+      table.querySelectorAll('tbody tr').forEach(function(tr){
+        tr.style.cursor = 'pointer';
+        tr.addEventListener('click', function(e){
+          if (e.target.closest('a,button,input')) return;
+          var next = tr.nextElementSibling;
+          if (next && next.classList.contains('gx-row')) { var inn=next.querySelector('.gx-inner'); inn.style.maxHeight='0px'; setTimeout(function(){ if(next.parentNode) next.remove(); },260); tr.classList.remove('gx-open'); return; }
+          table.querySelectorAll('.gx-row').forEach(function(r){ r.remove(); });
+          table.querySelectorAll('tbody tr.gx-open').forEach(function(r){ r.classList.remove('gx-open'); });
+          var name = txt(tr,'.c-name');
+          var fields = [['Mobile',txt(tr,'.c-phone')],['Lead ID',txt(tr,'.c-id')],['Source',txt(tr,'.src')],['Model interest',txt(tr,'.mdl')],['SLA',txt(tr,'.sla-tag')],['Status',txt(tr,'.st-badge')]];
+          var items = fields.filter(function(x){return x[1];}).map(function(x){ return '<div class="gx-item"><div class="gx-label">'+x[0]+'</div><div class="gx-val">'+x[1]+'</div></div>'; }).join('');
+          var cols = tr.children.length;
+          var exp = document.createElement('tr'); exp.className = 'gx-row';
+          exp.innerHTML = '<td colspan="'+cols+'"><div class="gx-inner"><div class="gx-grid">'+items+'</div><div class="gx-foot"><a class="gx-btn" href="lead-detail.html?lead='+encodeURIComponent(name)+'">Open full details <span class="material-symbols-outlined">arrow_forward</span></a></div></div></td>';
+          tr.parentNode.insertBefore(exp, tr.nextSibling);
+          tr.classList.add('gx-open');
+          var inner = exp.querySelector('.gx-inner'); inner.style.maxHeight='0px';
+          requestAnimationFrame(function(){ inner.style.maxHeight = inner.scrollHeight + 'px'; });
+        });
+      });
+    })();
+
+    function ccShowToast(msg) {
+      var t = document.getElementById('ccToast');
+      if (!t) { t = document.createElement('div'); t.id = 'ccToast'; t.className = 'cc-toast'; document.body.appendChild(t); }
+      t.innerHTML = '<span class="material-symbols-outlined">check_circle</span>' + msg;
+      t.classList.add('show');
+      clearTimeout(window._ccToastT);
+      window._ccToastT = setTimeout(function(){ t.classList.remove('show'); }, 1800);
+    }
+    function copyText(text, el) {
+      function done() {
+        var ico = el.querySelector('.cc-ico');
+        if (ico) { ico.textContent = 'check'; el.classList.add('copied'); setTimeout(function(){ ico.textContent = 'content_copy'; el.classList.remove('copied'); }, 1200); }
+        ccShowToast('Copied ' + text);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, done); }
+      else { var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e) {} document.body.removeChild(ta); done(); }
     }
   </script>
 </body>

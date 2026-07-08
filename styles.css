@@ -23,7 +23,7 @@
 }
 
 body {
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: 'Segoe UI', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: var(--d365-text);
   background: var(--d365-page-bg);
   line-height: 1.5;
