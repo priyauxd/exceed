@@ -116,7 +116,24 @@
     .lx-open:hover { filter: brightness(1.15); }
     .lx-open .material-symbols-outlined { font-size: 15px; }
     /* SLA Tracker widget */
-    .dp-sla-widget { border: 1px solid var(--border-soft); border-radius: 14px; padding: 14px; margin-bottom: 14px; background: var(--surface); box-shadow: 0 4px 16px rgba(24,44,86,.06); }
+    .dp-sla-widget { border: 1px solid var(--border-soft); border-radius: 14px; padding: 14px 16px 16px; margin-bottom: 14px; background: var(--surface); box-shadow: 0 4px 16px rgba(24,44,86,.06); }
+    .sla2-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+    .sla2-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .sla2-timers-l { font-size: 13px; color: var(--ink); }
+    .sla2-update { font-size: 11px; color: var(--ink-muted); margin-left: auto; line-height: 1.3; max-width: 130px; text-align: right; }
+    .sla2-refresh { border: none; background: none; cursor: pointer; color: var(--ink-muted); display: flex; padding: 2px; border-radius: 6px; flex-shrink: 0; }
+    .sla2-refresh:hover { color: var(--blue); background: var(--blue-soft); }
+    .sla2-refresh .material-symbols-outlined { font-size: 17px; }
+    .sla2-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .sla2-tile { position: relative; display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-soft); border-radius: 8px; padding: 11px 12px; }
+    .sla2-dot { position: absolute; top: 9px; right: 9px; width: 6px; height: 6px; border-radius: 50%; }
+    .sla2-dot.ok { background: #20b26a; } .sla2-dot.wrn { background: var(--amber); } .sla2-dot.brch { background: var(--red); }
+    .sla2-ring { width: 34px; height: 34px; flex-shrink: 0; }
+    .sla2-bg { fill: none; stroke: var(--border); stroke-width: 3.2; }
+    .sla2-fg { fill: none; stroke: #20b26a; stroke-width: 3.2; stroke-linecap: round; transition: stroke-dasharray .5s linear; }
+    .sla2-ring.wrn .sla2-fg { stroke: var(--amber); } .sla2-ring.brch .sla2-fg { stroke: var(--red); }
+    .sla2-label { font-size: 12.5px; font-weight: 600; color: var(--ink); }
+    .sla2-time { font-size: 11.5px; color: var(--ink-muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
     .slaw-head { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
     .slaw-head .material-symbols-outlined { font-size: 17px; color: var(--blue); }
     .slaw-head-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
@@ -1850,75 +1867,42 @@
     }
 
     // ── SLA Tracker widget ──
+    function fmtSlaTimer(s){ s = Math.max(0, s); var m = Math.floor(s/60), ss = s%60; return String(m).padStart(2,'0')+'m:'+String(ss).padStart(2,'0')+'s'; }
+    function fmtSlaNow(){ var d = new Date(); var h = d.getHours(), ap = h>=12?'PM':'AM'; h = h%12||12; return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+h+':'+String(d.getMinutes()).padStart(2,'0')+' '+ap; }
+    function refreshSla(){ var l = selectedIdx>=0?leads[selectedIdx]:null; if(!l) return; l._slaUpdated = fmtSlaNow(); renderDetail(selectedIdx, currentStep); }
+    function slaTile(label, secs, idx){
+      var col = secs < 60 ? 'brch' : (secs < 150 ? 'wrn' : 'ok');
+      var pct = Math.max(3, Math.min(100, Math.round(secs / 300 * 100)));
+      return '<div class="sla2-tile">' +
+        '<span class="sla2-dot '+col+'"></span>' +
+        '<svg class="sla2-ring '+col+'" viewBox="0 0 36 36"><circle class="sla2-bg" cx="18" cy="18" r="15.5"></circle><circle class="sla2-fg" id="sla2Fg'+idx+'" cx="18" cy="18" r="15.5" pathLength="100" stroke-dasharray="'+pct+' 100" transform="rotate(-90 18 18)"></circle></svg>' +
+        '<div class="sla2-info"><div class="sla2-label">'+label+'</div><div class="sla2-time" id="sla2Time'+idx+'">'+fmtSlaTimer(secs)+'</div></div>' +
+      '</div>';
+    }
     function slaWidget(l, sd) {
-      var slaNum = (String(l.sla).match(/\d+/) || [''])[0];
-      var big = slaNum || l.sla;
-      var sub = slaNum ? 'mins left' : (l.slaTime || '');
-      var cls = l.slaClass === 'brch' ? 'brch' : (l.slaClass === 'wrn' ? 'wrn' : 'ok');
-      var created = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time.split(' ')[0] : '—';
-      var createdDT = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time : '—';
-      var assignedDT = (l.owner && l.owner !== 'Unassigned') ? (createdDT + ' · ' + l.owner) : 'Pending assignment';
-      var slaPct = cls === 'brch' ? 100 : (cls === 'wrn' ? 82 : Math.max(8, Math.min(70, slaNum ? Math.round((30 - Math.min(30, +slaNum)) / 30 * 100) : 40)));
-      var slaState = cls === 'brch' ? 'Breached' : (cls === 'wrn' ? 'Due soon' : 'On track');
-      // Per-stage SLA config — reflects the stage currently being viewed in the stepper.
       var si = Math.min(Math.max(currentStep, 0), stageSla.length - 1);
       var ssla = stageSla[si] || { show:[], items:[] };
-      var showValMap = {
-        'Record created': created + ' · 09:12',
-        'Assignment': (l.owner && l.owner !== 'Unassigned') ? created + ' · 09:20' : 'Pending assignment',
-        'Appointment': (l.handoverBooking && l.handoverBooking.date) ? tdFmtDate(l.handoverBooking.date) + (l.handoverBooking.time ? ' · ' + l.handoverBooking.time : '')
-          : ((l.nextCall && l.nextCall.date) ? tdFmtDate(l.nextCall.date) + (l.nextCall.time ? ' · ' + l.nextCall.time : '') : 'Not scheduled')
-      };
-      var showRows = ssla.show.map(function(k){
-        return '<div class="slaw-irow"><span class="slaw-ilabel">' + k + ' date/time</span><span class="slaw-ival">' + (showValMap[k] || '—') + '</span></div>';
-      }).join('');
       var noteHtml = ssla.note ? '<div class="slaw-note"><span class="material-symbols-outlined">smart_toy</span>' + ssla.note + '</div>' : '';
-      // List of SLA activities for this stage. Progress derived from attempts logged.
-      var cadence = ssla.items;
-      var doneUpto = cls === 'brch' ? 0 : Math.min(cadence.length, (l.attempts || 1) - 1);
-      var curIdx = Math.min(cadence.length - 1, Math.max(0, doneUpto));
-      var cadHtml = cadence.map(function(c, i){
-        var st = i < curIdx ? 'done' : (i === curIdx ? (cls === 'brch' ? 'missed' : 'current') : 'upcoming');
-        var icon = st === 'done' ? 'check_circle' : (st === 'missed' ? 'error' : (st === 'current' ? 'radio_button_checked' : 'radio_button_unchecked'));
-        return '<div class="slaw-cad-item '+st+'">' +
-          '<span class="material-symbols-outlined slaw-cad-dot">'+icon+'</span>' +
-          '<div class="slaw-cad-body"><div class="slaw-cad-t">'+c.t+'</div><div class="slaw-cad-a">'+c.a+'</div></div>' +
-        '</div>';
-      }).join('');
-      var cadSection = cadence.length
-        ? '<div class="slaw-cadence">' +
-            '<div class="slaw-cad-head2">List of SLA</div>' +
-            cadence.map(function(it, k){ return '<div class="slaw-all-item"><span class="slaw-all-n">'+(k+1)+'.</span> '+it.a+' <span class="slaw-all-when">'+it.t+'</span></div>'; }).join('') +
+      var cadSection = (ssla.items && ssla.items.length)
+        ? '<div class="slaw-cadence"><div class="slaw-cad-head2">List of SLA</div>' +
+            ssla.items.map(function(it, k){ return '<div class="slaw-all-item"><span class="slaw-all-n">'+(k+1)+'.</span> '+it.a+' <span class="slaw-all-when">'+it.t+'</span></div>'; }).join('') +
           '</div>'
         : '';
 
-      var nextStep = 'Call / WhatsApp customer';
-      if (l.disqualified) nextStep = 'Disqualified' + (l.disqReason ? ' — ' + l.disqReason : '');
-      else if (l.nextCall && l.nextCall.date) nextStep = 'Call back ' + tdFmtDate(l.nextCall.date) + (l.nextCall.time ? ' · ' + l.nextCall.time : '');
-      else if (l.handoverBooking) nextStep = 'Showroom handover — ' + l.handoverBooking.location + (l.handoverBooking.date ? ' · ' + tdFmtDate(l.handoverBooking.date) : '') + (l.handoverBooking.time ? ' · ' + l.handoverBooking.time : '');
+      if (!l._slaTimers) l._slaTimers = { t1: 214, t2: 274 };
+      if (!l._slaUpdated) l._slaUpdated = fmtSlaNow();
+      var upcoming = [];
+      for (var k = currentStep + 1; k < journeySteps.length && upcoming.length < 2; k++) upcoming.push(journeySteps[k].name);
+      while (upcoming.length < 2) upcoming.push(journeySteps[Math.min(currentStep, journeySteps.length - 1)].name);
 
-      var statusIcon = cls === 'brch' ? 'error' : (cls === 'wrn' ? 'schedule' : 'check_circle');
-      var escalationHtml = cls === 'brch'
-        ? '<div class="slaw-escalate brch"><span class="material-symbols-outlined">campaign</span>Breached &mdash; escalated to manager</div>'
-        : (cls === 'wrn' ? '<div class="slaw-escalate wrn"><span class="material-symbols-outlined">notification_important</span>Action soon to avoid breach</div>' : '');
       return '<div class="dp-sla-widget">' +
-        '<div class="slaw-head-row"><span class="slaw-head"><span class="material-symbols-outlined">timer</span>SLA Tracker</span>' +
-          '<span class="slaw-status-pill '+cls+'"><span class="material-symbols-outlined">'+statusIcon+'</span>'+slaState+'</span></div>' +
-        '<div class="slaw-hero '+cls+'"><div class="slaw-hero-big">'+l.sla+'</div>' +
-          (l.slaTime ? '<div class="slaw-hero-sub">'+l.slaTime+'</div>' : '') + '</div>' +
-        '<div class="slaw-meta">' +
-          '<div class="slaw-meta-item"><span class="slaw-meta-l">Created</span><span class="slaw-meta-v">'+createdDT+'</span></div>' +
-          '<div class="slaw-meta-item"><span class="slaw-meta-l">Assigned</span><span class="slaw-meta-v">'+assignedDT+'</span></div>' +
-        '</div>' +
-        '<div class="slaw-graph">' +
-          '<div class="slaw-graph-head"><span>'+((ssla.sla&&ssla.sla.name)||'First response')+' &middot; '+((ssla.sla&&ssla.sla.target)||'30 min')+' target</span></div>' +
-          '<div class="slaw-track"><div class="slaw-fill '+cls+'" style="width:'+slaPct+'%"></div><span class="slaw-thumb '+cls+'" style="left:'+slaPct+'%"></span><span class="slaw-target" style="left:100%"></span></div>' +
-          '<div class="slaw-scale">'+((ssla.sla&&ssla.sla.scale)||['0m','15m','30m']).map(function(s,i,a){return '<span>'+s+(i===a.length-1&&s?' &#9873;':'')+'</span>';}).join('')+'</div>' +
-        '</div>' +
-        escalationHtml +
-        '<div class="slaw-info">' +
-          showRows +
-          '<div class="slaw-irow"><span class="slaw-ilabel">Next step</span><span class="slaw-ival">' + nextStep + '</span></div>' +
+        '<div class="sla2-title">SLA</div>' +
+        '<div class="sla2-head"><span class="sla2-timers-l">SLA Timers</span>' +
+          '<span class="sla2-update">Last update: '+l._slaUpdated+'</span>' +
+          '<button class="sla2-refresh" onclick="refreshSla()" title="Refresh"><span class="material-symbols-outlined">refresh</span></button></div>' +
+        '<div class="sla2-tiles">' +
+          slaTile(upcoming[0]+' By', l._slaTimers.t1, 0) +
+          slaTile(upcoming[1]+' By', l._slaTimers.t2, 1) +
         '</div>' +
         noteHtml +
         cadSection +
@@ -3273,6 +3257,19 @@
     }
 
     renderLeads('all');
+
+    // Live SLA countdown tick — updates the open lead's timers each second.
+    setInterval(function(){
+      if (selectedIdx < 0) return;
+      var l = leads[selectedIdx]; if (!l || !l._slaTimers) return;
+      ['t1','t2'].forEach(function(kk, idx){
+        if (l._slaTimers[kk] > 0) l._slaTimers[kk]--;
+        var secs = l._slaTimers[kk];
+        var tEl = document.getElementById('sla2Time'+idx); if (tEl) tEl.textContent = fmtSlaTimer(secs);
+        var fEl = document.getElementById('sla2Fg'+idx);
+        if (fEl) { var pct = Math.max(3, Math.min(100, Math.round(secs/300*100))); fEl.setAttribute('stroke-dasharray', pct+' 100'); }
+      });
+    }, 1000);
 
     (function() {
       var params = new URLSearchParams(window.location.search);
