@@ -1715,7 +1715,8 @@
       var l = leads[selectedIdx];
       l.checks = l.checks || {};
       var key = currentStep + '-' + ci;
-      var done = !((key in l.checks) ? l.checks[key] : false);
+      var def = currentStep < l.bpfStage-1;
+      var done = !((key in l.checks) ? l.checks[key] : def);
       l.checks[key] = done;
       el.classList.toggle('done', done); el.classList.toggle('pending', !done);
       var ic = el.querySelector('.material-symbols-outlined'); if (ic) ic.textContent = done ? 'check_box' : 'check_box_outline_blank';
@@ -2131,7 +2132,7 @@
       var doneCount = 0, itemsHtml = '';
       sd.checklist.forEach(function(item, ci) {
         var key = stepIdx + '-' + ci;
-        var isDone = !!(l.checks && l.checks[key]);
+        var isDone = (l.checks && key in l.checks) ? l.checks[key] : (stepIdx < l.bpfStage-1);
         if (isDone) doneCount++;
         itemsHtml += '<div class="dp-check-item '+(isDone?'done':'pending')+'" style="cursor:pointer" onclick="toggleCheck('+ci+', this)">' +
           '<span class="material-symbols-outlined">'+(isDone?'check_box':'check_box_outline_blank')+'</span>' +
@@ -2260,7 +2261,7 @@
       var sd = stepDetails[si], total = sd.checklist.length, done = 0;
       sd.checklist.forEach(function(item, ci) {
         var key = si + '-' + ci;
-        var isDone = !!(l.checks && l.checks[key]);
+        var isDone = (l.checks && key in l.checks) ? l.checks[key] : (si < l.bpfStage-1);
         if (isDone) done++;
       });
       return { done: done, total: total };
@@ -2359,9 +2360,9 @@
     // Surfaces test drives already booked (e.g. from the Test Drive tab) inside the Log activity panel.
     function laExistingBookings() {
       if (!tdBookings.length) return '';
-      return '<div class="la-booked"><div class="la-booked-h"><span class="material-symbols-outlined">directions_car</span>Already booked</div>' +
+      return '<div class="la-booked"><div class="la-booked-h"><span class="material-symbols-outlined">event_available</span>Previously booked test drive'+(tdBookings.length>1?'s':'')+'</div>' +
         tdBookings.map(function(b){
-          return '<div class="la-booked-row"><span>'+b.model+'</span><span class="la-booked-dt">'+tdFmtDate(b.date)+' &middot; '+b.time+'</span></div>';
+          return '<div class="la-booked-row"><span>'+b.model+'</span><span class="la-booked-dt">'+tdFmtDate(b.date)+' &middot; '+b.time+(b.location?' &middot; '+b.location:'')+'</span></div>';
         }).join('') +
       '</div>';
     }
@@ -2507,9 +2508,16 @@
 
       if (laAnswer === 'no') {
         l.attempts = Math.min((l.attempts || 1) + 1, 4);
-        if (laNoReason === 'Not reachable') { l.nextCall = { date: f.date, time: f.time, note: notes }; } else { l.nextCall = null; }
-        l.activities.unshift({ type: 'call', text: ['No answer', laNoReason, (laNoReason === 'Not reachable' && when) ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-        showToast('Missed attempt logged' + (laNoReason ? ' — ' + laNoReason : ''));
+        if (laNoReason === 'Invalid number') {
+          l.nextCall = null; l.disqReason = 'Invalid number';
+          l.activities.unshift({ type: 'call', text: ['No answer', 'Invalid number', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
+          showToast('Lead disqualified — invalid number');
+        } else {
+          l.nextCall = { date: f.date, time: f.time, note: notes };
+          l.activities.unshift({ type: 'call', text: ['No answer', 'Not reachable', when ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast('Missed attempt logged — Not reachable' + (when ? ' · ' + when : ''));
+        }
       } else {
         var r = laRoutes[laOutcome];
         if (laOutcome === 'Book test drive' || laOutcome === 'Handover to showroom') {
