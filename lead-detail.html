@@ -174,6 +174,16 @@
     .slaw-viewall:hover { background: var(--blue-soft); }
     .slaw-viewall .material-symbols-outlined { font-size: 16px; }
     .slaw-all { margin-top: 8px; border-top: 1px solid var(--border-soft); padding-top: 8px; }
+    .slaw-all-stage { padding: 9px 0; border-bottom: 1px solid var(--border-soft); }
+    .slaw-all-stage:last-child { border-bottom: none; }
+    .slaw-all-stage.active { background: var(--blue-soft); border-radius: 8px; padding: 9px 10px; margin: 0 -8px; border-bottom: none; }
+    .slaw-all-stage-name { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+    .slaw-all-show { font-size: 10.5px; color: var(--ink-muted); font-weight: 600; margin-bottom: 5px; }
+    .slaw-all-item { font-size: 11px; color: var(--ink-secondary); line-height: 1.5; display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; }
+    .slaw-all-n { color: var(--ink-muted); font-weight: 700; }
+    .slaw-all-when { font-size: 9.5px; font-weight: 700; color: var(--blue); background: var(--blue-soft); padding: 1px 6px; border-radius: 10px; }
+    .slaw-all-note { display: flex; gap: 5px; margin-top: 6px; font-size: 10px; line-height: 1.4; color: var(--ink-secondary); font-style: italic; }
+    .slaw-all-note .material-symbols-outlined { font-size: 13px; color: var(--blue); flex-shrink: 0; font-style: normal; }
     .slaw-all-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border-soft); }
     .slaw-all-row.active { background: var(--blue-soft); border-radius: var(--borderRadiusMedium); padding: 6px 8px; margin: 0 -8px; border-bottom: none; grid-template-columns: auto 1fr auto auto; }
     .slaw-all-row.active .slaw-all-name { color: var(--blue); }
@@ -207,6 +217,7 @@
     .slaw-note-box strong { color: var(--ink); }
     /* Follow-up cadence timeline */
     .slaw-cadence { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border-soft); }
+    .slaw-cad-head2 { font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-bottom: 8px; }
     .slaw-cad-head { display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 8px; cursor: pointer; user-select: none; }
     .slaw-cad-head:hover { color: var(--ink-secondary); }
     .slaw-cad-head .material-symbols-outlined { font-size: 16px; }
@@ -777,6 +788,28 @@
     .qc-cta.done .material-symbols-outlined { font-size: 16px; }
     .qc-cta:disabled { display: flex; align-items: center; justify-content: center; gap: 5px; background: var(--bg); color: var(--ink-muted); cursor: not-allowed; }
     .qc-cta:disabled .material-symbols-outlined { font-size: 15px; }
+    /* Stock picker modal */
+    .stock-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-46%); z-index: 70; width: 640px; max-width: 94vw; max-height: 84vh; background: var(--surface); border-radius: 16px; box-shadow: 0 30px 72px rgba(20,24,34,.32); display: flex; flex-direction: column; overflow: hidden; opacity: 0; visibility: hidden; transition: opacity .2s, transform .2s, visibility .2s; }
+    .stock-modal.open { opacity: 1; visibility: visible; transform: translate(-50%,-50%); }
+    .stock-hd { display: flex; align-items: center; gap: 10px; padding: 15px 20px; border-bottom: 1px solid var(--border); }
+    .stock-hd-t { flex: 1; }
+    .stock-hd-title { font-size: 15px; font-weight: 800; color: var(--ink); }
+    .stock-hd-sub { font-size: 12px; color: var(--ink-secondary); margin-top: 2px; }
+    .stock-body { flex: 1; overflow-y: auto; padding: 14px 20px; display: flex; flex-direction: column; gap: 10px; }
+    .stock-row { display: flex; align-items: center; gap: 14px; border: 1px solid var(--border-soft); border-radius: 12px; padding: 10px 12px; transition: border-color .12s, box-shadow .12s; }
+    .stock-row:hover { border-color: var(--blue); box-shadow: 0 3px 12px rgba(24,44,86,.08); }
+    .stock-img { width: 100px; height: 60px; object-fit: contain; background: repeating-linear-gradient(135deg, #eef1f5, #eef1f5 10px, #e7ebf0 10px, #e7ebf0 20px); border-radius: 8px; flex-shrink: 0; }
+    .stock-info { flex: 1; min-width: 0; }
+    .stock-model { font-size: 13.5px; font-weight: 800; color: var(--ink); }
+    .stock-vin { font-size: 10.5px; color: var(--ink-muted); font-weight: 600; letter-spacing: .02em; margin-top: 1px; }
+    .stock-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 14px; margin-top: 6px; font-size: 11px; color: var(--ink-secondary); }
+    .stock-meta .b { color: var(--ink); font-weight: 600; }
+    .stock-dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); display: inline-block; margin-right: 4px; vertical-align: middle; }
+    .stock-status { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--green-soft); color: #2f7a4f; }
+    .stock-status.transit { background: var(--amber-soft); color: #8a6420; }
+    .stock-sel { font-family: inherit; font-size: 12px; font-weight: 700; color: #fff; background: var(--blue); border: none; border-radius: 8px; padding: 9px 15px; cursor: pointer; flex-shrink: 0; }
+    .stock-sel:hover { background: var(--blue-dark); }
+    .stock-ft { padding: 12px 20px; border-top: 1px solid var(--border-soft); display: flex; justify-content: flex-end; }
     .prop-body { padding: 14px; }
     .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
     .prop-build-img { width: 96px; height: 62px; object-fit: cover; border-radius: 8px; background: #eef1f5; flex-shrink: 0; }
@@ -1188,7 +1221,10 @@
       <button class="dp-header-btn" title="Close" onclick="closeCreateLead()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <div class="cp-body">
-      <div class="cp-field"><label class="cp-label">Lead Source <span class="req">*</span></label><select class="cp-select" id="clSource" onchange="onLeadSourceChange()"><option>Walk In</option><option>Call</option><option>Contact Form</option><option>External Referrals</option><option>Others</option></select></div>
+      <div class="cp-grid2">
+        <div class="cp-field"><label class="cp-label">Lead Source <span class="req">*</span></label><select class="cp-select" id="clSource" onchange="onLeadSourceChange()"><option>Walk In</option><option>Call</option><option>Contact Form</option><option>External Referrals</option><option>Others</option></select></div>
+        <div class="cp-field"><label class="cp-label">Mobile Number <span class="req">*</span></label><input class="cp-input" id="clMobile" value="+971 "></div>
+      </div>
       <button type="button" class="cp-uaepass" id="clUaePass" onclick="uaePassPrefill()"><span class="cp-uaepass-badge"><img src="assets/uae-pass.svg" alt=""></span>Verify with UAE Pass</button>
 
       <div class="cp-section-title">Customer</div>
@@ -1196,10 +1232,7 @@
         <div class="cp-field"><label class="cp-label">First Name <span class="req">*</span></label><input class="cp-input" id="clFirst" placeholder="e.g. Ahmed"></div>
         <div class="cp-field"><label class="cp-label">Last Name <span class="req">*</span></label><input class="cp-input" id="clLast" placeholder="e.g. Khalifa"></div>
       </div>
-      <div class="cp-grid2">
-        <div class="cp-field"><label class="cp-label">Mobile Number <span class="req">*</span></label><input class="cp-input" id="clMobile" value="+971 "></div>
-        <div class="cp-field"><label class="cp-label">Email</label><input class="cp-input" id="clEmail" placeholder="name@email.ae"></div>
-      </div>
+      <div class="cp-field"><label class="cp-label">Email</label><input class="cp-input" id="clEmail" placeholder="name@email.ae"></div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Preferred Language</label><select class="cp-select" id="clLang"><option>English</option><option>Arabic</option></select></div>
         <div class="cp-field"><label class="cp-label">Preferred Contact Channel <span class="req">*</span></label><select class="cp-select" id="clPrefChannel"><option>WhatsApp</option><option>Call</option><option>Email</option><option>SMS</option></select></div>
@@ -1207,7 +1240,7 @@
 
       <div class="cp-section-title">Brand</div>
       <div class="cp-grid2">
-        <div class="cp-field"><label class="cp-label">Brand</label><select class="cp-select" id="clBrand"><option>Exeed</option><option>MHero</option><option>Lepas</option></select></div>
+        <div class="cp-field" id="clBrandField"><label class="cp-label">Brand</label><select class="cp-select" id="clBrand"><option>Exeed</option><option>MHero</option><option>Lepas</option></select></div>
         <div class="cp-field"><label class="cp-label">Model</label><select class="cp-select" id="clModel"><option>RX-Comfort</option><option>VX Luxury</option><option>VX-EXECUTIVE</option><option>ET REEV</option></select></div>
       </div>
       <div class="cp-field"><label class="cp-label">Assigned Showroom</label><select class="cp-select" id="clShowroom"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
@@ -1215,10 +1248,10 @@
       <div class="cp-section-title">Internal</div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Lead Type <span class="req">*</span></label><select class="cp-select" id="clLeadType"><option>Buy (New)</option><option>Buy (Used)</option><option>Lease</option></select></div>
-        <div class="cp-field"><label class="cp-label">Lead Stage</label><select class="cp-select" id="clStage"><option>New</option><option>Qualify</option><option>Visit</option></select></div>
+        <div class="cp-field" id="clStageField"><label class="cp-label">Lead Stage</label><select class="cp-select" id="clStage"><option>New</option><option>Qualify</option><option>Visit</option></select></div>
       </div>
-      <div class="cp-field"><label class="cp-label">Lead Temperature <span class="req">*</span></label><select class="cp-select" id="clTemp"><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
-      <div class="cp-field"><label class="cp-label">Call Status</label><select class="cp-select" id="clCallStatus"><option>Not Called</option><option>No Answer 1</option><option>No Answer 2</option><option>No Answer 3</option><option>Call Back</option><option>Follow up</option><option>Answered</option></select></div>
+      <div class="cp-field" id="clTempField"><label class="cp-label">Lead Temperature <span class="req">*</span></label><select class="cp-select" id="clTemp"><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
+      <div class="cp-field" id="clCallStatusField"><label class="cp-label">Call Status</label><select class="cp-select" id="clCallStatus"><option>Not Called</option><option>No Answer 1</option><option>No Answer 2</option><option>No Answer 3</option><option>Call Back</option><option>Follow up</option><option>Answered</option></select></div>
       <div class="cp-field"><label class="cp-label">Description <span class="req">*</span></label><textarea class="cp-textarea" id="clDesc" placeholder="Free text — enquiry details, budget, timeline…"></textarea></div>
       <div id="clError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
     </div>
@@ -1273,6 +1306,17 @@
       <button class="cp-btn" onclick="clearWaiverSig()">Clear</button>
       <button class="cp-btn primary" onclick="confirmWaiver()">Sign &amp; confirm</button>
     </div>
+  </div>
+
+  <div class="create-overlay" id="stockOverlay" onclick="closeStockModal()"></div>
+  <div class="stock-modal" id="stockModal" role="dialog" aria-label="Select vehicle from stock">
+    <div class="stock-hd">
+      <span class="material-symbols-outlined" style="color:var(--blue)">inventory_2</span>
+      <div class="stock-hd-t"><div class="stock-hd-title">Choose a vehicle from stock</div><div class="stock-hd-sub" id="stockSub">Available units matching this proposal</div></div>
+      <button class="dp-header-btn" title="Close" onclick="closeStockModal()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="stock-body" id="stockBody"></div>
+    <div class="stock-ft"><button class="cp-btn" onclick="closeStockModal()">Cancel</button></div>
   </div>
 
   <script>
@@ -1816,8 +1860,8 @@
       var assignedDT = (l.owner && l.owner !== 'Unassigned') ? (createdDT + ' · ' + l.owner) : 'Pending assignment';
       var slaPct = cls === 'brch' ? 100 : (cls === 'wrn' ? 82 : Math.max(8, Math.min(70, slaNum ? Math.round((30 - Math.min(30, +slaNum)) / 30 * 100) : 40)));
       var slaState = cls === 'brch' ? 'Breached' : (cls === 'wrn' ? 'Due soon' : 'On track');
-      // Per-stage SLA config (based on the lead's current stage).
-      var si = Math.min(Math.max((l.bpfStage || 1) - 1, 0), stageSla.length - 1);
+      // Per-stage SLA config — reflects the stage currently being viewed in the stepper.
+      var si = Math.min(Math.max(currentStep, 0), stageSla.length - 1);
       var ssla = stageSla[si] || { show:[], items:[] };
       var showValMap = {
         'Record created': created + ' · 09:12',
@@ -1843,8 +1887,8 @@
       }).join('');
       var cadSection = cadence.length
         ? '<div class="slaw-cadence">' +
-            '<div class="slaw-cad-head" onclick="toggleCadence()">List of SLA <span class="material-symbols-outlined" id="cadCaret">expand_more</span></div>' +
-            '<div id="cadList" style="display:none">' + cadHtml + '</div>' +
+            '<div class="slaw-cad-head2">List of SLA</div>' +
+            cadence.map(function(it, k){ return '<div class="slaw-all-item"><span class="slaw-all-n">'+(k+1)+'.</span> '+it.a+' <span class="slaw-all-when">'+it.t+'</span></div>'; }).join('') +
           '</div>'
         : '';
 
@@ -1878,8 +1922,6 @@
         '</div>' +
         noteHtml +
         cadSection +
-        '<div class="slaw-viewall" id="slaViewAll" onclick="toggleAllSlas()">View all SLAs <span class="material-symbols-outlined" id="slaViewCaret">expand_more</span></div>' +
-        '<div class="slaw-all" id="slaAll" style="display:none">' + allSlaRows(l, cls) + '</div>' +
       '</div>';
     }
 
@@ -1929,34 +1971,21 @@
     }
 
     function allSlaRows(l, cls) {
-      function pill(st) {
-        var map = { ok:['Met','ok'], wrn:['Due soon','wrn'], brch:['Breached','brch'], pending:['Pending','pending'] };
-        var m = map[st] || map.pending;
-        return '<span class="slaw-all-pill '+m[1]+'">'+m[0]+'</span>';
-      }
-      var bp = l.bpfStage || 1;
-      var defs = [
-        ['First response', '30 min', 1],
-        ['First contact', 'Day 1', 2],
-        ['Lead qualification', '1 hr', 3],
-        ['Test drive scheduling', 'Day 4', 4],
-        ['Proposal turnaround', '48 hrs', 5],
-        ['Quote approval', '24 hrs', 6],
-        ['Delivery prep', '3 days', 7],
-        ['Post-delivery follow-up', '+30 d', 8]
-      ];
-      var rows = defs.map(function(d){
-        var st = d[2];
-        var status = bp > st ? 'ok' : (bp === st ? (cls === 'brch' ? 'brch' : 'wrn') : 'pending');
-        var group = bp === st ? 0 : (bp < st ? 1 : 2);
-        return { name:d[0], tgt:d[1], status:status, group:group };
-      });
-      rows.sort(function(a,b){ return a.group - b.group; });
-      return rows.map(function(r){
-        var rc = r.group === 0 ? ' active' : (r.group === 2 ? ' done' : '');
-        return '<div class="slaw-all-row'+rc+'">' +
-          (r.group === 0 ? '<span class="slaw-all-mark">Active</span>' : '') +
-          '<span class="slaw-all-name">'+r.name+'</span><span class="slaw-all-tgt">'+r.tgt+'</span>'+pill(r.status)+'</div>';
+      var cur = (l.bpfStage || 1) - 1;
+      return journeySteps.map(function(js, si){
+        var ss = stageSla[si] || { show:[], items:[] };
+        var showLine = (ss.show && ss.show.length)
+          ? '<div class="slaw-all-show">Show: ' + ss.show.map(function(k){ return k + ' date/time'; }).join(' + ') + '</div>' : '';
+        var items = (ss.items || []).map(function(it, k){
+          return '<div class="slaw-all-item"><span class="slaw-all-n">'+(k+1)+'.</span> '+it.a+' <span class="slaw-all-when">'+it.t+'</span></div>';
+        }).join('');
+        var noteLine = ss.note ? '<div class="slaw-all-note"><span class="material-symbols-outlined">smart_toy</span>'+ss.note+'</div>' : '';
+        if (!showLine && !items && !noteLine) return '';
+        var isCur = si === cur;
+        return '<div class="slaw-all-stage'+(isCur?' active':'')+'">' +
+          '<div class="slaw-all-stage-name">'+js.name+(isCur?' <span class="slaw-all-mark">Current</span>':'')+'</div>' +
+          showLine + items + noteLine +
+        '</div>';
       }).join('');
     }
 
@@ -2114,10 +2143,11 @@
           { title:'Customer Details', moreId:'intakeCustMore', fields:[
             {label:'First Name', prop:'firstName', val:fn, req:true},
             {label:'Last Name', prop:'lastName', val:ln, req:true},
-            {label:'Mobile Phone', prop:'phone', val:l.phone, type:'phone', req:true},
-            {label:'Emirates ID', val:l.emiratesId}
+            {label:'Mobile Number', prop:'phone', val:l.phone, type:'phone', req:true},
+            {label:'Email', prop:'email', val:l.email}
           ], more:[
-            {label:'Email', prop:'email', val:l.email},
+            {label:'WhatsApp Number', val:l.phone},
+            {label:'Emirates ID', val:l.emiratesId},
             {label:'Nationality', type:'lookup', val:'UAE'}
           ]},
           { title:'Vehicle', moreId:'intakeVehMore', fields:[
@@ -2892,7 +2922,71 @@
       renderDetail(selectedIdx, currentStep);
     }
 
-    function createQuotation(i){ var p = leads[selectedIdx].proposals[i]; if (p){ p.isQuote = true; p._sel = false; showToast('Quotation created — ' + p.id); renderDetail(selectedIdx, currentStep); } }
+    // Choosing "Create Quotation" opens a stock picker to allocate a specific vehicle.
+    var stockForProposal = -1, stockList = [];
+    function stockForProposalList(p){
+      var model = (p.model || '').split(' · ')[0];
+      var colors = [
+        { n:'Pearl White', h:'#eceff2', img:'assets/es/ext-white.png' },
+        { n:'Matte Gray', h:'#6d737a', img:'assets/es/ext-matte-gray.png' },
+        { n:'Passion Red', h:'#9d1f28', img:'assets/es/ext-red.png' },
+        { n:'Titanium Silver', h:'#c3c8ce', img:'assets/es/ext-silver.png' },
+        { n:'Forest Green', h:'#2f4638', img:'assets/es/ext-green.png' }
+      ];
+      var locs = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi', 'EXEED Etihad Road'];
+      var n = Math.max(3, p.stock || 4), out = [];
+      for (var k = 0; k < n; k++) {
+        var c = colors[k % colors.length];
+        out.push({
+          chassis: 'LVX-2026-0' + (56100 + k * 137 + (p.nsp % 100)),
+          model: model, trim: p.trim || '', year: '2026',
+          extColor: c.n, extHex: c.h, image: c.img,
+          intColor: (k % 2) ? 'Red' : 'Black & Gray',
+          location: locs[k % locs.length],
+          status: (k === 1) ? 'In transit' : 'Ready'
+        });
+      }
+      return out;
+    }
+    function createQuotation(i){
+      var p = leads[selectedIdx].proposals[i]; if (!p) return;
+      stockForProposal = i;
+      stockList = stockForProposalList(p);
+      document.getElementById('stockSub').textContent = p.model + ' · ' + stockList.length + ' units available';
+      document.getElementById('stockBody').innerHTML = stockList.map(function(s, k){
+        return '<div class="stock-row">' +
+          '<img class="stock-img" src="'+s.image+'" alt="">' +
+          '<div class="stock-info">' +
+            '<div class="stock-model">'+s.model+(s.trim?' · '+s.trim:'')+'</div>' +
+            '<div class="stock-vin">VIN &middot; '+s.chassis+'</div>' +
+            '<div class="stock-meta">' +
+              '<span><span class="stock-dot" style="background:'+s.extHex+'"></span><span class="b">'+s.extColor+'</span></span>' +
+              '<span>Interior: <span class="b">'+s.intColor+'</span></span>' +
+              '<span>Year: <span class="b">'+s.year+'</span></span>' +
+              '<span><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle">location_on</span>'+s.location+'</span>' +
+              '<span class="stock-status'+(s.status==='In transit'?' transit':'')+'">'+s.status+'</span>' +
+            '</div>' +
+          '</div>' +
+          '<button class="stock-sel" onclick="selectStockCar('+k+')">Select</button>' +
+        '</div>';
+      }).join('');
+      document.getElementById('stockOverlay').classList.add('show');
+      document.getElementById('stockModal').classList.add('open');
+    }
+    function closeStockModal(){
+      document.getElementById('stockOverlay').classList.remove('show');
+      document.getElementById('stockModal').classList.remove('open');
+      stockForProposal = -1;
+    }
+    function selectStockCar(k){
+      var l = leads[selectedIdx], p = l.proposals[stockForProposal], s = stockList[k];
+      if (!p || !s) { closeStockModal(); return; }
+      p.chassis = s.chassis; p.extColor = s.extColor; p.extHex = s.extHex; p.image = s.image;
+      p.intColor = s.intColor; p.allocLocation = s.location; p.isQuote = true; p._sel = false;
+      closeStockModal();
+      showToast('Quotation created — ' + p.id + ' · ' + s.chassis);
+      renderDetail(selectedIdx, currentStep);
+    }
     function shareProposal(i, ch){ var p = leads[selectedIdx].proposals[i]; if (p) showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' sent via ' + ch); }
 
     function renderProposalCard(p, i, arr){
@@ -3066,6 +3160,15 @@
       var src = document.getElementById('clSource').value;
       var btn = document.getElementById('clUaePass');
       if (btn) { btn.style.display = (src === 'Walk In') ? '' : 'none'; btn.classList.remove('verified'); }
+      // Fields hidden per lead source.
+      var hideMap = {
+        'Walk In': ['clBrandField','clStageField','clTempField','clCallStatusField'],
+        'Call':    ['clBrandField','clStageField','clCallStatusField']
+      };
+      var hide = hideMap[src] || [];
+      ['clBrandField','clStageField','clTempField','clCallStatusField'].forEach(function(id){
+        var e = document.getElementById(id); if (e) e.style.display = (hide.indexOf(id) !== -1) ? 'none' : '';
+      });
     }
     function uaePassPrefill() {
       document.getElementById('clFirst').value = 'Ahmed';
