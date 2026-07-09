@@ -696,9 +696,10 @@
     .dp-logcard-desc strong { color: var(--ink); }
     .dp-log-btn { appearance: none; border: 1px solid var(--colorBrandBackground); font-family: inherit; background: var(--colorBrandBackground); color: var(--colorNeutralForegroundOnBrand); font-size: var(--fontSizeBase300); font-weight: 600; padding: 5px 14px; border-radius: var(--borderRadiusMedium); cursor: pointer; transition: background .1s; white-space: nowrap; }
     .dp-log-btn:hover { background: var(--colorBrandBackgroundHover); border-color: var(--colorBrandBackgroundHover); }
-    .dp-uaepass-btn { display: inline-flex; align-items: center; gap: 5px; appearance: none; border: 1px solid #1a7f4b; background: #eafaf0; color: #1a7f4b; font-family: inherit; font-size: var(--fontSizeBase300); font-weight: 600; padding: 5px 12px; border-radius: var(--borderRadiusMedium); cursor: pointer; transition: all .12s; white-space: nowrap; }
-    .dp-uaepass-btn:hover { background: #1a7f4b; color: #fff; }
-    .dp-uaepass-btn .material-symbols-outlined { font-size: 16px; }
+    .dp-uaepass-btn { display: inline-flex; align-items: center; gap: 7px; appearance: none; border: 1.5px solid #14171c; background: #fff; color: #14171c; font-family: inherit; font-size: var(--fontSizeBase300); font-weight: 700; padding: 4px 13px 4px 5px; border-radius: 8px; cursor: pointer; transition: background .12s; white-space: nowrap; }
+    .dp-uaepass-btn:hover { background: #f4f5f7; }
+    .dp-uaepass-badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 6px; background: #0f1115; flex-shrink: 0; }
+    .dp-uaepass-ic { width: 15px; height: 15px; display: block; }
 
     /* Step detail */
     .dp-step-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
@@ -784,6 +785,12 @@
     .qc-sub { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; }
     .qc-price { font-size: 16px; font-weight: 800; color: var(--blue); margin-top: 7px; letter-spacing: -.02em; }
     .qc-emi { font-size: 10.5px; color: var(--ink-secondary); margin-top: 1px; }
+    .qc-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
+    .qc-avail { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--green-soft); color: #2f7a4f; }
+    .qc-avail::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .qc-avail.limited { background: var(--amber-soft); color: #8a6420; }
+    .qc-avail.out { background: var(--red-soft); color: var(--red); }
+    .qc-vin { font-size: 10px; color: var(--ink-muted); font-weight: 600; letter-spacing: .02em; }
     .qc-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
     .qc-chip { font-size: 10px; font-weight: 600; color: var(--ink-secondary); background: var(--bg); border-radius: 20px; padding: 2px 9px; }
     .qc-share { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; }
@@ -794,6 +801,8 @@
     .qc-cta:hover { background: var(--blue-dark); }
     .qc-cta.done { display: flex; align-items: center; justify-content: center; gap: 5px; background: var(--green-soft); color: #2f7a4f; cursor: default; }
     .qc-cta.done .material-symbols-outlined { font-size: 16px; }
+    .qc-cta:disabled { display: flex; align-items: center; justify-content: center; gap: 5px; background: var(--bg); color: var(--ink-muted); cursor: not-allowed; }
+    .qc-cta:disabled .material-symbols-outlined { font-size: 15px; }
     .prop-body { padding: 14px; }
     .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
     .prop-build-img { width: 96px; height: 62px; object-fit: cover; border-radius: 8px; background: #eef1f5; flex-shrink: 0; }
@@ -971,6 +980,11 @@
     .cp-body::-webkit-scrollbar { width: 4px; }
     .cp-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     .cp-section-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-muted); margin: 20px 0 11px; }
+    .cp-uaepass { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; border: 1.5px solid #14171c; background: #fff; color: #14171c; font-family: inherit; font-size: 13px; font-weight: 700; padding: 6px 15px 6px 6px; border-radius: 9px; cursor: pointer; transition: background .12s; }
+    .cp-uaepass:hover { background: #f4f5f7; }
+    .cp-uaepass.verified { border-color: #1a7f4b; color: #1a7f4b; background: #eafaf0; }
+    .cp-uaepass-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 7px; background: #0f1115; flex-shrink: 0; }
+    .cp-uaepass-badge img { width: 17px; height: 17px; display: block; }
     .cp-section-title:first-child { margin-top: 0; }
     .cp-field { margin-bottom: 13px; }
     #logPanel .cp-body { padding: 20px; }
@@ -1126,10 +1140,6 @@
             <div class="list-title-row">
               <h1>My Active Leads <span class="lead-count">12 leads</span></h1>
               <div class="list-actions">
-                <div class="view-toggle">
-                  <button class="vt on" id="vtList" onclick="setView('list')"><span class="material-symbols-outlined">table_rows</span> List</button>
-                  <button class="vt" id="vtPipe" onclick="setView('pipeline')"><span class="material-symbols-outlined">view_kanban</span> Pipeline</button>
-                </div>
                 <button class="list-btn"><span class="material-symbols-outlined">filter_list</span> Filter</button>
                 <button class="list-btn"><span class="material-symbols-outlined">sort</span> Sort</button>
                 <button class="list-btn primary" onclick="openCreateLead()"><span class="material-symbols-outlined">add</span> New lead</button>
@@ -1204,6 +1214,9 @@
       <button class="dp-header-btn" title="Close" onclick="closeCreateLead()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <div class="cp-body">
+      <div class="cp-field"><label class="cp-label">Lead Source <span class="req">*</span></label><select class="cp-select" id="clSource" onchange="onLeadSourceChange()"><option>Walk In</option><option>Call</option><option>Contact Form</option><option>External Referrals</option><option>Others</option></select></div>
+      <button type="button" class="cp-uaepass" id="clUaePass" onclick="uaePassPrefill()"><span class="cp-uaepass-badge"><img src="assets/uae-pass.svg" alt=""></span>Verify with UAE Pass</button>
+
       <div class="cp-section-title">Customer</div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">First Name <span class="req">*</span></label><input class="cp-input" id="clFirst" placeholder="e.g. Ahmed"></div>
@@ -1218,25 +1231,12 @@
         <div class="cp-field"><label class="cp-label">Preferred Contact Channel <span class="req">*</span></label><select class="cp-select" id="clPrefChannel"><option>WhatsApp</option><option>Call</option><option>Email</option><option>SMS</option></select></div>
       </div>
 
-      <div class="cp-section-title">Performance</div>
-      <div class="cp-grid2">
-        <div class="cp-field"><label class="cp-label">Lead Source <span class="req">*</span></label><select class="cp-select" id="clSource"><option>Walk In</option><option>Call</option><option>Contact Form</option><option>External Referrals</option><option>Others</option></select></div>
-      </div>
-      <div class="cp-field"><label class="cp-label">Channel <span class="req">*</span></label><select class="cp-select" id="clChannel"><option>WhatsApp</option><option>Call</option><option>Website</option><option>Social Media</option><option>Email</option><option>Print Media</option></select></div>
-
       <div class="cp-section-title">Brand</div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Brand</label><select class="cp-select" id="clBrand"><option>Exeed</option><option>MHero</option><option>Lepas</option></select></div>
         <div class="cp-field"><label class="cp-label">Model</label><select class="cp-select" id="clModel"><option>RX-Comfort</option><option>VX Luxury</option><option>VX-EXECUTIVE</option><option>ET REEV</option></select></div>
       </div>
-      <div class="cp-grid2">
-        <div class="cp-field"><label class="cp-label">Assigned Showroom</label><select class="cp-select" id="clShowroom"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
-        <div class="cp-field"><label class="cp-label">Assigned Sales Executive</label><select class="cp-select" id="clExec"><option>Unassigned</option><option>Saravanakumar Subramani</option><option>Mohamad Mohamed</option><option>Basel Talalini</option></select></div>
-      </div>
-      <div class="cp-grid2">
-        <div class="cp-field"><label class="cp-label">Company</label><select class="cp-select" id="clCompany"><option>6651</option><option>6661</option><option>6681</option></select></div>
-        <div class="cp-field"><label class="cp-label">Showroom</label><select class="cp-select" id="clBizOp"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
-      </div>
+      <div class="cp-field"><label class="cp-label">Assigned Showroom</label><select class="cp-select" id="clShowroom"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
 
       <div class="cp-section-title">Internal</div>
       <div class="cp-grid2">
@@ -1265,7 +1265,7 @@
     </div>
     <div class="cp-body">
       <div class="la-attempts" id="laAttempts"><span class="material-symbols-outlined">call</span><span id="laAttemptsText">1 of 5 attempts done</span></div>
-      <div class="cp-field">
+      <div class="cp-field" id="laAnswerWrap">
         <label class="cp-label">Did the customer answer?</label>
         <div class="la-yn-row">
           <button class="la-yn" id="laYes" onclick="setLaAnswer('yes')"><span class="material-symbols-outlined">check</span> Yes</button>
@@ -1273,7 +1273,6 @@
         </div>
       </div>
       <div class="cp-field" id="laOutcomeWrap" style="display:none">
-        <label class="cp-label">Outcome</label>
         <div class="la-chips" id="laChips"></div>
       </div>
       <div id="laDynamic"></div>
@@ -1950,8 +1949,6 @@
         '</div>' +
         noteHtml +
         cadSection +
-        '<div class="slaw-viewall" id="slaViewAll" onclick="toggleAllSlas()">View all SLAs <span class="material-symbols-outlined" id="slaViewCaret">expand_more</span></div>' +
-        '<div class="slaw-all" id="slaAll" style="display:none">' + allSlaRows(l, cls) + '</div>' +
       '</div>';
     }
 
@@ -2135,7 +2132,7 @@
       html += '<div class="dp-step-header">' +
         '<span class="dp-step-hint"><span class="material-symbols-outlined">edit_note</span>'+lp.title+'</span>' +
         '<div class="dp-step-actions">' +
-          (stepIdx === 3 ? '<button class="dp-uaepass-btn" onclick="uaePassVerify()"><span class="material-symbols-outlined">verified_user</span>UAE Pass</button>' : '') +
+          (stepIdx === 3 ? '<button class="dp-uaepass-btn" onclick="uaePassVerify()"><span class="dp-uaepass-badge"><img src="assets/uae-pass.svg" alt="" class="dp-uaepass-ic"></span>UAE Pass</button>' : '') +
           '<button class="dp-log-btn" onclick="openLogActivity()">Log Activity</button></div>' +
       '</div>';
 
@@ -2327,12 +2324,15 @@
       'Not interested':       { disq: true }
     };
 
-    // Outcome chips differ by whether the customer answered.
+    // New/Contact (call centre) outcomes appear after the Yes/No answer.
     var laYesOutcomes = ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'];
-    var laNoOutcomes  = ['Disqualify Customer', 'Send WhatsApp', 'Call customer'];
+    // Qualify & later (sales) outcomes replace the Yes/No step entirely.
+    var laSalesOutcomes = ['Send to WhatsApp', 'Call', 'Disqualify', 'Return to call center'];
+    var laReturnReasons = ['Wrong assignment', 'Not sales-ready', 'Customer request', 'Duplicate lead', 'Other'];
+    function laIsSalesStage(){ return currentStep >= 2; }
     function renderOutcomeChips() {
       var host = document.getElementById('laChips'); if (!host) return;
-      var outs = laAnswer === 'yes' ? laYesOutcomes : [];
+      var outs = laIsSalesStage() ? laSalesOutcomes : (laAnswer === 'yes' ? laYesOutcomes : []);
       host.innerHTML = outs.map(function(o){ return '<button class="la-chip'+(laOutcome===o?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>'; }).join('');
     }
 
@@ -2409,7 +2409,7 @@
       var g = function(id){ var e = document.getElementById(id); return e ? e.value : ''; };
       var disc = discoveryCallCenterQs.filter(function(q, i){ var e = document.getElementById('laDiscQ' + i); return e && e.value && e.value !== '—'; });
       var noReason = (document.querySelector('input[name="laNoReason"]:checked') || {}).value || '';
-      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), noReason: noReason, disc: disc };
+      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), rating: g('laRating'), returnReason: g('laReturnReason'), noReason: noReason, disc: disc };
     }
     function laFmtDT(date, time) { if (!date) return ''; return tdFmtDate(date) + (time ? ' · ' + time : ''); }
 
@@ -2434,11 +2434,25 @@
           html += laDiscovery();
           html += laDateTime('Date & time');
           html += laNotesField();
+          html += laSelect('laRating', 'Lead rating', ['Hot','Warm','Cold'], false);
         } else if (laOutcome === 'Needs time') {
           html += laDateTime('Reschedule call');
           html += laNotesField();
         } else if (laOutcome === 'Not interested') {
           html += laSelect('laReason', 'Reason', laReasons, true);
+        } else if (laOutcome === 'Send to WhatsApp' || laOutcome === 'Call') {
+          html += laDateTime('Reschedule');
+          html += laNotesField();
+        } else if (laOutcome === 'Disqualify') {
+          html += '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label><div class="la-radio">' +
+            ['Invalid number','Not reachable'].map(function(o){
+              return '<label class="la-radio-item"><input type="radio" name="laNoReason" value="'+o+'"'+(laNoReason===o?' checked':'')+' onchange="setLaNoReason(\''+o+'\')"><span>'+o+'</span></label>';
+            }).join('') + '</div></div>';
+          if (laNoReason === 'Not reachable') { html += laDateTime('Reschedule'); }
+          html += laNotesField();
+        } else if (laOutcome === 'Return to call center') {
+          html += laSelect('laReturnReason', 'Return reason', laReturnReasons, true);
+          html += laNotesField();
         }
       }
       host.innerHTML = html;
@@ -2448,13 +2462,17 @@
       if (selectedIdx < 0) return;
       var lp = logPrompts[currentStep] || logPrompts[0];
       document.getElementById('logSub').innerHTML = lp.title;
-      laAnswer = null; laOutcome = null;
+      laAnswer = null; laOutcome = null; laNoReason = 'Invalid number';
       document.getElementById('laYes').classList.remove('on');
       document.getElementById('laNo').classList.remove('on','no');
       document.getElementById('laChips').innerHTML = '';
-      document.getElementById('laOutcomeWrap').style.display = 'none';
       document.getElementById('laError').style.display = 'none';
       document.getElementById('laDynamic').innerHTML = '';
+      // Qualify & later: skip Yes/No, pick an outcome directly.
+      var salesStage = laIsSalesStage();
+      document.getElementById('laAnswerWrap').style.display = salesStage ? 'none' : '';
+      if (salesStage) { laAnswer = 'yes'; document.getElementById('laOutcomeWrap').style.display = ''; renderOutcomeChips(); }
+      else { document.getElementById('laOutcomeWrap').style.display = 'none'; }
       // Call-attempt tracking only applies to New & Contact (call centre) stages.
       var attemptStage = currentStep <= 1;
       var att = Math.min(leads[selectedIdx].attempts || 1, 4);
@@ -2471,6 +2489,15 @@
       if (laAnswer === 'no') {
         if (laNoReason === 'Invalid number') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
         h.textContent = 'Saving will log a missed attempt and schedule the next follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
+      }
+      if (laAnswer === 'yes' && laSalesOutcomes.indexOf(laOutcome) !== -1) {
+        if (laOutcome === 'Disqualify') {
+          if (laNoReason === 'Invalid number') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; }
+          else { h.textContent = 'Saving will log a missed attempt and reschedule.'; h.className = 'la-hint ok'; }
+          h.style.display = ''; return;
+        }
+        if (laOutcome === 'Return to call center') { h.textContent = 'Saving will return this lead to the call center.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
+        h.textContent = 'Saving will log the outreach and schedule a follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
       }
       if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
         var r = laRoutes[laOutcome];
@@ -2531,6 +2558,31 @@
           l.activities.unshift({ type: 'call', text: ['No answer', 'Not reachable', when ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast('Missed attempt logged — Not reachable' + (when ? ' · ' + when : ''));
         }
+      } else if (laSalesOutcomes.indexOf(laOutcome) !== -1) {
+        if (laOutcome === 'Send to WhatsApp' || laOutcome === 'Call') {
+          l.nextCall = { date: f.date, time: f.time, note: notes };
+          var ot = laOutcome === 'Send to WhatsApp' ? 'whatsapp' : 'call';
+          l.activities.unshift({ type: ot, text: [laOutcome, when ? 'follow-up ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast(laOutcome + (when ? ' · follow-up ' + when : ''));
+        } else if (laOutcome === 'Disqualify') {
+          if (laNoReason === 'Invalid number') {
+            l.nextCall = null; l.disqReason = 'Invalid number';
+            l.activities.unshift({ type: 'call', text: ['Disqualified', 'Invalid number', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+            l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
+            showToast('Lead disqualified — invalid number');
+          } else {
+            l.nextCall = { date: f.date, time: f.time, note: notes };
+            l.activities.unshift({ type: 'call', text: ['Not reachable', when ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+            showToast('Missed attempt logged — Not reachable' + (when ? ' · ' + when : ''));
+          }
+        } else if (laOutcome === 'Return to call center') {
+          l.nextCall = null; l.disqReason = null; l.disqualified = false;
+          l.owner = 'Call Center'; l.handover = 'Returned to call center';
+          l.stage = 'New'; l.stageNum = 'New'; l.stageClass = 'new'; l.bpfStage = 1;
+          currentStep = 0;
+          l.activities.unshift({ type: 'call', text: ['Returned to call center', f.returnReason, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast('Returned to call center' + (f.returnReason ? ' — ' + f.returnReason : ''));
+        }
       } else {
         var r = laRoutes[laOutcome];
         if (laOutcome === 'Book test drive' || laOutcome === 'Handover to showroom') {
@@ -2547,7 +2599,8 @@
             var car = f.car || l.model;
             l.handover = 'Scheduled — ' + loc;
             l.handoverBooking = { location: loc, date: f.date, time: f.time, car: car };
-            l.activities.unshift({ type: 'visit', text: ['Handover to showroom', loc, car, when, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+            if (f.rating) { l.temp = f.rating; l.intent = f.rating === 'Hot' ? 'High' : (f.rating === 'Cold' ? 'Low' : 'Med'); l.intentClass = l.intent.toLowerCase(); }
+            l.activities.unshift({ type: 'visit', text: ['Handover to showroom', loc, car, when, (f.rating ? 'Rating: ' + f.rating : ''), notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           }
           l.nextCall = null; l.disqReason = null;
           l.bpfStage = r.n; l.stage = r.name; l.stageNum = r.name; l.stageClass = 'qualified'; l.disqualified = false;
@@ -2911,7 +2964,8 @@
     function createQuotation(i){ var p = leads[selectedIdx].proposals[i]; if (p){ p.isQuote = true; p._sel = false; showToast('Quotation created — ' + p.id); renderDetail(selectedIdx, currentStep); } }
     function shareProposal(i, ch){ var p = leads[selectedIdx].proposals[i]; if (p) showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' sent via ' + ch); }
 
-    function renderProposalCard(p, i){
+    function renderProposalCard(p, i, arr){
+      var hasQuote = (arr || []).some(function(x){ return x.isQuote; });
       var down = Math.round(p.nsp * p.downPct / 100);
       var loan = p.nsp - down - (p.pdi || 0);
       var monthly = propEmi(loan + propAddTotal(p), 5);
@@ -2920,6 +2974,10 @@
       var draft = 'Draft ' + ('0' + (i + 1)).slice(-2) + (p.tag ? ' · ' + p.tag : '');
       var chips = propAddOns.filter(function(a){ return p.addOns && p.addOns[a.k]; }).slice(0,3)
         .map(function(a){ return '<span class="qc-chip">' + a.label + '</span>'; }).join('');
+      var stock = (p.stock != null) ? p.stock : 4;
+      var availCls = stock === 0 ? 'out' : (stock <= 2 ? 'limited' : '');
+      var availText = stock === 0 ? 'Out of stock' : stock + ' in stock';
+      var chassis = p.chassis || ('LVX' + String(p.nsp || 0).slice(-3) + (i + 1) + '84C');
       return '<div class="qcard'+(p._sel?' selected':'')+(p.isQuote?' isquote':'')+(p.bestFit?' best':'')+'">' +
         (p.bestFit && !p.isQuote ? '<span class="qc-best">Best fit</span>' : '') +
         (p.isQuote ? '<span class="qc-badge"><span class="material-symbols-outlined">verified</span>Quotation</span>' : '') +
@@ -2931,6 +2989,7 @@
           (subLine ? '<div class="qc-sub">'+subLine+'</div>' : '') +
           '<div class="qc-price">AED '+propFmt(p.nsp)+'</div>' +
           '<div class="qc-emi">AED '+propFmt(monthly)+' / mo &middot; 60 mo</div>' +
+          '<div class="qc-meta"><span class="qc-avail '+availCls+'">'+availText+'</span><span class="qc-vin">VIN &middot; '+chassis+'</span></div>' +
           (chips ? '<div class="qc-chips">'+chips+'</div>' : '') +
           '<div class="qc-share">' +
             '<button class="qc-sbtn" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">download</span>Download</button>' +
@@ -2938,7 +2997,9 @@
           '</div>' +
           (p.isQuote
             ? '<button class="qc-cta done" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">verified</span> Quotation ready</button>'
-            : '<button class="qc-cta" onclick="createQuotation('+i+')">Create Quotation</button>') +
+            : (hasQuote
+                ? '<button class="qc-cta" disabled title="A quotation already exists for this lead"><span class="material-symbols-outlined">lock</span> Create Quotation</button>'
+                : '<button class="qc-cta" onclick="createQuotation('+i+')">Create Quotation</button>')) +
         '</div>' +
       '</div>';
     }
@@ -2947,9 +3008,9 @@
       l.proposals = l.proposals || [];
       if (!l.proposals.length && !l._propSeeded) {
         l._propSeeded = true;
-        l.proposals.push({ id:'P-2026-1001', tag:'Value', model:'EXEED ES · Standard Range', trim:'Standard Range', year:'2026', extColor:'Pearl White', extHex:'#eceff2', image:'assets/es/ext-white.png', intColor:'Black & Gray', intHex:'#2c2c30', range:'520 km', power:'204 hp', nsp:159900, downPct:20, pdi:0, addOns:{ insurance:false, service:false, tinting:true, ceramic:true }, isQuote:false });
-        l.proposals.push({ id:'P-2026-1002', tag:'Best fit', bestFit:true, model:'EXEED ES · Long Range', trim:'Long Range', year:'2026', extColor:'Matte Gray', extHex:'#6d737a', image:'assets/es/ext-matte-gray.png', intColor:'Black & Gray', intHex:'#2c2c30', range:'620 km', power:'279 hp', nsp:179900, downPct:20, pdi:0, addOns:{ insurance:false, service:true, tinting:true, ceramic:true }, isQuote:false });
-        l.proposals.push({ id:'P-2026-1003', tag:'Premium', model:'EXEED ES · AWD Performance', trim:'AWD Performance', year:'2026', extColor:'Passion Red', extHex:'#9d1f28', image:'assets/es/ext-red.png', intColor:'Red', intHex:'#9d1f28', range:'580 km', power:'517 hp', nsp:209900, downPct:15, pdi:0, addOns:{ insurance:true, service:true, tinting:true, ceramic:true }, isQuote:false });
+        l.proposals.push({ id:'P-2026-1001', tag:'Value', stock:5, chassis:'LVX-2026-056192', model:'EXEED ES · Standard Range', trim:'Standard Range', year:'2026', extColor:'Pearl White', extHex:'#eceff2', image:'assets/es/ext-white.png', intColor:'Black & Gray', intHex:'#2c2c30', range:'520 km', power:'204 hp', nsp:159900, downPct:20, pdi:0, addOns:{ insurance:false, service:false, tinting:true, ceramic:true }, isQuote:false });
+        l.proposals.push({ id:'P-2026-1002', tag:'Best fit', bestFit:true, stock:2, chassis:'LVX-2026-057841', model:'EXEED ES · Long Range', trim:'Long Range', year:'2026', extColor:'Matte Gray', extHex:'#6d737a', image:'assets/es/ext-matte-gray.png', intColor:'Black & Gray', intHex:'#2c2c30', range:'620 km', power:'279 hp', nsp:179900, downPct:20, pdi:0, addOns:{ insurance:false, service:true, tinting:true, ceramic:true }, isQuote:false });
+        l.proposals.push({ id:'P-2026-1003', tag:'Premium', stock:3, chassis:'LVX-2026-058219', model:'EXEED ES · AWD Performance', trim:'AWD Performance', year:'2026', extColor:'Passion Red', extHex:'#9d1f28', image:'assets/es/ext-red.png', intColor:'Red', intHex:'#9d1f28', range:'580 km', power:'517 hp', nsp:209900, downPct:15, pdi:0, addOns:{ insurance:true, service:true, tinting:true, ceramic:true }, isQuote:false });
       }
       var quotes = l.proposals.filter(function(p){ return p.isQuote; }).length;
       var head = '<div class="prop-head">' +
@@ -3065,9 +3126,25 @@
       document.getElementById('cpSubmit').textContent = 'Create lead';
       ['clFirst','clLast','clEmail','clDesc'].forEach(function(id){ document.getElementById(id).value = ''; });
       document.getElementById('clMobile').value = '+971 ';
-      ['clLang','clPrefChannel','clSource','clChannel','clBrand','clModel','clShowroom','clExec','clCompany','clBizOp','clLeadType','clStage','clTemp','clCallStatus'].forEach(function(id){ var e=document.getElementById(id); if(e) e.selectedIndex=0; });
+      ['clLang','clPrefChannel','clSource','clBrand','clModel','clShowroom','clLeadType','clStage','clTemp','clCallStatus'].forEach(function(id){ var e=document.getElementById(id); if(e) e.selectedIndex=0; });
       document.getElementById('clError').style.display = 'none';
+      onLeadSourceChange();
       openLeadPanel();
+    }
+    function onLeadSourceChange() {
+      var src = document.getElementById('clSource').value;
+      var btn = document.getElementById('clUaePass');
+      if (btn) { btn.style.display = (src === 'Walk In') ? '' : 'none'; btn.classList.remove('verified'); }
+    }
+    function uaePassPrefill() {
+      document.getElementById('clFirst').value = 'Ahmed';
+      document.getElementById('clLast').value = 'Al Mansoori';
+      document.getElementById('clMobile').value = '+971 50 555 0192';
+      document.getElementById('clEmail').value = 'ahmed.almansoori@email.ae';
+      setSelect('clLang', 'Arabic'); setSelect('clStage', 'Visit');
+      var btn = document.getElementById('clUaePass');
+      if (btn) { btn.classList.add('verified'); btn.innerHTML = '<span class="cp-uaepass-badge"><img src="assets/uae-pass.svg" alt=""></span>Verified &middot; details prefilled'; }
+      showToast('UAE Pass verified — details prefilled, lead set to Visit');
     }
     function openEditLead(idx) {
       if (idx == null || idx < 0 || !leads[idx]) return;
@@ -3081,12 +3158,11 @@
       document.getElementById('clDesc').value = (l.activities && l.activities[0]) ? l.activities[0].text : 'Existing lead.';
       setSelect('clLang', l.lang); setSelect('clPrefChannel', l.preferred);
       setSelect('clSource', l.source);
-      setSelect('clChannel', l.channel);
       setSelect('clBrand', /mhero/i.test(l.model) ? 'MHero' : (/lepas/i.test(l.model) ? 'Lepas' : 'Exeed'));
       setSelect('clModel', l.model);
-      setSelect('clShowroom', l.showroom); setSelect('clExec', l.owner);
-      setSelect('clCompany', l.company); setSelect('clBizOp', l.bizOp);
+      setSelect('clShowroom', l.showroom);
       setSelect('clLeadType', l.leadType); setSelect('clStage', l.stage);
+      onLeadSourceChange();
       setSelect('clTemp', l.temp);
       setSelect('clCallStatus', l.callStatus);
       document.getElementById('cpTitle').textContent = 'Edit lead';
@@ -3124,16 +3200,20 @@
       var brand = document.getElementById('clBrand').value;
       var modelVal = document.getElementById('clModel').value;
       var fullModel = modelVal.toLowerCase().indexOf(brand.toLowerCase()) === 0 ? modelVal : (brand + ' ' + modelVal);
+      var stageBpf = {'New':1,'Qualify':3,'Visit':4};
+      var showroomVal = document.getElementById('clShowroom').value;
+      var prefVal = document.getElementById('clPrefChannel').value;
       var fields = {
         name: name, initials: (first.charAt(0) + (last.charAt(0) || '')).toUpperCase(),
         phone: mobile, email: val('clEmail') || '—',
         source: srcVal, srcClass: sm[0], srcIcon: sm[1], model: fullModel,
         stage: sd2[0], stageClass: sd2[1], stageNum: sd2[0], intent: im[0], intentClass: im[1],
-        owner: document.getElementById('clExec').value, channel: document.getElementById('clChannel').value,
+        bpfStage: stageBpf[stageVal] || 1,
+        owner: 'Unassigned', channel: prefVal,
         lang: document.getElementById('clLang').value,
-        temp: document.getElementById('clTemp').value, showroom: document.getElementById('clShowroom').value,
-        preferred: document.getElementById('clPrefChannel').value, leadType: document.getElementById('clLeadType').value,
-        company: document.getElementById('clCompany').value, bizOp: document.getElementById('clBizOp').value,
+        temp: document.getElementById('clTemp').value, showroom: showroomVal,
+        preferred: prefVal, leadType: document.getElementById('clLeadType').value,
+        company: '—', bizOp: showroomVal,
         callStatus: document.getElementById('clCallStatus').value
       };
       if (editingId) {
