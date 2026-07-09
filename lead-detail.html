@@ -696,6 +696,9 @@
     .dp-logcard-desc strong { color: var(--ink); }
     .dp-log-btn { appearance: none; border: 1px solid var(--colorBrandBackground); font-family: inherit; background: var(--colorBrandBackground); color: var(--colorNeutralForegroundOnBrand); font-size: var(--fontSizeBase300); font-weight: 600; padding: 5px 14px; border-radius: var(--borderRadiusMedium); cursor: pointer; transition: background .1s; white-space: nowrap; }
     .dp-log-btn:hover { background: var(--colorBrandBackgroundHover); border-color: var(--colorBrandBackgroundHover); }
+    .dp-uaepass-btn { display: inline-flex; align-items: center; gap: 5px; appearance: none; border: 1px solid #1a7f4b; background: #eafaf0; color: #1a7f4b; font-family: inherit; font-size: var(--fontSizeBase300); font-weight: 600; padding: 5px 12px; border-radius: var(--borderRadiusMedium); cursor: pointer; transition: all .12s; white-space: nowrap; }
+    .dp-uaepass-btn:hover { background: #1a7f4b; color: #fff; }
+    .dp-uaepass-btn .material-symbols-outlined { font-size: 16px; }
 
     /* Step detail */
     .dp-step-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
@@ -746,6 +749,9 @@
     .prop-bulk-convert { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 11.5px; font-weight: 700; color: var(--ink); background: #fff; border: none; border-radius: 7px; padding: 7px 12px; cursor: pointer; }
     .prop-bulk-convert:hover { background: var(--blue-soft); }
     .prop-bulk-convert .material-symbols-outlined { font-size: 15px; }
+    .prop-bulk-email { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 11.5px; font-weight: 600; color: #eef1f6; background: rgba(255,255,255,.12); border: none; border-radius: 7px; padding: 7px 11px; cursor: pointer; }
+    .prop-bulk-email:hover { background: rgba(255,255,255,.22); }
+    .prop-bulk-email .material-symbols-outlined { font-size: 15px; }
     .prop-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); }
     .prop-name { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--ink); }
     .prop-name .material-symbols-outlined { font-size: 16px; color: var(--blue); }
@@ -780,7 +786,7 @@
     .qc-emi { font-size: 10.5px; color: var(--ink-secondary); margin-top: 1px; }
     .qc-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
     .qc-chip { font-size: 10px; font-weight: 600; color: var(--ink-secondary); background: var(--bg); border-radius: 20px; padding: 2px 9px; }
-    .qc-share { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; }
+    .qc-share { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; }
     .qc-sbtn { display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-family: inherit; font-size: 10px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 6px 2px; cursor: pointer; transition: .12s; }
     .qc-sbtn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
     .qc-sbtn .material-symbols-outlined { font-size: 13px; }
@@ -1688,6 +1694,12 @@
       toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
     }
 
+    function uaePassVerify(){
+      var l = selectedIdx >= 0 ? leads[selectedIdx] : null;
+      showToast('UAE Pass verification requested' + (l ? ' for ' + l.name : ''));
+      if (l){ l.activities = l.activities || []; l.activities.unshift({ type:'visit', text:'UAE Pass identity verification requested', time:'2026-07-09 12:00' }); }
+    }
+
     function toggleCopilot(){
       var p = document.getElementById('copilotPanel'), r = document.getElementById('copilotRail');
       var open = p.classList.toggle('open');
@@ -2123,6 +2135,7 @@
       html += '<div class="dp-step-header">' +
         '<span class="dp-step-hint"><span class="material-symbols-outlined">edit_note</span>'+lp.title+'</span>' +
         '<div class="dp-step-actions">' +
+          (stepIdx === 3 ? '<button class="dp-uaepass-btn" onclick="uaePassVerify()"><span class="material-symbols-outlined">verified_user</span>UAE Pass</button>' : '') +
           '<button class="dp-log-btn" onclick="openLogActivity()">Log Activity</button></div>' +
       '</div>';
 
@@ -2878,6 +2891,22 @@
       if (n) showToast(n + ' quotation' + (n !== 1 ? 's' : '') + ' generated');
       renderDetail(selectedIdx, currentStep);
     }
+    function downloadSelectedProposals(){
+      var l = leads[selectedIdx], sel = [];
+      (l.proposals || []).forEach(function(p, i){ if (p._sel) sel.push(i); });
+      sel.forEach(function(i){ downloadProposal(i); });
+      if (sel.length) showToast(sel.length + ' proposal' + (sel.length !== 1 ? 's' : '') + ' downloaded');
+    }
+    function emailSelectedProposals(){
+      var n = (leads[selectedIdx].proposals || []).filter(function(p){ return p._sel; }).length;
+      if (n) showToast(n + ' proposal' + (n !== 1 ? 's' : '') + ' emailed to customer');
+    }
+    function archiveSelectedProposals(){
+      var l = leads[selectedIdx], n = 0;
+      l.proposals = (l.proposals || []).filter(function(p){ if (p._sel){ n++; return false; } return true; });
+      if (n) showToast(n + ' proposal' + (n !== 1 ? 's' : '') + ' archived');
+      renderDetail(selectedIdx, currentStep);
+    }
 
     function createQuotation(i){ var p = leads[selectedIdx].proposals[i]; if (p){ p.isQuote = true; p._sel = false; showToast('Quotation created — ' + p.id); renderDetail(selectedIdx, currentStep); } }
     function shareProposal(i, ch){ var p = leads[selectedIdx].proposals[i]; if (p) showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' sent via ' + ch); }
@@ -2904,8 +2933,7 @@
           '<div class="qc-emi">AED '+propFmt(monthly)+' / mo &middot; 60 mo</div>' +
           (chips ? '<div class="qc-chips">'+chips+'</div>' : '') +
           '<div class="qc-share">' +
-            '<button class="qc-sbtn" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">picture_as_pdf</span>PDF</button>' +
-            '<button class="qc-sbtn" onclick="shareProposal('+i+',\'WhatsApp\')"><span class="material-symbols-outlined">chat</span>WhatsApp</button>' +
+            '<button class="qc-sbtn" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">download</span>Download</button>' +
             '<button class="qc-sbtn" onclick="shareProposal('+i+',\'Email\')"><span class="material-symbols-outlined">mail</span>Email</button>' +
           '</div>' +
           (p.isQuote
@@ -2940,7 +2968,9 @@
             '<span class="prop-bulk-n"><span class="material-symbols-outlined">check_circle</span>'+selCount+' selected</span>' +
             '<div class="prop-bulk-actions">' +
               '<button class="prop-bulk-clear" onclick="clearPropSelection()">Clear</button>' +
-              '<button class="prop-bulk-convert" onclick="convertSelectedProposals()"><span class="material-symbols-outlined">receipt_long</span>Generate quotation</button>' +
+              '<button class="prop-bulk-email" onclick="emailSelectedProposals()"><span class="material-symbols-outlined">mail</span>Email</button>' +
+              '<button class="prop-bulk-email" onclick="archiveSelectedProposals()"><span class="material-symbols-outlined">archive</span>Archive</button>' +
+              '<button class="prop-bulk-convert" onclick="downloadSelectedProposals()"><span class="material-symbols-outlined">download</span>Download</button>' +
             '</div>' +
           '</div>'
         : '<div class="prop-hint"><span class="material-symbols-outlined">check_box</span>Tick one or more cards to generate a quotation.</div>';
