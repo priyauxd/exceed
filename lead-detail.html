@@ -827,6 +827,17 @@
     .stock-sel { font-family: inherit; font-size: 12px; font-weight: 700; color: #fff; background: var(--blue); border: none; border-radius: 8px; padding: 9px 15px; cursor: pointer; flex-shrink: 0; }
     .stock-sel:hover { background: var(--blue-dark); }
     .stock-ft { padding: 12px 20px; border-top: 1px solid var(--border-soft); display: flex; justify-content: flex-end; }
+    /* Confirmation dialog */
+    .confirm-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-46%); z-index: 95; width: 360px; max-width: 92vw; background: var(--surface); border-radius: 14px; box-shadow: 0 30px 70px rgba(20,24,34,.32); padding: 22px 22px 18px; text-align: center; opacity: 0; visibility: hidden; transition: opacity .18s, transform .18s, visibility .18s; }
+    .confirm-modal.open { opacity: 1; visibility: visible; transform: translate(-50%,-50%); }
+    .confirm-ic { width: 52px; height: 52px; border-radius: 50%; background: var(--red-soft); color: var(--red); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+    .confirm-ic .material-symbols-outlined { font-size: 28px; }
+    .confirm-title { font-size: 16px; font-weight: 800; color: var(--ink); }
+    .confirm-text { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.5; margin: 7px 0 18px; }
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+    .confirm-actions .cp-btn { min-width: 96px; justify-content: center; }
+    .cp-btn.danger { background: var(--red); border-color: var(--red); color: #fff; }
+    .cp-btn.danger:hover { background: #c0392b; border-color: #c0392b; }
     .prop-body { padding: 14px; }
     .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
     .prop-build-img { width: 96px; height: 62px; object-fit: cover; border-radius: 8px; background: #eef1f5; flex-shrink: 0; }
@@ -1336,6 +1347,17 @@
     <div class="stock-ft"><button class="cp-btn" onclick="closeStockModal()">Cancel</button></div>
   </div>
 
+  <div class="create-overlay" id="confirmOverlay" onclick="closeConfirm()"></div>
+  <div class="confirm-modal" id="confirmModal" role="alertdialog">
+    <div class="confirm-ic"><span class="material-symbols-outlined">warning</span></div>
+    <div class="confirm-title" id="confirmTitle">Are you sure?</div>
+    <div class="confirm-text" id="confirmText"></div>
+    <div class="confirm-actions">
+      <button class="cp-btn" onclick="closeConfirm()" id="confirmCancelBtn">Keep</button>
+      <button class="cp-btn danger" id="confirmOkBtn" onclick="confirmProceed()">Confirm</button>
+    </div>
+  </div>
+
   <script>
     var leads = [
       { id:'L-2026-04832', name:'Hiren Patel', initials:'HP', av:'av2', phone:'+971 50 482 9120', email:'hiren.patel@email.ae', emiratesId:'784-1985-9123847-2', source:'Website — Configurator', srcClass:'web', srcIcon:'W', model:'EXEED LX · Luxury', sla:'Met', slaClass:'ok', slaTime:'Completed 09:33', stage:'Discovery', stageClass:'qualified', stageNum:'Discovery', intent:'High', intentClass:'high', owner:'Mariam Saeed', bpfStage:5, score:72, profileComplete:84, convertProb:72, discovery:62, channel:'WhatsApp', lang:'English', campaign:'Ramadan EXEED LX Promo', temp:'Hot', existing:'Yes · NPS 9', showroom:'SZR Showroom — Dubai', handover:'Accepted by Mariam Saeed', preferred:'WhatsApp', nps:'9', activities:[{type:'whatsapp',text:'Customer confirmed weekend availability fo…',time:'2026-06-29 18:12'},{type:'call',text:'Discovery call — budget AED 3-4k/month, comp…',time:'2026-06-28 10:18'},{type:'visit',text:'Walk-in — viewed LX & TXL, took broch…',time:'2026-06-26 14:05'}] },
@@ -1427,7 +1449,26 @@
     function selectTimeSlot(t){ tdSched.time = t; schedRerender(); }
     function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdBookView = 'wizard'; schedRerender(); }
     function tdSetStatus(i, s){ if (!tdBookings[i]) return; tdBookings[i].status = s; showToast(s === 'Complete' ? 'Test drive completed' : 'Waiver signed — drive in progress'); schedRerender(); }
-    function cancelBooking(i){ var b = tdBookings[i]; if (!b) return; tdBookings.splice(i, 1); if (!tdBookings.length) tdBookView = 'empty'; var l = leads[selectedIdx]; if (l){ l.activities = l.activities || []; l.activities.unshift({ type:'visit', text:'Test drive cancelled — '+b.model+' · '+tdFmtDate(b.date)+' '+b.time, time:'2026-07-09 12:00' }); } showToast('Test drive cancelled'); schedRerender(); }
+    var confirmCb = null;
+    function openConfirm(title, text, okLabel, cb){
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmText').textContent = text;
+      document.getElementById('confirmOkBtn').textContent = okLabel || 'Confirm';
+      confirmCb = cb;
+      document.getElementById('confirmOverlay').classList.add('show');
+      document.getElementById('confirmModal').classList.add('open');
+    }
+    function closeConfirm(){ document.getElementById('confirmOverlay').classList.remove('show'); document.getElementById('confirmModal').classList.remove('open'); confirmCb = null; }
+    function confirmProceed(){ var cb = confirmCb; closeConfirm(); if (cb) cb(); }
+    function cancelBooking(i){
+      var b = tdBookings[i]; if (!b) return;
+      openConfirm('Cancel test drive?', b.model + ' · ' + tdFmtDate(b.date) + ' ' + b.time + ' will be cancelled.', 'Cancel drive', function(){
+        tdBookings.splice(i, 1);
+        if (!tdBookings.length) tdBookView = 'empty';
+        var l = leads[selectedIdx]; if (l){ l.activities = l.activities || []; l.activities.unshift({ type:'visit', text:'Test drive cancelled — '+b.model+' · '+tdFmtDate(b.date)+' '+b.time, time:'2026-07-09 12:00' }); }
+        showToast('Test drive cancelled'); schedRerender();
+      });
+    }
     function tdDownload(i){ showToast('Test drive report downloaded'); }
 
     var waiverIdx = -1, waiverSigned = false, waiverSigCtx = null;
