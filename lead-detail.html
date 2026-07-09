@@ -616,6 +616,7 @@
     .td-table th.td-act, .td-table td.td-act { text-align: right; }
     .td-resched { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-secondary); background: none; border: none; cursor: pointer; padding: 4px 6px; border-radius: var(--borderRadiusMedium); }
     .td-resched:hover { color: var(--blue); background: var(--blue-soft); }
+    .td-resched.danger:hover { color: var(--red); background: var(--red-soft); }
     .td-resched .material-symbols-outlined { font-size: 15px; }
     /* Test-drive wizard */
     .td-wiz { border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 18px 20px 20px; box-shadow: var(--shadow2); }
@@ -1005,6 +1006,11 @@
     .la-dq-q { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 7px; }
     .la-dq-n { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; background: var(--blue-soft); color: var(--blue); font-size: 10.5px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
     .la-dq-label { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+    .la-booked { border: 1px solid #c4e8d0; background: var(--green-soft); border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; }
+    .la-booked-h { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #2f7a4f; margin-bottom: 7px; }
+    .la-booked-h .material-symbols-outlined { font-size: 15px; }
+    .la-booked-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; font-weight: 600; color: var(--ink); padding: 3px 0; }
+    .la-booked-dt { font-size: 11.5px; color: var(--ink-secondary); font-weight: 500; }
     .la-radio { display: flex; flex-direction: column; gap: 7px; }
     .la-radio-item { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ink); cursor: pointer; padding: 8px 11px; border: 1px solid var(--border-soft); border-radius: var(--radius-sm); background: var(--surface); }
     .la-radio-item:has(input:checked) { border-color: var(--blue); background: var(--blue-soft); }
@@ -1346,7 +1352,7 @@
     var stepDetails = [
       {title:'New Lead Intake', fields:['customer','emiratesId','mobile','email','lang','preferred','source','model','temp','showroom','handover','existing'], checklist:['Leads created successfully','Log activities on attempts to reach out to customers'], aiTitle:'Accept this qualified lead', aiDesc:'Call center has handed over a <strong>Hot</strong> lead with all mandatory fields filled. Accept to start the SLA clock with you as the owner.', aiBtns:['Accept Lead','Return to Call Center'], aiNote:'Lead must be accepted or returned with a reason.'},
       {title:'First Contact', fields:['customer','mobile','email','showroom','channel'], checklist:['Complete customer discovery questions (5 Qns)','Log activities on attempts to reach out to customers','Qualify or disqualify customers based on responses'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
-      {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Log activities on attempts to reach out to customers','Share brochures and video recording with customers','Book an appointment with the customer','Survey link shared'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
+      {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Log activities on attempts to reach out to customers','Share brochures and video recording with customers','Book an appointment with the customer'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
       {title:'Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Complete customer profile with E-ID / UAE Pass','Initiate test drive with customer','Complete customer discovery questions (10 Qns)','Record Trade-in Interests','Check stocks and create proposals for customers','Automated — Post Visit & Test Drive Surveys'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
       {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Convert selected proposal into quotation','Share quotation to customers via Docusign'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
       {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['Receive signed agreement from customer','Collect booking payment','Book vehicle stock'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
@@ -1404,6 +1410,7 @@
     function selectTimeSlot(t){ tdSched.time = t; schedRerender(); }
     function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdBookView = 'wizard'; schedRerender(); }
     function tdSetStatus(i, s){ if (!tdBookings[i]) return; tdBookings[i].status = s; showToast(s === 'Complete' ? 'Test drive completed' : 'Waiver signed — drive in progress'); schedRerender(); }
+    function cancelBooking(i){ var b = tdBookings[i]; if (!b) return; tdBookings.splice(i, 1); if (!tdBookings.length) tdBookView = 'empty'; var l = leads[selectedIdx]; if (l){ l.activities = l.activities || []; l.activities.unshift({ type:'visit', text:'Test drive cancelled — '+b.model+' · '+tdFmtDate(b.date)+' '+b.time, time:'2026-07-09 12:00' }); } showToast('Test drive cancelled'); schedRerender(); }
     function tdDownload(i){ showToast('Test drive report downloaded'); }
 
     var waiverIdx = -1, waiverSigned = false, waiverSigCtx = null;
@@ -1534,13 +1541,14 @@
         var status = b.status || 'Booked';
         var badgeCls = status === 'Complete' ? 'complete' : (status === 'In progress' ? 'progress' : 'booked');
         var actions;
+        var cancelBtn = '<button class="td-resched danger" onclick="cancelBooking('+i+')"><span class="material-symbols-outlined">close</span>Cancel</button>';
         if (status === 'In progress') {
-          actions = '<button class="td-resched" onclick="tdSetStatus('+i+',\'Complete\')"><span class="material-symbols-outlined">check_circle</span>Complete</button>';
+          actions = '<button class="td-resched" onclick="tdSetStatus('+i+',\'Complete\')"><span class="material-symbols-outlined">check_circle</span>Complete</button>' + cancelBtn;
         } else if (status === 'Complete') {
           actions = '<button class="td-resched" onclick="tdDownload('+i+')"><span class="material-symbols-outlined">download</span>Download</button>';
         } else {
           actions = '<button class="td-resched" onclick="reschedule('+i+')"><span class="material-symbols-outlined">edit</span>Reschedule</button>' +
-            '<button class="td-resched" onclick="openWaiver('+i+')"><span class="material-symbols-outlined">draw</span>Sign waiver</button>';
+            '<button class="td-resched" onclick="openWaiver('+i+')"><span class="material-symbols-outlined">draw</span>Sign waiver</button>' + cancelBtn;
         }
         return '<tr>' +
           '<td><span class="td-veh"><span class="td-veh-ic material-symbols-outlined">directions_car</span><strong>'+b.model+'</strong></span></td>' +
@@ -2295,7 +2303,8 @@
       renderDetail(selectedIdx, currentStep);
     }
 
-    var laAnswer = null, laOutcome = null;
+    var laAnswer = null, laOutcome = null, laNoReason = 'Invalid number';
+    function setLaNoReason(v){ laNoReason = v; renderLaFields(); updateLaHint(); }
     // outcome -> {stage number, journey name} or {disq:true}
     var laRoutes = {
       'Handover to showroom': { n: 3, name: 'Qualify' },
@@ -2309,7 +2318,7 @@
     var laNoOutcomes  = ['Disqualify Customer', 'Send WhatsApp', 'Call customer'];
     function renderOutcomeChips() {
       var host = document.getElementById('laChips'); if (!host) return;
-      var outs = laAnswer === 'yes' ? laYesOutcomes : (laAnswer === 'no' ? laNoOutcomes : []);
+      var outs = laAnswer === 'yes' ? laYesOutcomes : [];
       host.innerHTML = outs.map(function(o){ return '<button class="la-chip'+(laOutcome===o?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>'; }).join('');
     }
 
@@ -2346,6 +2355,15 @@
     }
     function laNotesField() {
       return '<div class="cp-field"><label class="cp-label">Notes</label><textarea class="cp-textarea" id="laNoteText" placeholder="Conversation summary…"></textarea></div>';
+    }
+    // Surfaces test drives already booked (e.g. from the Test Drive tab) inside the Log activity panel.
+    function laExistingBookings() {
+      if (!tdBookings.length) return '';
+      return '<div class="la-booked"><div class="la-booked-h"><span class="material-symbols-outlined">directions_car</span>Already booked</div>' +
+        tdBookings.map(function(b){
+          return '<div class="la-booked-row"><span>'+b.model+'</span><span class="la-booked-dt">'+tdFmtDate(b.date)+' &middot; '+b.time+'</span></div>';
+        }).join('') +
+      '</div>';
     }
     function laDiscovery() {
       return '<div class="la-dqcard">' +
@@ -2385,15 +2403,16 @@
       var host = document.getElementById('laDynamic');
       if (!host) return;
       var html = '';
-      if (laAnswer === 'no' && laOutcome) {
-        if (laOutcome === 'Disqualify Customer') {
-          html += laSelect('laReason', 'Reason', laReasons, true);
-        } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Call customer') {
-          html += laDateTime('Reschedule');
-        }
+      if (laAnswer === 'no') {
+        html += '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label><div class="la-radio">' +
+          ['Invalid number','Not reachable'].map(function(o){
+            return '<label class="la-radio-item"><input type="radio" name="laNoReason" value="'+o+'"'+(laNoReason===o?' checked':'')+' onchange="setLaNoReason(\''+o+'\')"><span>'+o+'</span></label>';
+          }).join('') + '</div></div>';
+        if (laNoReason === 'Not reachable') { html += laDateTime('Reschedule'); }
         html += laNotesField();
       } else if (laAnswer === 'yes' && laOutcome) {
         if (laOutcome === 'Book test drive') {
+          html += laExistingBookings();
           html += laDiscovery();
           html += laBookingPicker();
           html += laNotesField();
@@ -2403,6 +2422,7 @@
           html += laNotesField();
         } else if (laOutcome === 'Needs time') {
           html += laDateTime('Reschedule call');
+          html += laNotesField();
         } else if (laOutcome === 'Not interested') {
           html += laSelect('laReason', 'Reason', laReasons, true);
         }
@@ -2421,8 +2441,11 @@
       document.getElementById('laOutcomeWrap').style.display = 'none';
       document.getElementById('laError').style.display = 'none';
       document.getElementById('laDynamic').innerHTML = '';
-      var att = leads[selectedIdx].attempts || 1;
-      document.getElementById('laAttemptsText').textContent = att + ' of 5 attempts done';
+      // Call-attempt tracking only applies to New & Contact (call centre) stages.
+      var attemptStage = currentStep <= 1;
+      var att = Math.min(leads[selectedIdx].attempts || 1, 4);
+      document.getElementById('laAttempts').style.display = attemptStage ? '' : 'none';
+      document.getElementById('laAttemptsText').textContent = att + ' of 4 attempts done';
       updateLaHint();
       document.getElementById('logOverlay').classList.add('show');
       document.getElementById('logPanel').classList.add('open');
@@ -2431,8 +2454,8 @@
     function updateLaHint() {
       var h = document.getElementById('laHint');
       if (!h) return;
-      if (laAnswer === 'no' && laOutcome) {
-        if (laOutcome === 'Disqualify Customer') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
+      if (laAnswer === 'no') {
+        if (laNoReason === 'Invalid number') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
         h.textContent = 'Saving will log a missed attempt and schedule the next follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
       }
       if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
@@ -2446,11 +2469,12 @@
     function setLaAnswer(v) {
       laAnswer = v;
       laOutcome = null;
+      if (v === 'no') laNoReason = 'Invalid number';
       document.getElementById('laYes').classList.toggle('on', v === 'yes');
       var no = document.getElementById('laNo');
       no.classList.toggle('on', v === 'no'); no.classList.toggle('no', v === 'no');
-      // Outcome chips appear for both answers (different sets per answer).
-      document.getElementById('laOutcomeWrap').style.display = v ? '' : 'none';
+      // Outcome chips only for "Yes"; "No" goes straight to reschedule + notes.
+      document.getElementById('laOutcomeWrap').style.display = (v === 'yes') ? '' : 'none';
       renderOutcomeChips();
       renderLaFields();
       updateLaHint();
@@ -2472,7 +2496,7 @@
     function submitLogActivity(close) {
       var e = document.getElementById('laError');
       if (!laAnswer) { e.textContent = 'Please record whether the customer answered.'; e.style.display = 'block'; return; }
-      if (!laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
+      if (laAnswer === 'yes' && !laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
       e.style.display = 'none';
       var l = leads[selectedIdx];
       var noteEl = document.getElementById('laNoteText');
@@ -2482,18 +2506,10 @@
       l.activities = l.activities || [];
 
       if (laAnswer === 'no') {
-        l.attempts = Math.min((l.attempts || 1) + 1, 5);
-        if (laOutcome === 'Disqualify Customer') {
-          l.disqReason = f.reason; l.nextCall = null;
-          l.activities.unshift({ type: 'call', text: ['No answer — Disqualified', f.reason, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-          l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
-          showToast('Lead disqualified' + (f.reason ? ' — ' + f.reason : ''));
-        } else {
-          l.nextCall = { date: f.date, time: f.time, note: laOutcome };
-          var actType = laOutcome === 'Send WhatsApp' ? 'whatsapp' : 'call';
-          l.activities.unshift({ type: actType, text: ['No answer — ' + laOutcome, when ? 'next ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-          showToast(laOutcome + (when ? ' · next ' + when : '') + ' scheduled');
-        }
+        l.attempts = Math.min((l.attempts || 1) + 1, 4);
+        if (laNoReason === 'Not reachable') { l.nextCall = { date: f.date, time: f.time, note: notes }; } else { l.nextCall = null; }
+        l.activities.unshift({ type: 'call', text: ['No answer', laNoReason, (laNoReason === 'Not reachable' && when) ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+        showToast('Missed attempt logged' + (laNoReason ? ' — ' + laNoReason : ''));
       } else {
         var r = laRoutes[laOutcome];
         if (laOutcome === 'Book test drive' || laOutcome === 'Handover to showroom') {
