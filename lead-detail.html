@@ -317,32 +317,6 @@
 
     /* Genesys CTI softphone */
     .cti-panel { position: fixed; right: 20px; bottom: 20px; width: 260px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow16); z-index: 80; overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(12px); transition: opacity .2s, transform .2s, visibility .2s; }
-    /* Sales Copilot — ambient side rail + docked drawer */
-    .copilot-rail { position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 88; width: 42px; height: 140px; border-radius: 16px 0 0 16px; background: linear-gradient(160deg, #6a5cff, #a35cff 70%, #ff6ec7); box-shadow: -6px 0 24px rgba(96,60,220,.42); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer; color: #fff; overflow: hidden; transition: width .18s ease, box-shadow .18s ease, transform .3s cubic-bezier(.4,0,.2,1), opacity .2s; }
-    .copilot-rail:hover { width: 56px; box-shadow: -10px 0 32px rgba(96,60,220,.62); }
-    .copilot-rail.tuck { transform: translateY(-50%) translateX(110%); opacity: 0; pointer-events: none; }
-    .copilot-rail-ic { font-size: 22px; z-index: 1; }
-    .copilot-rail-label { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; z-index: 1; }
-    .copilot-rail-pulse { position: absolute; inset: 0; background: radial-gradient(60% 50% at 50% 50%, rgba(255,255,255,.5), transparent 70%); opacity: 0; animation: copilotPulse 2.8s ease-in-out infinite; }
-    @keyframes copilotPulse { 0%,100% { opacity: 0; } 50% { opacity: .8; } }
-    .copilot-panel { position: fixed; right: 0; top: 0; bottom: 0; z-index: 89; width: 360px; max-width: 92vw; background: var(--surface); border-left: 1px solid var(--border); box-shadow: -14px 0 44px rgba(20,24,34,.20); display: flex; flex-direction: column; overflow: hidden; transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
-    .copilot-panel.open { transform: translateX(0); }
-    .copilot-head { display: flex; align-items: center; gap: 8px; padding: 15px 16px; background: linear-gradient(135deg, #6a5cff, #a35cff); color: #fff; flex-shrink: 0; }
-    .copilot-head .material-symbols-outlined { font-size: 20px; }
-    .copilot-title { font-size: 13.5px; font-weight: 700; flex: 1; }
-    .copilot-head-btn { border: none; background: rgba(255,255,255,.2); color: #fff; width: 26px; height: 26px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .copilot-head-btn:hover { background: rgba(255,255,255,.32); }
-    .copilot-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-    .copilot-msg { font-size: 12.5px; line-height: 1.5; color: var(--ink); background: var(--bg); border-radius: 12px; padding: 10px 12px; max-width: 90%; }
-    .copilot-msg.me { align-self: flex-end; background: #efeafe; color: #4432a8; }
-    .copilot-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-    .copilot-chip { font-family: inherit; font-size: 11.5px; font-weight: 600; color: #6a5cff; background: #efeafe; border: none; border-radius: 20px; padding: 6px 12px; cursor: pointer; transition: .12s; }
-    .copilot-chip:hover { background: #6a5cff; color: #fff; }
-    .copilot-foot { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--border-soft); flex-shrink: 0; }
-    .copilot-input { flex: 1; border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; font-family: inherit; font-size: 12.5px; outline: none; color: var(--ink); }
-    .copilot-input:focus { border-color: #6a5cff; }
-    .copilot-send { border: none; background: #6a5cff; color: #fff; width: 40px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .copilot-send:hover { background: #5a4cf0; }
     .cti-panel.open { opacity: 1; visibility: visible; transform: translateY(0); }
     .cti-head { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; background: linear-gradient(135deg, #0a0e14, #16293c); color: #fff; }
     .cti-brand { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; }
@@ -1301,31 +1275,6 @@
     </div>
   </div>
 
-  <div class="copilot-rail" id="copilotRail" onclick="toggleCopilot()" title="Sales Copilot" role="button" aria-label="Open Sales Copilot">
-    <span class="copilot-rail-pulse"></span>
-    <span class="material-symbols-outlined copilot-rail-ic">auto_awesome</span>
-    <span class="copilot-rail-label">Copilot</span>
-  </div>
-  <div class="copilot-panel" id="copilotPanel" role="dialog" aria-label="Sales Copilot">
-    <div class="copilot-head">
-      <span class="material-symbols-outlined">auto_awesome</span>
-      <span class="copilot-title">Sales Copilot</span>
-      <button class="copilot-head-btn" onclick="toggleCopilot()"><span class="material-symbols-outlined" style="font-size:16px">close</span></button>
-    </div>
-    <div class="copilot-body" id="copilotBody">
-      <div class="copilot-msg">Hi 👋 I can help with this lead — summarise activity, draft a follow-up, or suggest the next best action.</div>
-      <div class="copilot-chips">
-        <button class="copilot-chip" onclick="copilotAsk('Summarise this lead')">Summarise this lead</button>
-        <button class="copilot-chip" onclick="copilotAsk('Draft a follow-up message')">Draft follow-up</button>
-        <button class="copilot-chip" onclick="copilotAsk('What is the next best action?')">Next best action</button>
-      </div>
-    </div>
-    <div class="copilot-foot">
-      <input class="copilot-input" id="copilotInput" placeholder="Ask Copilot…" onkeydown="if(event.key==='Enter')copilotSend()">
-      <button class="copilot-send" onclick="copilotSend()"><span class="material-symbols-outlined" style="font-size:18px">send</span></button>
-    </div>
-  </div>
-
   <script>
     var leads = [
       { id:'L-2026-04832', name:'Hiren Patel', initials:'HP', av:'av2', phone:'+971 50 482 9120', email:'hiren.patel@email.ae', emiratesId:'784-1985-9123847-2', source:'Website — Configurator', srcClass:'web', srcIcon:'W', model:'EXEED LX · Luxury', sla:'Met', slaClass:'ok', slaTime:'Completed 09:33', stage:'Discovery', stageClass:'qualified', stageNum:'Discovery', intent:'High', intentClass:'high', owner:'Mariam Saeed', bpfStage:5, score:72, profileComplete:84, convertProb:72, discovery:62, channel:'WhatsApp', lang:'English', campaign:'Ramadan EXEED LX Promo', temp:'Hot', existing:'Yes · NPS 9', showroom:'SZR Showroom — Dubai', handover:'Accepted by Mariam Saeed', preferred:'WhatsApp', nps:'9', activities:[{type:'whatsapp',text:'Customer confirmed weekend availability fo…',time:'2026-06-29 18:12'},{type:'call',text:'Discovery call — budget AED 3-4k/month, comp…',time:'2026-06-28 10:18'},{type:'visit',text:'Walk-in — viewed LX & TXL, took broch…',time:'2026-06-26 14:05'}] },
@@ -1403,12 +1352,14 @@
     // ── Test-drive booking flow ──
     var tdBookView = 'empty'; // 'empty' | 'wizard' | 'list'
     var tdEditIdx = -1;
+    var TD_TODAY = '2026-07-09', TD_NOW = '10:00';
     var tdSched = { model:null, date:null, time:null };
     var tdBookings = [];
     var tdDemoSeeded = false;
-    var tdCalY = 2026, tdCalM = 9; // October 2026
+    var tdCalY = 2026, tdCalM = 6; // July 2026 (today)
     function schedRerender(){ renderDetail(selectedIdx, currentStep); }
-    function bookStart(){ tdEditIdx = -1; tdSched = { model:null, date:null, time:null }; tdBookView = 'wizard'; schedRerender(); }
+    function tdShowToday(){ var p = TD_TODAY.split('-'); tdCalY = +p[0]; tdCalM = +p[1] - 1; }
+    function bookStart(){ tdEditIdx = -1; tdSched = { model:null, date:TD_TODAY, time:TD_NOW }; tdShowToday(); tdBookView = 'wizard'; schedRerender(); }
     function bookCancel(){ tdBookView = tdBookings.length ? 'list' : 'empty'; schedRerender(); }
     function calNav(d){ tdCalM += d; if (tdCalM < 0){ tdCalM = 11; tdCalY--; } if (tdCalM > 11){ tdCalM = 0; tdCalY++; } schedRerender(); }
     function selectCalDay(iso){ tdSched.date = iso; schedRerender(); }
@@ -1699,28 +1650,6 @@
       if (l){ l.activities = l.activities || []; l.activities.unshift({ type:'visit', text:'UAE Pass identity verification requested', time:'2026-07-09 12:00' }); }
     }
 
-    function toggleCopilot(){
-      var p = document.getElementById('copilotPanel'), r = document.getElementById('copilotRail');
-      var open = p.classList.toggle('open');
-      r.classList.toggle('tuck', open);
-      if (open) setTimeout(function(){ var i = document.getElementById('copilotInput'); if (i) i.focus(); }, 240);
-    }
-    function copilotAsk(q){ document.getElementById('copilotInput').value = q; copilotSend(); }
-    function copilotSend(){
-      var inp = document.getElementById('copilotInput'), q = (inp.value || '').trim(); if (!q) return;
-      var body = document.getElementById('copilotBody');
-      body.insertAdjacentHTML('beforeend', '<div class="copilot-msg me">' + q.replace(/</g,'&lt;') + '</div>');
-      inp.value = '';
-      var l = selectedIdx >= 0 ? leads[selectedIdx] : null;
-      var reply;
-      if (!l) { reply = 'Open a lead first and I\'ll tailor suggestions to it.'; }
-      else if (/summar/i.test(q)) { reply = '<strong>'+l.name+'</strong> · '+l.stageNum+' stage. Source: '+l.source+', channel: '+l.channel+'. Convert probability '+l.convertProb+'%, discovery '+l.discovery+'%. Last activity: '+((l.activities&&l.activities[0])?l.activities[0].text:'—'); }
-      else if (/follow|draft|message/i.test(q)) { reply = 'Suggested WhatsApp: “Hi '+l.name.split(' ')[0]+', thanks for your interest in the '+l.model+'. I\'d love to book a quick test drive this week — what day suits you?”'; }
-      else if (/next|action|best/i.test(q)) { reply = 'Next best action for '+l.name+': log the outstanding call within SLA, then '+(l.bpfStage>=4?'share a tailored proposal from the configurator.':'book a showroom appointment.'); }
-      else { reply = 'For <strong>'+l.name+'</strong> ('+l.stageNum+'), I\'d prioritise the SLA follow-up and share the EXEED ES brochure. Ask me to summarise, draft a message, or suggest the next action.'; }
-      setTimeout(function(){ body.insertAdjacentHTML('beforeend', '<div class="copilot-msg">' + reply + '</div>'); body.scrollTop = body.scrollHeight; }, 380);
-      body.scrollTop = body.scrollHeight;
-    }
     function toggleCheck(ci, el) {
       if (selectedIdx < 0) return;
       var l = leads[selectedIdx];
@@ -1949,6 +1878,8 @@
         '</div>' +
         noteHtml +
         cadSection +
+        '<div class="slaw-viewall" id="slaViewAll" onclick="toggleAllSlas()">View all SLAs <span class="material-symbols-outlined" id="slaViewCaret">expand_more</span></div>' +
+        '<div class="slaw-all" id="slaAll" style="display:none">' + allSlaRows(l, cls) + '</div>' +
       '</div>';
     }
 
@@ -2524,7 +2455,7 @@
     function setLaOutcome(btn) {
       laOutcome = btn.getAttribute('data-out');
       document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.toggle('on', c === btn); });
-      if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: null, time: null }; }
+      if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: TD_TODAY, time: TD_NOW }; tdShowToday(); }
       renderLaFields();
       updateLaHint();
     }
