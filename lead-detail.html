@@ -2100,7 +2100,8 @@
       html += '</div>';
 
       // Form tabs (above the step) — synced with the identity-card tab bar
-      html += tabBarHtml(null, ['overview','discovery','testdrive','proposals']);
+      var stageTabs = (stepIdx <= 1) ? ['overview','discovery','testdrive'] : ['overview','discovery','testdrive','proposals'];
+      html += tabBarHtml(null, stageTabs);
 
       if (leadTab !== 'overview') {
         html += leadTabPanel(l, leadTab);
@@ -2343,6 +2344,9 @@
           '<div class="cp-field"><input class="cp-input" type="time" id="laTime"></div>' +
         '</div>';
     }
+    function laNotesField() {
+      return '<div class="cp-field"><label class="cp-label">Notes</label><textarea class="cp-textarea" id="laNoteText" placeholder="Conversation summary…"></textarea></div>';
+    }
     function laDiscovery() {
       return '<div class="la-dqcard">' +
         '<div class="la-dqcard-head"><span class="material-symbols-outlined">quiz</span>Discovery questions</div>' +
@@ -2385,15 +2389,18 @@
         if (laOutcome === 'Disqualify Customer') {
           html += laSelect('laReason', 'Reason', laReasons, true);
         } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Call customer') {
-          html += laDateTime('Schedule next');
+          html += laDateTime('Reschedule');
         }
+        html += laNotesField();
       } else if (laAnswer === 'yes' && laOutcome) {
         if (laOutcome === 'Book test drive') {
           html += laDiscovery();
           html += laBookingPicker();
+          html += laNotesField();
         } else if (laOutcome === 'Handover to showroom') {
           html += laDiscovery();
           html += laDateTime('Date & time');
+          html += laNotesField();
         } else if (laOutcome === 'Needs time') {
           html += laDateTime('Reschedule call');
         } else if (laOutcome === 'Not interested') {
@@ -2468,7 +2475,8 @@
       if (!laOutcome) { e.textContent = 'Please select an outcome.'; e.style.display = 'block'; return; }
       e.style.display = 'none';
       var l = leads[selectedIdx];
-      var notes = '';
+      var noteEl = document.getElementById('laNoteText');
+      var notes = noteEl ? noteEl.value.trim() : '';
       var f = laGather();
       var when = laFmtDT(f.date, f.time);
       l.activities = l.activities || [];
@@ -2477,13 +2485,13 @@
         l.attempts = Math.min((l.attempts || 1) + 1, 5);
         if (laOutcome === 'Disqualify Customer') {
           l.disqReason = f.reason; l.nextCall = null;
-          l.activities.unshift({ type: 'call', text: ['No answer — Disqualified', f.reason].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          l.activities.unshift({ type: 'call', text: ['No answer — Disqualified', f.reason, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
           showToast('Lead disqualified' + (f.reason ? ' — ' + f.reason : ''));
         } else {
           l.nextCall = { date: f.date, time: f.time, note: laOutcome };
           var actType = laOutcome === 'Send WhatsApp' ? 'whatsapp' : 'call';
-          l.activities.unshift({ type: actType, text: ['No answer — ' + laOutcome, when ? 'next ' + when : ''].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          l.activities.unshift({ type: actType, text: ['No answer — ' + laOutcome, when ? 'next ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast(laOutcome + (when ? ' · next ' + when : '') + ' scheduled');
         }
       } else {
