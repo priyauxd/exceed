@@ -70,14 +70,6 @@
   .stage-caption{text-align:center; padding:0 24px 14px; flex-shrink:0;}
   .stage-caption .big{font-size:22px; font-weight:800; letter-spacing:-.02em;}
   .stage-caption .sub{font-size:12.5px; color:var(--ink2); margin-top:3px;}
-  .stock-check{flex-shrink:0; display:flex; align-items:center; gap:9px; justify-content:center; margin:0 auto 12px; padding:8px 14px; background:var(--panel); border:1px solid var(--line); border-radius:30px; box-shadow:var(--card-shadow) 0 4px 14px;}
-  .stock-check .mi{font-size:17px; color:var(--ink2);}
-  .stock-l{font-size:11.5px; font-weight:600; color:var(--ink2);}
-  .stock-select{font-family:inherit; font-size:12.5px; font-weight:600; color:var(--ink); background:none; border:none; outline:none; cursor:pointer; padding:2px 4px;}
-  .stock-status{display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700; padding:4px 11px; border-radius:20px; background:rgba(31,158,90,.14); color:#1f9e5a;}
-  .stock-status::before{content:''; width:7px; height:7px; border-radius:50%; background:currentColor;}
-  .stock-status.limited{background:rgba(224,140,35,.16); color:#d4873a;}
-  .stock-status.out{background:rgba(224,35,63,.14); color:var(--accent2);}
 
   /* Selector dock */
   .dock{flex-shrink:0; padding:14px 28px 18px; border-top:1px solid var(--line); background:var(--dock-bg); backdrop-filter:blur(10px);}
@@ -172,17 +164,6 @@
       <div class="stage-badge"><span class="m">EXEED ES</span><span class="t">Fully Electric SUV &middot; 2026</span></div>
       <div class="stage-img-wrap"><img class="stage-img" id="stageImg" src="assets/es/ext-white.png" alt="EXEED ES"></div>
       <div class="stage-caption"><div class="big" id="stageBig">EXEED ES</div><div class="sub" id="stageSub">Choose your configuration</div></div>
-      <div class="stock-check">
-        <span class="mi">inventory_2</span>
-        <span class="stock-l">Stock at</span>
-        <select class="stock-select" id="stockSelect" onchange="checkStock()">
-          <option>EXEED Dubai — SZR</option>
-          <option>EXEED Sharjah</option>
-          <option>EXEED Abu Dhabi</option>
-          <option>EXEED Etihad Road</option>
-        </select>
-        <span class="stock-status" id="stockStatus">In stock</span>
-      </div>
       <div class="dock">
         <div class="dock-h"><span class="t" id="dockTitle">Select</span></div>
         <div id="dockBody"></div>
@@ -366,14 +347,6 @@
     document.getElementById('savedOv').classList.add('show');
   }
   function buildAnother(){ document.getElementById('savedOv').classList.remove('show'); state.step=1; renderAll(); }
-
-  var STOCK = { 'EXEED Dubai — SZR':['In stock',''], 'EXEED Sharjah':['Limited stock','limited'], 'EXEED Abu Dhabi':['In stock',''], 'EXEED Etihad Road':['Out of stock','out'] };
-  function checkStock(){
-    var s = STOCK[document.getElementById('stockSelect').value] || ['In stock',''];
-    var el = document.getElementById('stockStatus');
-    el.textContent = s[0]; el.className = 'stock-status ' + s[1];
-  }
-  checkStock();
 
   function toggleTheme(){
     var dark = document.body.classList.toggle('dark');

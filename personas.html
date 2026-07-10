@@ -53,6 +53,30 @@
     .day { font-size: 12px; color: var(--ink-secondary, #424242); line-height: 1.55; background: var(--colorNeutralBackground3, #f5f5f5); border-radius: 10px; padding: 11px 13px; margin-top: 12px; }
     .day b { color: var(--ink, #242424); font-weight: 700; }
 
+    /* ── User journeys ── */
+    .jsec { margin-top: 40px; }
+    .jsec-title { font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
+    .jsec-sub { font-size: 13.5px; color: var(--ink-secondary, #424242); margin-top: 6px; margin-bottom: 22px; line-height: 1.6; max-width: 760px; }
+    .journey { background: #fff; border: 1px solid var(--border-soft, #f0f0f0); border-left: 4px solid var(--pc); border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,.05), 0 1px 3px rgba(0,0,0,.03); padding: 18px 20px; margin-bottom: 18px; }
+    .j-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .j-av { width: 34px; height: 34px; border-radius: 50%; background: var(--pc); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .j-title { font-size: 14.5px; font-weight: 700; }
+    .j-title span { color: var(--ink-muted, #616161); font-weight: 500; }
+    .j-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+    @media (max-width: 900px) { .j-strip { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(190px, 1fr); overflow-x: auto; padding-bottom: 8px; } }
+    .j-phase { position: relative; background: var(--pc-soft); border-radius: 12px; padding: 12px 13px; }
+    .j-phase::after { content: '\203A'; position: absolute; right: -13px; top: 50%; transform: translateY(-50%); font-size: 20px; font-weight: 700; color: var(--pc); }
+    .j-phase:last-child::after { display: none; }
+    .j-ph-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 7px; }
+    .j-num { width: 20px; height: 20px; border-radius: 50%; background: var(--pc); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .j-feel { display: inline-flex; align-items: center; gap: 3px; font-size: 10.5px; font-weight: 700; }
+    .j-feel .material-symbols-outlined { font-size: 15px; }
+    .s-pos .j-feel { color: #2f7a4f; } .s-neu .j-feel { color: #1c4d75; } .s-cau .j-feel { color: #8a6420; }
+    .j-ph-name { font-size: 12.5px; font-weight: 700; color: var(--ink, #242424); }
+    .j-ph-do { font-size: 11.5px; color: var(--ink-secondary, #424242); line-height: 1.45; margin-top: 3px; }
+    .j-ph-touch { font-size: 10.5px; color: var(--ink-muted, #616161); margin-top: 8px; display: inline-flex; align-items: center; gap: 4px; }
+    .j-ph-touch .material-symbols-outlined { font-size: 13px; }
+
     /* persona accent palettes */
     .agent   { --pc:#2a6797; --pc-ink:#1c4d75; --pc-soft:#eaf1f7; }
     .sales   { --pc:#2f7a4f; --pc-ink:#1f5c39; --pc-soft:#e9f4ee; }
@@ -230,6 +254,60 @@
             <div class="tools"><b>Tools:</b> Manager dashboard · Agent performance grid · SLA & exceptions · Copilot</div>
             <div class="day"><b>A day:</b> Sees 24 not-actioned and 11 SLA-overdue → acts on Copilot's prompt to reassign uncalled leads from an overloaded agent → flags two agents for coaching → clears the SLA-risk queue before peak → sends daily numbers to leadership.</div>
           </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="jsec">
+      <div class="jsec-title">User Journeys</div>
+      <div class="jsec-sub">How each role moves through a typical cycle — the phases, what they do, how they feel, and the CRM touchpoint at each step.</div>
+
+      <!-- Contact Center Agent journey -->
+      <div class="journey agent">
+        <div class="j-head"><div class="j-av">NA</div><div class="j-title">Nadia Al Amiri <span>· Contact Center Agent — first-contact sprint</span></div></div>
+        <div class="j-strip">
+          <div class="j-phase s-cau"><div class="j-ph-top"><span class="j-num">1</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_stressed</span>Alert</span></div><div class="j-ph-name">Lead arrives</div><div class="j-ph-do">New lead auto-assigned; 30-min SLA clock starts.</div><div class="j-ph-touch"><span class="material-symbols-outlined">list_alt</span>Lead queue</div></div>
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">2</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Focused</span></div><div class="j-ph-name">Prioritize &amp; dial</div><div class="j-ph-do">Sort by SLA risk; click-to-dial the hottest lead.</div><div class="j-ph-touch"><span class="material-symbols-outlined">call</span>Genesys CTI</div></div>
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">3</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Adaptive</span></div><div class="j-ph-name">Connect or fallback</div><div class="j-ph-do">Talk, or send approved WhatsApp on no-answer.</div><div class="j-ph-touch"><span class="material-symbols-outlined">chat</span>WhatsApp</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">4</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>Decisive</span></div><div class="j-ph-name">Qualify intent</div><div class="j-ph-do">Log outcome: Interested / Needs time / Compare / Book.</div><div class="j-ph-touch"><span class="material-symbols-outlined">edit_note</span>Log activity</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">5</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>Relieved</span></div><div class="j-ph-name">Hand over</div><div class="j-ph-do">Route to Sales, or schedule a call-back.</div><div class="j-ph-touch"><span class="material-symbols-outlined">forward_to_inbox</span>Pipeline</div></div>
+        </div>
+      </div>
+
+      <!-- Sales Executive journey -->
+      <div class="journey sales">
+        <div class="j-head"><div class="j-av">MS</div><div class="j-title">Mariam Saeed <span>· Sales Executive — qualified to closed</span></div></div>
+        <div class="j-strip">
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">1</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Confident</span></div><div class="j-ph-name">Accept lead</div><div class="j-ph-do">Qualified lead lands; review the AI fit card.</div><div class="j-ph-touch"><span class="material-symbols-outlined">assignment_ind</span>Opportunity</div></div>
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">2</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Engaged</span></div><div class="j-ph-name">Discover</div><div class="j-ph-do">Structured needs analysis; match the right model.</div><div class="j-ph-touch"><span class="material-symbols-outlined">quiz</span>Discovery</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">3</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>Excited</span></div><div class="j-ph-name">Test drive</div><div class="j-ph-do">Book &amp; run the drive that moves the customer.</div><div class="j-ph-touch"><span class="material-symbols-outlined">directions_car</span>Booking</div></div>
+          <div class="j-phase s-cau"><div class="j-ph-top"><span class="j-num">4</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_stressed</span>Waiting</span></div><div class="j-ph-name">Propose</div><div class="j-ph-do">Generate quote &amp; finance; chase approval.</div><div class="j-ph-touch"><span class="material-symbols-outlined">description</span>Quotes</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">5</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>Accomplished</span></div><div class="j-ph-name">Close</div><div class="j-ph-do">Negotiate, order, hand over to delivery.</div><div class="j-ph-touch"><span class="material-symbols-outlined">handshake</span>Order</div></div>
+        </div>
+      </div>
+
+      <!-- Brand Host journey -->
+      <div class="journey host">
+        <div class="j-head"><div class="j-av">SK</div><div class="j-title">Sara Khalid <span>· Brand Host — showroom experience</span></div></div>
+        <div class="j-strip">
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">1</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Ready</span></div><div class="j-ph-name">Prepare</div><div class="j-ph-do">Review today's appointments &amp; assigned SEs.</div><div class="j-ph-touch"><span class="material-symbols-outlined">event</span>Reception</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">2</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>Warm</span></div><div class="j-ph-name">Welcome</div><div class="j-ph-do">Greet &amp; check in; link the guest to their SE.</div><div class="j-ph-touch"><span class="material-symbols-outlined">how_to_reg</span>Check-in</div></div>
+          <div class="j-phase s-cau"><div class="j-ph-top"><span class="j-num">3</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_stressed</span>Watchful</span></div><div class="j-ph-name">Test-drive ready</div><div class="j-ph-do">Confirm checklist, chase waiver, prep the car.</div><div class="j-ph-touch"><span class="material-symbols-outlined">checklist</span>Readiness</div></div>
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">4</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Attentive</span></div><div class="j-ph-name">During visit</div><div class="j-ph-do">Support the drive; keep the experience smooth.</div><div class="j-ph-touch"><span class="material-symbols-outlined">storefront</span>Floor</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">5</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>Proud</span></div><div class="j-ph-name">Handover &amp; follow-up</div><div class="j-ph-do">Red-carpet delivery; schedule 3/7/30-day follow-ups.</div><div class="j-ph-touch"><span class="material-symbols-outlined">redeem</span>Handover</div></div>
+        </div>
+      </div>
+
+      <!-- Call Center Manager journey -->
+      <div class="journey manager">
+        <div class="j-head"><div class="j-av">ES</div><div class="j-title">Eman Saleh <span>· Call Center Manager — shift risk control</span></div></div>
+        <div class="j-strip">
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">1</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Vigilant</span></div><div class="j-ph-name">Monitor</div><div class="j-ph-do">Open the live dashboard at shift start.</div><div class="j-ph-touch"><span class="material-symbols-outlined">monitoring</span>Dashboard</div></div>
+          <div class="j-phase s-cau"><div class="j-ph-top"><span class="j-num">2</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_stressed</span>Concerned</span></div><div class="j-ph-name">Detect</div><div class="j-ph-do">Spot not-actioned &amp; SLA-overdue leads.</div><div class="j-ph-touch"><span class="material-symbols-outlined">error</span>Exceptions</div></div>
+          <div class="j-phase s-neu"><div class="j-ph-top"><span class="j-num">3</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_neutral</span>Decisive</span></div><div class="j-ph-name">Act &amp; rebalance</div><div class="j-ph-do">Reassign uncalled leads; balance the load.</div><div class="j-ph-touch"><span class="material-symbols-outlined">swap_horiz</span>Agent grid</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">4</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>Supportive</span></div><div class="j-ph-name">Coach</div><div class="j-ph-do">Flag agents for coaching; set targets.</div><div class="j-ph-touch"><span class="material-symbols-outlined">groups</span>Performance</div></div>
+          <div class="j-phase s-pos"><div class="j-ph-top"><span class="j-num">5</span><span class="j-feel"><span class="material-symbols-outlined">sentiment_satisfied</span>In control</span></div><div class="j-ph-name">Report</div><div class="j-ph-do">Send the daily numbers to leadership.</div><div class="j-ph-touch"><span class="material-symbols-outlined">summarize</span>Reports</div></div>
         </div>
       </div>
 
