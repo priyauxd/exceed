@@ -2383,8 +2383,19 @@
       renderDetail(selectedIdx, currentStep);
     }
 
-    var laAnswer = null, laOutcome = null, laNoReason = 'Invalid number';
+    var laAnswer = null, laOutcome = null, laNoReason = 'Invalid number', laReasonSel = '', laReasonComment = '';
     function setLaNoReason(v){ laNoReason = v; renderLaFields(); updateLaHint(); }
+    function onLaReasonChange(v){ laReasonSel = v; renderLaFields(); }
+    function laReasonField(opts){
+      var html = '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label>' +
+        '<select class="cp-select" id="laReason" onchange="onLaReasonChange(this.value)">' +
+        opts.map(function(o){ return '<option'+(laReasonSel===o?' selected':'')+'>'+o+'</option>'; }).join('') +
+        '</select></div>';
+      if (laReasonSel === 'Others') {
+        html += '<div class="cp-field"><label class="cp-label">Comment <span class="req">*</span></label><textarea class="cp-textarea" id="laReasonComment" placeholder="Add reason…" oninput="laReasonComment=this.value">'+(laReasonComment||'')+'</textarea></div>';
+      }
+      return html;
+    }
     // outcome -> {stage number, journey name} or {disq:true}
     var laRoutes = {
       'Handover to showroom': { n: 3, name: 'Qualify' },
@@ -2416,6 +2427,7 @@
     }
 
     var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
+    var laReasonsNewContact = ['Out of Scope', 'Wrong Number', 'Not Interested', 'Submitted by Mistake', 'High Price', 'Inconvenient Location', 'Duplicate', 'Others'];
     var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
     var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
     // Call Center discovery questions — shared by the Discovery Questions tab and the Log activity panel.
@@ -2529,7 +2541,7 @@
       var g = function(id){ var e = document.getElementById(id); return e ? e.value : ''; };
       var disc = discoveryCallCenterQs.filter(function(q, i){ var e = document.getElementById('laDiscQ' + i); return e && e.value && e.value !== '—'; });
       var noReason = (document.querySelector('input[name="laNoReason"]:checked') || {}).value || '';
-      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), rating: g('laRating'), returnReason: g('laReturnReason'), transferAgent: g('laTransferAgent'), noReason: noReason, disc: disc };
+      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), reasonComment: g('laReasonComment'), rating: g('laRating'), returnReason: g('laReturnReason'), transferAgent: g('laTransferAgent'), noReason: noReason, disc: disc };
     }
     function laFmtDT(date, time) { if (!date) return ''; return tdFmtDate(date) + (time ? ' · ' + time : ''); }
 
@@ -2559,7 +2571,7 @@
           html += laDateTime('Reschedule call');
           html += laNotesField();
         } else if (laOutcome === 'Not interested') {
-          html += laSelect('laReason', 'Reason', laReasons, true);
+          html += laReasonField(currentStep <= 1 ? laReasonsNewContact : laReasons);
         } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls') {
           html += laDateTime('Reschedule');
           html += laNotesField();
@@ -2587,7 +2599,7 @@
       if (selectedIdx < 0) return;
       var lp = logPrompts[currentStep] || logPrompts[0];
       document.getElementById('logSub').innerHTML = lp.title;
-      laAnswer = null; laOutcome = null; laNoReason = 'Invalid number';
+      laAnswer = null; laOutcome = null; laNoReason = 'Invalid number'; laReasonSel = ''; laReasonComment = '';
       document.getElementById('laYes').classList.remove('on');
       document.getElementById('laNo').classList.remove('on','no');
       document.getElementById('laChips').innerHTML = '';
@@ -2744,7 +2756,8 @@
           showToast('Moved to ' + r.name + (bkWhen ? ' · ' + bkWhen : ''));
         } else if (r.disq) {
           l.disqReason = f.reason;
-          l.activities.unshift({ type: 'call', text: ['Not interested', f.reason, f.note, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          var niReason = (f.reason === 'Others' && f.reasonComment) ? 'Others: ' + f.reasonComment : f.reason;
+          l.activities.unshift({ type: 'call', text: ['Not interested', niReason, f.note, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
           showToast('Lead disqualified' + (f.reason ? ' — ' + f.reason : ''));
         } else {
