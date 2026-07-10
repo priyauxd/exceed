@@ -1627,7 +1627,7 @@
       var body = '<div class="td-wiz-body">' +
         '<label class="cp-label">Vehicle</label>' +
         '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
-        '<label class="cp-label" style="margin-top:14px">Date &amp; time</label>' +
+        '<label class="cp-label" style="margin-top:14px">Preferred date &amp; time</label>' +
         '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml()+'</div><div class="sw-slots">'+schedSlotsHtml()+'</div></div>' +
         '<div class="sw-nav"><button class="cp-btn" onclick="bookCancel()">Cancel</button>' +
           '<button class="dp-tdc-cta sw-next'+(canBook?'':' locked')+'"'+(canBook?' onclick="schedDone()"':'')+'>Book test drive</button></div>' +
@@ -2386,7 +2386,7 @@
       return '<div class="la-booking">' +
         '<label class="cp-label">Vehicle</label>' +
         '<select class="cp-select" onchange="tdSched.model=this.value"><option'+(tdSched.model===l.model?' selected':'')+'>'+l.model+'</option><option>EXEED TXL Flagship</option><option>EXEED RX</option><option>EXEED VX · Executive</option></select>' +
-        '<div class="la-dt-group"><label class="cp-label">Date &amp; time</label>' +
+        '<div class="la-dt-group"><label class="cp-label">Preferred date &amp; time</label>' +
           '<div class="sw-dt"><div class="sw-cal">'+schedCalendarHtml('laCalNav','laSelectCalDay')+'</div><div class="sw-slots">'+schedSlotsHtml('laSelectTimeSlot')+'</div></div>' +
         '</div>' +
       '</div>';
