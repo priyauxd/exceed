@@ -334,6 +334,8 @@
     .dp-av { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #fff; flex-shrink: 0; }
     .dp-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .dp-meta-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .dp-lead-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--blue); background: var(--blue-soft); border-radius: var(--borderRadiusCircular); padding: 3px 11px 3px 9px; }
+    .dp-lead-tag .material-symbols-outlined { font-size: 14px; }
     .dp-call { display: inline-flex; align-items: center; gap: 5px; font-family: var(--fontFamilyBase); font-size: 11.5px; font-weight: 600; color: var(--blue); background: var(--blue-soft); border: 1px solid transparent; border-radius: var(--borderRadiusCircular); padding: 3px 11px 3px 9px; cursor: pointer; transition: background .12s; }
     .dp-call:hover { background: #dde5ec; }
     .dp-call .material-symbols-outlined { font-size: 15px; }
@@ -614,6 +616,28 @@
     .wv-sign-label { font-size: 11px; font-weight: 700; color: var(--ink); }
     .wv-sign-hint { font-size: 10.5px; color: var(--ink-muted); }
     .wv-canvas { width: 100%; height: 120px; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); background: var(--bg); touch-action: none; cursor: crosshair; display: block; }
+    .wv-upblock { margin-top: 14px; }
+    .wv-upload { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; height: 130px; border: 1.5px dashed var(--border); border-radius: var(--radius-md); background: var(--bg); cursor: pointer; transition: border-color .12s, background .12s; }
+    .wv-upload:hover { border-color: var(--blue); background: var(--blue-soft); }
+    .wv-upload.has { border-style: solid; border-color: #46a56b; background: var(--green-soft); }
+    .wv-upload .material-symbols-outlined { font-size: 30px; color: var(--blue); }
+    .wv-upload.has .material-symbols-outlined { color: #2f7a4f; }
+    .wv-upload-t { font-size: 13px; font-weight: 700; color: var(--ink); max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wv-upload-s { font-size: 11px; color: var(--ink-muted); }
+    .wv-uploaded { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1.5px solid #46a56b; border-radius: var(--radius-md); background: var(--green-soft); }
+    .wv-up-thumb { flex: 0 0 auto; width: 64px; height: 44px; border-radius: 6px; overflow: hidden; background: #fff; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .wv-up-thumb .material-symbols-outlined { font-size: 26px; color: #2f7a4f; }
+    .wv-up-img { width: 100%; height: 100%; object-fit: cover; }
+    .wv-up-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+    .wv-up-name { font-size: 13px; font-weight: 700; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wv-up-meta { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #2f7a4f; font-weight: 600; }
+    .wv-up-meta .material-symbols-outlined { font-size: 14px; }
+    .wv-up-replace { flex: 0 0 auto; font-size: 12px; font-weight: 600; color: var(--blue); cursor: pointer; padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: #fff; }
+    .wv-up-replace:hover { background: var(--blue-soft); border-color: var(--blue); }
+    .wv-up-remove { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: none; background: transparent; border-radius: 6px; cursor: pointer; color: var(--ink-muted); }
+    .wv-up-remove:hover { background: rgba(0,0,0,.06); color: var(--ink); }
+    .wv-up-remove .material-symbols-outlined { font-size: 18px; }
+    .cp-btn.locked { opacity: .45; pointer-events: none; }
     #waiverDownload { display: inline-flex; align-items: center; gap: 5px; text-decoration: none; margin-right: auto; }
     .td-table th.td-act, .td-table td.td-act { text-align: right; }
     .td-resched { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-secondary); background: none; border: none; cursor: pointer; padding: 4px 6px; border-radius: var(--borderRadiusMedium); }
@@ -1041,6 +1065,10 @@
     .la-yn.on { border-color: #46a56b; background: var(--green-soft); color: #2f7a4f; }
     .la-yn.on.no { border-color: var(--red); background: var(--red-soft); color: var(--red); }
     .la-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .la-outgroup { margin-bottom: 13px; }
+    .la-outgroup:last-child { margin-bottom: 0; }
+    .la-outgroup-h { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-bottom: 7px; }
+    .la-chips-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .la-chip { font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--borderRadiusCircular); background: var(--surface); color: var(--ink-secondary); cursor: pointer; transition: all .12s; }
     .la-chip:hover { border-color: var(--blue); color: var(--blue); }
     .la-chip.on { background: var(--green-soft); border-color: #46a56b; color: #2f7a4f; }
@@ -1329,11 +1357,7 @@
       <button class="wv-fs-close" title="Close" onclick="closeWaiver()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <div class="wv-fs-body" id="waiverBody"></div>
-    <div class="wv-fs-footer">
-      <a class="cp-btn" id="waiverDownload" href="test-drive-waiver.pdf" download="Test-Drive-Waiver.pdf"><span class="material-symbols-outlined" style="font-size:16px">download</span> Download PDF</a>
-      <button class="cp-btn" onclick="clearWaiverSig()">Clear</button>
-      <button class="cp-btn primary" onclick="confirmWaiver()">Sign &amp; confirm</button>
-    </div>
+    <div class="wv-fs-footer" id="waiverFooter"></div>
   </div>
 
   <div class="create-overlay" id="stockOverlay" onclick="closeStockModal()"></div>
@@ -1391,8 +1415,8 @@
       {title:'First Contact', fields:['customer','mobile','email','showroom','channel'], checklist:['Complete customer discovery questions (5 Qns)','Log activities on attempts to reach out to customers','Qualify or disqualify customers based on responses'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
       {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Log activities on attempts to reach out to customers','Share brochures and video recording with customers','Book an appointment with the customer'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
       {title:'Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Complete customer profile with E-ID / UAE Pass','Initiate test drive with customer','Complete customer discovery questions (10 Qns)','Record Trade-in Interests','Check stocks and create proposals for customers','Automated — Post Visit & Test Drive Surveys'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
-      {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Convert selected proposal into quotation','Share quotation to customers via Docusign'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
-      {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['Receive signed agreement from customer','Collect booking payment','Book vehicle stock'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
+      {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Convert selected proposal into quotation','Share quotation to customers via Docusign','Receive signed agreement from customer'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
+      {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['Collect booking payment','Book vehicle stock'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
       {title:'Preparation for Delivery', fields:['customer','model','showroom'], checklist:['Back office team — VIN Assignment','Back office team — RTA Registration','Back office team — Pre-delivery inspection'], aiTitle:'Hand off to back office', aiDesc:'The deal is booked. <strong>Back office</strong> completes VIN assignment, RTA registration and the pre-delivery inspection before the car is ready.', aiBtns:['Notify Back Office','View Checklist'], aiNote:'All back-office tasks must be completed before the car is ready for delivery.'},
       {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:['Schedule a delivery with customer'], aiTitle:'Confirm the booking', aiDesc:'Vehicle is prepared. <strong>Schedule the delivery</strong> appointment with the customer.', aiBtns:['Schedule Delivery','Hold Order'], aiNote:'A delivery appointment must be scheduled to proceed.'},
       {title:'Close — Won / Lost', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:['Demo vehicle features','First service briefing','Generate a delivery note','Automated — Post Delivery Surveys'], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
@@ -1471,34 +1495,88 @@
     }
     function tdDownload(i){ showToast('Test drive report downloaded'); }
 
-    var waiverIdx = -1, waiverSigned = false, waiverSigCtx = null;
+    var waiverIdx = -1, waiverSigned = false, waiverSigCtx = null, waiverStep = 1, waiverLicense = null, waiverLicenseUrl = null;
+    function waiverDocHtml(){
+      var l = leads[selectedIdx], b = tdBookings[waiverIdx];
+      var row = function(a, av, c, cv){ return '<div class="wv-row"><div class="wv-cell"><span class="wv-k">'+a+'</span><span class="wv-v">'+(av||'—')+'</span></div>'+(c?'<div class="wv-cell"><span class="wv-k">'+c+'</span><span class="wv-v">'+(cv||'—')+'</span></div>':'')+'</div>'; };
+      return '<div class="wv-doc">' +
+        '<div class="wv-title">Test Drive Authorization Request</div>' +
+        '<div class="wv-grid">' +
+          row('Vehicle model', b.model, 'Sales in charge', l.owner) +
+          row('VIN no.', '056192', 'Registration', 'DXB E 92967') +
+          row('Start date', tdFmtDate(b.date), 'Start time', b.time) +
+          row('Customer name', l.name, 'Contact no.', l.phone) +
+          row('Location', b.location, 'Accompanied by', l.owner) +
+        '</div>' +
+        '<div class="wv-legal">I confirm that I have received the above vehicle in good condition for test drive purposes, that I am the owner of the above licence and legally allowed to drive the demonstration vehicle. I will not drive off-road unless authorised, and I agree to reimburse any expenses from damage due to my negligence. In case of an accident that is my fault, I agree to pay the insurance excess.</div>' +
+      '</div>';
+    }
     function openWaiver(i){
       if (!tdBookings[i]) return;
-      waiverIdx = i; waiverSigned = false;
-      var l = leads[selectedIdx], b = tdBookings[i];
-      var row = function(a, av, c, cv){ return '<div class="wv-row"><div class="wv-cell"><span class="wv-k">'+a+'</span><span class="wv-v">'+(av||'—')+'</span></div>'+(c?'<div class="wv-cell"><span class="wv-k">'+c+'</span><span class="wv-v">'+(cv||'—')+'</span></div>':'')+'</div>'; };
-      var body =
-        '<div class="wv-sheet">' +
-        '<div class="wv-doc">' +
-          '<div class="wv-title">Test Drive Authorization Request</div>' +
-          '<div class="wv-grid">' +
-            row('Vehicle model', b.model, 'Sales in charge', l.owner) +
-            row('VIN no.', '056192', 'Registration', 'DXB E 92967') +
-            row('Start date', tdFmtDate(b.date), 'Start time', b.time) +
-            row('Customer name', l.name, 'Contact no.', l.phone) +
-            row('Location', b.location, 'Accompanied by', l.owner) +
-          '</div>' +
-          '<div class="wv-legal">I confirm that I have received the above vehicle in good condition for test drive purposes, that I am the owner of the above licence and legally allowed to drive the demonstration vehicle. I will not drive off-road unless authorised, and I agree to reimburse any expenses from damage due to my negligence. In case of an accident that is my fault, I agree to pay the insurance excess.</div>' +
-        '</div>' +
-        '<div class="wv-sign">' +
-          '<div class="wv-sign-head"><span class="wv-sign-label">Customer signature</span><span class="wv-sign-hint">Sign with finger or stylus</span></div>' +
-          '<canvas id="waiverCanvas" class="wv-canvas"></canvas>' +
-        '</div>' +
-        '</div>';
-      document.getElementById('waiverBody').innerHTML = body;
+      waiverIdx = i; waiverSigned = false; waiverStep = 1; waiverLicense = null; waiverLicenseUrl = null;
+      renderWaiverStep();
       document.getElementById('waiverPanel').classList.add('open');
-      requestAnimationFrame(initWaiverSig);
     }
+    function renderWaiverStep(){
+      var body, footer;
+      if (waiverStep === 1){
+        body = '<div class="wv-sheet">' + waiverDocHtml() +
+          '<div class="wv-upblock">' +
+            '<div class="wv-sign-head"><span class="wv-sign-label">Driving licence</span><span class="wv-sign-hint">Required before signing</span></div>' +
+            (waiverLicense ? waiverUploadedHtml() :
+              '<label class="wv-upload" id="wvUploadZone">' +
+                '<input type="file" accept="image/*,.pdf" onchange="onLicenseUpload(this)" style="display:none">' +
+                '<span class="material-symbols-outlined">upload_file</span>' +
+                '<span class="wv-upload-t">Click to upload driving licence</span>' +
+                '<span class="wv-upload-s">JPG, PNG or PDF</span>' +
+              '</label>') +
+          '</div>' +
+        '</div>';
+        footer = '<a class="cp-btn" href="test-drive-waiver.pdf" download="Test-Drive-Waiver.pdf"><span class="material-symbols-outlined" style="font-size:16px">download</span> Download PDF</a>' +
+          '<button class="cp-btn primary'+(waiverLicense?'':' locked')+'" id="wvNextBtn" onclick="waiverNext()">Continue to sign <span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span></button>';
+      } else {
+        body = '<div class="wv-sheet">' + waiverDocHtml() +
+          '<div class="wv-sign">' +
+            '<div class="wv-sign-head"><span class="wv-sign-label">Customer signature</span><span class="wv-sign-hint">Sign with finger or stylus</span></div>' +
+            '<canvas id="waiverCanvas" class="wv-canvas"></canvas>' +
+          '</div>' +
+        '</div>';
+        footer = '<button class="cp-btn" onclick="waiverBack()"><span class="material-symbols-outlined" style="font-size:16px">arrow_back</span> Back</button>' +
+          '<button class="cp-btn" onclick="clearWaiverSig()">Clear</button>' +
+          '<button class="cp-btn primary" onclick="confirmWaiver()">Sign &amp; confirm</button>';
+      }
+      document.getElementById('waiverBody').innerHTML = body;
+      document.getElementById('waiverFooter').innerHTML = footer;
+      if (waiverStep === 2) requestAnimationFrame(initWaiverSig);
+    }
+    function waiverUploadedHtml(){
+      var isImg = /\.(jpe?g|png|gif|webp)$/i.test(waiverLicense || '');
+      var thumb = (isImg && waiverLicenseUrl)
+        ? '<img class="wv-up-img" src="'+waiverLicenseUrl+'" alt="Driving licence">'
+        : '<span class="material-symbols-outlined">'+(/\.pdf$/i.test(waiverLicense||'')?'picture_as_pdf':'image')+'</span>';
+      return '<div class="wv-uploaded">' +
+        '<div class="wv-up-thumb">'+thumb+'</div>' +
+        '<div class="wv-up-info">' +
+          '<span class="wv-up-name">'+waiverLicense+'</span>' +
+          '<span class="wv-up-meta"><span class="material-symbols-outlined">check_circle</span>Driving licence uploaded</span>' +
+        '</div>' +
+        '<label class="wv-up-replace">Replace<input type="file" accept="image/*,.pdf" onchange="onLicenseUpload(this)" style="display:none"></label>' +
+        '<button class="wv-up-remove" onclick="removeLicense()" title="Remove"><span class="material-symbols-outlined">close</span></button>' +
+      '</div>';
+    }
+    function onLicenseUpload(input){
+      var f = input.files && input.files[0]; if (!f) return;
+      waiverLicense = f.name;
+      if (waiverLicenseUrl) { try { URL.revokeObjectURL(waiverLicenseUrl); } catch(e){} }
+      waiverLicenseUrl = /\.(jpe?g|png|gif|webp)$/i.test(f.name) ? URL.createObjectURL(f) : null;
+      renderWaiverStep();
+    }
+    function removeLicense(){
+      if (waiverLicenseUrl) { try { URL.revokeObjectURL(waiverLicenseUrl); } catch(e){} }
+      waiverLicense = null; waiverLicenseUrl = null; renderWaiverStep();
+    }
+    function waiverNext(){ if (!waiverLicense){ showToast('Please upload the driving licence first'); return; } waiverStep = 2; waiverSigned = false; renderWaiverStep(); }
+    function waiverBack(){ waiverStep = 1; renderWaiverStep(); }
     function initWaiverSig(){
       var cv = document.getElementById('waiverCanvas');
       if (!cv) return;
@@ -1935,9 +2013,15 @@
       var upcoming = [];
       for (var k = currentStep + 1; k < journeySteps.length && upcoming.length < 2; k++) upcoming.push(journeySteps[k].name);
       while (upcoming.length < 2) upcoming.push(journeySteps[Math.min(currentStep, journeySteps.length - 1)].name);
+      var createdDT = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time : '—';
+      var assignedDT = (l.owner && l.owner !== 'Unassigned') ? (createdDT + ' · ' + l.owner) : 'Pending assignment';
 
       return '<div class="dp-sla-widget">' +
         '<div class="sla2-title">SLA</div>' +
+        '<div class="slaw-meta">' +
+          '<div class="slaw-meta-item"><span class="slaw-meta-l">Created</span><span class="slaw-meta-v">'+createdDT+'</span></div>' +
+          '<div class="slaw-meta-item"><span class="slaw-meta-l">Assigned</span><span class="slaw-meta-v">'+assignedDT+'</span></div>' +
+        '</div>' +
         '<div class="sla2-head"><span class="sla2-timers-l">SLA Timers</span>' +
           '<span class="sla2-update">Last update: '+l._slaUpdated+'</span>' +
           '<button class="sla2-refresh" onclick="refreshSla()" title="Refresh"><span class="material-symbols-outlined">refresh</span></button></div>' +
@@ -2067,13 +2151,12 @@
               '<span class="dp-name editable" contenteditable="true" spellcheck="false" data-prop="name" onblur="editField(this)" onkeydown="editKeydown(event)">'+l.name+'</span>' +
             '</div>' +
             '<div class="dp-meta-row">' +
-              '<span class="dp-sub"><span class="material-symbols-outlined" style="font-size:13px">person</span>'+l.owner+'<span style="color:var(--border)">|</span><span class="material-symbols-outlined" style="font-size:13px">location_on</span>'+l.showroom+'</span>' +
+              '<span class="dp-lead-tag"><span class="material-symbols-outlined" style="font-size:13px">badge</span>Lead</span>' +
             '</div>' +
           '</div>' +
           '<div class="dp-formhead">' +
             '<div class="dp-fh-field"><div class="dp-fh-val mono">'+l.id+'</div><div class="dp-fh-label">Lead ID</div></div>' +
-            '<div class="dp-fh-field"><div class="dp-fh-val">'+(l.source && l.source !== '—' ? l.source : '- - -')+'</div><div class="dp-fh-label">Lead Source</div></div>' +
-            '<div class="dp-fh-field"><div class="dp-fh-val">'+l.temp+'</div><div class="dp-fh-label">Rating</div></div>' +
+            '<div class="dp-fh-field"><div class="dp-fh-val">'+l.showroom+'</div><div class="dp-fh-label">Location</div></div>' +
             '<div class="dp-fh-owner"><span class="dp-fh-av lead-av '+l.av+'">'+ownerInit+'<span class="dp-fh-dot"></span></span>' +
               '<div><div class="dp-fh-val link">'+l.owner+'</div><div class="dp-fh-label">Owner</div></div>' +
             '</div>' +
@@ -2216,9 +2299,10 @@
       html += '<div class="dp-side">';
       html += '<div class="dp-kpi-card">' +
         '<div class="dp-kpi-head">Lead Snapshot</div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Lead source</span><span class="dp-kpi-v">'+(l.source && l.source !== '—' ? l.source : '—')+'</span></div>' +
+        '<div class="dp-kpi-item"><span class="dp-kpi-l">Rating</span><span class="dp-kpi-v">'+l.temp+'</span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Profile completion</span><span class="dp-kpi-v">'+l.profileComplete+'%</span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Preferred channel</span><span class="dp-kpi-v">'+l.channel+' <span class="dp-kpi-sub">&middot; '+langAbbr+'</span></span></div>' +
-        '<div class="dp-kpi-item"><span class="dp-kpi-l">Campaign</span><span class="dp-kpi-v">'+(l.campaign && l.campaign !== '—' ? l.campaign : '—')+'</span></div>' +
       '</div>';
       html += slaWidget(l, sd);
       html += '<div class="dp-ai-card">' +
@@ -2309,16 +2393,26 @@
       'Not interested':       { disq: true }
     };
 
-    // New/Contact (call centre) outcomes appear after the Yes/No answer.
-    var laYesOutcomes = ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'];
-    // Qualify & later (sales) outcomes replace the Yes/No step entirely.
-    var laSalesOutcomes = ['Send to WhatsApp', 'Call', 'Disqualify', 'Return to call center'];
+    // Outcomes grouped into Internal / External, per stage bucket.
+    var laOutcomeGroups = {
+      sales: { Internal: ['Alerts', 'Return to call center', 'Transfer ownership'], External: ['Send WhatsApp', 'Calls', 'Disqualify'] },
+      yes:   { Internal: ['Transfer ownership'], External: ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'] }
+    };
+    // Flat list of "action" (non-stage-routing) outcomes for submit/validation.
+    var laSalesOutcomes = ['Alerts', 'Return to call center', 'Transfer ownership', 'Send WhatsApp', 'Calls', 'Disqualify'];
     var laReturnReasons = ['Wrong assignment', 'Not sales-ready', 'Customer request', 'Duplicate lead', 'Other'];
+    var laAgents = ['Mariam Saeed', 'Nadia Al Amiri', 'Mariam Khalil', 'Priyamvada K.', 'Saravanakumar Subramani', 'Basel Talalini'];
     function laIsSalesStage(){ return currentStep >= 2; }
     function renderOutcomeChips() {
       var host = document.getElementById('laChips'); if (!host) return;
-      var outs = laIsSalesStage() ? laSalesOutcomes : (laAnswer === 'yes' ? laYesOutcomes : []);
-      host.innerHTML = outs.map(function(o){ return '<button class="la-chip'+(laOutcome===o?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>'; }).join('');
+      var groups = laIsSalesStage() ? laOutcomeGroups.sales : (laAnswer === 'yes' ? laOutcomeGroups.yes : null);
+      if (!groups) { host.innerHTML = ''; return; }
+      host.innerHTML = ['Internal','External'].map(function(g){
+        var outs = groups[g] || []; if (!outs.length) return '';
+        return '<div class="la-outgroup"><div class="la-outgroup-h">'+g+'</div><div class="la-chips-row">' +
+          outs.map(function(o){ return '<button class="la-chip'+(laOutcome===o?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>'; }).join('') +
+        '</div></div>';
+      }).join('');
     }
 
     var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
@@ -2332,6 +2426,47 @@
       { label:'When should the sales executive best contact or meet you?', opts:['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other (specify)'], req:true },
       { label:'Preferred communication channel?', opts:['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other (specify)'], req:false }
     ];
+
+    // Sales Executive discovery questions — shown from Qualify onward, above the Call Center set.
+    var discoverySalesExecQs = [
+      { q:'What is your primary use case for the car?', subs:[ { opts:['Family car','Daily commute','Business/company use','Long trips','Upgrade current vehicle','Exploring options','Other (specify)'] } ] },
+      { q:'What are you driving today, and is it your only car or one of a few?', subs:[
+        { l:'Current vehicle', opts:['Toyota','Lexus','Nissan','Hyundai/Kia','German premium','Other Japanese/Korean','Chinese brand','No current vehicle','Other (specify)'] },
+        { l:'Car situation', opts:['Only car','One of multiple personal cars','Shared family car','Company/fleet vehicle','Not shared','Other (specify)'] } ], free:true },
+      { q:'What do you enjoy most about it — and if you could change one thing, what would it be?', subs:[
+        { l:'Enjoy most', opts:['Reliability','Comfort','Space','Technology/connectivity','Safety','Performance','Fuel economy','Brand/status','Low running cost','Nothing specific','Other (specify)'] },
+        { l:'Would change', opts:['Space','Fuel economy','Maintenance/running cost','Technology/connectivity','Safety/ADAS','Comfort/noise','Performance','Age/mileage','Reliability','Exterior/interior design','No change mentioned','Other (specify)'] } ], free:true },
+      { q:'Who usually travels with you — family, colleagues, or mostly yourself?', subs:[
+        { opts:['Self only','Spouse/partner','Family with children','Extended family','Clients/colleagues','Company/fleet users','Driver/chauffeur + passengers','Mixed passengers','Other (specify)'] } ], free:true },
+      { q:'Where do most of your drives take you, and roughly how far each week?', subs:[
+        { l:'Main usage', opts:['Daily city commute','Highway/inter-emirate','School/family errands','Long trips','Business/client transport','Off-road/outdoor','Mixed usage','Other (specify)'] },
+        { l:'Weekly distance', opts:['<100 km','100-250 km','250-500 km','500-800 km','800+ km','Not sure'] } ], free:true },
+      { q:'When choosing a car, what matters most to you?', subs:[
+        { opts:['Safety/ADAS','Space/3rd row','Comfort/luxury','Technology/connectivity','Fuel economy/hybrid','Reliability/warranty','Performance','Price/value','Availability/delivery timing','Brand/image','Resale value','Other (specify)'] } ], free:true },
+      { q:'Are you comparing any other models, and who else helps you decide?', tag:'Before quote', subs:[
+        { l:'Competitor / alternative', opts:['BYD','Jetour','Toyota','Lexus','Nissan','Geely/Changan','Hyundai/Kia','German premium','Not comparing','Other (specify)'] },
+        { l:'Decision helper', opts:['Self only','Spouse/partner','Parent/family member','Business partner','Company/procurement','Driver/main user','Other (specify)'] } ], free:true },
+      { q:'What budget range or monthly EMI are you comfortable with?', tag:'Before quote', subs:[], free:true, freeLabel:'Budget range / monthly EMI' },
+      { q:'What is your expected timeframe to purchase?', tag:'Before quote', subs:[
+        { opts:['Immediate / ready now','Within 1 week','Within 2-4 weeks','1-3 months','3+ months','Exploring only / no timeline yet','Other (specify)'] } ] },
+      { q:'What would make you feel completely confident moving forward?', subs:[
+        { opts:['Test drive experience','Clear final offer','Vehicle availability/color','Warranty/service clarity','Safety proof/reviews','Product comparison','Trade-in valuation','Family/decision-maker approval','Delivery timing','More time to think','Ready to proceed','Other (specify)'] } ], free:true }
+    ];
+    function discoverySalesExecFields() {
+      var fields = [];
+      discoverySalesExecQs.forEach(function(q, i){
+        var base = (i + 1) + '. ' + q.q + (q.tag ? '  ·  ' + q.tag : '');
+        q.subs.forEach(function(s, j){
+          var lab = j === 0 ? (base + (s.l ? '  —  ' + s.l : '')) : ('↳ ' + s.l);
+          fields.push({ label: lab, type:'select', val:'—', opts:['—'].concat(s.opts), optional:true, wide:true });
+        });
+        if (q.free) {
+          var flab = q.subs.length === 0 ? (base + (q.freeLabel ? '  —  ' + q.freeLabel : '')) : ('↳ ' + (q.freeLabel || 'Add note'));
+          fields.push({ label: flab, type:'text', val:'', optional:true, wide:true });
+        }
+      });
+      return fields;
+    }
 
     var laToday = '2026-07-08';
     var laNoReasons = ['Call not picked up', 'Invalid number'];
@@ -2394,7 +2529,7 @@
       var g = function(id){ var e = document.getElementById(id); return e ? e.value : ''; };
       var disc = discoveryCallCenterQs.filter(function(q, i){ var e = document.getElementById('laDiscQ' + i); return e && e.value && e.value !== '—'; });
       var noReason = (document.querySelector('input[name="laNoReason"]:checked') || {}).value || '';
-      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), rating: g('laRating'), returnReason: g('laReturnReason'), noReason: noReason, disc: disc };
+      return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), rating: g('laRating'), returnReason: g('laReturnReason'), transferAgent: g('laTransferAgent'), noReason: noReason, disc: disc };
     }
     function laFmtDT(date, time) { if (!date) return ''; return tdFmtDate(date) + (time ? ' · ' + time : ''); }
 
@@ -2425,8 +2560,13 @@
           html += laNotesField();
         } else if (laOutcome === 'Not interested') {
           html += laSelect('laReason', 'Reason', laReasons, true);
-        } else if (laOutcome === 'Send to WhatsApp' || laOutcome === 'Call') {
+        } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls') {
           html += laDateTime('Reschedule');
+          html += laNotesField();
+        } else if (laOutcome === 'Alerts') {
+          html += '<div class="cp-field"><label class="cp-label">Alert note <span class="req">*</span></label><textarea class="cp-textarea" id="laNoteText" placeholder="This note will appear as an alert to the agent…"></textarea></div>';
+        } else if (laOutcome === 'Transfer ownership') {
+          html += laSelect('laTransferAgent', 'Transfer to', laAgents, true);
           html += laNotesField();
         } else if (laOutcome === 'Disqualify') {
           html += '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label><div class="la-radio">' +
@@ -2482,6 +2622,8 @@
           h.style.display = ''; return;
         }
         if (laOutcome === 'Return to call center') { h.textContent = 'Saving will return this lead to the call center.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
+        if (laOutcome === 'Alerts') { h.textContent = 'Saving will raise an alert note for the agent.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
+        if (laOutcome === 'Transfer ownership') { h.textContent = 'Saving will transfer ownership of this lead.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         h.textContent = 'Saving will log the outreach and schedule a follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
       }
       if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
@@ -2544,11 +2686,20 @@
           showToast('Missed attempt logged — Not reachable' + (when ? ' · ' + when : ''));
         }
       } else if (laSalesOutcomes.indexOf(laOutcome) !== -1) {
-        if (laOutcome === 'Send to WhatsApp' || laOutcome === 'Call') {
+        if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls') {
           l.nextCall = { date: f.date, time: f.time, note: notes };
-          var ot = laOutcome === 'Send to WhatsApp' ? 'whatsapp' : 'call';
+          var ot = laOutcome === 'Send WhatsApp' ? 'whatsapp' : 'call';
           l.activities.unshift({ type: ot, text: [laOutcome, when ? 'follow-up ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast(laOutcome + (when ? ' · follow-up ' + when : ''));
+        } else if (laOutcome === 'Alerts') {
+          l.alert = notes;
+          l.activities.unshift({ type: 'note', text: ['Alert', notes].filter(Boolean).join(' — '), time: '2026-07-07 12:00' });
+          showToast('Alert raised for the agent');
+        } else if (laOutcome === 'Transfer ownership') {
+          var ag = f.transferAgent || l.owner;
+          l.owner = ag;
+          l.activities.unshift({ type: 'note', text: ['Ownership transferred to ' + ag, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast('Ownership transferred to ' + ag);
         } else if (laOutcome === 'Disqualify') {
           if (laNoReason === 'Invalid number') {
             l.nextCall = null; l.disqReason = 'Invalid number';
@@ -2734,11 +2885,14 @@
     }
     function discoveryQuestionsForm(l) {
       var mg = (['LX','TXL','RX','VX'].filter(function(m){ return new RegExp('\\b'+m+'\\b').test(l.model || ''); })[0]) || '—';
-      return dpFormSections([
-        { title:'Call Center — Discovery Questions', fields: discoveryCallCenterQs.map(function(q){
-          return { label:q.label, type:'select', val: q.model ? mg : '—', opts:['—'].concat(q.opts), req:q.req, optional:!q.req, wide:true };
-        }) }
-      ]);
+      var sections = [];
+      if (currentStep >= 2) {
+        sections.push({ title:'Sales Executive — Discovery Questions', fields: discoverySalesExecFields() });
+      }
+      sections.push({ title:'Call Center — Discovery Questions', fields: discoveryCallCenterQs.map(function(q){
+        return { label:q.label, type:'select', val: q.model ? mg : '—', opts:['—'].concat(q.opts), req:q.req, optional:!q.req, wide:true };
+      }) });
+      return dpFormSections(sections);
     }
 
     function discoveryTestDriveForm(l) {
