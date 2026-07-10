@@ -910,7 +910,7 @@
     .dp-main { flex: 2.8 1 340px; min-width: 0; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-md); box-shadow: var(--shadow2); display: flex; flex-direction: column; }
     .dp-main-scroll { flex: 1; padding: 16px 18px 8px; min-width: 0; }
     .dp-main-foot { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--radius-md) var(--radius-md); }
-    .dp-side { flex: 1 1 240px; min-width: 230px; }
+    .dp-side { flex: 1.15 1 320px; min-width: 300px; }
     /* Header metrics (top-right corner) */
     .dp-head-metrics { display: flex; gap: 28px; margin-left: auto; flex-shrink: 0; padding-top: 2px; text-align: right; }
     .dp-hm-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 3px; }
@@ -1049,6 +1049,19 @@
     #logPanel .cp-body { padding: 20px; }
     #logPanel .cp-body > * { margin-bottom: 18px; }
     #logPanel .cp-body > *:last-child { margin-bottom: 0; }
+
+    /* ── v2: Log Activity docked as a permanent sticky rail ── */
+    /* ── v2: Log Activity as an in-flow side card (sticky within the side column) ── */
+    .dp-logside { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; margin-bottom: 16px; position: sticky; top: 0; }
+    .dp-logside-head { display: flex; align-items: center; gap: 7px; padding: 13px 16px; border-bottom: 1px solid var(--border); position: relative; background: linear-gradient(180deg, var(--amber-soft, #fff8e7), var(--surface)); }
+    .dp-logside-head::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--amber, #f6c453); }
+    .dp-logside-head .material-symbols-outlined { font-size: 19px; color: var(--amber, #f6c453); }
+    .dp-logside-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+    .dp-logside-sub { font-size: 11.5px; color: var(--ink-secondary); padding: 10px 16px 0; line-height: 1.45; }
+    .dp-logside-body { padding: 14px 16px; }
+    .dp-logside-body > * { margin-bottom: 16px; }
+    .dp-logside-body > *:last-child { margin-bottom: 0; }
+    .dp-logside-foot { display: flex; justify-content: flex-end; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--colorNeutralBackground3, #fafafa); }
     #laDynamic > .cp-field, #laDynamic > .la-dqcard, #laDynamic > .la-booking { margin-bottom: 16px; }
     #laDynamic > .cp-field:last-child, #laDynamic > .la-booking:last-child { margin-bottom: 0; }
     .cp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -1156,8 +1169,8 @@
         <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Callbacks</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manager</a>
         <div class="sb-group">Sales</div>
-        <a href="lead-detail.html" class="sb-item active"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
-        <a href="lead-detail-v2.html" class="sb-item"><span class="material-symbols-outlined">splitscreen_right</span>Leads &middot; Option 2</a>
+        <a href="lead-detail.html" class="sb-item"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="lead-detail-v2.html" class="sb-item active"><span class="material-symbols-outlined">splitscreen_right</span>Leads &middot; Option 2</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">handshake</span>Deals</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">request_quote</span>Quotes</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Test Drives</a>
@@ -1316,37 +1329,6 @@
     <div class="cp-footer">
       <button class="cp-btn" onclick="closeCreateLead()">Cancel</button>
       <button class="cp-btn primary" id="cpSubmit" onclick="submitCreateLead()">Create lead</button>
-    </div>
-  </div>
-
-  <div class="create-overlay" id="logOverlay" onclick="closeLogActivity()"></div>
-  <div class="create-panel" id="logPanel" role="dialog" aria-label="Log activity" style="max-width:460px">
-    <div class="cp-header">
-      <div style="flex:1">
-        <div class="cp-title">Log activity</div>
-        <div class="cp-sub" id="logSub">Record the outcome of this step</div>
-      </div>
-      <button class="dp-header-btn" title="Close" onclick="closeLogActivity()"><span class="material-symbols-outlined">close</span></button>
-    </div>
-    <div class="cp-body">
-      <div class="la-attempts" id="laAttempts"><span class="material-symbols-outlined">call</span><span id="laAttemptsText">1 of 5 attempts done</span></div>
-      <div class="cp-field" id="laAnswerWrap">
-        <label class="cp-label">Did the customer answer?</label>
-        <div class="la-yn-row">
-          <button class="la-yn" id="laYes" onclick="setLaAnswer('yes')"><span class="material-symbols-outlined">check</span> Yes</button>
-          <button class="la-yn" id="laNo" onclick="setLaAnswer('no')"><span class="material-symbols-outlined">close</span> No</button>
-        </div>
-      </div>
-      <div class="cp-field" id="laOutcomeWrap" style="display:none">
-        <div class="la-chips" id="laChips"></div>
-      </div>
-      <div id="laDynamic"></div>
-      <div class="la-hint" id="laHint" style="display:none"></div>
-      <div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
-    </div>
-    <div class="cp-footer">
-      <button class="cp-btn" onclick="closeLogActivity()">Close</button>
-      <button class="cp-btn primary" onclick="submitLogActivity(true)">Save</button>
     </div>
   </div>
 
@@ -2204,7 +2186,7 @@
         '<span class="dp-step-hint"><span class="material-symbols-outlined">edit_note</span>'+lp.title+'</span>' +
         '<div class="dp-step-actions">' +
           (isVisitStage ? '<button class="dp-uaepass-btn" onclick="uaePassVerify()"><span class="dp-uaepass-badge"><img src="assets/uae-pass.svg" alt="" class="dp-uaepass-ic"></span>UAE Pass</button>' : '') +
-          '<button class="dp-log-btn" onclick="openLogActivity()">Log Activity</button></div>' +
+          '</div>' +
       '</div>';
 
       // Essential info + checklist side by side
@@ -2298,8 +2280,9 @@
       html += '</div>'; // dp-main-scroll
       html += '</div>'; // dp-main
 
-      // Right sidebar: KPI snapshot + SLA tracker + AI card + activity
+      // Right sidebar: Log activity (primary) + KPI snapshot + SLA tracker + AI card + activity
       html += '<div class="dp-side">';
+      html += logSideCard();
       html += '<div class="dp-kpi-card">' +
         '<div class="dp-kpi-head">Lead Snapshot</div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Lead source</span><span class="dp-kpi-v">'+(l.source && l.source !== '—' ? l.source : '—')+'</span></div>' +
@@ -2337,6 +2320,30 @@
       document.getElementById('dpBody').innerHTML = html;
 
       updateStepGate();
+      openLogActivity();
+    }
+
+    // In-flow Log Activity card rendered inside the full-screen side column.
+    function logSideCard() {
+      return '<div class="dp-logside">' +
+        '<div class="dp-logside-head"><span class="material-symbols-outlined">bolt</span><span class="dp-logside-title">Log activity</span></div>' +
+        '<div class="dp-logside-sub" id="logSub">Record the outcome of this step</div>' +
+        '<div class="dp-logside-body">' +
+          '<div class="la-attempts" id="laAttempts"><span class="material-symbols-outlined">call</span><span id="laAttemptsText">1 of 5 attempts done</span></div>' +
+          '<div class="cp-field" id="laAnswerWrap">' +
+            '<label class="cp-label">Did the customer answer?</label>' +
+            '<div class="la-yn-row">' +
+              '<button class="la-yn" id="laYes" onclick="setLaAnswer(\'yes\')"><span class="material-symbols-outlined">check</span> Yes</button>' +
+              '<button class="la-yn" id="laNo" onclick="setLaAnswer(\'no\')"><span class="material-symbols-outlined">close</span> No</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cp-field" id="laOutcomeWrap" style="display:none"><div class="la-chips" id="laChips"></div></div>' +
+          '<div id="laDynamic"></div>' +
+          '<div class="la-hint" id="laHint" style="display:none"></div>' +
+          '<div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>' +
+        '</div>' +
+        '<div class="dp-logside-foot"><button class="cp-btn primary" onclick="submitLogActivity(true)">Save activity</button></div>' +
+      '</div>';
     }
 
     function stepProgress(l, si) {
@@ -2629,8 +2636,6 @@
       document.getElementById('laAttempts').style.display = attemptStage ? '' : 'none';
       document.getElementById('laAttemptsText').textContent = att + ' of 4 attempts done';
       updateLaHint();
-      document.getElementById('logOverlay').classList.add('show');
-      document.getElementById('logPanel').classList.add('open');
     }
 
     function updateLaHint() {
@@ -2682,8 +2687,7 @@
     }
 
     function closeLogActivity() {
-      document.getElementById('logOverlay').classList.remove('show');
-      document.getElementById('logPanel').classList.remove('open');
+      // v2: log activity lives in the side column; re-render repopulates it, nothing to close.
     }
 
     function submitLogActivity(close) {
