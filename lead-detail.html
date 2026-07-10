@@ -2385,7 +2385,7 @@
 
     var laAnswer = null, laOutcome = null, laNoReason = 'Invalid number', laReasonSel = '', laReasonComment = '';
     function setLaNoReason(v){ laNoReason = v; renderLaFields(); updateLaHint(); }
-    function onLaReasonChange(v){ laReasonSel = v; renderLaFields(); }
+    function onLaReasonChange(v){ laReasonSel = v; renderLaFields(); updateLaHint(); }
     function laReasonField(opts){
       var html = '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label>' +
         '<select class="cp-select" id="laReason" onchange="onLaReasonChange(this.value)">' +
@@ -2428,6 +2428,7 @@
 
     var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
     var laReasonsNewContact = ['Out of Scope', 'Wrong Number', 'Not Interested', 'Submitted by Mistake', 'High Price', 'Inconvenient Location', 'Duplicate', 'Others'];
+    var laDisqualifyReasons = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands'];
     var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
     var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
     // Call Center discovery questions — shared by the Discovery Questions tab and the Log activity panel.
@@ -2581,12 +2582,13 @@
           html += laSelect('laTransferAgent', 'Transfer to', laAgents, true);
           html += laNotesField();
         } else if (laOutcome === 'Disqualify') {
-          html += '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label><div class="la-radio">' +
-            ['Invalid number','Not reachable'].map(function(o){
-              return '<label class="la-radio-item"><input type="radio" name="laNoReason" value="'+o+'"'+(laNoReason===o?' checked':'')+' onchange="setLaNoReason(\''+o+'\')"><span>'+o+'</span></label>';
-            }).join('') + '</div></div>';
-          if (laNoReason === 'Not reachable') { html += laDateTime('Reschedule'); }
-          html += laNotesField();
+          html += '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label>' +
+            '<select class="cp-select" id="laReason" onchange="onLaReasonChange(this.value)">' +
+            laDisqualifyReasons.concat(['Others']).map(function(o){ return '<option'+(laReasonSel===o?' selected':'')+'>'+o+'</option>'; }).join('') +
+            '</select></div>';
+          if (laReasonSel === 'Others') {
+            html += '<div class="cp-field"><label class="cp-label">Comment <span class="req">*</span></label><textarea class="cp-textarea" id="laReasonComment" placeholder="Add reason…" oninput="laReasonComment=this.value">'+(laReasonComment||'')+'</textarea></div>';
+          }
         } else if (laOutcome === 'Return to call center') {
           html += laSelect('laReturnReason', 'Return reason', laReturnReasons, true);
           html += laNotesField();
@@ -2629,8 +2631,7 @@
       }
       if (laAnswer === 'yes' && laSalesOutcomes.indexOf(laOutcome) !== -1) {
         if (laOutcome === 'Disqualify') {
-          if (laNoReason === 'Invalid number') { h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger'; }
-          else { h.textContent = 'Saving will log a missed attempt and reschedule.'; h.className = 'la-hint ok'; }
+          h.textContent = 'Saving will disqualify this lead.'; h.className = 'la-hint danger';
           h.style.display = ''; return;
         }
         if (laOutcome === 'Return to call center') { h.textContent = 'Saving will return this lead to the call center.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
@@ -2713,16 +2714,12 @@
           l.activities.unshift({ type: 'note', text: ['Ownership transferred to ' + ag, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast('Ownership transferred to ' + ag);
         } else if (laOutcome === 'Disqualify') {
-          if (laNoReason === 'Invalid number') {
-            l.nextCall = null; l.disqReason = 'Invalid number';
-            l.activities.unshift({ type: 'call', text: ['Disqualified', 'Invalid number', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-            l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
-            showToast('Lead disqualified — invalid number');
-          } else {
-            l.nextCall = { date: f.date, time: f.time, note: notes };
-            l.activities.unshift({ type: 'call', text: ['Not reachable', when ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-            showToast('Missed attempt logged — Not reachable' + (when ? ' · ' + when : ''));
-          }
+          var dqReason = f.reason || laDisqualifyReasons[0];
+          if (dqReason === 'Others' && f.reasonComment) dqReason = 'Others: ' + f.reasonComment;
+          l.nextCall = null; l.disqReason = dqReason;
+          l.activities.unshift({ type: 'call', text: ['Disqualified', dqReason, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true;
+          showToast('Lead disqualified — ' + dqReason);
         } else if (laOutcome === 'Return to call center') {
           l.nextCall = null; l.disqReason = null; l.disqualified = false;
           l.owner = 'Call Center'; l.handover = 'Returned to call center';
