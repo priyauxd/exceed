@@ -774,6 +774,9 @@
     .prop-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .prop-add-btn { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 12px; font-weight: 600; color: #fff; background: var(--ink); border: none; border-radius: 8px; padding: 7px 12px; cursor: pointer; flex-shrink: 0; }
     .prop-add-btn:hover { background: #0f1722; }
+    .prop-support-btn { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px; cursor: pointer; flex-shrink: 0; }
+    .prop-support-btn:hover { background: var(--colorNeutralBackground3, #f4f5f7); border-color: var(--ink-muted); }
+    .prop-support-btn .material-symbols-outlined { font-size: 16px; }
     .prop-add-btn .material-symbols-outlined { font-size: 16px; }
     .prop-empty { display: flex; align-items: center; gap: 12px; padding: 22px 18px; background: var(--surface); border: 1px dashed var(--border); border-radius: var(--radius-md); font-size: 12.5px; color: var(--ink-secondary); }
     .prop-empty .material-symbols-outlined { font-size: 28px; color: var(--blue); flex-shrink: 0; }
@@ -3271,6 +3274,7 @@
       renderDetail(selectedIdx, currentStep);
     }
     function shareProposal(i, ch){ var p = leads[selectedIdx].proposals[i]; if (p) showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' sent via ' + ch); }
+    function requestManagerSupport(){ showToast('Manager support requested for this deal'); }
 
     function renderProposalCard(p, i, arr){
       var hasQuote = (arr || []).some(function(x){ return x.isQuote; });
@@ -3324,7 +3328,10 @@
       var head = '<div class="prop-head">' +
         '<div><div class="dp-essential-title">Proposals</div>' +
         '<div class="dp-essential-sub" style="margin:0">'+l.proposals.length+' proposal'+(l.proposals.length!==1?'s':'')+' &middot; '+quotes+' quotation'+(quotes!==1?'s':'')+'</div></div>' +
-        '<button class="prop-add-btn" onclick="addProposal()"><span class="material-symbols-outlined">add</span> New proposal</button>' +
+        '<div class="prop-head-actions">' +
+          '<button class="prop-support-btn" onclick="requestManagerSupport()"><span class="material-symbols-outlined">support_agent</span> Manager Support</button>' +
+          '<button class="prop-add-btn" onclick="addProposal()"><span class="material-symbols-outlined">add</span> New proposal</button>' +
+        '</div>' +
       '</div>';
       if (!l.proposals.length) {
         return '<div class="dp-essential" style="margin-bottom:14px">' + head +
