@@ -83,6 +83,15 @@
   .swatch.on .nm{color:var(--ink);}
 
   .cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px;}
+  /* Compact model grid — all EXEED models visible without scrolling */
+  .cards.models{grid-template-columns:repeat(3,1fr); gap:10px;}
+  @media(min-width:1480px){ .cards.models{grid-template-columns:repeat(6,1fr);} }
+  .card.mcard{padding:12px 13px;}
+  .card.mcard .cn{font-size:14px;}
+  .card.mcard .cs{font-size:11px; margin-top:2px;}
+  .card.mcard .specs{gap:8px; margin-top:8px;}
+  .card.mcard .cp{font-size:12.5px; margin-top:8px;}
+  .card.mcard .check{top:10px; right:10px; width:18px; height:18px;}
   .card{border:1.5px solid var(--line); border-radius:14px; padding:15px; cursor:pointer; background:var(--panel); transition:.15s; position:relative;}
   .card:hover{border-color:var(--card-hover);}
   .card.on{border-color:var(--sel-border); box-shadow:0 8px 24px var(--card-shadow);}
@@ -104,38 +113,48 @@
   .btn.dark .mi{font-size:18px;}
 
   /* Summary panel */
-  .summary{margin:12px; border:1px solid var(--line); border-radius:18px; background:var(--summary-bg); padding:16px 18px; display:flex; flex-direction:column; height:calc(100% - 24px); overflow-y:auto;}
-  .sum-title{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2); margin-bottom:9px;}
-  .sum-hero{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--panel2); margin-bottom:11px;}
+  .summary{margin:10px; border:1px solid var(--line); border-radius:18px; background:var(--summary-bg); padding:12px 14px; display:flex; flex-direction:column; height:calc(100% - 20px); overflow-y:auto;}
+  .sum-title{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2); margin-bottom:5px;}
+  .sum-hero{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--panel2); margin-bottom:7px;}
   .sum-hero img{width:100%; height:78px; object-fit:cover; background:var(--stage2);}
-  .sum-hero .cap{padding:8px 12px;}
+  .sum-hero .cap{padding:6px 10px;}
   .sum-hero .cap .m{font-size:13px; font-weight:800;}
   .sum-hero .cap .t{font-size:11.5px; color:var(--ink2); margin-top:1px;}
-  .sum-rows{display:flex; flex-direction:column; gap:1px; margin-bottom:11px;}
-  .sum-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:5.5px 0; border-bottom:1px solid var(--line);}
+  .sum-rows{display:flex; flex-direction:column; gap:1px; margin-bottom:7px;}
+  .sum-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:3.5px 0; border-bottom:1px solid var(--line);}
   .sum-row .k{font-size:11.5px; color:var(--ink2);}
   .sum-row .v{font-size:12px; font-weight:700; display:flex; align-items:center; gap:7px;}
   .sum-row .v .cdot{width:13px; height:13px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
 
-  .fin{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:11px 12px; margin-bottom:11px;}
-  .fin-l{display:flex; align-items:center; justify-content:space-between; margin-bottom:7px;}
+  .fin{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:8px 10px; margin-bottom:7px;}
+  .fin-l{display:flex; align-items:center; justify-content:space-between; margin-bottom:5px;}
   .fin-l .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
   .fin-l .v{font-size:12.5px; font-weight:800;}
   .fin-range{width:100%; accent-color:var(--cta-bg); cursor:pointer;}
-  .emi-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:5px;}
-  .emi-table th{background:var(--emi-th); color:#fff; font-weight:700; padding:5px; font-size:10px;}
+  .fin-check{display:flex; align-items:center; gap:8px; margin:7px 0 3px; font-size:12px; font-weight:600; cursor:pointer;}
+  .fin-check input{accent-color:var(--cta-bg); width:15px; height:15px;}
+  .fin-badge{margin-left:auto; font-size:10px; font-weight:800; color:var(--cta-bg); background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:2px 8px;}
+  .fin-field{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:4px 0; border-bottom:1px solid var(--line); font-size:12px;}
+  .fin-field .k{color:var(--ink2);}
+  .fin-field .fin-v{font-weight:800;}
+  .fin-inp{font-weight:700; display:inline-flex; align-items:center; gap:4px;}
+  .fin-inp input{width:78px; text-align:right; font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:4px 7px;}
+  .fin-sel{font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:5px 8px; cursor:pointer;}
+  .addon .ap.free{color:#1a9d5a;}
+  .emi-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:4px;}
+  .emi-table th{background:var(--emi-th); color:#fff; font-weight:700; padding:3px 5px; font-size:10px;}
   .emi-table th:first-child{background:transparent; color:var(--muted); text-align:left; text-transform:uppercase; font-size:9px; letter-spacing:.04em;}
-  .emi-table td{padding:4px 5px; text-align:center; border-bottom:1px solid var(--line); font-weight:700;}
+  .emi-table td{padding:3px 5px; text-align:center; border-bottom:1px solid var(--line); font-weight:700;}
   .emi-table td:first-child{text-align:left; color:var(--ink2); font-weight:600;}
-  .addons{display:flex; flex-direction:column; gap:1px; margin-bottom:10px;}
-  .addon{display:flex; align-items:center; gap:9px; padding:5px 2px; font-size:12px; border-bottom:1px solid var(--line); cursor:pointer;}
+  .addons{display:flex; flex-direction:column; gap:1px; margin-bottom:6px;}
+  .addon{display:flex; align-items:center; gap:9px; padding:3px 2px; font-size:12px; border-bottom:1px solid var(--line); cursor:pointer;}
   .addon input{accent-color:var(--cta-bg); width:15px; height:15px;}
   .addon .ap{margin-left:auto; font-weight:700; color:var(--ink2);}
-  .addon-total{display:flex; justify-content:space-between; background:var(--addon-bg); color:var(--addon-text); padding:9px 13px; border-radius:10px; font-size:12.5px; font-weight:800; margin-bottom:11px;}
+  .addon-total{display:flex; justify-content:space-between; background:var(--addon-bg); color:var(--addon-text); padding:7px 12px; border-radius:10px; font-size:12.5px; font-weight:800; margin-bottom:8px;}
 
-  .save-btn{width:100%; justify-content:center; background:var(--cta-bg); color:var(--cta-text); font-size:14.5px; padding:14px;}
+  .save-btn{width:100%; justify-content:center; background:var(--cta-bg); color:var(--cta-text); font-size:13.5px; padding:11px;}
   .save-btn:hover{opacity:.9;}
-  .save-hint{text-align:center; font-size:11px; color:var(--muted); margin-top:9px;}
+  .save-hint{text-align:center; font-size:11px; color:var(--muted); margin-top:6px;}
 
   /* Saved toast overlay */
   .saved-ov{position:fixed; inset:0; background:rgba(15,18,24,.5); backdrop-filter:blur(3px); display:none; align-items:center; justify-content:center; z-index:60;}
@@ -161,7 +180,7 @@
   <div class="wrap">
     <!-- Stage + dock -->
     <div class="stage">
-      <div class="stage-badge"><span class="m">EXEED ES</span><span class="t">Fully Electric SUV &middot; 2026</span></div>
+      <div class="stage-badge"><span class="m" id="badgeModel">EXEED ES</span><span class="t">Fully Electric SUV &middot; 2026</span></div>
       <div class="stage-img-wrap"><img class="stage-img" id="stageImg" src="assets/es/ext-white.png" alt="EXEED ES"></div>
       <div class="stage-caption"><div class="big" id="stageBig">EXEED ES</div><div class="sub" id="stageSub">Choose your configuration</div></div>
       <div class="dock">
@@ -181,7 +200,11 @@
       <div class="sum-rows" id="sumRows"></div>
       <div class="fin">
         <div class="fin-l"><span class="k">Down payment</span><span class="v" id="downLbl">20% · AED 0</span></div>
-        <input class="fin-range" id="downRange" type="range" min="0" max="50" step="5" value="20" oninput="setDown(this.value)">
+        <input class="fin-range" id="downRange" type="range" min="20" max="100" step="5" value="20" oninput="setDown(this.value)">
+        <label class="fin-check"><input type="checkbox" id="dpSupport" onchange="toggleDpSupport()"><span>Down payment support</span><span class="fin-badge">+25%</span></label>
+        <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-inp">AED <input id="tradeInAmt" type="number" min="0" step="500" value="0" oninput="setTradeIn(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Booking amount</span><span class="fin-v">AED 2,000</span></div>
+        <div class="fin-field"><span class="k">Campaign</span><select class="fin-sel" id="campaignSel" onchange="setCampaign(this.value)"></select></div>
         <table class="emi-table"><thead><tr><th>EMI @ 2%</th><th>Without</th><th>With adds</th></tr></thead><tbody id="emiBody"></tbody></table>
       </div>
       <div class="addons" id="addons"></div>
@@ -227,16 +250,33 @@
     { k:'tinting',   label:'Tinting', price:1200 },
     { k:'ceramic',   label:'Ceramic Coating', price:2559 }
   ];
+  var MODELS = [
+    { id:'vx',  name:'EXEED VX',  cls:'Flagship 7-seat SUV', s1:'2.0T · 261 hp',  s2:'6/7 seats', price:189900 },
+    { id:'txl', name:'EXEED TXL', cls:'Premium SUV',         s1:'1.6T · 197 hp',  s2:'5 seats',   price:129900 },
+    { id:'lx',  name:'EXEED LX',  cls:'Compact SUV',         s1:'1.5T · 156 hp',  s2:'5 seats',   price:99900 },
+    { id:'rx',  name:'EXEED RX',  cls:'Coupe SUV',           s1:'2.0T · 261 hp',  s2:'Sport',     price:169900 },
+    { id:'es',  name:'EXEED ES',  cls:'Fully electric SUV',  s1:'Up to 620 km',   s2:'517 hp',    price:159900 },
+    { id:'et',  name:'EXEED ET',  cls:'Electric REEV SUV',   s1:'Up to 1400 km',  s2:'Hybrid EV', price:199900 }
+  ];
+  var CAMPAIGNS = [
+    { id:'none',    name:'No campaign',           free:[] },
+    { id:'ramadan', name:'Ramadan Offer',         free:['tinting','ceramic'] },
+    { id:'launch',  name:'EXEED Launch Bundle',   free:['insurance','service','tinting','ceramic'] }
+  ];
+  var BOOKING = 2000;
   var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', downPct:20, addOns:{ insurance:false, service:false, tinting:true, ceramic:true } };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', downPct:20, tradeIn:0, dpSupport:false, campaign:'none', addOns:{ insurance:false, service:false, tinting:true, ceramic:true } };
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
+  function model(){ return MODELS.filter(function(m){return m.id===state.model;})[0] || MODELS[4]; }
+  function campaign(){ return CAMPAIGNS.filter(function(c){return c.id===state.campaign;})[0] || CAMPAIGNS[0]; }
+  function isFree(k){ return campaign().free.indexOf(k) !== -1; }
   function trim(){ return TRIMS.filter(function(t){return t.id===state.trim;})[0]; }
   function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
   function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
   function emi(loan,y){ return Math.round(loan*(1+RATE*y)/(y*12)); }
-  function addTotal(){ return ADDONS.reduce(function(s,a){return s+(state.addOns[a.k]?a.price:0);},0); }
+  function addTotal(){ return ADDONS.reduce(function(s,a){ return s + ((state.addOns[a.k] && !isFree(a.k)) ? a.price : 0); },0); }
 
   function leadTarget(){ var m=location.search.match(/lead=(\d+)/); return m?parseInt(m[1],10):null; }
 
@@ -259,14 +299,17 @@
     var title = document.getElementById('dockTitle');
     if (state.step === 0){ // Model
       title.textContent = 'Select model';
-      body.innerHTML = '<div class="cards">' +
-        '<div class="card on"><span class="check"><span class="mi">check</span></span><div class="cn">EXEED ES</div><div class="cs">Fully electric SUV</div><div class="specs"><span><span class="mi" style="font-size:14px">bolt</span>Up to 620 km</span><span><span class="mi" style="font-size:14px">speed</span>517 hp</span></div></div>' +
-        '</div>';
+      body.innerHTML = '<div class="cards models">' + MODELS.map(function(m){
+        return '<div class="card mcard'+(state.model===m.id?' on':'')+'" onclick="pick(\'model\',\''+m.id+'\')"><span class="check"><span class="mi">check</span></span>' +
+          '<div class="cn">'+m.name+'</div><div class="cs">'+m.cls+'</div>' +
+          '<div class="specs"><span>'+m.s1+'</span><span>'+m.s2+'</span></div>' +
+          '<div class="cp">From AED '+fmt(m.price)+'</div></div>';
+      }).join('') + '</div>';
     } else if (state.step === 1){ // Trim
       title.textContent = 'Select trim';
       body.innerHTML = '<div class="cards">' + TRIMS.map(function(t){
         return '<div class="card'+(state.trim===t.id?' on':'')+'" onclick="pick(\'trim\',\''+t.id+'\')"><span class="check"><span class="mi">check</span></span>' +
-          '<div class="cn">'+t.name+'</div><div class="cs">EXEED ES</div>' +
+          '<div class="cn">'+t.name+'</div><div class="cs">'+model().name+'</div>' +
           '<div class="specs"><span><span class="mi" style="font-size:14px">bolt</span>'+t.range+'</span><span><span class="mi" style="font-size:14px">speed</span>'+t.power+'</span><span><span class="mi" style="font-size:14px">timer</span>'+t.accel+'</span></div>' +
           '<div class="cp">AED '+fmt(t.price)+'</div></div>';
       }).join('') + '</div>';
@@ -291,28 +334,39 @@
   function renderStage(){
     var t = trim(), c = ext(), ic = intr();
     if (state.step === 3){ setStageImg(ic.img); document.getElementById('stageBig').textContent = ic.name; document.getElementById('stageSub').textContent = 'Interior'; }
-    else { setStageImg(c.img); document.getElementById('stageBig').textContent = 'EXEED ES · ' + t.name; document.getElementById('stageSub').textContent = c.name + ' · ' + ic.name; }
+    else { setStageImg(c.img); document.getElementById('stageBig').textContent = model().name + ' · ' + t.name; document.getElementById('stageSub').textContent = c.name + ' · ' + ic.name; }
+    var bm = document.getElementById('badgeModel'); if (bm) bm.textContent = model().name;
   }
 
   function renderSummary(){
     var t = trim(), c = ext(), ic = intr();
-    var down = Math.round(t.price * state.downPct/100);
-    var loan = t.price - down, at = addTotal(), loanW = loan + at;
-    document.getElementById('sumModel').textContent = 'EXEED ES';
+    var effPct = Math.min(100, state.downPct + (state.dpSupport ? 25 : 0));
+    var down = Math.round(t.price * effPct/100);
+    var tradeIn = state.tradeIn || 0;
+    var loan = Math.max(0, t.price - down - tradeIn - BOOKING);
+    var at = addTotal(), loanW = loan + at;
+    document.getElementById('sumModel').textContent = model().name;
     document.getElementById('sumTrim').textContent = t.name + ' · 2026';
     document.getElementById('sumRows').innerHTML =
       row('Trim', t.name) +
       row('Range', t.range) + row('Power', t.power) +
       rowColor('Exterior', c.name, c.hex) +
       rowColor('Interior', ic.name, ic.hex) +
-      row('Vehicle price', 'AED ' + fmt(t.price));
+      row('Vehicle price', 'AED ' + fmt(t.price)) +
+      row('Amount financed', 'AED ' + fmt(loan));
     document.getElementById('topPrice').textContent = 'AED ' + fmt(t.price);
-    document.getElementById('downLbl').textContent = state.downPct + '% · AED ' + fmt(down);
+    document.getElementById('downLbl').textContent = effPct + '% · AED ' + fmt(down) + (state.dpSupport ? ' · +25% support' : '');
+    document.getElementById('campaignSel').innerHTML = CAMPAIGNS.map(function(cp){
+      return '<option value="'+cp.id+'"'+(state.campaign===cp.id?' selected':'')+'>'+cp.name+'</option>';
+    }).join('');
+    var dps = document.getElementById('dpSupport'); if (dps) dps.checked = state.dpSupport;
     document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
       return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loan,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
     }).join('');
     document.getElementById('addons').innerHTML = ADDONS.map(function(a){
-      return '<label class="addon"><input type="checkbox"'+(state.addOns[a.k]?' checked':'')+' onchange="toggleAdd(\''+a.k+'\')"><span>'+a.label+'</span><span class="ap">AED '+fmt(a.price)+'</span></label>';
+      var free = isFree(a.k), on = state.addOns[a.k];
+      var price = (free && on) ? 'Included · AED 0' : 'AED ' + fmt(a.price);
+      return '<label class="addon"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleAdd(\''+a.k+'\')"><span>'+a.label+'</span><span class="ap'+(free&&on?' free':'')+'">'+price+'</span></label>';
     }).join('');
     document.getElementById('addTotal').textContent = 'AED ' + fmt(at);
   }
@@ -323,13 +377,16 @@
   function pick(kind,val){ state[kind]=val; renderAll(); }
   function toggleAdd(k){ state.addOns[k]=!state.addOns[k]; renderSummary(); }
   function setDown(v){ state.downPct=+v; renderSummary(); }
+  function setTradeIn(v){ state.tradeIn = Math.max(0, parseInt(v,10)||0); renderSummary(); }
+  function toggleDpSupport(){ var el=document.getElementById('dpSupport'); state.dpSupport = el ? el.checked : !state.dpSupport; renderSummary(); }
+  function setCampaign(v){ state.campaign = v; campaign().free.forEach(function(k){ state.addOns[k] = true; }); renderSummary(); }
   function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
   function goTo(i){ state.step=i; renderAll(); }
 
   function saveProposal(){
     var t = trim(), c = ext(), ic = intr();
     var proposal = {
-      model:'EXEED ES · '+t.name, trim:t.name, year:'2026',
+      model:model().name+' · '+t.name, trim:t.name, year:'2026',
       extColor:c.name, extHex:c.hex, image:c.img,
       intColor:ic.name, intHex:ic.hex,
       range:t.range, power:t.power,
