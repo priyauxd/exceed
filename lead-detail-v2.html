@@ -500,6 +500,16 @@
     .dp-if { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
     .dp-if-label { font-size: 11.5px; color: var(--ink-secondary); font-weight: 500; }
     .dp-if-req { color: var(--red); margin-left: 2px; font-weight: 700; }
+    .dp-if-lock { font-size: 12px; color: var(--ink-muted); margin-left: 4px; vertical-align: -2px; }
+    .dp-if-ro { background: #f0f2f5; color: var(--ink-muted); cursor: not-allowed; }
+    .dp-if-chips { display: flex; gap: 8px; }
+    .dp-chip-radio { display: inline-flex; align-items: center; gap: 6px; padding: 6px 15px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; font-size: 12.5px; font-weight: 600; color: var(--ink-secondary); background: var(--surface); transition: border-color .12s, background .12s, color .12s; }
+    .dp-chip-radio input { accent-color: var(--blue); margin: 0; cursor: pointer; }
+    .dp-chip-radio:hover { border-color: var(--blue); }
+    .dp-chip-radio.on { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
+    .ti-details { margin: 6px 0 22px; padding-top: 12px; border-top: 1px dashed var(--border); }
+    .ti-details-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin: 0 0 14px; }
+    .ti-details-h .material-symbols-outlined { font-size: 17px; color: var(--amber, #f6c453); }
     .dp-if-opt { margin-left: 6px; font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); background: var(--bg); border: 1px solid var(--border-soft); border-radius: 10px; padding: 1px 6px; }
     .dp-if-area { min-height: 54px; resize: vertical; padding: 6px 9px; line-height: 1.4; }
     .dp-if-lookup { position: relative; display: block; width: 100%; }
@@ -1248,13 +1258,13 @@
     </div>
   </div>
 
-  <div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-overlay" id="delOverlay">
     <div class="confirm-box">
       <div class="confirm-icon"><span class="material-symbols-outlined">delete</span></div>
-      <div class="confirm-title" id="confirmTitle">Delete lead?</div>
-      <div class="confirm-text" id="confirmText">This lead will be permanently removed. This action cannot be undone.</div>
+      <div class="confirm-title" id="delTitle">Delete lead?</div>
+      <div class="confirm-text" id="delText">This lead will be permanently removed. This action cannot be undone.</div>
       <div class="confirm-actions">
-        <button class="confirm-btn cancel" onclick="closeConfirm()">Cancel</button>
+        <button class="confirm-btn cancel" onclick="closeDelConfirm()">Cancel</button>
         <button class="confirm-btn danger" onclick="confirmDelete()">Delete</button>
       </div>
     </div>
@@ -1486,13 +1496,18 @@
     function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdBookView = 'wizard'; schedRerender(); }
     function tdSetStatus(i, s){ if (!tdBookings[i]) return; tdBookings[i].status = s; showToast(s === 'Complete' ? 'Test drive completed' : 'Waiver signed — drive in progress'); schedRerender(); }
     var confirmCb = null;
-    function openConfirm(title, text, okLabel, cb){
+    function openConfirm(title, text, okLabel, cb, cancelLabel){
       document.getElementById('confirmTitle').textContent = title;
       document.getElementById('confirmText').textContent = text;
       document.getElementById('confirmOkBtn').textContent = okLabel || 'Confirm';
+      document.getElementById('confirmCancelBtn').textContent = cancelLabel || 'Keep';
       confirmCb = cb;
       document.getElementById('confirmOverlay').classList.add('show');
       document.getElementById('confirmModal').classList.add('open');
+    }
+    // Reminder before executing a test drive: confirm the customer's trade-in interest was captured.
+    function signWaiverReminder(i){
+      openConfirm('Trade-in check', 'Before the test drive — have you confirmed whether the customer is interested in a trade-in and recorded it under Details › Vehicle?', 'Yes, continue', function(){ openWaiver(i); }, 'No, not yet');
     }
     function closeConfirm(){ document.getElementById('confirmOverlay').classList.remove('show'); document.getElementById('confirmModal').classList.remove('open'); confirmCb = null; }
     function confirmProceed(){ var cb = confirmCb; closeConfirm(); if (cb) cb(); }
@@ -1696,7 +1711,7 @@
           actions = '<button class="td-resched" onclick="tdDownload('+i+')"><span class="material-symbols-outlined">download</span>Download</button>';
         } else {
           actions = '<button class="td-resched" onclick="reschedule('+i+')"><span class="material-symbols-outlined">edit</span>Reschedule</button>' +
-            '<button class="td-resched" onclick="openWaiver('+i+')"><span class="material-symbols-outlined">draw</span>Sign waiver</button>' + cancelBtn;
+            '<button class="td-resched" onclick="signWaiverReminder('+i+')"><span class="material-symbols-outlined">draw</span>Sign waiver</button>' + cancelBtn;
         }
         return '<tr>' +
           '<td><span class="td-veh"><span class="td-veh-ic material-symbols-outlined">directions_car</span><strong>'+b.model+'</strong></span></td>' +
@@ -1810,11 +1825,11 @@
     function deleteSelected() {
       if (selectedIds.size === 0) return;
       var n = selectedIds.size;
-      document.getElementById('confirmTitle').textContent = n === 1 ? 'Delete lead?' : 'Delete ' + n + ' leads?';
-      document.getElementById('confirmText').textContent = (n === 1 ? 'This lead' : 'These ' + n + ' leads') + ' will be permanently removed. This action cannot be undone.';
-      document.getElementById('confirmOverlay').classList.add('show');
+      document.getElementById('delTitle').textContent = n === 1 ? 'Delete lead?' : 'Delete ' + n + ' leads?';
+      document.getElementById('delText').textContent = (n === 1 ? 'This lead' : 'These ' + n + ' leads') + ' will be permanently removed. This action cannot be undone.';
+      document.getElementById('delOverlay').classList.add('show');
     }
-    function closeConfirm() { document.getElementById('confirmOverlay').classList.remove('show'); }
+    function closeDelConfirm() { document.getElementById('delOverlay').classList.remove('show'); }
     function confirmDelete() {
       var n = selectedIds.size;
       var openLeadDeleted = selectedIdx > -1 && selectedIds.has(leads[selectedIdx].id);
@@ -1824,7 +1839,7 @@
       renderLeads('all');
       updateLeadCount(); updateDeleteBtn();
       if (openLeadDeleted) closePanel();
-      closeConfirm();
+      closeDelConfirm();
       showToast((n === 1 ? '1 lead' : n + ' leads') + ' deleted');
     }
     var toastTimer;
@@ -2248,7 +2263,12 @@
         var fld = function(o) {
           var star = o.req ? '<span class="dp-if-req">*</span>' : '';
           var ctrl;
-          if (o.type === 'select') {
+          if (o.tradeInToggle) {
+            ctrl = '<div class="dp-if-chips" id="intakeTradeIn">' + ['Yes','No'].map(function(x){
+              var on = (o.val === x);
+              return '<label class="dp-chip-radio'+(on?' on':'')+'"><input type="radio" name="tradeInInterested" value="'+x+'"'+(on?' checked':'')+' onchange="onTradeInChange(this.value)"><span>'+x+'</span></label>';
+            }).join('') + '</div>';
+          } else if (o.type === 'select') {
             ctrl = '<select class="dp-if-input" data-prop="'+(o.prop||'')+'" onchange="editIntake(this)">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+x+'</option>';}).join('')+'</select>';
           } else if (o.type === 'textarea') {
             ctrl = '<textarea class="dp-if-input dp-if-area" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" placeholder="Manual input…">'+(o.val||'')+'</textarea>';
@@ -2273,13 +2293,13 @@
             {label:'Nationality', type:'lookup', val:'UAE'}
           ]},
           { title:'Vehicle', moreId:'intakeVehMore', fields:[
-            {label:'Model', prop:'model', type:'lookup', val:l.model}
+            {label:'Model', prop:'model', type:'lookup', val:l.model},
+            {label:'Trade-in Interested', type:'select', tradeInToggle:true, val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']}
           ], more:[
             {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
             {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
             {label:'Model Year', type:'select', val:'2026', opts:['2026','2025','2024']},
-            {label:'Model Code', val:''},
-            {label:'Trade-in Interested', type:'select', val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']}
+            {label:'Model Code', val:''}
           ]},
           { title:'Lead Qualification', fields:[
             {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
@@ -2303,7 +2323,12 @@
         var intakeToolbar = '<div class="dp-intake-toolbar"><span class="dp-intake-heading">'+sd.title+'</span>' +
           (intakeHasMore ? '<button type="button" class="dp-intake-all" onclick="expandAllIntake(this)"><span class="material-symbols-outlined">unfold_more</span><span class="dp-intake-all-lbl">Expand all</span></button>' : '') +
         '</div>';
-        html += '<div class="dp-intake">' + intakeToolbar + '<div class="dp-intake-groups">' + groups.map(renderGroup).join('') + '</div></div>';
+        var groupsHtml = groups.map(function(g){
+          var out = renderGroup(g);
+          if (g.title === 'Vehicle') out += tradeInDetailsHtml(l.existing !== 'No');
+          return out;
+        }).join('');
+        html += '<div class="dp-intake">' + intakeToolbar + '<div class="dp-intake-groups">' + groupsHtml + '</div></div>';
       }
       } // end overview tab
       html += '</div>'; // dp-main-scroll
@@ -2348,6 +2373,58 @@
       document.getElementById('dpBody').innerHTML = html;
 
       updateStepGate();
+    }
+
+    // Trade-in Device + Appraisal detail sections — revealed when Trade-in Interested = Yes.
+    function tiField(label, o) {
+      o = o || {};
+      var star = o.req ? '<span class="dp-if-req">*</span>' : '';
+      var lock = o.lock ? '<span class="material-symbols-outlined dp-if-lock">lock</span>' : '';
+      var ctrl;
+      if (o.type === 'select') {
+        ctrl = '<select class="dp-if-input">'+(o.options||['—']).map(function(x){return '<option>'+x+'</option>';}).join('')+'</select>';
+      } else if (o.type === 'textarea') {
+        ctrl = '<textarea class="dp-if-input dp-if-area" placeholder="Manual input…"></textarea>';
+      } else if (o.type === 'lookup') {
+        ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="" placeholder="---"><span class="material-symbols-outlined dp-if-lk">search</span></div>';
+      } else {
+        ctrl = '<input class="dp-if-input'+(o.lock?' dp-if-ro':'')+'" type="text" value=""'+(o.lock?' readonly':'')+' placeholder="---">';
+      }
+      return '<div class="dp-if'+(o.wide?' dp-if-wide':'')+'"><label class="dp-if-label">'+label+star+lock+'</label>'+ctrl+'</div>';
+    }
+    function tradeInDetailsHtml(show) {
+      var device = [
+        tiField('Device', {type:'lookup'}), tiField('Year'),
+        tiField('Brand', {type:'lookup'}), tiField('Mileage'),
+        tiField('Class', {type:'lookup'}), tiField('Condition', {type:'select', options:['---','Excellent','Good','Fair','Poor']}),
+        tiField('Model', {type:'lookup'}), tiField('Engine'),
+        tiField('Region (Lov)', {type:'select', options:['---','Dubai','Abu Dhabi','Sharjah','Northern Emirates'], req:true}), tiField('Interior Color'),
+        tiField('Model Code', {type:'lookup'}), tiField('Exterior Color'),
+        tiField('Variant', {type:'lookup'}), tiField('Transmission', {type:'select', options:['---','Automatic','Manual']})
+      ].join('');
+      var appraisal = [
+        tiField('Appraisal Source'), tiField('Offer Price'),
+        tiField('Appraised Value'), tiField('Trade In Observation Cost'),
+        tiField('Expected Listing Price'), tiField('Adjustment'),
+        tiField('Expected Sales Price'), tiField('Adjusted Offer Price', {lock:true}),
+        tiField('Trade In Variance', {lock:true}), tiField('Settlement'),
+        tiField('Margin', {lock:true}), tiField('Trade In Value'),
+        tiField('Margin %', {lock:true}),
+        tiField('Reason For Adjustment', {type:'textarea', wide:true})
+      ].join('');
+      return '<div id="tradeInDetails" class="ti-details" style="'+(show?'':'display:none')+'">' +
+        '<div class="ti-details-h"><span class="material-symbols-outlined">sync_alt</span>Trade-in Details</div>' +
+        '<div class="dp-intake-col"><div class="dp-intake-title">Device</div><div class="dp-if-fields">'+device+'</div></div>' +
+        '<div class="dp-intake-col"><div class="dp-intake-title">Appraisal</div><div class="dp-if-fields">'+appraisal+'</div></div>' +
+      '</div>';
+    }
+    function onTradeInChange(v) {
+      var el = document.getElementById('tradeInDetails');
+      if (el) el.style.display = (v === 'Yes') ? '' : 'none';
+      var wrap = document.getElementById('intakeTradeIn');
+      if (wrap) wrap.querySelectorAll('.dp-chip-radio').forEach(function(lbl){
+        var inp = lbl.querySelector('input'); lbl.classList.toggle('on', !!(inp && inp.checked));
+      });
     }
 
     function stepProgress(l, si) {
