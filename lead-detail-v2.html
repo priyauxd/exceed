@@ -74,6 +74,20 @@
     .filter-chip { padding: 5px 14px; border-radius: 16px; font-size: 11.5px; font-weight: 500; border: 1px solid transparent; background: transparent; color: var(--ink-muted); cursor: pointer; transition: all .12s; font-family: inherit; }
     .filter-chip:hover { background: var(--blue-soft); color: var(--blue); }
     .filter-chip.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .lead-menu-wrap { position: relative; }
+    .lead-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 30; min-width: 214px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 14px 36px rgba(20,24,34,.18); padding: 11px; display: none; }
+    .lead-menu.open { display: block; }
+    .lm-row { display: flex; flex-direction: column; gap: 4px; margin-bottom: 9px; }
+    .lm-row label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .lm-row select { font-family: inherit; font-size: 12.5px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--ink); cursor: pointer; }
+    .lm-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 6px; }
+    .lm-opt { display: flex; align-items: center; justify-content: space-between; width: 100%; font-family: inherit; font-size: 12.5px; font-weight: 500; color: var(--ink); background: none; border: none; border-radius: 7px; padding: 7px 9px; cursor: pointer; text-align: left; }
+    .lm-opt:hover { background: var(--blue-soft); }
+    .lm-opt.on { color: var(--blue); font-weight: 700; background: var(--blue-soft); }
+    .lm-opt .lm-arrow { font-size: 16px; }
+    .lm-clear { width: 100%; margin-top: 4px; font-family: inherit; font-size: 12px; font-weight: 600; color: var(--ink-secondary); background: none; border: 1px solid var(--border); border-radius: 7px; padding: 6px; cursor: pointer; }
+    .lm-clear:hover { background: var(--blue-soft); color: var(--blue); border-color: var(--blue); }
+    .lead-menu-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 9px; background: var(--blue); color: #fff; font-size: 10px; font-weight: 800; margin-left: 5px; }
     .filter-search { margin-left: auto; padding: 6px 12px 6px 32px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-family: inherit; color: var(--ink); outline: none; width: 200px; transition: border-color .15s; background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239ea3b5' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 10px center; }
     .filter-search:focus { border-color: var(--blue); }
     .filter-search::placeholder { color: var(--ink-muted); }
@@ -438,9 +452,9 @@
     .dp-j-step .j-num { position: relative; z-index: 1; width: 38px; height: 38px; border-radius: 50%; margin: 0 auto 11px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; background: var(--surface); border: 2px solid #d7dce3; color: var(--ink-muted); transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, background .2s, border-color .2s; }
     .dp-j-step .j-num .material-symbols-outlined { font-size: 21px; font-variation-settings: 'wght' 700; }
     .dp-j-step.done .j-num { background: linear-gradient(135deg, #63c088, #46a56b); border-color: transparent; color: #fff; box-shadow: 0 3px 8px rgba(70,165,107,.18); }
-    .dp-j-step.active .j-num { background: linear-gradient(135deg, #2f76ac, #073a63); border-color: transparent; color: #fff; box-shadow: 0 0 0 5px rgba(47,118,172,.16), 0 6px 14px rgba(7,58,99,.22); animation: dp-node-pulse 2.4s ease-in-out infinite; }
-    @keyframes dp-node-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(47,118,172,.16), 0 6px 14px rgba(7,58,99,.20); } 50% { box-shadow: 0 0 0 9px rgba(47,118,172,.07), 0 6px 16px rgba(7,58,99,.24); } }
-    .dp-j-step.viewing .j-num { outline: 2.5px solid var(--exeed-cyan); outline-offset: 2px; }
+    .dp-j-step.active .j-num { background: linear-gradient(135deg, #2b2f37, #0c0f14); border-color: transparent; color: #fff; box-shadow: 0 0 0 5px rgba(20,24,34,.13), 0 6px 14px rgba(12,15,20,.24); animation: dp-node-pulse 2.4s ease-in-out infinite; }
+    @keyframes dp-node-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(20,24,34,.13), 0 6px 14px rgba(12,15,20,.22); } 50% { box-shadow: 0 0 0 9px rgba(20,24,34,.05), 0 6px 16px rgba(12,15,20,.26); } }
+    .dp-j-step.viewing .j-num { outline: 2.5px solid rgba(20,24,34,.32); outline-offset: 2px; }
     .dp-j-step:hover .j-num { transform: translateY(-2px); }
     .dp-j-step .j-name { font-size: 11px; font-weight: 600; color: var(--ink-secondary); display: block; line-height: 1.3; padding: 0 4px; }
     .dp-j-step.done .j-name { color: #3d8a5b; }
@@ -451,7 +465,7 @@
     .dp-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
     /* v2: identity card + boxed stepper/tabs stick together below the top */
     .dp-stickytop { position: sticky; top: 0; z-index: 6; background: var(--surface); }
-    .dp-stagebox { position: relative; background: var(--surface); border: 1px solid #e6e9ef; border-radius: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06); padding: 10px 22px 0; margin-bottom: 16px; }
+    .dp-stagebox { position: relative; background: var(--surface); border: 1px solid #e6e9ef; border-radius: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06); padding: 10px 22px 0; margin-bottom: 8px; }
     .dp-stagebox .dp-journey-card { padding-top: 18px; margin-bottom: 0; border-bottom: 1px solid #eef1f5; }
     .dp-stagebox .dp-tabs { margin-bottom: 0; border-bottom: none; }
     .dp-tab-actions { margin-left: auto; align-self: center; display: inline-flex; align-items: center; gap: 10px; transform: translateY(-4px); }
@@ -930,7 +944,7 @@
     /* 2-column layout: main + top-right sidebar */
     .dp-layout { display: flex; flex-wrap: wrap; gap: 18px; align-items: stretch; }
     .dp-main { flex: 2.8 1 340px; min-width: 0; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-md); box-shadow: var(--shadow2); display: flex; flex-direction: column; }
-    .dp-main-scroll { flex: 1; padding: 16px 18px 8px; min-width: 0; }
+    .dp-main-scroll { flex: 1; padding: 10px 18px 8px; min-width: 0; }
     .dp-main-foot { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--radius-md) var(--radius-md); }
     .dp-side { flex: 1 1 240px; min-width: 230px; }
     /* Header metrics (top-right corner) */
@@ -1227,8 +1241,19 @@
             <div class="list-title-row">
               <h1>My Active Leads <span class="lead-count">12 leads</span></h1>
               <div class="list-actions">
-                <button class="list-btn"><span class="material-symbols-outlined">filter_list</span> Filter</button>
-                <button class="list-btn"><span class="material-symbols-outlined">sort</span> Sort</button>
+                <div class="lead-menu-wrap">
+                  <button class="list-btn" onclick="toggleLeadMenu('filterMenu')"><span class="material-symbols-outlined">filter_list</span> Filter<span class="lead-menu-badge" id="filterCount" style="display:none">0</span></button>
+                  <div class="lead-menu" id="filterMenu">
+                    <div class="lm-row"><label>Source</label><select id="fSource" onchange="setAdvFilter('source',this.value)"><option value="">Any source</option></select></div>
+                    <div class="lm-row"><label>Rating</label><select id="fRating" onchange="setAdvFilter('rating',this.value)"><option value="">Any rating</option><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
+                    <div class="lm-row"><label>SLA status</label><select id="fSla" onchange="setAdvFilter('sla',this.value)"><option value="">Any SLA</option><option value="brch">Breached</option><option value="wrn">Due soon</option><option value="ok">On track</option></select></div>
+                    <button class="lm-clear" onclick="clearAdvFilters()">Clear filters</button>
+                  </div>
+                </div>
+                <div class="lead-menu-wrap">
+                  <button class="list-btn" onclick="toggleLeadMenu('sortMenu')"><span class="material-symbols-outlined">sort</span> Sort</button>
+                  <div class="lead-menu" id="sortMenu"></div>
+                </div>
                 <button class="list-btn primary" onclick="openCreateLead()"><span class="material-symbols-outlined">add</span> New lead</button>
               </div>
             </div>
@@ -1744,19 +1769,43 @@
     }
     var selectedIds = new Set();
 
+    var advFilters = { source:'', rating:'', sla:'' };
+    var sortState = { key:'', dir:'asc' };
+    var curStageFilter = 'all', curSearch = '';
+    function leadMatches(l) {
+      if (curStageFilter && curStageFilter !== 'all') {
+        var stg = l.stage.toLowerCase();
+        if (curStageFilter === 'na') { if (l.stageClass !== 'na') return false; }
+        else if (stg !== curStageFilter) return false;
+      }
+      if (curSearch) {
+        var s = curSearch.toLowerCase();
+        if (l.name.toLowerCase().indexOf(s) === -1 && l.id.toLowerCase().indexOf(s) === -1 && l.model.toLowerCase().indexOf(s) === -1) return false;
+      }
+      if (advFilters.source && l.source.split(' —')[0] !== advFilters.source) return false;
+      if (advFilters.rating && l.temp !== advFilters.rating) return false;
+      if (advFilters.sla && l.slaClass !== advFilters.sla) return false;
+      return true;
+    }
+    function cmpLeads(a, b, key) {
+      if (key === 'name') return a.name.localeCompare(b.name);
+      if (key === 'id') return a.id.localeCompare(b.id);
+      if (key === 'stage') return (a.bpfStage||0) - (b.bpfStage||0);
+      if (key === 'score') return (a.score||0) - (b.score||0);
+      if (key === 'rating') { var r = {Hot:0, Warm:1, Cold:2}; return (r[a.temp]==null?9:r[a.temp]) - (r[b.temp]==null?9:r[b.temp]); }
+      if (key === 'sla') { var sc = {brch:0, wrn:1, ok:2, na:3}; return (sc[a.slaClass]==null?9:sc[a.slaClass]) - (sc[b.slaClass]==null?9:sc[b.slaClass]); }
+      return 0;
+    }
     function renderLeads(filter, search) {
+      if (filter !== undefined) curStageFilter = filter || 'all';
+      if (search !== undefined) curSearch = search || '';
       var tbody = document.getElementById('leadsBody');
       tbody.innerHTML = '';
-      leads.forEach(function(l, i) {
-        if (filter && filter !== 'all') {
-          var stg = l.stage.toLowerCase();
-          if (filter === 'na') { if (l.stageClass !== 'na') return; }
-          else if (stg !== filter) return;
-        }
-        if (search) {
-          var s = search.toLowerCase();
-          if (l.name.toLowerCase().indexOf(s) === -1 && l.id.toLowerCase().indexOf(s) === -1 && l.model.toLowerCase().indexOf(s) === -1) return;
-        }
+      var rows = [];
+      leads.forEach(function(l, i){ if (leadMatches(l)) rows.push({ l:l, i:i }); });
+      if (sortState.key) rows.sort(function(a, b){ return cmpLeads(a.l, b.l, sortState.key) * (sortState.dir === 'desc' ? -1 : 1); });
+      rows.forEach(function(o) {
+        var l = o.l, i = o.i;
         var tr = document.createElement('tr');
         if (l.urgent) tr.className = 'urg';
         if (i === selectedIdx) tr.classList.add('selected');
@@ -2142,7 +2191,49 @@
       btn.classList.add('on');
       renderLeads(filter);
     }
-    function searchLeads(val) { renderLeads('all', val); }
+    function searchLeads(val) { renderLeads(undefined, val); }
+
+    // Advanced filter + sort menus for the leads table.
+    function toggleLeadMenu(id) {
+      var m = document.getElementById(id);
+      var open = m.classList.contains('open');
+      document.querySelectorAll('.lead-menu').forEach(function(x){ x.classList.remove('open'); });
+      if (!open) m.classList.add('open');
+    }
+    document.addEventListener('click', function(e){
+      if (!e.target.closest('.lead-menu-wrap')) document.querySelectorAll('.lead-menu').forEach(function(x){ x.classList.remove('open'); });
+    });
+    function populateLeadFilters() {
+      var sel = document.getElementById('fSource'); if (!sel) return;
+      var seen = {}, opts = ['<option value="">Any source</option>'];
+      leads.forEach(function(l){ var s = l.source.split(' —')[0]; if (s && !seen[s]) { seen[s] = 1; opts.push('<option>'+s+'</option>'); } });
+      sel.innerHTML = opts.join('');
+    }
+    function setAdvFilter(k, v) { advFilters[k] = v; renderLeads(); updateFilterBadge(); }
+    function clearAdvFilters() {
+      advFilters = { source:'', rating:'', sla:'' };
+      ['fSource','fRating','fSla'].forEach(function(id){ var e = document.getElementById(id); if (e) e.value = ''; });
+      renderLeads(); updateFilterBadge();
+    }
+    function updateFilterBadge() {
+      var n = (advFilters.source?1:0) + (advFilters.rating?1:0) + (advFilters.sla?1:0);
+      var b = document.getElementById('filterCount'); if (b) { b.textContent = n; b.style.display = n ? '' : 'none'; }
+    }
+    var SORT_OPTS = [['name','Lead name'],['id','Lead ID'],['sla','SLA urgency'],['stage','Stage'],['score','Lead score'],['rating','Rating']];
+    function setSort(key) {
+      if (sortState.key === key) sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+      else { sortState.key = key; sortState.dir = 'asc'; }
+      renderLeads(); renderSortMenu();
+    }
+    function clearSort() { sortState = { key:'', dir:'asc' }; renderLeads(); renderSortMenu(); }
+    function renderSortMenu() {
+      var m = document.getElementById('sortMenu'); if (!m) return;
+      m.innerHTML = '<div class="lm-title">Sort by</div>' + SORT_OPTS.map(function(o){
+        var active = sortState.key === o[0];
+        var arrow = active ? (sortState.dir === 'asc' ? 'arrow_upward' : 'arrow_downward') : '';
+        return '<button class="lm-opt'+(active?' on':'')+'" onclick="setSort(\''+o[0]+'\')">'+o[1]+'<span class="material-symbols-outlined lm-arrow">'+arrow+'</span></button>';
+      }).join('') + '<button class="lm-clear" onclick="clearSort()">Clear sort</button>';
+    }
 
     function openPanelFull(idx) {
       openPanel(idx);
@@ -2318,13 +2409,13 @@
           var hasMore = g.more && g.more.length;
           var out = '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">' + g.fields.map(fld).join('') + '</div>';
           if (hasMore) {
-            out += '<div class="dp-if-more" id="'+g.moreId+'" style="display:none"><div class="dp-if-fields">' + g.more.map(fld).join('') + '</div></div>';
+            out += '<div class="dp-if-more" id="'+g.moreId+'" style=""><div class="dp-if-fields">' + g.more.map(fld).join('') + '</div></div>';
           }
           return out + '</div>';
         };
         var intakeHasMore = groups.some(function(g){ return g.more && g.more.length; });
         var intakeToolbar = '<div class="dp-intake-toolbar"><span class="dp-intake-heading">'+sd.title+'</span>' +
-          (intakeHasMore ? '<button type="button" class="dp-intake-all" onclick="expandAllIntake(this)"><span class="material-symbols-outlined">unfold_more</span><span class="dp-intake-all-lbl">Expand all</span></button>' : '') +
+          (intakeHasMore ? '<button type="button" class="dp-intake-all on" onclick="expandAllIntake(this)"><span class="material-symbols-outlined">unfold_less</span><span class="dp-intake-all-lbl">Collapse all</span></button>' : '') +
         '</div>';
         var groupsHtml = groups.map(function(g){
           var out = renderGroup(g);
@@ -3566,6 +3657,7 @@
     }
 
     renderLeads('all');
+    populateLeadFilters(); renderSortMenu();
 
     // Live SLA countdown tick — updates the open lead's timers each second.
     setInterval(function(){
