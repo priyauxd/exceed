@@ -432,26 +432,35 @@
     .dp-chev.viewing { outline: 2px solid var(--exeed-cyan); outline-offset: -2px; }
     .dp-journey { display: flex; position: relative; padding: 2px 0; }
     .dp-j-step { flex: 1; position: relative; text-align: center; cursor: pointer; min-width: 0; }
-    .dp-j-step::before { content: ''; position: absolute; top: 15px; left: -50%; width: 100%; height: 3px; background: var(--border); border-radius: 3px; z-index: 0; transition: background .4s ease; }
+    .dp-j-step::before { content: ''; position: absolute; top: 18px; left: -50%; width: 100%; height: 2px; background: #e2e6ec; z-index: 0; transition: background .4s ease; }
     .dp-j-step:first-child::before { display: none; }
-    .dp-j-step.done::before, .dp-j-step.active::before { background: linear-gradient(90deg, #5cb97f, #46a56b); }
-    .dp-j-step .j-num { position: relative; z-index: 1; width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; background: var(--surface); border: 2px solid var(--border); color: var(--ink-muted); transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, background .2s; }
-    .dp-j-step .j-num .material-symbols-outlined { font-size: 19px; font-variation-settings: 'wght' 700; }
-    .dp-j-step.done .j-num { background: linear-gradient(135deg, #63c088, #46a56b); border-color: transparent; color: #fff; box-shadow: 0 3px 8px rgba(70,165,107,.16); }
-    .dp-j-step.active .j-num { background: linear-gradient(135deg, #2f76ac, #00203f); border-color: transparent; color: #fff; box-shadow: 0 0 0 5px rgba(0,183,187,.20), 0 4px 10px rgba(0,32,63,.16); animation: dp-node-pulse 2.2s ease-in-out infinite; }
-    @keyframes dp-node-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(0,183,187,.18), 0 4px 10px rgba(0,32,63,.16); } 50% { box-shadow: 0 0 0 8px rgba(0,183,187,.08), 0 4px 12px rgba(0,32,63,.18); } }
+    .dp-j-step.done::before, .dp-j-step.active::before { background: linear-gradient(90deg, #63c088, #46a56b); }
+    .dp-j-step .j-num { position: relative; z-index: 1; width: 38px; height: 38px; border-radius: 50%; margin: 0 auto 11px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; background: var(--surface); border: 2px solid #d7dce3; color: var(--ink-muted); transition: transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .2s, background .2s, border-color .2s; }
+    .dp-j-step .j-num .material-symbols-outlined { font-size: 21px; font-variation-settings: 'wght' 700; }
+    .dp-j-step.done .j-num { background: linear-gradient(135deg, #63c088, #46a56b); border-color: transparent; color: #fff; box-shadow: 0 3px 8px rgba(70,165,107,.18); }
+    .dp-j-step.active .j-num { background: linear-gradient(135deg, #2f76ac, #073a63); border-color: transparent; color: #fff; box-shadow: 0 0 0 5px rgba(47,118,172,.16), 0 6px 14px rgba(7,58,99,.22); animation: dp-node-pulse 2.4s ease-in-out infinite; }
+    @keyframes dp-node-pulse { 0%,100% { box-shadow: 0 0 0 4px rgba(47,118,172,.16), 0 6px 14px rgba(7,58,99,.20); } 50% { box-shadow: 0 0 0 9px rgba(47,118,172,.07), 0 6px 16px rgba(7,58,99,.24); } }
     .dp-j-step.viewing .j-num { outline: 2.5px solid var(--exeed-cyan); outline-offset: 2px; }
     .dp-j-step:hover .j-num { transform: translateY(-2px); }
-    .dp-j-step .j-name { font-size: 9px; font-weight: 600; color: var(--ink-muted); display: block; line-height: 1.25; padding: 0 3px; letter-spacing: -.01em; }
+    .dp-j-step .j-name { font-size: 11px; font-weight: 600; color: var(--ink-secondary); display: block; line-height: 1.3; padding: 0 4px; }
     .dp-j-step.done .j-name { color: #3d8a5b; }
-    .dp-j-step.active .j-name { color: var(--blue); font-weight: 700; }
+    .dp-j-step.active .j-name { color: var(--ink); font-weight: 700; }
     .dp-j-step .j-status { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--blue); display: block; margin-top: 3px; }
 
     /* Form tabs */
     .dp-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
+    /* v2: identity card + boxed stepper/tabs stick together below the top */
+    .dp-stickytop { position: sticky; top: 0; z-index: 6; background: var(--surface); }
+    .dp-stagebox { position: relative; background: var(--surface); border: 1px solid #e6e9ef; border-radius: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06); padding: 10px 22px 0; margin-bottom: 16px; }
+    .dp-stagebox .dp-journey-card { padding-top: 18px; margin-bottom: 0; border-bottom: 1px solid #eef1f5; }
+    .dp-stagebox .dp-tabs { margin-bottom: 0; border-bottom: none; }
+    .dp-tab-actions { margin-left: auto; align-self: center; display: inline-flex; align-items: center; gap: 10px; transform: translateY(-4px); }
     .dp-tab { appearance: none; background: none; border: none; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-secondary); padding: 8px 14px 10px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .12s, border-color .12s; }
     .dp-tab:hover { color: var(--blue); }
     .dp-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .dp-tab-log { display: inline-flex; align-items: center; gap: 5px; appearance: none; font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border-radius: var(--borderRadiusMedium); cursor: pointer; white-space: nowrap; background: var(--colorBrandBackground); color: var(--colorNeutralForegroundOnBrand); border: 1px solid var(--colorBrandBackground); transition: background .1s; }
+    .dp-tab-log:hover { background: var(--colorBrandBackgroundHover); border-color: var(--colorBrandBackgroundHover); }
+    .dp-tab-log .material-symbols-outlined { font-size: 16px; }
     /* Identity-card tab strip (synced with the form tabs) */
     .dp-idtabs { margin: 14px -20px -18px; padding: 2px 20px 0; border-top: 1px solid var(--border-soft); border-bottom: none; gap: 0; overflow-x: auto; }
     .dp-idtabs .dp-tab { padding: 10px 14px 12px; }
@@ -910,7 +919,7 @@
     .dp-main { flex: 2.8 1 340px; min-width: 0; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-md); box-shadow: var(--shadow2); display: flex; flex-direction: column; }
     .dp-main-scroll { flex: 1; padding: 16px 18px 8px; min-width: 0; }
     .dp-main-foot { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 18px; border-top: 1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--radius-md) var(--radius-md); }
-    .dp-side { flex: 1.15 1 320px; min-width: 300px; }
+    .dp-side { flex: 1 1 240px; min-width: 230px; }
     /* Header metrics (top-right corner) */
     .dp-head-metrics { display: flex; gap: 28px; margin-left: auto; flex-shrink: 0; padding-top: 2px; text-align: right; }
     .dp-hm-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 3px; }
@@ -1050,18 +1059,6 @@
     #logPanel .cp-body > * { margin-bottom: 18px; }
     #logPanel .cp-body > *:last-child { margin-bottom: 0; }
 
-    /* ── v2: Log Activity docked as a permanent sticky rail ── */
-    /* ── v2: Log Activity as an in-flow side card (sticky within the side column) ── */
-    .dp-logside { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; margin-bottom: 16px; position: sticky; top: 0; }
-    .dp-logside-head { display: flex; align-items: center; gap: 7px; padding: 13px 16px; border-bottom: 1px solid var(--border); position: relative; background: linear-gradient(180deg, var(--amber-soft, #fff8e7), var(--surface)); }
-    .dp-logside-head::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--amber, #f6c453); }
-    .dp-logside-head .material-symbols-outlined { font-size: 19px; color: var(--amber, #f6c453); }
-    .dp-logside-title { font-size: 14px; font-weight: 700; color: var(--ink); }
-    .dp-logside-sub { font-size: 11.5px; color: var(--ink-secondary); padding: 10px 16px 0; line-height: 1.45; }
-    .dp-logside-body { padding: 14px 16px; }
-    .dp-logside-body > * { margin-bottom: 16px; }
-    .dp-logside-body > *:last-child { margin-bottom: 0; }
-    .dp-logside-foot { display: flex; justify-content: flex-end; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--colorNeutralBackground3, #fafafa); }
     #laDynamic > .cp-field, #laDynamic > .la-dqcard, #laDynamic > .la-booking { margin-bottom: 16px; }
     #laDynamic > .cp-field:last-child, #laDynamic > .la-booking:last-child { margin-bottom: 0; }
     .cp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -1329,6 +1326,37 @@
     <div class="cp-footer">
       <button class="cp-btn" onclick="closeCreateLead()">Cancel</button>
       <button class="cp-btn primary" id="cpSubmit" onclick="submitCreateLead()">Create lead</button>
+    </div>
+  </div>
+
+  <div class="create-overlay" id="logOverlay" onclick="closeLogActivity()"></div>
+  <div class="create-panel" id="logPanel" role="dialog" aria-label="Log activity" style="max-width:460px">
+    <div class="cp-header">
+      <div style="flex:1">
+        <div class="cp-title">Log activity</div>
+        <div class="cp-sub" id="logSub">Record the outcome of this step</div>
+      </div>
+      <button class="dp-header-btn" title="Close" onclick="closeLogActivity()"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="cp-body">
+      <div class="la-attempts" id="laAttempts"><span class="material-symbols-outlined">call</span><span id="laAttemptsText">1 of 5 attempts done</span></div>
+      <div class="cp-field" id="laAnswerWrap">
+        <label class="cp-label">Did the customer answer?</label>
+        <div class="la-yn-row">
+          <button class="la-yn" id="laYes" onclick="setLaAnswer('yes')"><span class="material-symbols-outlined">check</span> Yes</button>
+          <button class="la-yn" id="laNo" onclick="setLaAnswer('no')"><span class="material-symbols-outlined">close</span> No</button>
+        </div>
+      </div>
+      <div class="cp-field" id="laOutcomeWrap" style="display:none">
+        <div class="la-chips" id="laChips"></div>
+      </div>
+      <div id="laDynamic"></div>
+      <div class="la-hint" id="laHint" style="display:none"></div>
+      <div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
+    </div>
+    <div class="cp-footer">
+      <button class="cp-btn" onclick="closeLogActivity()">Close</button>
+      <button class="cp-btn primary" onclick="submitLogActivity(true)">Save</button>
     </div>
   </div>
 
@@ -2127,14 +2155,14 @@
       var ownerInit = l.owner.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
       var langAbbr = (l.lang || '').slice(0,2).toUpperCase();
       var discDone = Math.floor(l.discovery/12.5);
+      // Sticky top region — identity card + stage box scroll and stick together.
+      html += '<div class="dp-stickytop">';
       html += '<div class="dp-idcard">' +
         '<div class="dp-lead-head">' +
           '<div class="dp-av lead-av '+l.av+'">'+l.initials+'</div>' +
           '<div class="dp-head-info">' +
             '<div class="dp-name-row">' +
               '<span class="dp-name editable" contenteditable="true" spellcheck="false" data-prop="name" onblur="editField(this)" onkeydown="editKeydown(event)">'+l.name+'</span>' +
-            '</div>' +
-            '<div class="dp-meta-row">' +
               '<span class="dp-lead-tag"><span class="material-symbols-outlined" style="font-size:13px">badge</span>Lead</span>' +
             '</div>' +
           '</div>' +
@@ -2149,10 +2177,8 @@
         tabBarHtml('dp-idtabs', ['overview','related']) +
       '</div>';
 
-      // 2-column layout: main (left widget: stepper + tabs + content + step-nav) + sidebar (SLA/AI/timeline)
-      html += '<div class="dp-layout"><div class="dp-main"><div class="dp-main-scroll">';
-
-      // Process stage — top of the unified left widget (circle stepper)
+      // Sticky boxed header: full-width process stepper + tabs.
+      html += '<div class="dp-stagebox">';
       html += '<div class="dp-journey-card">';
       html += '<div class="dp-journey">';
       journeySteps.forEach(function(js, si) {
@@ -2169,9 +2195,19 @@
       html += '</div>';
       html += '</div>';
 
-      // Form tabs (above the step) — synced with the identity-card tab bar
+      // Full-width form tabs with UAE Pass (Visit only) + Log activity on the right.
       var stageTabs = (stepIdx <= 1) ? ['overview','discovery','testdrive'] : ['overview','discovery','testdrive','proposals'];
-      html += tabBarHtml(null, stageTabs);
+      var isVisitStage = journeySteps[stepIdx] && journeySteps[stepIdx].name === 'Visit';
+      var tabActions = '<div class="dp-tab-actions">' +
+        (isVisitStage ? '<button class="dp-uaepass-btn" onclick="uaePassVerify()"><span class="dp-uaepass-badge"><img src="assets/uae-pass.svg" alt="" class="dp-uaepass-ic"></span>UAE Pass</button>' : '') +
+        '<button class="dp-tab-log" onclick="openLogActivity()"><span class="material-symbols-outlined">bolt</span>Log activity</button>' +
+      '</div>';
+      html += tabBarHtml(null, stageTabs, tabActions);
+      html += '</div>'; // dp-stagebox
+      html += '</div>'; // dp-stickytop
+
+      // 2-column layout: main content + sidebar (SLA / AI / timeline)
+      html += '<div class="dp-layout"><div class="dp-main"><div class="dp-main-scroll">';
 
       if (leadTab !== 'overview') {
         html += leadTabPanel(l, leadTab);
@@ -2181,13 +2217,6 @@
       var stepBadge = stepIdx < l.bpfStage-1 ? 'completed' : (stepIdx === l.bpfStage-1 ? 'progress' : 'pending');
       var stepBadgeText = stepIdx < l.bpfStage-1 ? 'Completed' : (stepIdx === l.bpfStage-1 ? 'In Progress' : 'Pending');
       var lp = logPrompts[stepIdx] || logPrompts[0];
-      var isVisitStage = journeySteps[stepIdx] && journeySteps[stepIdx].name === 'Visit';
-      html += '<div class="dp-step-header">' +
-        '<span class="dp-step-hint"><span class="material-symbols-outlined">edit_note</span>'+lp.title+'</span>' +
-        '<div class="dp-step-actions">' +
-          (isVisitStage ? '<button class="dp-uaepass-btn" onclick="uaePassVerify()"><span class="dp-uaepass-badge"><img src="assets/uae-pass.svg" alt="" class="dp-uaepass-ic"></span>UAE Pass</button>' : '') +
-          '</div>' +
-      '</div>';
 
       // Essential info + checklist side by side
       // Checklist — gates progression to the next stage (kept in first fold)
@@ -2280,9 +2309,8 @@
       html += '</div>'; // dp-main-scroll
       html += '</div>'; // dp-main
 
-      // Right sidebar: Log activity (primary) + KPI snapshot + SLA tracker + AI card + activity
+      // Right sidebar: KPI snapshot + SLA tracker + AI card + activity
       html += '<div class="dp-side">';
-      html += logSideCard();
       html += '<div class="dp-kpi-card">' +
         '<div class="dp-kpi-head">Lead Snapshot</div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Lead source</span><span class="dp-kpi-v">'+(l.source && l.source !== '—' ? l.source : '—')+'</span></div>' +
@@ -2320,30 +2348,6 @@
       document.getElementById('dpBody').innerHTML = html;
 
       updateStepGate();
-      openLogActivity();
-    }
-
-    // In-flow Log Activity card rendered inside the full-screen side column.
-    function logSideCard() {
-      return '<div class="dp-logside">' +
-        '<div class="dp-logside-head"><span class="material-symbols-outlined">bolt</span><span class="dp-logside-title">Log activity</span></div>' +
-        '<div class="dp-logside-sub" id="logSub">Record the outcome of this step</div>' +
-        '<div class="dp-logside-body">' +
-          '<div class="la-attempts" id="laAttempts"><span class="material-symbols-outlined">call</span><span id="laAttemptsText">1 of 5 attempts done</span></div>' +
-          '<div class="cp-field" id="laAnswerWrap">' +
-            '<label class="cp-label">Did the customer answer?</label>' +
-            '<div class="la-yn-row">' +
-              '<button class="la-yn" id="laYes" onclick="setLaAnswer(\'yes\')"><span class="material-symbols-outlined">check</span> Yes</button>' +
-              '<button class="la-yn" id="laNo" onclick="setLaAnswer(\'no\')"><span class="material-symbols-outlined">close</span> No</button>' +
-            '</div>' +
-          '</div>' +
-          '<div class="cp-field" id="laOutcomeWrap" style="display:none"><div class="la-chips" id="laChips"></div></div>' +
-          '<div id="laDynamic"></div>' +
-          '<div class="la-hint" id="laHint" style="display:none"></div>' +
-          '<div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>' +
-        '</div>' +
-        '<div class="dp-logside-foot"><button class="cp-btn primary" onclick="submitLogActivity(true)">Save activity</button></div>' +
-      '</div>';
     }
 
     function stepProgress(l, si) {
@@ -2379,13 +2383,13 @@
       renderDetail(selectedIdx, si);
     }
 
-    function tabBarHtml(extraClass, keys) {
+    function tabBarHtml(extraClass, keys, rightHtml) {
       var overviewLabel = (extraClass === 'dp-idtabs') ? 'Main' : 'Details';
       var tabs = [['overview',overviewLabel],['discovery','Discovery Questions'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
       if (keys) tabs = tabs.filter(function(t){ return keys.indexOf(t[0]) !== -1; });
       return '<div class="dp-tabs '+(extraClass||'')+'">' + tabs.map(function(t){
         return '<button class="dp-tab'+(leadTab===t[0]?' active':'')+'" onclick="switchLeadTab(\''+t[0]+'\')">'+t[1]+'</button>';
-      }).join('') + '</div>';
+      }).join('') + (rightHtml || '') + '</div>';
     }
 
     function switchLeadTab(tab) {
@@ -2582,7 +2586,6 @@
           html += laDiscovery();
           html += laDateTime('Date & time');
           html += laNotesField();
-          html += laSelect('laRating', 'Lead rating', ['Hot','Warm','Cold'], false);
         } else if (laOutcome === 'Needs time') {
           html += laDateTime('Reschedule call');
           html += laNotesField();
@@ -2636,6 +2639,8 @@
       document.getElementById('laAttempts').style.display = attemptStage ? '' : 'none';
       document.getElementById('laAttemptsText').textContent = att + ' of 4 attempts done';
       updateLaHint();
+      document.getElementById('logOverlay').classList.add('show');
+      document.getElementById('logPanel').classList.add('open');
     }
 
     function updateLaHint() {
@@ -2687,7 +2692,8 @@
     }
 
     function closeLogActivity() {
-      // v2: log activity lives in the side column; re-render repopulates it, nothing to close.
+      document.getElementById('logOverlay').classList.remove('show');
+      document.getElementById('logPanel').classList.remove('open');
     }
 
     function submitLogActivity(close) {
