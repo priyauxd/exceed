@@ -417,15 +417,15 @@
     .ch-sub { font-size: 12px; color: rgba(255,255,255,.9); display: flex; align-items: center; gap: 6px; margin-top: 1px; }
     .ch-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: cr-pulse 1.8s infinite; }
     .call-end-btn { margin-left: auto; background: #e0233f; color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-weight: 700; font-family: inherit; font-size: 13px; cursor: pointer; }
-    .call-scroll { flex: 1; overflow-y: auto; padding: 16px 20px; min-height: 0; }
-    .cl-sec { font-size: 11px; font-weight: 800; letter-spacing: .09em; color: #7a828f; margin: 0 0 12px; }
-    .cl-sec.sg { color: #8fa0ff; }
+    .call-scroll { flex: 1; overflow-y: auto; padding: 16px 20px; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+    .cl-sec { font-size: 11px; font-weight: 800; letter-spacing: .09em; color: #7a828f; margin: 0 0 12px; flex-shrink: 0; }
+    .cl-sec.sg { color: #8fa0ff; margin-bottom: 10px; }
     .tr-line { display: flex; gap: 10px; margin-bottom: 13px; align-items: flex-start; }
     .tr-who { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 5px; flex-shrink: 0; letter-spacing: .04em; }
     .tr-who.agent { background: #2f5bd0; color: #fff; }
     .tr-who.customer { background: #3f9d5f; color: #fff; }
     .tr-text { font-size: 14px; color: #d6dae2; line-height: 1.45; }
-    .cl-suggest { margin: 20px 0 4px; }
+    .cl-suggest { flex-shrink: 0; padding: 14px 20px 16px; border-top: 1px solid #1c212b; background: #090c11; }
     .sg-card { background: linear-gradient(120deg, #4152e6, #2b86c0); border-radius: 16px; padding: 18px 20px; box-shadow: 0 10px 34px rgba(60,80,230,.32); }
     .sg-label { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: rgba(255,255,255,.85); margin-bottom: 9px; }
     .sg-text { font-size: 18px; font-weight: 800; color: #fff; line-height: 1.35; }
@@ -1051,6 +1051,8 @@
     .dp-ai-btn.primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(124,109,216,.12); }
     .dp-ai-btn.secondary { background: #fff; color: #7c6dd8; border: 1px solid #c5b8e8; }
     .dp-ai-btn.secondary:hover { background: #f5f0ff; }
+    .dp-ai-btn.secondary.danger { color: #c0392b; border-color: #e6c3bf; }
+    .dp-ai-btn.secondary.danger:hover { background: #fdf3f2; border-color: #dba8a2; }
     .dp-ai-note { font-size: 10px; color: #8b7bba; margin-top: 8px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; }
     .dp-ai-note .material-symbols-outlined { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
     .dp-nba-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #8b7bba; margin: 12px 0 7px; }
@@ -1413,20 +1415,10 @@
       <div class="call-scroll">
         <div class="cl-sec">TRANSCRIPT</div>
         <div id="callTranscript"></div>
-        <div class="cl-suggest">
-          <div class="cl-sec sg"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">auto_awesome</span> AI SUGGESTIONS</div>
-          <div class="sg-card"><div class="sg-label">SAY THIS NEXT</div><div class="sg-text" id="callSuggestText">Listening…</div><div class="sg-src">Source: agent</div></div>
-        </div>
       </div>
-      <div class="cp-profile">
-        <div class="cp-phead"><div class="cl-sec" style="margin:0">CUSTOMER PROFILE</div><span class="cp-req" id="callReqCount">0/6 required</span></div>
-        <div class="cp-grid" id="callProfile"></div>
-        <div class="cp-chips">
-          <span class="cp-chip">Lead source: Incoming Call</span>
-          <span class="cp-chip">Language: English</span>
-          <span class="cp-chip warm">Lead temperature: Warm</span>
-          <span class="cp-chip">Email: …</span>
-        </div>
+      <div class="cl-suggest">
+        <div class="cl-sec sg"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">auto_awesome</span> AI SUGGESTIONS</div>
+        <div class="sg-card"><div class="sg-label">SAY THIS NEXT</div><div class="sg-text" id="callSuggestText">Listening…</div><div class="sg-src">Source: agent</div></div>
       </div>
     </div>
   </div>
@@ -2640,14 +2632,8 @@
         '</div>' +
         '<div class="dp-ai-title">'+sd.aiTitle+'</div>' +
         '<div class="dp-ai-desc"><strong>Why AI suggests this:</strong> '+sd.aiDesc+'</div>';
-      sd.aiBtns.forEach(function(btn, bi) {
-        html += '<button class="dp-ai-btn '+(bi===0?'primary':'secondary')+'">'+btn+(bi===0?' &#8250;':'')+'</button>';
-      });
-      html += '<div class="dp-nba-label">Next best actions</div>' +
-        '<div class="dp-nba">' +
-          '<button class="dp-nba-btn" onclick="nbaAction(\'Handover to sales executive\')"><span class="material-symbols-outlined">person_add</span>Handover to sales executive</button>' +
-          '<button class="dp-nba-btn danger" onclick="nbaAction(\'Disqualify\')"><span class="material-symbols-outlined">block</span>Disqualify</button>' +
-        '</div>' +
+      html += '<button class="dp-ai-btn primary" onclick="nbaAction(\'Handover to sales executive\')">Handover to sales executive &#8250;</button>' +
+        '<button class="dp-ai-btn secondary danger" onclick="nbaAction(\'Disqualify\')">Disqualify</button>' +
         (l.aiSummary ? '<div class="dp-ai-summary"><div class="dp-ai-sum-h"><span class="material-symbols-outlined">description</span> AI call summary</div><div class="dp-ai-sum-text">'+l.aiSummary.text+'</div>' + (l.aiSummary.sent ? '<button class="act-wa-btn sent" disabled><span class="material-symbols-outlined">check</span> Sent to WhatsApp</button>' : '<button class="act-wa-btn" onclick="sendSummaryWhatsApp(event)"><span class="material-symbols-outlined">chat</span> Send to WhatsApp</button>') + '</div>' : '');
       html += '<div class="dp-ai-note"><span class="material-symbols-outlined">schedule</span> '+sd.aiNote+'</div>';
       html += '</div>';
