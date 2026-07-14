@@ -378,6 +378,75 @@
     .cti-ctrl .material-symbols-outlined { font-size: 20px; }
     .cti-ctrl.hangup { background: #d13438; border-color: #d13438; color: #fff; }
     .cti-ctrl.hangup:hover { background: #b02a2e; }
+    /* ── Live call flow (dialpad → AI Copilot) ── */
+    .call-overlay { position: fixed; inset: 0; background: rgba(8,11,16,.55); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 90; }
+    .call-overlay.open { opacity: 1; visibility: visible; }
+    .call-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 520px; max-width: 96vw; background: #0b0e14; color: #e6e9ef; box-shadow: -14px 0 44px rgba(0,0,0,.45); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); z-index: 95; display: flex; flex-direction: column; overflow: hidden; }
+    .call-panel.open { transform: translateX(0); }
+    .call-ring { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 30px; gap: 8px; background: radial-gradient(120% 60% at 50% 22%, #12203a, #0b0e14 70%); }
+    .cr-halo { position: relative; display: flex; align-items: center; justify-content: center; width: 92px; height: 92px; margin-bottom: 16px; }
+    .cr-halo::before, .cr-halo::after { content: ''; position: absolute; width: 92px; height: 92px; border-radius: 50%; border: 1.5px solid rgba(90,140,230,.35); animation: cr-ring 2.6s ease-out infinite; }
+    .cr-halo::after { animation-delay: 1.1s; }
+    @keyframes cr-ring { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.9); opacity: 0; } }
+    .cr-av { position: relative; z-index: 1; width: 92px; height: 92px; border-radius: 50%; background: linear-gradient(135deg, #3a5bd0, #2a9fd0); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; color: #fff; box-shadow: 0 10px 30px rgba(42,120,200,.4); }
+    @keyframes cr-pulse { 0% { box-shadow: 0 0 0 0 rgba(58,91,208,.5); } 70% { box-shadow: 0 0 0 20px rgba(58,91,208,0); } 100% { box-shadow: 0 0 0 0 rgba(58,91,208,0); } }
+    .cr-name { font-size: 22px; font-weight: 700; color: #fff; }
+    .cr-num { font-size: 14px; color: #9aa2b1; margin-top: 2px; }
+    .cr-status { font-size: 12.5px; color: #7fd0ff; letter-spacing: .06em; text-transform: uppercase; margin-top: 6px; display: inline-flex; align-items: center; }
+    .cr-dots { display: inline-flex; gap: 3px; margin-left: 6px; }
+    .cr-dots i { width: 4px; height: 4px; border-radius: 50%; background: #7fd0ff; animation: cr-blink 1.2s infinite; }
+    .cr-dots i:nth-child(2){ animation-delay: .2s; } .cr-dots i:nth-child(3){ animation-delay: .4s; }
+    @keyframes cr-blink { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
+    .cr-actions { display: flex; gap: 24px; align-items: center; margin-top: 40px; }
+    .cr-ctrl { width: 56px; height: 56px; border-radius: 50%; background: #161b24; border: 1px solid #262b36; color: #cfd6e2; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s, color .12s; }
+    .cr-ctrl:hover { background: #1f2632; }
+    .cr-ctrl.on { background: #2f5bd0; border-color: #2f5bd0; color: #fff; }
+    .cr-ctrl .material-symbols-outlined { font-size: 24px; }
+    .cr-end { width: 66px; height: 66px; border-radius: 50%; background: #e0233f; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 26px rgba(224,35,63,.45); transition: transform .12s; }
+    .cr-end:hover { transform: scale(1.05); }
+    .cr-end .material-symbols-outlined { font-size: 28px; }
+    .call-live { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .call-controls { display: flex; gap: 8px; padding: 12px 16px; background: #0d1119; border-bottom: 1px solid #1c212b; flex-shrink: 0; }
+    .cc-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 9px 4px; border-radius: 10px; background: #161b24; border: 1px solid #232a36; color: #aab2c2; font-size: 10.5px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background .12s, color .12s, border-color .12s; }
+    .cc-btn:hover { background: #1e2531; color: #e6e9ef; }
+    .cc-btn.on { background: #2f5bd0; border-color: #2f5bd0; color: #fff; }
+    .cc-btn .material-symbols-outlined { font-size: 19px; }
+    .call-head { background: linear-gradient(120deg, #3f4fe0, #2a86c0); padding: 15px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .ch-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; color: #fff; }
+    .ch-title { font-size: 18px; font-weight: 800; color: #fff; }
+    .ch-sub { font-size: 12px; color: rgba(255,255,255,.9); display: flex; align-items: center; gap: 6px; margin-top: 1px; }
+    .ch-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 0 0 rgba(74,222,128,.6); animation: cr-pulse 1.8s infinite; }
+    .call-end-btn { margin-left: auto; background: #e0233f; color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-weight: 700; font-family: inherit; font-size: 13px; cursor: pointer; }
+    .call-scroll { flex: 1; overflow-y: auto; padding: 16px 20px; min-height: 0; }
+    .cl-sec { font-size: 11px; font-weight: 800; letter-spacing: .09em; color: #7a828f; margin: 0 0 12px; }
+    .cl-sec.sg { color: #8fa0ff; }
+    .tr-line { display: flex; gap: 10px; margin-bottom: 13px; align-items: flex-start; }
+    .tr-who { font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 5px; flex-shrink: 0; letter-spacing: .04em; }
+    .tr-who.agent { background: #2f5bd0; color: #fff; }
+    .tr-who.customer { background: #3f9d5f; color: #fff; }
+    .tr-text { font-size: 14px; color: #d6dae2; line-height: 1.45; }
+    .cl-suggest { margin: 20px 0 4px; }
+    .sg-card { background: linear-gradient(120deg, #4152e6, #2b86c0); border-radius: 16px; padding: 18px 20px; box-shadow: 0 10px 34px rgba(60,80,230,.32); }
+    .sg-label { font-size: 11px; font-weight: 800; letter-spacing: .08em; color: rgba(255,255,255,.85); margin-bottom: 9px; }
+    .sg-text { font-size: 18px; font-weight: 800; color: #fff; line-height: 1.35; }
+    .sg-src { font-size: 11px; color: rgba(255,255,255,.72); margin-top: 9px; }
+    .cp-profile { border-top: 1px solid #1c212b; padding: 16px 20px 18px; flex-shrink: 0; background: #090c11; }
+    .cp-phead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .cp-req { font-size: 11px; font-weight: 700; color: #f0a93b; background: rgba(240,169,59,.12); border: 1px solid rgba(240,169,59,.3); border-radius: 12px; padding: 3px 11px; }
+    .cp-req.complete { color: #4ade80; background: rgba(74,222,128,.12); border-color: rgba(74,222,128,.35); }
+    .cp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .cp-field { border: 1px solid #23402c; border-radius: 10px; padding: 9px 11px; display: flex; gap: 9px; align-items: flex-start; background: #0c130d; }
+    .cp-field.pending { border-color: #262b36; background: #0d1119; border-style: dashed; }
+    .cp-check { color: #4ade80; font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+    .cp-check.off { color: #5a626e; }
+    .cp-fbody { min-width: 0; }
+    .cp-flabel { font-size: 9px; font-weight: 700; letter-spacing: .05em; color: #7a828f; display: flex; align-items: center; gap: 4px; }
+    .cp-ficon { font-size: 12px; color: #5a626e; }
+    .cp-fval { font-size: 13px; font-weight: 700; color: #e6e9ef; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cp-fval.off { color: #6b7280; font-weight: 500; font-style: italic; }
+    .cp-chips { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 13px; }
+    .cp-chip { font-size: 11px; color: #9aa2b1; border: 1px solid #2a303c; border-radius: 14px; padding: 4px 11px; }
+    .cp-chip.warm { color: #f0a93b; border-color: #5a4522; font-weight: 700; }
     .cti-foot { font-size: 9.5px; color: var(--ink-muted); text-align: center; padding: 0 12px 12px; line-height: 1.4; }
     .dp-name { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
     .dp-badges { display: inline-flex; gap: 5px; flex-wrap: wrap; }
@@ -975,6 +1044,17 @@
     .dp-ai-btn.secondary:hover { background: #f5f0ff; }
     .dp-ai-note { font-size: 10px; color: #8b7bba; margin-top: 8px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4; }
     .dp-ai-note .material-symbols-outlined { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+    .dp-nba-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #8b7bba; margin: 12px 0 7px; }
+    .dp-nba { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .dp-nba-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid #d6ccf0; border-radius: 8px; background: rgba(255,255,255,.7); color: #4c3a96; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; text-align: left; line-height: 1.25; transition: background .12s, border-color .12s; }
+    .dp-nba-btn:hover { background: #fff; border-color: #b8a8e6; }
+    .dp-nba-btn .material-symbols-outlined { font-size: 15px; flex-shrink: 0; }
+    .dp-nba-btn.danger { color: #b3261e; border-color: #eccfcc; }
+    .dp-nba-btn.danger:hover { background: #fdf3f2; border-color: #e0a9a3; }
+    .dp-ai-summary { background: rgba(255,255,255,.8); border: 1px solid #d6ccf0; border-radius: 10px; padding: 11px 12px; margin-top: 12px; }
+    .dp-ai-sum-h { display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: #5b46c0; margin-bottom: 6px; }
+    .dp-ai-sum-h .material-symbols-outlined { font-size: 14px; }
+    .dp-ai-sum-text { font-size: 11.5px; color: #4c3a96; line-height: 1.5; margin-bottom: 9px; }
 
     /* Checklist */
     .dp-checklist { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 16px; }
@@ -1010,7 +1090,12 @@
     .dp-act-type.call { background: var(--blue-soft); color: var(--blue); }
     .dp-act-type.visit { background: var(--purple-soft); color: var(--purple); }
     .dp-act-type.email { background: var(--amber-soft); color: #8a6420; }
+    .dp-act-type.ai { background: #ece9fb; color: #5b46c0; }
     .dp-act-text { font-size: 11.5px; color: var(--ink-secondary); line-height: 1.4; }
+    .act-wa-btn { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; padding: 5px 11px; border: none; border-radius: 7px; background: #25a35a; color: #fff; font-size: 11px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .12s; }
+    .act-wa-btn:hover { background: #1f8f4e; }
+    .act-wa-btn.sent { background: #e6f5ec; color: #1f8f4e; cursor: default; }
+    .act-wa-btn .material-symbols-outlined { font-size: 14px; }
     .dp-act-time { font-size: 9.5px; color: var(--ink-muted); margin-top: 2px; }
 
     /* Bottom nav */
@@ -1289,21 +1374,51 @@
   </div>
   <div class="toast" id="toast"></div>
 
-  <!-- Genesys CTI softphone (Channel Integration Framework hand-off) -->
-  <div class="cti-panel" id="ctiPanel">
-    <div class="cti-head"><span class="cti-brand"><span class="material-symbols-outlined">headset_mic</span>Genesys CTI</span><span class="cti-status" id="ctiStatus">Connecting…</span></div>
-    <div class="cti-body">
-      <div class="cti-av" id="ctiAv">?</div>
-      <div class="cti-name" id="ctiName">—</div>
-      <div class="cti-num" id="ctiNum">—</div>
-      <div class="cti-timer" id="ctiTimer">00:00</div>
+  <!-- Live call flow: ringing dialpad → AI Copilot (transcript + assist) -->
+  <div class="call-overlay" id="callOverlay" onclick="endCall()"></div>
+  <div class="call-panel" id="callPanel" role="dialog" aria-label="Live call">
+    <div class="call-ring" id="callRing">
+      <div class="cr-halo"><div class="cr-av" id="crAv">?</div></div>
+      <div class="cr-name" id="crName">—</div>
+      <div class="cr-num" id="crNum">—</div>
+      <div class="cr-status" id="crStatus">Calling<span class="cr-dots"><i></i><i></i><i></i></span></div>
+      <div class="cr-actions">
+        <button class="cr-ctrl" onclick="toggleCallCtrl(this,'Mic')" title="Mute"><span class="material-symbols-outlined">mic</span></button>
+        <button class="cr-end" onclick="endCall()" title="End call"><span class="material-symbols-outlined">call_end</span></button>
+        <button class="cr-ctrl" onclick="toggleCallCtrl(this,'Speaker')" title="Speaker"><span class="material-symbols-outlined">volume_up</span></button>
+      </div>
     </div>
-    <div class="cti-controls">
-      <button class="cti-ctrl" title="Mute"><span class="material-symbols-outlined">mic_off</span></button>
-      <button class="cti-ctrl" title="Keypad"><span class="material-symbols-outlined">dialpad</span></button>
-      <button class="cti-ctrl hangup" title="End call" onclick="closeCti()"><span class="material-symbols-outlined">call_end</span></button>
+    <div class="call-live" id="callLive" style="display:none">
+      <div class="call-head">
+        <div class="ch-icon"><span class="material-symbols-outlined">auto_awesome</span></div>
+        <div><div class="ch-title">AI Copilot</div><div class="ch-sub"><span class="ch-dot"></span> Live call &middot; listening &middot; <span id="callTimer">00:00</span></div></div>
+        <button class="call-end-btn" onclick="endCall()"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px">call_end</span> End Call</button>
+      </div>
+      <div class="call-controls">
+        <button class="cc-btn" onclick="toggleCallCtrl(this,'Mute')"><span class="material-symbols-outlined">mic_off</span><span>Mute</span></button>
+        <button class="cc-btn" onclick="toggleCallCtrl(this,'Hold')"><span class="material-symbols-outlined">pause</span><span>Hold</span></button>
+        <button class="cc-btn" onclick="toggleCallCtrl(this,'Transfer')"><span class="material-symbols-outlined">phone_forwarded</span><span>Transfer</span></button>
+        <button class="cc-btn" onclick="toggleCallCtrl(this,'Keypad')"><span class="material-symbols-outlined">dialpad</span><span>Keypad</span></button>
+      </div>
+      <div class="call-scroll">
+        <div class="cl-sec">TRANSCRIPT</div>
+        <div id="callTranscript"></div>
+        <div class="cl-suggest">
+          <div class="cl-sec sg"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">auto_awesome</span> AI SUGGESTIONS</div>
+          <div class="sg-card"><div class="sg-label">SAY THIS NEXT</div><div class="sg-text" id="callSuggestText">Listening…</div><div class="sg-src">Source: agent</div></div>
+        </div>
+      </div>
+      <div class="cp-profile">
+        <div class="cp-phead"><div class="cl-sec" style="margin:0">CUSTOMER PROFILE</div><span class="cp-req" id="callReqCount">0/6 required</span></div>
+        <div class="cp-grid" id="callProfile"></div>
+        <div class="cp-chips">
+          <span class="cp-chip">Lead source: Incoming Call</span>
+          <span class="cp-chip">Language: English</span>
+          <span class="cp-chip warm">Lead temperature: Warm</span>
+          <span class="cp-chip">Email: …</span>
+        </div>
+      </div>
     </div>
-    <div class="cti-foot">Call handled by Genesys &middot; logged to activity timeline</div>
   </div>
 
   <div class="create-overlay" id="createOverlay" onclick="closeCreateLead()"></div>
@@ -2103,41 +2218,116 @@
       '</div>';
     }
 
-    var ctiTimerInt = null;
-    function openCti(number, name) {
-      var p = document.getElementById('ctiPanel');
+    var callTimers = [];
+    function clearCallTimers(){ callTimers.forEach(function(t){ clearTimeout(t); clearInterval(t); }); callTimers = []; }
+    // Back-compat alias for the phone button.
+    function openCti(number, name){ openCall(number, name); }
+    function openCall(number, name) {
+      clearCallTimers();
       var init = (name || '?').split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
-      document.getElementById('ctiAv').textContent = init;
-      document.getElementById('ctiName').textContent = name || '';
-      document.getElementById('ctiNum').textContent = number || '';
-      document.getElementById('ctiStatus').textContent = 'Connecting…';
-      document.getElementById('ctiStatus').className = 'cti-status';
-      document.getElementById('ctiTimer').textContent = '00:00';
-      p.classList.add('open');
-      clearInterval(ctiTimerInt);
-      // hand-off to Genesys CTI adapter: simulate connect, then start call timer
-      setTimeout(function(){
-        var st = document.getElementById('ctiStatus'); if (!st) return;
-        st.textContent = 'On call'; st.className = 'cti-status live';
-        var sec = 0;
-        ctiTimerInt = setInterval(function(){
-          sec++;
-          var t = document.getElementById('ctiTimer'); if (!t) { clearInterval(ctiTimerInt); return; }
-          t.textContent = String(Math.floor(sec/60)).padStart(2,'0') + ':' + String(sec%60).padStart(2,'0');
-        }, 1000);
-      }, 1400);
+      document.getElementById('crAv').textContent = init;
+      document.getElementById('crName').textContent = name || '';
+      document.getElementById('crNum').textContent = number || '';
+      document.getElementById('crStatus').textContent = 'Ringing…';
+      document.getElementById('callRing').style.display = '';
+      document.getElementById('callLive').style.display = 'none';
+      document.getElementById('callTranscript').innerHTML = '';
+      document.getElementById('callSuggestText').textContent = 'Listening…';
+      document.getElementById('callOverlay').classList.add('open');
+      document.getElementById('callPanel').classList.add('open');
+      callTimers.push(setTimeout(function(){ startLiveCall(number, name); }, 2400));
     }
-    function closeCti() {
-      clearInterval(ctiTimerInt);
-      document.getElementById('ctiPanel').classList.remove('open');
-      // log the outbound call to the lead's activity timeline
+    function renderCallProfile(number) {
+      var host = document.getElementById('callProfile'); if (!host) return;
+      var l = selectedIdx >= 0 ? leads[selectedIdx] : null;
+      var fields = [
+        ['Mobile', 'call', number || (l ? l.phone : '')],
+        ['First Name', 'person', l ? l.name.split(' ')[0] : ''],
+        ['Model of Interest', 'directions_car', l && l.model ? l.model : ''],
+        ['Full Name', 'badge', l ? l.name : ''],
+        ['Assigned Showroom', 'store', (l && l.showroom) ? l.showroom : ''],
+        ['Preferred Channel', 'forum', (l && l.preferred) ? l.preferred : '']
+      ];
+      var done = 0;
+      host.innerHTML = fields.map(function(f){
+        var val = f[2], ok = !!(val && val !== '…' && val !== '—');
+        if (ok) done++;
+        return '<div class="cp-field'+(ok?'':' pending')+'">' +
+          '<span class="cp-check '+(ok?'':'off')+' material-symbols-outlined">'+(ok?'check_circle':'radio_button_unchecked')+'</span>' +
+          '<div class="cp-fbody"><div class="cp-flabel"><span class="material-symbols-outlined cp-ficon">'+f[1]+'</span>'+f[0].toUpperCase()+'</div>' +
+          '<div class="cp-fval'+(ok?'':' off')+'">'+(ok?val:'Not captured yet')+'</div></div></div>';
+      }).join('');
+      var rc = document.getElementById('callReqCount'); if (rc) { rc.textContent = done + '/6 required'; rc.classList.toggle('complete', done === 6); }
+    }
+    function startLiveCall(number, name) {
+      document.getElementById('callRing').style.display = 'none';
+      document.getElementById('callLive').style.display = 'flex';
+      renderCallProfile(number);
+      var sec = 0; var tm = document.getElementById('callTimer'); if (tm) tm.textContent = '00:00';
+      callTimers.push(setInterval(function(){ sec++; var t = document.getElementById('callTimer'); if (t) t.textContent = String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0'); }, 1000));
+      var tr = document.getElementById('callTranscript'); tr.innerHTML = '';
+      var lines = [
+        ['agent','Thank you for calling AGM. My name is Sara, how may I address you?'],
+        ['customer','Hi Sara — I saw the EXEED RX online, is it available right now?'],
+        ['agent','Absolutely, we have it in stock. Could you please share what you’re specifically looking for? Are you interested in a particular model or feature?'],
+        ['customer','Mostly the price, and a test drive this weekend if possible.'],
+        ['agent','Of course, I can arrange that. May I take your name and preferred showroom?'],
+        ['customer','It’s Ahmed, and the Downtown showroom works for me.']
+      ];
+      var suggestions = [
+        'Ask how you may address the customer and note their name.',
+        'Could you please share what you’re specifically looking for? Are you interested in a particular model or feature?',
+        'Confirm stock and offer a test-drive slot this weekend at their preferred showroom.',
+        'Capture the customer name, showroom and preferred contact channel to complete the profile.'
+      ];
+      var i = 0;
+      function next(){
+        if (i >= lines.length) return;
+        var ln = lines[i];
+        var d = document.createElement('div'); d.className = 'tr-line';
+        d.innerHTML = '<span class="tr-who '+ln[0]+'">'+(ln[0]==='agent'?'AGENT':'CUSTOMER')+'</span><span class="tr-text">'+ln[1]+'</span>';
+        tr.appendChild(d);
+        var sc = document.querySelector('.call-scroll'); if (sc) sc.scrollTop = sc.scrollHeight;
+        var sIdx = Math.min(Math.floor(i/1.5), suggestions.length-1);
+        document.getElementById('callSuggestText').textContent = suggestions[sIdx];
+        i++;
+        callTimers.push(setTimeout(next, 2200));
+      }
+      next();
+    }
+    function endCall() {
+      clearCallTimers();
+      document.getElementById('callOverlay').classList.remove('open');
+      document.getElementById('callPanel').classList.remove('open');
       if (selectedIdx >= 0) {
         var l = leads[selectedIdx];
         l.activities = l.activities || [];
-        l.activities.unshift({ type: 'call', text: 'Outbound call via Genesys CTI', time: '2026-07-07 12:00' });
+        var fn = (l.name || 'Customer').split(' ')[0];
+        var summary = fn + ' is interested in the ' + (l.model || 'EXEED') + '. Discussed pricing and requested a test drive this weekend at ' + (l.showroom || 'the Downtown showroom') + '. Sentiment: warm. Next: confirm the test-drive slot.';
+        l.aiSummary = { text: summary };
+        l.activities.unshift({ type: 'ai', text: 'AI call summary — ' + summary + ' <button class="act-wa-btn" onclick="sendSummaryWhatsApp(event)"><span class="material-symbols-outlined">chat</span> Send summary to WhatsApp</button>', time: '2026-07-08 12:00' });
         renderDetail(selectedIdx, currentStep);
-        showToast('Call logged to timeline');
+        showToast('Call ended · AI summary added to timeline');
       }
+    }
+    function sendSummaryWhatsApp(ev) {
+      if (ev) ev.stopPropagation();
+      if (selectedIdx < 0) return;
+      var l = leads[selectedIdx];
+      if (l.aiSummary && l.aiSummary.sent) { showToast('Summary already sent to the customer'); return; }
+      if (l.aiSummary) l.aiSummary.sent = true;
+      l.activities = l.activities || [];
+      l.activities.forEach(function(a){ if (a.type === 'ai' && typeof a.text === 'string') { a.text = a.text.replace(/<button class="act-wa-btn"[\s\S]*?<\/button>/, '<button class="act-wa-btn sent" disabled><span class="material-symbols-outlined">check</span> Sent to WhatsApp</button>'); } });
+      l.activities.unshift({ type: 'whatsapp', text: 'Summary sent to the customer via WhatsApp', time: '2026-07-08 12:00' });
+      renderDetail(selectedIdx, currentStep);
+      showToast('Summary sent to the customer via WhatsApp');
+    }
+    function nbaAction(a) {
+      showToast(a === 'AI summary' ? 'Generating AI call summary…' : a + ' started');
+    }
+    function toggleCallCtrl(btn, label) {
+      var on = btn.classList.toggle('on');
+      showToast(label + (label === 'Transfer' || label === 'Keypad' ? '' : (on ? ' on' : ' off')));
     }
 
     function toggleCadence() {
@@ -2350,6 +2540,11 @@
                 var on = (o.val === x);
                 return '<label class="dp-chip-radio'+(on?' on':'')+'"><input type="radio" name="tradeInInterested" value="'+x+'"'+(on?' checked':'')+' onchange="onTradeInChange(this.value)"><span>'+x+'</span></label>';
               }).join('') + '</div>';
+            } else if (o.radioChips) {
+              ctrl = '<div class="dp-if-chips">' + o.radioChips.map(function(x){
+                var on = (o.val === x);
+                return '<label class="dp-chip-radio'+(on?' on':'')+'"><input type="radio" name="'+(o.radioName||'qualRadio')+'" value="'+x+'"'+(on?' checked':'')+' onchange="onGenericRadio(this)"><span>'+x+'</span></label>';
+              }).join('') + '</div>';
             } else {
               ctrl = '<select class="dp-if-input" data-prop="'+(o.prop||'')+'" onchange="editIntake(this)">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+x+'</option>';}).join('')+'</select>';
             }
@@ -2385,6 +2580,7 @@
             {label:'Model Code', val:''}
           ]},
           { title:'Lead Qualification', fields:[
+            {label:'Qualification', type:'select', radioChips:['Qualify','Not Qualify'], radioName:'leadQualification', val:'Qualify', req:true},
             {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
             {label:'Lead Source', type:'lookup', val:l.source, req:true},
             {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true},
@@ -2437,6 +2633,12 @@
       sd.aiBtns.forEach(function(btn, bi) {
         html += '<button class="dp-ai-btn '+(bi===0?'primary':'secondary')+'">'+btn+(bi===0?' &#8250;':'')+'</button>';
       });
+      html += '<div class="dp-nba-label">Next best actions</div>' +
+        '<div class="dp-nba">' +
+          '<button class="dp-nba-btn" onclick="nbaAction(\'Handover to sales executive\')"><span class="material-symbols-outlined">person_add</span>Handover to sales executive</button>' +
+          '<button class="dp-nba-btn danger" onclick="nbaAction(\'Disqualify\')"><span class="material-symbols-outlined">block</span>Disqualify</button>' +
+        '</div>' +
+        (l.aiSummary ? '<div class="dp-ai-summary"><div class="dp-ai-sum-h"><span class="material-symbols-outlined">description</span> AI call summary</div><div class="dp-ai-sum-text">'+l.aiSummary.text+'</div>' + (l.aiSummary.sent ? '<button class="act-wa-btn sent" disabled><span class="material-symbols-outlined">check</span> Sent to WhatsApp</button>' : '<button class="act-wa-btn" onclick="sendSummaryWhatsApp(event)"><span class="material-symbols-outlined">chat</span> Send to WhatsApp</button>') + '</div>' : '');
       html += '<div class="dp-ai-note"><span class="material-symbols-outlined">schedule</span> '+sd.aiNote+'</div>';
       html += '</div>';
 
@@ -2505,6 +2707,12 @@
       var el = document.getElementById('tradeInDetails');
       if (el) el.style.display = (v === 'Yes') ? '' : 'none';
       var wrap = document.getElementById('intakeTradeIn');
+      if (wrap) wrap.querySelectorAll('.dp-chip-radio').forEach(function(lbl){
+        var inp = lbl.querySelector('input'); lbl.classList.toggle('on', !!(inp && inp.checked));
+      });
+    }
+    function onGenericRadio(input) {
+      var wrap = input.closest('.dp-if-chips');
       if (wrap) wrap.querySelectorAll('.dp-chip-radio').forEach(function(lbl){
         var inp = lbl.querySelector('input'); lbl.classList.toggle('on', !!(inp && inp.checked));
       });
