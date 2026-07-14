@@ -339,7 +339,7 @@
     .dp-fh-label { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; }
     .dp-fh-av { position: relative; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
     .dp-fh-dot { position: absolute; right: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: var(--green); border: 2px solid var(--surface); }
-    .dp-idcard { position: sticky; top: 0; z-index: 20; border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 16px; background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; }
+    .dp-idcard { position: relative; border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 16px; background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; }
     .dp-lead-head { display: flex; align-items: center; gap: 14px; }
     .dp-head-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
     .dp-kebab { flex-shrink: 0; width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--ink-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; align-self: flex-start; transition: background .12s, border-color .12s; }
@@ -516,8 +516,7 @@
     /* Form tabs */
     .dp-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); margin-bottom: 16px; flex-wrap: wrap; }
     /* v2: identity card + boxed stepper/tabs stick together below the top */
-    .dp-stickytop { position: sticky; top: 0; z-index: 6; background: var(--surface); }
-    .dp-stagebox { position: relative; background: var(--surface); border: 1px solid #e6e9ef; border-radius: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06); padding: 10px 22px 0; margin-bottom: 8px; }
+    .dp-stagebox { position: sticky; top: 0; z-index: 12; background: var(--surface); border: 1px solid #e6e9ef; border-radius: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06); padding: 10px 22px 0; margin-bottom: 8px; }
     .dp-stagebox .dp-journey-card { padding-top: 18px; margin-bottom: 0; border-bottom: 1px solid #eef1f5; }
     .dp-stagebox .dp-tabs { margin-bottom: 0; border-bottom: none; }
     .dp-tab-actions { margin-left: auto; align-self: center; display: inline-flex; align-items: center; gap: 10px; transform: translateY(-4px); }
@@ -2428,8 +2427,7 @@
       var ownerInit = l.owner.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
       var langAbbr = (l.lang || '').slice(0,2).toUpperCase();
       var discDone = Math.floor(l.discovery/12.5);
-      // Sticky top region — identity card + stage box scroll and stick together.
-      html += '<div class="dp-stickytop">';
+      // Identity card scrolls; only the stage box below is sticky.
       html += '<div class="dp-idcard">' +
         '<div class="dp-lead-head">' +
           '<div class="dp-av lead-av '+l.av+'">'+l.initials+'</div>' +
@@ -2477,7 +2475,6 @@
       '</div>';
       html += tabBarHtml(null, stageTabs, tabActions);
       html += '</div>'; // dp-stagebox
-      html += '</div>'; // dp-stickytop
 
       // 2-column layout: main content + sidebar (SLA / AI / timeline)
       html += '<div class="dp-layout"><div class="dp-main"><div class="dp-main-scroll">';
