@@ -841,9 +841,9 @@
     .temp.hot { background: var(--red-soft); color: var(--red); }
     .temp.warm { background: var(--amber-soft); color: #8a6420; }
 
-    .panels3 { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:14px; align-items:start; }
+    .panels3 { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:14px; align-items:stretch; }
     @media (max-width: 1100px){ .panels3 { grid-template-columns: 1fr; } }
-    .panels3 .sc { max-height:320px; overflow-y:auto; }
+    .panels3 .sc { height:320px; overflow-y:auto; }
     .panels3 .sc-head { position:sticky; top:0; background:var(--surface); z-index:1; }
     .panels3 .sc::-webkit-scrollbar { width:5px; }
     .panels3 .sc::-webkit-scrollbar-thumb { background:rgba(20,24,34,.16); border-radius:5px; }
