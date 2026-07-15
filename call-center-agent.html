@@ -168,7 +168,19 @@
       font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6;
     }
     .greeting-sub .date { font-weight: 600; color: var(--ink); }
-    .greeting-right { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+    .greeting-right { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .date-filter { display:inline-flex; align-items:center; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:3px 5px 3px 11px; }
+    .date-filter .df-cal { font-size:16px; color:var(--blue); margin-right:6px; }
+    .df-tab { padding:6px 13px; border:none; background:transparent; color:var(--ink-secondary); font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:7px; transition:all .12s; }
+    .df-tab:hover { color:var(--ink); }
+    .df-tab.on { background:var(--blue); color:#fff; }
+    .date-filter-wrap { position:relative; }
+    .date-custom { display:none; position:absolute; top:calc(100% + 6px); right:0; background:var(--surface); border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 30px rgba(20,24,34,.14); padding:12px; z-index:40; gap:10px; align-items:flex-end; }
+    .date-custom.open { display:flex; }
+    .date-custom label { display:flex; flex-direction:column; gap:4px; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-muted); }
+    .date-custom input[type=date] { border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; }
+    .date-custom input[type=date]:focus { border-color:var(--blue); }
+    .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
     .shift-pill {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 8px 16px; background: var(--surface);
@@ -1032,7 +1044,7 @@
           <div class="greeting-left">
             <h1>Good afternoon, Nadia <span class="wave">&#128075;</span></h1>
             <div class="greeting-sub">
-              <span class="date">Tuesday, 30 Jun 2026</span> &middot; You have <strong style="color:var(--red)">7 leads</strong> waiting for action and <strong style="color:var(--green)">3 ready</strong> to hand over.
+              <span class="date">30 Jun 2026</span> &middot; <strong style="color:var(--red)">7 to action</strong> &middot; <strong style="color:var(--green)">3 ready to hand over</strong>
             </div>
           </div>
           <div class="greeting-right">
@@ -1040,7 +1052,21 @@
             <div class="shift-pill">
               <span class="dot"></span> On shift &middot; <span class="tm" id="timer">03:12:47</span>
             </div>
-            <div style="display:flex;flex-direction:row;align-items:center;gap:8px"><span class="last-refreshed" id="lastRefreshed" style="font-size:11px;color:var(--ink-muted);white-space:nowrap"></span><button class="btn-soft btn-icon-only" onclick="doRefresh(this)" title="Refresh"><span class="material-symbols-outlined">refresh</span></button></div>
+            <div class="date-filter-wrap">
+              <div class="date-filter">
+                <span class="material-symbols-outlined df-cal">calendar_today</span>
+                <button class="df-tab on" onclick="setDateRange(this)">Today</button>
+                <button class="df-tab" onclick="setDateRange(this)">This Week</button>
+                <button class="df-tab" onclick="setDateRange(this)">This Month</button>
+                <button class="df-tab" id="dfCustom" onclick="setDateRange(this)">Custom Range</button>
+              </div>
+              <div class="date-custom" id="dateCustom">
+                <label>From<input type="date" id="dateFrom"></label>
+                <label>To<input type="date" id="dateTo"></label>
+                <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
+              </div>
+            </div>
+            <button class="btn-soft btn-icon-only" id="refreshBtn" onclick="doRefresh(this)" title="Refresh"><span class="material-symbols-outlined">refresh</span></button>
           </div>
         </div>
 
@@ -1083,33 +1109,57 @@
         <div class="kpi-section warm">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">SLA Performance</span><span class="kpi-sec-sub">&middot; Compliance vs targets</span></div>
           <div class="kpi-grid g5">
-            <div class="metric-card clk" onclick="openKpi('c1c')">
-              <div class="mc-icon green"><span class="material-symbols-outlined">support_agent</span></div>
-              <div class="mc-lbl">Customer 1st Contact</div><div class="mc-val txt-green">92%</div><div class="mc-sub">Target 95%</div>
+            <div class="dial-card clk" onclick="openKpi('c1c')">
+              <div class="dial-label">Customer 1st Contact</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 65">
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" stroke="url(#gradC1C)" stroke-dasharray="157" stroke-dashoffset="12.56" />
+                  <defs><linearGradient id="gradC1C" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center"><div class="dial-value" style="color:#3d8a5b">92%</div></div>
+              </div>
+              <div class="dial-sub">Target 95%</div>
             </div>
-            <div class="metric-card clk" onclick="openKpi('showroom')">
-              <div class="mc-icon amber"><span class="material-symbols-outlined">storefront</span></div>
-              <div class="mc-lbl">Assigned to Showroom</div><div class="mc-val txt-amber">91%</div><div class="mc-sub">Target 95%</div>
+            <div class="dial-card clk" onclick="openKpi('showroom')">
+              <div class="dial-label">Assigned to Showroom</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 65">
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" stroke="url(#gradShow)" stroke-dasharray="157" stroke-dashoffset="14.13" />
+                  <defs><linearGradient id="gradShow" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5b8def" /><stop offset="100%" stop-color="#7ba5f5" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center"><div class="dial-value" style="color:#3560b8">91%</div></div>
+              </div>
+              <div class="dial-sub">Target 95%</div>
             </div>
-            <div class="metric-card clk" onclick="openKpi('open3d')">
-              <div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div>
-              <div class="mc-lbl">Open Leads &gt; 3 Days</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Re-engage</div>
-            </div>
-            <div class="metric-card clk" onclick="openKpi('returned')">
-              <div class="mc-icon amber"><span class="material-symbols-outlined">undo</span></div>
-              <div class="mc-lbl">Return Rate</div><div class="mc-val txt-amber">50%</div><div class="mc-sub">Handed-over leads returned</div>
+            <div class="dial-card clk" onclick="openKpi('returned')">
+              <div class="dial-label">Return Rate</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 65">
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" stroke="url(#gradReturn)" stroke-dasharray="157" stroke-dashoffset="78.5" />
+                  <defs><linearGradient id="gradReturn" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center"><div class="dial-value" style="color:#b5642a">50%</div></div>
+              </div>
+              <div class="dial-sub">Handed-over leads returned</div>
             </div>
             <div class="dial-card clk" onclick="openKpi('aht')">
               <div class="dial-label">Qual Completion</div>
               <div class="dial-wrap">
                 <svg class="dial-svg" viewBox="0 0 120 65">
                   <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
-                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" stroke="url(#gradQual)" stroke-dasharray="157" stroke-dashoffset="37.7" />
-                  <defs><linearGradient id="gradQual" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#5cb97f" /></linearGradient></defs>
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" stroke="url(#gradQual)" stroke-dasharray="157" stroke-dashoffset="37.68" />
+                  <defs><linearGradient id="gradQual" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a78bfa" /><stop offset="100%" stop-color="#7c6dd8" /></linearGradient></defs>
                 </svg>
-                <div class="dial-center"><div class="dial-value" style="color:#8a6420">76%</div></div>
+                <div class="dial-center"><div class="dial-value" style="color:#6d5bc0">76%</div></div>
               </div>
               <div class="dial-sub">of connected calls</div>
+            </div>
+            <div class="metric-card clk" onclick="openKpi('open3d')">
+              <div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div>
+              <div class="mc-lbl">Open Leads &gt; 3 Days</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Re-engage</div>
             </div>
           </div>
         </div>
@@ -1426,6 +1476,25 @@
       document.getElementById('tabAfter').classList.toggle('on', !isSales);
     }
 
+    // Date range filter (Today is the default)
+    function setDateRange(btn){
+      btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var custom = document.getElementById('dateCustom');
+      var isCustom = /custom/i.test(btn.textContent);
+      if (custom) custom.classList.toggle('open', isCustom);
+      if (isCustom) { var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
+    }
+    function applyCustomRange(){
+      var f = document.getElementById('dateFrom').value, t = document.getElementById('dateTo').value;
+      var fmt = function(d){ if(!d) return ''; var p=d.split('-'); return p[2]+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; };
+      var lbl = 'Custom Range';
+      if (f && t) lbl = fmt(f)+' – '+fmt(t);
+      else if (f) lbl = 'From '+fmt(f);
+      document.getElementById('dfCustom').textContent = lbl;
+      document.getElementById('dateCustom').classList.remove('open');
+    }
+
     // ── Training Coach: live AI role-play ──
     var TC_MODULES = [
       { t:'Inbound lead greeting', d:'Warm, branded, bilingual-ready.', st:'completed', score:92, rule:'Warm, branded, bilingual-ready.',
@@ -1653,12 +1722,11 @@
 
   <script>
     function doRefresh(btn){
-      var el=document.getElementById('lastRefreshed');
       var t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-      if(el) el.textContent='Last refreshed '+t;
-      if(btn){var i=btn.querySelector('.material-symbols-outlined');if(i){i.style.transition='transform .6s ease';i.style.transform='rotate(360deg)';setTimeout(function(){i.style.transition='none';i.style.transform='none';},650);}}
+      var rb=document.getElementById('refreshBtn'); if(rb) rb.title='Last refreshed '+t;
+      if(btn){btn.title='Last refreshed '+t;var i=btn.querySelector('.material-symbols-outlined');if(i){i.style.transition='transform .6s ease';i.style.transform='rotate(360deg)';setTimeout(function(){i.style.transition='none';i.style.transform='none';},650);}}
     }
-    (function(){var el=document.getElementById('lastRefreshed');if(el)el.textContent='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
+    (function(){var rb=document.getElementById('refreshBtn');if(rb)rb.title='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
   </script>
 
   <script>
