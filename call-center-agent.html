@@ -6,7 +6,7 @@
   <title>Call Center Agent — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <link href="fluent-tokens.css" rel="stylesheet" />
+  <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <style>
     :root {
       --bg: #f5f5f5;
@@ -322,7 +322,7 @@
       padding: 14px 16px;
       transition: box-shadow .2s;
     }
-    .metric-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .metric-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
     .mc-icon {
       width: 28px; height: 28px; border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
@@ -352,7 +352,7 @@
       display: flex; flex-direction: column; align-items: center;
       transition: box-shadow .2s;
     }
-    .dial-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.04); }
+    .dial-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
     .dial-label {
       font-size: 10px; font-weight: 600; text-transform: uppercase;
       letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 6px;
@@ -709,6 +709,175 @@
     .gx-foot { padding: 2px 18px 14px; }
     .gx-btn { display: inline-flex; align-items: center; gap: 5px; background: var(--blue); color: #fff; text-decoration: none; border-radius: 8px; padding: 8px 15px; font-size: 12px; font-weight: 600; }
     .gx-btn .material-symbols-outlined { font-size: 15px; }
+    /* ── Ported KPI sections + drill-down drawer ── */
+    .mc-val.txt-amber { color: #8a6420; }
+    .clk { cursor: pointer; }
+    .kpi-section { background: transparent; border: none; border-radius: 0; padding: 0; margin-bottom: 18px; }
+    .kpi-section.warm { background: transparent; }
+    .kpi-sec-head { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; }
+    .kpi-sec-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .kpi-sec-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
+    .kpi-sec-sub { font-size: 11px; color: var(--ink-muted); }
+    .kpi-grid { display: grid; gap: 10px; }
+    .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
+    .kpi-grid.g7 { grid-template-columns: repeat(7, 1fr); }
+    .metric-card.clk:hover { border-color: #d5d9e0; }
+    .dial-card.clk { cursor: pointer; }
+    .stream-bar { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .stream-seg { display:inline-flex; background:#eceef2; border:1px solid var(--border); border-radius:9px; padding:2px; }
+    .seg-tab { padding:5px 14px; border:none; background:transparent; color:var(--ink-secondary); font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:7px; display:inline-flex; align-items:center; gap:6px; transition:all .12s; }
+    .seg-tab:hover { color:var(--ink); }
+    .seg-tab.on { background:#fff; color:var(--blue); box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .seg-n { font-size:11px; font-weight:700; opacity:.65; }
+    .stream-note { font-size:12px; color:var(--red); font-weight:600; }
+
+    /* ── Training Coach modal ── */
+    .train-banner { cursor:pointer; }
+    .train-chip { display:inline-flex; align-items:center; gap:5px; background:var(--blue-soft); border:1px solid #d5e0ec; color:var(--blue); border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
+    .train-chip:hover { background:#dbe6f0; }
+    .train-chip .material-symbols-outlined { font-size:16px; }
+    .tc-ov { position:fixed; inset:0; background:rgba(20,24,34,.5); opacity:0; visibility:hidden; transition:opacity .2s; z-index:130; }
+    .tc-ov.open { opacity:1; visibility:visible; }
+    .tc-panel { position:fixed; top:0; right:0; bottom:0; width:1000px; max-width:96vw; background:var(--surface); box-shadow:-14px 0 44px rgba(0,0,0,.22); z-index:131; display:flex; flex-direction:column; overflow:hidden; transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1); }
+    .tc-panel.open { transform:translateX(0); }
+    .tc-head { background:var(--blue); color:#fff; padding:18px 22px; display:flex; align-items:flex-start; gap:12px; }
+    .tc-head > .material-symbols-outlined { font-size:22px; margin-top:2px; }
+    .tc-htitle { font-size:19px; font-weight:700; }
+    .tc-hsub { font-size:12.5px; color:rgba(255,255,255,.85); margin-top:3px; }
+    .tc-close { margin-left:auto; background:transparent; border:none; color:#fff; font-size:24px; cursor:pointer; line-height:1; }
+    .tc-body { flex:1; display:flex; min-height:0; }
+    .tc-list { width:300px; border-right:1px solid var(--border); overflow-y:auto; flex-shrink:0; }
+    .tc-mod { padding:14px 16px; border-bottom:1px solid var(--border-soft); cursor:pointer; border-left:3px solid transparent; }
+    .tc-mod:hover { background:#f8f9fd; }
+    .tc-mod.active { border-left-color:var(--blue); background:var(--blue-soft); box-shadow:inset 0 0 0 1px #cdd8e4; }
+    .tc-mod-title { font-size:13.5px; font-weight:700; }
+    .tc-mod-desc { font-size:11.5px; color:var(--ink-muted); margin:2px 0 8px; }
+    .tc-badge { display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:11px; }
+    .tc-badge.completed { background:var(--green-soft); color:#3d8a5b; }
+    .tc-badge.due { background:var(--amber-soft); color:#8a6420; }
+    .tc-badge.failed { background:var(--red-soft); color:var(--red); }
+    .tc-badge .material-symbols-outlined { font-size:13px; }
+    .tc-main { flex:1; display:flex; flex-direction:column; min-width:0; padding:18px; gap:14px; overflow-y:auto; }
+    .tc-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px; gap:4px; }
+    .tc-empty > .material-symbols-outlined { font-size:44px; color:var(--blue); margin-bottom:6px; }
+    .tc-empty h4 { font-size:21px; font-weight:800; letter-spacing:-.01em; }
+    .tc-empty p { font-size:13.5px; color:var(--ink-muted); max-width:440px; line-height:1.6; margin-top:2px; }
+    .tc-halo { position:relative; width:88px; height:88px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+    .tc-halo::before, .tc-halo::after { content:''; position:absolute; width:70px; height:70px; border-radius:50%; border:2px solid var(--blue); opacity:0; animation: tchalo 2.4s ease-out infinite; }
+    .tc-halo::after { animation-delay:1.2s; }
+    @keyframes tchalo { 0% { transform:scale(.85); opacity:.55; } 100% { transform:scale(1.9); opacity:0; } }
+    .tc-halo-core { width:70px; height:70px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 28px rgba(23,41,61,.28); z-index:1; }
+    .tc-halo-core .material-symbols-outlined { font-size:34px; }
+    .tc-waves { display:flex; align-items:center; gap:4px; height:22px; margin-bottom:14px; }
+    .tc-waves i { width:4px; background:var(--blue); border-radius:3px; opacity:.55; animation: tcwave 1s ease-in-out infinite; }
+    .tc-waves i:nth-child(1){ height:8px; animation-delay:0s; } .tc-waves i:nth-child(2){ height:16px; animation-delay:.1s; } .tc-waves i:nth-child(3){ height:22px; animation-delay:.2s; } .tc-waves i:nth-child(4){ height:12px; animation-delay:.3s; } .tc-waves i:nth-child(5){ height:20px; animation-delay:.4s; } .tc-waves i:nth-child(6){ height:10px; animation-delay:.5s; } .tc-waves i:nth-child(7){ height:16px; animation-delay:.6s; }
+    @keyframes tcwave { 0%,100% { transform:scaleY(.35); } 50% { transform:scaleY(1); } }
+    .tc-steps { display:flex; align-items:center; gap:10px; margin-top:20px; }
+    .tc-step { display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .tc-step-ico { width:44px; height:44px; border-radius:12px; background:var(--blue-soft); color:var(--blue); display:flex; align-items:center; justify-content:center; }
+    .tc-step-ico .material-symbols-outlined { font-size:22px; }
+    .tc-step-t { font-size:11.5px; font-weight:600; color:var(--ink-secondary); }
+    .tc-step-arrow { color:var(--blue-muted); font-size:20px; }
+    .tc-playarea { flex:1; display:flex; flex-direction:column; gap:14px; min-height:0; }
+    .tc-scenario { background:#eef0f4; border-radius:10px; padding:14px 16px; }
+    .tc-sc-lbl { font-size:10.5px; font-weight:700; letter-spacing:.06em; color:var(--ink-muted); text-transform:uppercase; }
+    .tc-sc-rule { font-size:15px; font-weight:600; margin-top:3px; }
+    .tc-callbar { background:#0b0f1a; color:#fff; border-radius:10px; padding:15px 18px; display:none; }
+    .tc-callbar.show { display:block; }
+    .tc-callbar-top { display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px; }
+    .tc-dots { display:flex; gap:5px; margin-top:12px; flex-wrap:wrap; }
+    .tc-dots i { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.4); }
+    .tc-callbar.live .tc-dots i { animation: tcpulse 1.3s infinite; }
+    @keyframes tcpulse { 0%,100% { opacity:.25; } 50% { opacity:1; } }
+    .tc-hint { font-size:11.5px; color:var(--ink-muted); display:flex; align-items:center; gap:6px; }
+    .tc-hint .material-symbols-outlined { font-size:15px; }
+    .tc-chat { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:14px; overflow-y:auto; min-height:170px; }
+    .tc-msg { display:flex; gap:10px; align-items:flex-start; }
+    .tc-msg.you { flex-direction:row-reverse; }
+    .tc-av { width:34px; height:34px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+    .tc-av.customer { background:var(--blue); }
+    .tc-av.you { background:#17293d; }
+    .tc-av.coach { background:#3d8a5b; }
+    .tc-bubble { max-width:74%; border-radius:12px; padding:11px 14px; font-size:13.5px; line-height:1.5; }
+    .tc-msg.customer .tc-bubble { background:#fff; border:1px solid var(--border); }
+    .tc-msg.you .tc-bubble { background:#e9edf2; text-align:right; }
+    .tc-msg.coach .tc-bubble { background:var(--green-soft); border:1px solid #cfe9d8; }
+    .tc-role { font-size:10px; font-weight:700; letter-spacing:.05em; color:var(--ink-muted); text-transform:uppercase; margin-bottom:4px; }
+    .tc-inputrow { display:flex; gap:8px; }
+    .tc-input { flex:1; border:1px solid var(--border); border-radius:8px; padding:10px 13px; font-size:13.5px; font-family:inherit; outline:none; }
+    .tc-input:focus { border-color:var(--blue); }
+    .tc-input:disabled { background:#f5f5f5; }
+    .tc-send { background:var(--blue); color:#fff; border:none; border-radius:8px; padding:0 16px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .tc-complete { background:var(--blue); color:#fff; border:none; border-radius:9px; padding:12px 20px; font-size:13.5px; font-weight:700; font-family:inherit; cursor:pointer; display:inline-flex; align-items:center; gap:7px; align-self:flex-start; opacity:.5; pointer-events:none; }
+    .tc-complete.ready { opacity:1; pointer-events:auto; }
+    @media (max-width: 1200px) { .kpi-grid.g5, .kpi-grid.g7 { grid-template-columns: repeat(3, 1fr); } }
+
+    .train-banner { display:flex; align-items:center; gap:10px; background: var(--blue-soft); border:1px solid #d5e0ec; border-radius: var(--radius); padding: 11px 16px; margin-bottom: 14px; font-size: 12.5px; color: var(--ink-secondary); }
+    .train-banner > .material-symbols-outlined { color: var(--blue); font-size: 18px; }
+    .train-banner a { margin-left:auto; color: var(--blue); font-weight:600; text-decoration:none; white-space:nowrap; }
+    .nextcall { display:flex; align-items:center; gap:11px; width:fit-content; max-width:100%; margin-left:auto; margin-bottom:12px; background: var(--surface); border:1px solid var(--border); border-left:4px solid var(--blue); border-radius: var(--radius); padding: 10px 14px; box-shadow: 0 2px 10px rgba(20,24,34,.05); }
+    .nextcall .nc-ico { width:30px;height:30px;border-radius:8px;background:var(--blue-soft);color:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0; }
+    .nextcall .nc-ico .material-symbols-outlined { font-size:18px; }
+    .nc-lbl { font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue); }
+    .nc-name { font-size:14px;font-weight:700;margin-top:1px; }
+    .nc-meta { font-size:11.5px;color:var(--ink-muted);margin-top:1px; }
+    .nc-btn { margin-left:18px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-decoration:none;flex-shrink:0; }
+    .q-head-left { display:flex; align-items:center; gap:10px; }
+    .q-nextcall { display:flex; align-items:center; gap:11px; }
+    .q-nextcall .nc-ico { width:30px; height:30px; border-radius:8px; background:var(--blue-soft); color:var(--blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .q-nextcall .nc-ico .material-symbols-outlined { font-size:18px; }
+    .qnc-info { display:flex; flex-direction:column; line-height:1.25; }
+    .qnc-lbl { font-size:9px; font-weight:700; letter-spacing:.06em; color:var(--blue); text-transform:uppercase; }
+    .qnc-name { font-size:13px; font-weight:700; }
+    .qnc-meta { font-size:11.5px; color:var(--ink-muted); }
+    .q-nextcall .nc-btn { margin-left:4px; }
+
+    .st-badge.con { background: var(--green-soft); color: #3d8a5b; }
+    .st-badge.ret { background: var(--amber-soft); color: #8a6420; }
+    .q-next { color: var(--blue); font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .q-next:hover { text-decoration: underline; }
+    .pct-g { color:#3d8a5b; font-weight:700; } .pct-a { color:#8a6420; font-weight:700; } .pct-r { color: var(--red); font-weight:700; }
+    .temp { display:inline-block; padding:2px 10px; border-radius:11px; font-size:10.5px; font-weight:600; }
+    .temp.hot { background: var(--red-soft); color: var(--red); }
+    .temp.warm { background: var(--amber-soft); color: #8a6420; }
+
+    .panels3 { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:14px; }
+    @media (max-width: 1100px){ .panels3 { grid-template-columns: 1fr; } }
+    .sc-head.clk { cursor:pointer; }
+    .rr-reason { color: var(--blue); font-weight:600; font-size:11.5px; }
+    .rr-miss { font-size:10.5px; color: var(--ink-muted); margin-top:2px; }
+    .handover { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); margin-top:14px; overflow:hidden; }
+    .ho-head { padding:12px 18px; border-bottom:1px solid var(--border-soft); font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; }
+    .ho-head .material-symbols-outlined { font-size:17px; color:var(--blue); }
+    .ho-row { display:flex; align-items:center; gap:12px; padding:13px 18px; border-bottom:1px solid var(--border-soft); }
+    .ho-row:last-child { border-bottom:none; }
+    .ho-info { flex:1; min-width:0; }
+    .ho-name { font-weight:700; font-size:13px; display:flex; align-items:center; gap:5px; }
+    .ho-name .material-symbols-outlined { font-size:15px; color:var(--green); }
+    .ho-meta { font-size:11.5px; color:var(--ink-muted); margin-top:1px; }
+    .ho-avail { font-size:10px; font-weight:700; padding:2px 9px; border-radius:9px; background:var(--green-soft); color:#3d8a5b; }
+    .ho-note { font-size:11px; color:var(--ink-muted); font-style:italic; }
+    .ho-btn { background:var(--blue); color:#fff; border:none; border-radius:8px; padding:8px 16px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+
+    .dd-ov { position:fixed; inset:0; background:rgba(20,24,34,.45); opacity:0; visibility:hidden; transition:opacity .2s; z-index:120; }
+    .dd-ov.open { opacity:1; visibility:visible; }
+    .dd-panel { position:fixed; top:0; right:0; bottom:0; width:940px; max-width:96vw; background:var(--surface); box-shadow:-14px 0 44px rgba(0,0,0,.22); transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1); z-index:121; display:flex; flex-direction:column; overflow:hidden; }
+    .dd-panel.open { transform:translateX(0); }
+    .dd-head { background: var(--blue); color:#fff; padding:20px 24px; display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+    .dd-title { font-size:21px; font-weight:700; letter-spacing:-.01em; }
+    .dd-sub { font-size:12.5px; color:rgba(255,255,255,.78); margin-top:4px; }
+    .dd-hr { display:flex; align-items:center; gap:14px; }
+    .dd-count { font-size:13px; color:rgba(255,255,255,.9); white-space:nowrap; }
+    .dd-close { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); color:#fff; width:30px; height:30px; border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .dd-close:hover { background:rgba(255,255,255,.22); }
+    .dd-body { flex:1; overflow-y:auto; }
+    .dd-table { width:100%; border-collapse:collapse; }
+    .dd-table th { text-align:left; padding:12px 22px; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); background:#fafbfd; border-bottom:1px solid var(--border); }
+    .dd-table td { padding:15px 22px; font-size:13px; border-bottom:1px solid var(--border-soft); vertical-align:middle; }
+    .dd-nm { font-weight:600; } .dd-id { font-size:11.5px; color:var(--ink-muted); font-family:'SF Mono',Consolas,monospace; margin-top:1px; }
+    .dd-link { color:var(--blue); font-weight:600; text-decoration:none; white-space:nowrap; } .dd-link:hover { text-decoration:underline; }
+    .dd-red { color:var(--red); font-weight:600; } .dd-amber { color:#8a6420; font-weight:600; }
+    .mono { font-family:'SF Mono',Consolas,monospace; }
     </style>
 </head>
 <body>
@@ -796,16 +965,15 @@
       </div>
       <nav class="sb-nav">
         <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
-        <a href="index.html" class="sb-item"><span class="material-symbols-outlined">home</span>Home</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">task_alt</span>Activities</a>
+        <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="call-center-agent.html" class="sb-item enabled"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
         <div class="sb-group">Call Center</div>
         <a href="#" class="sb-item active"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today's Leads</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Follow-ups</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manag&hellip;</a>
         <div class="sb-group">Sales</div>
-        <a href="lead-detail.html" class="sb-item"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="lead-detail.html" class="sb-item enabled"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">handshake</span>Deals</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">request_quote</span>Quotes</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Test Drives</a>
@@ -864,6 +1032,7 @@
             </div>
           </div>
           <div class="greeting-right">
+            <button class="train-chip" onclick="openTraining()" title="Open training coach"><span class="material-symbols-outlined">school</span> 5 modules due <span class="material-symbols-outlined" style="font-size:15px">chevron_right</span></button>
             <div class="shift-pill">
               <span class="dot"></span> On shift &middot; <span class="tm" id="timer">03:12:47</span>
             </div>
@@ -896,222 +1065,205 @@
           </div>
         </div>
 
-        <!-- KPI Row -->
-        <div class="metrics-row">
-          <div class="dial-card">
-            <div class="dial-label">1st-Contact SLA</div>
-            <div class="dial-wrap">
-              <svg class="dial-svg" viewBox="0 0 120 65">
-                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
-                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" id="dialSLA"
-                  stroke="url(#gradTeal)" stroke-dasharray="157" stroke-dashoffset="157" />
-                <defs>
-                  <linearGradient id="gradTeal" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#5cb97f" />
-                    <stop offset="100%" stop-color="#4fb8a8" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div class="dial-center">
-                <div class="dial-value" style="color:#3d8a5b">92%</div>
-              </div>
-            </div>
-            <div class="dial-sub"><span style="color:var(--green)">&uarr;</span> +2pp WoW</div>
+        <!-- Stream filter -->
+        <div class="stream-bar">
+          <div class="stream-seg">
+            <button class="seg-tab on" id="tabSales" onclick="setStream('sales')">Sales <span class="seg-n">5</span></button>
+            <button class="seg-tab" id="tabAfter" onclick="setStream('aftersales')">Aftersales <span class="seg-n">4</span></button>
           </div>
-          <div class="dial-card">
-            <div class="dial-label">Avg. Handle Time</div>
-            <div class="dial-wrap">
-              <svg class="dial-svg" viewBox="0 0 120 65">
-                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
-                <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" id="dialTime"
-                  stroke="url(#gradPurple)" stroke-dasharray="157" stroke-dashoffset="157" />
-                <defs>
-                  <linearGradient id="gradPurple" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#a78bfa" />
-                    <stop offset="100%" stop-color="#7c6dd8" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div class="dial-center">
-                <div class="dial-value" style="color:#7c6dd8">4m 12s</div>
-              </div>
-            </div>
-            <div class="dial-sub"><span style="color:var(--green)">&darr;</span> &minus;18s vs yday</div>
-          </div>
-          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon blue"><span class="material-symbols-outlined">group</span></div>
-            <div class="mc-lbl">Leads Assigned</div>
-            <div class="mc-val">18</div>
-          </a>
-          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div>
-            <div class="mc-lbl">Not Actioned</div>
-            <div class="mc-val txt-red">7</div>
-            <div class="mc-sub">Action now</div>
-          </a>
-          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon amber"><span class="material-symbols-outlined">schedule</span></div>
-            <div class="mc-lbl">Callbacks Due</div>
-            <div class="mc-val">5</div>
-            <div class="mc-sub">Next: 14:30</div>
-          </a>
-          <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon green"><span class="material-symbols-outlined">check_circle</span></div>
-            <div class="mc-lbl">Ready for Handover</div>
-            <div class="mc-val">3</div>
-            <div class="mc-sub">Push to Sales</div>
-          </a>
+          <span class="stream-note"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">warning</span> 1 aftersales SLA breach</span>
         </div>
 
-        <!-- Main grid -->
-        <div class="dash-grid">
-          <!-- Lead queue -->
-          <div class="q-panel">
+        <div id="streamSales">
+        <!-- SLA Performance -->
+        <div class="kpi-section warm">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">SLA Performance</span><span class="kpi-sec-sub">&middot; Compliance vs targets</span></div>
+          <div class="kpi-grid g5">
+            <div class="metric-card clk" onclick="openKpi('c1c')">
+              <div class="mc-icon green"><span class="material-symbols-outlined">support_agent</span></div>
+              <div class="mc-lbl">Customer 1st Contact</div><div class="mc-val txt-green">92%</div><div class="mc-sub">Target 95%</div>
+            </div>
+            <div class="metric-card clk" onclick="openKpi('showroom')">
+              <div class="mc-icon amber"><span class="material-symbols-outlined">storefront</span></div>
+              <div class="mc-lbl">Assigned to Showroom</div><div class="mc-val txt-amber">91%</div><div class="mc-sub">Target 95%</div>
+            </div>
+            <div class="metric-card clk" onclick="openKpi('open3d')">
+              <div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div>
+              <div class="mc-lbl">Open Leads &gt; 3 Days</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Re-engage</div>
+            </div>
+            <div class="metric-card clk" onclick="openKpi('returned')">
+              <div class="mc-icon amber"><span class="material-symbols-outlined">undo</span></div>
+              <div class="mc-lbl">Return Rate</div><div class="mc-val txt-amber">50%</div><div class="mc-sub">Handed-over leads returned</div>
+            </div>
+            <div class="dial-card clk" onclick="openKpi('aht')">
+              <div class="dial-label">Qual Completion</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 65">
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-bg" />
+                  <path d="M 10 60 A 50 50 0 0 1 110 60" class="dial-fill" stroke="url(#gradQual)" stroke-dasharray="157" stroke-dashoffset="37.7" />
+                  <defs><linearGradient id="gradQual" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#5cb97f" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center"><div class="dial-value" style="color:#8a6420">76%</div></div>
+              </div>
+              <div class="dial-sub">of connected calls</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Volumetrics -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My Queue</span><span class="kpi-sec-sub">&middot; Your queue right now</span></div>
+          <div class="kpi-grid g7">
+            <div class="metric-card clk" onclick="openKpi('assigned')"><div class="mc-icon blue"><span class="material-symbols-outlined">group</span></div><div class="mc-lbl">Leads Assigned</div><div class="mc-val">5</div><div class="mc-sub">Call Centre-owned only</div></div>
+            <div class="metric-card clk" onclick="openKpi('notActioned')"><div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">5</div><div class="mc-sub">Action first</div></div>
+            <div class="metric-card clk" onclick="openKpi('callbacks')"><div class="mc-icon amber"><span class="material-symbols-outlined">schedule</span></div><div class="mc-lbl">Callbacks Due</div><div class="mc-val">2</div><div class="mc-sub">1 overdue</div></div>
+            <div class="metric-card clk" onclick="openKpi('contact')"><div class="mc-icon green"><span class="material-symbols-outlined">check_circle</span></div><div class="mc-lbl">Contact</div><div class="mc-val txt-green">2</div><div class="mc-sub">100% qualified</div></div>
+            <div class="metric-card clk" onclick="openKpi('returned')"><div class="mc-icon amber"><span class="material-symbols-outlined">undo</span></div><div class="mc-lbl">Returned by Sales</div><div class="mc-val">2</div><div class="mc-sub">Fix and resend</div></div>
+            <div class="metric-card clk" onclick="openKpi('aht')"><div class="mc-icon teal"><span class="material-symbols-outlined">timer</span></div><div class="mc-lbl">AHT &middot; Qual &middot; Return</div><div class="mc-val" style="font-size:19px">4m 05s</div><div class="mc-sub">Qual 88% &middot; Return 3%</div></div>
+            <div class="metric-card clk" onclick="openKpi('lost')" style="background:var(--red-soft);border-color:#f4cfcf"><div class="mc-icon red"><span class="material-symbols-outlined">person_off</span></div><div class="mc-lbl">Lost Leads</div><div class="mc-val txt-red">1</div><div class="mc-sub">Separated from queue</div></div>
+          </div>
+        </div>
+
+        <!-- Lead queue (full width) -->
+        <div class="q-panel">
             <div class="q-head">
-              <h3>Today's lead queue</h3>
-              <span class="q-cnt">9 of 9</span>
+              <div class="q-head-left"><h3>Lead queue</h3><span class="q-cnt">5 of 5 &middot; sorted by urgency</span></div>
+              <div class="q-nextcall">
+                <div class="nc-ico"><span class="material-symbols-outlined">wifi_calling_3</span></div>
+                <div class="qnc-info"><span class="qnc-lbl">My next call</span><span class="qnc-line"><span class="qnc-name">Meera Shah</span> <span class="qnc-meta">&middot; EXEED LX &middot; <strong style="color:var(--red)">8 min left</strong> &middot; <span class="temp hot">Hot</span></span></span></div>
+                <a href="lead-detail.html?lead=Meera+Shah" class="nc-btn"><span class="material-symbols-outlined" style="font-size:16px">call</span> Start call</a>
+              </div>
             </div>
             <div class="q-filters">
               <span class="material-symbols-outlined">filter_list</span>
-              <button class="qt on">All</button>
+              <button class="qt on">All &middot; 5</button>
               <button class="qt">New</button>
-              <button class="qt">Not actioned</button>
-              <button class="qt">Follow-ups</button>
-              <button class="qt">Ready to hand over</button>
+              <button class="qt">Not Actioned</button>
+              <button class="qt">Callback</button>
+              <button class="qt">Contact</button>
+              <button class="qt">SLA Breached</button>
+              <button class="qt">Returned by Sales</button>
             </div>
             <table class="qt-table">
               <thead><tr>
-                <th>Customer</th><th>Phone</th><th>Lead ID</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Status</th><th style="text-align:right">Action</th>
+                <th>Lead</th><th>Status</th><th>Source</th><th>Model</th><th>SLA</th><th>Qual %</th><th style="text-align:right">Next Action</th>
               </tr></thead>
               <tbody>
-                <tr>
-                  <td><div class="c-name">Hiren Patel</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 50 123 4567',this)"><span class="cc-text c-phone">+971 50 123 4567</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04832',this)"><span class="cc-text c-id">L-2026-04832</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
-                  <td><span class="mdl">EXEED LX Premium</span></td>
-                  <td><span class="sla-tag ok"><span class="blink"></span>12 min left</span></td>
-                  <td><span class="st-badge new">New</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Hiren+Patel" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
-                </tr>
                 <tr class="urg">
-                  <td><div class="c-name">Maya Hassan</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 55 998 2210',this)"><span class="cc-text c-phone">+971 55 998 2210</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04831',this)"><span class="cc-text c-id">L-2026-04831</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot ig">I</span>Instagram Ads</span></td>
-                  <td><span class="mdl">EXEED TXL Flagship</span></td>
-                  <td><span class="sla-tag brch"><span class="blink"></span>SLA breached</span></td>
-                  <td><span class="st-badge na">Not actioned</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Maya+Hassan" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
+                  <td><div class="c-name">Meera Shah</div><div class="c-id">L-2026-06002</div></td>
+                  <td><span class="st-badge na">Not Actioned</span></td>
+                  <td>800 Number</td><td><span class="mdl">EXEED LX</span></td>
+                  <td><span class="sla-tag brch"><span class="blink"></span>8m left</span></td>
+                  <td><span class="pct-r">20%</span></td>
+                  <td style="text-align:right"><a class="q-next" href="lead-detail.html?lead=Meera+Shah">Start call &rsaquo;</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Karim Saleh</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 52 447 1100',this)"><span class="cc-text c-phone">+971 52 447 1100</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04829',this)"><span class="cc-text c-id">L-2026-04829</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot ggl">G</span>Google Search</span></td>
-                  <td><span class="mdl">EXEED VX</span></td>
-                  <td><span class="sla-tag ok"><span class="blink"></span>1h 20m left</span></td>
-                  <td><span class="st-badge new">New</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Karim+Saleh" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
+                  <td><div class="c-name">Sam Fadi</div><div class="c-id">L-2026-06006</div></td>
+                  <td><span class="st-badge con">Contact</span></td>
+                  <td>800 Number</td><td><span class="mdl">EXEED LX</span></td>
+                  <td><span class="sla-tag ok">25m left</span></td>
+                  <td><span class="pct-g">100%</span></td>
+                  <td style="text-align:right"><a class="q-next" href="lead-detail.html?lead=Sam+Fadi">Hand over to Sales &rsaquo;</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Aisha Khalifa</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 50 887 6631',this)"><span class="cc-text c-phone">+971 50 887 6631</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04825',this)"><span class="cc-text c-id">L-2026-04825</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot walk">R</span>Walk-in ref.</span></td>
-                  <td><span class="mdl">EXEED RX</span></td>
-                  <td><span class="sla-tag wrn"><span class="blink"></span>Due 14:30</span></td>
-                  <td><span class="st-badge cb">Follow-up</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Aisha+Khalifa" class="act-btn open" title="View follow-up"><span class="material-symbols-outlined">event</span></a></td>
+                  <td><div class="c-name">Sara Ali</div><div class="c-id">L-2026-06101</div></td>
+                  <td><span class="st-badge ret">Returned</span></td>
+                  <td>Call Center Inbound</td><td><span class="mdl">EXEED LX</span></td>
+                  <td><span class="sla-tag wrn">30m left</span></td>
+                  <td><span class="pct-a">90%</span></td>
+                  <td style="text-align:right"><a class="q-next" href="lead-detail.html?lead=Sara+Ali">Complete missing field &rsaquo;</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Linda George</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 56 220 7788',this)"><span class="cc-text c-phone">+971 56 220 7788</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04820',this)"><span class="cc-text c-id">L-2026-04820</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot fb">f</span>Facebook Ads</span></td>
-                  <td><span class="mdl">EXEED LX</span></td>
-                  <td><span class="sla-tag wrn"><span class="blink"></span>Due 15:15</span></td>
-                  <td><span class="st-badge cb">Follow-up</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Linda+George" class="act-btn open" title="View follow-up"><span class="material-symbols-outlined">event</span></a></td>
+                  <td><div class="c-name">Mira Khaled</div><div class="c-id">L-2026-06102</div></td>
+                  <td><span class="st-badge ret">Returned</span></td>
+                  <td>Manual CC Queue</td><td><span class="mdl">EXEED LX</span></td>
+                  <td><span class="sla-tag wrn">30m left</span></td>
+                  <td><span class="pct-a">70%</span></td>
+                  <td style="text-align:right"><a class="q-next" href="lead-detail.html?lead=Mira+Khaled">Verify number &rsaquo;</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Omar Nasser</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 55 331 9987',this)"><span class="cc-text c-phone">+971 55 331 9987</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04818',this)"><span class="cc-text c-id">L-2026-04818</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
-                  <td><span class="mdl">EXEED TXL</span></td>
-                  <td><span class="sla-tag ok">Qualified</span></td>
-                  <td><span class="st-badge ho">Ready to hand over</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand" title="Hand over"><span class="material-symbols-outlined">send</span></a></td>
-                </tr>
-                <tr>
-                  <td><div class="c-name">Fatima Al Ali</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 50 662 4411',this)"><span class="cc-text c-phone">+971 50 662 4411</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04817',this)"><span class="cc-text c-id">L-2026-04817</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot ref">R</span>Referral</span></td>
-                  <td><span class="mdl">EXEED VX</span></td>
-                  <td><span class="sla-tag ok">Qualified</span></td>
-                  <td><span class="st-badge ho">Ready to hand over</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand" title="Hand over"><span class="material-symbols-outlined">send</span></a></td>
-                </tr>
-                <tr>
-                  <td><div class="c-name">Yousef Rahman</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 52 118 3344',this)"><span class="cc-text c-phone">+971 52 118 3344</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04815',this)"><span class="cc-text c-id">L-2026-04815</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot ig">I</span>Instagram Ads</span></td>
-                  <td><span class="mdl">EXEED LX</span></td>
-                  <td><span class="sla-tag ok">Qualified</span></td>
-                  <td><span class="st-badge ho">Ready to hand over</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html" class="act-btn hand" title="Hand over"><span class="material-symbols-outlined">send</span></a></td>
-                </tr>
-                <tr>
-                  <td><div class="c-name">Reem Al Zaabi</div></td><td><span class="copy-chip" title="Copy phone" onclick="event.stopPropagation();copyText('+971 55 774 8823',this)"><span class="cc-text c-phone">+971 55 774 8823</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td><td><span class="copy-chip" title="Copy Lead ID" onclick="event.stopPropagation();copyText('L-2026-04814',this)"><span class="cc-text c-id">L-2026-04814</span><span class="material-symbols-outlined cc-ico">content_copy</span></span></td>
-                  <td><span class="src"><span class="src-dot web">W</span>AGM website</span></td>
-                  <td><span class="mdl">EXEED RX</span></td>
-                  <td><span class="sla-tag ok">In progress</span></td>
-                  <td><span class="st-badge ip">In progress</span></td>
-                  <td style="text-align:right"><a href="lead-detail.html?lead=Reem+Al+Zaabi" class="act-btn open" title="Open lead"><span class="material-symbols-outlined">open_in_new</span></a></td>
+                  <td><div class="c-name">Dana Alwan</div><div class="c-id">L-2026-06013</div></td>
+                  <td><span class="st-badge con">Contact</span></td>
+                  <td>Call Center Inbound</td><td><span class="mdl">EXEED LX</span></td>
+                  <td><span class="sla-tag ok">250m left</span></td>
+                  <td><span class="pct-g">100%</span></td>
+                  <td style="text-align:right"><a class="q-next" href="lead-detail.html?lead=Dana+Alwan">Hand over to Sales &rsaquo;</a></td>
                 </tr>
               </tbody>
             </table>
+        </div>
+
+        <!-- Three panels -->
+        <div class="panels3">
+          <div class="sc">
+            <div class="sc-head clk" onclick="openKpi('callbacks')">
+              <h4><span class="material-symbols-outlined" style="color:var(--amber)">schedule</span> Callbacks due</h4>
+              <span class="sc-cnt">12</span>
+            </div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Farida Zohra</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &times; 3 &middot; Escalate</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Anita Wong</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &middot; Retry</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Aisha Khalifa</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &times; 2 &middot; Prefers evenings</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Layan Otaibi</span><span class="tc norm">08:35</span></div><div class="r-detail">Callback requested &middot; Hot &mdash; quick</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Linda George</span><span class="tc norm">08:40</span></div><div class="r-detail">Requested callback &middot; Wants LX walkthrough</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Karam Halabi</span><span class="tc norm">08:45</span></div><div class="r-detail">Requested demo &middot; Hot</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
           </div>
 
-          <!-- Sidebar -->
-          <div class="side">
-            <div class="sc">
-              <div class="sc-head">
-                <h4><span class="material-symbols-outlined" style="color:var(--amber)">schedule</span> Follow-ups due</h4>
-                <span class="sc-cnt">2</span>
-              </div>
-              <div class="sc-row">
-                <div class="sc-row-top"><span class="r-name">Aisha Khalifa</span><span class="tc urg">14:30</span></div>
-                <div class="r-detail">EXEED RX &middot; Due 14:30</div>
-                <a href="lead-detail.html?lead=Aisha+Khalifa" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">open_in_new</span> Open lead</a>
-              </div>
-              <div class="sc-row">
-                <div class="sc-row-top"><span class="r-name">Linda George</span><span class="tc norm">15:15</span></div>
-                <div class="r-detail">EXEED LX &middot; Due 15:15</div>
-                <a href="lead-detail.html?lead=Linda+George" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">open_in_new</span> Open lead</a>
-              </div>
+          <div class="sc">
+            <div class="sc-head clk" onclick="openKpi('contact')">
+              <h4><span class="material-symbols-outlined" style="color:var(--green)">check_circle</span> Contact</h4>
+              <span class="sc-cnt">2 &middot; 100% qualified</span>
             </div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Sam Fadi</span><span class="qb">Contact</span></div><div class="r-detail">EXEED LX &middot; 800 Number</div><a href="lead-detail.html?lead=Sam+Fadi" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Dana Alwan</span><span class="qb">Contact</span></div><div class="r-detail">EXEED LX &middot; Call Center Inbound</div><a href="lead-detail.html?lead=Dana+Alwan" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a></div>
+          </div>
 
-            <div class="sc">
-              <div class="sc-head">
-                <h4><span class="material-symbols-outlined" style="color:var(--green)">check_circle</span> Ready to hand over</h4>
-                <span class="sc-cnt">3</span>
-              </div>
-              <div class="sc-row">
-                <div class="sc-row-top"><span class="r-name">Omar Nasser</span><span class="qb">Qualified</span></div>
-                <div class="r-detail">EXEED TXL &middot; AGM website</div>
-                <a href="lead-detail.html" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a>
-              </div>
-              <div class="sc-row">
-                <div class="sc-row-top"><span class="r-name">Fatima Al Ali</span><span class="qb">Qualified</span></div>
-                <div class="r-detail">EXEED VX &middot; Referral</div>
-                <a href="lead-detail.html" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a>
-              </div>
-              <div class="sc-row">
-                <div class="sc-row-top"><span class="r-name">Yousef Rahman</span><span class="qb">Qualified</span></div>
-                <div class="r-detail">EXEED LX &middot; Instagram Ads</div>
-                <a href="lead-detail.html" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">send</span> Hand over to Sales</a>
-              </div>
+          <div class="sc">
+            <div class="sc-head clk" onclick="openKpi('returned')">
+              <h4><span class="material-symbols-outlined" style="color:var(--blue)">undo</span> Returned by sales</h4>
+              <span class="sc-cnt">2</span>
             </div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Sara Ali</span></div><div class="rr-reason">Reason: Missing preferred showroom</div><div class="rr-miss">90% complete &middot; Cannot resend until fixed</div><a href="lead-detail.html?lead=Sara+Ali" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">build</span> Fix &amp; resend</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Mira Khaled</span></div><div class="rr-reason">Reason: Wrong contact number</div><div class="rr-miss">70% complete &middot; Cannot resend until fixed</div><a href="lead-detail.html?lead=Mira+Khaled" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">build</span> Fix &amp; resend</a></div>
+          </div>
+        </div>
 
-            <div class="ai">
-              <div class="ai-top">
-                <span class="ai-pill">&#10024; AI Copilot</span>
-                <span class="ai-title">Lead Qualification Assist</span>
-              </div>
-              <div class="ai-body">
-                Next best action for <strong>Hiren Patel</strong>: confirm intent, capture budget band, propose showroom slot within 24h.
-                <br>
-                <a href="lead-detail.html?lead=Hiren+Patel" class="ai-btn"><span class="material-symbols-outlined">open_in_new</span> Open lead with suggestions</a>
-              </div>
+        <!-- Sales executives recommended for handover -->
+        <div class="handover">
+          <div class="ho-head"><span class="material-symbols-outlined">group</span> Sales executives &mdash; recommended for handover</div>
+          <div class="ho-row">
+            <div class="ho-info"><div class="ho-name">Priya Nair <span class="material-symbols-outlined">verified</span></div><div class="ho-meta">SZR &middot; English/Hindi &middot; 5 active &middot; 0 pending FC</div></div>
+            <span class="ho-avail">Available</span><span class="ho-note">Low workload</span>
+            <button class="ho-btn">Hand over</button>
+          </div>
+          <div class="ho-row">
+            <div class="ho-info"><div class="ho-name">Ahmad Nasr <span class="material-symbols-outlined">verified</span></div><div class="ho-meta">SZR &middot; English/Arabic &middot; 8 active &middot; 1 pending FC</div></div>
+            <span class="ho-avail">Available</span><span class="ho-note">Low workload</span>
+            <button class="ho-btn">Hand over</button>
+          </div>
+          <div class="ho-row">
+            <div class="ho-info"><div class="ho-name">Mariam Saeed <span class="material-symbols-outlined">verified</span></div><div class="ho-meta">SZR &middot; English/Arabic &middot; 12 active &middot; 3 pending FC</div></div>
+            <span class="ho-avail">Available</span>
+            <button class="ho-btn" style="margin-left:auto">Hand over</button>
+          </div>
+        </div>
+        </div><!-- /streamSales -->
+
+        <!-- Aftersales stream -->
+        <div id="streamAftersales" style="display:none">
+          <div class="q-panel">
+            <div class="q-head">
+              <h3><span class="material-symbols-outlined" style="font-size:17px;vertical-align:-3px;color:var(--blue)">groups</span> Aftersales requests</h3>
+              <span class="q-cnt">Separate SLA &middot; never counted with Sales</span>
             </div>
+            <table class="qt-table">
+              <thead><tr><th>Ticket</th><th>Customer</th><th>Type</th><th>Agent</th><th>Age</th><th>SLA</th><th style="text-align:right">Next Action</th></tr></thead>
+              <tbody>
+                <tr><td><span class="c-id">AS-3001</span></td><td><div class="c-name">Ravi Kumar</div></td><td>Service booking</td><td>Nadia Al Suwaidi</td><td>20m</td><td><span class="sla-tag ok">On Track</span></td><td style="text-align:right"><a class="q-next" href="#">Confirm slot &rsaquo;</a></td></tr>
+                <tr class="urg"><td><span class="c-id">AS-3002</span></td><td><div class="c-name">Marwa El Sayed</div></td><td>Complaint</td><td>Aisha Hussein</td><td>240m</td><td><span class="sla-tag brch">SLA Breached</span></td><td style="text-align:right"><a class="q-next" href="#">Escalate to service manager &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3003</span></td><td><div class="c-name">Simon Wu</div></td><td>Parts enquiry</td><td>Farhan Aslam</td><td>90m</td><td><span class="sla-tag wrn">Due Soon</span></td><td style="text-align:right"><a class="q-next" href="#">Send parts availability &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3004</span></td><td><div class="c-name">Amina Yousef</div></td><td>Warranty</td><td>Ivan Petrov</td><td>45m</td><td><span class="sla-tag ok">On Track</span></td><td style="text-align:right"><a class="q-next" href="#">Collect proof of purchase &rsaquo;</a></td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
@@ -1119,11 +1271,332 @@
     </div>
   </div>
 
+  <!-- Training Coach modal -->
+  <div class="tc-ov" id="tcOv" onclick="closeTraining()"></div>
+  <div class="tc-panel" id="tcPanel" role="dialog" aria-label="Call Center Training Coach">
+    <div class="tc-head">
+      <span class="material-symbols-outlined">school</span>
+      <div><div class="tc-htitle">Call Center Training Coach</div><div class="tc-hsub">Click a module to start a live AI role-play. Listen, then complete the module when the call ends.</div></div>
+      <button class="tc-close" onclick="closeTraining()" aria-label="Close">&times;</button>
+    </div>
+    <div class="tc-body">
+      <div class="tc-list" id="tcList"></div>
+      <div class="tc-main">
+        <div class="tc-empty" id="tcEmpty">
+          <div class="tc-halo"><div class="tc-halo-core"><span class="material-symbols-outlined">support_agent</span></div></div>
+          <div class="tc-waves"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <h4>Ready to practice?</h4>
+          <p>Pick a module on the left &mdash; the AI customer will call in and role-play the scenario live. You'll hear both sides, then score yourself.</p>
+          <div class="tc-steps">
+            <div class="tc-step"><div class="tc-step-ico"><span class="material-symbols-outlined">list_alt</span></div><div class="tc-step-t">Pick a module</div></div>
+            <span class="tc-step-arrow material-symbols-outlined">chevron_right</span>
+            <div class="tc-step"><div class="tc-step-ico"><span class="material-symbols-outlined">hearing</span></div><div class="tc-step-t">Listen live</div></div>
+            <span class="tc-step-arrow material-symbols-outlined">chevron_right</span>
+            <div class="tc-step"><div class="tc-step-ico"><span class="material-symbols-outlined">military_tech</span></div><div class="tc-step-t">Get scored</div></div>
+          </div>
+        </div>
+        <div class="tc-playarea" id="tcPlayArea" style="display:none">
+          <div class="tc-scenario"><div class="tc-sc-lbl" id="tcScLbl">Live role-play</div><div class="tc-sc-rule" id="tcScRule">Select a module to begin.</div></div>
+          <div class="tc-callbar" id="tcCallbar"><div class="tc-callbar-top"><span class="material-symbols-outlined" id="tcMuteIco" onclick="tcToggleMute()" style="cursor:pointer" title="Mute / unmute voice">volume_up</span> <span id="tcCallText">Live call in progress &mdash; listening&hellip;</span></div><div class="tc-dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="tc-chat" id="tcChat"></div>
+          <div class="tc-hint"><span class="material-symbols-outlined">hearing</span> The AI plays both the customer and your responses — just listen, then complete the module.</div>
+          <button class="tc-complete" id="tcComplete" onclick="tcComplete()"><span class="material-symbols-outlined" style="font-size:18px">check_circle</span> Complete Module</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI drill-down drawer -->
+  <div class="dd-ov" id="ddOv" onclick="closeKpi()"></div>
+  <div class="dd-panel" id="ddPanel" role="dialog" aria-label="KPI detail">
+    <div class="dd-head">
+      <div><div class="dd-title" id="ddTitle"></div><div class="dd-sub" id="ddSub"></div></div>
+      <div class="dd-hr"><span class="dd-count" id="ddCount"></span><button class="dd-close" onclick="closeKpi()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>
+    </div>
+    <div class="dd-body"><table class="dd-table" id="ddTable"></table></div>
+  </div>
+
+  <script>
+    // ── KPI drill-down data (content ported from call-center-agent dashboard) ──
+    function L(n, id){ return '<div class="dd-nm">'+n+'</div>'+(id?'<div class="dd-id">'+id+'</div>':''); }
+    function T(t){ return '<span class="temp '+t.toLowerCase()+'">'+t+'</span>'; }
+    function P(n){ var c = n>=100?'pct-g':(n>=60?'pct-a':'pct-r'); return '<span class="'+c+'">'+n+'%</span>'; }
+    function A(x){ return '<a class="dd-link" href="lead-detail.html">'+x+' &rsaquo;</a>'; }
+    function RED(x){ return '<span class="dd-red">'+x+'</span>'; }
+    function M(x){ return '<span class="mono">'+x+'</span>'; }
+    var KPI = {
+      c1c: { t:'Customer 1st Contact — SLA breaches', s:'Placeholder mock — swap for live SLA query', c:'3 records',
+        head:'<th>Lead</th><th>SLA Type</th><th>Due Time</th><th>Breach Duration</th><th>Owner</th><th></th>',
+        rows:[
+          [L('Ali Kassem'),'Customer 1st Contact',M('10:15'),RED('12m'),'Rahul Krishnan',A('Open')],
+          [L('Farida Zohra'),'Customer 1st Contact',M('09:40'),RED('40m'),'Aisha Hussein',A('Open')],
+          [L('Diego Alvarez'),'Customer 1st Contact',M('10:30'),RED('30m'),'Fadi Haddad',A('Open')]
+        ] },
+      showroom: { t:'Assigned to Showroom — SLA breaches', s:'Placeholder mock — swap for live SLA query', c:'2 records',
+        head:'<th>Lead</th><th>SLA Type</th><th>Due Time</th><th>Breach Duration</th><th>Owner</th><th></th>',
+        rows:[
+          [L('Sara Ali'),'Assigned to Showroom',M('09:30'),RED('1h'),'Nadia Al Suwaidi',A('Open')],
+          [L('Mira Khaled'),'Assigned to Showroom',M('10:05'),RED('25m'),'Nadia Al Suwaidi',A('Open')]
+        ] },
+      open3d: { t:'Open leads > 3 days', s:'Placeholder mock — swap for live SLA query', c:'3 records',
+        head:'<th>Lead</th><th>SLA Type</th><th>Due Time</th><th>Breach Duration</th><th>Owner</th>',
+        rows:[
+          [L('Talal Baig'),'Lead Assignment → CA','3d ago',RED('4d'),'Karim Mostafa'],
+          [L('Huda Baker'),'Lead Assignment → CA','4d ago',RED('11d'),'Talal Baig'],
+          [L('Naif Alavi'),'Customer 1st Contact','3d ago',RED('6d'),'Omar Al Khoury']
+        ] },
+      returned: { t:'Returned by Sales', s:'Complete missing information before resending', c:'2 records',
+        head:'<th>Lead</th><th>Temp</th><th>Source</th><th>Return Reason</th><th>Qual %</th><th>Next Action</th><th>Owner</th><th></th>',
+        rows:[
+          [L('Sara Ali','L-2026-06101'),T('Warm'),'Call Center Inbound',A('Missing preferred showroom'),P(90),A('Complete missing field'),'Nadia Al Suwaidi',A('Review returned')],
+          [L('Mira Khaled','L-2026-06102'),T('Warm'),'Manual CC Queue',A('Wrong contact number'),P(70),A('Verify number'),'Nadia Al Suwaidi',A('Review returned')]
+        ] },
+      aht: { t:'AHT · Qualification · Return', s:'5 recent handled calls · sorted by most recent', c:'5 recent handled calls',
+        head:'<th>Lead Name</th><th>Temp</th><th>Source</th><th>Handling Time</th><th>Qual %</th>',
+        rows:[
+          [L('Ali Kassem','L-2026-06001'),T('Warm'),'Call Center Inbound',M('4m 42s'),P(40)],
+          [L('Meera Shah','L-2026-06002'),T('Hot'),'800 Number',M('3m 58s'),P(20)],
+          [L('Sam Fadi','L-2026-06006'),T('Hot'),'800 Number',M('5m 10s'),P(100)],
+          [L('Iman Sabri','L-2026-06009'),T('Warm'),'Call Center Inbound',M('3m 12s'),P(100)],
+          [L('Dana Alwan','L-2026-06013'),T('Warm'),'Call Center Inbound',M('4m 20s'),P(100)]
+        ] },
+      assigned: { t:'My assigned leads', s:'Call Center owned only', c:'5 records',
+        head:'<th>Lead</th><th>Temp</th><th>Source</th><th>Stage</th><th>SLA</th><th>Qual %</th><th>Next Action</th><th>Routing</th><th></th>',
+        rows:[
+          [L('Meera Shah','L-2026-06002'),T('Hot'),'800 Number','Contact',RED('8 min left'),P(20),A('Start call'),'Call center',A('Start call')],
+          [L('Sam Fadi','L-2026-06006'),T('Hot'),'800 Number','Contact','25 min left',P(100),A('Hand over to Sales'),'Call center',A('Start call')],
+          [L('Sara Ali','L-2026-06101'),T('Warm'),'Call Center Inbound','Contact','30 min left',P(90),A('Complete missing field'),'Returned by sales',A('Start call')],
+          [L('Mira Khaled','L-2026-06102'),T('Warm'),'Manual CC Queue','Contact','30 min left',P(70),A('Verify number'),'Returned by sales',A('Start call')],
+          [L('Dana Alwan','L-2026-06013'),T('Warm'),'Call Center Inbound','Contact','4h 10m left',P(100),A('Hand over to Sales'),'Call center',A('Start call')]
+        ] },
+      notActioned: { t:'Not actioned', s:'Action these first — sorted by SLA remaining', c:'5 records',
+        head:'<th>Lead</th><th>Temp</th><th>Source</th><th>SLA</th><th>Channel</th><th>Next Action</th><th>Routing</th><th></th>',
+        rows:[
+          [L('Meera Shah','L-2026-06002'),T('Hot'),'800 Number','<span class="dd-amber">8 min left</span>','WhatsApp · English',A('Start call'),'Call center',A('Start call')],
+          [L('Sam Fadi','L-2026-06006'),T('Hot'),'800 Number','25 min left','WhatsApp · English',A('Hand over to Sales'),'Call center',A('Start call')],
+          [L('Sara Ali','L-2026-06101'),T('Warm'),'Call Center Inbound','30 min left','WhatsApp · English',A('Complete missing field'),'Returned by sales',A('Start call')],
+          [L('Mira Khaled','L-2026-06102'),T('Warm'),'Manual CC Queue','30 min left','WhatsApp · English',A('Verify number'),'Returned by sales',A('Start call')],
+          [L('Dana Alwan','L-2026-06013'),T('Warm'),'Call Center Inbound','4h 10m left','WhatsApp · English',A('Hand over to Sales'),'Call center',A('Start call')]
+        ] },
+      callbacks: { t:'Callbacks due', s:'Sorted by due time', c:'2 callbacks',
+        head:'<th>Customer</th><th>Phone</th><th>Due</th><th>Previous Outcome</th><th>Notes</th><th></th>',
+        rows:[
+          [L('Aisha Khalifa','CB-1001'),M('+971 50 887 6631'),RED('30 min overdue'),'No answer × 2','Prefers evenings',A('Call back')],
+          [L('Karam Halabi','CB-1011'),M('+971 50 998 8877'),'<span class="dd-amber">15 min</span>','Requested demo','Hot',A('Call back')]
+        ] },
+      contact: { t:'Contact', s:'Only fully qualified leads appear here', c:'2 records',
+        head:'<th>Lead</th><th>Temp</th><th>Source</th><th>Model</th><th>Qual %</th><th>Next Action</th><th>Routing</th><th></th>',
+        rows:[
+          [L('Sam Fadi','L-2026-06006'),T('Hot'),'800 Number','EXEED LX',P(100),A('Hand over to Sales'),'Call center',A('Hand over to Sales')],
+          [L('Dana Alwan','L-2026-06013'),T('Warm'),'Call Center Inbound','EXEED LX',P(100),A('Hand over to Sales'),'Call center',A('Hand over to Sales')]
+        ] },
+      lost: { t:'Lost leads', s:'Separated from active queue', c:'1 record',
+        head:'<th>Lead</th><th>Source</th><th>Stage</th><th>Lost Reason</th><th>Days Idle</th><th>Owner</th><th></th>',
+        rows:[
+          [L('Nabil Farha','L-2026-07006'),'800 Number','Contact','Duplicate','15d','Nadia Al Suwaidi',A('Open')]
+        ] }
+    };
+    function openKpi(k){
+      var d = KPI[k]; if (!d) return;
+      document.getElementById('ddTitle').textContent = d.t;
+      document.getElementById('ddSub').textContent = d.s;
+      document.getElementById('ddCount').textContent = d.c;
+      var h = '<thead><tr>'+d.head+'</tr></thead><tbody>';
+      d.rows.forEach(function(r){ h += '<tr>'+r.map(function(c){ return '<td>'+c+'</td>'; }).join('')+'</tr>'; });
+      h += '</tbody>';
+      document.getElementById('ddTable').innerHTML = h;
+      document.getElementById('ddOv').classList.add('open');
+      document.getElementById('ddPanel').classList.add('open');
+    }
+    function closeKpi(){
+      document.getElementById('ddOv').classList.remove('open');
+      document.getElementById('ddPanel').classList.remove('open');
+    }
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeKpi(); });
+
+    // Stream filter: Sales ↔ Aftersales
+    function setStream(s){
+      var isSales = s === 'sales';
+      document.getElementById('streamSales').style.display = isSales ? '' : 'none';
+      document.getElementById('streamAftersales').style.display = isSales ? 'none' : '';
+      document.getElementById('tabSales').classList.toggle('on', isSales);
+      document.getElementById('tabAfter').classList.toggle('on', !isSales);
+    }
+
+    // ── Training Coach: live AI role-play ──
+    var TC_MODULES = [
+      { t:'Inbound lead greeting', d:'Warm, branded, bilingual-ready.', st:'completed', score:92, rule:'Warm, branded, bilingual-ready.',
+        script:[
+          {r:'you', t:"Hello, thank you for calling AGM EXEED — this is Nadia. May I have your name and how I can help today?"},
+          {r:'customer', t:"Hi Nadia, I'm Omar — I saw the EXEED LX online and wanted more info."},
+          {r:'you', t:"Wonderful, Omar — I'd be happy to help with the EXEED LX. Is it for yourself or the family?"},
+          {r:'customer', t:"For the family, mostly city driving."},
+          {r:'you', t:"Perfect. I'll capture your details now and hand you to a sales specialist who will confirm within 15 minutes."},
+          {r:'customer', t:"Okay, that sounds good — what's the next step?"}
+        ], coach:"Great practice run — captured: Greeting, Name capture. Click Complete Module to save your score." },
+      { t:'Structured qualification', d:'Follow the CC qualification form.', st:'due', rule:'Follow the CC qualification form — budget, usage, timeline.',
+        script:[
+          {r:'you', t:"To find the best fit, may I ask a few quick questions? What's your budget range?"},
+          {r:'customer', t:"Around 150k, mostly city driving."},
+          {r:'you', t:"Great. And how many people usually travel with you?"},
+          {r:'customer', t:"We're five — we need good space."},
+          {r:'you', t:"Noted — 5 seats, city use, ~150k budget. When are you hoping to buy?"},
+          {r:'customer', t:"Within the next month."}
+        ], coach:"Great practice run — captured: Budget, Usage, Timeline. Click Complete Module to save your score." },
+      { t:'Model interest capture', d:'Confirm exact model and trim.', st:'completed', score:88, rule:'Confirm the exact model and trim.',
+        script:[
+          {r:'customer', t:"I like the EXEED range but I'm not sure which one fits."},
+          {r:'you', t:"Happy to help — are you after 5 seats or a 3-row 7-seater?"},
+          {r:'customer', t:"I want the bigger one with 3 rows."},
+          {r:'you', t:"That's the EXEED VX. Would you like the top trim with the panoramic roof?"},
+          {r:'customer', t:"Yes, the top trim sounds right."},
+          {r:'you', t:"Perfect — EXEED VX, top trim. I'll note that on your profile."}
+        ], coach:"Great practice run — captured: Model, Trim. Click Complete Module to save your score." },
+      { t:'Preferred showroom capture', d:'Always confirm branch.', st:'due', rule:'Always confirm branch.',
+        script:[
+          {r:'customer', t:"I'd like to come and see the car this weekend."},
+          {r:'you', t:"Love that — which area are you in so I can find the nearest showroom?"},
+          {r:'customer', t:"I'm in Sharjah — which branch is closest?"},
+          {r:'you', t:"Our Sharjah showroom on Al Wahda Street is closest. Shall I book you in there this weekend?"},
+          {r:'customer', t:"Okay, that sounds good — what's the next step?"},
+          {r:'you', t:"I'll capture your details now and hand you to a sales specialist who will confirm your appointment within 15 minutes."}
+        ], coach:"Great practice run — captured: Preferred showroom, Preferred contact time. Click Complete Module to save your score." },
+      { t:'Test drive enquiry', d:'Offer & confirm test drive.', st:'completed', score:95, rule:'Offer and confirm a test-drive slot.',
+        script:[
+          {r:'customer', t:"Can I test drive the EXEED VX?"},
+          {r:'you', t:"Absolutely! We have slots this weekend — would Saturday morning suit you?"},
+          {r:'customer', t:"Saturday morning works for me."},
+          {r:'you', t:"Great. Please bring your driving licence and Emirates ID. I'll confirm the booking now."},
+          {r:'customer', t:"Do I need to bring anything else?"},
+          {r:'you', t:"That's everything — I'll text you the address and time shortly."}
+        ], coach:"Great practice run — captured: Test-drive slot, Documents. Click Complete Module to save your score." },
+      { t:'Finance question handling', d:'Capture interest only — do NOT quote.', st:'failed', score:48, rule:'Capture interest only — do NOT quote a price.',
+        script:[
+          {r:'customer', t:"What's the monthly installment for the LX?"},
+          {r:'you', t:"Great question — I can't quote exact figures, but our finance team offers flexible plans. May I capture your interest so a specialist can share options?"},
+          {r:'customer', t:"So roughly how much per month?"},
+          {r:'you', t:"I'd rather not give an inaccurate number — a finance specialist will call you with tailored options. Is that okay?"},
+          {r:'customer', t:"Okay, can someone call me with the options?"},
+          {r:'you', t:"Absolutely — I'll flag your profile for a finance callback today."}
+        ], coach:"Great practice run — captured: Finance interest (no quote given). Click Complete Module to save your score." },
+      { t:'Competitor question handling', d:'Empathise, redirect to strengths.', st:'due', rule:'Empathise, then redirect to EXEED strengths.',
+        script:[
+          {r:'customer', t:"I'm also looking at a Toyota — why should I pick EXEED?"},
+          {r:'you', t:"That's a fair comparison — both are strong. What EXEED adds is a longer warranty and more standard features at this price."},
+          {r:'customer', t:"The Toyota has good resale value though."},
+          {r:'you', t:"True — and EXEED's resale is improving fast, plus you get a 5-year warranty and a free service package. Shall I book a test drive so you can feel the difference?"},
+          {r:'customer', t:"Hmm — tell me more about the warranty."},
+          {r:'you', t:"Of course — 5 years or 150,000 km, whichever comes first, fully transferable. Let me capture your details."}
+        ], coach:"Great practice run — captured: Empathy, Redirect to strengths. Click Complete Module to save your score." }
+    ];
+    var tcActive = -1, tcTimers = [], tcToken = 0, tcMuted = false, tcVoices = [];
+    if (window.speechSynthesis) { tcVoices = speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = function(){ tcVoices = speechSynthesis.getVoices(); }; }
+    function tcClearTimers(){ tcTimers.forEach(function(t){ clearTimeout(t); }); tcTimers = []; if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} } }
+    function tcPickVoice(role){
+      if (!tcVoices.length) return null;
+      var en = tcVoices.filter(function(v){ return /en[-_]/i.test(v.lang); });
+      var pool = en.length ? en : tcVoices;
+      function find(names){ for (var i=0;i<pool.length;i++){ var n=pool[i].name.toLowerCase(); for (var j=0;j<names.length;j++){ if (n.indexOf(names[j])>=0) return pool[i]; } } return null; }
+      if (role === 'customer') return find(['daniel','male','fred','rishi','google uk english male']) || pool[pool.length>1?1:0];
+      return find(['samantha','female','victoria','karen','moira','google uk english female']) || pool[0];
+    }
+    function tcSpeak(text, role, cb){
+      if (tcMuted || !window.speechSynthesis) { if (cb) tcTimers.push(setTimeout(cb, 850)); return; }
+      try { speechSynthesis.cancel(); } catch(e){}
+      var u = new SpeechSynthesisUtterance(text);
+      var v = tcPickVoice(role); if (v) u.voice = v;
+      u.rate = 1.02; u.pitch = role === 'you' ? 1.12 : (role === 'customer' ? 0.95 : 1.0);
+      var done = false; function fin(){ if (done) return; done = true; if (cb) cb(); }
+      u.onend = fin; u.onerror = fin;
+      tcTimers.push(setTimeout(fin, Math.max(2500, text.length * 75)));  // fallback if onend never fires
+      speechSynthesis.speak(u);
+    }
+    function tcToggleMute(){
+      tcMuted = !tcMuted;
+      var ico = document.getElementById('tcMuteIco'); if (ico) ico.textContent = tcMuted ? 'volume_off' : 'volume_up';
+      if (tcMuted && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
+    }
+    function tcBadge(m){
+      if (m.st==='completed') return '<span class="tc-badge completed"><span class="material-symbols-outlined">check_circle</span> completed &middot; '+m.score+'%</span>';
+      if (m.st==='failed') return '<span class="tc-badge failed"><span class="material-symbols-outlined">cancel</span> failed &middot; '+m.score+'%</span>';
+      return '<span class="tc-badge due">due</span>';
+    }
+    function tcRenderList(){
+      document.getElementById('tcList').innerHTML = TC_MODULES.map(function(m,i){
+        return '<div class="tc-mod'+(i===tcActive?' active':'')+'" onclick="tcSelect('+i+')"><div class="tc-mod-title">'+m.t+'</div><div class="tc-mod-desc">'+m.d+'</div>'+tcBadge(m)+'</div>';
+      }).join('');
+    }
+    function openTraining(){
+      tcClearTimers(); tcToken++; tcActive = -1; tcRenderList();
+      document.getElementById('tcEmpty').style.display = 'flex';
+      document.getElementById('tcPlayArea').style.display = 'none';
+      document.getElementById('tcOv').classList.add('open');
+      document.getElementById('tcPanel').classList.add('open');
+    }
+    function closeTraining(){
+      tcClearTimers(); tcToken++; tcActive = -1;
+      if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
+      document.getElementById('tcOv').classList.remove('open');
+      document.getElementById('tcPanel').classList.remove('open');
+    }
+    function tcMsg(role, who, text){
+      var chat = document.getElementById('tcChat');
+      var av = role==='customer' ? '<span class="material-symbols-outlined" style="font-size:18px">person</span>' : (role==='coach' ? 'AI' : 'N');
+      var d = document.createElement('div'); d.className = 'tc-msg '+role;
+      d.innerHTML = '<div class="tc-av '+role+'">'+av+'</div><div class="tc-bubble"><div class="tc-role">'+who+'</div>'+text+'</div>';
+      chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
+    }
+    // Auto-play the role-play — the AI speaks BOTH the customer and the agent (you); the trainee just listens.
+    function tcSelect(i){
+      tcClearTimers();
+      tcToken++; var token = tcToken;
+      tcActive = i; tcRenderList();
+      document.getElementById('tcEmpty').style.display = 'none';
+      document.getElementById('tcPlayArea').style.display = 'flex';
+      var m = TC_MODULES[i];
+      document.getElementById('tcScLbl').textContent = 'Live role-play · ' + m.t.toUpperCase();
+      document.getElementById('tcScRule').textContent = m.rule;
+      document.getElementById('tcChat').innerHTML = '';
+      var bar = document.getElementById('tcCallbar'); bar.classList.add('show','live');
+      document.getElementById('tcCallText').innerHTML = 'Live call in progress &mdash; listening&hellip;';
+      document.getElementById('tcComplete').classList.remove('ready');
+      tcTimers.push(setTimeout(function(){ tcPlay(0, token); }, 450));
+    }
+    // Play a turn, speak it, then advance when the voice finishes (keeps audio + captions in sync).
+    function tcPlay(idx, token){
+      if (token !== tcToken) return;
+      var m = TC_MODULES[tcActive];
+      if (idx >= m.script.length){
+        tcMsg('coach', 'Coach', m.coach);
+        document.getElementById('tcCallbar').classList.remove('live');
+        document.getElementById('tcCallText').innerHTML = 'Call complete &mdash; click Complete Module';
+        document.getElementById('tcComplete').classList.add('ready');
+        tcSpeak(m.coach, 'coach', null);
+        return;
+      }
+      var turn = m.script[idx];
+      tcMsg(turn.r, turn.r === 'you' ? 'Nadia (You)' : 'Customer', turn.t);
+      tcSpeak(turn.t, turn.r, function(){
+        if (token !== tcToken) return;
+        tcTimers.push(setTimeout(function(){ tcPlay(idx + 1, token); }, 350));
+      });
+    }
+    function tcComplete(){
+      if (tcActive < 0) return;
+      var m = TC_MODULES[tcActive];
+      if (!m.score || m.st !== 'completed') m.score = 90;
+      m.st = 'completed';
+      tcRenderList();
+      tcMsg('coach', 'Coach', 'Module saved — score '+m.score+'%. Pick another module to keep practising.');
+      document.getElementById('tcComplete').classList.remove('ready');
+    }
+  </script>
+
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const arc = 157;
-      document.getElementById('dialSLA').style.strokeDashoffset = arc - (arc * 0.92);
-      document.getElementById('dialTime').style.strokeDashoffset = arc - (arc * 0.52);
+      const dSLA = document.getElementById('dialSLA'); if (dSLA) dSLA.style.strokeDashoffset = arc - (arc * 0.92);
+      const dTime = document.getElementById('dialTime'); if (dTime) dTime.style.strokeDashoffset = arc - (arc * 0.52);
     });
 
     let sec = 3*3600 + 12*60 + 47;
@@ -1256,5 +1729,6 @@
       else { var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e) {} document.body.removeChild(ta); done(); }
     }
   </script>
+  <script src="copilot-widget.js?v=8" defer></script>
 </body>
 </html>

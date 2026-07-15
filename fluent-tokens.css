@@ -175,3 +175,11 @@
 .fluent-btn.primary:hover { background: var(--colorBrandBackgroundHover); border-color: var(--colorBrandBackgroundHover); }
 .fluent-btn.subtle { background: var(--colorSubtleBackground); border-color: transparent; color: var(--colorNeutralForeground2); }
 .fluent-btn.subtle:hover { background: var(--colorSubtleBackgroundHover); }
+
+/* Mockup nav: only the active (or explicitly .enabled) sidebar items are interactive. */
+.sidebar .nav-item:not(.active):not(.enabled),
+.sidebar .sb-item:not(.active):not(.enabled) {
+  pointer-events: none;
+  opacity: .42;
+  cursor: default;
+}

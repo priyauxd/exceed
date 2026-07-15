@@ -6,7 +6,7 @@
   <title>Sales Executive — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <link href="fluent-tokens.css" rel="stylesheet" />
+  <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <style>
     :root {
       --bg: #f5f5f5;
@@ -661,16 +661,15 @@
       </div>
       <nav class="sb-nav">
         <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
-        <a href="index.html" class="sb-item"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
         <a href="#" class="sb-item active"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">task_alt</span>Activities</a>
         <div class="sb-group">Call Center</div>
         <a href="call-center-agent.html" class="sb-item"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today&rsquo;s Leads</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Callbacks</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manag&hellip;</a>
         <div class="sb-group">Sales</div>
-        <a href="lead-detail.html" class="sb-item"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="lead-detail.html" class="sb-item enabled"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">handshake</span>Deals</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">request_quote</span>Quotes</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Test Drives</a>
@@ -1124,5 +1123,6 @@
       copilotRender(intent);
     }
   </script>
+  <script src="copilot-widget.js?v=8" defer></script>
 </body>
 </html>

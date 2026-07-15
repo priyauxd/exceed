@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="d365-shell.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
-  <link href="fluent-tokens.css" rel="stylesheet" />
+  <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <style>
     .dash-header { display: flex; align-items: flex-start; justify-content: space-between; }
     .dash-header-left { flex: 1; }
@@ -143,19 +143,14 @@
 
       <nav class="sidebar-nav">
         <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
-        <a href="#" class="nav-item">
+        <a href="index.html" class="nav-item enabled">
           <span class="material-symbols-outlined">home</span>
           <span>Home</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="call-center-manager.html" class="nav-item enabled">
           <span class="material-symbols-outlined">dashboard</span>
           <span>Dashboard</span>
         </a>
-        <a href="#" class="nav-item">
-          <span class="material-symbols-outlined">task_alt</span>
-          <span>Activities</span>
-        </a>
-
         <div class="nav-group-label">CALL CENTER</div>
         <a href="#" class="nav-item">
           <span class="material-symbols-outlined">monitoring</span>
@@ -175,7 +170,7 @@
         </a>
 
         <div class="nav-group-label">SALES</div>
-        <a href="lead-detail.html" class="nav-item">
+        <a href="lead-detail.html" class="nav-item enabled">
           <span class="material-symbols-outlined">leaderboard</span>
           <span>Leads</span>
         </a>
@@ -1119,6 +1114,6 @@
     }
     (function(){var el=document.getElementById('lastRefreshed');if(el)el.textContent='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
   </script>
-  <script src="copilot-widget.js" defer></script>
+  <script src="copilot-widget.js?v=8" defer></script>
 </body>
 </html>

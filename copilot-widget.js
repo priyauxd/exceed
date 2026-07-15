@@ -49,7 +49,32 @@
   .cw-ntext{font-size:11.5px;color:#616161;line-height:1.4;margin-top:2px;}\
   .cw-ntime{font-size:10.5px;color:#9ea3b5;margin-top:3px;}\
   .cw-nfoot{padding:10px 14px;text-align:center;}\
-  .cw-nfoot a{font-size:11.5px;color:#17293d;font-weight:600;text-decoration:none;cursor:pointer;}';
+  .cw-nfoot a{font-size:11.5px;color:#17293d;font-weight:600;text-decoration:none;cursor:pointer;}\
+  .cw-persona-wrap{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.13);padding:3px 6px 3px 10px;border-radius:6px;margin-right:8px;}\
+  .cw-persona-wrap:hover{background:rgba(255,255,255,.22);}\
+  .cw-persona-wrap>.material-symbols-outlined{font-size:16px;color:#fff;opacity:.9;}\
+  .cw-persona{appearance:none;-webkit-appearance:none;background:transparent;border:none;color:#fff;font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;outline:none;padding:2px 2px;max-width:180px;}\
+  .cw-persona option{color:#242424;}\
+  .cw-rgrp-head{display:flex;align-items:center;gap:8px;padding:8px 14px 5px;font-size:11px;font-weight:700;letter-spacing:.02em;color:#8a8f9c;cursor:pointer;user-select:none;}\
+  .cw-rgrp-head .cw-rico{font-size:16px;}\
+  .cw-rgrp-head .cw-rcaret{margin-left:auto;font-size:16px;transition:transform .15s;}\
+  .cw-rgrp.collapsed .cw-rcaret{transform:rotate(-90deg);}\
+  .cw-rgrp.collapsed .cw-rlist{display:none;}\
+  .cw-rlist{max-height:186px;overflow-y:auto;}\
+  .cw-rlist::-webkit-scrollbar{width:4px;}\
+  .cw-rlist::-webkit-scrollbar-thumb{background:rgba(20,24,34,.18);border-radius:4px;}\
+  .cw-r-av{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#8b7bdf;color:#fff;font-size:9px;font-weight:700;flex-shrink:0;letter-spacing:.02em;margin-right:2px;}\
+  .cw-r-av.a1{background:linear-gradient(135deg,#8b7bdf,#a78bfa);}\
+  .cw-r-av.a2{background:linear-gradient(135deg,#5b8def,#7ba5f5);}\
+  .cw-r-av.a3{background:linear-gradient(135deg,#e8a84c,#d4873a);}\
+  .cw-r-av.a4{background:linear-gradient(135deg,#5cb97f,#4fb8a8);}\
+  .cw-r-av.a5{background:linear-gradient(135deg,#e76e6e,#d45b5b);}\
+  .cw-r-av.a6{background:linear-gradient(135deg,#4fb8a8,#3da89a);}\
+  .cw-r-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}\
+  .cw-r-item .cw-r-pin{margin-left:6px;font-size:15px;color:#b9bdc9;opacity:0;cursor:pointer;flex-shrink:0;transition:opacity .12s,color .12s;}\
+  .cw-r-item:hover .cw-r-pin{opacity:.7;}\
+  .cw-r-item .cw-r-pin:hover{color:#5b54d6;opacity:1;}\
+  .cw-r-item .cw-r-pin.on{opacity:1;color:#5b54d6;font-variation-settings:\'FILL\' 1;}';
 
   var NOTIFS = [
     ['danger', 'warning', 'SLA breached — Maya Hassan', 'L-2026-04831 passed the 1-hour first-contact SLA. Manager notified.', '12 min ago'],
@@ -58,6 +83,16 @@
     ['success', 'check_circle', 'Handover accepted — Ahmad Rizk', 'L-2026-04810 accepted by Mariam K. Test drive booked.', '1 hr ago']
   ];
   var CHIPS = ['What should I do first?', 'Which leads are at SLA risk?', "What's ready to hand over?", 'Draft a follow-up'];
+
+  // Persona → dashboard mapping. Selecting a persona loads that role's dashboard & flows.
+  var PERSONAS = [
+    ['Call Center Agent', 'call-center-agent.html'],
+    ['Call Center Manager', 'call-center-manager.html'],
+    ['Sales Executive', 'sales-executive.html'],
+    ['Brand Host', 'brand-host.html'],
+    ['Delivery Specialist', 'delivery-consultant.html']
+  ];
+  var PERSONA_DEFAULT = 'call-center-agent.html';
 
   // Define global toggles up-front so they exist even if injection is skipped/fails.
   if (!window.toggleCopilot) {
@@ -136,6 +171,94 @@
         '<div class="cw-nfoot"><a>View all notifications</a></div>';
       document.body.appendChild(nov); document.body.appendChild(drop);
     }
+
+    // ---- Persona switcher (sits just before the Copilot link) ----
+    if (actions && !document.getElementById('cwPersona')) {
+      var here = (location.pathname.split('/').pop() || '').toLowerCase();
+      var stored = null; try { stored = localStorage.getItem('exceed_persona'); } catch (e) {}
+      var current = '';
+      PERSONAS.forEach(function (p) { if (p[1].toLowerCase() === here) current = p[1]; });
+      if (!current && stored) current = stored;
+      if (!current) current = PERSONA_DEFAULT;
+
+      var pwrap = document.createElement('div'); pwrap.className = 'cw-persona-wrap';
+      pwrap.innerHTML = '<span class="material-symbols-outlined">badge</span>';
+      var psel = document.createElement('select'); psel.className = 'cw-persona'; psel.id = 'cwPersona';
+      psel.title = 'Switch persona — loads that role’s dashboard & flows';
+      PERSONAS.forEach(function (p) {
+        var o = document.createElement('option'); o.value = p[1]; o.textContent = p[0];
+        if (p[1] === current) o.selected = true;
+        psel.appendChild(o);
+      });
+      psel.onchange = function () {
+        var v = this.value; try { localStorage.setItem('exceed_persona', v); } catch (e) {}
+        if (v && v.toLowerCase() !== here) location.href = v;
+      };
+      pwrap.appendChild(psel);
+      actions.insertBefore(pwrap, actions.firstChild); // left-most → before Copilot
+    }
+
+    // ---- Recent / Pinned leads in the sidebar (persona views only, not the home chooser) ----
+    (function () {
+      var page = (location.pathname.split('/').pop() || '').toLowerCase();
+      if (page === '' || page === 'index.html') return;
+      if (document.getElementById('cwRecentGrp')) return;
+      var dash = null;
+      document.querySelectorAll('.sidebar a, .sb-nav a, .sidebar-nav a').forEach(function (a) {
+        var ico = a.querySelector('.material-symbols-outlined');
+        if (ico && ico.textContent.trim().toLowerCase() === 'dashboard') dash = a;
+      });
+      if (!dash || !dash.parentNode) return;
+      var conv = dash.className.indexOf('nav-item') >= 0 ? 'nav-item' : 'sb-item';
+      function load(key, seed) {
+        var v; try { v = JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) {}
+        if (!v || !v.length) { v = seed; try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} }
+        return v;
+      }
+      function save(key, arr) { try { localStorage.setItem(key, JSON.stringify(arr)); } catch (e) {} }
+      var recents = load('exceed_recent_leads', [
+        { name: 'Abbas Jaffy' }, { name: 'Maya Hassan' }, { name: 'Sara Ali' },
+        { name: 'Hiren Patel' }, { name: 'Karim Saleh' }, { name: 'Ahmad Rizk' }, { name: 'Layla Noor' }
+      ]);
+      var pinned = load('exceed_pinned_leads', [{ name: 'Ahmad Rizk' }]);
+      function isPinned(n) { return pinned.some(function (p) { return p.name === n; }); }
+      function togglePin(n) {
+        if (isPinned(n)) pinned = pinned.filter(function (p) { return p.name !== n; });
+        else pinned = pinned.concat([{ name: n }]);
+        save('exceed_pinned_leads', pinned);
+        renderAll();
+      }
+      function initials(n) { return (n || '?').split(/\s+/).map(function (p) { return p.charAt(0); }).join('').slice(0, 2).toUpperCase(); }
+      function avClass(n) { var s = 0; for (var i = 0; i < (n || '').length; i++) s += n.charCodeAt(i); return 'a' + (s % 6 + 1); }
+      function item(r) {
+        var a = document.createElement('a');
+        a.href = 'lead-detail.html?lead=' + encodeURIComponent(r.name);
+        a.className = conv + ' enabled cw-r-item';
+        var on = isPinned(r.name);
+        a.innerHTML = '<span class="cw-r-av ' + avClass(r.name) + '">' + initials(r.name) + '</span>' +
+          '<span class="cw-r-name">' + r.name + '</span>' +
+          '<span class="cw-r-pin material-symbols-outlined' + (on ? ' on' : '') + '" title="' + (on ? 'Unpin lead' : 'Pin lead') + '">push_pin</span>';
+        a.querySelector('.cw-r-pin').onclick = function (e) { e.preventDefault(); e.stopPropagation(); togglePin(r.name); };
+        return a;
+      }
+      var recList, pinList;
+      function fill(el, arr) { el.innerHTML = ''; arr.forEach(function (r) { el.appendChild(item(r)); }); }
+      function renderAll() { fill(recList, recents); fill(pinList, pinned); }
+      function group(id, title, hicon) {
+        var g = document.createElement('div'); g.className = 'cw-rgrp'; if (id) g.id = id;
+        var h = document.createElement('div'); h.className = 'cw-rgrp-head';
+        h.innerHTML = '<span class="material-symbols-outlined cw-rico">' + hicon + '</span><span>' + title + '</span><span class="material-symbols-outlined cw-rcaret">expand_more</span>';
+        var l = document.createElement('div'); l.className = 'cw-rlist';
+        h.onclick = function () { g.classList.toggle('collapsed'); };
+        g.appendChild(h); g.appendChild(l);
+        return { grp: g, list: l };
+      }
+      var rec = group('cwRecentGrp', 'Recent', 'schedule'); recList = rec.list;
+      var pin = group('cwPinnedGrp', 'Pinned', 'push_pin'); pinList = pin.list;
+      renderAll();
+      dash.parentNode.insertBefore(rec.grp, dash.nextSibling);
+      rec.grp.parentNode.insertBefore(pin.grp, rec.grp.nextSibling);
+    })();
    } catch (e) { console.warn('copilot-widget injection skipped:', e); }
   });
 })();

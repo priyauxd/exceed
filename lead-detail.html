@@ -6,7 +6,7 @@
   <title>Leads — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
-  <link href="fluent-tokens.css" rel="stylesheet" />
+  <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -337,7 +337,7 @@
     .dp-fh-val.mono { font-family: 'SF Mono','Consolas',monospace; font-size: 12px; }
     .dp-fh-val.link { color: var(--blue); font-weight: 600; }
     .dp-fh-label { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; }
-    .dp-fh-av { position: relative; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .dp-fh-av { position: relative; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: #e4e4e6; color: #616161; flex-shrink: 0; }
     .dp-fh-dot { position: absolute; right: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: var(--green); border: 2px solid var(--surface); }
     .dp-idcard { position: sticky; top: 0; z-index: 20; border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 16px 18px; margin-bottom: 16px; background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; }
     .dp-lead-head { display: flex; align-items: center; gap: 14px; }
@@ -383,34 +383,36 @@
     .call-overlay.open { opacity: 1; visibility: visible; }
     .call-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 520px; max-width: 96vw; background: #0b0e14; color: #e6e9ef; box-shadow: -14px 0 44px rgba(0,0,0,.45); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); z-index: 95; display: flex; flex-direction: column; overflow: hidden; }
     .call-panel.open { transform: translateX(0); }
-    .call-ring { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 30px; gap: 8px; background: radial-gradient(120% 60% at 50% 22%, #12203a, #0b0e14 70%); }
-    .cr-halo { position: relative; display: flex; align-items: center; justify-content: center; width: 92px; height: 92px; margin-bottom: 16px; }
-    .cr-halo::before, .cr-halo::after { content: ''; position: absolute; width: 92px; height: 92px; border-radius: 50%; border: 1.5px solid rgba(90,140,230,.35); animation: cr-ring 2.6s ease-out infinite; }
-    .cr-halo::after { animation-delay: 1.1s; }
-    @keyframes cr-ring { 0% { transform: scale(1); opacity: .8; } 100% { transform: scale(1.9); opacity: 0; } }
-    .cr-av { position: relative; z-index: 1; width: 92px; height: 92px; border-radius: 50%; background: linear-gradient(135deg, #3a5bd0, #2a9fd0); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; color: #fff; box-shadow: 0 10px 30px rgba(42,120,200,.4); }
     @keyframes cr-pulse { 0% { box-shadow: 0 0 0 0 rgba(58,91,208,.5); } 70% { box-shadow: 0 0 0 20px rgba(58,91,208,0); } 100% { box-shadow: 0 0 0 0 rgba(58,91,208,0); } }
-    .cr-name { font-size: 22px; font-weight: 700; color: #fff; }
-    .cr-num { font-size: 14px; color: #9aa2b1; margin-top: 2px; }
-    .cr-status { font-size: 12.5px; color: #7fd0ff; letter-spacing: .06em; text-transform: uppercase; margin-top: 6px; display: inline-flex; align-items: center; }
-    .cr-dots { display: inline-flex; gap: 3px; margin-left: 6px; }
-    .cr-dots i { width: 4px; height: 4px; border-radius: 50%; background: #7fd0ff; animation: cr-blink 1.2s infinite; }
-    .cr-dots i:nth-child(2){ animation-delay: .2s; } .cr-dots i:nth-child(3){ animation-delay: .4s; }
-    @keyframes cr-blink { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
-    .cr-actions { display: flex; gap: 24px; align-items: center; margin-top: 40px; }
-    .cr-ctrl { width: 56px; height: 56px; border-radius: 50%; background: #161b24; border: 1px solid #262b36; color: #cfd6e2; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s, color .12s; }
-    .cr-ctrl:hover { background: #1f2632; }
-    .cr-ctrl.on { background: #2f5bd0; border-color: #2f5bd0; color: #fff; }
-    .cr-ctrl .material-symbols-outlined { font-size: 24px; }
-    .cr-end { width: 66px; height: 66px; border-radius: 50%; background: #e0233f; color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 26px rgba(224,35,63,.45); transition: transform .12s; }
-    .cr-end:hover { transform: scale(1.05); }
-    .cr-end .material-symbols-outlined { font-size: 28px; }
-    .call-live { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-    .call-controls { display: flex; gap: 8px; padding: 12px 16px; background: #0d1119; border-bottom: 1px solid #1c212b; flex-shrink: 0; }
-    .cc-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 9px 4px; border-radius: 10px; background: #161b24; border: 1px solid #232a36; color: #aab2c2; font-size: 10.5px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background .12s, color .12s, border-color .12s; }
-    .cc-btn:hover { background: #1e2531; color: #e6e9ef; }
-    .cc-btn.on { background: #2f5bd0; border-color: #2f5bd0; color: #fff; }
-    .cc-btn .material-symbols-outlined { font-size: 19px; }
+    /* Genesys softphone widget (separate from the AI Copilot box) */
+    .gen-widget { position: fixed; left: 40px; bottom: 40px; width: 344px; max-width: calc(100vw - 80px); background: #fff; border-radius: 12px; box-shadow: 0 24px 64px rgba(8,11,16,.32); z-index: 96; opacity: 0; visibility: hidden; transform: translateY(14px); transition: opacity .25s, transform .25s; overflow: hidden; }
+    .gen-widget.open { opacity: 1; visibility: visible; transform: none; }
+    .gw-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; }
+    .gw-brand { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 700; color: #16305c; }
+    .gw-logo { color: #ff5a1f; font-size: 20px; }
+    .gw-help { font-size: 12.5px; color: #2563eb; cursor: pointer; }
+    .gw-topbar { display: flex; align-items: center; justify-content: space-between; background: #16305c; color: #cfd8e8; padding: 7px 14px; }
+    .gw-topbar .material-symbols-outlined { font-size: 18px; cursor: pointer; }
+    .gw-ctrls { display: flex; align-items: center; gap: 3px; background: #0f2140; padding: 7px 9px; }
+    .gwc { flex: 1; height: 34px; border: none; background: transparent; color: #cdd8ea; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .12s, color .12s; }
+    .gwc:hover { background: rgba(255,255,255,.10); }
+    .gwc.on { background: rgba(255,255,255,.20); color: #fff; }
+    .gwc .material-symbols-outlined { font-size: 20px; }
+    .gwc.hang { background: #e0233f; color: #fff; }
+    .gwc.hang:hover { background: #c51d35; }
+    .gw-calls { max-height: 234px; overflow-y: auto; }
+    .gw-call { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #eef0f3; }
+    .gw-call.active { background: #bff0c9; }
+    .gwc-ico { font-size: 18px; color: #5a6472; flex-shrink: 0; }
+    .gw-call.active .gwc-ico { color: #1c7a37; }
+    .gwc-info { flex: 1; min-width: 0; }
+    .gwc-num { font-size: 13.5px; font-weight: 600; color: #1c2430; }
+    .gwc-sub { font-size: 11.5px; color: #6b7280; }
+    .gwc-id { font-size: 11px; color: #97a0ac; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .gwc-acts { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+    .gwc-acts .material-symbols-outlined { font-size: 16px; color: #5a6472; cursor: pointer; }
+    .gw-status { display: flex; align-items: center; justify-content: center; gap: 8px; background: #16305c; color: #fff; padding: 10px; font-size: 13px; font-weight: 600; }
+    .gw-status .material-symbols-outlined { font-size: 16px; }
     .call-head { background: linear-gradient(120deg, #3f4fe0, #2a86c0); padding: 15px 20px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
     .ch-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; color: #fff; }
     .ch-title { font-size: 18px; font-weight: 800; color: #fff; }
@@ -557,6 +559,10 @@
     .dp-if { display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
     .dp-if-label { font-size: 11.5px; color: var(--ink-secondary); font-weight: 500; }
     .dp-if-req { color: var(--red); margin-left: 2px; font-weight: 700; }
+    .dp-if-aitag { display: inline-block; margin-left: 6px; font-size: 8.5px; font-weight: 800; color: #1f8f4e; background: #e6f5ec; border-radius: 4px; padding: 1px 5px; letter-spacing: .03em; vertical-align: 1px; }
+    .dp-if-ai .dp-if-input { background: #eefaf2; box-shadow: inset 3px 0 0 #46a56b; }
+    .dp-if-ai .dp-if-lookup .dp-if-input { background: #eefaf2; box-shadow: inset 3px 0 0 #46a56b; }
+    .dp-if-ai .dp-chip-radio.on { border-color: #46a56b; color: #1f8f4e; background: #eafaf0; }
     .dp-if-lock { font-size: 12px; color: var(--ink-muted); margin-left: 4px; vertical-align: -2px; }
     .dp-if-ro { background: #f0f2f5; color: var(--ink-muted); cursor: not-allowed; }
     .dp-if-chips { display: flex; gap: 8px; }
@@ -1244,9 +1250,8 @@
       <div class="sb-brand"><div class="sb-logo">A</div><div><span class="sb-name">AGM Sales</span><br><span class="sb-sub">EXEED CRM</span></div></div>
       <nav class="sb-nav">
         <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
-        <a href="index.html" class="sb-item"><span class="material-symbols-outlined">home</span>Home</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">task_alt</span>Activities</a>
+        <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="call-center-agent.html" class="sb-item enabled"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
         <div class="sb-group">Call Center</div>
         <a href="call-center-agent.html" class="sb-item"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today's Leads</a>
@@ -1361,38 +1366,48 @@
 
   <!-- Live call flow: ringing dialpad → AI Copilot (transcript + assist) -->
   <div class="call-overlay" id="callOverlay" onclick="endCall()"></div>
-  <div class="call-panel" id="callPanel" role="dialog" aria-label="Live call">
-    <div class="call-ring" id="callRing">
-      <div class="cr-halo"><div class="cr-av" id="crAv">?</div></div>
-      <div class="cr-name" id="crName">—</div>
-      <div class="cr-num" id="crNum">—</div>
-      <div class="cr-status" id="crStatus">Calling<span class="cr-dots"><i></i><i></i><i></i></span></div>
-      <div class="cr-actions">
-        <button class="cr-ctrl" onclick="toggleCallCtrl(this,'Mic')" title="Mute"><span class="material-symbols-outlined">mic</span></button>
-        <button class="cr-end" onclick="endCall()" title="End call"><span class="material-symbols-outlined">call_end</span></button>
-        <button class="cr-ctrl" onclick="toggleCallCtrl(this,'Speaker')" title="Speaker"><span class="material-symbols-outlined">volume_up</span></button>
+
+  <!-- Genesys softphone widget -->
+  <div class="gen-widget" id="genWidget">
+    <div class="gw-head"><span class="gw-brand"><span class="gw-logo material-symbols-outlined">bolt</span>Genesys</span><span class="gw-help">View Help Guide</span></div>
+    <div class="gw-topbar"><span class="material-symbols-outlined">menu</span><span class="material-symbols-outlined">expand_more</span></div>
+    <div class="gw-ctrls">
+      <button class="gwc" title="Call"><span class="material-symbols-outlined">call</span></button>
+      <button class="gwc" title="Transfer" onclick="toggleCallCtrl(this,'Transfer')"><span class="material-symbols-outlined">phone_forwarded</span></button>
+      <button class="gwc" title="Mute" onclick="toggleCallCtrl(this,'Mute')"><span class="material-symbols-outlined">mic</span></button>
+      <button class="gwc hang" title="End call" onclick="endCall()"><span class="material-symbols-outlined">call_end</span></button>
+      <button class="gwc" title="Hold" onclick="toggleCallCtrl(this,'Hold')"><span class="material-symbols-outlined">pause</span></button>
+      <button class="gwc" title="Record"><span class="material-symbols-outlined">fiber_manual_record</span></button>
+      <button class="gwc" title="Keypad"><span class="material-symbols-outlined">dialpad</span></button>
+    </div>
+    <div class="gw-calls">
+      <div class="gw-call active">
+        <span class="material-symbols-outlined gwc-ico">call</span>
+        <div class="gwc-info"><div class="gwc-num" id="gwNum">+971 50 000 0000</div><div class="gwc-sub" id="gwName">Connected</div><div class="gwc-id">ae0b0503-727e-4e32-8d5c-5c3c2fd11bc3</div></div>
+        <div class="gwc-acts"><span class="material-symbols-outlined">edit</span><span class="material-symbols-outlined">person</span></div>
+      </div>
+      <div class="gw-call">
+        <span class="material-symbols-outlined gwc-ico">call</span>
+        <div class="gwc-info"><div class="gwc-num">+971 50 118 4402</div><div class="gwc-sub">Internal</div><div class="gwc-id">01554141-cf9a-41c7-b67e-2cc06a3450d1</div></div>
+        <div class="gwc-acts"><span class="material-symbols-outlined">edit</span><span class="material-symbols-outlined">person</span></div>
       </div>
     </div>
-    <div class="call-live" id="callLive" style="display:none">
-      <div class="call-head">
-        <div class="ch-icon"><span class="material-symbols-outlined">auto_awesome</span></div>
-        <div><div class="ch-title">AI Copilot</div><div class="ch-sub"><span class="ch-dot"></span> Live call &middot; listening &middot; <span id="callTimer">00:00</span></div></div>
-        <button class="call-end-btn" onclick="endCall()"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px">call_end</span> End Call</button>
-      </div>
-      <div class="call-controls">
-        <button class="cc-btn" onclick="toggleCallCtrl(this,'Mute')"><span class="material-symbols-outlined">mic_off</span><span>Mute</span></button>
-        <button class="cc-btn" onclick="toggleCallCtrl(this,'Hold')"><span class="material-symbols-outlined">pause</span><span>Hold</span></button>
-        <button class="cc-btn" onclick="toggleCallCtrl(this,'Transfer')"><span class="material-symbols-outlined">phone_forwarded</span><span>Transfer</span></button>
-        <button class="cc-btn" onclick="toggleCallCtrl(this,'Keypad')"><span class="material-symbols-outlined">dialpad</span><span>Keypad</span></button>
-      </div>
-      <div class="call-scroll">
-        <div class="cl-sec">TRANSCRIPT</div>
-        <div id="callTranscript"></div>
-      </div>
-      <div class="cl-suggest">
-        <div class="cl-sec sg"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">auto_awesome</span> AI SUGGESTIONS</div>
-        <div class="sg-card"><div class="sg-label">SAY THIS NEXT</div><div class="sg-text" id="callSuggestText">Listening…</div><div class="sg-src">Source: agent</div></div>
-      </div>
+    <div class="gw-status">On Queue <span class="material-symbols-outlined">schedule</span></div>
+  </div>
+
+  <!-- AI Copilot box (separate: transcript + suggestions) -->
+  <div class="call-panel" id="callPanel" role="dialog" aria-label="AI Copilot">
+    <div class="call-head">
+      <div class="ch-icon"><span class="material-symbols-outlined">auto_awesome</span></div>
+      <div><div class="ch-title">AI Copilot</div><div class="ch-sub"><span class="ch-dot"></span> Live call &middot; listening &middot; <span id="callTimer">00:00</span></div></div>
+    </div>
+    <div class="call-scroll">
+      <div class="cl-sec">TRANSCRIPT</div>
+      <div id="callTranscript"></div>
+    </div>
+    <div class="cl-suggest">
+      <div class="cl-sec sg"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">auto_awesome</span> AI SUGGESTIONS</div>
+      <div class="sg-card"><div class="sg-label">SAY THIS NEXT</div><div class="sg-text" id="callSuggestText">Listening…</div><div class="sg-src">Source: agent</div></div>
     </div>
   </div>
 
@@ -2199,45 +2214,18 @@
     function openCti(number, name){ openCall(number, name); }
     function openCall(number, name) {
       clearCallTimers();
-      var init = (name || '?').split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
-      document.getElementById('crAv').textContent = init;
-      document.getElementById('crName').textContent = name || '';
-      document.getElementById('crNum').textContent = number || '';
-      document.getElementById('crStatus').textContent = 'Ringing…';
-      document.getElementById('callRing').style.display = '';
-      document.getElementById('callLive').style.display = 'none';
+      var gn = document.getElementById('gwNum'); if (gn) gn.textContent = number || '';
+      var gnm = document.getElementById('gwName'); if (gnm) gnm.textContent = 'Dialing…';
       document.getElementById('callTranscript').innerHTML = '';
       document.getElementById('callSuggestText').textContent = 'Listening…';
       document.getElementById('callOverlay').classList.add('open');
+      document.getElementById('genWidget').classList.add('open');
       document.getElementById('callPanel').classList.add('open');
-      callTimers.push(setTimeout(function(){ startLiveCall(number, name); }, 2400));
+      callTimers.push(setTimeout(function(){ startLiveCall(number, name); }, 1600));
     }
-    function renderCallProfile(number) {
-      var host = document.getElementById('callProfile'); if (!host) return;
-      var l = selectedIdx >= 0 ? leads[selectedIdx] : null;
-      var fields = [
-        ['Mobile', 'call', number || (l ? l.phone : '')],
-        ['First Name', 'person', l ? l.name.split(' ')[0] : ''],
-        ['Model of Interest', 'directions_car', l && l.model ? l.model : ''],
-        ['Full Name', 'badge', l ? l.name : ''],
-        ['Assigned Showroom', 'store', (l && l.showroom) ? l.showroom : ''],
-        ['Preferred Channel', 'forum', (l && l.preferred) ? l.preferred : '']
-      ];
-      var done = 0;
-      host.innerHTML = fields.map(function(f){
-        var val = f[2], ok = !!(val && val !== '…' && val !== '—');
-        if (ok) done++;
-        return '<div class="cp-field'+(ok?'':' pending')+'">' +
-          '<span class="cp-check '+(ok?'':'off')+' material-symbols-outlined">'+(ok?'check_circle':'radio_button_unchecked')+'</span>' +
-          '<div class="cp-fbody"><div class="cp-flabel"><span class="material-symbols-outlined cp-ficon">'+f[1]+'</span>'+f[0].toUpperCase()+'</div>' +
-          '<div class="cp-fval'+(ok?'':' off')+'">'+(ok?val:'Not captured yet')+'</div></div></div>';
-      }).join('');
-      var rc = document.getElementById('callReqCount'); if (rc) { rc.textContent = done + '/6 required'; rc.classList.toggle('complete', done === 6); }
-    }
+    function renderCallProfile(number) { /* profile removed — handled by Genesys widget */ }
     function startLiveCall(number, name) {
-      document.getElementById('callRing').style.display = 'none';
-      document.getElementById('callLive').style.display = 'flex';
-      renderCallProfile(number);
+      var gnm = document.getElementById('gwName'); if (gnm) gnm.textContent = 'Connected';
       var sec = 0; var tm = document.getElementById('callTimer'); if (tm) tm.textContent = '00:00';
       callTimers.push(setInterval(function(){ sec++; var t = document.getElementById('callTimer'); if (t) t.textContent = String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0'); }, 1000));
       var tr = document.getElementById('callTranscript'); tr.innerHTML = '';
@@ -2273,29 +2261,35 @@
     function endCall() {
       clearCallTimers();
       document.getElementById('callOverlay').classList.remove('open');
+      document.getElementById('genWidget').classList.remove('open');
       document.getElementById('callPanel').classList.remove('open');
       if (selectedIdx >= 0) {
         var l = leads[selectedIdx];
         l.activities = l.activities || [];
         var fn = (l.name || 'Customer').split(' ')[0];
-        var summary = fn + ' is interested in the ' + (l.model || 'EXEED') + '. Discussed pricing and requested a test drive this weekend at ' + (l.showroom || 'the Downtown showroom') + '. Sentiment: warm. Next: confirm the test-drive slot.';
-        l.aiSummary = { text: summary };
-        l.activities.unshift({ type: 'ai', text: 'AI call summary — ' + summary + ' <button class="act-wa-btn" onclick="sendSummaryWhatsApp(event)"><span class="material-symbols-outlined">chat</span> Send summary to WhatsApp</button>', time: '2026-07-08 12:00' });
+        var summary = fn + ' is interested in the EXEED RX. Discussed pricing and requested a test drive this weekend at the Downtown showroom. Sentiment: warm. Next: confirm the test-drive slot.';
+        // Personalised WhatsApp message (tailored offer / test-drive slot selection)
+        l.aiMessage = { text: 'Hi ' + fn + ', thanks for your interest in the EXEED RX! We’ve reserved a test-drive slot for you this weekend at our Downtown showroom, along with a personalised price offer. Reply 1 for Sat 11 AM or 2 for Sun 4 PM to confirm.' };
+        l.activities.unshift({ type: 'ai', text: 'Personalised WhatsApp message generated — tailored offer &amp; test-drive slot ready. <button class="act-wa-btn" onclick="sendWaMessage(event)"><span class="material-symbols-outlined">chat</span> Send WhatsApp message</button>', time: '2026-07-08 12:00' });
+        // AI-powered field population from the call — AI call summary lands in Description
+        l.model = 'EXEED RX'; l.channel = 'WhatsApp';
+        l.aiDescription = 'AI call summary — ' + summary;
+        l._aiFields = { model: true, channel: true, description: true, qualification: true };
         renderDetail(selectedIdx, currentStep);
-        showToast('Call ended · AI summary added to timeline');
+        showToast('Call ended · AI summary added to Description · WhatsApp message ready');
       }
     }
-    function sendSummaryWhatsApp(ev) {
+    function sendWaMessage(ev) {
       if (ev) ev.stopPropagation();
       if (selectedIdx < 0) return;
       var l = leads[selectedIdx];
-      if (l.aiSummary && l.aiSummary.sent) { showToast('Summary already sent to the customer'); return; }
-      if (l.aiSummary) l.aiSummary.sent = true;
+      if (l.aiMessage && l.aiMessage.sent) { showToast('WhatsApp message already sent'); return; }
+      if (l.aiMessage) l.aiMessage.sent = true;
       l.activities = l.activities || [];
       l.activities.forEach(function(a){ if (a.type === 'ai' && typeof a.text === 'string') { a.text = a.text.replace(/<button class="act-wa-btn"[\s\S]*?<\/button>/, '<button class="act-wa-btn sent" disabled><span class="material-symbols-outlined">check</span> Sent to WhatsApp</button>'); } });
-      l.activities.unshift({ type: 'whatsapp', text: 'Summary sent to the customer via WhatsApp', time: '2026-07-08 12:00' });
+      l.activities.unshift({ type: 'whatsapp', text: 'Personalised message sent to the customer via WhatsApp', time: '2026-07-08 12:00' });
       renderDetail(selectedIdx, currentStep);
-      showToast('Summary sent to the customer via WhatsApp');
+      showToast('Personalised message sent via WhatsApp');
     }
     function nbaAction(a) {
       showToast(a === 'AI summary' ? 'Generating AI call summary…' : a + ' started');
@@ -2431,7 +2425,7 @@
           '<div class="dp-formhead">' +
             '<div class="dp-fh-field"><div class="dp-fh-val mono">'+l.id+'</div><div class="dp-fh-label">Lead ID</div></div>' +
             '<div class="dp-fh-field"><div class="dp-fh-val">'+l.showroom+'</div><div class="dp-fh-label">Location</div></div>' +
-            '<div class="dp-fh-owner"><span class="dp-fh-av lead-av '+l.av+'">'+ownerInit+'<span class="dp-fh-dot"></span></span>' +
+            '<div class="dp-fh-owner"><span class="dp-fh-av">'+ownerInit+'<span class="dp-fh-dot"></span></span>' +
               '<div><div class="dp-fh-val link">'+l.owner+'</div><div class="dp-fh-label">Owner</div></div>' +
             '</div>' +
           '</div>' +
@@ -2532,7 +2526,7 @@
           } else {
             ctrl = '<input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}">';
           }
-          return '<div class="dp-if'+(o.type==='textarea'?' dp-if-wide':'')+'"><label class="dp-if-label">'+o.label+star+'</label>'+ctrl+'</div>';
+          return '<div class="dp-if'+(o.type==='textarea'?' dp-if-wide':'')+(o.ai?' dp-if-ai':'')+'"><label class="dp-if-label">'+o.label+star+(o.ai?'<span class="dp-if-aitag">✦ AI</span>':'')+'</label>'+ctrl+'</div>';
         };
         var groups = [
           { title:'Customer Details', moreId:'intakeCustMore', fields:[
@@ -2546,7 +2540,7 @@
             {label:'Nationality', type:'lookup', val:'UAE'}
           ]},
           { title:'Vehicle', moreId:'intakeVehMore', fields:[
-            {label:'Model', prop:'model', type:'lookup', val:l.model},
+            {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model)},
             {label:'Trade-in Interested', type:'select', tradeInToggle:true, val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']}
           ], more:[
             {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
@@ -2555,11 +2549,11 @@
             {label:'Model Code', val:''}
           ]},
           { title:'Lead Qualification', fields:[
-            {label:'Qualification', type:'select', radioChips:['Qualify','Not Qualify'], radioName:'leadQualification', val:'Qualify', req:true},
+            {label:'Qualification', type:'select', radioChips:['Qualify','Not Qualify'], radioName:'leadQualification', val:'Qualify', req:true, ai: !!(l._aiFields && l._aiFields.qualification)},
             {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
             {label:'Lead Source', type:'lookup', val:l.source, req:true},
-            {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true},
-            {label:'Description', val:'', req:true}
+            {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true, ai: !!(l._aiFields && l._aiFields.channel)},
+            {label:'Description', val: (l._aiFields && l._aiFields.description) ? (l.aiDescription||'') : '', req:true, ai: !!(l._aiFields && l._aiFields.description)}
           ]},
           { title:'Organization', fields:[
             {label:'Showroom', type:'lookup', val:'Abudhabi Corniche', req:true}
@@ -2607,7 +2601,7 @@
         '<div class="dp-ai-desc"><strong>Why AI suggests this:</strong> '+sd.aiDesc+'</div>';
       html += '<button class="dp-ai-btn primary" onclick="nbaAction(\'Handover to sales executive\')">Handover to sales executive &#8250;</button>' +
         '<button class="dp-ai-btn secondary danger" onclick="nbaAction(\'Disqualify\')">Disqualify</button>' +
-        (l.aiSummary ? '<div class="dp-ai-summary"><div class="dp-ai-sum-h"><span class="material-symbols-outlined">description</span> AI call summary</div><div class="dp-ai-sum-text">'+l.aiSummary.text+'</div>' + (l.aiSummary.sent ? '<button class="act-wa-btn sent" disabled><span class="material-symbols-outlined">check</span> Sent to WhatsApp</button>' : '<button class="act-wa-btn" onclick="sendSummaryWhatsApp(event)"><span class="material-symbols-outlined">chat</span> Send to WhatsApp</button>') + '</div>' : '');
+        (l.aiMessage ? '<div class="dp-ai-summary"><div class="dp-ai-sum-h"><span class="material-symbols-outlined">chat</span> Personalised WhatsApp message</div><div class="dp-ai-sum-text">'+l.aiMessage.text+'</div>' + (l.aiMessage.sent ? '<button class="act-wa-btn sent" disabled><span class="material-symbols-outlined">check</span> Sent to WhatsApp</button>' : '<button class="act-wa-btn" onclick="sendWaMessage(event)"><span class="material-symbols-outlined">chat</span> Send WhatsApp message</button>') + '</div>' : '');
       html += '<div class="dp-ai-note"><span class="material-symbols-outlined">schedule</span> '+sd.aiNote+'</div>';
       html += '</div>';
 
@@ -3875,6 +3869,6 @@
     function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
     function closeSidebar(){ document.body.classList.remove('sb-rail'); }
   </script>
-  <script src="copilot-widget.js" defer></script>
+  <script src="copilot-widget.js?v=8" defer></script>
 </body>
 </html>
