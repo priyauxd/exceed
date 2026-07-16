@@ -581,6 +581,17 @@
     .ti-details { margin: 6px 0 22px; padding-top: 12px; border-top: 1px dashed var(--border); }
     .ti-details-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin: 0 0 14px; }
     .ti-details-h .material-symbols-outlined { font-size: 17px; color: var(--amber, #f6c453); }
+    .ti-photos { margin: 6px 0 22px; padding-top: 12px; border-top: 1px dashed var(--border); }
+    .ti-photo-actions { display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+    .ti-photo-btn { display:inline-flex; align-items:center; gap:6px; padding:9px 14px; border:1px dashed var(--border); border-radius:8px; font-size:12.5px; font-weight:600; color:var(--blue); cursor:pointer; background:#fafbfd; transition:border-color .12s, background .12s; }
+    .ti-photo-btn:hover { border-color:var(--blue); background:#f4f7fb; }
+    .ti-photo-btn .material-symbols-outlined { font-size:18px; }
+    .ti-photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:10px; }
+    .ti-photo-thumb { position:relative; aspect-ratio:1; border-radius:8px; overflow:hidden; border:1px solid var(--border); background:#f5f5f5; }
+    .ti-photo-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .ti-photo-rm { position:absolute; top:4px; right:4px; width:22px; height:22px; border-radius:50%; background:rgba(20,24,34,.6); color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+    .ti-photo-rm .material-symbols-outlined { font-size:15px; }
+    .ti-photo-empty { grid-column:1/-1; font-size:12px; color:var(--ink-muted); padding:16px; text-align:center; border:1px dashed var(--border); border-radius:8px; }
     .dp-if-opt { margin-left: 6px; font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); background: var(--bg); border: 1px solid var(--border-soft); border-radius: 10px; padding: 1px 6px; }
     .dp-if-area { min-height: 54px; resize: vertical; padding: 6px 9px; line-height: 1.4; }
     .dp-if-lookup { position: relative; display: block; width: 100%; }
@@ -890,12 +901,15 @@
     .qcard:hover { box-shadow: 0 6px 22px rgba(24,44,86,.10); }
     .qcard.best { border-color: #6c5ce7; }
     .qcard.selected { border-color: #6c5ce7; box-shadow: 0 0 0 2px rgba(108,92,231,.20); }
-    .qcard.isquote { border-color: var(--blue); }
+    .qcard.isquote { border: 2px solid #46a56b; box-shadow: 0 0 0 3px rgba(70,165,107,.14), 0 8px 24px rgba(70,165,107,.14); background: linear-gradient(180deg, #f4faf6, #fff); }
+    .qcard.isquote:hover { box-shadow: 0 0 0 3px rgba(70,165,107,.18), 0 10px 28px rgba(70,165,107,.18); }
     .qc-best { position: absolute; top: 10px; right: 10px; z-index: 2; background: #6c5ce7; color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .02em; padding: 4px 11px; border-radius: 20px; box-shadow: 0 2px 8px rgba(108,92,231,.4); }
-    .qc-badge { position: absolute; top: 10px; right: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 3px; background: var(--blue); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px; }
+    .qc-badge { position: absolute; top: 10px; right: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 4px; background: linear-gradient(135deg, #46a56b, #2f7a4f); color: #fff; font-size: 10px; font-weight: 800; padding: 4px 11px; border-radius: 20px; box-shadow: 0 2px 8px rgba(47,122,79,.35); }
     .qc-badge .material-symbols-outlined { font-size: 13px; }
     .qc-check { position: absolute; top: 10px; left: 10px; z-index: 2; display: flex; background: rgba(255,255,255,.92); border-radius: 7px; padding: 4px; box-shadow: var(--shadow2); cursor: pointer; }
     .qc-check input { width: 16px; height: 16px; accent-color: #6c5ce7; cursor: pointer; margin: 0; }
+    .qc-tick { position: absolute; top: 10px; left: 10px; z-index: 2; width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #46a56b, #2f7a4f); color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(47,122,79,.45); border: 2px solid #fff; }
+    .qc-tick .material-symbols-outlined { font-size: 16px; font-weight: 700; }
     .qc-photo { height: 92px; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg, #eef1f5, #eef1f5 10px, #e7ebf0 10px, #e7ebf0 20px); color: var(--ink-muted); font-size: 11px; letter-spacing: .05em; }
     .qc-photo img { width: 82%; height: 82%; object-fit: contain; }
     .qc-body { padding: 10px 12px 12px; display: flex; flex-direction: column; }
@@ -922,6 +936,26 @@
     .qc-cta.done .material-symbols-outlined { font-size: 16px; }
     .qc-cta:disabled { display: flex; align-items: center; justify-content: center; gap: 5px; background: var(--bg); color: var(--ink-muted); cursor: not-allowed; }
     .qc-cta:disabled .material-symbols-outlined { font-size: 15px; }
+    .qc-quote-actions { display:flex; flex-direction:column; gap:6px; }
+    .qc-cta.accept { margin-top:0; display:flex; align-items:center; justify-content:center; gap:5px; background:#eef7f1; color:#2f7a4f; border:1px solid #bfe3cc; }
+    .qc-cta.accept:hover { background:#e2f1e8; }
+    .qc-cta.accept .material-symbols-outlined { font-size:16px; }
+    .conf-quote { border:1px solid var(--border); border-radius:12px; padding:16px; margin:12px 0 14px; background:linear-gradient(180deg,#f4faf6,#fff); }
+    .conf-quote-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .conf-badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:#2f7a4f; background:#e4f4ea; border-radius:20px; padding:4px 12px; }
+    .conf-badge .material-symbols-outlined { font-size:15px; }
+    .conf-id { font-size:12px; font-weight:700; color:var(--ink-muted); font-family:'SF Mono',Consolas,monospace; }
+    .conf-photo { width:100%; max-height:180px; object-fit:contain; margin-bottom:10px; }
+    .conf-model { font-size:17px; font-weight:800; }
+    .conf-sub { font-size:12px; color:var(--ink-muted); margin-top:2px; }
+    .conf-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+    .conf-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-muted); }
+    .conf-val { font-size:14px; font-weight:700; margin-top:2px; }
+    .conf-ctas { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    @media (max-width:640px){ .conf-ctas { grid-template-columns:1fr; } }
+    .conf-cta { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 16px; border:1px solid var(--border); border-radius:10px; background:var(--surface); font-size:13px; font-weight:600; font-family:inherit; color:var(--ink); cursor:pointer; transition:all .12s; }
+    .conf-cta:hover { border-color:var(--blue); color:var(--blue); background:#f6f9fd; }
+    .conf-cta .material-symbols-outlined { font-size:19px; color:var(--blue); }
     /* Stock picker modal */
     .stock-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-46%); z-index: 70; width: 640px; max-width: 94vw; max-height: 84vh; background: var(--surface); border-radius: 16px; box-shadow: 0 30px 72px rgba(20,24,34,.32); display: flex; flex-direction: column; overflow: hidden; opacity: 0; visibility: hidden; transition: opacity .2s, transform .2s, visibility .2s; }
     .stock-modal.open { opacity: 1; visibility: visible; transform: translate(-50%,-50%); }
@@ -1630,7 +1664,7 @@
     var confirmCb = null;
     function openConfirm(title, text, okLabel, cb, cancelLabel){
       document.getElementById('confirmTitle').textContent = title;
-      document.getElementById('confirmText').textContent = text;
+      document.getElementById('confirmText').innerHTML = text;
       document.getElementById('confirmOkBtn').textContent = okLabel || 'Confirm';
       document.getElementById('confirmCancelBtn').textContent = cancelLabel || 'Keep';
       confirmCb = cb;
@@ -2461,7 +2495,7 @@
       html += '</div>';
 
       // Full-width form tabs with UAE Pass (Visit only) + Log activity on the right.
-      var stageTabs = (stepIdx <= 1) ? ['overview','discovery','testdrive'] : ['overview','discovery','testdrive','proposals'];
+      var stageTabs = (stepIdx <= 1) ? ['overview','discovery','testdrive'] : ['overview','discovery','tradein','testdrive','proposals'];
       var isVisitStage = journeySteps[stepIdx] && journeySteps[stepIdx].name === 'Visit';
       var tabActions = '<div class="dp-tab-actions">' +
         (isVisitStage ? '<button class="dp-uaepass-btn" onclick="uaePassVerify()"><span class="dp-uaepass-badge"><img src="assets/uae-pass.svg" alt="" class="dp-uaepass-ic"></span>UAE Pass</button>' : '') +
@@ -2547,8 +2581,7 @@
             {label:'Nationality', type:'lookup', val:'UAE'}
           ]},
           { title:'Vehicle', moreId:'intakeVehMore', fields:[
-            {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model)},
-            {label:'Trade-in Interested', type:'select', tradeInToggle:true, val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']}
+            {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model)}
           ], more:[
             {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
             {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
@@ -2578,11 +2611,7 @@
         var intakeToolbar = '<div class="dp-intake-toolbar"><span class="dp-intake-heading">'+sd.title+'</span>' +
           (intakeHasMore ? '<button type="button" class="dp-intake-all on" onclick="expandAllIntake(this)"><span class="material-symbols-outlined">unfold_less</span><span class="dp-intake-all-lbl">Collapse all</span></button>' : '') +
         '</div>';
-        var groupsHtml = groups.map(function(g){
-          var out = renderGroup(g);
-          if (g.title === 'Vehicle') out += tradeInDetailsHtml(l.existing !== 'No');
-          return out;
-        }).join('');
+        var groupsHtml = groups.map(function(g){ return renderGroup(g); }).join('');
         html += '<div class="dp-intake">' + intakeToolbar + '<div class="dp-intake-groups">' + groupsHtml + '</div></div>';
       }
       } // end overview tab
@@ -2673,9 +2702,48 @@
         '<div class="dp-intake-col"><div class="dp-intake-title">Appraisal</div><div class="dp-if-fields">'+appraisal+'</div></div>' +
       '</div>';
     }
+    function tradeInPanel(l) {
+      var interested = 'Yes';
+      var toggle = '<div class="dp-if" id="intakeTradeIn"><label class="dp-if-label">Trade-in Interested?</label>' +
+        '<select class="dp-if-input" onchange="onTradeInChange(this.value)">' +
+        ['Yes','No','Not sure'].map(function(x){ return '<option'+(x===interested?' selected':'')+'>'+x+'</option>'; }).join('') +
+        '</select></div>';
+      var photos = '<div class="ti-photos" id="tiPhotos" style="'+(interested==='Yes'?'':'display:none')+'">' +
+        '<div class="ti-details-h"><span class="material-symbols-outlined">photo_camera</span>Vehicle Photos</div>' +
+        '<div class="ti-photo-actions">' +
+          '<label class="ti-photo-btn"><span class="material-symbols-outlined">upload</span> Upload photos<input type="file" accept="image/*" multiple hidden onchange="tiAddPhotos(this)"></label>' +
+          '<label class="ti-photo-btn"><span class="material-symbols-outlined">photo_camera</span> Capture photo<input type="file" accept="image/*" capture="environment" hidden onchange="tiAddPhotos(this)"></label>' +
+        '</div>' +
+        '<div class="ti-photo-grid" id="tiPhotoGrid"><div class="ti-photo-empty">No photos yet &mdash; upload or capture the trade-in vehicle.</div></div>' +
+      '</div>';
+      return '<div class="dp-essential" style="margin-bottom:14px">' +
+        '<div class="dp-essential-title">Trade-in</div>' +
+        '<div class="dp-essential-sub">Capture the customer&rsquo;s trade-in interest, photos and appraisal.</div>' +
+        '<div class="dp-if-fields" style="margin-bottom:6px">' + toggle + '</div>' +
+        photos +
+        tradeInDetailsHtml(interested === 'Yes') +
+      '</div>';
+    }
+    function tiAddPhotos(input) {
+      var grid = document.getElementById('tiPhotoGrid'); if (!grid) return;
+      var empty = grid.querySelector('.ti-photo-empty'); if (empty) empty.remove();
+      Array.prototype.forEach.call(input.files || [], function(file){
+        if (!file.type || file.type.indexOf('image') !== 0) return;
+        var reader = new FileReader();
+        reader.onload = function(e){
+          var d = document.createElement('div'); d.className = 'ti-photo-thumb';
+          d.innerHTML = '<img src="'+e.target.result+'" alt="photo"><button class="ti-photo-rm" title="Remove" onclick="this.parentNode.remove()"><span class="material-symbols-outlined">close</span></button>';
+          grid.appendChild(d);
+        };
+        reader.readAsDataURL(file);
+      });
+      input.value = '';
+    }
     function onTradeInChange(v) {
       var el = document.getElementById('tradeInDetails');
       if (el) el.style.display = (v === 'Yes') ? '' : 'none';
+      var ph = document.getElementById('tiPhotos');
+      if (ph) ph.style.display = (v === 'Yes') ? '' : 'none';
       var wrap = document.getElementById('intakeTradeIn');
       if (wrap) wrap.querySelectorAll('.dp-chip-radio').forEach(function(lbl){
         var inp = lbl.querySelector('input'); lbl.classList.toggle('on', !!(inp && inp.checked));
@@ -2723,7 +2791,7 @@
 
     function tabBarHtml(extraClass, keys, rightHtml) {
       var overviewLabel = (extraClass === 'dp-idtabs') ? 'Main' : 'Details';
-      var tabs = [['overview',overviewLabel],['discovery','Discovery Questions'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
+      var tabs = [['overview',overviewLabel],['discovery','Discovery Questions'],['tradein','Trade in'],['testdrive','Test Drive'],['proposals','Proposals'],['related','Related Records']];
       if (keys) tabs = tabs.filter(function(t){ return keys.indexOf(t[0]) !== -1; });
       return '<div class="dp-tabs '+(extraClass||'')+'">' + tabs.map(function(t){
         return '<button class="dp-tab'+(leadTab===t[0]?' active':'')+'" onclick="switchLeadTab(\''+t[0]+'\')">'+t[1]+'</button>';
@@ -3525,6 +3593,7 @@
     function selectStockCar(k){
       var l = leads[selectedIdx], p = l.proposals[stockForProposal], s = stockList[k];
       if (!p || !s) { closeStockModal(); return; }
+      l.proposals.forEach(function(x){ x.isQuote = false; });  // only one active quotation per lead
       p.chassis = s.chassis; p.extColor = s.extColor; p.extHex = s.extHex; p.image = s.image;
       p.intColor = s.intColor; p.allocLocation = s.location; p.isQuote = true; p._sel = false;
       closeStockModal();
@@ -3533,6 +3602,70 @@
     }
     function shareProposal(i, ch){ var p = leads[selectedIdx].proposals[i]; if (p) showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' sent via ' + ch); }
     function requestManagerSupport(){ showToast('Manager support requested for this deal'); }
+    // Create Quotation — if another proposal is already the quotation, confirm that it will be voided first.
+    function requestCreateQuotation(i){
+      var l = leads[selectedIdx], existing = null;
+      (l.proposals || []).forEach(function(p, idx){ if (p.isQuote && idx !== i) existing = p; });
+      if (existing) {
+        openConfirm('Create a new quotation?',
+          'A quotation already exists (<strong>' + existing.id + '</strong>). Creating a quotation from this proposal will <strong>void the previous one</strong>. Are you sure?',
+          'Yes, create', function(){ createQuotation(i); }, 'Cancel');
+      } else {
+        createQuotation(i);
+      }
+    }
+    // Customer accepts the quotation → move the deal to the Confirmed state.
+    function acceptQuotation(i){
+      var l = leads[selectedIdx], p = l.proposals[i]; if (!p || !p.isQuote) return;
+      openConfirm('Mark quotation accepted?',
+        'Confirm the customer has accepted quotation <strong>' + p.id + '</strong>. This moves the deal to the <strong>Confirmed</strong> state.',
+        'Yes, accept', function(){
+          l.propState = 'confirmed'; l._acceptedProp = i;
+          renderDetail(selectedIdx, currentStep);
+          showToast('Quotation ' + p.id + ' accepted — moved to Confirmed');
+        }, 'Cancel');
+    }
+    function backToDraft(){
+      var l = leads[selectedIdx]; l.propState = 'draft';
+      renderDetail(selectedIdx, currentStep);
+      showToast('Switched back to draft proposals');
+    }
+    function confirmedCta(msg){ showToast(msg); }
+    // Confirmed state — the accepted quotation with booking / paperwork CTAs.
+    function confirmedQuotationPanel(l){
+      var p = (l.proposals || [])[l._acceptedProp];
+      if (!p) (l.proposals || []).forEach(function(x){ if (x.isQuote) p = x; });
+      if (!p) { l.propState = 'draft'; return proposalsPanel(l); }
+      var down = Math.round(p.nsp * p.downPct / 100), loan = p.nsp - down - (p.pdi || 0);
+      var monthly = propEmi(loan + propAddTotal(p), 5);
+      var modelName = (p.model || '').split(' · ')[0];
+      var ctas = [
+        ['link', 'Send booking confirm link', 'Booking confirmation link sent to the customer'],
+        ['request_quote', 'Generate sales quotation', 'Sales quotation generated'],
+        ['description', 'Generate purchase agreement', 'Purchase agreement generated'],
+        ['health_and_safety', 'Generate duty of care', 'Duty of care document generated']
+      ];
+      return '<div class="dp-essential" style="margin-bottom:14px">' +
+        '<div class="prop-head"><div><div class="dp-essential-title">Confirmed &mdash; Accepted quotation</div>' +
+          '<div class="dp-essential-sub" style="margin:0">Customer accepted ' + p.id + '. Complete the booking and paperwork below.</div></div>' +
+          '<button class="prop-support-btn" onclick="backToDraft()"><span class="material-symbols-outlined">arrow_back</span> Back to draft</button>' +
+        '</div>' +
+        '<div class="conf-quote">' +
+          '<div class="conf-quote-top"><span class="conf-badge"><span class="material-symbols-outlined">verified</span> Accepted quotation</span><span class="conf-id">' + p.id + '</span></div>' +
+          (p.image ? '<img class="conf-photo" src="' + p.image + '" alt="">' : '') +
+          '<div class="conf-model">' + (modelName || p.model) + '</div>' +
+          ((p.trim || p.extColor || p.chassis) ? '<div class="conf-sub">' + [p.trim, p.extColor, p.chassis ? ('VIN · ' + p.chassis) : ''].filter(Boolean).join(' · ') + '</div>' : '') +
+          '<div class="conf-grid">' +
+            '<div><div class="conf-lbl">Vehicle price</div><div class="conf-val">AED ' + propFmt(p.nsp) + '</div></div>' +
+            '<div><div class="conf-lbl">Down payment</div><div class="conf-val">' + p.downPct + '% · AED ' + propFmt(down) + '</div></div>' +
+            '<div><div class="conf-lbl">Monthly (60 mo)</div><div class="conf-val">AED ' + propFmt(monthly) + '</div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="conf-ctas">' + ctas.map(function(c){
+          return '<button class="conf-cta" onclick="confirmedCta(\'' + c[2] + '\')"><span class="material-symbols-outlined">' + c[0] + '</span>' + c[1] + '</button>';
+        }).join('') + '</div>' +
+      '</div>';
+    }
 
     function renderProposalCard(p, i, arr){
       var hasQuote = (arr || []).some(function(x){ return x.isQuote; });
@@ -3551,7 +3684,9 @@
       return '<div class="qcard'+(p._sel?' selected':'')+(p.isQuote?' isquote':'')+(p.bestFit?' best':'')+'">' +
         (p.bestFit && !p.isQuote ? '<span class="qc-best">Best fit</span>' : '') +
         (p.isQuote ? '<span class="qc-badge"><span class="material-symbols-outlined">verified</span>Quotation</span>' : '') +
-        '<label class="qc-check" title="Select"><input type="checkbox"'+(p._sel?' checked':'')+' onchange="toggleProposalSelect('+i+')"></label>' +
+        (p.isQuote
+          ? '<span class="qc-tick" title="Selected quotation"><span class="material-symbols-outlined">check</span></span>'
+          : '<label class="qc-check" title="Select"><input type="checkbox"'+(p._sel?' checked':'')+' onchange="toggleProposalSelect('+i+')"></label>') +
         '<div class="qc-photo">' + (p.image ? '<img src="'+p.image+'" alt="">' : '<span>vehicle photo</span>') + '</div>' +
         '<div class="qc-body">' +
           '<div class="qc-draft">'+draft+'</div>' +
@@ -3566,10 +3701,11 @@
             '<button class="qc-sbtn" onclick="shareProposal('+i+',\'Email\')"><span class="material-symbols-outlined">mail</span>Email</button>' +
           '</div>' +
           (p.isQuote
-            ? '<button class="qc-cta done" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">verified</span> Quotation ready</button>'
-            : (hasQuote
-                ? '<button class="qc-cta" disabled title="A quotation already exists for this lead"><span class="material-symbols-outlined">lock</span> Create Quotation</button>'
-                : '<button class="qc-cta" onclick="createQuotation('+i+')">Create Quotation</button>')) +
+            ? '<div class="qc-quote-actions">' +
+                '<button class="qc-cta done" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">verified</span> Quotation ready</button>' +
+                '<button class="qc-cta accept" onclick="acceptQuotation('+i+')"><span class="material-symbols-outlined">how_to_reg</span> Mark accepted by customer</button>' +
+              '</div>'
+            : '<button class="qc-cta" onclick="requestCreateQuotation('+i+')">Create Quotation</button>') +
         '</div>' +
       '</div>';
     }
@@ -3582,6 +3718,7 @@
         l.proposals.push({ id:'P-2026-1002', tag:'Best fit', bestFit:true, stock:2, chassis:'LVX-2026-057841', model:'EXEED ES · Long Range', trim:'Long Range', year:'2026', extColor:'Matte Gray', extHex:'#6d737a', image:'assets/es/ext-matte-gray.png', intColor:'Black & Gray', intHex:'#2c2c30', range:'620 km', power:'279 hp', nsp:179900, downPct:20, pdi:0, addOns:{ insurance:false, service:true, tinting:true, ceramic:true }, isQuote:false });
         l.proposals.push({ id:'P-2026-1003', tag:'Premium', stock:3, chassis:'LVX-2026-058219', model:'EXEED ES · AWD Performance', trim:'AWD Performance', year:'2026', extColor:'Passion Red', extHex:'#9d1f28', image:'assets/es/ext-red.png', intColor:'Red', intHex:'#9d1f28', range:'580 km', power:'517 hp', nsp:209900, downPct:15, pdi:0, addOns:{ insurance:true, service:true, tinting:true, ceramic:true }, isQuote:false });
       }
+      if (l.propState === 'confirmed') { return confirmedQuotationPanel(l); }
       var quotes = l.proposals.filter(function(p){ return p.isQuote; }).length;
       var head = '<div class="prop-head">' +
         '<div><div class="dp-essential-title">Proposals</div>' +
@@ -3631,6 +3768,9 @@
       }
       if (tab === 'proposals') {
         return proposalsPanel(l);
+      }
+      if (tab === 'tradein') {
+        return tradeInPanel(l);
       }
       // related
       var relItems = [
