@@ -1607,7 +1607,7 @@
       { sla:{name:'Contact attempts', target:'Day 4', scale:['Day 1','Day 2','Day 4']}, show:[], items:[{t:'Day 1', a:'Log second call attempt'},{t:'Day 2', a:'Log third call attempt'},{t:'Day 4', a:'Log fourth call attempt'}], note:'Ticked when an action is logged. Escalation to CEC Manager.' },
       { sla:{name:'Qualification', target:'30 min', scale:['0m','15m','30m']}, show:[], items:[{t:'Within 30 min of assignment · working hours', a:'Log activity to reach out to the customer'}], note:'Ticked when an action is logged. Escalation to Branch Sales Manager.' },
       { sla:{name:'Visit — walk-in service', target:'5 min', scale:['0m','','5m']}, show:['Appointment'], items:[{t:'Within 5 min', a:'Serve walk-in lead assigned by host'}], note:'Ticked when "Meet Customer" is logged. Escalation to Branch Sales Manager.' },
-      { sla:{name:'Proposal turnaround', target:'48 hrs', scale:['0h','24h','48h']}, show:[], items:[{t:'Day 2', a:'Log follow-up with customer on proposal'},{t:'Day 3', a:'Log follow-up with customer on proposal'}] },
+      { sla:{name:'Proposal turnaround', target:'48 hrs', scale:['0h','24h','48h']}, show:[], items:[] },
       { sla:{name:'Quote approval', target:'24 hrs', scale:['0h','12h','24h']}, show:[], items:[] },
       { sla:{name:'Delivery prep', target:'3 days', scale:['Day 0','','Day 3']}, show:[], items:[] },
       { sla:{name:'Delivery scheduling', target:'Day 2', scale:['Now','','Day 2']}, show:['Appointment'], items:[] },
@@ -2831,8 +2831,8 @@
       var host = document.getElementById('laChips'); if (!host) return;
       var groups = laIsSalesStage() ? laOutcomeGroups.sales : (laAnswer === 'yes' ? laOutcomeGroups.yes : null);
       if (!groups) { host.innerHTML = ''; return; }
-      // Visit stage gets an extra customer-related outcome.
-      if (journeySteps[currentStep] && journeySteps[currentStep].name === 'Visit') {
+      // Qualify and Visit stages get an extra customer-related outcome.
+      if (journeySteps[currentStep] && (journeySteps[currentStep].name === 'Qualify' || journeySteps[currentStep].name === 'Visit')) {
         groups = { Internal: groups.Internal, External: ['Meet customer'].concat(groups.External) };
       }
       var groupLabels = { Internal: 'Internal', External: 'Customer related' };
