@@ -581,7 +581,7 @@
     .ti-details { margin: 6px 0 22px; padding-top: 12px; border-top: 1px dashed var(--border); }
     .ti-details-h { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin: 0 0 14px; }
     .ti-details-h .material-symbols-outlined { font-size: 17px; color: var(--amber, #f6c453); }
-    .ti-photos { margin: 6px 0 22px; padding-top: 12px; border-top: 1px dashed var(--border); }
+    .ti-photos { margin: 28px 0 22px; padding-top: 22px; border-top: 1px dashed var(--border); }
     .ti-photo-actions { display:flex; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
     .ti-photo-btn { display:inline-flex; align-items:center; gap:6px; padding:9px 14px; border:1px dashed var(--border); border-radius:8px; font-size:12.5px; font-weight:600; color:var(--blue); cursor:pointer; background:#fafbfd; transition:border-color .12s, background .12s; }
     .ti-photo-btn:hover { border-color:var(--blue); background:#f4f7fb; }
@@ -595,6 +595,49 @@
     .ti-appraise-btn { display:inline-flex; align-items:center; gap:6px; margin-top:14px; padding:10px 18px; background:var(--blue); color:#fff; border:none; border-radius:8px; font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; transition:.12s; }
     .ti-appraise-btn:hover { background:var(--blue-dark); }
     .ti-appraise-btn .material-symbols-outlined { font-size:17px; }
+    /* Damage marker */
+    .ti-damage { margin: 18px 0 6px; }
+    .ti-damage-wrap { display:grid; grid-template-columns: 1fr 250px; gap:16px; align-items:start; }
+    @media (max-width:760px){ .ti-damage-wrap { grid-template-columns:1fr; } }
+    .ti-damage-h { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; text-align:center; margin-bottom:10px; color:var(--ink); }
+    .ti-diagram { position:relative; background:#fff; border:1px solid var(--border); border-radius:14px; padding:14px; cursor:crosshair; }
+    .ti-car { width:100%; height:auto; display:block; max-height:420px; }
+    .ti-mark { position:absolute; transform:translate(-50%,-50%); z-index:5; pointer-events:none; text-align:center; }
+    .ti-mark-ico { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid #17293d; color:#17293d; font-size:12px; font-weight:900; line-height:1; box-shadow:0 1px 5px rgba(0,0,0,.22); }
+    .ti-mark-ico.scratch { letter-spacing:-2px; }
+    .ti-mark-ico.major { color:#c0392b; border-color:#c0392b; }
+    .ti-mark-ico .material-symbols-outlined { font-size:15px; font-weight:700; }
+    .ti-mark-ico.sm { width:20px; height:20px; border-width:1.5px; flex-shrink:0; }
+    .ti-mark-ico.sm .material-symbols-outlined { font-size:13px; }
+    .ti-mark-code { font-size:9px; font-weight:800; color:#17293d; margin-top:1px; background:rgba(255,255,255,.9); padding:0 3px; border-radius:3px; display:inline-block; }
+    .ti-dmenu { position:absolute; z-index:20; background:#fff; border-radius:16px; box-shadow:0 16px 48px rgba(20,24,34,.25); padding:14px 16px; width:216px; }
+    .ti-dmenu-h { font-size:11px; font-weight:800; letter-spacing:.05em; color:var(--ink-muted); text-transform:uppercase; margin-bottom:8px; }
+    .ti-dopt { display:flex; align-items:center; gap:12px; padding:9px 4px; cursor:pointer; font-size:14px; font-weight:600; color:var(--ink); border-radius:8px; }
+    .ti-dopt:hover { background:var(--bg); }
+    .ti-dopt .ti-mark-ico { border:none; box-shadow:none; background:none; width:22px; }
+    .ti-dopt .material-symbols-outlined { font-size:20px; }
+    .ti-dcancel { text-align:center; color:var(--blue); font-weight:600; padding:10px 0 2px; cursor:pointer; font-size:13px; }
+    .ti-legend { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:12px; font-size:12px; color:var(--ink-secondary); }
+    .ti-lg { display:inline-flex; align-items:center; gap:5px; }
+    .ti-lg .ti-mark-ico { width:18px; height:18px; border-width:1.5px; font-size:10px; }
+    .ti-lg .material-symbols-outlined { font-size:16px; }
+    .ti-dcard { border:1px solid var(--border); border-radius:12px; padding:12px; margin-bottom:10px; }
+    .ti-dcard-top { display:flex; align-items:center; gap:8px; }
+    .ti-dcode { font-weight:800; font-size:13px; }
+    .ti-dregion { font-size:10.5px; font-weight:600; color:var(--ink-secondary); background:var(--bg); border-radius:6px; padding:2px 8px; }
+    .ti-dx { margin-left:auto; cursor:pointer; color:var(--ink-muted); font-size:17px; }
+    .ti-dx:hover { color:var(--red); }
+    .ti-dtype { font-size:12px; color:var(--ink-secondary); margin-top:3px; }
+    .ti-dattach { font-size:11px; font-weight:600; color:var(--ink-muted); margin:10px 0 6px; }
+    .ti-dmedia-btns { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .ti-dmbtn { display:flex; flex-direction:column; align-items:center; gap:2px; border:1px dashed var(--border); border-radius:8px; padding:8px; font-size:10.5px; color:var(--ink-secondary); cursor:pointer; }
+    .ti-dmbtn:hover { border-color:var(--blue); color:var(--blue); }
+    .ti-dmbtn .material-symbols-outlined { font-size:18px; }
+    .ti-dmedia-thumbs { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .ti-dthumb { width:40px; height:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; background:#f0f0f0; }
+    .ti-dthumb img { width:100%; height:100%; object-fit:cover; }
+    .ti-dthumb.vid { color:var(--blue); }
+    .ti-dempty { font-size:12px; color:var(--ink-muted); padding:16px; text-align:center; border:1px dashed var(--border); border-radius:10px; }
     .dp-if-opt { margin-left: 6px; font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-muted); background: var(--bg); border: 1px solid var(--border-soft); border-radius: 10px; padding: 1px 6px; }
     .dp-if-area { min-height: 54px; resize: vertical; padding: 6px 9px; line-height: 1.4; }
     .dp-if-lookup { position: relative; display: block; width: 100%; }
@@ -2668,30 +2711,31 @@
       var star = o.req ? '<span class="dp-if-req">*</span>' : '';
       var lock = o.lock ? '<span class="material-symbols-outlined dp-if-lock">lock</span>' : '';
       var opt = o.opt ? '<span class="dp-if-opt">'+o.opt+'</span>' : '';
+      var ph = o.ph || '';
       var ctrl;
       if (o.type === 'select') {
         ctrl = '<select class="dp-if-input">'+(o.options||['—']).map(function(x){return '<option>'+x+'</option>';}).join('')+'</select>';
       } else if (o.type === 'textarea') {
-        ctrl = '<textarea class="dp-if-input dp-if-area" placeholder="Manual input…"></textarea>';
+        ctrl = '<textarea class="dp-if-input dp-if-area" placeholder="'+(ph||'Manual input…')+'"></textarea>';
       } else if (o.type === 'lookup') {
-        ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="" placeholder="---"><span class="material-symbols-outlined dp-if-lk">search</span></div>';
+        ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="" placeholder="'+(ph||'---')+'"><span class="material-symbols-outlined dp-if-lk">search</span></div>';
       } else {
-        ctrl = '<input class="dp-if-input'+(o.lock?' dp-if-ro':'')+'" type="text" value=""'+(o.lock?' readonly':'')+' placeholder="---">';
+        ctrl = '<input class="dp-if-input'+(o.lock?' dp-if-ro':'')+'" type="text" value=""'+(o.lock?' readonly':'')+' placeholder="'+(ph||'---')+'">';
       }
       return '<div class="dp-if'+(o.wide?' dp-if-wide':'')+'"><label class="dp-if-label">'+label+star+lock+opt+'</label>'+ctrl+'</div>';
     }
     function tradeInDetailsHtml(show) {
       var vehicle = [
-        tiField('Brand', {type:'lookup'}), tiField('Model', {type:'lookup'}),
-        tiField('Year'), tiField('Mileage'),
-        tiField('Exterior Color'), tiField('Transmission', {type:'select', options:['---','Automatic','Manual']}),
-        tiField('Registration Number'), tiField('VIN Number'),
+        tiField('Brand', {type:'lookup', ph:'Search brand (e.g. Toyota)'}), tiField('Model', {type:'lookup', ph:'Search model (e.g. Camry)'}),
+        tiField('Year', {ph:'e.g. 2021'}), tiField('Mileage', {ph:'e.g. 45,000 km'}),
+        tiField('Exterior Color', {ph:'e.g. Pearl White'}), tiField('Transmission', {type:'select', options:['---','Automatic','Manual']}),
+        tiField('Registration Number', {ph:'e.g. Dubai · A 12345'}), tiField('VIN Number', {ph:'17-character VIN'}),
         tiField('Tire Condition', {type:'select', options:['---','Good','Bad']}),
-        tiField('Remarks', {type:'textarea', wide:true})
+        tiField('Remarks', {type:'textarea', wide:true, ph:'Condition notes, service history, accidents…'})
       ].join('');
       var appraisal = [
-        tiField('Customer Expected Price', {opt:'Input by SE'}),
-        tiField('Offer Price', {lock:true, opt:'Input by buyer only'})
+        tiField('Customer Expected Price', {opt:'Input by SE', ph:'AED — customer expected price'}),
+        tiField('Offer Price', {lock:true, opt:'Input by buyer only', ph:'Awaiting buyer offer'})
       ].join('');
       return '<div id="tradeInDetails" class="ti-details" style="'+(show?'':'display:none')+'">' +
         '<div class="ti-details-h"><span class="material-symbols-outlined">sync_alt</span>Trade-in Details</div>' +
@@ -2704,10 +2748,10 @@
     function submitForAppraisal(){ showToast('Trade-in submitted for appraisal'); }
     function tradeInPanel(l) {
       var interested = 'Yes';
-      var toggle = '<div class="dp-if" id="intakeTradeIn"><label class="dp-if-label">Trade-in Interested?</label>' +
-        '<select class="dp-if-input" onchange="onTradeInChange(this.value)">' +
-        ['Yes','No','Not sure'].map(function(x){ return '<option'+(x===interested?' selected':'')+'>'+x+'</option>'; }).join('') +
-        '</select></div>';
+      var toggle = '<div class="dp-if"><label class="dp-if-label">Trade-in Interested?</label>' +
+        '<div class="dp-if-chips" id="intakeTradeIn">' +
+          ['Yes','No'].map(function(x){ var on = (x === interested); return '<label class="dp-chip-radio'+(on?' on':'')+'"><input type="radio" name="tradeInInterested" value="'+x+'"'+(on?' checked':'')+' onchange="onTradeInChange(this.value)"><span>'+x+'</span></label>'; }).join('') +
+        '</div></div>';
       var photos = '<div class="ti-photos" id="tiPhotos" style="'+(interested==='Yes'?'':'display:none')+'">' +
         '<div class="ti-details-h"><span class="material-symbols-outlined">photo_camera</span>Vehicle Photos</div>' +
         '<div class="ti-photo-actions">' +
@@ -2720,8 +2764,99 @@
         '<div class="dp-essential-title">Trade-in</div>' +
         '<div class="dp-essential-sub">Capture the customer&rsquo;s trade-in interest, photos and appraisal.</div>' +
         '<div class="dp-if-fields" style="margin-bottom:6px">' + toggle + '</div>' +
-        photos +
         tradeInDetailsHtml(interested === 'Yes') +
+        '<div id="tiDamageWrap" style="'+(interested==='Yes'?'':'display:none')+'">' + damageMarkerHtml(l) + photos + '</div>' +
+      '</div>';
+    }
+    // ── Trade-in damage marker (tap the diagram to mark damage) ──
+    var TI_CAR_SVG = '<img src="assets/car-diagram.png" class="ti-car" alt="Vehicle inspection diagram">';
+    var tiDmgTypes = { scratch:{p:'S',l:'Scratch'}, dent:{p:'D',l:'Dent'}, major:{p:'X',l:'Major Damage'}, side:{p:'I',l:'Side Image'} };
+    function tiDmgIcon(type){
+      if (type === 'scratch') return '//';
+      if (type === 'dent') return '<span class="material-symbols-outlined">radio_button_unchecked</span>';
+      if (type === 'major') return '<span class="material-symbols-outlined">close</span>';
+      return '<span class="material-symbols-outlined">image</span>';
+    }
+    function tiRegionAt(x, y){
+      var h = x<33?'Left':(x>67?'Right':'Centre');
+      var v = y<33?'Front':(y>67?'Rear':'Mid');
+      if (h === 'Centre' && v === 'Mid') return 'Roof / Centre';
+      if (h === 'Centre') return v + ' section';
+      return h + ' side' + (v === 'Mid' ? '' : ' · ' + v);
+    }
+    var tiPendingMark = null;
+    function tiDiagramClick(e){
+      var dia = document.getElementById('tiDiagram'); if (!dia) return;
+      if (e.target.closest && e.target.closest('.ti-dmenu')) return;
+      var r = dia.getBoundingClientRect();
+      tiPendingMark = { x: (e.clientX - r.left) / r.width * 100, y: (e.clientY - r.top) / r.height * 100 };
+      var menu = document.getElementById('tiDmenu'); if (!menu) return;
+      var mx = Math.min(Math.max(e.clientX - r.left - 20, 8), Math.max(8, r.width - 228));
+      var my = Math.min(Math.max(e.clientY - r.top - 10, 8), Math.max(8, r.height - 250));
+      menu.style.left = mx + 'px'; menu.style.top = my + 'px'; menu.style.display = 'block';
+    }
+    function tiCancelMark(e){ if (e) e.stopPropagation(); tiPendingMark = null; var m = document.getElementById('tiDmenu'); if (m) m.style.display = 'none'; }
+    function tiPickDamage(type){
+      if (!tiPendingMark || selectedIdx < 0) return;
+      var l = leads[selectedIdx]; l.tiDamages = l.tiDamages || [];
+      var t = tiDmgTypes[type] || tiDmgTypes.scratch;
+      var n = l.tiDamages.filter(function(d){ return d.type === type; }).length + 1;
+      l.tiDamages.push({ id: 'dmg' + Date.now() + Math.floor(Math.random()*99), x: tiPendingMark.x, y: tiPendingMark.y, type: type, code: t.p + n, region: tiRegionAt(tiPendingMark.x, tiPendingMark.y), media: [] });
+      tiPendingMark = null;
+      renderDetail(selectedIdx, currentStep);
+    }
+    function tiRemoveDamage(id){
+      var l = leads[selectedIdx]; l.tiDamages = (l.tiDamages || []).filter(function(d){ return d.id !== id; });
+      renderDetail(selectedIdx, currentStep);
+    }
+    function tiDamageMedia(id, kind, input){
+      var l = leads[selectedIdx], d = (l.tiDamages || []).filter(function(x){ return x.id === id; })[0];
+      var file = input.files && input.files[0]; if (!d || !file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev){ d.media = d.media || []; d.media.push({ type: kind, url: ev.target.result }); renderDetail(selectedIdx, currentStep); };
+      reader.readAsDataURL(file);
+    }
+    function damageCardHtml(d){
+      var thumbs = (d.media || []).map(function(m){ return m.type === 'video' ? '<span class="ti-dthumb vid"><span class="material-symbols-outlined">videocam</span></span>' : '<span class="ti-dthumb"><img src="'+m.url+'" alt=""></span>'; }).join('');
+      return '<div class="ti-dcard">' +
+        '<div class="ti-dcard-top"><span class="ti-mark-ico sm '+d.type+'">'+tiDmgIcon(d.type)+'</span><span class="ti-dcode">'+d.code+'</span><span class="ti-dregion">'+d.region+'</span><span class="ti-dx material-symbols-outlined" onclick="tiRemoveDamage(\''+d.id+'\')">close</span></div>' +
+        '<div class="ti-dtype">'+(tiDmgTypes[d.type]?tiDmgTypes[d.type].l:d.type)+'</div>' +
+        '<div class="ti-dattach">Attach Photo / Video</div>' +
+        '<div class="ti-dmedia-btns">' +
+          '<label class="ti-dmbtn"><span class="material-symbols-outlined">photo_camera</span>Photo<input type="file" accept="image/*" hidden onchange="tiDamageMedia(\''+d.id+'\',\'photo\',this)"></label>' +
+          '<label class="ti-dmbtn"><span class="material-symbols-outlined">videocam</span>Video<input type="file" accept="video/*" hidden onchange="tiDamageMedia(\''+d.id+'\',\'video\',this)"></label>' +
+        '</div>' +
+        (thumbs ? '<div class="ti-dmedia-thumbs">'+thumbs+'</div>' : '') +
+      '</div>';
+    }
+    function damageMarkerHtml(l){
+      l.tiDamages = l.tiDamages || [];
+      var marks = l.tiDamages.map(function(d){
+        return '<div class="ti-mark" style="left:'+d.x+'%;top:'+d.y+'%"><span class="ti-mark-ico '+d.type+'">'+tiDmgIcon(d.type)+'</span><span class="ti-mark-code">'+d.code+'</span></div>';
+      }).join('');
+      var legend = '<span class="ti-lg"><span class="ti-mark-ico scratch">//</span> Scratch</span>' +
+        '<span class="ti-lg"><span class="material-symbols-outlined">radio_button_unchecked</span> Dent</span>' +
+        '<span class="ti-lg"><span class="material-symbols-outlined">close</span> Major Damage</span>' +
+        '<span class="ti-lg"><span class="material-symbols-outlined">image</span> Side Image</span>';
+      var list = l.tiDamages.length ? l.tiDamages.map(damageCardHtml).join('') : '<div class="ti-dempty">No damage marked yet. Tap the diagram to add.</div>';
+      return '<div class="ti-damage"><div class="ti-details-h"><span class="material-symbols-outlined">report</span>Damage Marks</div>' +
+        '<div class="ti-damage-wrap">' +
+          '<div>' +
+            '<div class="ti-damage-h">Tap to Mark Damage</div>' +
+            '<div class="ti-diagram" id="tiDiagram" onclick="tiDiagramClick(event)">' + TI_CAR_SVG + marks +
+              '<div class="ti-dmenu" id="tiDmenu" style="display:none">' +
+                '<div class="ti-dmenu-h">Select Damage Type</div>' +
+                '<div class="ti-dopt" onclick="tiPickDamage(\'scratch\')"><span class="ti-mark-ico scratch">//</span> Scratch</div>' +
+                '<div class="ti-dopt" onclick="tiPickDamage(\'dent\')"><span class="material-symbols-outlined">radio_button_unchecked</span> Dent</div>' +
+                '<div class="ti-dopt" onclick="tiPickDamage(\'major\')"><span class="material-symbols-outlined">close</span> Major Damage</div>' +
+                '<div class="ti-dopt" onclick="tiPickDamage(\'side\')"><span class="material-symbols-outlined">image</span> Side Image</div>' +
+                '<div class="ti-dcancel" onclick="tiCancelMark(event)">Cancel</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="ti-legend">' + legend + '</div>' +
+          '</div>' +
+          '<div><div class="ti-damage-h" style="text-align:left">Damage List ('+l.tiDamages.length+')</div>' + list + '</div>' +
+        '</div>' +
       '</div>';
     }
     function tiAddPhotos(input) {
@@ -2744,6 +2879,8 @@
       if (el) el.style.display = (v === 'Yes') ? '' : 'none';
       var ph = document.getElementById('tiPhotos');
       if (ph) ph.style.display = (v === 'Yes') ? '' : 'none';
+      var dm = document.getElementById('tiDamageWrap');
+      if (dm) dm.style.display = (v === 'Yes') ? '' : 'none';
       var wrap = document.getElementById('intakeTradeIn');
       if (wrap) wrap.querySelectorAll('.dp-chip-radio').forEach(function(lbl){
         var inp = lbl.querySelector('input'); lbl.classList.toggle('on', !!(inp && inp.checked));
