@@ -1603,10 +1603,10 @@
 
     // Per-stage SLA (indexed to journeySteps). show = date/time fields to surface, items = list of SLA activities, note = advisory.
     var stageSla = [
-      { sla:{name:'First response', target:'30 min', scale:['0m','15m','30m']}, show:[], items:[{t:'Within 30 min', a:'Log first call attempt'}], note:'If the customer does not respond, an automated WhatsApp message is sent to the customer.' },
-      { sla:{name:'First contact', target:'Day 1', scale:['Now','','Day 1']}, show:[], items:[{t:'Within 30 min', a:'Log first call attempt'},{t:'Day 1', a:'Log second call attempt'},{t:'Day 2', a:'Log third call attempt'},{t:'Day 4', a:'Log fourth call attempt'}] },
-      { sla:{name:'Qualification', target:'1 hr', scale:['0h','','1h']}, show:[], items:[{t:'Within 1 hour of assignment', a:'Log activity to reach out to the customer'}] },
-      { sla:{name:'Test drive scheduling', target:'Day 4', scale:['Now','','Day 4']}, show:['Appointment'], items:[] },
+      { sla:{name:'First response', target:'30 min', scale:['0m','15m','30m']}, show:[], items:[{t:'Within 30 min · working hours', a:'Log first call attempt'}], note:'Ticked when an action is logged. If the customer does not respond, an automated WhatsApp message is sent to the customer. Escalation to CEC Manager.' },
+      { sla:{name:'Contact attempts', target:'Day 4', scale:['Day 1','Day 2','Day 4']}, show:[], items:[{t:'Day 1', a:'Log second call attempt'},{t:'Day 2', a:'Log third call attempt'},{t:'Day 4', a:'Log fourth call attempt'}], note:'Ticked when an action is logged. Escalation to CEC Manager.' },
+      { sla:{name:'Qualification', target:'30 min', scale:['0m','15m','30m']}, show:[], items:[{t:'Within 30 min of assignment · working hours', a:'Log activity to reach out to the customer'}], note:'Ticked when an action is logged. Escalation to Branch Sales Manager.' },
+      { sla:{name:'Visit — walk-in service', target:'5 min', scale:['0m','','5m']}, show:['Appointment'], items:[{t:'Within 5 min', a:'Serve walk-in lead assigned by host'}], note:'Ticked when "Meet Customer" is logged. Escalation to Branch Sales Manager.' },
       { sla:{name:'Proposal turnaround', target:'48 hrs', scale:['0h','24h','48h']}, show:[], items:[{t:'Day 2', a:'Log follow-up with customer on proposal'},{t:'Day 3', a:'Log follow-up with customer on proposal'}] },
       { sla:{name:'Quote approval', target:'24 hrs', scale:['0h','12h','24h']}, show:[], items:[] },
       { sla:{name:'Delivery prep', target:'3 days', scale:['Day 0','','Day 3']}, show:[], items:[] },
