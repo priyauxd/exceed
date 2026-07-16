@@ -64,7 +64,8 @@
     .list-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .list-title-row h1 { font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
     .list-title-row .lead-count { font-size: 12px; color: var(--ink-muted); font-weight: 400; background: var(--bg); padding: 3px 10px; border-radius: 10px; margin-left: 10px; }
-    .list-actions { display: flex; gap: 6px; }
+    .list-actions { display: flex; align-items: center; gap: 6px; }
+    .list-actions .search-box { margin-left: 4px; }
     .list-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 11.5px; color: var(--ink-secondary); cursor: pointer; font-family: inherit; transition: all .12s; }
     .list-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
     .list-btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
@@ -92,7 +93,40 @@
     .filter-search:focus { border-color: var(--blue); }
     .filter-search::placeholder { color: var(--ink-muted); }
     /* View toggle + Sales pipeline (kanban) */
-    .view-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .view-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+    .vt-btn { display:inline-flex; align-items:center; justify-content:center; border:none; background:var(--surface); color:var(--ink-secondary); font-size:12px; font-weight:600; font-family:inherit; padding:6px 9px; cursor:pointer; transition:.12s; }
+    .search-box { display:inline-flex; align-items:center; }
+    .search-ico-btn { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0; border:1px solid var(--border); border-radius:8px; background:var(--surface); color:var(--ink-secondary); cursor:pointer; transition:.12s; font-family:inherit; }
+    .search-ico-btn:hover { color:var(--blue); border-color:var(--blue); }
+    .search-ico-btn .material-symbols-outlined { font-size:17px; }
+    .search-box .filter-search { width:0; padding:0; border-color:transparent; opacity:0; margin-left:0; transition: width .18s ease, opacity .15s, padding .18s, margin .18s; }
+    .search-box.open .filter-search { width:180px; padding:6px 12px 6px 32px; border-color:var(--border); opacity:1; margin-left:6px; }
+    .search-box.open .search-ico-btn { display:none; }
+    .vt-btn.on { background:var(--blue); color:#fff; }
+    .vt-btn:not(.on):hover { color:var(--blue); }
+    .vt-btn .material-symbols-outlined { font-size:15px; }
+    .leads-cal-wrap { flex:1; overflow-y:auto; padding:14px 20px 20px; }
+    .cal-head { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+    .cal-nav { width:30px; height:30px; border:1px solid var(--border); border-radius:7px; background:var(--surface); cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--ink-secondary); }
+    .cal-nav:hover { border-color:var(--blue); color:var(--blue); }
+    .cal-title { font-size:15px; font-weight:700; }
+    .cal-today-btn { margin-left:auto; border:1px solid var(--border); background:var(--surface); border-radius:7px; padding:6px 12px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; color:var(--ink-secondary); }
+    .cal-today-btn:hover { border-color:var(--blue); color:var(--blue); }
+    .cal-wds { display:grid; grid-template-columns:repeat(7,1fr); }
+    .cal-wd { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-muted); padding:6px; text-align:center; }
+    .cal-days { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:var(--border-soft); border:1px solid var(--border-soft); border-radius:8px; overflow:hidden; }
+    .cal-cell { background:var(--surface); min-height:96px; padding:6px; }
+    .cal-cell.empty { background:#fafbfd; }
+    .cal-cell.today { background:var(--blue-soft); }
+    .cal-daynum { font-size:11px; font-weight:700; color:var(--ink-secondary); margin-bottom:4px; }
+    .cal-cell.today .cal-daynum { color:var(--blue); }
+    .cal-chips { display:flex; flex-direction:column; gap:3px; }
+    .cal-chip { display:flex; align-items:center; gap:5px; width:100%; text-align:left; border:none; background:var(--bg); border-radius:5px; padding:3px 6px; font-size:10.5px; font-weight:600; color:var(--ink); font-family:inherit; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .cal-chip:hover { background:var(--blue-soft); color:var(--blue); }
+    .cal-chip-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; background:var(--green); }
+    .cal-chip.brch .cal-chip-dot, .cal-chip.na .cal-chip-dot { background:var(--red); }
+    .cal-chip.wrn .cal-chip-dot { background:var(--amber); }
+    .cal-empty-note { font-size:12px; color:var(--ink-muted); text-align:center; padding:40px; }
     .vt { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border: none; background: var(--surface); font-size: 11.5px; color: var(--ink-secondary); cursor: pointer; font-family: inherit; }
     .vt + .vt { border-left: 1px solid var(--border); }
     .vt.on { background: var(--blue); color: #fff; }
@@ -284,6 +318,14 @@
     .leads-table input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--blue); vertical-align: middle; }
     .leads-table tbody tr.urg { background: #fef7f7; }
     .leads-table tbody tr.urg:hover { background: #fdf0f0; }
+    .leads-empty-row td { border-bottom: none !important; background: none !important; }
+    .leads-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:56px 20px; gap:3px; }
+    .leads-empty > .material-symbols-outlined { font-size:42px; color:var(--ink-muted); margin-bottom:8px; }
+    .leads-empty-t { font-size:15px; font-weight:700; color:var(--ink); }
+    .leads-empty-s { font-size:12.5px; color:var(--ink-muted); max-width:360px; line-height:1.5; }
+    .leads-empty-btn { margin-top:14px; display:inline-flex; align-items:center; gap:6px; background:var(--blue); color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .leads-empty-btn:hover { background:var(--blue-dark); }
+    .leads-empty-btn .material-symbols-outlined { font-size:16px; }
     .lead-cell { display: flex; align-items: center; gap: 10px; }
     .lead-av { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; color: #fff; flex-shrink: 0; }
     .lead-av.av1 { background: linear-gradient(135deg, #8b7bdf, #a78bfa); }
@@ -634,7 +676,10 @@
     .ti-dmbtn:hover { border-color:var(--blue); color:var(--blue); }
     .ti-dmbtn .material-symbols-outlined { font-size:18px; }
     .ti-dmedia-thumbs { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
-    .ti-dthumb { width:40px; height:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; background:#f0f0f0; }
+    .ti-dthumb { position:relative; width:40px; height:40px; border-radius:6px; overflow:hidden; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; background:#f0f0f0; }
+    .ti-dthumb-rm { position:absolute; top:2px; right:2px; width:16px; height:16px; border-radius:50%; background:rgba(20,24,34,.72); color:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+    .ti-dthumb-rm:hover { background:var(--red); }
+    .ti-dthumb-rm .material-symbols-outlined { font-size:11px; }
     .ti-dthumb img { width:100%; height:100%; object-fit:cover; }
     .ti-dthumb.vid { color:var(--blue); }
     .ti-dempty { font-size:12px; color:var(--ink-muted); padding:16px; text-align:center; border:1px dashed var(--border); border-radius:10px; }
@@ -1394,22 +1439,6 @@
           <div class="list-header">
             <div class="list-title-row">
               <h1>My Active Leads <span class="lead-count">12 leads</span></h1>
-              <div class="list-actions">
-                <div class="lead-menu-wrap">
-                  <button class="list-btn" onclick="toggleLeadMenu('filterMenu')"><span class="material-symbols-outlined">filter_list</span> Filter<span class="lead-menu-badge" id="filterCount" style="display:none">0</span></button>
-                  <div class="lead-menu" id="filterMenu">
-                    <div class="lm-row"><label>Source</label><select id="fSource" onchange="setAdvFilter('source',this.value)"><option value="">Any source</option></select></div>
-                    <div class="lm-row"><label>Rating</label><select id="fRating" onchange="setAdvFilter('rating',this.value)"><option value="">Any rating</option><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
-                    <div class="lm-row"><label>SLA status</label><select id="fSla" onchange="setAdvFilter('sla',this.value)"><option value="">Any SLA</option><option value="brch">Breached</option><option value="wrn">Due soon</option><option value="ok">On track</option></select></div>
-                    <button class="lm-clear" onclick="clearAdvFilters()">Clear filters</button>
-                  </div>
-                </div>
-                <div class="lead-menu-wrap">
-                  <button class="list-btn" onclick="toggleLeadMenu('sortMenu')"><span class="material-symbols-outlined">sort</span> Sort</button>
-                  <div class="lead-menu" id="sortMenu"></div>
-                </div>
-                <button class="list-btn primary" onclick="openCreateLead()"><span class="material-symbols-outlined">add</span> New lead</button>
-              </div>
             </div>
           </div>
           <div class="list-filters" id="listFilters">
@@ -1418,13 +1447,45 @@
             <button class="filter-chip" onclick="filterLeads(this,'contacted')">Contacted <span style="font-weight:400;opacity:.7;margin-left:2px">3</span></button>
             <button class="filter-chip" onclick="filterLeads(this,'qualified')">Qualified <span style="font-weight:400;opacity:.7;margin-left:2px">2</span></button>
             <button class="filter-chip" onclick="filterLeads(this,'visit')">Visit <span style="font-weight:400;opacity:.7;margin-left:2px">2</span></button>
-            <input class="filter-search" type="text" placeholder="Search leads..." oninput="searchLeads(this.value)" />
+            <div class="list-actions" style="margin-left:auto">
+              <div class="search-box" id="searchBox">
+                <button class="search-ico-btn" onclick="toggleSearchBox()" title="Search"><span class="material-symbols-outlined">search</span></button>
+                <input class="filter-search" type="text" placeholder="Search leads..." oninput="searchLeads(this.value)" onblur="collapseSearchIfEmpty()" />
+              </div>
+              <div class="lead-menu-wrap">
+                <button class="list-btn" onclick="toggleLeadMenu('filterMenu')"><span class="material-symbols-outlined">filter_list</span> Filter<span class="lead-menu-badge" id="filterCount" style="display:none">0</span></button>
+                <div class="lead-menu" id="filterMenu">
+                  <div class="lm-row"><label>Source</label><select id="fSource" onchange="setAdvFilter('source',this.value)"><option value="">Any source</option></select></div>
+                  <div class="lm-row"><label>Rating</label><select id="fRating" onchange="setAdvFilter('rating',this.value)"><option value="">Any rating</option><option>Hot</option><option>Warm</option><option>Cold</option></select></div>
+                  <div class="lm-row"><label>SLA status</label><select id="fSla" onchange="setAdvFilter('sla',this.value)"><option value="">Any SLA</option><option value="brch">Breached</option><option value="wrn">Due soon</option><option value="ok">On track</option></select></div>
+                  <button class="lm-clear" onclick="clearAdvFilters()">Clear filters</button>
+                </div>
+              </div>
+              <div class="lead-menu-wrap" id="sortWrap">
+                <button class="list-btn" onclick="toggleLeadMenu('sortMenu')"><span class="material-symbols-outlined">sort</span> Sort</button>
+                <div class="lead-menu" id="sortMenu"></div>
+              </div>
+              <div class="view-toggle">
+                <button class="vt-btn on" id="vtTable" title="Table view" onclick="setLeadsView('table')"><span class="material-symbols-outlined">table_rows</span></button>
+                <button class="vt-btn" id="vtCal" title="Calendar view" onclick="setLeadsView('calendar')"><span class="material-symbols-outlined">calendar_month</span></button>
+              </div>
+              <button class="list-btn primary" onclick="openCreateLead()"><span class="material-symbols-outlined">add</span> New lead</button>
+            </div>
           </div>
           <div class="leads-table-wrap" id="tableWrap">
             <table class="leads-table" id="leadsTable">
               <thead><tr><th class="chk-cell"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th><th>Lead</th><th>Lead ID</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Stage</th><th>Mobile</th><th>Owner</th><th></th></tr></thead>
               <tbody id="leadsBody"></tbody>
             </table>
+          </div>
+          <div class="leads-cal-wrap" id="calendarWrap" style="display:none">
+            <div class="cal-head">
+              <button class="cal-nav" onclick="calNav(-1)"><span class="material-symbols-outlined">chevron_left</span></button>
+              <span class="cal-title" id="calTitle"></span>
+              <button class="cal-nav" onclick="calNav(1)"><span class="material-symbols-outlined">chevron_right</span></button>
+              <button class="cal-today-btn" onclick="calToday()">Today</button>
+            </div>
+            <div id="calGrid"></div>
           </div>
           <div class="pipeline-wrap" id="pipelineWrap" style="display:none">
             <div class="pipeline-board" id="pipelineBoard"></div>
@@ -1956,6 +2017,7 @@
     var advFilters = { source:'', rating:'', sla:'' };
     var sortState = { key:'', dir:'asc' };
     var curStageFilter = 'all', curSearch = '';
+    var leadsView = 'table', calY = 2026, calM = 6;
     function leadMatches(l) {
       if (curStageFilter && curStageFilter !== 'all') {
         var stg = l.stage.toLowerCase();
@@ -1983,11 +2045,24 @@
     function renderLeads(filter, search) {
       if (filter !== undefined) curStageFilter = filter || 'all';
       if (search !== undefined) curSearch = search || '';
+      if (leadsView === 'calendar') renderLeadsCalendar();
       var tbody = document.getElementById('leadsBody');
       tbody.innerHTML = '';
       var rows = [];
       leads.forEach(function(l, i){ if (leadMatches(l)) rows.push({ l:l, i:i }); });
       if (sortState.key) rows.sort(function(a, b){ return cmpLeads(a.l, b.l, sortState.key) * (sortState.dir === 'desc' ? -1 : 1); });
+      if (!rows.length) {
+        var active = !!(curSearch && curSearch.trim()) || curStageFilter !== 'all' || advFilters.source || advFilters.rating || advFilters.sla;
+        var etr = document.createElement('tr'); etr.className = 'leads-empty-row';
+        etr.innerHTML = '<td colspan="10"><div class="leads-empty">' +
+          '<span class="material-symbols-outlined">search_off</span>' +
+          '<div class="leads-empty-t">No leads found</div>' +
+          '<div class="leads-empty-s">' + (active ? 'No leads match your search or filters. Try a different term or clear them to see all leads.' : 'There are no leads to show yet.') + '</div>' +
+          (active ? '<button class="leads-empty-btn" onclick="clearLeadsSearch()"><span class="material-symbols-outlined">restart_alt</span> Clear search &amp; filters</button>' : '') +
+        '</div></td>';
+        tbody.appendChild(etr);
+        return;
+      }
       rows.forEach(function(o) {
         var l = o.l, i = o.i;
         var tr = document.createElement('tr');
@@ -2429,6 +2504,58 @@
       renderLeads(filter);
     }
     function searchLeads(val) { renderLeads(undefined, val); }
+    function clearLeadsSearch() {
+      var inp = document.querySelector('.filter-search'); if (inp) inp.value = '';
+      advFilters = { source:'', rating:'', sla:'' };
+      ['fSource','fRating','fSla'].forEach(function(id){ var e = document.getElementById(id); if (e) e.value = ''; });
+      curSearch = ''; renderLeads('all'); updateFilterBadge();
+    }
+    var CAL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function leadDateParts(l){
+      var t = (l.activities && l.activities[0] && l.activities[0].time) || '';
+      var m = t.match(/^(\d{4})-(\d{2})-(\d{2})/);
+      return m ? { y:+m[1], mo:+m[2]-1, d:+m[3] } : null;
+    }
+    function setLeadsView(v){
+      leadsView = v; var isCal = v === 'calendar';
+      document.getElementById('tableWrap').style.display = isCal ? 'none' : '';
+      document.getElementById('calendarWrap').style.display = isCal ? '' : 'none';
+      document.getElementById('vtTable').classList.toggle('on', !isCal);
+      document.getElementById('vtCal').classList.toggle('on', isCal);
+      var sw = document.getElementById('sortWrap'); if (sw) sw.style.display = isCal ? 'none' : '';
+      if (isCal) renderLeadsCalendar();
+    }
+    function toggleSearchBox(){
+      var box = document.getElementById('searchBox'); if (!box) return;
+      box.classList.add('open');
+      var inp = box.querySelector('.filter-search');
+      setTimeout(function(){ inp.focus(); }, 30);
+    }
+    function collapseSearchIfEmpty(){
+      var box = document.getElementById('searchBox'); if (!box) return;
+      var inp = box.querySelector('.filter-search');
+      if (!inp.value.trim()) box.classList.remove('open');
+    }
+    function calNav(dir){ calM += dir; if (calM < 0) { calM = 11; calY--; } else if (calM > 11) { calM = 0; calY++; } renderLeadsCalendar(); }
+    function calToday(){ calY = 2026; calM = 6; renderLeadsCalendar(); }
+    function renderLeadsCalendar(){
+      var grid = document.getElementById('calGrid'); if (!grid) return;
+      var tt = document.getElementById('calTitle'); if (tt) tt.textContent = CAL_MONTHS[calM] + ' ' + calY;
+      var rows = []; leads.forEach(function(l, i){ if (leadMatches(l)) rows.push({ l:l, i:i }); });
+      var byDay = {}, total = 0;
+      rows.forEach(function(o){ var p = leadDateParts(o.l); if (p && p.y === calY && p.mo === calM) { (byDay[p.d] = byDay[p.d] || []).push(o); total++; } });
+      var first = new Date(calY, calM, 1).getDay();
+      var days = new Date(calY, calM + 1, 0).getDate();
+      var head = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(function(d){ return '<div class="cal-wd">'+d+'</div>'; }).join('');
+      var cells = '';
+      for (var b = 0; b < first; b++) cells += '<div class="cal-cell empty"></div>';
+      for (var d = 1; d <= days; d++){
+        var isToday = (calY === 2026 && calM === 6 && d === 9);
+        var chips = (byDay[d] || []).map(function(o){ var l = o.l; return '<button class="cal-chip '+l.slaClass+'" title="'+l.name+' · '+l.stage+'" onclick="event.stopPropagation();openPanelFull('+o.i+')"><span class="cal-chip-dot"></span>'+l.name+'</button>'; }).join('');
+        cells += '<div class="cal-cell'+(isToday ? ' today' : '')+'"><div class="cal-daynum">'+d+'</div><div class="cal-chips">'+chips+'</div></div>';
+      }
+      grid.innerHTML = '<div class="cal-wds">'+head+'</div><div class="cal-days">'+cells+'</div>' + (total ? '' : '<div class="cal-empty-note">No leads dated in '+CAL_MONTHS[calM]+' '+calY+'.</div>');
+    }
 
     // Advanced filter + sort menus for the leads table.
     function toggleLeadMenu(id) {
@@ -2816,8 +2943,14 @@
       reader.onload = function(ev){ d.media = d.media || []; d.media.push({ type: kind, url: ev.target.result }); renderDetail(selectedIdx, currentStep); };
       reader.readAsDataURL(file);
     }
+    function tiDamageRemoveMedia(id, mi){
+      var l = leads[selectedIdx], d = (l.tiDamages || []).filter(function(x){ return x.id === id; })[0];
+      if (!d || !d.media) return;
+      d.media.splice(mi, 1);
+      renderDetail(selectedIdx, currentStep);
+    }
     function damageCardHtml(d){
-      var thumbs = (d.media || []).map(function(m){ return m.type === 'video' ? '<span class="ti-dthumb vid"><span class="material-symbols-outlined">videocam</span></span>' : '<span class="ti-dthumb"><img src="'+m.url+'" alt=""></span>'; }).join('');
+      var thumbs = (d.media || []).map(function(m, mi){ var inner = m.type === 'video' ? '<span class="material-symbols-outlined">videocam</span>' : '<img src="'+m.url+'" alt="">'; return '<span class="ti-dthumb'+(m.type==='video'?' vid':'')+'">'+inner+'<button class="ti-dthumb-rm" title="Remove" onclick="tiDamageRemoveMedia(\''+d.id+'\','+mi+')"><span class="material-symbols-outlined">close</span></button></span>'; }).join('');
       return '<div class="ti-dcard">' +
         '<div class="ti-dcard-top"><span class="ti-mark-ico sm '+d.type+'">'+tiDmgIcon(d.type)+'</span><span class="ti-dcode">'+d.code+'</span><span class="ti-dregion">'+d.region+'</span><span class="ti-dx material-symbols-outlined" onclick="tiRemoveDamage(\''+d.id+'\')">close</span></div>' +
         '<div class="ti-dtype">'+(tiDmgTypes[d.type]?tiDmgTypes[d.type].l:d.type)+'</div>' +
