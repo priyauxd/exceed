@@ -1020,7 +1020,7 @@
     .qc-vin { font-size: 10px; color: var(--ink-muted); font-weight: 600; letter-spacing: .02em; }
     .qc-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
     .qc-chip { font-size: 10px; font-weight: 600; color: var(--ink-secondary); background: var(--bg); border-radius: 20px; padding: 2px 9px; }
-    .qc-share { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; }
+    .qc-share { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; }
     .qc-sbtn { display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-family: inherit; font-size: 10px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 6px 2px; cursor: pointer; transition: .12s; }
     .qc-sbtn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
     .qc-sbtn .material-symbols-outlined { font-size: 13px; }
@@ -3791,6 +3791,10 @@
     function addProposal(){
       window.open('proposal-builder.html?lead=' + selectedIdx, 'exeedProposalBuilder', 'width=1280,height=860');
     }
+    // "Edit" reopens the configurator for an existing proposal.
+    function editProposal(i){
+      window.open('proposal-builder.html?lead=' + selectedIdx + '&edit=' + i, 'exeedProposalBuilder', 'width=1280,height=860');
+    }
     // Pull any proposals built in the configurator window into their target leads.
     function importProposalQueue(){
       var q; try { q = JSON.parse(localStorage.getItem('exeedProposalQueue') || '[]'); } catch(e){ return; }
@@ -3971,6 +3975,16 @@
       renderDetail(selectedIdx, currentStep);
       showToast('Switched back to draft proposals');
     }
+    // Edit a confirmed quotation — warn, then reopen it in the configurator.
+    function editConfirmedQuotation(){
+      var l = leads[selectedIdx], p = acceptedProp();
+      openConfirm('Edit accepted quotation?', 'Editing <strong>' + (p ? p.id : 'this quotation') + '</strong> will move it back to draft and the customer will need to review and approve the updated quotation again.', 'Edit quotation', function(){
+        var idx = (l._acceptedProp != null) ? l._acceptedProp : 0;
+        l.propState = 'draft';
+        renderDetail(selectedIdx, currentStep);
+        editProposal(idx);
+      }, 'Cancel', 'edit', true);
+    }
     function confirmedCta(msg){ showToast(msg); }
     function acceptedProp(){ var l = leads[selectedIdx]; var p = (l.proposals || [])[l._acceptedProp]; if (!p) (l.proposals || []).forEach(function(x){ if (x.isQuote) p = x; }); return p; }
     // Confirmed state — the accepted quotation with booking / paperwork CTAs.
@@ -3986,7 +4000,10 @@
       return '<div class="dp-essential" style="margin-bottom:14px">' +
         '<div class="prop-head"><div><div class="dp-essential-title">Confirmed &mdash; Accepted quotation</div>' +
           '<div class="dp-essential-sub" style="margin:0">Customer accepted ' + p.id + '. Complete the booking and paperwork below.</div></div>' +
-          '<button class="prop-support-btn" onclick="backToDraft()"><span class="material-symbols-outlined">arrow_back</span> Back to draft</button>' +
+          '<div style="display:flex; gap:8px">' +
+            '<button class="prop-support-btn" onclick="editConfirmedQuotation()"><span class="material-symbols-outlined">edit</span> Edit</button>' +
+            '<button class="prop-support-btn" onclick="backToDraft()"><span class="material-symbols-outlined">arrow_back</span> Back to draft</button>' +
+          '</div>' +
         '</div>' +
         '<div class="conf-quote">' +
           '<div class="conf-quote-top"><span class="conf-badge"><span class="material-symbols-outlined">verified</span> Accepted quotation</span><span class="conf-id">' + p.id + '</span></div>' +
@@ -4076,6 +4093,7 @@
           '<div class="qc-meta"><span class="qc-avail '+availCls+'">'+availText+'</span><span class="qc-vin">VIN &middot; '+chassis+'</span></div>' +
           (chips ? '<div class="qc-chips">'+chips+'</div>' : '') +
           '<div class="qc-share">' +
+            '<button class="qc-sbtn" onclick="editProposal('+i+')"><span class="material-symbols-outlined">edit</span>Edit</button>' +
             '<button class="qc-sbtn" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">download</span>Download</button>' +
             '<button class="qc-sbtn" onclick="shareProposal('+i+',\'Email\')"><span class="material-symbols-outlined">mail</span>Email</button>' +
           '</div>' +
