@@ -2748,13 +2748,15 @@
             ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}"><span class="material-symbols-outlined dp-if-lk">search</span></div>';
           } else if (o.type === 'phone') {
             ctrl = '<div class="dp-if-phone"><input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}"><button class="dp-if-call" onclick="openCti(\''+l.phone+'\',\''+l.name.replace(/\'/g,"")+'\')" title="Click to call via Genesys CTI"><span class="material-symbols-outlined">call</span></button></div>';
+          } else if (o.lock) {
+            ctrl = '<input class="dp-if-input dp-if-ro" type="text" value="'+esc(o.val)+'" readonly>';
           } else {
             ctrl = '<input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}">';
           }
-          return '<div class="dp-if'+(o.type==='textarea'?' dp-if-wide':'')+(o.ai?' dp-if-ai':'')+'"><label class="dp-if-label">'+o.label+star+(o.ai?'<span class="dp-if-aitag">✦ AI</span>':'')+'</label>'+ctrl+'</div>';
+          return '<div class="dp-if'+(o.type==='textarea'?' dp-if-wide':'')+(o.ai?' dp-if-ai':'')+'"><label class="dp-if-label">'+o.label+star+(o.lock?'<span class="material-symbols-outlined dp-if-lock">lock</span>':'')+(o.ai?'<span class="dp-if-aitag">✦ AI</span>':'')+'</label>'+ctrl+'</div>';
         };
         var groups = [
-          { title:'Customer Details', moreId:'intakeCustMore', fields:[
+          { title:'Lead Details', moreId:'intakeCustMore', fields:[
             {label:'First Name', prop:'firstName', val:fn, req:true},
             {label:'Last Name', prop:'lastName', val:ln, req:true},
             {label:'Mobile Number', prop:'phone', val:l.phone, type:'phone', req:true},
@@ -2762,7 +2764,8 @@
           ], more:[
             {label:'WhatsApp Number', val:l.phone},
             {label:'Emirates ID', val:l.emiratesId},
-            {label:'Nationality', type:'lookup', val:'UAE'}
+            {label:'Nationality', type:'lookup', val:'UAE'},
+            {label:'Campaign Name', lock:true, val:'EV - Performance 2025'}
           ]},
           { title:'Vehicle', moreId:'intakeVehMore', fields:[
             {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model)}
@@ -3133,7 +3136,7 @@
     }
 
     var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
-    var laReasonsNewContact = ['Out of Scope', 'Wrong Number', 'Not Interested', 'Submitted by Mistake', 'High Price', 'Inconvenient Location', 'Duplicate', 'Others'];
+    var laReasonsNewContact = ['Out of Scope', 'Wrong Number', 'Not Interested', 'Submitted by Mistake', 'High Price', 'Inconvenient Location', 'Duplicate', 'General', 'Others'];
     var laDisqualifyReasons = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands'];
     var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
     var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
@@ -3258,10 +3261,10 @@
       var html = '';
       if (laAnswer === 'no') {
         html += '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label><div class="la-radio">' +
-          ['Invalid number','Not reachable'].map(function(o){
+          ['Invalid number','Not reachable','Voicemail','Switched off'].map(function(o){
             return '<label class="la-radio-item"><input type="radio" name="laNoReason" value="'+o+'"'+(laNoReason===o?' checked':'')+' onchange="setLaNoReason(\''+o+'\')"><span>'+o+'</span></label>';
           }).join('') + '</div></div>';
-        if (laNoReason === 'Not reachable') { html += laDateTime('Reschedule'); }
+        if (laNoReason !== 'Invalid number') { html += laDateTime('Reschedule'); }
         html += laNotesField();
       } else if (laAnswer === 'yes' && laOutcome) {
         if (laOutcome === 'Book test drive') {
@@ -3404,8 +3407,8 @@
           showToast('Lead disqualified — invalid number');
         } else {
           l.nextCall = { date: f.date, time: f.time, note: notes };
-          l.activities.unshift({ type: 'call', text: ['No answer', 'Not reachable', when ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
-          showToast('Missed attempt logged — Not reachable' + (when ? ' · ' + when : ''));
+          l.activities.unshift({ type: 'call', text: ['No answer', laNoReason, when ? 'reschedule ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast('Missed attempt logged — ' + laNoReason + (when ? ' · ' + when : ''));
         }
       } else if (laSalesOutcomes.indexOf(laOutcome) !== -1) {
         if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls') {
