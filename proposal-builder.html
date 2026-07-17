@@ -114,16 +114,63 @@
   .btn.dark:hover{opacity:.88;}
   .btn.dark .mi{font-size:18px;}
 
+  /* Finance step: shrink car to a thumbnail, calculations move into the dock on the left */
+  body.step-interior .stage-img{max-width:60%; max-height:64%;}
+  body.step-finance .stage-img-wrap{display:none;}
+  body.step-finance .stage-badge{display:none;}
+  body.step-finance .dock{margin:clamp(8px,1.4vh,12px) 26px 18px; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; overflow:hidden;}
+  body.step-finance .dock-h{flex-shrink:0;}
+  body.step-finance #dockBody{flex:1 1 auto; min-height:0; overflow-y:auto;}
+  body.step-finance .dock-nav{flex-shrink:0; margin-top:0; padding-top:12px; border-top:1px solid var(--line);}
+  .dock-model{display:block; font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink); text-transform:none;}
+  .dock-model-sub{display:block; font-size:12px; font-weight:600; color:var(--ink2); text-transform:none; letter-spacing:0; margin-bottom:9px;}
+  .dock-vas-label{display:block; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted);}
+  #finDock .sec-h:first-child{margin-top:0;}
+
   /* Summary panel */
   .summary{--sum-m:clamp(8px,1.4vh,12px); margin:var(--sum-m); border:1px solid var(--line); border-radius:18px; background:var(--summary-bg); padding:clamp(10px,1.6vh,14px) 15px; display:flex; flex-direction:column; height:calc(100% - var(--sum-m)*2); overflow:hidden; box-shadow:0 10px 34px rgba(8,10,14,.10);}
   .sum-title{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2); margin-bottom:5px;}
+  #finCalcHome{display:none;}
+  body.step-finance #finCalcHome{display:block;}
+  .vas-sub{font-size:12px; color:var(--ink2); margin-bottom:12px; line-height:1.5;}
+  .vas-group{border:1px solid var(--line); border-radius:11px; margin-bottom:8px; overflow:hidden; background:var(--panel);}
+  .vas-g-head{width:100%; display:flex; align-items:center; gap:10px; padding:11px 13px; background:none; border:none; cursor:pointer; font-family:inherit; text-align:left;}
+  .vas-g-head:hover{background:var(--panel2);}
+  .vas-g-ic{width:30px; height:30px; border-radius:8px; background:var(--panel2); display:flex; align-items:center; justify-content:center; color:var(--ink2); flex-shrink:0;}
+  .vas-g-ic .mi{font-size:17px;}
+  .vas-g-name{flex:1; font-size:13px; font-weight:700; color:var(--ink);}
+  .vas-g-badge{background:var(--cta-bg); color:var(--cta-text); font-size:11px; font-weight:800; border-radius:20px; padding:1px 8px;}
+  .vas-g-chev{color:var(--ink2); font-size:20px;}
+  .vas-g-body{border-top:1px solid var(--line); padding:2px 13px 6px;}
+  .vas-item{display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink); cursor:pointer;}
+  .vas-item:last-child{border-bottom:none;}
+  .vas-item input{accent-color:var(--cta-bg); width:15px; height:15px; flex-shrink:0;}
+  .vas-item-n{flex:1;}
+  .vas-item-p{font-weight:700; color:var(--ink2); white-space:nowrap;}
+  .vas-item.on .vas-item-p{color:var(--ink);}
+  .sum-head{font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink);}
+  .sum-subhead{font-size:12px; color:var(--ink2); margin:1px 0 13px;}
+  .fin-out{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-top:8px;}
+  .fin-out-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin-bottom:6px;}
+  .fo-row{display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; color:var(--ink2); border-bottom:1px solid var(--line);}
+  .fo-row .fo-v{font-weight:700; color:var(--ink);}
+  .fo-total{display:flex; justify-content:space-between; align-items:baseline; margin-top:11px; padding-top:11px; border-top:2px solid var(--line);}
+  .fo-total .fo-l{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);}
+  .fo-total .fo-big{font-size:23px; font-weight:800; letter-spacing:-.02em; color:var(--ink);}
+  .fo-total .fo-big small{font-size:12px; font-weight:600; color:var(--ink2);}
   .sec-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:clamp(6px,1.2vh,11px) 2px 6px;}
-  .sum-rows{display:grid; grid-template-columns:1fr 1fr; gap:clamp(6px,1.3vh,11px) 44px; margin:2px 0 clamp(6px,1.2vh,10px); padding:2px 2px;}
-  .sum-row{display:flex; flex-direction:column; gap:3px; min-width:0;}
-  .sum-row .k{font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+  .sum-rows{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:2px 0 clamp(6px,1.2vh,10px);}
+  .sum-row{display:flex; flex-direction:column; gap:4px; min-width:0; background:var(--panel2); border:1px solid var(--line); border-radius:11px; padding:11px 13px;}
+  .sum-row .k{display:flex; align-items:center; gap:4px; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+  .sum-k-ic{font-size:13px; line-height:1; color:var(--ink2); text-transform:none; letter-spacing:0;}
   .sum-row .v{font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; color:var(--ink);}
   .sum-row .v .cdot{width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); flex-shrink:0;}
 
+  .pay-toggle{display:flex; gap:6px; margin-bottom:8px;}
+  .pay-btn{flex:1; padding:8px 6px; border:1px solid var(--line); border-radius:9px; background:var(--panel); color:var(--ink2); font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; transition:.12s;}
+  .pay-btn:hover{border-color:var(--card-hover);}
+  .pay-btn.on{background:var(--cta-bg); color:var(--cta-text); border-color:var(--cta-bg);}
+  .dp-ro-input{background:var(--line) !important; color:var(--muted) !important; cursor:not-allowed;}
   .fin{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:clamp(7px,1.2vh,10px) 12px; margin-bottom:4px;}
   .fin-l{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
   .fin-l .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
@@ -141,9 +188,11 @@
   .fin-field{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:clamp(3px,0.7vh,5px) 0; border-bottom:1px solid var(--line); font-size:12px;}
   .fin-field .k{color:var(--ink2);}
   .fin-sub{font-size:10px; font-weight:700; color:var(--muted); text-transform:none; letter-spacing:0; margin-left:4px;}
-  .fin-field .fin-v{font-weight:800;}
-  .fin-inp{font-weight:700; display:inline-flex; align-items:center; gap:4px;}
-  .fin-inp input{width:78px; text-align:right; font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:4px 7px;}
+  .fin-field .fin-v{font-weight:800; display:inline-flex; align-items:center; gap:6px;}
+  .fin-cur{font-size:12px; font-weight:700; color:var(--ink2);}
+  .fin-num{display:inline-block; width:70px; padding-right:8px; text-align:right;}
+  .fin-inp{font-weight:700; display:inline-flex; align-items:center; gap:6px;}
+  .fin-inp input{width:78px; box-sizing:border-box; text-align:right; font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:4px 7px;}
   .fin-sel{font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:5px 8px; cursor:pointer;}
   .addon .ap.free{color:#1a9d5a;}
   .emi-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:clamp(4px,0.9vh,7px);}
@@ -211,22 +260,30 @@
     <!-- Summary -->
     <aside class="summary">
       <div class="sum-scroll">
+      <div class="sum-head" id="sumHead">Your build</div>
+      <div class="sum-subhead" id="sumSubhead"></div>
       <div class="sum-rows" id="sumRows"></div>
-      <div class="sec-h">Financing</div>
-      <div class="fin">
-        <div class="fin-field"><span class="k">Total price</span><span class="fin-v" id="finTotal">AED 0</span></div>
-        <div class="fin-field"><span class="k">Discount amount<span class="fin-sub" id="discHint"></span></span><span class="fin-inp">AED <input id="discountAmt" type="number" min="0" step="500" value="0" oninput="setDiscount(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-inp">AED <input id="tradeInAmt" type="number" min="0" step="500" value="25000" oninput="setTradeIn(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Booking amount</span><span class="fin-inp">AED <input id="bookingAmt" type="number" min="2000" step="500" value="2000" oninput="setBooking(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Down payment</span><span class="fin-inp">AED <input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownAmt(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Down payment support</span><span class="fin-inp">AED <input id="dpSupportAmt" type="number" min="0" step="500" value="0" oninput="setDpSupportAmt(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Campaign</span><select class="fin-sel" id="campaignSel" onchange="setCampaign(this.value)"></select></div>
-        <table class="emi-table"><thead><tr><th>EMI @ 2%</th><th>Without</th><th>With adds</th></tr></thead><tbody id="emiBody"></tbody></table>
+      <div id="finOutput"></div>
+      <div id="finCalcHome"><div id="finCalc">
+      <div class="sec-h" id="finHeading">Financing</div>
+      <div class="pay-toggle" id="payToggle">
+        <button type="button" class="pay-btn on" data-pay="cash" onclick="setPayType('cash')">Cash</button>
+        <button type="button" class="pay-btn" data-pay="financing" onclick="setPayType('financing')">Financing</button>
+        <button type="button" class="pay-btn" data-pay="dpassist" onclick="setPayType('dpassist')">DP Assist</button>
       </div>
-      <div class="bundle-h">Protection package</div>
-      <div class="bundle-tiers" id="bundleTiers"></div>
-      <div class="addons" id="addons"></div>
-      <div class="addon-total"><span>Total adds on</span><span id="addTotal">AED 0</span></div>
+      <div class="fin">
+        <div class="fin-field"><span class="k">List price</span><span class="fin-v" id="finList">AED 0</span></div>
+        <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-v" id="finTrade">AED 0</span></div>
+        <div class="fin-field"><span class="k">Booking amount</span><span class="fin-inp"><span class="fin-cur">AED</span><input id="bookingAmt" type="number" min="2000" step="500" value="2000" oninput="setBooking(this.value)"></span></div>
+        <div class="fin-field" id="rowDiscount"><span class="k">Discount amount<span class="fin-sub" id="discHint"></span></span><span class="fin-inp"><span class="fin-cur">AED</span><input id="discountAmt" type="number" min="0" step="500" value="0" oninput="setDiscount(this.value)"></span></div>
+        <div class="fin-field" id="rowDpSupport"><span class="k">DP support</span><span class="fin-inp"><span class="fin-cur">AED</span><input id="dpSupportAmt" type="number" min="0" step="500" value="20000" oninput="setDpSupport(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Net price</span><span class="fin-v" id="finNet">AED 0</span></div>
+        <div class="fin-field"><span class="k">Value added services</span><span class="fin-v" id="finVas">AED 0</span></div>
+        <div class="fin-field" id="rowDownpay"><span class="k">Downpayment amount</span><span class="fin-inp"><span class="fin-cur">AED</span><input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownpayment(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Campaign</span><select class="fin-sel" id="campaignSel" onchange="setCampaign(this.value)"></select></div>
+        <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Without</th><th>With adds</th></tr></thead><tbody id="emiBody"></tbody></table>
+      </div>
+      </div></div>
       </div>
       <button class="btn save-btn" onclick="saveProposal()"><span class="mi">save</span> Save</button>
       <div class="save-hint">Adds to the lead's proposal list in the CRM</div>
@@ -246,7 +303,7 @@
   </div>
 
 <script>
-  var RATE = 0.021;
+  var RATE = 0.035;
   var TRIMS = [
     { id:'std', name:'Standard Range', range:'520 km', power:'204 hp', accel:'7.9s', price:159900 },
     { id:'lr',  name:'Long Range',     range:'620 km', power:'279 hp', accel:'6.5s', price:179900 },
@@ -268,6 +325,54 @@
     { k:'service',   label:'Service Contract', price:3500 },
     { k:'tinting',   label:'Tinting', price:1200 },
     { k:'ceramic',   label:'Ceramic Coating', price:2559 }
+  ];
+  // Value Added Services — grouped accessories (EXEED VAS annex, excl. VAT).
+  var VAS_GROUPS = [
+    { id:'mats', name:'Floor Mats', icon:'dashboard', items:[
+      { id:'mat-es',     name:'Trunk Liner — EXEED ES', price:350 },
+      { id:'mat-vx',     name:'Floor Mat — EXEED VX', price:750 },
+      { id:'mat-lx',     name:'Floor Mat — EXEED LX', price:450 },
+      { id:'mat-carpet', name:'Carpet Mat 2500 GSM', price:750 },
+      { id:'mat-rx',     name:'Floor Mats — RX', price:400 }
+    ]},
+    { id:'tinting', name:'Tinting — V Kool', icon:'gradient', items:[
+      { id:'tint-sig-50',   name:'Signature · Windows 30/40/50%', price:1200 },
+      { id:'tint-sig-70',   name:'Signature · Windows 70%', price:1500 },
+      { id:'tint-sig-sun',  name:'Signature · Panoramic sunroof', price:600 },
+      { id:'tint-prem',     name:'Premium · Windows 30–70%', price:3500 },
+      { id:'tint-prem-roof',name:'Premium · Panoramic roof', price:900 },
+      { id:'tint-prem-ws',  name:'Premium · Front windshield 10%', price:1400 }
+    ]},
+    { id:'ppf', name:'Paint Protection Film — V Kool', icon:'shield', items:[
+      { id:'ppf-full-sedan',  name:'Sedan · Full car', price:14000 },
+      { id:'ppf-front-sedan', name:'Sedan · Full front', price:6000 },
+      { id:'ppf-full-suv',    name:'SUV · Full car', price:17000 },
+      { id:'ppf-front-suv',   name:'SUV · Full front', price:7000 },
+      { id:'ppf-edges',       name:'Door edges', price:750 },
+      { id:'ppf-mirrors',     name:'Mirrors', price:750 },
+      { id:'ppf-headlights',  name:'Headlights', price:750 }
+    ]},
+    { id:'ceramic', name:'Nano Ceramic — Rhino', icon:'auto_awesome', items:[
+      { id:'cer-both', name:'Exterior + Interior', price:2000 },
+      { id:'cer-ext',  name:'Exterior', price:1500 },
+      { id:'cer-int',  name:'Interior', price:950 }
+    ]},
+    { id:'pedals', name:'Pedals & Steps', icon:'directions_car', items:[
+      { id:'ped-e',    name:'E-Pedal', price:4900 },
+      { id:'ped-step', name:'E-Step Pedal', price:4150 },
+      { id:'ped-2026', name:'E-Step Pedal (2026 model)', price:7150 },
+      { id:'ped-side', name:'Side Step Switch', price:350 }
+    ]},
+    { id:'electronics', name:'Electronics', icon:'devices', items:[
+      { id:'el-screen', name:'Rear Entertainment Screen', price:5100 },
+      { id:'el-batt',   name:'Battery Booster', price:1100 },
+      { id:'el-ipad',   name:'Rear iPad Holders', price:450 }
+    ]},
+    { id:'boot', name:'Boot & Storage', icon:'inventory_2', items:[
+      { id:'boot-tray',    name:'Rear Boot Tray', price:350 },
+      { id:'boot-divider', name:'Rear Boot Divider', price:200 },
+      { id:'boot-hanger',  name:'Rear Hanger', price:800 }
+    ]}
   ];
   var MODELS = [
     { id:'vx',  name:'EXEED VX',  cls:'Flagship 7-seat SUV', s1:'2.0T · 261 hp',  s2:'6/7 seats', price:189900 },
@@ -291,7 +396,7 @@
   ];
   var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', discount:0, tradeIn:25000, booking:2000, downAmt:0, dpSupportAmt:0, campaign:'none', bundle:'custom', addOns:{ insurance:false, service:false, tinting:true, ceramic:true } };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'none', vas:{}, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -302,7 +407,26 @@
   function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
   function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
   function emi(loan,y){ return Math.round(loan*(1+RATE*y)/(y*12)); }
-  function addTotal(){ return ADDONS.reduce(function(s,a){ return s + ((state.addOns[a.k] && !isFree(a.k)) ? a.price : 0); },0); }
+  function addTotal(){ var s=0; VAS_GROUPS.forEach(function(g){ g.items.forEach(function(it){ if (state.vas[it.id]) s+=it.price; }); }); return s; }
+  function vasGroupCount(g){ var n=0; g.items.forEach(function(it){ if (state.vas[it.id]) n++; }); return n; }
+  function renderVasChooser(){
+    var host = document.getElementById('vasChooser'); if (!host) return;
+    host.innerHTML = VAS_GROUPS.map(function(g){
+      var open = !!state.vasOpen[g.id], cnt = vasGroupCount(g);
+      var head = '<button type="button" class="vas-g-head'+(open?' open':'')+'" onclick="toggleVasGroup(\''+g.id+'\')">' +
+        '<span class="vas-g-ic"><span class="mi">'+g.icon+'</span></span>' +
+        '<span class="vas-g-name">'+g.name+'</span>' +
+        (cnt?'<span class="vas-g-badge">'+cnt+'</span>':'') +
+        '<span class="mi vas-g-chev">'+(open?'expand_less':'expand_more')+'</span></button>';
+      var bodyHtml = open ? '<div class="vas-g-body">' + g.items.map(function(it){
+        var on = !!state.vas[it.id];
+        return '<label class="vas-item'+(on?' on':'')+'"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleVasItem(\''+it.id+'\')"><span class="vas-item-n">'+it.name+'</span><span class="vas-item-p">AED '+fmt(it.price)+'</span></label>';
+      }).join('') + '</div>' : '';
+      return '<div class="vas-group">'+head+bodyHtml+'</div>';
+    }).join('');
+  }
+  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; renderVasChooser(); }
+  function toggleVasItem(id){ state.vas[id] = !state.vas[id]; renderVasChooser(); renderSummary(); }
 
   function leadTarget(){ var m=location.search.match(/lead=(\d+)/); return m?parseInt(m[1],10):null; }
 
@@ -323,6 +447,8 @@
   function renderDock(){
     var body = document.getElementById('dockBody');
     var title = document.getElementById('dockTitle');
+    document.body.classList.toggle('step-finance', state.step === 4);
+    document.body.classList.toggle('step-interior', state.step === 3);
     if (state.step === 0){ // Model
       title.textContent = 'Select model';
       body.innerHTML = '<div class="cards models">' + MODELS.map(function(m){
@@ -349,9 +475,10 @@
       body.innerHTML = '<div class="swatches">' + INT.map(function(c){
         return '<div class="swatch'+(state.int===c.id?' on':'')+'" onclick="pick(\'int\',\''+c.id+'\')"><span class="dot" style="background:'+c.hex+'"></span><span class="nm">'+c.name+'</span></div>';
       }).join('') + '</div>';
-    } else { // Finance
-      title.textContent = 'Finance & summary';
-      body.innerHTML = '<div style="font-size:13px; color:var(--ink2); line-height:1.6">Review your build and adjust the finance options in the summary panel, then <strong style="color:var(--ink)">Save</strong> to send it to the CRM.</div>';
+    } else { // Finance — Value Added Services (accessories) chooser on the left
+      title.textContent = 'Value Added Services';
+      body.innerHTML = '<div class="vas-sub">Pick accessories &amp; services. The total feeds into the financing on the right.</div><div id="vasChooser"></div>';
+      renderVasChooser();
     }
     document.getElementById('nextBtn').style.visibility = state.step === STEPS.length-1 ? 'hidden' : 'visible';
     document.getElementById('backBtn').style.visibility = state.step === 0 ? 'hidden' : 'visible';
@@ -366,56 +493,74 @@
 
   function renderSummary(){
     var t = trim(), c = ext(), ic = intr();
+    var pay = state.payType;
     var maxD = maxDiscount();
-    if (state.discount > maxD){ state.discount = maxD; var di = document.getElementById('discountAmt'); if (di) di.value = maxD; }
-    var loan = Math.max(0, t.price - state.discount - (state.tradeIn||0) - (state.booking||0) - (state.downAmt||0) - (state.dpSupportAmt||0));
-    var at = addTotal(), loanW = loan + at;
+    if (state.discount > maxD){ state.discount = maxD; var di = document.getElementById('discountAmt'); if (di && pay !== 'dpassist') di.value = maxD; }
+    var list = t.price;
+    var tradeIn = state.tradeIn || 0;
+    var discount = (pay === 'dpassist') ? 0 : state.discount;
+    var booking = state.booking || 0;
+    var dpSupport = (pay === 'dpassist') ? (state.dpSupportAmt || 0) : 0;
+    var downpay = (pay === 'cash') ? 0 : (state.downAmt || 0);
+    var netPrice = Math.max(0, list - discount - tradeIn);
+    var at = addTotal(), vas = at;
+    var loan = (pay === 'cash') ? 0 : Math.max(0, netPrice - booking - downpay - dpSupport);
+    var loanW = loan + vas;
+    document.getElementById('sumHead').textContent = model().name;
+    document.getElementById('sumSubhead').textContent = [t.name, c.name, ic.name].join(' · ');
     document.getElementById('sumRows').innerHTML =
-      row('Trim', t.name) +
-      rowColor('Exterior', c.name, c.hex) +
-      rowColor('Interior', ic.name, ic.hex) +
-      row('Amount financed', 'AED ' + fmt(loan));
-    document.getElementById('topPrice').textContent = 'AED ' + fmt(t.price);
-    document.getElementById('finTotal').textContent = 'AED ' + fmt(t.price);
-    document.getElementById('discHint').textContent = 'max AED ' + fmt(maxD);
+      row('Trim', t.name, 'tune') +
+      rowColor('Exterior', c.name, c.hex, 'palette') +
+      rowColor('Interior', ic.name, ic.hex, 'weekend') +
+      row('Vehicle price', 'AED ' + fmt(list), 'sell');
+    // Financing output card — only revealed on the Finance step (calculated at the end).
+    var fo = document.getElementById('finOutput');
+    if (state.step === 4) {
+      var foHead, foBig;
+      if (pay === 'cash') { foHead = 'Total payable'; foBig = 'AED ' + fmt(netPrice + vas); }
+      else { foHead = 'From'; foBig = 'AED ' + fmt(emi(loanW, 5)) + '<small> /mo · 60 mo</small>'; }
+      fo.innerHTML = '<div class="fin-out"><div class="fo-total" style="margin:0; padding:0; border:none"><span class="fo-l">' + foHead + '</span><span class="fo-big">' + foBig + '</span></div></div>';
+    } else {
+      fo.innerHTML = '';
+    }
+    var onFinance = state.step === 4;
+    var saveBtn = document.querySelector('.save-btn'); if (saveBtn) saveBtn.style.display = onFinance ? '' : 'none';
+    var saveHint = document.querySelector('.save-hint'); if (saveHint) saveHint.style.display = onFinance ? '' : 'none';
+    document.getElementById('topPrice').textContent = 'AED ' + fmt(list);
+    var finV = function(n){ return '<span class="fin-cur">AED</span><span class="fin-num">' + fmt(n) + '</span>'; };
+    document.getElementById('finList').innerHTML = finV(list);
+    document.getElementById('finTrade').innerHTML = finV(tradeIn);
+    document.getElementById('finNet').innerHTML = finV(netPrice);
+    document.getElementById('finVas').innerHTML = finV(vas);
+    document.getElementById('discHint').textContent = (pay === 'dpassist') ? 'fixed' : ('max AED ' + fmt(maxD));
+    document.getElementById('rowDpSupport').style.display = (pay === 'dpassist') ? '' : 'none';
+    document.getElementById('rowDownpay').style.display = (pay === 'cash') ? 'none' : '';
+    document.getElementById('emiTable').style.display = (pay === 'cash') ? 'none' : '';
     document.getElementById('campaignSel').innerHTML = CAMPAIGNS.map(function(cp){
       return '<option value="'+cp.id+'"'+(state.campaign===cp.id?' selected':'')+'>'+cp.name+'</option>';
     }).join('');
-    document.getElementById('emiBody').innerHTML = [5,3,2].map(function(y){
+    document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
       return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loan,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
     }).join('');
-    document.getElementById('bundleTiers').innerHTML = BUNDLES.map(function(b){
-      var price = b.items ? 'AED ' + fmt(bundleTotal(b)) : 'Choose add-ons';
-      return '<button class="bundle-tier'+(state.bundle===b.id?' on':'')+'" onclick="setBundle(\''+b.id+'\')">' +
-        '<span class="bt-name">'+b.name+'</span><span class="bt-desc">'+b.desc+'</span><span class="bt-price">'+price+'</span></button>';
-    }).join('');
-    document.getElementById('addons').innerHTML = ADDONS.map(function(a){
-      var free = isFree(a.k), on = state.addOns[a.k];
-      var price = (free && on) ? 'Included · AED 0' : 'AED ' + fmt(a.price);
-      return '<label class="addon"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleAdd(\''+a.k+'\')"><span>'+a.label+'</span><span class="ap'+(free&&on?' free':'')+'">'+price+'</span></label>';
-    }).join('');
-    document.getElementById('addTotal').textContent = 'AED ' + fmt(at);
   }
-  function row(k,v){ return '<div class="sum-row"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'; }
-  function rowColor(k,v,hex){ return '<div class="sum-row"><span class="k">'+k+'</span><span class="v"><span class="cdot" style="background:'+hex+'"></span>'+v+'</span></div>'; }
+  function row(k,v,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v">'+v+'</span></div>'; }
+  function rowColor(k,v,hex,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v"><span class="cdot" style="background:'+hex+'"></span>'+v+'</span></div>'; }
 
   function renderAll(){ renderSteps(); renderDock(); renderStage(); renderSummary(); }
   function pick(kind,val){ state[kind]=val; renderAll(); }
-  function bundleById(id){ return BUNDLES.filter(function(b){return b.id===id;})[0] || BUNDLES[2]; }
-  function bundleTotal(b){ if (!b.items) return 0; return ADDONS.reduce(function(s,a){ return s + (b.items.indexOf(a.k)!==-1 ? a.price : 0); },0); }
-  function setBundle(id){
-    state.bundle = id;
-    var b = bundleById(id);
-    if (b.items) ADDONS.forEach(function(a){ state.addOns[a.k] = b.items.indexOf(a.k) !== -1; });
+  function setDiscount(v){ state.discount = Math.min(maxDiscount(), Math.max(0, parseInt(v,10)||0)); renderSummary(); }
+  function setBooking(v){ state.booking = Math.max(2000, parseInt(v,10)||2000); renderSummary(); }
+  function setDownpayment(v){ state.downAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
+  function setDpSupport(v){ state.dpSupportAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
+  function setPayType(t){
+    state.payType = t;
+    var tg = document.getElementById('payToggle');
+    if (tg) Array.prototype.forEach.call(tg.querySelectorAll('.pay-btn'), function(b){ b.classList.toggle('on', b.getAttribute('data-pay') === t); });
+    var disc = document.getElementById('discountAmt');
+    if (disc){ if (t === 'dpassist'){ disc.readOnly = true; disc.value = 0; disc.classList.add('dp-ro-input'); } else { disc.readOnly = false; disc.value = state.discount; disc.classList.remove('dp-ro-input'); } }
     renderSummary();
   }
-  function toggleAdd(k){ state.addOns[k]=!state.addOns[k]; state.bundle='custom'; renderSummary(); }
-  function setDiscount(v){ state.discount = Math.min(maxDiscount(), Math.max(0, parseInt(v,10)||0)); renderSummary(); }
-  function setTradeIn(v){ state.tradeIn = Math.max(0, parseInt(v,10)||0); renderSummary(); }
-  function setBooking(v){ state.booking = Math.max(2000, parseInt(v,10)||2000); renderSummary(); }
-  function setDownAmt(v){ state.downAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
-  function setDpSupportAmt(v){ state.dpSupportAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
-  function setCampaign(v){ state.campaign = v; campaign().free.forEach(function(k){ state.addOns[k] = true; }); renderSummary(); }
+  function setCampaign(v){ state.campaign = v; renderSummary(); }
   function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
   function goTo(i){ state.step=i; renderAll(); }
 
@@ -426,8 +571,9 @@
       extColor:c.name, extHex:c.hex, image:c.img,
       intColor:ic.name, intHex:ic.hex,
       range:t.range, power:t.power,
-      nsp:t.price, downPct:Math.round((state.downAmt||0)/t.price*100), discount:state.discount, tradeIn:state.tradeIn, booking:state.booking, downAmt:state.downAmt, dpSupport:state.dpSupportAmt, pdi:0,
-      addOns:{ insurance:!!state.addOns.insurance, service:!!state.addOns.service, tinting:!!state.addOns.tinting, ceramic:!!state.addOns.ceramic },
+      nsp:t.price, payType:state.payType, downPct:Math.round((state.downAmt||0)/t.price*100), discount:(state.payType==='dpassist'?0:state.discount), tradeIn:state.tradeIn, booking:state.booking, downAmt:state.downAmt, dpSupport:(state.payType==='dpassist'?state.dpSupportAmt:0), pdi:0,
+      addOns:{ insurance:false, service:false, tinting:vasGroupCount(VAS_GROUPS.filter(function(g){return g.id==='tinting';})[0])>0, ceramic:vasGroupCount(VAS_GROUPS.filter(function(g){return g.id==='ceramic';})[0])>0 },
+      vasTotal:addTotal(),
       isQuote:false
     };
     try {
@@ -453,8 +599,6 @@
     document.getElementById('themeIcon').textContent = dark ? 'light_mode' : 'dark_mode';
   })();
 
-  state.downAmt = Math.round(trim().price*0.2/500)*500;
-  (function(){ var el=document.getElementById('downAmt'); if(el) el.value = state.downAmt; })();
   renderAll();
 </script>
 </body>
