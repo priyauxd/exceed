@@ -165,21 +165,24 @@
   .dh{height:0.72em; width:auto; display:inline-block; vertical-align:-0.02em; margin-right:3px;}
   .vas-ccinput{width:96px; box-sizing:border-box; text-align:left; font-weight:700; font-size:12.5px; font-family:inherit; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:7px 9px; outline:none;}
   .vas-ccinput:focus{border-color:var(--cta-bg);}
-  .vas-opts{background:var(--panel2); border-bottom:1px solid var(--line); padding:2px 16px 8px;}
-  .vas-opt{display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink); cursor:pointer;}
+  .vas-opts{background:var(--panel2); border-bottom:1px solid var(--line);}
+  .vas-opt{cursor:pointer; border-bottom:1px solid var(--line);}
   .vas-opt:last-child{border-bottom:none;}
-  .vas-opt input{accent-color:var(--cta-bg); width:15px; height:15px; flex-shrink:0;}
-  .vas-opt-n{flex:1;}
-  .vas-opt-p{font-weight:700; color:var(--ink2); white-space:nowrap;}
+  .vas-opt:hover{background:rgba(0,0,0,.03);}
+  .vas-opt-lbl{display:flex; align-items:center; gap:9px; padding-left:46px;}
+  .vas-opt-lbl input{accent-color:var(--cta-bg); width:14px; height:14px; flex-shrink:0;}
+  .vas-opt-n{display:flex; align-items:center; font-size:11.5px; color:var(--ink);}
+  .vas-opt-p{font-size:11.5px; font-weight:700; color:var(--ink2);}
   .vas-opt.on .vas-opt-p{color:var(--ink);}
+  .vas-cat-name{font-size:12.5px; font-weight:700;}
   .sum-head{font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink);}
   .sum-subhead{font-size:12px; color:var(--ink2); margin:1px 0 13px;}
   .pc{margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; font-size:11px;}
   .pc-title{background:var(--cta-bg); color:var(--cta-text); font-weight:800; padding:9px 12px; font-size:12.5px;}
   .pc-row{display:grid; grid-template-columns:1.55fr 1fr 1fr; align-items:center; border-bottom:1px solid var(--line);}
   .pc-row:last-of-type{border-bottom:none;}
-  .pc-i{padding:10px 16px; color:var(--ink); text-align:left;}
-  .pc-v{padding:10px 16px; text-align:left; color:var(--ink); font-weight:700;}
+  .pc-i{padding:10px 16px; color:var(--ink); text-align:left; font-size:12.5px;}
+  .pc-v{padding:10px 16px; text-align:left; color:var(--ink); font-weight:700; font-size:12.5px;}
   .pc-head{background:var(--panel2);}
   .pc-head .pc-i, .pc-head .pc-v{font-weight:800; color:var(--ink2); font-size:10px; text-transform:uppercase; letter-spacing:.03em;}
   .pc-head .pc-i{text-align:left;}
@@ -480,7 +483,7 @@
           rows += '<div class="vas-opts" onclick="event.stopPropagation()">' + c.options.map(function(o){
             var on = state.vasSel[c.id] && state.vasSel[c.id][o.id];
             var recb = o.rec ? '<span class="vas-rec">Recommended</span>' : '';
-            return '<label class="vas-opt'+(on?' on':'')+'"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleVasOpt(\''+c.id+'\',\''+o.id+'\')"><span class="vas-opt-n">'+o.label+recb+'</span><span class="vas-opt-p">'+dh(o.price)+'</span></label>';
+            return '<label class="pc-row vas-opt'+(on?' on':'')+'"><span class="pc-i vas-opt-lbl"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleVasOpt(\''+c.id+'\',\''+o.id+'\')"><span class="vas-opt-n">'+o.label+recb+'</span></span><span class="pc-v"></span><span class="pc-v vas-opt-p">'+dh(o.price)+'</span></label>';
           }).join('') + '</div>';
         }
       }
