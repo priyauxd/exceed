@@ -120,6 +120,7 @@
   body.step-finance .stage-badge{display:none;}
   body.step-finance .dock{margin:clamp(8px,1.4vh,12px) 26px 18px; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; overflow:hidden;}
   body.step-finance .dock-h{flex-shrink:0;}
+  body.step-finance .dock-h .t{font-size:15px; text-transform:none; letter-spacing:-.01em; color:var(--ink);}
   body.step-finance #dockBody{flex:1 1 auto; min-height:0; overflow-y:auto;}
   body.step-finance .dock-nav{flex-shrink:0; margin-top:0; padding-top:12px; border-top:1px solid var(--line);}
   .dock-model{display:block; font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink); text-transform:none;}
@@ -153,16 +154,27 @@
   .vas-item-p{font-weight:700; color:var(--ink2); white-space:nowrap;}
   .vas-item.on .vas-item-p{color:var(--ink);}
   .vas-rec{display:inline-flex; align-items:center; margin-left:8px; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:#3d9b63; background:rgba(92,185,127,.16); border:1px solid rgba(92,185,127,.4); border-radius:20px; padding:1px 7px; vertical-align:middle; white-space:nowrap;}
+  .vas-cat{cursor:pointer;}
+  .vas-cat:hover{background:var(--panel2);}
+  .vas-cat .pc-i{display:flex; align-items:center; gap:10px;}
+  .vas-cat-ic{font-size:17px; color:var(--ink2);}
+  .vas-cat-name{font-weight:700;}
+  .vas-cat-chev{color:var(--ink2); font-size:18px;}
+  .vas-input-row{background:var(--panel2); border-bottom:1px solid var(--line); padding:11px 16px 13px;}
+  .vas-num, .vas-sel{width:100%; box-sizing:border-box; font-family:inherit; font-size:12.5px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:9px 11px; outline:none; text-align:left;}
+  .vas-num:focus, .vas-sel:focus{border-color:var(--cta-bg);}
   .sum-head{font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink);}
   .sum-subhead{font-size:12px; color:var(--ink2); margin:1px 0 13px;}
   .pc{margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; font-size:11px;}
   .pc-title{background:var(--cta-bg); color:var(--cta-text); font-weight:800; padding:9px 12px; font-size:12.5px;}
   .pc-row{display:grid; grid-template-columns:1.55fr 1fr 1fr; align-items:center; border-bottom:1px solid var(--line);}
   .pc-row:last-of-type{border-bottom:none;}
-  .pc-i{padding:7px 12px; color:var(--ink); text-align:left;}
-  .pc-v{padding:7px 12px; text-align:right; color:var(--ink); font-weight:700;}
+  .pc-i{padding:10px 16px; color:var(--ink); text-align:left;}
+  .pc-v{padding:10px 16px; text-align:center; color:var(--ink); font-weight:700;}
   .pc-head{background:var(--panel2);}
-  .pc-head .pc-i, .pc-head .pc-v{font-weight:800; color:var(--ink2); text-align:center; font-size:10px; text-transform:uppercase; letter-spacing:.03em;}
+  .pc-head .pc-i, .pc-head .pc-v{font-weight:800; color:var(--ink2); font-size:10px; text-transform:uppercase; letter-spacing:.03em;}
+  .pc-head .pc-i{text-align:left;}
+  .pc-head .pc-v{text-align:center;}
   .pc-total{background:var(--panel2);}
   .pc-total .pc-i, .pc-total .pc-v{font-weight:800;}
   .pc-band .pc-i{background:var(--cta-bg); color:var(--cta-text); font-weight:700;}
@@ -300,7 +312,6 @@
         <button type="button" class="pay-btn" data-pay="dpassist" onclick="setPayType('dpassist')">DP Assist</button>
       </div>
       <div class="fin">
-        <div class="fin-field"><span class="k">Campaign</span><select class="fin-sel" id="campaignSel" onchange="setCampaign(this.value)"></select></div>
         <div class="fin-field"><span class="k">List price</span><span class="fin-v" id="finList">AED 0</span></div>
         <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-v" id="finTrade">AED 0</span></div>
         <div class="fin-field"><span class="k">Booking amount</span><span class="fin-inp"><span class="fin-cur">AED</span><input id="bookingAmt" type="number" min="2000" step="500" value="2000" oninput="setBooking(this.value)"></span></div>
@@ -309,7 +320,7 @@
         <div class="fin-field"><span class="k">Net price</span><span class="fin-v" id="finNet">AED 0</span></div>
         <div class="fin-field"><span class="k">Value added services<span class="vas-info"><span class="mi">info</span><span class="vas-tip" id="vasTip"></span></span></span><span class="fin-v" id="finVas">AED 0</span></div>
         <div class="fin-field" id="rowDownpay"><span class="k">Downpayment amount</span><span class="fin-inp"><span class="fin-cur">AED</span><input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownpayment(this.value)"></span></div>
-        <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Without</th><th>With adds</th></tr></thead><tbody id="emiBody"></tbody></table>
+        <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Monthly installment</th></tr></thead><tbody id="emiBody"></tbody></table>
       </div>
       </div></div>
       <div id="finOutput"></div>
@@ -356,49 +367,42 @@
     { k:'ceramic',   label:'Ceramic Coating', price:2559 }
   ];
   // Value Added Services — grouped accessories (EXEED VAS annex, excl. VAT).
-  var VAS_GROUPS = [
-    { id:'accessories', name:'Accessories', icon:'auto_awesome_motion', items:[
-      { id:'mat-es',     name:'Trunk Liner — EXEED ES', price:350 },
-      { id:'mat-vx',     name:'Floor Mat — EXEED VX', price:750 },
-      { id:'mat-lx',     name:'Floor Mat — EXEED LX', price:450 },
-      { id:'mat-carpet', name:'Carpet Mat 2500 GSM', price:750 },
-      { id:'mat-rx',     name:'Floor Mats — RX', price:400 },
-      { id:'ped-e',      name:'E-Pedal', price:4900 },
-      { id:'ped-step',   name:'E-Step Pedal', price:4150 },
-      { id:'ped-2026',   name:'E-Step Pedal (2026 model)', price:7150 },
-      { id:'ped-side',   name:'Side Step Switch', price:350 },
-      { id:'el-screen',  name:'Rear Entertainment Screen', price:5100 },
-      { id:'el-batt',    name:'Battery Booster', price:1100 },
-      { id:'el-ipad',    name:'Rear iPad Holders', price:450 },
-      { id:'boot-tray',    name:'Rear Boot Tray', price:350 },
-      { id:'boot-divider', name:'Rear Boot Divider', price:200 },
-      { id:'boot-hanger',  name:'Rear Hanger', price:800 }
+  // VAS main categories. type 'number' = free-text amount; type 'dropdown' = pick an option (sets the amount). rec = Lepas recommended amount.
+  var VAS_CATS = [
+    { id:'cmi',   name:'Comprehensive Motor Insurance', icon:'verified_user',    type:'number', rec:5000 },
+    { id:'gap',   name:'GAP RTI',                       icon:'security',         type:'number', rec:2499 },
+    { id:'smc',   name:'Service Maintenance Contract',  icon:'build',            type:'number', rec:4000 },
+    { id:'ppf',   name:'Paint Protection Ceramic / PPF',icon:'shield',           type:'dropdown', rec:6000, options:[
+      { label:'Select…', price:0 },
+      { label:'Ceramic — Exterior + Interior', price:2000 },
+      { label:'PPF — Sedan · Full front', price:6000 },
+      { label:'PPF — Sedan · Full car', price:14000 },
+      { label:'PPF — SUV · Full front', price:7000 },
+      { label:'PPF — SUV · Full car', price:17000 }
     ]},
-    { id:'tinting', name:'Tinting — V Kool', icon:'gradient', items:[
-      { id:'tint-sig-50',   name:'Signature · Windows 30/40/50%', price:1200 },
-      { id:'tint-sig-70',   name:'Signature · Windows 70%', price:1500 },
-      { id:'tint-sig-sun',  name:'Signature · Panoramic sunroof', price:600 },
-      { id:'tint-prem',     name:'Premium · Windows 30–70%', price:3500 },
-      { id:'tint-prem-roof',name:'Premium · Panoramic roof', price:900 },
-      { id:'tint-prem-ws',  name:'Premium · Front windshield 10%', price:1400 }
+    { id:'smart', name:'SMART Care Plan',               icon:'health_and_safety',type:'dropdown', rec:1703, options:[
+      { label:'Select…', price:0 },
+      { label:'SMART — 1 year', price:1703 },
+      { label:'SMART — 2 years', price:2900 },
+      { label:'SMART — 3 years', price:3900 }
     ]},
-    { id:'ppf', name:'Paint Protection Film — V Kool', icon:'shield', items:[
-      { id:'ppf-full-sedan',  name:'Sedan · Full car', price:14000 },
-      { id:'ppf-front-sedan', name:'Sedan · Full front', price:6000 },
-      { id:'ppf-full-suv',    name:'SUV · Full car', price:17000 },
-      { id:'ppf-front-suv',   name:'SUV · Full front', price:7000 },
-      { id:'ppf-edges',       name:'Door edges', price:750 },
-      { id:'ppf-mirrors',     name:'Mirrors', price:750 },
-      { id:'ppf-headlights',  name:'Headlights', price:750 }
+    { id:'tinting', name:'Tinting',                     icon:'gradient',         type:'dropdown', rec:3500, options:[
+      { label:'Select…', price:0 },
+      { label:'Signature · Windows 30/40/50%', price:1200 },
+      { label:'Signature · Windows 70%', price:1500 },
+      { label:'Premium · Windows 30–70%', price:3500 }
     ]},
-    { id:'ceramic', name:'Nano Ceramic — Rhino', icon:'auto_awesome', items:[
-      { id:'cer-both', name:'Exterior + Interior', price:2000 },
-      { id:'cer-ext',  name:'Exterior', price:1500 },
-      { id:'cer-int',  name:'Interior', price:950 }
+    { id:'iloe',  name:'ILOE',                          icon:'work',             type:'dropdown', rec:900, options:[
+      { label:'Select…', price:0 },
+      { label:'ILOE — 1 year', price:900 },
+      { label:'ILOE — 2 years', price:1600 }
+    ]},
+    { id:'tyre',  name:'Tyre Replacement',              icon:'tire_repair',      type:'dropdown', rec:1500, options:[
+      { label:'Select…', price:0 },
+      { label:'Basic tyre cover', price:1500 },
+      { label:'Premium tyre cover', price:2800 }
     ]}
   ];
-  // Lepas-recommended value added services (used for the Recommended vs Customer-choice table).
-  var VAS_RECOMMENDED = { 'mat-carpet':1, 'ped-side':1, 'tint-prem':1, 'cer-both':1, 'ppf-front-sedan':1 };
   var MODELS = [
     { id:'vx',  name:'EXEED VX',  cls:'Flagship 7-seat SUV', s1:'2.0T · 261 hp',  s2:'6/7 seats', price:189900 },
     { id:'txl', name:'EXEED TXL', cls:'Premium SUV',         s1:'1.6T · 197 hp',  s2:'5 seats',   price:129900 },
@@ -422,7 +426,7 @@
   ];
   var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'evperf', vas:{}, vasOpen:{} };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'evperf', vasVal:{}, vasOpen:{ cmi:true, gap:true, smc:true } };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -433,28 +437,37 @@
   function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
   function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
   function emi(loan,y){ return Math.round(loan*(1+RATE*y)/(y*12)); }
-  function addTotal(){ var s=0; VAS_GROUPS.forEach(function(g){ g.items.forEach(function(it){ if (state.vas[it.id]) s+=it.price; }); }); return s; }
-  function vasGroupCount(g){ var n=0; g.items.forEach(function(it){ if (state.vas[it.id]) n++; }); return n; }
+  function addTotal(){ var s=0; VAS_CATS.forEach(function(c){ s += (state.vasVal[c.id]||0); }); return s; }
+  function recVasTotal(){ var s=0; VAS_CATS.forEach(function(c){ s += c.rec; }); return s; }
   function renderVasChooser(){
-    var host = document.getElementById('vasChooser'); if (!host) return;
-    host.innerHTML = VAS_GROUPS.map(function(g){
-      var open = !!state.vasOpen[g.id], cnt = vasGroupCount(g);
-      var head = '<button type="button" class="vas-g-head'+(open?' open':'')+'" onclick="toggleVasGroup(\''+g.id+'\')">' +
-        '<span class="vas-g-ic"><span class="mi">'+g.icon+'</span></span>' +
-        '<span class="vas-g-name">'+g.name+'</span>' +
-        (cnt?'<span class="vas-g-badge">'+cnt+'</span>':'') +
-        '<span class="mi vas-g-chev">'+(open?'expand_less':'expand_more')+'</span></button>';
-      var bodyHtml = open ? '<div class="vas-g-body">' + g.items.map(function(it){
-        var on = !!state.vas[it.id];
-        var rec = VAS_RECOMMENDED[it.id] ? '<span class="vas-rec">Recommended</span>' : '';
-        return '<label class="vas-item'+(on?' on':'')+'"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleVasItem(\''+it.id+'\')"><span class="vas-item-n">'+it.name+rec+'</span><span class="vas-item-p">AED '+fmt(it.price)+'</span></label>';
-      }).join('') + '</div>' : '';
-      return '<div class="vas-group">'+head+bodyHtml+'</div>';
-    }).join('');
-    var cmp = document.getElementById('vasCompare'); if (cmp) cmp.innerHTML = vasCompareHtml();
+    var host = document.getElementById('vasTable'); if (!host) return;
+    var totalRec = 0, totalCust = 0, rows = '';
+    VAS_CATS.forEach(function(c){
+      var cust = state.vasVal[c.id] || 0;
+      totalRec += c.rec; totalCust += cust;
+      var open = !!state.vasOpen[c.id];
+      rows += '<div class="pc-row vas-cat'+(open?' open':'')+'" onclick="toggleVasGroup(\''+c.id+'\')">' +
+        '<span class="pc-i"><span class="mi vas-cat-chev">'+(open?'expand_less':'expand_more')+'</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span></span>' +
+        '<span class="pc-v">'+fmt(c.rec)+'</span><span class="pc-v">'+fmt(cust)+'</span></div>';
+      if (open){
+        var ctrl;
+        if (c.type === 'number'){
+          ctrl = '<input type="number" id="vasInput_'+c.id+'" min="0" step="100" class="vas-num" value="'+(cust||'')+'" placeholder="Enter amount (AED)" onchange="setVasVal(\''+c.id+'\', this.value)" onclick="event.stopPropagation()">';
+        } else {
+          ctrl = '<select id="vasInput_'+c.id+'" class="vas-sel" onchange="setVasVal(\''+c.id+'\', this.value)" onclick="event.stopPropagation()">' +
+            c.options.map(function(o){ return '<option value="'+o.price+'"'+(o.price===cust?' selected':'')+'>'+o.label+(o.price?(' · AED '+fmt(o.price)):'')+'</option>'; }).join('') + '</select>';
+        }
+        rows += '<div class="vas-input-row" onclick="event.stopPropagation()">'+ctrl+'</div>';
+      }
+    });
+    rows += '<div class="pc-row pc-total"><span class="pc-i">Total VAS (AED)</span><span class="pc-v">'+fmt(totalRec)+'</span><span class="pc-v">'+fmt(totalCust)+'</span></div>';
+    host.innerHTML = '<div class="pc">' +
+      '<div class="pc-row pc-head"><span class="pc-i">Service</span><span class="pc-v">Recommended</span><span class="pc-v">Customer choice</span></div>' +
+      rows +
+    '</div>';
   }
-  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; renderVasChooser(); }
-  function toggleVasItem(id){ state.vas[id] = !state.vas[id]; renderVasChooser(); renderSummary(); }
+  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; renderVasChooser(); if (state.vasOpen[id]){ var el = document.getElementById('vasInput_'+id); if (el){ el.focus(); if (el.select) el.select(); } } }
+  function setVasVal(id, v){ state.vasVal[id] = Math.max(0, parseInt(v,10)||0); renderVasChooser(); renderSummary(); }
 
   function leadTarget(){ var m=location.search.match(/lead=(\d+)/); return m?parseInt(m[1],10):null; }
 
@@ -505,8 +518,7 @@
       }).join('') + '</div>';
     } else { // Finance — Value Added Services (accessories) chooser on the left
       title.textContent = 'Value Added Services';
-      body.innerHTML = '<div class="vas-sub">Pick accessories &amp; services. The total feeds into the financing on the right.</div>' +
-        '<div class="vas-layout"><div id="vasChooser"></div><div class="vas-right"><div id="vasCompare"></div></div></div>';
+      body.innerHTML = '<div class="vas-sub">Pick accessories &amp; services. The total feeds into the financing on the right.</div><div id="vasTable"></div>';
       renderVasChooser();
     }
     document.getElementById('nextBtn').style.visibility = state.step === STEPS.length-1 ? 'hidden' : 'visible';
@@ -523,8 +535,6 @@
   function renderSummary(){
     var t = trim(), c = ext(), ic = intr();
     var pay = state.payType;
-    var maxD = maxDiscount();
-    if (state.discount > maxD){ state.discount = maxD; var di = document.getElementById('discountAmt'); if (di && pay !== 'dpassist') di.value = maxD; }
     var list = t.price;
     var tradeIn = state.tradeIn || 0;
     var discount = (pay === 'dpassist') ? 0 : state.discount;
@@ -554,50 +564,24 @@
     document.getElementById('finTrade').innerHTML = finV(tradeIn);
     document.getElementById('finNet').innerHTML = finV(netPrice);
     document.getElementById('finVas').innerHTML = finV(vas);
-    var vasSel = []; VAS_GROUPS.forEach(function(g){ g.items.forEach(function(it){ if (state.vas[it.id]) vasSel.push(it); }); });
+    var vasSel = VAS_CATS.filter(function(c){ return (state.vasVal[c.id]||0) > 0; });
     document.getElementById('vasTip').innerHTML = vasSel.length
-      ? '<div class="vas-tip-h">Added services</div>' + vasSel.map(function(it){ return '<div class="vas-tip-row"><span>'+it.name+'</span><span>AED '+fmt(it.price)+'</span></div>'; }).join('')
+      ? '<div class="vas-tip-h">Added services</div>' + vasSel.map(function(c){ return '<div class="vas-tip-row"><span>'+c.name+'</span><span>AED '+fmt(state.vasVal[c.id])+'</span></div>'; }).join('')
       : '<div class="vas-tip-empty">No services added yet.</div>';
-    document.getElementById('discHint').textContent = (pay === 'dpassist') ? 'fixed' : ('max AED ' + fmt(maxD));
+    document.getElementById('discHint').textContent = (pay === 'dpassist') ? 'fixed' : '';
     document.getElementById('rowDpSupport').style.display = (pay === 'dpassist') ? '' : 'none';
     document.getElementById('rowDownpay').style.display = (pay === 'cash') ? 'none' : '';
-    document.getElementById('campaignSel').innerHTML = CAMPAIGNS.map(function(cp){
-      return '<option value="'+cp.id+'"'+(state.campaign===cp.id?' selected':'')+'>'+cp.name+'</option>';
-    }).join('');
     document.getElementById('emiTable').style.display = (pay === 'cash') ? 'none' : '';
     document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
-      return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loan,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
+      return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
     }).join('');
-  }
-  // Value Added Services — Lepas Recommended vs the customer's current choice.
-  function vasCompareHtml(){
-    var cats = [
-      { id:'accessories', label:'Accessories' },
-      { id:'tinting',     label:'Tinting' },
-      { id:'ppf',         label:'Paint Protection Film' },
-      { id:'ceramic',     label:'Nano Ceramic' }
-    ];
-    var recSum = 0, custSum = 0, rows = '';
-    cats.forEach(function(c){
-      var grp = VAS_GROUPS.filter(function(x){ return x.id === c.id; })[0]; if (!grp) return;
-      var rec = 0, cust = 0;
-      grp.items.forEach(function(it){ if (VAS_RECOMMENDED[it.id]) rec += it.price; if (state.vas[it.id]) cust += it.price; });
-      recSum += rec; custSum += cust;
-      rows += '<div class="pc-row"><span class="pc-i">'+c.label+'</span><span class="pc-v">'+fmt(rec)+'</span><span class="pc-v">'+fmt(cust)+'</span></div>';
-    });
-    rows += '<div class="pc-row pc-total"><span class="pc-i">Total VAS (AED)</span><span class="pc-v">'+fmt(recSum)+'</span><span class="pc-v">'+fmt(custSum)+'</span></div>';
-    return '<div class="pc">' +
-      '<div class="pc-title">Value Added Services</div>' +
-      '<div class="pc-row pc-head"><span class="pc-i">Service</span><span class="pc-v">Recommended</span><span class="pc-v">Customer choice</span></div>' +
-      rows +
-    '</div>';
   }
   function row(k,v,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v">'+v+'</span></div>'; }
   function rowColor(k,v,hex,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v"><span class="cdot" style="background:'+hex+'"></span>'+v+'</span></div>'; }
 
   function renderAll(){ renderSteps(); renderDock(); renderStage(); renderSummary(); }
   function pick(kind,val){ state[kind]=val; renderAll(); }
-  function setDiscount(v){ state.discount = Math.min(maxDiscount(), Math.max(0, parseInt(v,10)||0)); renderSummary(); }
+  function setDiscount(v){ state.discount = Math.max(0, parseInt(v,10)||0); renderSummary(); }
   function setBooking(v){ state.booking = Math.max(2000, parseInt(v,10)||2000); renderSummary(); }
   function setDownpayment(v){ state.downAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
   function setDpSupport(v){ state.dpSupportAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
@@ -621,7 +605,7 @@
       intColor:ic.name, intHex:ic.hex,
       range:t.range, power:t.power,
       nsp:t.price, payType:state.payType, downPct:Math.round((state.downAmt||0)/t.price*100), discount:(state.payType==='dpassist'?0:state.discount), tradeIn:state.tradeIn, booking:state.booking, downAmt:state.downAmt, dpSupport:(state.payType==='dpassist'?state.dpSupportAmt:0), pdi:0,
-      addOns:{ insurance:false, service:false, tinting:vasGroupCount(VAS_GROUPS.filter(function(g){return g.id==='tinting';})[0])>0, ceramic:vasGroupCount(VAS_GROUPS.filter(function(g){return g.id==='ceramic';})[0])>0 },
+      addOns:{ insurance:(state.vasVal.cmi||0)>0, service:(state.vasVal.smc||0)>0, tinting:(state.vasVal.tinting||0)>0, ceramic:(state.vasVal.ppf||0)>0 },
       vasTotal:addTotal(),
       isQuote:false
     };
