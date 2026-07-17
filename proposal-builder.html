@@ -66,7 +66,7 @@
   .stage-badge{position:absolute; top:18px; left:26px; display:flex; flex-direction:column; gap:2px; z-index:2;}
   .stage-badge .m{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;}
   .stage-badge .t{font-size:12px; color:var(--ink2);}
-  .stage-img-wrap{flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:24px 34px 0;}
+  .stage-img-wrap{flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:clamp(10px,2.5vh,24px) 34px 0;}
   .stage-img{max-width:86%; max-height:92%; object-fit:contain; filter:drop-shadow(0 36px 48px rgba(20,24,34,.26)); transition:opacity .35s ease, transform .5s ease;}
   .stage-img.swap{opacity:0; transform:translateY(8px) scale(.99);}
   .stage-caption{display:none;}
@@ -74,8 +74,8 @@
   .stage-caption .sub{font-size:12.5px; color:var(--ink2); margin-top:3px;}
 
   /* Selector dock */
-  .dock{position:relative; z-index:3; flex-shrink:0; margin:-64px 26px 22px; padding:18px 26px 18px; border:1px solid var(--glass-line); border-radius:22px; background:var(--dock-bg); backdrop-filter:blur(24px) saturate(1.35); -webkit-backdrop-filter:blur(24px) saturate(1.35); box-shadow:0 18px 52px rgba(8,10,14,.18);}
-  .dock-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:15px;}
+  .dock{position:relative; z-index:3; flex-shrink:0; margin:clamp(-64px,-6vh,-40px) 26px clamp(12px,2.2vh,22px); padding:clamp(12px,1.8vh,18px) 26px; border:1px solid var(--glass-line); border-radius:22px; background:var(--dock-bg); backdrop-filter:blur(24px) saturate(1.35); -webkit-backdrop-filter:blur(24px) saturate(1.35); box-shadow:0 18px 52px rgba(8,10,14,.18);}
+  .dock-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:clamp(9px,1.6vh,15px);}
   .dock-h .t{font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2);}
   .swatches{display:flex; gap:14px; flex-wrap:wrap;}
   .swatch{display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; width:74px;}
@@ -106,7 +106,7 @@
   .card.on .check{display:flex;}
   .card .check .mi{font-size:14px;}
 
-  .dock-nav{display:flex; justify-content:space-between; align-items:center; margin-top:18px;}
+  .dock-nav{display:flex; justify-content:space-between; align-items:center; margin-top:clamp(10px,1.8vh,18px);}
   .btn{display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:13.5px; font-weight:700; padding:11px 20px; border-radius:11px; border:none; cursor:pointer; transition:.15s;}
   .btn.ghost{background:none; color:var(--ink2); padding-left:6px;}
   .btn.ghost:hover{color:var(--ink);}
@@ -115,16 +115,16 @@
   .btn.dark .mi{font-size:18px;}
 
   /* Summary panel */
-  .summary{margin:12px; border:1px solid var(--line); border-radius:18px; background:var(--summary-bg); padding:14px 15px; display:flex; flex-direction:column; height:calc(100% - 24px); overflow:hidden; box-shadow:0 10px 34px rgba(8,10,14,.10);}
+  .summary{--sum-m:clamp(8px,1.4vh,12px); margin:var(--sum-m); border:1px solid var(--line); border-radius:18px; background:var(--summary-bg); padding:clamp(10px,1.6vh,14px) 15px; display:flex; flex-direction:column; height:calc(100% - var(--sum-m)*2); overflow:hidden; box-shadow:0 10px 34px rgba(8,10,14,.10);}
   .sum-title{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2); margin-bottom:5px;}
-  .sec-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:11px 2px 6px;}
-  .sum-rows{display:grid; grid-template-columns:1fr 1fr; gap:11px 44px; margin:2px 0 10px; padding:2px 2px;}
+  .sec-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:clamp(6px,1.2vh,11px) 2px 6px;}
+  .sum-rows{display:grid; grid-template-columns:1fr 1fr; gap:clamp(6px,1.3vh,11px) 44px; margin:2px 0 clamp(6px,1.2vh,10px); padding:2px 2px;}
   .sum-row{display:flex; flex-direction:column; gap:3px; min-width:0;}
   .sum-row .k{font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
   .sum-row .v{font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; color:var(--ink);}
   .sum-row .v .cdot{width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); flex-shrink:0;}
 
-  .fin{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:4px;}
+  .fin{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:clamp(7px,1.2vh,10px) 12px; margin-bottom:4px;}
   .fin-l{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
   .fin-l .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
   .fin-l .v{font-size:12.5px; font-weight:800;}
@@ -138,36 +138,38 @@
   .fin-check{display:flex; align-items:center; gap:9px; margin:8px 0 4px; font-size:12px; font-weight:600; cursor:pointer;}
   .fin-check input{accent-color:var(--cta-bg); width:15px; height:15px;}
   .fin-badge{margin-left:auto; font-size:10px; font-weight:800; color:var(--ink2); background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:2px 8px;}
-  .fin-field{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:5px 0; border-bottom:1px solid var(--line); font-size:12px;}
+  .fin-field{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:clamp(3px,0.7vh,5px) 0; border-bottom:1px solid var(--line); font-size:12px;}
   .fin-field .k{color:var(--ink2);}
+  .fin-sub{font-size:10px; font-weight:700; color:var(--muted); text-transform:none; letter-spacing:0; margin-left:4px;}
   .fin-field .fin-v{font-weight:800;}
   .fin-inp{font-weight:700; display:inline-flex; align-items:center; gap:4px;}
   .fin-inp input{width:78px; text-align:right; font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:4px 7px;}
   .fin-sel{font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:5px 8px; cursor:pointer;}
   .addon .ap.free{color:#1a9d5a;}
-  .emi-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:7px;}
+  .emi-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:clamp(4px,0.9vh,7px);}
   .emi-table th{background:var(--emi-th); color:#fff; font-weight:700; padding:4px 5px; font-size:10px;}
   .emi-table th:first-child{background:transparent; color:var(--muted); text-align:left; text-transform:uppercase; font-size:9px; letter-spacing:.04em;}
-  .emi-table td{padding:3.5px 5px; text-align:center; border-bottom:1px solid var(--line); font-weight:700;}
+  .emi-table td{padding:clamp(2px,0.5vh,3.5px) 5px; text-align:center; border-bottom:1px solid var(--line); font-weight:700;}
   .emi-table td:first-child{text-align:left; color:var(--ink2); font-weight:600;}
-  .bundle-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:11px 2px 6px;}
-  .bundle-tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:9px;}
-  .bundle-tier{display:flex; flex-direction:column; gap:1px; align-items:flex-start; text-align:left; padding:9px 9px; border:1.5px solid var(--line); border-radius:11px; background:var(--panel); cursor:pointer; font-family:inherit; transition:.15s;}
+  .bundle-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:clamp(6px,1.2vh,11px) 2px 6px;}
+  .bundle-tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:clamp(5px,1.1vh,9px);}
+  .bundle-tier{display:flex; flex-direction:column; gap:1px; align-items:flex-start; text-align:left; padding:clamp(6px,1.1vh,9px) 9px; border:1.5px solid var(--line); border-radius:11px; background:var(--panel); cursor:pointer; font-family:inherit; transition:.15s;}
   .bundle-tier:hover{border-color:var(--card-hover);}
   .bundle-tier.on{border-color:var(--sel-border); background:var(--panel2); box-shadow:0 4px 12px var(--card-shadow);}
   .bt-name{font-size:12.5px; font-weight:800; color:var(--ink);}
   .bt-desc{font-size:10px; color:var(--muted);}
   .bt-price{font-size:11px; font-weight:700; color:var(--ink2); margin-top:3px;}
-  .addons{display:flex; flex-direction:column; gap:1px; margin-bottom:9px;}
-  .addon{display:flex; align-items:center; gap:10px; padding:5px 2px; font-size:12px; border-bottom:1px solid var(--line); cursor:pointer;}
+  .addons{display:flex; flex-direction:column; gap:1px; margin-bottom:clamp(5px,1.1vh,9px);}
+  .addon{display:flex; align-items:center; gap:10px; padding:clamp(3px,0.7vh,5px) 2px; font-size:12px; border-bottom:1px solid var(--line); cursor:pointer;}
   .addon input{accent-color:var(--cta-bg); width:15px; height:15px;}
   .addon .ap{margin-left:auto; font-weight:700; color:var(--ink2);}
-  .addon-total{display:flex; justify-content:space-between; align-items:center; background:linear-gradient(150deg, var(--hero1), var(--hero2)); color:#fff; padding:10px 14px; border-radius:11px; font-size:12.5px; font-weight:700; margin-bottom:10px; box-shadow:0 8px 20px rgba(8,10,14,.22);}
+  .addon-total{display:flex; justify-content:space-between; align-items:center; background:linear-gradient(150deg, var(--hero1), var(--hero2)); color:#fff; padding:clamp(7px,1.3vh,10px) 14px; border-radius:11px; font-size:12.5px; font-weight:700; margin-bottom:clamp(4px,0.9vh,10px); box-shadow:0 8px 20px rgba(8,10,14,.22);}
   .addon-total span:last-child{font-size:14px; font-weight:800; color:#eaedf2;}
 
-  .save-btn{width:100%; justify-content:center; background:var(--cta-bg); color:var(--cta-text); font-size:13.5px; padding:12px; border-radius:11px; letter-spacing:.01em; margin-top:auto;}
+  .sum-scroll{flex:1; min-height:0; overflow-y:auto; padding-right:3px; margin-right:-3px;}
+  .save-btn{width:100%; justify-content:center; background:var(--cta-bg); color:var(--cta-text); font-size:13.5px; padding:clamp(9px,1.5vh,12px); border-radius:11px; letter-spacing:.01em; margin-top:clamp(8px,1.4vh,12px); flex-shrink:0;}
   .save-btn:hover{opacity:.9;}
-  .save-hint{text-align:center; font-size:10.5px; color:var(--muted); margin-top:7px;}
+  .save-hint{text-align:center; font-size:10.5px; color:var(--muted); margin-top:clamp(4px,0.9vh,7px);}
 
   /* Saved toast overlay */
   .saved-ov{position:fixed; inset:0; background:rgba(15,18,24,.5); backdrop-filter:blur(3px); display:none; align-items:center; justify-content:center; z-index:60;}
@@ -208,14 +210,16 @@
 
     <!-- Summary -->
     <aside class="summary">
+      <div class="sum-scroll">
       <div class="sum-rows" id="sumRows"></div>
       <div class="sec-h">Financing</div>
       <div class="fin">
-        <div class="fin-l"><span class="k">Down payment</span><span class="v" id="downLbl">20% · AED 0</span></div>
-        <input class="fin-range" id="downRange" type="range" min="20" max="100" step="5" value="20" oninput="setDown(this.value)">
-        <label class="fin-check"><input type="checkbox" id="dpSupport" onchange="toggleDpSupport()"><span>Down payment support</span><span class="fin-badge">+25%</span></label>
-        <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-inp">AED <input id="tradeInAmt" type="number" min="0" step="500" value="0" oninput="setTradeIn(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Booking amount</span><span class="fin-v">AED 2,000</span></div>
+        <div class="fin-field"><span class="k">Total price</span><span class="fin-v" id="finTotal">AED 0</span></div>
+        <div class="fin-field"><span class="k">Discount amount<span class="fin-sub" id="discHint"></span></span><span class="fin-inp">AED <input id="discountAmt" type="number" min="0" step="500" value="0" oninput="setDiscount(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-inp">AED <input id="tradeInAmt" type="number" min="0" step="500" value="25000" oninput="setTradeIn(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Booking amount</span><span class="fin-inp">AED <input id="bookingAmt" type="number" min="2000" step="500" value="2000" oninput="setBooking(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Down payment</span><span class="fin-inp">AED <input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownAmt(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Down payment support</span><span class="fin-inp">AED <input id="dpSupportAmt" type="number" min="0" step="500" value="0" oninput="setDpSupportAmt(this.value)"></span></div>
         <div class="fin-field"><span class="k">Campaign</span><select class="fin-sel" id="campaignSel" onchange="setCampaign(this.value)"></select></div>
         <table class="emi-table"><thead><tr><th>EMI @ 2%</th><th>Without</th><th>With adds</th></tr></thead><tbody id="emiBody"></tbody></table>
       </div>
@@ -223,6 +227,7 @@
       <div class="bundle-tiers" id="bundleTiers"></div>
       <div class="addons" id="addons"></div>
       <div class="addon-total"><span>Total adds on</span><span id="addTotal">AED 0</span></div>
+      </div>
       <button class="btn save-btn" onclick="saveProposal()"><span class="mi">save</span> Save</button>
       <div class="save-hint">Adds to the lead's proposal list in the CRM</div>
     </aside>
@@ -286,7 +291,8 @@
   ];
   var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', downPct:20, tradeIn:0, dpSupport:false, campaign:'none', bundle:'custom', addOns:{ insurance:false, service:false, tinting:true, ceramic:true } };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', discount:0, tradeIn:25000, booking:2000, downAmt:0, dpSupportAmt:0, campaign:'none', bundle:'custom', addOns:{ insurance:false, service:false, tinting:true, ceramic:true } };
+  function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
   function model(){ return MODELS.filter(function(m){return m.id===state.model;})[0] || MODELS[4]; }
@@ -360,10 +366,9 @@
 
   function renderSummary(){
     var t = trim(), c = ext(), ic = intr();
-    var effPct = Math.min(100, state.downPct + (state.dpSupport ? 25 : 0));
-    var down = Math.round(t.price * effPct/100);
-    var tradeIn = state.tradeIn || 0;
-    var loan = Math.max(0, t.price - down - tradeIn - BOOKING);
+    var maxD = maxDiscount();
+    if (state.discount > maxD){ state.discount = maxD; var di = document.getElementById('discountAmt'); if (di) di.value = maxD; }
+    var loan = Math.max(0, t.price - state.discount - (state.tradeIn||0) - (state.booking||0) - (state.downAmt||0) - (state.dpSupportAmt||0));
     var at = addTotal(), loanW = loan + at;
     document.getElementById('sumRows').innerHTML =
       row('Trim', t.name) +
@@ -371,11 +376,11 @@
       rowColor('Interior', ic.name, ic.hex) +
       row('Amount financed', 'AED ' + fmt(loan));
     document.getElementById('topPrice').textContent = 'AED ' + fmt(t.price);
-    document.getElementById('downLbl').textContent = effPct + '% · AED ' + fmt(down) + (state.dpSupport ? ' · +25% support' : '');
+    document.getElementById('finTotal').textContent = 'AED ' + fmt(t.price);
+    document.getElementById('discHint').textContent = 'max AED ' + fmt(maxD);
     document.getElementById('campaignSel').innerHTML = CAMPAIGNS.map(function(cp){
       return '<option value="'+cp.id+'"'+(state.campaign===cp.id?' selected':'')+'>'+cp.name+'</option>';
     }).join('');
-    var dps = document.getElementById('dpSupport'); if (dps) dps.checked = state.dpSupport;
     document.getElementById('emiBody').innerHTML = [5,3,2].map(function(y){
       return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loan,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
     }).join('');
@@ -390,7 +395,6 @@
       return '<label class="addon"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleAdd(\''+a.k+'\')"><span>'+a.label+'</span><span class="ap'+(free&&on?' free':'')+'">'+price+'</span></label>';
     }).join('');
     document.getElementById('addTotal').textContent = 'AED ' + fmt(at);
-    updateRangeFill();
   }
   function row(k,v){ return '<div class="sum-row"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>'; }
   function rowColor(k,v,hex){ return '<div class="sum-row"><span class="k">'+k+'</span><span class="v"><span class="cdot" style="background:'+hex+'"></span>'+v+'</span></div>'; }
@@ -406,10 +410,11 @@
     renderSummary();
   }
   function toggleAdd(k){ state.addOns[k]=!state.addOns[k]; state.bundle='custom'; renderSummary(); }
-  function setDown(v){ state.downPct=+v; renderSummary(); }
-  function updateRangeFill(){ var r=document.getElementById('downRange'); if(!r) return; var pct=(r.value-20)/(100-20)*100; r.style.background='linear-gradient(90deg, var(--cta-bg) '+pct+'%, var(--line) '+pct+'%)'; }
+  function setDiscount(v){ state.discount = Math.min(maxDiscount(), Math.max(0, parseInt(v,10)||0)); renderSummary(); }
   function setTradeIn(v){ state.tradeIn = Math.max(0, parseInt(v,10)||0); renderSummary(); }
-  function toggleDpSupport(){ var el=document.getElementById('dpSupport'); state.dpSupport = el ? el.checked : !state.dpSupport; renderSummary(); }
+  function setBooking(v){ state.booking = Math.max(2000, parseInt(v,10)||2000); renderSummary(); }
+  function setDownAmt(v){ state.downAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
+  function setDpSupportAmt(v){ state.dpSupportAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
   function setCampaign(v){ state.campaign = v; campaign().free.forEach(function(k){ state.addOns[k] = true; }); renderSummary(); }
   function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
   function goTo(i){ state.step=i; renderAll(); }
@@ -421,7 +426,7 @@
       extColor:c.name, extHex:c.hex, image:c.img,
       intColor:ic.name, intHex:ic.hex,
       range:t.range, power:t.power,
-      nsp:t.price, downPct:state.downPct, pdi:0,
+      nsp:t.price, downPct:Math.round((state.downAmt||0)/t.price*100), discount:state.discount, tradeIn:state.tradeIn, booking:state.booking, downAmt:state.downAmt, dpSupport:state.dpSupportAmt, pdi:0,
       addOns:{ insurance:!!state.addOns.insurance, service:!!state.addOns.service, tinting:!!state.addOns.tinting, ceramic:!!state.addOns.ceramic },
       isQuote:false
     };
@@ -448,6 +453,8 @@
     document.getElementById('themeIcon').textContent = dark ? 'light_mode' : 'dark_mode';
   })();
 
+  state.downAmt = Math.round(trim().price*0.2/500)*500;
+  (function(){ var el=document.getElementById('downAmt'); if(el) el.value = state.downAmt; })();
   renderAll();
 </script>
 </body>
