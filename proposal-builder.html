@@ -330,7 +330,7 @@
         <div class="fin-field"><span class="k">Net price</span><span class="fin-v" id="finNet">AED 0</span></div>
         <div class="fin-field"><span class="k">Value added services<span class="vas-info"><span class="mi">info</span><span class="vas-tip" id="vasTip"></span></span></span><span class="fin-v" id="finVas">AED 0</span></div>
         <div class="fin-field" id="rowDownpay"><span class="k">Downpayment amount</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownpayment(this.value)"></span></div>
-        <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Monthly installment</th></tr></thead><tbody id="emiBody"></tbody></table>
+        <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Our recommendation</th><th>Customer choice</th></tr></thead><tbody id="emiBody"></tbody></table>
       </div>
       </div></div>
       <div id="finOutput"></div>
@@ -598,9 +598,10 @@
     document.getElementById('discHint').textContent = (pay === 'dpassist') ? 'fixed' : '';
     document.getElementById('rowDpSupport').style.display = (pay === 'dpassist') ? '' : 'none';
     document.getElementById('rowDownpay').style.display = (pay === 'cash') ? 'none' : '';
+    var loanRec = loan + recVasTotal();
     document.getElementById('emiTable').style.display = (pay === 'cash') ? 'none' : '';
     document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
-      return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
+      return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loanRec,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
     }).join('');
   }
   function row(k,v,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v">'+v+'</span></div>'; }
