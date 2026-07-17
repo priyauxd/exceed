@@ -1031,7 +1031,8 @@
     .conf-photo { width:100%; max-height:180px; object-fit:contain; margin-bottom:10px; }
     .conf-model { font-size:17px; font-weight:800; }
     .conf-sub { font-size:12px; color:var(--ink-muted); margin-top:2px; }
-    .conf-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:14px; }
+    .conf-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px 24px; margin-top:14px; }
+    .conf-addons-val { font-size:12.5px; font-weight:600; line-height:1.5; }
     .conf-lbl { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-muted); }
     .conf-val { font-size:14px; font-weight:700; margin-top:2px; }
     .conf-ctas { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
@@ -1072,6 +1073,19 @@
     .confirm-actions .cp-btn { min-width: 96px; justify-content: center; }
     .cp-btn.danger { background: var(--red); border-color: var(--red); color: #fff; }
     .cp-btn.danger:hover { background: #c0392b; border-color: #c0392b; }
+    .cp-btn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .cp-btn.primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+    .confirm-ic.neutral { background: var(--blue-soft); color: var(--blue); }
+    .flow-lbl { display:block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-muted); margin-bottom:5px; }
+    .flow-inp { width:100%; box-sizing:border-box; padding:8px 10px; border:1px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; color:var(--ink); outline:none; }
+    .flow-inp:focus { border-color:var(--blue); }
+    .flow-chips { display:flex; gap:7px; }
+    .flow-chip { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:5px; padding:8px 6px; border:1px solid var(--border); border-radius:8px; font-size:12.5px; font-weight:600; color:var(--ink-secondary); cursor:pointer; transition:.12s; }
+    .flow-chip input { display:none; }
+    .flow-chip.on { border-color:var(--blue); background:var(--blue-soft); color:var(--blue); }
+    .flow-note { display:flex; align-items:flex-start; gap:6px; margin-top:12px; font-size:11.5px; color:var(--ink-secondary); line-height:1.4; text-align:left; }
+    .flow-note .material-symbols-outlined { font-size:16px; color:var(--blue); }
+    .conf-span { grid-column:1 / -1; }
     .prop-body { padding: 14px; }
     .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
     .prop-build-img { width: 96px; height: 62px; object-fit: cover; border-radius: 8px; background: #eef1f5; flex-shrink: 0; }
@@ -1760,11 +1774,15 @@
     function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdBookView = 'wizard'; schedRerender(); }
     function tdSetStatus(i, s){ if (!tdBookings[i]) return; tdBookings[i].status = s; showToast(s === 'Complete' ? 'Test drive completed' : 'Waiver signed — drive in progress'); schedRerender(); }
     var confirmCb = null;
-    function openConfirm(title, text, okLabel, cb, cancelLabel){
+    function openConfirm(title, text, okLabel, cb, cancelLabel, icon, neutral){
       document.getElementById('confirmTitle').textContent = title;
       document.getElementById('confirmText').innerHTML = text;
       document.getElementById('confirmOkBtn').textContent = okLabel || 'Confirm';
       document.getElementById('confirmCancelBtn').textContent = cancelLabel || 'Keep';
+      var icEl = document.querySelector('#confirmModal .confirm-ic');
+      if (icEl){ icEl.querySelector('.material-symbols-outlined').textContent = icon || 'warning'; icEl.classList.toggle('neutral', !!neutral); }
+      var okEl = document.getElementById('confirmOkBtn');
+      okEl.classList.toggle('danger', !neutral); okEl.classList.toggle('primary', !!neutral);
       confirmCb = cb;
       document.getElementById('confirmOverlay').classList.add('show');
       document.getElementById('confirmModal').classList.add('open');
@@ -3880,12 +3898,12 @@
     // Customer accepts the quotation → move the deal to the Confirmed state.
     function acceptQuotation(i){
       var l = leads[selectedIdx], p = l.proposals[i]; if (!p || !p.isQuote) return;
-      openConfirm('Mark quotation accepted?',
-        'Confirm the customer has accepted quotation <strong>' + p.id + '</strong>. This moves the deal to the <strong>Confirmed</strong> state.',
-        'Yes, accept', function(){
+      openConfirm('Send quotation to customer?',
+        'Send quotation <strong>' + p.id + '</strong> to the customer by email. This moves the deal to the <strong>Confirmed</strong> state.',
+        'Send quotation', function(){
           l.propState = 'confirmed'; l._acceptedProp = i;
           renderDetail(selectedIdx, currentStep);
-          showToast('Quotation ' + p.id + ' accepted — moved to Confirmed');
+          showToast('Quotation ' + p.id + ' sent to customer — moved to Confirmed');
         }, 'Cancel');
     }
     function backToDraft(){
@@ -3894,20 +3912,17 @@
       showToast('Switched back to draft proposals');
     }
     function confirmedCta(msg){ showToast(msg); }
+    function acceptedProp(){ var l = leads[selectedIdx]; var p = (l.proposals || [])[l._acceptedProp]; if (!p) (l.proposals || []).forEach(function(x){ if (x.isQuote) p = x; }); return p; }
     // Confirmed state — the accepted quotation with booking / paperwork CTAs.
     function confirmedQuotationPanel(l){
       var p = (l.proposals || [])[l._acceptedProp];
       if (!p) (l.proposals || []).forEach(function(x){ if (x.isQuote) p = x; });
       if (!p) { l.propState = 'draft'; return proposalsPanel(l); }
-      var down = Math.round(p.nsp * p.downPct / 100), loan = p.nsp - down - (p.pdi || 0);
-      var monthly = propEmi(loan + propAddTotal(p), 5);
+      var down = Math.round(p.nsp * p.downPct / 100);
+      var received = p.received || 0;
       var modelName = (p.model || '').split(' · ')[0];
-      var ctas = [
-        ['link', 'Send booking confirm link', 'Booking confirmation link sent to the customer'],
-        ['request_quote', 'Generate sales quotation', 'Sales quotation generated'],
-        ['description', 'Generate purchase agreement', 'Purchase agreement generated'],
-        ['health_and_safety', 'Generate duty of care', 'Duty of care document generated']
-      ];
+      var ons = propAddOns.filter(function(a){ return p.addOns && p.addOns[a.k]; }).map(function(a){ return a.label; });
+      var addonsStr = ons.length ? ons.join(' · ') : 'None';
       return '<div class="dp-essential" style="margin-bottom:14px">' +
         '<div class="prop-head"><div><div class="dp-essential-title">Confirmed &mdash; Accepted quotation</div>' +
           '<div class="dp-essential-sub" style="margin:0">Customer accepted ' + p.id + '. Complete the booking and paperwork below.</div></div>' +
@@ -3920,14 +3935,56 @@
           ((p.trim || p.extColor || p.chassis) ? '<div class="conf-sub">' + [p.trim, p.extColor, p.chassis ? ('VIN · ' + p.chassis) : ''].filter(Boolean).join(' · ') + '</div>' : '') +
           '<div class="conf-grid">' +
             '<div><div class="conf-lbl">Vehicle price</div><div class="conf-val">AED ' + propFmt(p.nsp) + '</div></div>' +
-            '<div><div class="conf-lbl">Down payment</div><div class="conf-val">' + p.downPct + '% · AED ' + propFmt(down) + '</div></div>' +
-            '<div><div class="conf-lbl">Monthly (60 mo)</div><div class="conf-val">AED ' + propFmt(monthly) + '</div></div>' +
+            '<div><div class="conf-lbl">Downpayment amount</div><div class="conf-val">AED ' + propFmt(down) + '</div></div>' +
+            '<div class="conf-span"><div class="conf-lbl">Add-ons</div><div class="conf-val conf-addons-val">' + addonsStr + '</div></div>' +
+            '<div class="conf-span"><div class="conf-lbl">Amount received from customer</div><div class="conf-val">AED ' + propFmt(received) + '</div></div>' +
           '</div>' +
         '</div>' +
-        '<div class="conf-ctas">' + ctas.map(function(c){
-          return '<button class="conf-cta" onclick="confirmedCta(\'' + c[2] + '\')"><span class="material-symbols-outlined">' + c[0] + '</span>' + c[1] + '</button>';
-        }).join('') + '</div>' +
+        '<div class="conf-ctas">' +
+          '<button class="conf-cta" onclick="sendPaymentLinkFlow()"><span class="material-symbols-outlined">link</span>Send payment link</button>' +
+          '<button class="conf-cta" onclick="generateQuotationFlow()"><span class="material-symbols-outlined">request_quote</span>Generate quotation</button>' +
+          '<button class="conf-cta conf-span" onclick="generatePurchaseAgreementFlow()"><span class="material-symbols-outlined">description</span>Generate purchase agreement</button>' +
+        '</div>' +
       '</div>';
+    }
+    function flowChipSel(el){ var box = el.closest('.flow-chips'); if (!box) return; box.querySelectorAll('.flow-chip').forEach(function(c){ c.classList.remove('on'); }); el.closest('.flow-chip').classList.add('on'); }
+    // Send payment link — input amount + channel, then record it as received from the customer.
+    function sendPaymentLinkFlow(){
+      var html = '<div style="text-align:left">' +
+        '<label class="flow-lbl">Payment amount (AED)</label>' +
+        '<input id="payAmt" type="number" min="0" step="500" value="2000" class="flow-inp">' +
+        '<label class="flow-lbl" style="margin-top:12px">Send via</label>' +
+        '<div class="flow-chips" id="payChan">' +
+          ['Email','SMS','Both'].map(function(x,idx){ return '<label class="flow-chip'+(idx===0?' on':'')+'"><input type="radio" name="payChan" value="'+x+'"'+(idx===0?' checked':'')+' onchange="flowChipSel(this)"><span>'+x+'</span></label>'; }).join('') +
+        '</div></div>';
+      openConfirm('Send payment link', html, 'Send link', function(){
+        var el = document.getElementById('payAmt');
+        var amt = Math.max(0, parseInt(el ? el.value : 0, 10) || 0);
+        var chanEl = document.querySelector('input[name=payChan]:checked');
+        var chan = chanEl ? chanEl.value : 'Email';
+        var p = acceptedProp(); if (p) p.received = (p.received || 0) + amt;
+        renderDetail(selectedIdx, currentStep);
+        showToast('Payment link (AED ' + propFmt(amt) + ') sent via ' + chan);
+      }, 'Cancel', 'link', true);
+    }
+    // Generate quotation — capture bank name; issued after manager signs.
+    function generateQuotationFlow(){
+      var html = '<div style="text-align:left">' +
+        '<label class="flow-lbl">Bank name</label>' +
+        '<input id="quoteBank" type="text" placeholder="e.g. Emirates NBD" class="flow-inp">' +
+        '<div class="flow-note"><span class="material-symbols-outlined">draw</span> Requires manager signature before it is issued to the customer.</div>' +
+      '</div>';
+      openConfirm('Generate quotation', html, 'Generate', function(){
+        var el = document.getElementById('quoteBank');
+        var bank = (el && el.value.trim()) ? el.value.trim() : 'the selected bank';
+        showToast('Quotation generated for ' + bank + ' — sent to manager to sign');
+      }, 'Cancel', 'request_quote', true);
+    }
+    // Purchase agreement — confirmation before sending to the customer via DocuSign.
+    function generatePurchaseAgreementFlow(){
+      openConfirm('Generate purchase agreement', 'The purchase agreement will be shared with the customer via <strong>DocuSign</strong> for electronic signature.', 'Send via DocuSign', function(){
+        showToast('Purchase agreement sent to the customer via DocuSign');
+      }, 'Cancel', 'description', true);
     }
 
     function renderProposalCard(p, i, arr){
@@ -3966,7 +4023,7 @@
           (p.isQuote
             ? '<div class="qc-quote-actions">' +
                 '<button class="qc-cta done" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">verified</span> Quotation ready</button>' +
-                '<button class="qc-cta accept" onclick="acceptQuotation('+i+')"><span class="material-symbols-outlined">how_to_reg</span> Mark accepted by customer</button>' +
+                '<button class="qc-cta accept" onclick="acceptQuotation('+i+')"><span class="material-symbols-outlined">send</span> Send quotation to customer</button>' +
               '</div>'
             : '<button class="qc-cta" onclick="requestCreateQuotation('+i+')">Create Quotation</button>') +
         '</div>' +
