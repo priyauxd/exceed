@@ -133,6 +133,10 @@
   #finCalcHome{display:none;}
   body.step-finance #finCalcHome{display:block;}
   .vas-sub{font-size:12px; color:var(--ink2); margin-bottom:12px; line-height:1.5;}
+  .vas-layout{display:grid; grid-template-columns:1.25fr 1fr; gap:18px; align-items:start;}
+  .vas-right{position:sticky; top:0;}
+  .vas-right .pc{margin-top:0;}
+  @media(max-width:900px){ .vas-layout{grid-template-columns:1fr;} }
   .vas-group{border:1px solid var(--line); border-radius:11px; margin-bottom:8px; overflow:hidden; background:var(--panel);}
   .vas-g-head{width:100%; display:flex; align-items:center; gap:10px; padding:11px 13px; background:none; border:none; cursor:pointer; font-family:inherit; text-align:left;}
   .vas-g-head:hover{background:var(--panel2);}
@@ -148,6 +152,7 @@
   .vas-item-n{flex:1;}
   .vas-item-p{font-weight:700; color:var(--ink2); white-space:nowrap;}
   .vas-item.on .vas-item-p{color:var(--ink);}
+  .vas-rec{display:inline-flex; align-items:center; margin-left:8px; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:#3d9b63; background:rgba(92,185,127,.16); border:1px solid rgba(92,185,127,.4); border-radius:20px; padding:1px 7px; vertical-align:middle; white-space:nowrap;}
   .sum-head{font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink);}
   .sum-subhead{font-size:12px; color:var(--ink2); margin:1px 0 13px;}
   .pc{margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; font-size:11px;}
@@ -295,6 +300,7 @@
         <button type="button" class="pay-btn" data-pay="dpassist" onclick="setPayType('dpassist')">DP Assist</button>
       </div>
       <div class="fin">
+        <div class="fin-field"><span class="k">Campaign</span><select class="fin-sel" id="campaignSel" onchange="setCampaign(this.value)"></select></div>
         <div class="fin-field"><span class="k">List price</span><span class="fin-v" id="finList">AED 0</span></div>
         <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-v" id="finTrade">AED 0</span></div>
         <div class="fin-field"><span class="k">Booking amount</span><span class="fin-inp"><span class="fin-cur">AED</span><input id="bookingAmt" type="number" min="2000" step="500" value="2000" oninput="setBooking(this.value)"></span></div>
@@ -303,7 +309,7 @@
         <div class="fin-field"><span class="k">Net price</span><span class="fin-v" id="finNet">AED 0</span></div>
         <div class="fin-field"><span class="k">Value added services<span class="vas-info"><span class="mi">info</span><span class="vas-tip" id="vasTip"></span></span></span><span class="fin-v" id="finVas">AED 0</span></div>
         <div class="fin-field" id="rowDownpay"><span class="k">Downpayment amount</span><span class="fin-inp"><span class="fin-cur">AED</span><input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownpayment(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Campaign</span><select class="fin-sel" id="campaignSel" onchange="setCampaign(this.value)"></select></div>
+        <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Without</th><th>With adds</th></tr></thead><tbody id="emiBody"></tbody></table>
       </div>
       </div></div>
       <div id="finOutput"></div>
@@ -351,12 +357,22 @@
   ];
   // Value Added Services — grouped accessories (EXEED VAS annex, excl. VAT).
   var VAS_GROUPS = [
-    { id:'mats', name:'Floor Mats', icon:'dashboard', items:[
+    { id:'accessories', name:'Accessories', icon:'auto_awesome_motion', items:[
       { id:'mat-es',     name:'Trunk Liner — EXEED ES', price:350 },
       { id:'mat-vx',     name:'Floor Mat — EXEED VX', price:750 },
       { id:'mat-lx',     name:'Floor Mat — EXEED LX', price:450 },
       { id:'mat-carpet', name:'Carpet Mat 2500 GSM', price:750 },
-      { id:'mat-rx',     name:'Floor Mats — RX', price:400 }
+      { id:'mat-rx',     name:'Floor Mats — RX', price:400 },
+      { id:'ped-e',      name:'E-Pedal', price:4900 },
+      { id:'ped-step',   name:'E-Step Pedal', price:4150 },
+      { id:'ped-2026',   name:'E-Step Pedal (2026 model)', price:7150 },
+      { id:'ped-side',   name:'Side Step Switch', price:350 },
+      { id:'el-screen',  name:'Rear Entertainment Screen', price:5100 },
+      { id:'el-batt',    name:'Battery Booster', price:1100 },
+      { id:'el-ipad',    name:'Rear iPad Holders', price:450 },
+      { id:'boot-tray',    name:'Rear Boot Tray', price:350 },
+      { id:'boot-divider', name:'Rear Boot Divider', price:200 },
+      { id:'boot-hanger',  name:'Rear Hanger', price:800 }
     ]},
     { id:'tinting', name:'Tinting — V Kool', icon:'gradient', items:[
       { id:'tint-sig-50',   name:'Signature · Windows 30/40/50%', price:1200 },
@@ -379,24 +395,10 @@
       { id:'cer-both', name:'Exterior + Interior', price:2000 },
       { id:'cer-ext',  name:'Exterior', price:1500 },
       { id:'cer-int',  name:'Interior', price:950 }
-    ]},
-    { id:'pedals', name:'Pedals & Steps', icon:'directions_car', items:[
-      { id:'ped-e',    name:'E-Pedal', price:4900 },
-      { id:'ped-step', name:'E-Step Pedal', price:4150 },
-      { id:'ped-2026', name:'E-Step Pedal (2026 model)', price:7150 },
-      { id:'ped-side', name:'Side Step Switch', price:350 }
-    ]},
-    { id:'electronics', name:'Electronics', icon:'devices', items:[
-      { id:'el-screen', name:'Rear Entertainment Screen', price:5100 },
-      { id:'el-batt',   name:'Battery Booster', price:1100 },
-      { id:'el-ipad',   name:'Rear iPad Holders', price:450 }
-    ]},
-    { id:'boot', name:'Boot & Storage', icon:'inventory_2', items:[
-      { id:'boot-tray',    name:'Rear Boot Tray', price:350 },
-      { id:'boot-divider', name:'Rear Boot Divider', price:200 },
-      { id:'boot-hanger',  name:'Rear Hanger', price:800 }
     ]}
   ];
+  // Lepas-recommended value added services (used for the Recommended vs Customer-choice table).
+  var VAS_RECOMMENDED = { 'mat-carpet':1, 'ped-side':1, 'tint-prem':1, 'cer-both':1, 'ppf-front-sedan':1 };
   var MODELS = [
     { id:'vx',  name:'EXEED VX',  cls:'Flagship 7-seat SUV', s1:'2.0T · 261 hp',  s2:'6/7 seats', price:189900 },
     { id:'txl', name:'EXEED TXL', cls:'Premium SUV',         s1:'1.6T · 197 hp',  s2:'5 seats',   price:129900 },
@@ -406,6 +408,7 @@
     { id:'et',  name:'EXEED ET',  cls:'Electric REEV SUV',   s1:'Up to 1400 km',  s2:'Hybrid EV', price:199900 }
   ];
   var CAMPAIGNS = [
+    { id:'evperf',  name:'EV - Performance 2025', free:[] },
     { id:'none',    name:'No campaign',           free:[] },
     { id:'ramadan', name:'Ramadan Offer',         free:['tinting','ceramic'] },
     { id:'launch',  name:'EXEED Launch Bundle',   free:['insurance','service','tinting','ceramic'] }
@@ -419,7 +422,7 @@
   ];
   var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'none', vas:{}, vasOpen:{} };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'evperf', vas:{}, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -443,10 +446,12 @@
         '<span class="mi vas-g-chev">'+(open?'expand_less':'expand_more')+'</span></button>';
       var bodyHtml = open ? '<div class="vas-g-body">' + g.items.map(function(it){
         var on = !!state.vas[it.id];
-        return '<label class="vas-item'+(on?' on':'')+'"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleVasItem(\''+it.id+'\')"><span class="vas-item-n">'+it.name+'</span><span class="vas-item-p">AED '+fmt(it.price)+'</span></label>';
+        var rec = VAS_RECOMMENDED[it.id] ? '<span class="vas-rec">Recommended</span>' : '';
+        return '<label class="vas-item'+(on?' on':'')+'"><input type="checkbox"'+(on?' checked':'')+' onchange="toggleVasItem(\''+it.id+'\')"><span class="vas-item-n">'+it.name+rec+'</span><span class="vas-item-p">AED '+fmt(it.price)+'</span></label>';
       }).join('') + '</div>' : '';
       return '<div class="vas-group">'+head+bodyHtml+'</div>';
     }).join('');
+    var cmp = document.getElementById('vasCompare'); if (cmp) cmp.innerHTML = vasCompareHtml();
   }
   function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; renderVasChooser(); }
   function toggleVasItem(id){ state.vas[id] = !state.vas[id]; renderVasChooser(); renderSummary(); }
@@ -500,7 +505,8 @@
       }).join('') + '</div>';
     } else { // Finance — Value Added Services (accessories) chooser on the left
       title.textContent = 'Value Added Services';
-      body.innerHTML = '<div class="vas-sub">Pick accessories &amp; services. The total feeds into the financing on the right.</div><div id="vasChooser"></div>';
+      body.innerHTML = '<div class="vas-sub">Pick accessories &amp; services. The total feeds into the financing on the right.</div>' +
+        '<div class="vas-layout"><div id="vasChooser"></div><div class="vas-right"><div id="vasCompare"></div></div></div>';
       renderVasChooser();
     }
     document.getElementById('nextBtn').style.visibility = state.step === STEPS.length-1 ? 'hidden' : 'visible';
@@ -535,10 +541,10 @@
       row('Trim', t.name, 'tune') +
       rowColor('Exterior', c.name, c.hex, 'palette') +
       rowColor('Interior', ic.name, ic.hex, 'weekend') +
-      row('Vehicle price', 'AED ' + fmt(list), 'sell');
+      row('Campaign', campaign().name, 'campaign');
     // Financing output card — only revealed on the Finance step (calculated at the end).
     var fo = document.getElementById('finOutput');
-    fo.innerHTML = (state.step === 4) ? payCalcHtml() : '';
+    fo.innerHTML = '';
     var onFinance = state.step === 4;
     var saveBtn = document.querySelector('.save-btn'); if (saveBtn) saveBtn.style.display = onFinance ? '' : 'none';
     var saveHint = document.querySelector('.save-hint'); if (saveHint) saveHint.style.display = onFinance ? '' : 'none';
@@ -558,35 +564,32 @@
     document.getElementById('campaignSel').innerHTML = CAMPAIGNS.map(function(cp){
       return '<option value="'+cp.id+'"'+(state.campaign===cp.id?' selected':'')+'>'+cp.name+'</option>';
     }).join('');
+    document.getElementById('emiTable').style.display = (pay === 'cash') ? 'none' : '';
+    document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
+      return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loan,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
+    }).join('');
   }
-  // Business payment-calculation table — Customer Choice (with down + trade-in) vs Lepas Recommendation (full finance).
-  function payCalcHtml(){
-    var t = trim();
-    var disc = (state.payType === 'dpassist') ? 0 : state.discount;
-    var netSelling = Math.max(0, t.price - disc);
-    var catTotal = function(ids){ var s=0; ids.forEach(function(gid){ var g = VAS_GROUPS.filter(function(x){return x.id===gid;})[0]; if (g) g.items.forEach(function(it){ if (state.vas[it.id]) s += it.price; }); }); return s; };
-    var tinting = catTotal(['tinting']), paint = catTotal(['ppf','ceramic']), access = catTotal(['mats','pedals','electronics','boot']);
-    var total = netSelling + tinting + paint + access;
-    var down = state.downAmt || 0, tradeIn = state.tradeIn || 0;
-    var finC = Math.max(0, total - down - tradeIn), finL = total;
-    var term = 60, monC = emi(finC, 5), monL = emi(finL, 5);
-    var two = function(a,b){ return '<span class="pc-v">'+fmt(a)+'</span><span class="pc-v">'+(b===''?'':fmt(b))+'</span>'; };
-    var item = function(label,a,b,cls){ return '<div class="pc-row'+(cls?' '+cls:'')+'"><span class="pc-i">'+label+'</span>'+two(a,b)+'</div>'; };
-    var rows = item('Net Selling Price of Vehicle', netSelling, netSelling);
-    if (tinting) rows += item('Tinting', tinting, tinting);
-    if (paint) rows += item('Paint Protection Ceramic / PPF', paint, paint);
-    if (access) rows += item('Accessories', access, access);
-    rows += item('Total Price (AED)', total, total, 'pc-total');
-    rows += '<div class="pc-row pc-band"><span class="pc-i">Down Payment (AED)</span><span class="pc-v">'+fmt(down)+'</span><span class="pc-v"></span></div>';
-    rows += '<div class="pc-row pc-band"><span class="pc-i">Trade-In Value</span><span class="pc-v">'+fmt(tradeIn)+'</span><span class="pc-v"></span></div>';
-    rows += item('Finance Amount (AED)', finC, finL, 'pc-fin');
-    rows += '<div class="pc-row pc-term"><span class="pc-i">Loan Term (Months)</span><span class="pc-v">'+term+'</span><span class="pc-v">'+term+'</span></div>';
-    rows += item('Approx. Monthly Installment (AED)', monC, monL, 'pc-monthly');
+  // Value Added Services — Lepas Recommended vs the customer's current choice.
+  function vasCompareHtml(){
+    var cats = [
+      { id:'accessories', label:'Accessories' },
+      { id:'tinting',     label:'Tinting' },
+      { id:'ppf',         label:'Paint Protection Film' },
+      { id:'ceramic',     label:'Nano Ceramic' }
+    ];
+    var recSum = 0, custSum = 0, rows = '';
+    cats.forEach(function(c){
+      var grp = VAS_GROUPS.filter(function(x){ return x.id === c.id; })[0]; if (!grp) return;
+      var rec = 0, cust = 0;
+      grp.items.forEach(function(it){ if (VAS_RECOMMENDED[it.id]) rec += it.price; if (state.vas[it.id]) cust += it.price; });
+      recSum += rec; custSum += cust;
+      rows += '<div class="pc-row"><span class="pc-i">'+c.label+'</span><span class="pc-v">'+fmt(rec)+'</span><span class="pc-v">'+fmt(cust)+'</span></div>';
+    });
+    rows += '<div class="pc-row pc-total"><span class="pc-i">Total VAS (AED)</span><span class="pc-v">'+fmt(recSum)+'</span><span class="pc-v">'+fmt(custSum)+'</span></div>';
     return '<div class="pc">' +
-      '<div class="pc-title">Payment Calculation</div>' +
-      '<div class="pc-row pc-head"><span class="pc-i">Item</span><span class="pc-v">Customer Choice</span><span class="pc-v">Lepas Rec.</span></div>' +
+      '<div class="pc-title">Value Added Services</div>' +
+      '<div class="pc-row pc-head"><span class="pc-i">Service</span><span class="pc-v">Recommended</span><span class="pc-v">Customer choice</span></div>' +
       rows +
-      '<div class="pc-foot">All calculations are estimated and subject to change. This is not a quotation and cannot be used for loan application.</div>' +
     '</div>';
   }
   function row(k,v,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v">'+v+'</span></div>'; }

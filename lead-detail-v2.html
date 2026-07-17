@@ -809,6 +809,9 @@
     .wv-sign-hint { font-size: 10.5px; color: var(--ink-muted); }
     .wv-canvas { width: 100%; height: 120px; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); background: var(--bg); touch-action: none; cursor: crosshair; display: block; }
     .wv-upblock { margin-top: 14px; }
+    .wv-docgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .wv-docslot-lbl { font-size: 11.5px; font-weight: 600; color: var(--ink-secondary); margin-bottom: 6px; }
+    .wv-sig-clear { margin-top: 6px; font-size: 11px; font-weight: 600; color: var(--blue); background: none; border: none; cursor: pointer; font-family: inherit; padding: 2px 0; }
     .wv-upload { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; height: 130px; border: 1.5px dashed var(--border); border-radius: var(--radius-md); background: var(--bg); cursor: pointer; transition: border-color .12s, background .12s; }
     .wv-upload:hover { border-color: var(--blue); background: var(--blue-soft); }
     .wv-upload.has { border-style: solid; border-color: #46a56b; background: var(--green-soft); }
@@ -1031,6 +1034,12 @@
     .qc-cta.accept { margin-top:0; display:flex; align-items:center; justify-content:center; gap:5px; background:#eef7f1; color:#2f7a4f; border:1px solid #bfe3cc; }
     .qc-cta.accept:hover { background:#e2f1e8; }
     .qc-cta.accept .material-symbols-outlined { font-size:16px; }
+    .qc-cta.pending { margin-top:0; display:flex; align-items:center; justify-content:center; gap:5px; white-space:nowrap; background:#fff4e5; color:#b26a1a; border:1px solid #f2cf9b; }
+    .qc-cta.pending:hover { background:#ffecd1; }
+    .qc-cta.pending .material-symbols-outlined { font-size:16px; }
+    .qc-cta.pending:disabled { background:#fff4e5; color:#b26a1a; border:1px solid #f2cf9b; cursor:default; opacity:.9; }
+    .qc-cta.pending:disabled .material-symbols-outlined { animation: qcSpin 1.4s linear infinite; }
+    @keyframes qcSpin { to { transform: rotate(360deg); } }
     .conf-quote { border:1px solid var(--border); border-radius:12px; padding:16px; margin:12px 0 14px; background:linear-gradient(180deg,#f4faf6,#fff); }
     .conf-quote-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
     .conf-badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; color:#2f7a4f; background:#e4f4ea; border-radius:20px; padding:4px 12px; }
@@ -1724,7 +1733,7 @@
       {title:'First Contact', fields:['customer','mobile','email','showroom','channel'], checklist:['Complete customer discovery questions (5 Qns)','Log activities on attempts to reach out to customers','Qualify or disqualify customers based on responses'], aiTitle:'Meet the SLA deadline', aiDesc:'Contact the customer within the required time window to maintain SLA compliance.', aiBtns:['Mark SLA Met','Request Extension'], aiNote:'SLA must be met or escalated to manager.'},
       {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Log activities on attempts to reach out to customers','Share brochures and video recording with customers','Record Trade-in Interests','Book a visit appointment or test drive with the customer'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
       {title:'Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Complete customer profile with E-ID / UAE Pass','Complete trade-in evaluation (If applicable)','Complete customer discovery questions (10 Qns)','Initiate test drive with customer','Verify stock availability and create proposals','Automated - Post Visit & Test Drive Surveys'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
-      {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Convert selected proposal into quotation','F&O - Automated replication of quotation','F&O - Automated booking payment link sent','F&O - Booking payment fully received for propose'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
+      {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Convert selected proposal into quotation and get manager&rsquo;s approval','F&O - Automated booking payment link sent','F&O - Booking payment fully received','F&O - Automated replication of quotation'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
       {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['F&O - VIN tagging completed','Purchase agreement generated and shared to customer via Docusign','Document received and signed by customer for accepted'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
       {title:'Preparation for Delivery', fields:['customer','model','showroom'], checklist:['F&O - Sales quotation approval','F&O - Sales order approval','F&O - Downpayment amount fully received for preparation for delivery stage'], aiTitle:'Hand off to back office', aiDesc:'The deal is booked. <strong>Back office</strong> completes VIN assignment, RTA registration and the pre-delivery inspection before the car is ready.', aiBtns:['Notify Back Office','View Checklist'], aiNote:'All back-office tasks must be completed before the car is ready for delivery.'},
       {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:['F&O - Pre-delivery inspection','Schedule a delivery with customer','Sales Admin - Trade in vehicle receiving (If applicable)','F&O - Generate invoice','F&O - Generate a delivery note ready for delivery'], aiTitle:'Confirm the booking', aiDesc:'Vehicle is prepared. <strong>Schedule the delivery</strong> appointment with the customer.', aiBtns:['Schedule Delivery','Hold Order'], aiNote:'A delivery appointment must be scheduled to proceed.'},
@@ -1782,6 +1791,17 @@
     function selectTimeSlot(t){ tdSched.time = t; schedRerender(); }
     function reschedule(i){ tdEditIdx = i; var b = tdBookings[i]; tdSched = { model:b.model, date:b.date, time:b.time }; tdBookView = 'wizard'; schedRerender(); }
     function tdSetStatus(i, s){ if (!tdBookings[i]) return; tdBookings[i].status = s; showToast(s === 'Complete' ? 'Test drive completed' : 'Waiver signed — drive in progress'); schedRerender(); }
+    function completeTestDrive(i){
+      if (!tdBookings[i]) return;
+      var html = '<div style="text-align:left"><label class="flow-lbl">Odometer reading at return (km)</label><input id="tdMileage" type="number" min="0" step="1" class="flow-inp" placeholder="e.g. 12345"></div>';
+      openConfirm('Complete test drive', html, 'Complete drive', function(){
+        var el = document.getElementById('tdMileage');
+        var km = el && el.value ? parseInt(el.value, 10) : 0;
+        tdBookings[i].status = 'Complete'; tdBookings[i].mileage = km;
+        showToast('Test drive completed' + (km ? ' — ' + km.toLocaleString('en-US') + ' km' : ''));
+        schedRerender();
+      }, 'Cancel', 'check_circle', true);
+    }
     var confirmCb = null;
     function openConfirm(title, text, okLabel, cb, cancelLabel, icon, neutral){
       document.getElementById('confirmTitle').textContent = title;
@@ -1813,7 +1833,9 @@
     }
     function tdDownload(i){ showToast('Test drive report downloaded'); }
 
-    var waiverIdx = -1, waiverSigned = false, waiverSigCtx = null, waiverStep = 1, waiverLicense = null, waiverLicenseUrl = null;
+    var waiverIdx = -1, waiverStep = 1;
+    var WV_DOCS = [ {k:'eidFront', label:'Emirates ID — Front'}, {k:'eidBack', label:'Emirates ID — Back'}, {k:'dlFront', label:'Driving Licence — Front'}, {k:'dlBack', label:'Driving Licence — Back'} ];
+    var waiverDocs = {}, waiverDocUrls = {}, waiverSigCtx = { cust:null, exec:null }, waiverSignedFlag = { cust:false, exec:false };
     function waiverDocHtml(){
       var l = leads[selectedIdx], b = tdBookings[waiverIdx];
       var row = function(a, av, c, cv){ return '<div class="wv-row"><div class="wv-cell"><span class="wv-k">'+a+'</span><span class="wv-v">'+(av||'—')+'</span></div>'+(c?'<div class="wv-cell"><span class="wv-k">'+c+'</span><span class="wv-v">'+(cv||'—')+'</span></div>':'')+'</div>'; };
@@ -1831,7 +1853,7 @@
     }
     function openWaiver(i){
       if (!tdBookings[i]) return;
-      waiverIdx = i; waiverSigned = false; waiverStep = 1; waiverLicense = null; waiverLicenseUrl = null;
+      waiverIdx = i; waiverStep = 1; waiverDocs = {}; waiverDocUrls = {}; waiverSigCtx = { cust:null, exec:null }; waiverSignedFlag = { cust:false, exec:false };
       renderWaiverStep();
       document.getElementById('waiverPanel').classList.add('open');
     }
@@ -1840,80 +1862,90 @@
       if (waiverStep === 1){
         body = '<div class="wv-sheet">' + waiverDocHtml() +
           '<div class="wv-upblock">' +
-            '<div class="wv-sign-head"><span class="wv-sign-label">Driving licence</span><span class="wv-sign-hint">Required before signing</span></div>' +
-            (waiverLicense ? waiverUploadedHtml() :
-              '<label class="wv-upload" id="wvUploadZone">' +
-                '<input type="file" accept="image/*,.pdf" onchange="onLicenseUpload(this)" style="display:none">' +
-                '<span class="material-symbols-outlined">upload_file</span>' +
-                '<span class="wv-upload-t">Click to upload driving licence</span>' +
-                '<span class="wv-upload-s">JPG, PNG or PDF</span>' +
-              '</label>') +
+            '<div class="wv-sign-head"><span class="wv-sign-label">Identity documents</span><span class="wv-sign-hint">Emirates ID &amp; driving licence — front and back</span></div>' +
+            '<div class="wv-docgrid">' + WV_DOCS.map(waiverDocSlotHtml).join('') + '</div>' +
           '</div>' +
         '</div>';
         footer = '<a class="cp-btn" href="test-drive-waiver.pdf" download="Test-Drive-Waiver.pdf"><span class="material-symbols-outlined" style="font-size:16px">download</span> Download PDF</a>' +
-          '<button class="cp-btn primary'+(waiverLicense?'':' locked')+'" id="wvNextBtn" onclick="waiverNext()">Continue to sign <span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span></button>';
+          '<button class="cp-btn primary'+(waiverAllDocs()?'':' locked')+'" id="wvNextBtn" onclick="waiverNext()">Continue to sign <span class="material-symbols-outlined" style="font-size:16px">arrow_forward</span></button>';
       } else {
         body = '<div class="wv-sheet">' + waiverDocHtml() +
           '<div class="wv-sign">' +
             '<div class="wv-sign-head"><span class="wv-sign-label">Customer signature</span><span class="wv-sign-hint">Sign with finger or stylus</span></div>' +
-            '<canvas id="waiverCanvas" class="wv-canvas"></canvas>' +
+            '<canvas id="waiverCanvasCust" class="wv-canvas"></canvas>' +
+            '<button class="wv-sig-clear" onclick="clearWaiverSig(\'cust\')">Clear</button>' +
+          '</div>' +
+          '<div class="wv-sign">' +
+            '<div class="wv-sign-head"><span class="wv-sign-label">Sales executive signature</span><span class="wv-sign-hint">Sign to authorize</span></div>' +
+            '<canvas id="waiverCanvasExec" class="wv-canvas"></canvas>' +
+            '<button class="wv-sig-clear" onclick="clearWaiverSig(\'exec\')">Clear</button>' +
           '</div>' +
         '</div>';
         footer = '<button class="cp-btn" onclick="waiverBack()"><span class="material-symbols-outlined" style="font-size:16px">arrow_back</span> Back</button>' +
-          '<button class="cp-btn" onclick="clearWaiverSig()">Clear</button>' +
           '<button class="cp-btn primary" onclick="confirmWaiver()">Sign &amp; confirm</button>';
       }
       document.getElementById('waiverBody').innerHTML = body;
       document.getElementById('waiverFooter').innerHTML = footer;
       if (waiverStep === 2) requestAnimationFrame(initWaiverSig);
     }
-    function waiverUploadedHtml(){
-      var isImg = /\.(jpe?g|png|gif|webp)$/i.test(waiverLicense || '');
-      var thumb = (isImg && waiverLicenseUrl)
-        ? '<img class="wv-up-img" src="'+waiverLicenseUrl+'" alt="Driving licence">'
-        : '<span class="material-symbols-outlined">'+(/\.pdf$/i.test(waiverLicense||'')?'picture_as_pdf':'image')+'</span>';
-      return '<div class="wv-uploaded">' +
-        '<div class="wv-up-thumb">'+thumb+'</div>' +
-        '<div class="wv-up-info">' +
-          '<span class="wv-up-name">'+waiverLicense+'</span>' +
-          '<span class="wv-up-meta"><span class="material-symbols-outlined">check_circle</span>Driving licence uploaded</span>' +
-        '</div>' +
-        '<label class="wv-up-replace">Replace<input type="file" accept="image/*,.pdf" onchange="onLicenseUpload(this)" style="display:none"></label>' +
-        '<button class="wv-up-remove" onclick="removeLicense()" title="Remove"><span class="material-symbols-outlined">close</span></button>' +
-      '</div>';
+    function waiverDocSlotHtml(doc){
+      var name = waiverDocs[doc.k];
+      if (name){
+        var url = waiverDocUrls[doc.k];
+        var isImg = /\.(jpe?g|png|gif|webp)$/i.test(name);
+        var thumb = (isImg && url) ? '<img class="wv-up-img" src="'+url+'" alt="'+doc.label+'">' : '<span class="material-symbols-outlined">'+(/\.pdf$/i.test(name)?'picture_as_pdf':'image')+'</span>';
+        return '<div class="wv-docslot"><div class="wv-docslot-lbl">'+doc.label+'</div>' +
+          '<div class="wv-uploaded">' +
+            '<div class="wv-up-thumb">'+thumb+'</div>' +
+            '<div class="wv-up-info"><span class="wv-up-name">'+name+'</span><span class="wv-up-meta"><span class="material-symbols-outlined">check_circle</span>Uploaded</span></div>' +
+            '<label class="wv-up-replace">Replace<input type="file" accept="image/*,.pdf" onchange="onWaiverDocUpload(this,\''+doc.k+'\')" style="display:none"></label>' +
+            '<button class="wv-up-remove" onclick="removeWaiverDoc(\''+doc.k+'\')" title="Remove"><span class="material-symbols-outlined">close</span></button>' +
+          '</div></div>';
+      }
+      return '<div class="wv-docslot"><div class="wv-docslot-lbl">'+doc.label+'</div>' +
+        '<label class="wv-upload">' +
+          '<input type="file" accept="image/*,.pdf" onchange="onWaiverDocUpload(this,\''+doc.k+'\')" style="display:none">' +
+          '<span class="material-symbols-outlined">upload_file</span>' +
+          '<span class="wv-upload-t">Upload</span>' +
+          '<span class="wv-upload-s">JPG, PNG or PDF</span>' +
+        '</label></div>';
     }
-    function onLicenseUpload(input){
+    function onWaiverDocUpload(input, key){
       var f = input.files && input.files[0]; if (!f) return;
-      waiverLicense = f.name;
-      if (waiverLicenseUrl) { try { URL.revokeObjectURL(waiverLicenseUrl); } catch(e){} }
-      waiverLicenseUrl = /\.(jpe?g|png|gif|webp)$/i.test(f.name) ? URL.createObjectURL(f) : null;
+      if (waiverDocUrls[key]) { try { URL.revokeObjectURL(waiverDocUrls[key]); } catch(e){} }
+      waiverDocs[key] = f.name;
+      waiverDocUrls[key] = /\.(jpe?g|png|gif|webp)$/i.test(f.name) ? URL.createObjectURL(f) : null;
       renderWaiverStep();
     }
-    function removeLicense(){
-      if (waiverLicenseUrl) { try { URL.revokeObjectURL(waiverLicenseUrl); } catch(e){} }
-      waiverLicense = null; waiverLicenseUrl = null; renderWaiverStep();
+    function removeWaiverDoc(key){
+      if (waiverDocUrls[key]) { try { URL.revokeObjectURL(waiverDocUrls[key]); } catch(e){} }
+      delete waiverDocs[key]; delete waiverDocUrls[key]; renderWaiverStep();
     }
-    function waiverNext(){ if (!waiverLicense){ showToast('Please upload the driving licence first'); return; } waiverStep = 2; waiverSigned = false; renderWaiverStep(); }
+    function waiverAllDocs(){ return WV_DOCS.every(function(d){ return !!waiverDocs[d.k]; }); }
+    function waiverNext(){ if (!waiverAllDocs()){ showToast('Please upload all four documents first'); return; } waiverStep = 2; waiverSignedFlag = { cust:false, exec:false }; renderWaiverStep(); }
     function waiverBack(){ waiverStep = 1; renderWaiverStep(); }
     function initWaiverSig(){
-      var cv = document.getElementById('waiverCanvas');
-      if (!cv) return;
-      var rect = cv.getBoundingClientRect();
-      cv.width = rect.width; cv.height = rect.height;
-      var ctx = cv.getContext('2d');
-      ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1b2733';
-      waiverSigCtx = ctx;
-      var drawing = false;
-      var pos = function(e){ var r = cv.getBoundingClientRect(); var p = e.touches ? e.touches[0] : e; return { x: p.clientX - r.left, y: p.clientY - r.top }; };
-      var start = function(e){ e.preventDefault(); drawing = true; waiverSigned = true; var p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
-      var move = function(e){ if (!drawing) return; e.preventDefault(); var p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
-      var end = function(){ drawing = false; };
-      cv.addEventListener('mousedown', start); cv.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
-      cv.addEventListener('touchstart', start, {passive:false}); cv.addEventListener('touchmove', move, {passive:false}); cv.addEventListener('touchend', end);
+      ['cust','exec'].forEach(function(which){
+        var cv = document.getElementById(which === 'cust' ? 'waiverCanvasCust' : 'waiverCanvasExec');
+        if (!cv) return;
+        var rect = cv.getBoundingClientRect();
+        cv.width = rect.width; cv.height = rect.height;
+        var ctx = cv.getContext('2d');
+        ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1b2733';
+        waiverSigCtx[which] = ctx;
+        var drawing = false;
+        var pos = function(e){ var r = cv.getBoundingClientRect(); var p = e.touches ? e.touches[0] : e; return { x: p.clientX - r.left, y: p.clientY - r.top }; };
+        var start = function(e){ e.preventDefault(); drawing = true; waiverSignedFlag[which] = true; var p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+        var move = function(e){ if (!drawing) return; e.preventDefault(); var p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); };
+        var end = function(){ drawing = false; };
+        cv.addEventListener('mousedown', start); cv.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
+        cv.addEventListener('touchstart', start, {passive:false}); cv.addEventListener('touchmove', move, {passive:false}); cv.addEventListener('touchend', end);
+      });
     }
-    function clearWaiverSig(){ var cv = document.getElementById('waiverCanvas'); if (cv && waiverSigCtx){ waiverSigCtx.clearRect(0,0,cv.width,cv.height); waiverSigned = false; } }
+    function clearWaiverSig(which){ var cv = document.getElementById(which === 'cust' ? 'waiverCanvasCust' : 'waiverCanvasExec'); if (cv && waiverSigCtx[which]){ waiverSigCtx[which].clearRect(0,0,cv.width,cv.height); waiverSignedFlag[which] = false; } }
     function confirmWaiver(){
-      if (!waiverSigned){ showToast('Please sign, or use Download PDF to sign on paper'); return; }
+      if (!waiverSignedFlag.cust){ showToast('Customer signature required'); return; }
+      if (!waiverSignedFlag.exec){ showToast('Sales executive signature required'); return; }
       if (tdBookings[waiverIdx]){ tdBookings[waiverIdx].status = 'In progress'; tdBookings[waiverIdx].waiverSigned = true; }
       closeWaiver();
       showToast('Waiver signed — drive in progress');
@@ -1921,7 +1953,7 @@
     }
     function closeWaiver(){
       document.getElementById('waiverPanel').classList.remove('open');
-      waiverIdx = -1; waiverSigCtx = null;
+      waiverIdx = -1; waiverSigCtx = { cust:null, exec:null };
     }
     function schedDone(){
       if (!tdSched.date || !tdSched.time){ schedRerender(); return; }
@@ -1997,7 +2029,7 @@
         var actions;
         var cancelBtn = '<button class="td-resched danger" onclick="cancelBooking('+i+')"><span class="material-symbols-outlined">close</span>Cancel</button>';
         if (status === 'In progress') {
-          actions = '<button class="td-resched" onclick="tdSetStatus('+i+',\'Complete\')"><span class="material-symbols-outlined">check_circle</span>Complete</button>' + cancelBtn;
+          actions = '<button class="td-resched" onclick="completeTestDrive('+i+')"><span class="material-symbols-outlined">check_circle</span>Complete</button>' + cancelBtn;
         } else if (status === 'Complete') {
           actions = '<button class="td-resched" onclick="tdDownload('+i+')"><span class="material-symbols-outlined">download</span>Download</button>';
         } else {
@@ -2875,20 +2907,25 @@
     function tradeInDetailsHtml(show) {
       var vehicle = [
         tiField('Brand', {type:'lookup', ph:'Search brand (e.g. Toyota)'}), tiField('Model', {type:'lookup', ph:'Search model (e.g. Camry)'}),
-        tiField('Year', {ph:'e.g. 2021'}), tiField('Mileage', {ph:'e.g. 45,000 km'}),
+        tiField('Year', {ph:'e.g. 2021'}), tiField('Current Mileage', {ph:'e.g. 45,000 km'}),
         tiField('Exterior Color', {ph:'e.g. Pearl White'}), tiField('Transmission', {type:'select', options:['---','Automatic','Manual']}),
         tiField('Registration Number', {ph:'e.g. Dubai · A 12345'}), tiField('VIN Number', {ph:'17-character VIN'}),
         tiField('Tire Condition', {type:'select', options:['---','Good','Bad']}),
         tiField('Remarks', {type:'textarea', wide:true, ph:'Condition notes, service history, accidents…'})
       ].join('');
+      return '<div id="tradeInDetails" class="ti-details" style="'+(show?'':'display:none')+'">' +
+        '<div class="ti-details-h"><span class="material-symbols-outlined">sync_alt</span>Trade-in Details</div>' +
+        '<div class="dp-intake-col"><div class="dp-intake-title">Vehicle</div><div class="dp-if-fields">'+vehicle+'</div></div>' +
+      '</div>';
+    }
+    function tradeInAppraisalHtml(show) {
       var appraisal = [
         tiField('Customer Expected Price', {opt:'Input by SE', ph:'AED — customer expected price'}),
         tiField('Offer Price', {lock:true, opt:'Input by buyer only', ph:'Awaiting buyer offer'})
       ].join('');
-      return '<div id="tradeInDetails" class="ti-details" style="'+(show?'':'display:none')+'">' +
-        '<div class="ti-details-h"><span class="material-symbols-outlined">sync_alt</span>Trade-in Details</div>' +
-        '<div class="dp-intake-col"><div class="dp-intake-title">Vehicle</div><div class="dp-if-fields">'+vehicle+'</div></div>' +
-        '<div class="dp-intake-col"><div class="dp-intake-title">Appraisal</div><div class="dp-if-fields">'+appraisal+'</div>' +
+      return '<div id="tiAppraisal" class="ti-details" style="'+(show?'':'display:none')+'">' +
+        '<div class="ti-details-h"><span class="material-symbols-outlined">gavel</span>Appraisal</div>' +
+        '<div class="dp-intake-col"><div class="dp-if-fields">'+appraisal+'</div>' +
           '<button class="ti-appraise-btn" onclick="submitForAppraisal()"><span class="material-symbols-outlined">gavel</span> Submit for Appraisal</button>' +
         '</div>' +
       '</div>';
@@ -2914,6 +2951,7 @@
         '<div class="dp-if-fields" style="margin-bottom:6px">' + toggle + '</div>' +
         tradeInDetailsHtml(interested === 'Yes') +
         '<div id="tiDamageWrap" style="'+(interested==='Yes'?'':'display:none')+'">' + damageMarkerHtml(l) + photos + '</div>' +
+        tradeInAppraisalHtml(interested === 'Yes') +
       '</div>';
     }
     // ── Trade-in damage marker (tap the diagram to mark damage) ──
@@ -3035,6 +3073,8 @@
       if (ph) ph.style.display = (v === 'Yes') ? '' : 'none';
       var dm = document.getElementById('tiDamageWrap');
       if (dm) dm.style.display = (v === 'Yes') ? '' : 'none';
+      var ap = document.getElementById('tiAppraisal');
+      if (ap) ap.style.display = (v === 'Yes') ? '' : 'none';
       var wrap = document.getElementById('intakeTradeIn');
       if (wrap) wrap.querySelectorAll('.dp-chip-radio').forEach(function(lbl){
         var inp = lbl.querySelector('input'); lbl.classList.toggle('on', !!(inp && inp.checked));
@@ -3838,7 +3878,7 @@
     function stockForProposalList(p){
       var model = (p.model || '').split(' · ')[0];
       // Units of the chosen proposal are identical trim/colour — only the VIN differs.
-      var n = Math.max(3, p.stock || 4), out = [];
+      var n = 1, out = [];
       for (var k = 0; k < n; k++) {
         out.push({
           chassis: 'LVX-2026-0' + (56100 + k * 137 + (p.nsp % 100)),
@@ -3906,6 +3946,16 @@
       }
     }
     // Customer accepts the quotation → move the deal to the Confirmed state.
+    function requestManagerApproval(i){
+      var l = leads[selectedIdx], p = l.proposals[i]; if (!p || !p.isQuote || p.mgrPending || p.mgrApproved) return;
+      p.mgrPending = true;
+      renderDetail(selectedIdx, currentStep);
+      showToast('Sent to manager for approval…');
+      setTimeout(function(){
+        var pp = (leads[selectedIdx].proposals || [])[i];
+        if (pp && pp.mgrPending){ pp.mgrPending = false; pp.mgrApproved = true; renderDetail(selectedIdx, currentStep); showToast('Quotation ' + pp.id + ' approved by manager'); }
+      }, 1600);
+    }
     function acceptQuotation(i){
       var l = leads[selectedIdx], p = l.proposals[i]; if (!p || !p.isQuote) return;
       openConfirm('Send quotation to customer?',
@@ -4023,7 +4073,6 @@
           '<div class="qc-model">'+(modelName || p.model)+'</div>' +
           (subLine ? '<div class="qc-sub">'+subLine+'</div>' : '') +
           '<div class="qc-price">AED '+propFmt(p.nsp)+'</div>' +
-          '<div class="qc-emi">AED '+propFmt(monthly)+' / mo &middot; 60 mo</div>' +
           '<div class="qc-meta"><span class="qc-avail '+availCls+'">'+availText+'</span><span class="qc-vin">VIN &middot; '+chassis+'</span></div>' +
           (chips ? '<div class="qc-chips">'+chips+'</div>' : '') +
           '<div class="qc-share">' +
@@ -4033,7 +4082,14 @@
           (p.isQuote
             ? '<div class="qc-quote-actions">' +
                 '<button class="qc-cta done" onclick="downloadProposal('+i+')"><span class="material-symbols-outlined">verified</span> Quotation ready</button>' +
-                '<button class="qc-cta accept" onclick="acceptQuotation('+i+')"><span class="material-symbols-outlined">send</span> Send quotation to customer</button>' +
+                (p.mgrApproved
+                  ? '<button class="qc-cta done"><span class="material-symbols-outlined">verified_user</span> Approved by manager</button>'
+                  : (p.mgrPending
+                    ? '<button class="qc-cta pending" disabled><span class="material-symbols-outlined">hourglass_top</span> Sent for approval&hellip;</button>'
+                    : '<button class="qc-cta pending" onclick="requestManagerApproval('+i+')"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval</button>')) +
+                (p.mgrApproved
+                  ? '<button class="qc-cta accept" onclick="acceptQuotation('+i+')"><span class="material-symbols-outlined">send</span> Send quotation to customer</button>'
+                  : '<button class="qc-cta" disabled><span class="material-symbols-outlined">lock</span> Send to customer &middot; needs approval</button>') +
               '</div>'
             : '<button class="qc-cta" onclick="requestCreateQuotation('+i+')">Create Quotation</button>') +
         '</div>' +
