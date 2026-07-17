@@ -327,8 +327,8 @@
         <div class="fin-field"><span class="k">Booking amount</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="bookingAmt" type="number" min="2000" step="500" value="2000" oninput="setBooking(this.value)"></span></div>
         <div class="fin-field" id="rowDiscount"><span class="k">Discount amount<span class="fin-sub" id="discHint"></span></span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="discountAmt" type="number" min="0" step="500" value="0" oninput="setDiscount(this.value)"></span></div>
         <div class="fin-field" id="rowDpSupport"><span class="k">DP support</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="dpSupportAmt" type="number" min="0" step="500" value="20000" oninput="setDpSupport(this.value)"></span></div>
-        <div class="fin-field"><span class="k">Net price</span><span class="fin-v" id="finNet">AED 0</span></div>
         <div class="fin-field"><span class="k">Value added services<span class="vas-info"><span class="mi">info</span><span class="vas-tip" id="vasTip"></span></span></span><span class="fin-v" id="finVas">AED 0</span></div>
+        <div class="fin-field"><span class="k">Net price</span><span class="fin-v" id="finNet">AED 0</span></div>
         <div class="fin-field" id="rowDownpay"><span class="k">Downpayment amount</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownpayment(this.value)"></span></div>
         <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Our recommendation</th><th>Customer choice</th></tr></thead><tbody id="emiBody"></tbody></table>
       </div>
@@ -568,10 +568,10 @@
     var booking = state.booking || 0;
     var dpSupport = (pay === 'dpassist') ? (state.dpSupportAmt || 0) : 0;
     var downpay = (pay === 'cash') ? 0 : (state.downAmt || 0);
-    var netPrice = Math.max(0, list - discount - tradeIn);
+    var baseNet = Math.max(0, list - discount - tradeIn);
     var at = addTotal(), vas = at;
-    var loan = (pay === 'cash') ? 0 : Math.max(0, netPrice - booking - downpay - dpSupport);
-    var loanW = loan + vas;
+    var netPrice = baseNet + vas;
+    var loanW = (pay === 'cash') ? 0 : Math.max(0, netPrice - booking - downpay - dpSupport);
     document.getElementById('sumHead').textContent = model().name;
     document.getElementById('sumSubhead').textContent = [t.name, c.name, ic.name].join(' · ');
     document.getElementById('sumRows').innerHTML =
@@ -598,7 +598,7 @@
     document.getElementById('discHint').textContent = (pay === 'dpassist') ? 'fixed' : '';
     document.getElementById('rowDpSupport').style.display = (pay === 'dpassist') ? '' : 'none';
     document.getElementById('rowDownpay').style.display = (pay === 'cash') ? 'none' : '';
-    var loanRec = loan + recVasTotal();
+    var loanRec = (pay === 'cash') ? 0 : Math.max(0, (baseNet + recVasTotal()) - booking - downpay - dpSupport);
     document.getElementById('emiTable').style.display = (pay === 'cash') ? 'none' : '';
     document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
       return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loanRec,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
