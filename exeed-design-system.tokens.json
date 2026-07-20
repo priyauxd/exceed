@@ -1,0 +1,142 @@
+{
+  "$description": "AGM Sales · EXEED CRM design system — Fluent UI v9 token layer with EXEED brand ramp. W3C DTCG format. Import via Tokens Studio (Import → single file → enable DTCG) or Figma Variables import. Mirrors fluent-tokens.css.",
+  "color": {
+    "$type": "color",
+    "neutral": {
+      "background": {
+        "1":        { "$value": "#ffffff", "$description": "Surfaces / cards" },
+        "1Hover":   { "$value": "#f5f5f5" },
+        "1Pressed": { "$value": "#e0e0e0" },
+        "1Selected":{ "$value": "#ebebeb" },
+        "2":        { "$value": "#fafafa" },
+        "3":        { "$value": "#f5f5f5", "$description": "Page canvas / filled inputs" },
+        "4":        { "$value": "#f0f0f0" },
+        "5":        { "$value": "#ebebeb" },
+        "6":        { "$value": "#e6e6e6" },
+        "disabled": { "$value": "#f0f0f0" }
+      },
+      "foreground": {
+        "1":         { "$value": "#242424", "$description": "Primary text" },
+        "2":         { "$value": "#424242", "$description": "Secondary text" },
+        "3":         { "$value": "#616161", "$description": "Muted text" },
+        "4":         { "$value": "#707070" },
+        "disabled":  { "$value": "#bdbdbd" },
+        "onBrand":   { "$value": "#ffffff" }
+      },
+      "stroke": {
+        "1":          { "$value": "#d1d1d1", "$description": "Control border" },
+        "2":          { "$value": "#e0e0e0", "$description": "Default border" },
+        "3":          { "$value": "#f0f0f0", "$description": "Soft divider" },
+        "accessible": { "$value": "#616161" }
+      }
+    },
+    "brand": {
+      "$description": "EXEED brand ramp mapped onto Fluent brand slots.",
+      "background":        { "$value": "#17293d", "$description": "Primary button / active" },
+      "backgroundHover":   { "$value": "#0f1d2c" },
+      "backgroundPressed": { "$value": "#0a141f" },
+      "backgroundSelected":{ "$value": "#1e3b52" },
+      "background2":       { "$value": "#eaeef3", "$description": "Subtle brand tint" },
+      "background2Hover":  { "$value": "#dde5ec" },
+      "foreground1":       { "$value": "#17293d", "$description": "Links / brand text" },
+      "foreground2":       { "$value": "#0f1d2c" },
+      "stroke1":           { "$value": "#17293d" },
+      "stroke2":           { "$value": "#98a6b6" },
+      "compound":          { "$value": "#2a6797", "$description": "Compound brand / input focus underline" },
+      "navy":              { "$value": "#00203f", "$description": "EXEED deepest navy" },
+      "azure":             { "$value": "#2a6797", "$description": "EXEED azure" },
+      "accentCyan":        { "$value": "#00b7bb", "$description": "EXEED signature cyan — glows/rings only" }
+    },
+    "status": {
+      "redForeground":    { "$value": "#b10e1c" },
+      "redBackground":    { "$value": "#d13438", "$description": "Breached / at-risk / error" },
+      "redSoft":          { "$value": "#fdf3f4" },
+      "yellowForeground": { "$value": "#8a6420" },
+      "yellowBackground": { "$value": "#f2b100", "$description": "Warning / due soon" },
+      "yellowSoft":       { "$value": "#fff9e5" },
+      "greenForeground":  { "$value": "#0e700e" },
+      "greenBackground":  { "$value": "#107c10", "$description": "On-track / met / done" },
+      "greenSoft":        { "$value": "#f1faf1" },
+      "purpleForeground": { "$value": "#5c2e91", "$description": "AI / Copilot accent" },
+      "purpleSoft":       { "$value": "#f2eaf8" }
+    },
+    "chrome": {
+      "start": { "$value": "#0a0e14", "$description": "Top-bar gradient start" },
+      "end":   { "$value": "#16293c", "$description": "Top-bar gradient end" }
+    }
+  },
+  "spacing": {
+    "$type": "dimension",
+    "horizontalXXS":  { "$value": "2px" },
+    "horizontalXS":   { "$value": "4px" },
+    "horizontalSNudge":{ "$value": "6px" },
+    "horizontalS":    { "$value": "8px" },
+    "horizontalMNudge":{ "$value": "10px" },
+    "horizontalM":    { "$value": "12px" },
+    "horizontalL":    { "$value": "16px" },
+    "horizontalXL":   { "$value": "20px" },
+    "horizontalXXL":  { "$value": "24px" },
+    "horizontalXXXL": { "$value": "32px" }
+  },
+  "borderRadius": {
+    "$type": "dimension",
+    "none":     { "$value": "0px" },
+    "small":    { "$value": "2px" },
+    "medium":   { "$value": "4px", "$description": "Controls / buttons / inputs" },
+    "large":    { "$value": "6px" },
+    "xlarge":   { "$value": "8px", "$description": "Cards" },
+    "circular": { "$value": "10000px", "$description": "Pills / avatars" }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "2":  { "$value": [ { "color": "#00000014", "offsetX": "0px", "offsetY": "1px", "blur": "2px", "spread": "0px" } ] },
+    "4":  { "$value": [ { "color": "#00000014", "offsetX": "0px", "offsetY": "2px", "blur": "4px", "spread": "0px" } ] },
+    "8":  { "$value": [ { "color": "#00000017", "offsetX": "0px", "offsetY": "4px", "blur": "8px", "spread": "0px" } ] },
+    "16": { "$value": [ { "color": "#0000001a", "offsetX": "0px", "offsetY": "8px", "blur": "16px", "spread": "0px" } ] },
+    "28": { "$value": [ { "color": "#00000024", "offsetX": "0px", "offsetY": "14px", "blur": "28px", "spread": "0px" } ] },
+    "64": { "$value": [ { "color": "#00000029", "offsetX": "0px", "offsetY": "24px", "blur": "48px", "spread": "0px" } ] }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "base":      { "$value": ["Segoe UI", "Inter", "system-ui", "sans-serif"] },
+      "monospace": { "$value": ["Cascadia Code", "SF Mono", "Consolas", "monospace"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular":  { "$value": 400 },
+      "medium":   { "$value": 500 },
+      "semibold": { "$value": 600 },
+      "bold":     { "$value": 700 }
+    },
+    "size": {
+      "$type": "dimension",
+      "base100": { "$value": "10px" },
+      "base200": { "$value": "12px" },
+      "base300": { "$value": "14px", "$description": "Body — Fluent base" },
+      "base400": { "$value": "16px", "$description": "Subtitle 2" },
+      "base500": { "$value": "20px", "$description": "Subtitle 1" },
+      "base600": { "$value": "24px", "$description": "Title 3" }
+    },
+    "lineHeight": {
+      "$type": "dimension",
+      "base100": { "$value": "14px" },
+      "base200": { "$value": "16px" },
+      "base300": { "$value": "20px" },
+      "base400": { "$value": "22px" },
+      "base500": { "$value": "26px" },
+      "base600": { "$value": "32px" }
+    }
+  },
+  "textStyle": {
+    "$type": "typography",
+    "title3":     { "$value": { "fontFamily": "Segoe UI", "fontWeight": 700, "fontSize": "24px", "lineHeight": "32px", "letterSpacing": "-0.02em" } },
+    "subtitle1":  { "$value": { "fontFamily": "Segoe UI", "fontWeight": 600, "fontSize": "20px", "lineHeight": "26px", "letterSpacing": "-0.01em" } },
+    "subtitle2":  { "$value": { "fontFamily": "Segoe UI", "fontWeight": 600, "fontSize": "16px", "lineHeight": "22px", "letterSpacing": "0" } },
+    "bodyStrong": { "$value": { "fontFamily": "Segoe UI", "fontWeight": 600, "fontSize": "14px", "lineHeight": "20px", "letterSpacing": "0" } },
+    "body":       { "$value": { "fontFamily": "Segoe UI", "fontWeight": 400, "fontSize": "14px", "lineHeight": "20px", "letterSpacing": "0" } },
+    "caption1":   { "$value": { "fontFamily": "Segoe UI", "fontWeight": 400, "fontSize": "12px", "lineHeight": "16px", "letterSpacing": "0" } },
+    "caption2":   { "$value": { "fontFamily": "Segoe UI", "fontWeight": 600, "fontSize": "10px", "lineHeight": "14px", "letterSpacing": "0.04em" } },
+    "monoId":     { "$value": { "fontFamily": "Cascadia Code", "fontWeight": 400, "fontSize": "12px", "lineHeight": "16px", "letterSpacing": "0" } }
+  }
+}

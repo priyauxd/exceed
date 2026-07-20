@@ -426,34 +426,6 @@
     }
     .qt:hover { background: var(--blue-soft); color: var(--blue); }
     .qt.on { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .qv-toggle { display: inline-flex; margin-left: auto; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0; }
-    .qv-btn { display: inline-flex; align-items: center; justify-content: center; border: none; background: var(--surface); color: var(--ink-muted); font-size: 11px; font-weight: 600; font-family: inherit; padding: 5px 9px; cursor: pointer; transition: .12s; }
-    .qv-btn.on { background: var(--blue); color: #fff; }
-    .qv-btn:not(.on):hover { color: var(--blue); }
-    .qv-btn .material-symbols-outlined { font-size: 15px; }
-    .q-cal-wrap { padding: 14px 18px 18px; }
-    .qcal-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-    .qcal-nav { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--ink-secondary); cursor: pointer; }
-    .qcal-nav:hover { background: var(--blue-soft); color: var(--blue); }
-    .qcal-nav .material-symbols-outlined { font-size: 17px; }
-    .qcal-title { font-size: 13px; font-weight: 700; color: var(--ink); }
-    .qcal-today { margin-left: auto; font-size: 11px; font-weight: 600; font-family: inherit; padding: 5px 11px; border: 1px solid var(--border); border-radius: 7px; background: var(--surface); color: var(--ink-secondary); cursor: pointer; }
-    .qcal-today:hover { background: var(--blue-soft); color: var(--blue); }
-    .qcal-wds { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 4px; }
-    .qcal-wd { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-muted); text-align: center; padding: 4px 0; }
-    .qcal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    .qcal-cell { background: var(--surface); min-height: 92px; padding: 6px; }
-    .qcal-cell.blank { background: #fafafb; }
-    .qcal-cell.today { background: var(--blue-soft); }
-    .qcal-daynum { font-size: 11px; font-weight: 600; color: var(--ink-secondary); margin-bottom: 4px; }
-    .qcal-cell.today .qcal-daynum { color: var(--blue); }
-    .qcal-chip { display: flex; align-items: center; gap: 5px; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 3px 6px; margin-bottom: 3px; font-size: 10.5px; font-weight: 600; color: var(--ink); cursor: pointer; text-decoration: none; transition: .1s; }
-    .qcal-chip:hover { border-color: var(--blue); background: var(--blue-soft); }
-    .qcal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .qcal-dot.brch { background: var(--red); }
-    .qcal-dot.wrn { background: var(--amber); }
-    .qcal-dot.ok { background: var(--green); }
-    .qcal-nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .qt-table { width: 100%; border-collapse: collapse; }
     .qt-table th {
@@ -1225,10 +1197,6 @@
               <button class="qt">Contact</button>
               <button class="qt">SLA Breached</button>
               <button class="qt">Returned by Sales</button>
-              <div class="qv-toggle">
-                <button class="qv-btn on" id="qvTable" title="Table view" onclick="setQueueView('table')"><span class="material-symbols-outlined">table_rows</span></button>
-                <button class="qv-btn" id="qvCal" title="Calendar view" onclick="setQueueView('calendar')"><span class="material-symbols-outlined">calendar_month</span></button>
-              </div>
             </div>
             <table class="qt-table" id="qtTableEl">
               <thead><tr>
@@ -1277,16 +1245,6 @@
                 </tr>
               </tbody>
             </table>
-            <div class="q-cal-wrap" id="qCalWrap" style="display:none">
-              <div class="qcal-head">
-                <button class="qcal-nav" onclick="qCalNav(-1)"><span class="material-symbols-outlined">chevron_left</span></button>
-                <span class="qcal-title" id="qCalTitle"></span>
-                <button class="qcal-nav" onclick="qCalNav(1)"><span class="material-symbols-outlined">chevron_right</span></button>
-                <button class="qcal-today" onclick="qCalToday()">Today</button>
-              </div>
-              <div class="qcal-wds"><div class="qcal-wd">Sun</div><div class="qcal-wd">Mon</div><div class="qcal-wd">Tue</div><div class="qcal-wd">Wed</div><div class="qcal-wd">Thu</div><div class="qcal-wd">Fri</div><div class="qcal-wd">Sat</div></div>
-              <div class="qcal-days" id="qCalGrid"></div>
-            </div>
         </div>
 
         <!-- Three panels -->
@@ -1794,45 +1752,6 @@
       if(typeof intent==='string' && copilotAnswers[intent]){ input.value=copilotLabels[intent]||input.value; }
       else { intent=copilotMatch(input.value); }
       copilotRender(intent);
-    }
-
-    /* ---- Lead queue: table / calendar view ---- */
-    var qQueueView = 'table', qCalY = 2026, qCalM = 6; // July 2026
-    var QCAL_MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    var qQueueLeads = [
-      { name: 'Meera Shah',  href: 'lead-detail.html?lead=Meera+Shah',  y: 2026, m: 6, d: 16, sla: 'brch', meta: 'EXEED LX · 8m left' },
-      { name: 'Sam Fadi',    href: 'lead-detail.html?lead=Sam+Fadi',    y: 2026, m: 6, d: 16, sla: 'ok',   meta: 'EXEED LX · 25m left' },
-      { name: 'Sara Ali',    href: 'lead-detail.html?lead=Sara+Ali',    y: 2026, m: 6, d: 17, sla: 'wrn',  meta: 'EXEED LX · 30m left' },
-      { name: 'Mira Khaled', href: 'lead-detail.html?lead=Mira+Khaled', y: 2026, m: 6, d: 17, sla: 'wrn',  meta: 'EXEED LX · 30m left' },
-      { name: 'Dana Alwan',  href: 'lead-detail.html?lead=Dana+Alwan',  y: 2026, m: 6, d: 18, sla: 'ok',   meta: 'EXEED LX · 250m left' }
-    ];
-    function setQueueView(v){
-      qQueueView = v;
-      var isCal = v === 'calendar';
-      document.getElementById('qtTableEl').style.display = isCal ? 'none' : '';
-      document.getElementById('qCalWrap').style.display = isCal ? 'block' : 'none';
-      document.getElementById('qvTable').classList.toggle('on', !isCal);
-      document.getElementById('qvCal').classList.toggle('on', isCal);
-      if (isCal) renderQueueCalendar();
-    }
-    function qCalNav(dir){ qCalM += dir; if (qCalM < 0){ qCalM = 11; qCalY--; } if (qCalM > 11){ qCalM = 0; qCalY++; } renderQueueCalendar(); }
-    function qCalToday(){ qCalY = 2026; qCalM = 6; renderQueueCalendar(); }
-    function renderQueueCalendar(){
-      document.getElementById('qCalTitle').textContent = QCAL_MONTHS[qCalM] + ' ' + qCalY;
-      var first = new Date(qCalY, qCalM, 1).getDay();
-      var days = new Date(qCalY, qCalM + 1, 0).getDate();
-      var today = { y: 2026, m: 6, d: 16 };
-      var grid = document.getElementById('qCalGrid');
-      var html = '';
-      for (var b = 0; b < first; b++) html += '<div class="qcal-cell blank"></div>';
-      for (var day = 1; day <= days; day++){
-        var isToday = (qCalY === today.y && qCalM === today.m && day === today.d);
-        var chips = qQueueLeads.filter(function(l){ return l.y === qCalY && l.m === qCalM && l.d === day; }).map(function(l){
-          return '<a class="qcal-chip" href="' + l.href + '" title="' + l.name + ' · ' + l.meta + '"><span class="qcal-dot ' + l.sla + '"></span><span class="qcal-nm">' + l.name + '</span></a>';
-        }).join('');
-        html += '<div class="qcal-cell' + (isToday ? ' today' : '') + '"><div class="qcal-daynum">' + day + '</div>' + chips + '</div>';
-      }
-      grid.innerHTML = html;
     }
   </script>
 
