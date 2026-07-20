@@ -188,9 +188,10 @@
   .pc-head .pc-i{text-align:left;}
   .pc-head .pc-v{text-align:left;}
   .pc-total{background:var(--panel2);}
-  .vas-emirow{background:rgba(231,110,110,.06);}
+  .vas-emirow{background:rgba(231,110,110,.09); border-top:1px solid rgba(231,110,110,.28);}
   .vas-emirow .pc-v{color:#d24b4b; font-weight:800;}
-  .vas-emi-note{color:#d24b4b; font-size:10.5px; font-style:italic; font-weight:600;}
+  .vas-emi-note{display:flex; align-items:center; gap:6px; color:#d24b4b; font-size:10.5px; font-style:italic; font-weight:600;}
+  .vas-emi-note .mi{font-size:15px; font-style:normal; flex-shrink:0;}
   .pc-total .pc-i, .pc-total .pc-v{font-weight:800;}
   .pc-band .pc-i{background:var(--cta-bg); color:var(--cta-text); font-weight:700;}
   .pc-fin{background:var(--panel2);}
@@ -492,7 +493,7 @@
       }
     });
     rows += '<div class="pc-row pc-total"><span class="pc-i">Total VAS</span><span class="pc-v">'+dh(totalRec)+'</span><span class="pc-v" id="vasTotalCust">'+dh(totalCust)+'</span></div>';
-    rows += '<div class="pc-row vas-emirow"><span class="pc-i vas-emi-note">Based on 3.5% interest &middot; 5-yr installment &middot; est. added EMI</span><span class="pc-v">+ '+dh(Math.round(totalRec/60))+' /mo</span><span class="pc-v" id="vasEmiCust">+ '+dh(Math.round(totalCust/60))+' /mo</span></div>';
+    rows += '<div class="pc-row vas-emirow"><span class="pc-i vas-emi-note"><span class="mi">warning</span>Based on 3.5% interest &middot; 5-yr installment &middot; est. added EMI</span><span class="pc-v">+ '+dh(Math.round(totalRec/60))+' /mo</span><span class="pc-v" id="vasEmiCust">+ '+dh(Math.round(totalCust/60))+' /mo</span></div>';
     host.innerHTML = '<div class="pc">' +
       '<div class="pc-row pc-head"><span class="pc-i">Service</span><span class="pc-v">Recommended</span><span class="pc-v">Customer choice</span></div>' +
       rows +
