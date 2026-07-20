@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Showroom Manager — AGM Sales EXEED CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="fluent-tokens.css?v=3" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --surface: #ffffff;
+      --surface-warm: #fefdfb;
+      --ink: #242424;
+      --ink-secondary: #424242;
+      --ink-muted: #616161;
+      --border: #e0e0e0;
+      --border-soft: #f0f0f0;
+      --blue: #17293d;
+      --blue-soft: #e9edf2;
+      --blue-muted: #98a6b6;
+      --red: #e76e6e;
+      --red-soft: #fdf0f0;
+      --amber: #e8a84c;
+      --amber-soft: #fdf6eb;
+      --green: #5cb97f;
+      --green-soft: #edf8f1;
+      --purple: #8b7bdf;
+      --purple-soft: #f1effc;
+      --teal: #4fb8a8;
+      --teal-soft: #ecf8f6;
+      --sidebar-w: 228px;
+      --topbar-h: 42px;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      height: var(--topbar-h);
+      background: linear-gradient(135deg, #0a0e14, #16293c);
+      color: #fff;
+      display: flex; align-items: center;
+      padding: 0 18px; gap: 12px;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      font-size: 13px;
+    }
+    .topbar .waffle { font-size: 16px; opacity: .7; cursor: pointer; }
+    .topbar .app-name { font-weight: 600; opacity: .95; }
+    .topbar .sep { width: 1px; height: 18px; background: rgba(255,255,255,.25); }
+    .topbar .org { opacity: .85; font-size: 12px; }
+    .topbar .search {
+      flex: 1; max-width: 360px; margin: 0 auto;
+      background: rgba(255,255,255,.15); border: none; border-radius: 8px;
+      padding: 6px 14px 6px 30px; color: #fff; font-size: 12px;
+      font-family: inherit; outline: none;
+    }
+    .topbar .search::placeholder { color: rgba(255,255,255,.6); }
+    .topbar .spacer { flex: 1; }
+    .topbar .actions { display: flex; align-items: center; gap: 12px; }
+    .topbar .copilot {
+      display: flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,.13); padding: 4px 10px;
+      border-radius: 6px; font-size: 11px; cursor: pointer;
+    }
+    .topbar .avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      display: grid; place-items: center; font-size: 10px; font-weight: 600;
+    }
+
+    /* ── Sidebar ── */
+    .shell { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
+      overflow-y: auto; z-index: 10;
+    }
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .sb-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .sb-logo {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: linear-gradient(135deg, #0a0e14, #16293c);
+      color: #fff; display: grid; place-items: center;
+      font-weight: 700; font-size: 13px;
+    }
+    .sb-name { font-weight: 600; font-size: 13px; line-height: 1.2; }
+    .sb-sub { font-size: 10px; color: var(--ink-muted); }
+    .sb-nav { padding: 8px; }
+    .sb-group {
+      font-size: 10px; font-weight: 600; color: var(--ink-muted);
+      padding: 14px 10px 4px; letter-spacing: .07em; text-transform: uppercase;
+    }
+    .sb-item {
+      display: flex; align-items: center; gap: 9px;
+      padding: 7px 10px; border-radius: 8px;
+      color: var(--ink-secondary); text-decoration: none;
+      font-size: 12.5px; transition: all .12s;
+      border-left: 2px solid transparent;
+    }
+    .sb-item:hover { background: var(--blue-soft); color: var(--blue); }
+    .sb-item.active {
+      background: var(--blue-soft); color: var(--blue);
+      font-weight: 600; border-left-color: var(--blue);
+    }
+    .sb-item .material-symbols-outlined { font-size: 18px; }
+
+    /* ── Main ── */
+    .main {
+      margin-left: var(--sidebar-w); margin-top: var(--topbar-h);
+      flex: 1; display: flex; flex-direction: column; min-width: 0;
+    }
+
+    /* Command bar */
+    .cmdbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 16px; height: 34px;
+      display: flex; align-items: center; gap: 3px;
+      font-size: 11px; color: var(--ink-muted); overflow-x: auto;
+    }
+    .cmdbar .ro {
+      font-size: 10px; color: var(--ink-muted);
+      padding: 3px 8px; background: var(--bg); border-radius: 4px;
+      white-space: nowrap;
+    }
+    .cmd-sep { width: 1px; height: 14px; background: var(--border); margin: 0 3px; }
+    .cb {
+      display: flex; align-items: center; gap: 3px;
+      padding: 3px 6px; border: none; background: none;
+      color: var(--ink-muted); font-size: 11px; cursor: pointer;
+      border-radius: 4px; white-space: nowrap; font-family: inherit;
+    }
+    .cb:hover { background: var(--bg); color: var(--ink-secondary); }
+    .cb .material-symbols-outlined { font-size: 13px; }
+
+    .page { padding: 22px 28px 48px; }
+
+    /* ── Greeting / header ── */
+    .greeting {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .greeting-left { flex: 1; }
+    .greeting h1 {
+      font-size: 24px; font-weight: 700; color: var(--ink);
+      letter-spacing: -.02em; margin-bottom: 4px;
+    }
+    .greeting-sub {
+      font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6;
+    }
+    .greeting-sub .date { font-weight: 600; color: var(--ink); }
+    .greeting-right { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .greeting h1 .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
+    @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
+
+    .date-filter { display:inline-flex; align-items:center; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:3px 5px 3px 11px; }
+    .date-filter .df-cal { font-size:16px; color:var(--blue); margin-right:6px; }
+    .df-tab { padding:6px 13px; border:none; background:transparent; color:var(--ink-secondary); font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:7px; transition:all .12s; }
+    .df-tab:hover { color:var(--ink); }
+    .df-tab.on { background:var(--blue); color:#fff; }
+    .date-filter-wrap { position:relative; }
+    .date-custom { display:none; position:absolute; top:calc(100% + 6px); right:0; background:var(--surface); border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 30px rgba(20,24,34,.14); padding:12px; z-index:40; gap:10px; align-items:flex-end; }
+    .date-custom.open { display:flex; }
+    .date-custom label { display:flex; flex-direction:column; gap:4px; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-muted); }
+    .date-custom input[type=date] { border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; }
+    .date-custom input[type=date]:focus { border-color:var(--blue); }
+    .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .btn-soft {
+      padding: 7px 14px; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--surface);
+      font-size: 11.5px; color: var(--ink-secondary);
+      cursor: pointer; font-family: inherit;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+    .btn-soft:hover { background: var(--bg); }
+    .btn-soft .material-symbols-outlined { font-size: 15px; }
+    .btn-soft.btn-icon-only { padding: 6px; width: 30px; height: 30px; justify-content: center; gap: 0; }
+    .btn-soft.btn-icon-only .material-symbols-outlined { font-size: 17px; }
+
+    /* ── Notification Bell (topbar) ── */
+    .notif-bell {
+      position: relative; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px; border-radius: 6px;
+      transition: background .15s;
+    }
+    .notif-bell:hover { background: rgba(255,255,255,.15); }
+    .notif-bell .material-symbols-outlined { font-size: 18px; }
+    .notif-bell .bell-badge {
+      position: absolute; top: 1px; right: 0;
+      font-size: 9px; font-weight: 700; color: #fff;
+      background: var(--red); min-width: 16px; height: 16px;
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; padding: 0 4px;
+      border: 2px solid #16293c;
+      animation: badge-pop .3s cubic-bezier(.4,0,.2,1);
+    }
+    @keyframes badge-pop { 0%{transform:scale(0)} 60%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+    /* ── Notification Dropdown ── */
+    .notif-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 29;
+    }
+    .notif-dropdown {
+      display: none; position: fixed;
+      top: var(--topbar-h); right: 80px;
+      width: 400px; max-height: 480px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: 0 12px 40px rgba(0,0,0,.12), 0 4px 12px rgba(0,0,0,.06);
+      z-index: 30; overflow: hidden;
+      animation: dropdown-in .2s ease-out;
+    }
+    @keyframes dropdown-in { 0%{opacity:0;transform:translateY(-8px)} 100%{opacity:1;transform:translateY(0)} }
+    .notif-dropdown.open, .notif-overlay.open { display: block; }
+    .notif-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+    }
+    .notif-head-left {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700; color: var(--ink);
+    }
+    .notif-head-left .material-symbols-outlined { font-size: 18px; color: var(--blue); }
+    .notif-badge {
+      font-size: 10px; font-weight: 700; color: #fff;
+      background: var(--red); padding: 2px 7px;
+      border-radius: 8px; min-width: 18px; text-align: center;
+    }
+    .notif-actions { display: flex; gap: 4px; }
+    .notif-actions button {
+      border: none; background: none; font-family: inherit;
+      font-size: 11px; color: var(--blue); cursor: pointer;
+      padding: 4px 10px; border-radius: 6px; font-weight: 600;
+    }
+    .notif-actions button:hover { background: var(--blue-soft); }
+    .notif-list { max-height: 380px; overflow-y: auto; }
+    .notif-list::-webkit-scrollbar { width: 3px; }
+    .notif-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 16px; border-bottom: 1px solid var(--border-soft);
+      transition: background .1s; cursor: pointer;
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item:hover { background: #f5f7fd; }
+    .notif-item.unread { background: #f5f8ff; }
+    .notif-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 7px;
+    }
+    .notif-item.unread .notif-dot { background: var(--blue); }
+    .ni-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ni-icon.danger { background: var(--red-soft); color: var(--red); }
+    .ni-icon.warn { background: var(--amber-soft); color: var(--amber); }
+    .ni-icon.info { background: var(--blue-soft); color: var(--blue); }
+    .ni-icon.success { background: var(--green-soft); color: var(--green); }
+    .ni-icon .material-symbols-outlined { font-size: 15px; }
+    .ni-body { flex: 1; min-width: 0; }
+    .ni-title { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+    .ni-text { font-size: 11.5px; color: var(--ink-secondary); line-height: 1.5; }
+    .ni-meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+    .ni-time { font-size: 10px; color: var(--ink-muted); }
+    .ni-action {
+      font-size: 10px; font-weight: 600; color: var(--blue);
+      text-decoration: none; padding: 2px 8px;
+      background: var(--blue-soft); border-radius: 4px;
+    }
+    .ni-action:hover { background: #dde8ff; }
+    .ni-dismiss {
+      border: none; background: none; color: var(--ink-muted);
+      font-size: 14px; cursor: pointer; opacity: 0;
+      transition: opacity .15s; flex-shrink: 0; padding: 0; margin-top: 2px;
+    }
+    .notif-item:hover .ni-dismiss { opacity: .6; }
+    .ni-dismiss:hover { opacity: 1 !important; }
+    .notif-footer {
+      padding: 10px 16px; border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .notif-footer a {
+      font-size: 12px; font-weight: 600; color: var(--blue);
+      text-decoration: none;
+    }
+    .notif-footer a:hover { text-decoration: underline; }
+
+    /* ── Metric cards (count KPIs) ── */
+    .metric-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      transition: box-shadow .2s;
+      position: relative;
+    }
+    .metric-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
+    .mc-icon {
+      width: 28px; height: 28px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 8px; font-size: 15px;
+    }
+    .mc-icon.blue { background: var(--blue-soft); color: var(--blue); }
+    .mc-icon.red { background: var(--red-soft); color: var(--red); }
+    .mc-icon.amber { background: var(--amber-soft); color: var(--amber); }
+    .mc-icon.green { background: var(--green-soft); color: var(--green); }
+    .mc-icon.teal { background: var(--teal-soft); color: var(--teal); }
+    .mc-icon.purple { background: var(--purple-soft); color: var(--purple); }
+    .mc-lbl {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 4px;
+    }
+    .mc-val { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+    .mc-val.txt-red { color: var(--red); }
+    .mc-val.txt-green { color: var(--green); }
+    .mc-val.txt-amber { color: #8a6420; }
+    .mc-sub { font-size: 10.5px; color: var(--ink-muted); margin-top: 3px; }
+    .mc-tag {
+      position: absolute; right: 12px; top: 12px;
+      font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 11px;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .mc-tag.live { background: var(--red-soft); color: var(--red); }
+    .mc-tag.live .lv-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse-dot 1.4s ease-in-out infinite; }
+    .mc-tag.ok { background: var(--green-soft); color: #3d8a5b; }
+    .mc-tag.wrn { background: var(--amber-soft); color: #8a6420; }
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── Dial cards (percentage KPIs) ── */
+    .dial-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      min-height: 170px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px;
+      transition: box-shadow .2s;
+    }
+    .dial-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
+    .dial-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 0;
+      text-align: center;
+    }
+    .dial-wrap { position: relative; width: 132px; height: 74px; }
+    .dial-svg { position: absolute; top: 0; left: 0; width: 132px; height: 72px; }
+    .dial-track {
+      fill: none; stroke: #e9ecf1; stroke-width: 10;
+      stroke-linecap: round;
+    }
+    .dial-fill {
+      fill: none; stroke-width: 10; stroke-linecap: round;
+      transition: stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);
+    }
+    .dial-center {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 2px;
+    }
+    .dial-value { font-size: 26px; font-weight: 700; line-height: 1; }
+    .dial-inner {
+      font-size: 10.5px; color: var(--ink-muted); margin-top: 3px;
+      text-align: center; line-height: 1.25; max-width: 84px;
+    }
+    .dial-sub { font-size: 11px; color: var(--ink-muted); margin-top: 0; text-align: center; }
+
+    /* ── KPI sections ── */
+    .kpi-section { background: transparent; border: none; border-radius: 0; padding: 0; margin-bottom: 18px; }
+    .kpi-sec-head { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; }
+    .kpi-sec-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .kpi-sec-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
+    .kpi-sec-sub { font-size: 11px; color: var(--ink-muted); }
+
+    /* ── Section shell (light-grey rounded panel) ── */
+    .sec-shell { background: #f7f8fa; border: 1px solid var(--border-soft); border-radius: var(--radius); padding: 15px 16px 16px; margin-bottom: 18px; }
+    .sec-shell-head { display: flex; align-items: center; gap: 8px; margin-bottom: 13px; flex-wrap: wrap; }
+    .sec-ico { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--blue-soft); color: var(--blue); }
+    .sec-ico .material-symbols-outlined { font-size: 14px; }
+    .sec-ico.amber { background: var(--amber-soft); color: #8a6420; }
+    .sec-ico.green { background: var(--green-soft); color: #3d8a5b; }
+    .sec-ico.red { background: var(--red-soft); color: var(--red); }
+    .sec-ico.purple { background: var(--purple-soft); color: var(--purple); }
+    .sec-ico.teal { background: var(--teal-soft); color: var(--teal); }
+    .sec-ttl { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
+    .sec-sub { font-size: 11.5px; color: var(--ink-muted); font-weight: 500; }
+    .sec-sub::before { content: "· "; }
+    .sec-head-spacer { flex: 1; }
+    .sec-ctrl { border: none; background: none; font-family: inherit; font-size: 11px; font-weight: 600; color: var(--blue); cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+    .sec-ctrl:hover { background: var(--blue-soft); }
+
+    /* ── Uniform accent metric card ── */
+    .acc-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    .acc-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--blue); border-radius: var(--radius-sm); padding: 11px 13px; position: relative; transition: box-shadow .2s; }
+    .acc-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.05); }
+    .acc-card.acc-green { border-left-color: var(--green); }
+    .acc-card.acc-amber { border-left-color: var(--amber); }
+    .acc-card.acc-red { border-left-color: var(--red); }
+    .acc-card.acc-blue { border-left-color: var(--blue); }
+    .acc-lbl { font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-bottom: 6px; line-height: 1.3; }
+    .acc-val { font-size: 24px; font-weight: 700; line-height: 1; letter-spacing: -.02em; color: var(--ink); }
+    .acc-val.sm { font-size: 20px; }
+    .acc-val.green { color: #3d8a5b; }
+    .acc-val.amber { color: #8a6420; }
+    .acc-val.red { color: var(--red); }
+    .acc-sub { font-size: 10.5px; color: var(--ink-muted); margin-top: 5px; }
+    .acc-live { position: absolute; right: 11px; top: 11px; font-size: 9px; font-weight: 700; color: var(--red); display: inline-flex; align-items: center; gap: 4px; }
+    .acc-live .lv-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse-dot 1.4s ease-in-out infinite; }
+
+    /* ── Pipeline column bar chart ── */
+    .pipe-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px 12px; }
+    .pipe-chart { display: flex; align-items: flex-end; gap: 10px; height: 210px; padding: 0 2px; }
+    .pipe-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; min-width: 0; }
+    .pipe-chip { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9px; margin-bottom: 6px; white-space: nowrap; }
+    .pipe-chip.grey { background: var(--bg); color: var(--ink-muted); }
+    .pipe-chip.green { background: var(--green-soft); color: #3d8a5b; }
+    .pipe-chip.amber { background: var(--amber-soft); color: #8a6420; }
+    .pipe-chip.blue { background: var(--blue-soft); color: var(--blue); }
+    .pipe-count { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; font-variant-numeric: tabular-nums; }
+    .pipe-bar { width: 100%; max-width: 54px; background: #cfe0f0; border-radius: 6px 6px 0 0; transition: height .8s cubic-bezier(.4,0,.2,1); min-height: 4px; }
+    .pipe-axis { display: flex; gap: 10px; padding: 8px 2px 0; border-top: 1px solid var(--border-soft); margin-top: 8px; }
+    .pipe-axis-lbl { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--ink-secondary); min-width: 0; }
+    .pipe-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; gap: 10px; flex-wrap: wrap; }
+    .pipe-foot-l { font-size: 11px; color: var(--ink-muted); font-style: italic; }
+    .pipe-foot-r { font-size: 11px; color: var(--ink-secondary); font-weight: 600; }
+
+    /* ── Diary timeline ── */
+    .diary-legend { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+    .dl-item { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--ink-secondary); }
+    .dl-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .tl-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 0; }
+    .tl-row { display: flex; align-items: stretch; gap: 0; border-bottom: 1px solid var(--border-soft); }
+    .tl-row:last-child { border-bottom: none; }
+    .tl-gutter { width: 62px; flex-shrink: 0; padding: 12px 0 12px 16px; font-size: 11px; font-weight: 600; color: var(--ink-muted); font-family: 'SF Mono','Cascadia Code',Consolas,monospace; }
+    .tl-event { flex: 1; display: flex; align-items: center; gap: 12px; margin: 7px 14px 7px 4px; padding: 9px 13px; border-radius: 8px; border-left: 3px solid var(--blue); background: #fafbfd; min-width: 0; }
+    .tl-event.ev-blue { border-left-color: var(--blue); }
+    .tl-event.ev-amber { border-left-color: var(--amber); }
+    .tl-event.ev-green { border-left-color: var(--green); }
+    .tl-event.ev-purple { border-left-color: var(--purple); }
+    .tl-event.ev-teal { border-left-color: var(--teal); }
+    .tl-time { font-size: 11px; font-weight: 600; color: var(--ink-muted); font-family: 'SF Mono','Cascadia Code',Consolas,monospace; white-space: nowrap; flex-shrink: 0; }
+    .tl-name { font-size: 12.5px; font-weight: 700; color: var(--ink); flex: 1; min-width: 0; }
+    .tl-pills { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+    .ev-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 10px; font-size: 10.5px; font-weight: 600; white-space: nowrap; }
+    .ev-pill.blue { background: var(--blue-soft); color: var(--blue); }
+    .ev-pill.amber { background: var(--amber-soft); color: #8a6420; }
+    .ev-pill.green { background: var(--green-soft); color: #3d8a5b; }
+    .ev-pill.purple { background: var(--purple-soft); color: var(--purple); }
+    .ev-pill.teal { background: var(--teal-soft); color: var(--teal); }
+
+    .kpi-grid { display: grid; gap: 10px; }
+    .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
+    .kpi-grid.g7 { grid-template-columns: repeat(7, 1fr); }
+    .kpi-grid.g4 { grid-template-columns: repeat(4, 1fr); }
+    .kpi-grid.g3 { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 1200px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g4 { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g4, .kpi-grid.g3 { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ── Queue / table panel ── */
+    .q-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .q-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 13px 18px; border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: 10px;
+    }
+    .q-head h3 { font-size: 14px; font-weight: 700; }
+    .q-head-left { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .q-cnt {
+      font-size: 11px; color: var(--ink-muted);
+      background: var(--bg); padding: 3px 10px; border-radius: 10px;
+    }
+    .q-scroll { overflow-x: auto; }
+
+    .qt-table { width: 100%; border-collapse: collapse; }
+    .qt-table th {
+      text-align: left; padding: 9px 14px;
+      font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: .07em;
+      color: var(--ink-muted); background: #fafbfd;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .qt-table td {
+      padding: 11px 14px; font-size: 12.5px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: middle;
+    }
+    .qt-table tbody tr { transition: background .1s; cursor: pointer; }
+    .qt-table tbody tr:hover { background: #f8f9fd; }
+    .qt-table tbody tr:last-child td { border-bottom: none; }
+    .qt-table tbody tr.urg { background: #fef7f7; }
+    .qt-table tbody tr.urg:hover { background: #fdf0f0; }
+
+    .c-name { font-weight: 600; font-size: 12.5px; color: var(--ink); }
+    .c-shift { font-size: 11px; color: var(--ink-muted); margin-top: 1px; }
+    .c-id { font-size: 11.5px; color: var(--ink-secondary); font-family: 'SF Mono', 'Cascadia Code', Consolas, monospace; }
+    .num { font-variant-numeric: tabular-nums; }
+    .num.red { color: var(--red); font-weight: 700; }
+
+    .sla-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 10px;
+      font-size: 10.5px; font-weight: 600;
+    }
+    .sla-tag.ok { background: var(--green-soft); color: #3d8a5b; }
+    .sla-tag.wrn { background: var(--amber-soft); color: #8a6420; }
+    .sla-tag.brch { background: var(--red-soft); color: var(--red); }
+
+    .st-badge {
+      display: inline-block; padding: 3px 10px;
+      border-radius: 10px; font-size: 10.5px; font-weight: 600;
+    }
+    .st-badge.ok { background: var(--green-soft); color: #3d8a5b; }
+    .st-badge.wrn { background: var(--amber-soft); color: #8a6420; }
+    .st-badge.brch { background: var(--red-soft); color: var(--red); }
+    .st-badge.blk { background: var(--blue-soft); color: var(--blue); }
+    .st-badge.ret { background: var(--blue-soft); color: var(--blue); }
+    .st-badge.gry { background: var(--bg); color: var(--ink-muted); }
+
+    .pct-g { color:#3d8a5b; font-weight:700; }
+    .pct-a { color:#8a6420; font-weight:700; }
+    .pct-r { color: var(--red); font-weight:700; }
+
+    .row-link { color: var(--blue); font-weight: 600; text-decoration: none; white-space: nowrap; font-size: 12px; }
+    .row-link:hover { text-decoration: underline; }
+    .why { color: var(--ink-muted); font-weight: 500; font-size: 11px; text-decoration: none; margin-left: 4px; }
+    .why:hover { text-decoration: underline; color: var(--blue); }
+    .none-txt { color: var(--ink-muted); font-size: 12px; }
+    .tbl-btn {
+      border: none; border-radius: 7px; padding: 7px 12px;
+      font-size: 11.5px; font-weight: 600; font-family: inherit; cursor: pointer;
+      white-space: nowrap; color: #fff; background: var(--blue);
+    }
+    .tbl-btn:hover { filter: brightness(1.12); }
+    .tbl-btn.red { background: var(--red); }
+    .tbl-btn.ghost { background: var(--surface); color: var(--ink-secondary); border: 1px solid var(--border); }
+    .tbl-btn.ghost:hover { background: var(--bg); filter: none; }
+    .tag-chip { display:inline-flex; align-items:center; padding:2px 8px; border-radius:9px; font-size:10.5px; font-weight:600; background:var(--bg); color:var(--ink-secondary); }
+    .tag-chip.hot { background:var(--red-soft); color:var(--red); }
+    .tag-chip.warm { background:var(--amber-soft); color:#8a6420; }
+    .src-chip { display:inline-flex; align-items:center; padding:2px 8px; border-radius:9px; font-size:10.5px; font-weight:600; background:var(--blue-soft); color:var(--blue); }
+
+    /* ── Manager header eyebrow ── */
+    .mgr-eyebrow { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--blue); margin-bottom:6px; }
+    .mgr-eyebrow .material-symbols-outlined { font-size:15px; }
+
+    /* ── Controls row ── */
+    .ctrl-row { display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-bottom:14px; }
+    .ctrl-row .spacer { flex:1; }
+    .scope-dd { display:inline-flex; align-items:center; gap:7px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 13px; font-size:12.5px; font-weight:600; color:var(--ink-secondary); cursor:pointer; font-family:inherit; }
+    .scope-dd:hover { background:var(--bg); }
+    .scope-dd .material-symbols-outlined { font-size:16px; color:var(--ink-muted); }
+    .loc-select { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:8px 11px; font-size:12.5px; font-weight:600; color:var(--ink-secondary); font-family:inherit; cursor:pointer; outline:none; }
+    .loc-select:focus { border-color:var(--blue); }
+
+    /* ── Two-column ── */
+    .two-col { display:grid; grid-template-columns:2fr 1fr; gap:14px; margin-bottom:14px; }
+    @media (max-width: 1000px) { .two-col { grid-template-columns:1fr; } }
+
+    /* ── Manager NBA banner ── */
+    .nba { display:flex; align-items:center; gap:14px; background:var(--blue-soft); border:1px solid #d0dbe6; border-radius:var(--radius); padding:14px 18px; margin-bottom:18px; }
+    .nba-ico { width:38px; height:38px; border-radius:10px; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .nba-ico .material-symbols-outlined { font-size:21px; }
+    .nba-body { flex:1; min-width:0; }
+    .nba-eyebrow { font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--blue); }
+    .nba-head { font-size:14.5px; font-weight:700; color:var(--ink); margin-top:1px; }
+    .nba-sub { font-size:11.5px; color:var(--ink-secondary); margin-top:2px; }
+    .nba-right { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+    .nba-link { font-size:12px; font-weight:600; color:var(--blue); text-decoration:none; white-space:nowrap; background:none; border:none; font-family:inherit; cursor:pointer; }
+    .nba-link:hover { text-decoration:underline; }
+    .nba-btn { background:var(--blue); color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
+    .nba-btn:hover { filter:brightness(1.15); }
+
+    /* ── Card wrapper ── */
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:14px; }
+    .card-head { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px 18px; border-bottom:1px solid var(--border-soft); }
+    .card-head h3 { font-size:14px; font-weight:700; }
+    .card-head .cap { font-size:11px; color:var(--ink-muted); text-align:right; max-width:420px; line-height:1.5; }
+
+    /* ── Lead source mix / progress bars ── */
+    .lsm-body { padding:16px 18px; display:flex; flex-direction:column; gap:12px; }
+    .lsm-row { display:flex; align-items:center; gap:12px; }
+    .lsm-lbl { width:210px; flex-shrink:0; font-size:12.5px; font-weight:600; color:var(--ink); }
+    .lsm-track { flex:1; height:12px; background:var(--bg); border-radius:6px; overflow:hidden; position:relative; }
+    .lsm-fill { height:100%; border-radius:6px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+    .lsm-fill.blue { background:var(--blue); }
+    .lsm-fill.green { background:var(--green); }
+    .lsm-fill.purple { background:var(--purple); }
+    .lsm-fill.orange { background:var(--amber); }
+    .lsm-fill.red { background:var(--red); }
+    .lsm-target { position:absolute; top:-3px; bottom:-3px; width:2px; background:var(--ink-secondary); opacity:.55; }
+    .lsm-val { width:120px; flex-shrink:0; text-align:right; font-size:12px; color:var(--ink-secondary); font-variant-numeric:tabular-nums; }
+    .lsm-val .t { color:var(--ink-muted); font-size:11px; }
+
+    /* ── Bottleneck / pipeline bars ── */
+    .bottleneck-body { padding:16px 18px; display:flex; flex-direction:column; gap:14px; }
+    .bn-row { display:flex; align-items:center; gap:14px; }
+    .bn-lbl { width:150px; flex-shrink:0; font-size:12.5px; font-weight:600; color:var(--ink); }
+    .bn-track { flex:1; height:22px; background:var(--bg); border-radius:6px; overflow:hidden; position:relative; }
+    .bn-fill { height:100%; border-radius:6px; transition:width .8s cubic-bezier(.4,0,.2,1); }
+    .bn-fill.green { background:var(--green); }
+    .bn-fill.amber { background:var(--amber); }
+    .bn-fill.red { background:var(--red); }
+    .bn-fill.blue { background:var(--blue); }
+    .bn-cap { position:absolute; inset:0; display:flex; align-items:center; padding:0 10px; font-size:11px; font-weight:600; color:var(--ink-secondary); }
+    .bn-var { width:70px; flex-shrink:0; text-align:right; font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; }
+
+    /* ── SLA legend ── */
+    .sla-legend { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .sla-pill { display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:600; padding:4px 11px; border-radius:11px; }
+    .sla-pill .d { width:6px; height:6px; border-radius:50%; }
+    .sla-pill.ok { background:var(--green-soft); color:#3d8a5b; } .sla-pill.ok .d { background:var(--green); }
+    .sla-pill.due { background:var(--amber-soft); color:#8a6420; } .sla-pill.due .d { background:var(--amber); }
+    .sla-pill.brch { background:var(--red-soft); color:var(--red); } .sla-pill.brch .d { background:var(--red); }
+    .sla-pill.info { background:var(--blue-soft); color:var(--blue); } .sla-pill.info .d { background:var(--blue); }
+    .sla-note { font-size:11.5px; color:var(--ink-muted); font-style:italic; }
+
+    /* ── Filter tabs / segments ── */
+    .stream-bar { display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+    .stream-seg { display:inline-flex; background:#eceef2; border:1px solid var(--border); border-radius:9px; padding:2px; }
+    .seg-tab { padding:5px 14px; border:none; background:transparent; color:var(--ink-secondary); font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:7px; display:inline-flex; align-items:center; gap:6px; transition:all .12s; }
+    .seg-tab:hover { color:var(--ink); }
+    .seg-tab.on { background:#fff; color:var(--blue); box-shadow:0 1px 3px rgba(0,0,0,.1); }
+    .seg-n { font-size:11px; font-weight:700; opacity:.65; }
+
+    /* ── Toast ── */
+    .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--blue); color:#fff; padding:11px 18px; border-radius:10px; font-size:12.5px; font-weight:600; box-shadow:0 8px 28px rgba(20,24,34,.25); opacity:0; visibility:hidden; transition:all .25s; z-index:70; display:flex; align-items:center; gap:8px; }
+    .toast.show { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+    .toast .material-symbols-outlined { font-size:17px; }
+
+    /* ── Copilot dropdown ── */
+    .copilot-dd-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.28); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 45; }
+    .copilot-dd-overlay.open { opacity: 1; visibility: visible; }
+    .topbar .copilot { cursor: pointer; }
+
+    /* ── Collapsible icon-rail sidebar ── */
+    .sidebar, .main { transition: width .25s ease, margin-left .25s ease; }
+    .sb-toggle { display: flex; align-items: center; gap: 9px; width: 100%; border: none; background: none; cursor: pointer; padding: 8px 10px; margin-bottom: 4px; color: var(--ink-secondary); border-radius: 8px; font-family: inherit; }
+    .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); }
+    .sb-toggle .material-symbols-outlined { font-size: 20px; }
+    body.sb-rail .sidebar { width: 60px; }
+    body.sb-rail .main { margin-left: 60px; }
+    body.sb-rail .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
+    body.sb-rail .sb-item .material-symbols-outlined { font-size: 18px; }
+    body.sb-rail .sb-group { display: none; }
+    body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
+    body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
+    body.sb-rail .sb-toggle { justify-content: center; padding: 8px 0; }
+    @media (max-width: 640px) { .topbar .search { display: none; } }
+    </style>
+</head>
+<body>
+  <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <span class="waffle" onclick="toggleSidebar()">&#9783;</span>
+    <span class="app-name">Dynamics 365</span>
+    <span class="sep"></span><span class="org">AGM Sales</span>
+    <input class="search" type="text" placeholder="&#128269; Search..." />
+    <span class="spacer"></span>
+    <div class="actions">
+      <div class="copilot" id="copilotBtn" onclick="toggleCopilot()">&#10024; Copilot</div>
+      <span style="opacity:.7;font-size:14px">&#9881;</span>
+      <div class="notif-bell" id="bellBtn" onclick="toggleNotif()">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="bell-badge" id="bellBadge">4</span>
+      </div>
+      <span style="opacity:.7;font-size:14px">&#10067;</span>
+      <div class="avatar">RA</div>
+    </div>
+  </div>
+
+  <!-- Notification overlay + dropdown -->
+  <div class="notif-overlay" id="notifOverlay" onclick="toggleNotif()"></div>
+  <div class="notif-dropdown" id="notifDropdown">
+    <div class="notif-head">
+      <div class="notif-head-left"><span class="material-symbols-outlined">notifications</span> Notifications <span class="notif-badge" id="notifBadge">4</span></div>
+      <div class="notif-actions"><button onclick="markAllRead()">Mark all read</button></div>
+    </div>
+    <div class="notif-list" id="notifList">
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon danger"><span class="material-symbols-outlined">timer</span></div>
+        <div class="ni-body">
+          <div class="ni-title">2 hot leads unassigned</div>
+          <div class="ni-text">Website &amp; WhatsApp leads waiting &mdash; first-contact SLA hasn't started. Assign now.</div>
+          <div class="ni-meta"><span class="ni-time">2 min ago</span><a href="#" class="ni-action">Assign leads</a></div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon warn"><span class="material-symbols-outlined">groups</span></div>
+        <div class="ni-body">
+          <div class="ni-title">Karim Mostafa &mdash; stalled queue</div>
+          <div class="ni-text">27 active &middot; 4 overdue at Deira. Reassign 3 leads to balance the floor.</div>
+          <div class="ni-meta"><span class="ni-time">14 min ago</span><a href="#" class="ni-action">Reassign</a></div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon info"><span class="material-symbols-outlined">hourglass_top</span></div>
+        <div class="ni-body">
+          <div class="ni-title">Maya Hassan waiting 18m</div>
+          <div class="ni-text">Test-drive customer at SZR &mdash; vehicle prep pending (VIN not assigned).</div>
+          <div class="ni-meta"><span class="ni-time">18 min ago</span><a href="#" class="ni-action">Notify exec</a></div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="ni-icon success"><span class="material-symbols-outlined">check_circle</span></div>
+        <div class="ni-body">
+          <div class="ni-title">CSI at 91 &middot; NPS 62</div>
+          <div class="ni-text">Network experience scores above target this month. Strong add-on penetration on insurance.</div>
+          <div class="ni-meta"><span class="ni-time">1 hr ago</span></div>
+        </div>
+        <button class="ni-dismiss" onclick="dismissNotif(this)">&times;</button>
+      </div>
+    </div>
+    <div class="notif-footer"><a href="#">View all notifications</a></div>
+  </div>
+
+
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-logo">A</div>
+        <div><span class="sb-name">AGM Sales</span><br><span class="sb-sub">EXEED CRM</span></div>
+      </div>
+      <nav class="sb-nav">
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
+        <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="showroom-manager.html" class="sb-item active"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+        <div class="sb-group">Call Center</div>
+        <a href="call-center-agent.html" class="sb-item"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today's Leads</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Follow-ups</a>
+        <a href="call-center-manager.html" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manag&hellip;</a>
+        <div class="sb-group">Sales</div>
+        <a href="lead-detail.html" class="sb-item enabled"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">handshake</span>Deals</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">request_quote</span>Quotes</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Test Drives</a>
+        <div class="sb-group">Customers</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">business</span>Accounts</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">contacts</span>Contacts</a>
+        <div class="sb-group">Operations</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">admin_panel_settings</span>Sales Admin</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">payments</span>Payments</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">description</span>Documents</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">inventory</span>JAFZA Orders</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">build</span>Vehicle Prep</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">store</span>Vendors</a>
+        <div class="sb-group">Deliveries</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">local_shipping</span>Delivery Dashboard</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">today</span>Today's Deliveries</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">block</span>Readiness Blockers</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">check_circle</span>Completed Delive&hellip;</a>
+        <div class="sb-group">Management</div>
+        <a href="showroom-manager.html" class="sb-item active"><span class="material-symbols-outlined">storefront</span>Showroom Manager</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">add_circle</span>Add-on Penetration</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">warning</span>SLA &amp; Exceptions</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">bar_chart</span>Team Performance</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">groups</span>Showroom Team</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="cmdbar">
+        <span class="ro"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle">info</span> Read-only &middot; Scope: <b>Network &mdash; all showrooms</b></span>
+        <div class="cmd-sep"></div>
+        <button class="cb"><span class="material-symbols-outlined">arrow_back</span></button>
+        <button class="cb"><span class="material-symbols-outlined">share</span></button>
+        <div class="cmd-sep"></div>
+        <button class="cb" onclick="showToast('Auto-assign flow opened')"><span class="material-symbols-outlined">group_add</span> Assign</button>
+        <button class="cb" onclick="exportQueue()"><span class="material-symbols-outlined">download</span> Export queue</button>
+        <button class="cb" onclick="showToast('Floor notified')"><span class="material-symbols-outlined">forward_to_inbox</span> Message Floor</button>
+        <button class="cb" onclick="doRefresh(this)"><span class="material-symbols-outlined">refresh</span> Refresh</button>
+        <button class="cb"><span class="material-symbols-outlined">account_tree</span> Process</button>
+        <button class="cb"><span class="material-symbols-outlined">bookmark</span> Follow</button>
+        <button class="cb"><span class="material-symbols-outlined">bolt</span> Flow</button>
+        <button class="cb"><span class="material-symbols-outlined">more_horiz</span></button>
+        <button class="cb" style="margin-left:auto"><span class="material-symbols-outlined">ios_share</span> Share</button>
+      </div>
+
+      <div class="page">
+        <!-- Header -->
+        <div class="greeting">
+          <div class="greeting-left">
+            <h1>Good afternoon, Rashid <span class="wave">&#128075;</span></h1>
+            <div class="greeting-sub"><span class="date">Network &mdash; live oversight</span> &middot; Tue, 30 Jun 2026 &middot; Direct-to-showroom leads &middot; assignments &middot; SLA &middot; showroom flow</div>
+          </div>
+          <div class="greeting-right">
+            <select class="loc-select" id="locSelect" onchange="changeLocation(this)">
+              <option value="Network">All branches</option>
+              <option value="SZR">SZR &mdash; Sheikh Zayed Road</option>
+              <option value="Deira">Deira</option>
+              <option value="Abu Dhabi">Abu Dhabi</option>
+              <option value="Sharjah">Sharjah</option>
+              <option value="Al Ain">Al Ain</option>
+            </select>
+            <div class="date-filter-wrap">
+              <div class="date-filter">
+                <span class="material-symbols-outlined df-cal">calendar_today</span>
+                <button class="df-tab on" onclick="setDateRange(this)">Today</button>
+                <button class="df-tab" onclick="setDateRange(this)">This Week</button>
+                <button class="df-tab" onclick="setDateRange(this)">This Month</button>
+                <button class="df-tab" id="dfCustom" onclick="setDateRange(this)">Custom Range</button>
+              </div>
+              <div class="date-custom" id="dateCustom">
+                <label>From<input type="date" id="dateFrom"></label>
+                <label>To<input type="date" id="dateTo"></label>
+                <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
+              </div>
+            </div>
+            <button class="btn-soft btn-icon-only" id="refreshBtn" onclick="doRefresh(this)" title="Refresh"><span class="material-symbols-outlined">refresh</span></button>
+          </div>
+        </div>
+
+        <!-- SLA legend -->
+        <div class="sla-legend">
+          <span class="sla-pill ok"><span class="d"></span> On Track</span>
+          <span class="sla-pill due"><span class="d"></span> Due Soon</span>
+          <span class="sla-pill info"><span class="d"></span> Blocked</span>
+          <span class="sla-pill brch"><span class="d"></span> Breached</span>
+          <span class="sla-note">&middot; First-contact SLA starts on assignment. Unassigned direct-to-showroom leads are pre-SLA.</span>
+        </div>
+
+        <!-- Manager Next Best Action -->
+        <div class="nba">
+          <div class="nba-ico"><span class="material-symbols-outlined">bolt</span></div>
+          <div class="nba-body">
+            <div class="nba-eyebrow">Manager Next Best Action</div>
+            <div class="nba-head">Assign 2 hot direct-to-showroom leads now</div>
+            <div class="nba-sub">Website &amp; WhatsApp leads are waiting &mdash; first-contact SLA has not started for unassigned records. &middot; SLA impact within 12 min</div>
+          </div>
+          <div class="nba-right">
+            <button class="nba-link" onclick="showToast('Auto-assigning by availability')">Auto-assign by availability</button>
+            <button class="nba-btn" onclick="showToast('Assigning waiting leads')">Assign leads &rsaquo;</button>
+          </div>
+        </div>
+
+        <!-- SECTION — Today's Actions -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Today's Actions</span><span class="kpi-sec-sub">&middot; What to move now</span></div>
+          <div class="kpi-grid g4">
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">person_add</span></div><div class="mc-lbl">New to Assign</div><div class="mc-val">5</div><div class="mc-sub">Direct-to-showroom</div></div>
+            <div class="metric-card"><span class="mc-tag live"><span class="lv-dot"></span> LIVE</span><div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Customers Waiting</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Longest 18m</div></div>
+            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div><div class="mc-lbl">Overdue Commitments</div><div class="mc-val txt-red">2</div><div class="mc-sub">By executive</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">group_add</span></div><div class="mc-lbl">New Leads Today</div><div class="mc-val">30</div><div class="mc-sub">Received today</div></div>
+            <div class="metric-card"><div class="mc-icon amber"><span class="material-symbols-outlined">call</span></div><div class="mc-lbl">Pending 1st Contact</div><div class="mc-val txt-amber">30</div><div class="mc-sub">Awaiting first contact</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">event</span></div><div class="mc-lbl">Follow-up Due</div><div class="mc-val">1</div><div class="mc-sub">Due today</div></div>
+            <div class="metric-card"><div class="mc-icon teal"><span class="material-symbols-outlined">directions_car</span></div><div class="mc-lbl">Test Drives</div><div class="mc-val">2</div><div class="mc-sub">Confirm &middot; reschedule</div></div>
+            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">request_quote</span></div><div class="mc-lbl">Open Quotes</div><div class="mc-val txt-red">5</div><div class="mc-sub">AED 1,049k at risk</div></div>
+          </div>
+        </div>
+
+        <!-- SECTION — SLA Performance -->
+        <div class="kpi-section warm">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">SLA Performance</span><span class="kpi-sec-sub">&middot; Compliance vs targets</span></div>
+          <div class="kpi-grid g5">
+            <div class="dial-card">
+              <div class="dial-inner">Lead Assignment &rarr; SE</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaAssign)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="9.42"/>
+                  <defs><linearGradient id="gradSlaAssign" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#b5642a">94%</div>
+                  <div class="dial-sub">Target 95%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Customer 1st Contact</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaContact)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="18.84"/>
+                  <defs><linearGradient id="gradSlaContact" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">88%</div>
+                  <div class="dial-sub">Target 95%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Assigned to Showroom</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaShow)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="14.13"/>
+                  <defs><linearGradient id="gradSlaShow" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#b5642a">91%</div>
+                  <div class="dial-sub">Target 95%</div>
+                </div>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div>
+              <div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">3</div><div class="mc-sub">Target &lt; 3</div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Add-on Penetration</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaAddon)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="50.24"/>
+                  <defs><linearGradient id="gradSlaAddon" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#3d8a5b">68%</div>
+                  <div class="dial-sub">Target 55%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION — Conversion Funnel -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--purple)"></span><span class="kpi-sec-title">Conversion Funnel</span><span class="kpi-sec-sub">&middot; Stage-to-stage conversion — network</span></div>
+          <div class="kpi-grid g7">
+            <div class="dial-card">
+              <div class="dial-inner">Leads &rarr; Visits</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="75.36"/>
+                  <defs><linearGradient id="gradFn1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">52%</div>
+                  <div class="dial-sub">Target 55%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Visits+Walk-ins &rarr; Test Drives</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn2)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="65.94"/>
+                  <defs><linearGradient id="gradFn2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">58%</div>
+                  <div class="dial-sub">Target 60%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Visits+Walk-ins &rarr; Booking</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn3)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="114.61"/>
+                  <defs><linearGradient id="gradFn3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">27%</div>
+                  <div class="dial-sub">Target 30%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Lead &rarr; Booking</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn4)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="139.73"/>
+                  <defs><linearGradient id="gradFn4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red);font-size:19px">11.4%</div>
+                  <div class="dial-sub">Target 12%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Booking &rarr; Invoice</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn5)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="28.26"/>
+                  <defs><linearGradient id="gradFn5" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">82%</div>
+                  <div class="dial-sub">Target 85%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Invoice &rarr; Delivery</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn6)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="18.84"/>
+                  <defs><linearGradient id="gradFn6" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">88%</div>
+                  <div class="dial-sub">Target 90%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Cancellation &rarr; Booking</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn7)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="130.31"/>
+                  <defs><linearGradient id="gradFn7" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">17%</div>
+                  <div class="dial-sub">Target 20%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION — Volumetrics -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Volumetrics</span><span class="kpi-sec-sub">&middot; Operational counts · MTD</span></div>
+          <div class="kpi-grid g7">
+            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">payments</span></div><div class="mc-lbl">Revenue MTD</div><div class="mc-val txt-green" style="font-size:20px">AED 9.45M</div><div class="mc-sub">Target 10.0M</div></div>
+            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">savings</span></div><div class="mc-lbl">Gross Profit MTD</div><div class="mc-val txt-green" style="font-size:20px">AED 1.32M</div><div class="mc-sub">Target 1.5M</div></div>
+            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">percent</span></div><div class="mc-lbl">Gross Profit %</div><div class="mc-val txt-green">14.0%</div><div class="mc-sub">Target 15%</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">directions_walk</span></div><div class="mc-lbl">Walks</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">event_available</span></div><div class="mc-lbl">Bookings</div><div class="mc-val">39</div><div class="mc-sub">Target 45</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">receipt_long</span></div><div class="mc-lbl">Sales Orders</div><div class="mc-val">34</div><div class="mc-sub">Target 40</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">description</span></div><div class="mc-lbl">Invoices</div><div class="mc-val">30</div><div class="mc-sub">Target 35</div></div>
+            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">local_shipping</span></div><div class="mc-lbl">Deliveries</div><div class="mc-val txt-green">27</div><div class="mc-sub">Target 30</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">storefront</span></div><div class="mc-lbl">Visits + Walk-ins</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">task_alt</span></div><div class="mc-lbl">Follow-ups On Time</div><div class="mc-val">214</div><div class="mc-sub">Target 250</div></div>
+            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">cancel</span></div><div class="mc-lbl">Cancellations</div><div class="mc-val txt-red">12</div><div class="mc-sub">Target &lt; 10</div></div>
+            <div class="metric-card"><div class="mc-icon amber"><span class="material-symbols-outlined">swap_horiz</span></div><div class="mc-lbl">Trade-ins</div><div class="mc-val txt-amber">18</div><div class="mc-sub">Target 25</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">add_circle</span></div><div class="mc-lbl">Add-ons Sold</div><div class="mc-val">71</div><div class="mc-sub">Target 80</div></div>
+          </div>
+        </div>
+
+        <!-- SECTION — Customer Experience -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--teal)"></span><span class="kpi-sec-title">Customer Experience &amp; Lead Management</span><span class="kpi-sec-sub">&middot; Quality, aging &amp; waiting customers</span></div>
+          <div class="kpi-grid g3">
+            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">sentiment_satisfied</span></div><div class="mc-lbl">CSI</div><div class="mc-val txt-green">91</div><div class="mc-sub">Target 90</div></div>
+            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">recommend</span></div><div class="mc-lbl">NPS</div><div class="mc-val txt-green">62</div><div class="mc-sub">Target 60</div></div>
+            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">7</div><div class="mc-sub">Target 0</div></div>
+          </div>
+        </div>
+
+        <!-- SECTION — Network Pipeline -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Network pipeline — All</span><span class="kpi-sec-sub">&middot; Stage volume &amp; conversion</span></div>
+          <div class="pipe-wrap">
+            <div class="pipe-chart">
+              <div class="pipe-col"><span class="pipe-chip grey">0%</span><span class="pipe-count">5</span><div class="pipe-bar" style="height:62%"></div></div>
+              <div class="pipe-col"><span class="pipe-chip green">400%</span><span class="pipe-count">1</span><div class="pipe-bar" style="height:14%"></div></div>
+              <div class="pipe-col"><span class="pipe-chip blue">200%</span><span class="pipe-count">2</span><div class="pipe-bar" style="height:26%"></div></div>
+              <div class="pipe-col"><span class="pipe-chip amber">50%</span><span class="pipe-count">4</span><div class="pipe-bar" style="height:90%"></div></div>
+              <div class="pipe-col"><span class="pipe-chip green">125%</span><span class="pipe-count">5</span><div class="pipe-bar" style="height:100%"></div></div>
+              <div class="pipe-col"><span class="pipe-chip amber">60%</span><span class="pipe-count">3</span><div class="pipe-bar" style="height:50%"></div></div>
+              <div class="pipe-col"><span class="pipe-chip amber">33%</span><span class="pipe-count">1</span><div class="pipe-bar" style="height:14%"></div></div>
+              <div class="pipe-col"><span class="pipe-chip grey">&mdash;</span><span class="pipe-count">&mdash;</span><div class="pipe-bar" style="height:3%"></div></div>
+            </div>
+            <div class="pipe-axis">
+              <span class="pipe-axis-lbl">New Leads</span>
+              <span class="pipe-axis-lbl">Lead Assignment</span>
+              <span class="pipe-axis-lbl">Contact</span>
+              <span class="pipe-axis-lbl">Nurture</span>
+              <span class="pipe-axis-lbl">Test Drive</span>
+              <span class="pipe-axis-lbl">Offer</span>
+              <span class="pipe-axis-lbl">Booking</span>
+              <span class="pipe-axis-lbl">Delivery</span>
+            </div>
+            <div class="pipe-foot">
+              <span class="pipe-foot-l">Bar height = volume &middot; chip = stage-to-stage conversion</span>
+              <span class="pipe-foot-r">Top 5 &middot; Delivered 1 &middot; Overall 20%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION — Team Diary -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">Team calendar</span><span class="kpi-sec-sub">&middot; Sales consultant diaries — SZR — Sheikh Zayed Road</span></div>
+          <div class="diary-legend">
+            <span class="dl-item"><span class="dl-dot" style="background:var(--blue)"></span> Appointment</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--amber)"></span> Follow-up</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--green)"></span> Test Drive</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--purple)"></span> Customer Call</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--teal)"></span> Delivery</span>
+          </div>
+          <div class="stream-bar">
+            <div class="stream-seg" id="diaryBranch">
+              <button class="seg-tab on" onclick="setDiaryBranch(this)">SZR</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Deira</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Abu Dhabi</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Sharjah</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Al Ain</button>
+            </div>
+            <div class="stream-seg" id="diaryRange">
+              <button class="seg-tab on" onclick="setDiaryRange(this)">Today</button>
+              <button class="seg-tab" onclick="setDiaryRange(this)">Week</button>
+            </div>
+          </div>
+          <div class="tl-wrap">
+            <div class="tl-row">
+              <div class="tl-gutter">09:00</div>
+              <div class="tl-event ev-green"><span class="tl-time">09:30&ndash;10:15</span><span class="tl-name">Hiren Patel</span><span class="tl-pills"><span class="ev-pill green">Test Drive</span><span class="st-badge ok">On Track</span></span></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-gutter">10:00</div>
+              <div class="tl-event ev-purple"><span class="tl-time">10:30&ndash;10:45</span><span class="tl-name">Sara Khalid</span><span class="tl-pills"><span class="ev-pill purple">Customer Call</span><span class="st-badge brch">Overdue</span></span></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-gutter">11:00</div>
+              <div class="tl-event ev-blue"><span class="tl-time">11:00&ndash;12:00</span><span class="tl-name">Fatima Al Ali</span><span class="tl-pills"><span class="ev-pill blue">Appointment</span><span class="st-badge ok">On Track</span></span></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-gutter">12:00</div>
+              <div class="tl-event ev-amber"><span class="tl-time">12:15&ndash;13:00</span><span class="tl-name">Karim Saleh</span><span class="tl-pills"><span class="ev-pill amber">Follow-up</span><span class="st-badge wrn">Due Soon</span></span></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-gutter">14:00</div>
+              <div class="tl-event ev-teal"><span class="tl-time">14:00&ndash;15:30</span><span class="tl-name">Linda George</span><span class="tl-pills"><span class="ev-pill teal">Delivery</span><span class="st-badge ok">On Track</span></span></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-gutter">15:00</div>
+              <div class="tl-event ev-green"><span class="tl-time">15:45&ndash;16:30</span><span class="tl-name">Ahmed Mansoor</span><span class="tl-pills"><span class="ev-pill green">Test Drive</span><span class="st-badge wrn">Due Soon</span></span></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-gutter">16:00</div>
+              <div class="tl-event ev-blue"><span class="tl-time">16:45&ndash;17:15</span><span class="tl-name">Maya Hassan</span><span class="tl-pills"><span class="ev-pill blue">Appointment</span><span class="st-badge ok">On Track</span></span></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-gutter">17:00</div>
+              <div class="tl-event ev-amber"><span class="tl-time">17:30&ndash;18:00</span><span class="tl-name">Rita Sami</span><span class="tl-pills"><span class="ev-pill amber">Follow-up</span><span class="st-badge ok">On Track</span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION — New Leads to Assign -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--red)"></span><span class="kpi-sec-title">New leads to assign</span><span class="kpi-sec-sub">&middot; Direct-to-showroom queue</span></div>
+          <div class="q-panel">
+            <div class="q-head">
+              <div class="q-head-left"><h3>New leads to assign</h3><span class="q-cnt">5 waiting &middot; sorted by SLA + temperature</span></div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button class="sec-ctrl" onclick="showToast('Add column')">Add column</button>
+                <button class="sec-ctrl" onclick="showToast('Returned to Call Center')">Return to Call Center</button>
+                <button class="btn-soft" onclick="showToast('Auto-assigning by availability')"><span class="material-symbols-outlined">bolt</span> Auto-assign</button>
+              </div>
+            </div>
+            <div class="q-scroll">
+            <table class="qt-table">
+              <thead><tr><th>Age</th><th>Customer</th><th>Source</th><th>Model</th><th>Temp</th><th>Language</th><th>Showroom</th><th>Suggested exec</th><th>SLA</th><th style="text-align:right">Action</th></tr></thead>
+              <tbody>
+                <tr class="urg">
+                  <td class="num">25m</td>
+                  <td><div class="c-name">Omar Nasser</div><div class="c-id">L-2026-05006</div></td>
+                  <td><span class="src-chip">WhatsApp</span></td><td>EXEED TXL</td>
+                  <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>DEI</td><td><a href="#" class="row-link">Layla Habib</a></td>
+                  <td><span class="sla-tag brch">5m left</span></td>
+                  <td style="text-align:right"><button class="tbl-btn red" onclick="assign(event,'Omar Nasser')">Assign</button> <a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a> <a href="#" class="why" onclick="showToast('Why this exec?');return false">Why?</a></td>
+                </tr>
+                <tr>
+                  <td class="num">22m</td>
+                  <td><div class="c-name">Grace Onu</div><div class="c-id">L-2026-05021</div></td>
+                  <td><span class="src-chip">Website</span></td><td>EXEED LX</td>
+                  <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>AUH</td><td><span class="none-txt">&mdash;</span></td>
+                  <td><span class="sla-tag wrn">8m left</span></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Grace Onu')">Assign</button></td>
+                </tr>
+                <tr>
+                  <td class="num">15m</td>
+                  <td><div class="c-name">Mira Nabil</div><div class="c-id">L-2026-05022</div></td>
+                  <td><span class="src-chip">Social Form</span></td><td>EXEED LX</td>
+                  <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>SZR</td><td><a href="#" class="row-link">Ahmad Nasr</a></td>
+                  <td><span class="sla-tag wrn">15m left</span></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Mira Nabil')">Assign</button> <a href="#" class="why" onclick="showToast('Why this exec?');return false">Why?</a></td>
+                </tr>
+                <tr>
+                  <td class="num">0m</td>
+                  <td><div class="c-name">Amir Zaki</div><div class="c-id">L-2026-05020</div></td>
+                  <td><span class="src-chip">WhatsApp</span></td><td>EXEED LX</td>
+                  <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
+                  <td><span class="sla-tag ok">30m left</span></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Amir Zaki')">Assign</button></td>
+                </tr>
+                <tr>
+                  <td class="num">0m</td>
+                  <td><div class="c-name">Maya Hassan</div><div class="c-id">L-2026-05003</div></td>
+                  <td><span class="src-chip">Social Form</span></td><td>EXEED TXL</td>
+                  <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
+                  <td><span class="sla-tag ok">45m left</span></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Maya Hassan')">Assign</button></td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION — Sales Executive Availability -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--teal)"></span><span class="kpi-sec-title">Sales Executive Availability</span><span class="kpi-sec-sub">&middot; Live workload across the network</span></div>
+          <div class="q-panel">
+            <div class="q-head">
+              <div class="q-head-left"><h3>Sales executive availability</h3><span class="q-cnt">6 on track &middot; 2 blocked &middot; 1 offline</span></div>
+              <div style="display:flex;align-items:center;gap:6px">
+                <button class="sec-ctrl" onclick="showToast('Add column')">Add column</button>
+                <button class="sec-ctrl" onclick="showToast('Rebalancing floor')">Rebalance floor</button>
+              </div>
+            </div>
+            <div class="q-scroll">
+            <table class="qt-table">
+              <thead><tr>
+                <th>Executive</th><th>Status</th><th>Active</th><th>New</th><th>Pend. FC</th><th>Overdue</th><th>Appt</th><th>Test Drive</th><th>Languages</th><th>Recommendation</th><th style="text-align:right">Action</th>
+              </tr></thead>
+              <tbody>
+                <tr class="urg">
+                  <td><div class="c-name">Fadi Haddad</div><div class="c-shift">AAN</div></td>
+                  <td><span class="st-badge gry">Offline</span></td>
+                  <td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num red">3</td><td class="num">0</td><td class="num">0</td>
+                  <td>English, Arabic</td>
+                  <td><a href="#" class="row-link">Escalate &mdash; offline</a></td>
+                  <td style="text-align:right"><button class="tbl-btn red" onclick="showToast('Escalating Fadi Haddad')">Escalate</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Omar Al Khoury</div><div class="c-shift">AUH</div></td>
+                  <td><span class="st-badge blk">Blocked</span></td>
+                  <td class="num">18</td><td class="num">3</td><td class="num">2</td><td class="num">2</td><td class="num">3</td><td class="num">2</td>
+                  <td>English, Arabic</td>
+                  <td><span class="none-txt">Balanced</span></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Sara Ali</div><div class="c-shift">SHJ</div></td>
+                  <td><span class="st-badge blk">Blocked</span></td>
+                  <td class="num">17</td><td class="num">2</td><td class="num">1</td><td class="num">2</td><td class="num">2</td><td class="num">1</td>
+                  <td>English, Arabic</td>
+                  <td><span class="none-txt">Balanced</span></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button></td>
+                </tr>
+                <tr class="urg">
+                  <td><div class="c-name">Karim Mostafa</div><div class="c-shift">DEI</div></td>
+                  <td><span class="st-badge gry">Stalled</span></td>
+                  <td class="num">27</td><td class="num">5</td><td class="num red">4</td><td class="num red">4</td><td class="num">2</td><td class="num">1</td>
+                  <td>English, Arabic, Hindi</td>
+                  <td><a href="#" class="row-link">Reassign 3 leads</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Reassigning 3 leads')">Reassign 3</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Mariam Saeed</div><div class="c-shift">SZR</div></td>
+                  <td><span class="st-badge gry">At Capacity</span></td>
+                  <td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">1</td><td class="num">3</td><td class="num">2</td>
+                  <td>English, Arabic</td>
+                  <td><span class="none-txt">At capacity</span></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Nour Jaber</div><div class="c-shift">AUH</div></td>
+                  <td><span class="st-badge wrn">Due Soon</span></td>
+                  <td class="num">11</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td>
+                  <td>English, Arabic</td>
+                  <td><a href="#" class="row-link">Back at 14:30</a></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Reminder set for Nour Jaber')">Remind</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Ahmad Nasr</div><div class="c-shift">SZR</div></td>
+                  <td><span class="st-badge ok">On Track</span></td>
+                  <td class="num">15</td><td class="num">2</td><td class="num">1</td><td class="num">3</td><td class="num">2</td><td class="num">1</td>
+                  <td>English, Arabic</td>
+                  <td><a href="#" class="row-link">Assign next</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Ahmad Nasr')">Assign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Rania Khoury</div><div class="c-shift">SZR</div></td>
+                  <td><span class="st-badge ok">On Track</span></td>
+                  <td class="num">12</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
+                  <td>English, Arabic, French</td>
+                  <td><a href="#" class="row-link">Assign next</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Rania Khoury')">Assign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Layla Habib</div><div class="c-shift">DEI</div></td>
+                  <td><span class="st-badge ok">On Track</span></td>
+                  <td class="num">14</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num">0</td>
+                  <td>English, Arabic</td>
+                  <td><span class="none-txt">Balanced</span></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Yousef Rahman</div><div class="c-shift">SHJ</div></td>
+                  <td><span class="st-badge ok">On Track</span></td>
+                  <td class="num">9</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
+                  <td>English, Urdu, Hindi</td>
+                  <td><a href="#" class="row-link">Assign next</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Yousef Rahman')">Assign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Zahra Iqbal</div><div class="c-shift">AAN</div></td>
+                  <td><span class="st-badge ok">On Track</span></td>
+                  <td class="num">10</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
+                  <td>English, Urdu, Arabic</td>
+                  <td><a href="#" class="row-link">Assign next</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Zahra Iqbal')">Assign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Talal Baig</div><div class="c-shift">DEI</div></td>
+                  <td><span class="st-badge ok">On Track</span></td>
+                  <td class="num">13</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">1</td>
+                  <td>English, Urdu, Hindi</td>
+                  <td><span class="none-txt">Balanced</span></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button></td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION — Customers Waiting -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--red)"></span><span class="kpi-sec-title">Customers Waiting</span><span class="kpi-sec-sub">&middot; Live showroom queue</span></div>
+          <div class="q-panel">
+            <div class="q-head">
+              <div class="q-head-left"><h3>Customers waiting</h3><span class="q-cnt">3 in queue &middot; longest 18m</span></div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <button class="sec-ctrl" onclick="showToast('Add column')">Add column</button>
+                <span class="mc-tag live" style="position:static"><span class="lv-dot"></span> LIVE</span>
+              </div>
+            </div>
+            <div class="q-scroll">
+            <table class="qt-table">
+              <thead><tr><th>Customer</th><th>Arrived</th><th>Wait</th><th>Purpose</th><th>Executive</th><th>Bottleneck</th><th style="text-align:right">Action</th></tr></thead>
+              <tbody>
+                <tr class="urg">
+                  <td><div class="c-name">Maya Hassan</div></td>
+                  <td class="num">10:45</td>
+                  <td><span class="sla-tag brch">18m</span></td>
+                  <td>Test drive</td><td>Ahmad Nasr</td>
+                  <td><a href="#" class="row-link">Vehicle prep &mdash; VIN pending</a></td>
+                  <td style="text-align:right"><button class="tbl-btn red" onclick="showToast('Notifying Ahmad Nasr')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Maya Hassan')">Reassign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Bilal Qureshi</div></td>
+                  <td class="num">10:52</td>
+                  <td><span class="sla-tag wrn">11m</span></td>
+                  <td>Delivery</td><td>Rania Khoury</td>
+                  <td><a href="#" class="row-link">Insurance doc missing</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Notifying Rania Khoury')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Bilal Qureshi')">Reassign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Elena Costa</div></td>
+                  <td class="num">11:05</td>
+                  <td><span class="sla-tag ok">6m</span></td>
+                  <td>Enquiry</td><td><span class="none-txt">&mdash;</span></td>
+                  <td><a href="#" class="row-link">Awaiting assignment</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Elena Costa')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Elena Costa')">Reassign</button></td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION — Add-on Penetration -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--green)"></span><span class="kpi-sec-title">Add-on penetration</span><span class="kpi-sec-sub">&middot; Attach rate by category — last 30 days</span></div>
+          <div class="kpi-grid g5">
+            <div class="dial-card">
+              <div class="dial-inner">Overall</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="50.24"/>
+                  <defs><linearGradient id="gradAo1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#3d8a5b">68%</div>
+                  <div class="dial-sub">Target 55%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Accessories</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo2)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="45.53"/>
+                  <defs><linearGradient id="gradAo2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#3d8a5b">71%</div>
+                  <div class="dial-sub">Target 60%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Maintenance</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo3)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="59.66"/>
+                  <defs><linearGradient id="gradAo3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#b5642a">62%</div>
+                  <div class="dial-sub">Target 65%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Insurance</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo4)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="34.54"/>
+                  <defs><linearGradient id="gradAo4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#3d8a5b">78%</div>
+                  <div class="dial-sub">Target 60%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card">
+              <div class="dial-inner">Warranty</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo5)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="70.65"/>
+                  <defs><linearGradient id="gradAo5" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#b5642a">55%</div>
+                  <div class="dial-sub">Target 60%</div>
+                </div>
+              </div>
+            </div>
+            <div class="metric-card">
+              <div class="mc-icon red"><span class="material-symbols-outlined">money_off</span></div>
+              <div class="mc-lbl">Zero Add-on Deals</div><div class="mc-val txt-red">4</div><div class="mc-sub">Target 0</div>
+            </div>
+          </div>
+          <div class="nba" style="margin-top:14px">
+            <div class="nba-ico"><span class="material-symbols-outlined">school</span></div>
+            <div class="nba-body">
+              <div class="nba-eyebrow">Coaching Alert</div>
+              <div class="nba-head">Coach Omar Al Khoury on maintenance contracts</div>
+              <div class="nba-sub">33% penetration vs 83% for the top performer. A short 1:1 could close the gap this month.</div>
+            </div>
+            <div class="nba-right">
+              <button class="nba-btn" onclick="showToast('Coaching session scheduled for Omar Al Khoury')">Schedule coaching &rsaquo;</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"><span class="material-symbols-outlined">check_circle</span><span id="toastMsg">Done</span></div>
+
+  <script>
+    // Toast helper
+    function showToast(msg){
+      var t=document.getElementById('toast'), m=document.getElementById('toastMsg');
+      if(!t)return; m.textContent=msg; t.classList.add('show');
+      clearTimeout(window.__toastT); window.__toastT=setTimeout(function(){ t.classList.remove('show'); },2200);
+    }
+    function assign(e, name){ e.stopPropagation(); showToast('Assigning ' + name + ' to next available executive'); }
+    function changeLocation(sel){ showToast('Switched to ' + sel.value); }
+    function exportQueue(){ showToast('Queue exported to CSV'); }
+    function setDiaryBranch(btn){ btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on'); showToast('Diary — ' + btn.textContent); }
+    function setDiaryRange(btn){ btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on'); showToast('Diary — ' + btn.textContent); }
+  </script>
+
+  <script>
+    // Date range filter (Today is the default)
+    function setDateRange(btn){
+      btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var custom = document.getElementById('dateCustom');
+      var isCustom = /custom/i.test(btn.textContent);
+      if (custom) custom.classList.toggle('open', isCustom);
+      if (isCustom) { var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
+    }
+    function applyCustomRange(){
+      var f = document.getElementById('dateFrom').value, t = document.getElementById('dateTo').value;
+      var fmt = function(d){ if(!d) return ''; var p=d.split('-'); return p[2]+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; };
+      var lbl = 'Custom Range';
+      if (f && t) lbl = fmt(f)+' – '+fmt(t);
+      else if (f) lbl = 'From '+fmt(f);
+      document.getElementById('dfCustom').textContent = lbl;
+      document.getElementById('dateCustom').classList.remove('open');
+    }
+  </script>
+
+  <script>
+    function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
+    function closeSidebar(){ document.body.classList.remove('sb-rail'); }
+  </script>
+
+  <script>
+    function doRefresh(btn){
+      var t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      var rb=document.getElementById('refreshBtn'); if(rb) rb.title='Last refreshed '+t;
+      if(btn){btn.title='Last refreshed '+t;var i=btn.querySelector('.material-symbols-outlined');if(i){i.style.transition='transform .6s ease';i.style.transform='rotate(360deg)';setTimeout(function(){i.style.transition='none';i.style.transform='none';},650);}}
+    }
+    (function(){var rb=document.getElementById('refreshBtn');if(rb)rb.title='Last refreshed '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});})();
+  </script>
+
+  <script>
+    function toggleCopilot(){ var ov=document.getElementById('copilotOverlay'); if(ov)ov.classList.toggle('open'); }
+
+    function toggleNotif(){ var dd=document.getElementById('notifDropdown'),ov=document.getElementById('notifOverlay'); if(!dd)return; dd.classList.toggle('open'); if(ov)ov.classList.toggle('open'); }
+    function markAllRead(){ document.querySelectorAll('.notif-item.unread').forEach(function(n){n.classList.remove('unread');}); updateBellBadge(); }
+    function dismissNotif(btn){ var item=btn.closest('.notif-item'); item.style.transition='all .2s'; item.style.opacity='0'; item.style.maxHeight='0'; item.style.padding='0 16px'; setTimeout(function(){ item.remove(); updateBellBadge(); },200); }
+    function updateBellBadge(){ var count=document.querySelectorAll('.notif-item.unread').length; ['bellBadge','notifBadge'].forEach(function(id){ var b=document.getElementById(id); if(!b)return; if(count>0){ b.textContent=count; b.style.display=''; } else { b.style.display='none'; } }); }
+  </script>
+  <script src="copilot-widget.js?v=8" defer></script>
+</body>
+</html>
