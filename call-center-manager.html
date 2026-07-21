@@ -626,6 +626,67 @@
     <div class="notif-footer"><a href="#">View all notifications</a></div>
   </div>
 
+  <!-- KPI metric drill-down drawer -->
+  <style>
+    .mdr-overlay{position:fixed;inset:0;background:rgba(15,20,28,.42);opacity:0;visibility:hidden;transition:.2s;z-index:60;}
+    .mdr-overlay.open{opacity:1;visibility:visible;}
+    .mdr{position:fixed;top:0;right:0;height:100vh;width:600px;max-width:94vw;background:var(--surface);box-shadow:-8px 0 30px rgba(15,20,28,.18);transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;}
+    .mdr.open{transform:translateX(0);}
+    .mdr-scroll{overflow-y:auto;height:100%;}
+    .mdr-hd{background:linear-gradient(135deg,#2f74e6,#2a5fc8);color:#fff;padding:20px 24px;position:relative;}
+    .mdr-ey{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.82;}
+    .mdr-ttl{font-size:22px;font-weight:700;margin-top:2px;}
+    .mdr-sub{font-size:12.5px;opacity:.85;margin-top:4px;max-width:60%;}
+    .mdr-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .mdr-close:hover{background:rgba(255,255,255,.28);}
+    .mdr-close .material-symbols-outlined{font-size:19px;}
+    .mdr-kpi{position:absolute;top:20px;right:60px;text-align:right;}
+    .mdr-kpi-val{font-size:34px;font-weight:800;line-height:1;}
+    .mdr-kpi-tgt{font-size:12px;font-weight:600;margin-top:6px;opacity:.92;}
+    .mdr-delta{margin-left:4px;font-weight:700;}
+    .mdr-delta.down{color:#ffd0d0;}
+    .mdr-delta.up{color:#bff0cf;}
+    .mdr-kpi-per{font-size:11px;opacity:.75;margin-top:3px;}
+    .mdr-tools{display:flex;align-items:center;gap:10px;padding:13px 24px;border-bottom:1px solid var(--border);background:#fafbfc;}
+    .mdr-tools .bd{display:flex;align-items:center;gap:7px;color:var(--ink-muted);font-size:12.5px;font-weight:600;}
+    .mdr-tools .bd .material-symbols-outlined{font-size:17px;}
+    .mdr-sel{border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:12.5px;color:var(--ink);background:var(--surface);cursor:pointer;font-weight:600;}
+    .mdr-report{margin-left:auto;display:flex;align-items:center;gap:5px;color:#2f6fe0;font-weight:700;font-size:13px;text-decoration:none;}
+    .mdr-report:hover{text-decoration:underline;}
+    .mdr-report .material-symbols-outlined{font-size:16px;}
+    .mdr-body{padding:20px 24px;}
+    .mdr-secl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;}
+    .mdr-chart{border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 8px;}
+    .mdr-trend-svg,.mdr-branch-svg{width:100%;height:auto;display:block;}
+    .mdr-grid{stroke:#eceef1;stroke-width:1;}
+    .mdr-axl{fill:#98a1ac;font-size:10px;font-family:inherit;}
+    .mdr-target{stroke:#2f6fe0;stroke-width:1.4;stroke-dasharray:4 4;opacity:.75;}
+    .mdr-tlab{fill:#2f6fe0;font-size:10px;font-weight:600;font-family:inherit;}
+    .mdr-line{fill:none;stroke:#2f6fe0;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;}
+    .mdr-dot{fill:#fff;stroke:#2f6fe0;stroke-width:2;}
+    .mdr-bar{fill:#2f6fe0;}
+    .mdr-bl{fill:var(--ink-secondary);font-size:11px;font-family:inherit;}
+    .mdr-rank{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+    .mdr-rbox{border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+    .mdr-rbox.top{background:var(--green-soft);border-color:#cfe9d9;}
+    .mdr-rbox.bot{background:var(--red-soft);border-color:#f3d6d6;}
+    .mdr-rh{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+    .mdr-rbox.top .mdr-rh{color:#3d8a5b;}
+    .mdr-rbox.bot .mdr-rh{color:#c0392b;}
+    .mdr-rrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;font-size:13px;}
+    .mdr-rrow .nm{color:var(--ink);}
+    .mdr-rrow .vv{font-weight:700;color:var(--ink);white-space:nowrap;}
+    .mdr-tabs{display:flex;border-top:1px solid var(--border);}
+    .mdr-tab{flex:1;text-align:center;padding:14px 0;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--ink-muted);background:none;border:none;cursor:pointer;font-family:inherit;text-transform:uppercase;}
+    .mdr-tab.on{color:#2f6fe0;box-shadow:inset 0 -2px 0 #2f6fe0;}
+    .mdr-open{cursor:pointer;}
+    .mdr-open:hover{box-shadow:0 2px 12px rgba(20,24,34,.10);}
+    .mdr-open:focus-visible{outline:2px solid #2f6fe0;outline-offset:2px;}
+  </style>
+  <div class="mdr-overlay" id="mdrOverlay" onclick="closeMetric()"></div>
+  <aside class="mdr" id="mdr" role="dialog" aria-modal="true" aria-label="Metric detail">
+    <div class="mdr-scroll" id="mdrContent"></div>
+  </aside>
 
   <div class="shell">
     <!-- Sidebar -->
@@ -755,7 +816,7 @@
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">SLA Performance</span><span class="kpi-sec-sub">&middot; Team-wide SLA compliance vs targets</span></div>
           <div class="kpi-grid g5">
-            <div class="dial-card">
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('firstContact')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('firstContact');}">
               <div class="dial-label">Customer 1st Contact</div>
               <div class="dial-wrap">
                 <svg class="dial-svg" viewBox="0 0 120 65">
@@ -767,7 +828,7 @@
               </div>
               <div class="dial-sub">Target 95%</div>
             </div>
-            <div class="dial-card">
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('assignSA')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('assignSA');}">
               <div class="dial-label">Assigned to Showroom</div>
               <div class="dial-wrap">
                 <svg class="dial-svg" viewBox="0 0 120 65">
@@ -783,7 +844,7 @@
               <div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div>
               <div class="mc-lbl">Open Leads &gt; 3 Days</div><div class="mc-val txt-red">3</div><div class="mc-sub">Target &lt;3 days &middot; 95%</div>
             </div>
-            <div class="dial-card">
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}">
               <div class="dial-label">Return Rate</div>
               <div class="dial-wrap">
                 <svg class="dial-svg" viewBox="0 0 120 65">
@@ -795,7 +856,7 @@
               </div>
               <div class="dial-sub">Leads bounced back</div>
             </div>
-            <div class="dial-card">
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('qualCompletion')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('qualCompletion');}">
               <div class="dial-label">Qual Completion</div>
               <div class="dial-wrap">
                 <svg class="dial-svg" viewBox="0 0 120 65">
@@ -1033,6 +1094,115 @@
     function markAllRead(){ document.querySelectorAll('.notif-item.unread').forEach(function(n){n.classList.remove('unread');}); updateBellBadge(); }
     function dismissNotif(btn){ var item=btn.closest('.notif-item'); item.style.transition='all .2s'; item.style.opacity='0'; item.style.maxHeight='0'; item.style.padding='0 16px'; setTimeout(function(){ item.remove(); updateBellBadge(); },200); }
     function updateBellBadge(){ var count=document.querySelectorAll('.notif-item.unread').length; ['bellBadge','notifBadge'].forEach(function(id){ var b=document.getElementById(id); if(!b)return; if(count>0){ b.textContent=count; b.style.display=''; } else { b.style.display='none'; } }); }
+  </script>
+  <script>
+    // ── KPI metric drill-down drawer ──
+    var METRICS = {
+      firstContact: { kind:'SLA Metric', title:'First Contact SLA', sub:'% of interactions handled within SLA window.', value:88, target:95, delta:-3, higherIsBetter:true, yTrendMax:100, trend:[84,80,84,81,85,82,84], xMax:100,
+        branches:[{n:'Al Ain',v:91.6},{n:'Abu Dhabi',v:91},{n:'Sharjah',v:88.5},{n:'Deira',v:87.1},{n:'SZR — Sheikh Zayed Road',v:85.4}] },
+      assignSA: { kind:'SLA Metric', title:'Assign to SA SLA', sub:'% of interactions handled within SLA window.', value:92, target:95, delta:1, higherIsBetter:true, yTrendMax:100, trend:[91,90.6,91,93,91,90,91], xMax:100,
+        branches:[{n:'SZR — Sheikh Zayed Road',v:93.1},{n:'Al Ain',v:90.9},{n:'Deira',v:90.4},{n:'Sharjah',v:89.9},{n:'Abu Dhabi',v:87.4}] },
+      returnRate: { kind:'Quality Metric', title:'Return Rate', sub:'% of qualified leads returned by Sales.', value:8, target:8, delta:-0.6, higherIsBetter:false, yTrendMax:20, trend:[9,8,9,7,8,9,8], xMax:20,
+        branches:[{n:'Al Ain',v:5.2},{n:'Abu Dhabi',v:6.4},{n:'Sharjah',v:8.1},{n:'SZR — Sheikh Zayed Road',v:9.8},{n:'Deira',v:11.2}] },
+      qualCompletion: { kind:'Quality Metric', title:'Qual Completion', sub:'% of connected calls with qualification completed.', value:82, target:90, delta:2, higherIsBetter:true, yTrendMax:100, trend:[80,81,83,82,84,81,82], xMax:100,
+        branches:[{n:'Al Ain',v:86.2},{n:'Abu Dhabi',v:84},{n:'Sharjah',v:82.5},{n:'Deira',v:80.1},{n:'SZR — Sheikh Zayed Road',v:78.4}] }
+    };
+
+    function fmtPct(v){ return (Math.round(v*10)/10) + '%'; }
+
+    function trendSVG(m){
+      var W=520,H=200,padL=32,padR=14,padT=14,padB=26;
+      var pw=W-padL-padR, ph=H-padT-padB, n=m.trend.length, yMax=m.yTrendMax;
+      var X=function(i){ return padL + pw*(i/(n-1)); };
+      var Y=function(v){ return padT + ph*(1 - v/yMax); };
+      var grid='',ylab='';
+      [0,.25,.5,.75,1].forEach(function(t){ var v=Math.round(yMax*t), yy=Y(v);
+        grid+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" class="mdr-grid"/>';
+        ylab+='<text x="'+(padL-6)+'" y="'+(yy+3)+'" class="mdr-axl" text-anchor="end">'+v+'</text>'; });
+      var ty=Y(m.target);
+      var tline='<line x1="'+padL+'" y1="'+ty+'" x2="'+(W-padR)+'" y2="'+ty+'" class="mdr-target"/>'+
+                '<text x="'+((padL+W-padR)/2)+'" y="'+(ty-4)+'" class="mdr-tlab" text-anchor="middle">Target</text>';
+      var pts=m.trend.map(function(v,i){ return X(i)+','+Y(v); });
+      var poly='<polyline class="mdr-line" points="'+pts.join(' ')+'"/>';
+      var dots=m.trend.map(function(v,i){ return '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3" class="mdr-dot"/>'; }).join('');
+      var xl=['-6w','-5w','-4w','-3w','-2w','-1w','Now'];
+      var xlab=xl.map(function(l,i){ return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+l+'</text>'; }).join('');
+      return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+tline+poly+dots+xlab+'</svg>';
+    }
+
+    function branchSVG(m){
+      var sorted=m.branches.slice().sort(function(a,b){ return m.higherIsBetter ? b.v-a.v : a.v-b.v; });
+      var W=520,padL=118,padR=22,padT=6,padB=24, rowH=34;
+      var H=padT+padB+rowH*sorted.length, pw=W-padL-padR, xMax=m.xMax;
+      var BX=function(v){ return pw*(v/xMax); };
+      var gl='',ax='';
+      [0,.25,.5,.75,1].forEach(function(t){ var v=Math.round(xMax*t), xx=padL+BX(v);
+        gl+='<line x1="'+xx+'" y1="'+padT+'" x2="'+xx+'" y2="'+(H-padB)+'" class="mdr-grid"/>';
+        ax+='<text x="'+xx+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+v+'</text>'; });
+      var tx=padL+BX(m.target);
+      var tl='<line x1="'+tx+'" y1="'+padT+'" x2="'+tx+'" y2="'+(H-padB)+'" class="mdr-target"/>';
+      var rows='';
+      sorted.forEach(function(b,i){
+        var cy=padT+rowH*i, barH=20, by=cy+(rowH-barH)/2, mid=by+barH/2;
+        if (b.n.indexOf(' — ')>-1){ var p=b.n.split(' — ');
+          rows+='<text x="'+(padL-8)+'" y="'+(mid-3)+'" class="mdr-bl" text-anchor="end">'+p[0]+' —<tspan x="'+(padL-8)+'" dy="12">'+p[1]+'</tspan></text>';
+        } else {
+          rows+='<text x="'+(padL-8)+'" y="'+(mid+3)+'" class="mdr-bl" text-anchor="end">'+b.n+'</text>';
+        }
+        rows+='<rect x="'+padL+'" y="'+by+'" width="'+BX(b.v)+'" height="'+barH+'" rx="3" class="mdr-bar"/>';
+      });
+      return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-branch-svg">'+gl+tl+rows+ax+'</svg>';
+    }
+
+    function rankRows(list){
+      return list.map(function(b){ return '<div class="mdr-rrow"><span class="nm">'+b.n+'</span><span class="vv">'+fmtPct(b.v)+'</span></div>'; }).join('');
+    }
+
+    function openMetric(id){
+      var m=METRICS[id]; if(!m) return;
+      var d=m.delta, good=m.higherIsBetter ? d>=0 : d<=0;
+      var arrow=d>0?'&#9650;':(d<0?'&#9660;':'&ndash;');
+      var chip=(d===0)?'':' <span class="mdr-delta '+(good?'up':'down')+'">'+arrow+' '+(d>0?'+':'')+d+'pp</span>';
+      var byGood=m.branches.slice().sort(function(a,b){ return m.higherIsBetter ? b.v-a.v : a.v-b.v; });
+      var top=byGood.slice(0,3), bottom=byGood.slice(-3).reverse();
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd">' +
+          '<div class="mdr-ey">'+m.kind+'</div>' +
+          '<div class="mdr-ttl">'+m.title+'</div>' +
+          '<div class="mdr-sub">'+m.sub+'</div>' +
+          '<div class="mdr-kpi"><div class="mdr-kpi-val">'+m.value+'%</div>' +
+            '<div class="mdr-kpi-tgt">Target '+m.target+'%'+chip+'</div>' +
+            '<div class="mdr-kpi-per">Period: This Month</div></div>' +
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>' +
+        '<div class="mdr-tools">' +
+          '<span class="bd"><span class="material-symbols-outlined">filter_list</span> Break down by</span>' +
+          '<select class="mdr-sel"><option>Branch</option><option>Agent</option><option>Source</option><option>Lead type</option></select>' +
+          '<a href="#" class="mdr-report" onclick="return false">View Full Report <span class="material-symbols-outlined">open_in_new</span></a>' +
+        '</div>' +
+        '<div class="mdr-body">' +
+          '<div class="mdr-secl">Trend</div><div class="mdr-chart">'+trendSVG(m)+'</div>' +
+          '<div class="mdr-rank">' +
+            '<div class="mdr-rbox top"><div class="mdr-rh">Top 3</div>'+rankRows(top)+'</div>' +
+            '<div class="mdr-rbox bot"><div class="mdr-rh">Bottom 3</div>'+rankRows(bottom)+'</div>' +
+          '</div>' +
+          '<div class="mdr-secl">By Branch</div><div class="mdr-chart">'+branchSVG(m)+'</div>' +
+        '</div>' +
+        '<div class="mdr-tabs">' +
+          '<button class="mdr-tab on" onclick="mdrTab(this)">Value</button>' +
+          '<button class="mdr-tab" onclick="mdrTab(this)">Vs Target</button>' +
+          '<button class="mdr-tab" onclick="mdrTab(this)">Volume</button>' +
+        '</div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
+    function closeMetric(){
+      document.getElementById('mdr').classList.remove('open');
+      document.getElementById('mdrOverlay').classList.remove('open');
+    }
+    function mdrTab(btn){ btn.parentNode.querySelectorAll('.mdr-tab').forEach(function(t){ t.classList.remove('on'); }); btn.classList.add('on'); }
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMetric(); });
   </script>
   <script src="copilot-widget.js?v=8" defer></script>
 </body>

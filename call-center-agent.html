@@ -154,24 +154,24 @@
 
     /* ── Greeting ── */
     .greeting {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; margin-bottom: 14px;
     }
-    .greeting-left { flex: 1; }
+    .greeting-left { flex: 1 1 auto; min-width: 0; }
     .greeting h1 {
-      font-size: 24px; font-weight: 700; color: var(--ink);
-      letter-spacing: -.02em; margin-bottom: 4px;
+      font-size: 18px; font-weight: 700; color: var(--ink);
+      letter-spacing: -.01em; margin-bottom: 1px;
     }
     .greeting h1 .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
     @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
     .greeting-sub {
-      font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6;
+      font-size: 13px; color: var(--ink-muted); line-height: 1.45; white-space: nowrap;
     }
-    .greeting-sub .date { font-weight: 600; color: var(--ink); }
-    .greeting-right { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: flex-end; }
-    .date-filter { display:inline-flex; align-items:center; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:3px 5px 3px 11px; }
-    .date-filter .df-cal { font-size:16px; color:var(--blue); margin-right:6px; }
-    .df-tab { padding:6px 13px; border:none; background:transparent; color:var(--ink-secondary); font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:7px; transition:all .12s; }
+    .greeting-sub .date { font-weight: 600; color: var(--ink-secondary); }
+    .greeting-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .date-filter { display:inline-flex; align-items:center; gap:1px; background:transparent; border:1px solid var(--border); border-radius:7px; padding:2px 3px 2px 9px; }
+    .date-filter .df-cal { font-size:15px; color:var(--ink-muted); margin-right:5px; }
+    .df-tab { padding:4px 10px; border:none; background:transparent; color:var(--ink-muted); font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:6px; transition:all .12s; }
     .df-tab:hover { color:var(--ink); }
     .df-tab.on { background:var(--blue); color:#fff; }
     .date-filter-wrap { position:relative; }
@@ -182,13 +182,13 @@
     .date-custom input[type=date]:focus { border-color:var(--blue); }
     .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
     .shift-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 16px; background: var(--surface);
-      border: 1px solid var(--border); border-radius: 20px;
-      font-size: 12px; color: var(--ink-secondary);
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 11px; background: transparent;
+      border: none; border-radius: 20px;
+      font-size: 11.5px; color: var(--ink-muted);
     }
     .shift-pill .dot {
-      width: 7px; height: 7px; border-radius: 50%;
+      width: 6px; height: 6px; border-radius: 50%;
       background: var(--green);
       box-shadow: 0 0 0 3px rgba(92,185,127,.2);
       animation: pulse 2s infinite;
@@ -745,9 +745,45 @@
 
     /* ── Training Coach modal ── */
     .train-banner { cursor:pointer; }
-    .train-chip { display:inline-flex; align-items:center; gap:5px; background:var(--blue-soft); border:1px solid #d5e0ec; color:var(--blue); border-radius:20px; padding:6px 12px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
+    .train-chip { display:inline-flex; align-items:center; gap:5px; background:var(--blue-soft); border:1px solid #d5e0ec; color:var(--blue); border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
     .train-chip:hover { background:#dbe6f0; }
-    .train-chip .material-symbols-outlined { font-size:16px; }
+    .train-chip .material-symbols-outlined { font-size:15px; }
+    .sim-call-btn { display:inline-flex; align-items:center; gap:5px; background:var(--green-soft); border:1px solid #cfe8d9; color:#2f8b57; border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
+    .sim-call-btn:hover { background:#dbf0e4; }
+    .sim-call-btn .material-symbols-outlined { font-size:16px; }
+    .scope-wrap { position:relative; display:inline-flex; align-items:center; gap:4px; }
+    .scope-dd { display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--border); border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; color:var(--ink-muted); cursor:pointer; font-family:inherit; }
+    .scope-dd:hover { background:var(--bg); }
+    .scope-dd strong { font-weight:600; color:var(--ink-secondary); }
+    .scope-dd .material-symbols-outlined { font-size:15px; color:var(--ink-muted); }
+    .scope-info { font-size:15px; color:var(--ink-muted); cursor:help; }
+    .scope-menu { position:absolute; top:calc(100% + 6px); right:0; background:var(--surface); border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 28px rgba(20,24,34,.14); padding:5px; min-width:206px; z-index:50; display:none; }
+    .scope-menu.open { display:block; }
+    .scope-menu button { display:block; width:100%; text-align:left; background:none; border:none; font-family:inherit; font-size:12.5px; color:var(--ink-secondary); padding:8px 10px; border-radius:7px; cursor:pointer; }
+    .scope-menu button:hover { background:var(--blue-soft); color:var(--blue); }
+    /* Simulated incoming call */
+    .inc-overlay { position:fixed; inset:0; background:rgba(15,20,28,.4); opacity:0; visibility:hidden; transition:.2s; z-index:210; }
+    .inc-overlay.open { opacity:1; visibility:visible; }
+    .inc-modal { position:fixed; top:0; left:50%; transform:translateX(-50%) translateY(-130%); transition:transform .34s cubic-bezier(.34,1.3,.5,1); z-index:211; width:384px; max-width:92vw; background:var(--surface); border-radius:0 0 16px 16px; box-shadow:0 16px 44px rgba(20,24,34,.24); overflow:hidden; }
+    .inc-modal.open { transform:translateX(-50%) translateY(0); }
+    .inc-hd { background:linear-gradient(135deg,#0a0e14,#16293c); color:#fff; padding:16px 20px; display:flex; align-items:center; gap:13px; }
+    .inc-ring { width:44px; height:44px; border-radius:50%; background:rgba(92,185,127,.2); display:flex; align-items:center; justify-content:center; color:#7ed6a0; flex-shrink:0; animation:incRing 1s ease-in-out infinite; }
+    .inc-ring .material-symbols-outlined { font-size:24px; animation:incShake 1s ease-in-out infinite; transform-origin:50% 60%; }
+    @keyframes incRing { 0%,100%{ box-shadow:0 0 0 0 rgba(92,185,127,.5); } 50%{ box-shadow:0 0 0 11px rgba(92,185,127,0); } }
+    @keyframes incShake { 0%,60%,100%{ transform:rotate(0); } 10%,30%{ transform:rotate(15deg); } 20%,40%{ transform:rotate(-15deg); } }
+    .inc-eyebrow { font-size:11px; letter-spacing:.06em; text-transform:uppercase; opacity:.7; font-weight:700; }
+    .inc-name { font-size:16px; font-weight:700; line-height:1.3; }
+    .inc-sub { font-size:12px; opacity:.82; }
+    .inc-body { padding:14px 20px 18px; }
+    .inc-meta { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:14px; }
+    .inc-tag { font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; background:var(--blue-soft); color:var(--blue); }
+    .inc-tag.hot { background:#fdeaea; color:var(--red); }
+    .inc-actions { display:flex; gap:10px; }
+    .inc-btn { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:11px; border-radius:10px; border:none; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; }
+    .inc-btn.accept { background:#5cb97f; color:#fff; }
+    .inc-btn.accept:hover { background:#4fa870; }
+    .inc-btn.decline { background:var(--red-soft); color:var(--red); }
+    .inc-btn.decline:hover { background:#f8dede; }
     .tc-ov { position:fixed; inset:0; background:rgba(20,24,34,.5); opacity:0; visibility:hidden; transition:opacity .2s; z-index:130; }
     .tc-ov.open { opacity:1; visibility:visible; }
     .tc-panel { position:fixed; top:0; right:0; bottom:0; width:1000px; max-width:96vw; background:var(--surface); box-shadow:-14px 0 44px rgba(0,0,0,.22); z-index:131; display:flex; flex-direction:column; overflow:hidden; transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1); }
@@ -833,7 +869,11 @@
     .nc-lbl { font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue); }
     .nc-name { font-size:14px;font-weight:700;margin-top:1px; }
     .nc-meta { font-size:11.5px;color:var(--ink-muted);margin-top:1px; }
-    .nc-btn { margin-left:18px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-decoration:none;flex-shrink:0; }
+    .nc-btn { margin-left:18px;background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:5px;text-decoration:none;flex-shrink:0;position:relative;animation:ncPulse 1.5s ease-in-out infinite; }
+    .nc-btn:hover { animation:none; }
+    .nc-btn .material-symbols-outlined { animation:ncRing 1.5s ease-in-out infinite; transform-origin:50% 60%; }
+    @keyframes ncPulse { 0%,100%{ box-shadow:0 0 0 0 rgba(0,183,187,.55); } 50%{ box-shadow:0 0 0 7px rgba(0,183,187,0); } }
+    @keyframes ncRing { 0%,60%,100%{ transform:rotate(0); } 8%,24%,40%{ transform:rotate(14deg); } 16%,32%{ transform:rotate(-14deg); } }
     .q-head-left { display:flex; align-items:center; gap:10px; }
     .q-nextcall { display:flex; align-items:center; gap:11px; }
     .q-nextcall .nc-ico { width:30px; height:30px; border-radius:8px; background:var(--blue-soft); color:var(--blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -1048,9 +1088,19 @@
             </div>
           </div>
           <div class="greeting-right">
-            <button class="train-chip" onclick="openTraining()" title="Open training coach"><span class="material-symbols-outlined">school</span> 5 modules due <span class="material-symbols-outlined" style="font-size:15px">chevron_right</span></button>
             <div class="shift-pill">
               <span class="dot"></span> On shift &middot; <span class="tm" id="timer">03:12:47</span>
+            </div>
+            <button class="sim-call-btn" onclick="simulateIncomingCall()" title="Simulate an inbound call"><span class="material-symbols-outlined">phone_in_talk</span> Simulate incoming call</button>
+            <button class="train-chip" onclick="openTraining()" title="Open training coach"><span class="material-symbols-outlined">school</span> 5 modules due <span class="material-symbols-outlined" style="font-size:15px">chevron_right</span></button>
+            <div class="scope-wrap">
+              <button class="scope-dd" onclick="toggleScope(event)"><span class="material-symbols-outlined">tune</span> Scope: <strong id="scopeVal">Call Centre-owned leads</strong> <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
+              <span class="scope-info material-symbols-outlined" title="Only leads owned by the Call Centre are shown here. Direct-to-showroom Website · WhatsApp · Social leads appear only when rerouted.">info</span>
+              <div class="scope-menu" id="scopeMenu">
+                <button onclick="setScope('Call Centre-owned leads')">Call Centre-owned leads</button>
+                <button onclick="setScope('All inbound leads')">All inbound leads</button>
+                <button onclick="setScope('My leads only')">My leads only</button>
+              </div>
             </div>
             <div class="date-filter-wrap">
               <div class="date-filter">
@@ -1355,6 +1405,30 @@
           <div class="tc-hint"><span class="material-symbols-outlined">hearing</span> The AI plays both the customer and your responses — just listen, then complete the module.</div>
           <button class="tc-complete" id="tcComplete" onclick="tcComplete()"><span class="material-symbols-outlined" style="font-size:18px">check_circle</span> Complete Module</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simulated incoming call -->
+  <div class="inc-overlay" id="incOverlay" onclick="declineIncoming()"></div>
+  <div class="inc-modal" id="incModal" role="dialog" aria-label="Incoming call">
+    <div class="inc-hd">
+      <div class="inc-ring"><span class="material-symbols-outlined">phone_in_talk</span></div>
+      <div>
+        <div class="inc-eyebrow">Incoming call · 800 Number</div>
+        <div class="inc-name" id="incName">Meera Shah</div>
+        <div class="inc-sub" id="incNum">+971 50 662 0148</div>
+      </div>
+    </div>
+    <div class="inc-body">
+      <div class="inc-meta">
+        <span class="inc-tag">EXEED LX</span>
+        <span class="inc-tag hot">Hot lead</span>
+        <span class="inc-tag">Highest priority · 8 min SLA</span>
+      </div>
+      <div class="inc-actions">
+        <button class="inc-btn decline" onclick="declineIncoming()"><span class="material-symbols-outlined" style="font-size:18px">call_end</span> Decline</button>
+        <button class="inc-btn accept" onclick="acceptIncoming()"><span class="material-symbols-outlined" style="font-size:18px">call</span> Accept call</button>
       </div>
     </div>
   </div>
@@ -1781,6 +1855,41 @@
         });
       });
     })();
+
+    // ── Scope dropdown ──
+    function toggleScope(e){ if(e) e.stopPropagation(); document.getElementById('scopeMenu').classList.toggle('open'); }
+    function setScope(label){
+      document.getElementById('scopeVal').textContent = label;
+      document.getElementById('scopeMenu').classList.remove('open');
+      ccShowToast('Scope: ' + label);
+    }
+    document.addEventListener('click', function(e){
+      var w = e.target.closest ? e.target.closest('.scope-wrap') : null;
+      if (!w){ var m = document.getElementById('scopeMenu'); if (m) m.classList.remove('open'); }
+    });
+
+    // ── Simulated incoming call ──
+    var _incRingT;
+    function simulateIncomingCall(){
+      document.getElementById('incOverlay').classList.add('open');
+      document.getElementById('incModal').classList.add('open');
+      if (window.navigator && navigator.vibrate){ try { navigator.vibrate([180,90,180]); } catch(e){} }
+      clearTimeout(_incRingT);
+      _incRingT = setTimeout(function(){ // auto time-out if unanswered
+        if (document.getElementById('incModal').classList.contains('open')){ declineIncoming(); ccShowToast('Missed call — added to callbacks'); }
+      }, 15000);
+    }
+    function closeIncoming(){
+      clearTimeout(_incRingT);
+      document.getElementById('incOverlay').classList.remove('open');
+      document.getElementById('incModal').classList.remove('open');
+    }
+    function acceptIncoming(){
+      closeIncoming();
+      ccShowToast('Call connected — opening lead');
+      setTimeout(function(){ window.location.href = 'lead-detail.html?lead=Meera+Shah'; }, 550);
+    }
+    function declineIncoming(){ closeIncoming(); }
 
     function ccShowToast(msg) {
       var t = document.getElementById('ccToast');
