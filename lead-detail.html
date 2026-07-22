@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Leads — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -4407,6 +4410,41 @@
   <script>
     function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
     function closeSidebar(){ document.body.classList.remove('sb-rail'); }
+  </script>
+  <script>
+    // Robust deep-link: open a lead's detail panel from ?lead=Name (or ?id=). Runs on load,
+    // isolated + guarded so it works even if the main init script errored earlier.
+    window.addEventListener('load', function(){
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var leadParam = params.get('lead') || params.get('id');
+        if (!leadParam || typeof openPanelFull !== 'function' || typeof leads === 'undefined') return;
+        var dp = document.getElementById('detailPanel');
+        if (dp && dp.classList.contains('open')) return; // main handler already opened it
+        var name = decodeURIComponent(leadParam).replace(/\+/g, ' ').trim();
+        var q = name.toLowerCase();
+        var idx = -1;
+        for (var i = 0; i < leads.length; i++) {
+          if (leads[i].name.toLowerCase() === q || leads[i].id.toLowerCase() === q) { idx = i; break; }
+        }
+        if (idx === -1) idx = leads.findIndex(function(l){ return l.name.toLowerCase().indexOf(q) > -1; });
+        if (idx === -1) {
+          var initials = name.split(/\s+/).map(function(p){ return p.charAt(0); }).join('').slice(0,2).toUpperCase();
+          leads.unshift({
+            id:'L-2026-'+Math.floor(1000+Math.random()*9000), name:name, initials:initials, av:'av1',
+            phone:'+971 50 000 0000', email:name.toLowerCase().replace(/\s+/g,'.')+'@email.ae', emiratesId:'—',
+            source:'Referral', srcClass:'ref', srcIcon:'R', model:'EXEED LX', sla:'On track', slaClass:'ok', slaTime:'On track',
+            stage:'New', stageClass:'new', stageNum:'New', intent:'Med', intentClass:'med', owner:'Unassigned', bpfStage:1,
+            score:60, profileComplete:40, convertProb:45, discovery:15, channel:'Phone', lang:'English', campaign:'—', temp:'Warm',
+            existing:'No', showroom:'EXEED Dubai', handover:'Pending', preferred:'Phone', nps:'—',
+            activities:[{type:'email', text:'Lead opened from dashboard…', time:'2026-07-04 09:00'}]
+          });
+          idx = 0;
+          if (typeof renderLeads === 'function') renderLeads('all');
+        }
+        openPanelFull(idx);
+      } catch(e) { if (window.console && console.warn) console.warn('lead deep-link failed', e); }
+    });
   </script>
   <script src="copilot-widget.js?v=8" defer></script>
 </body>

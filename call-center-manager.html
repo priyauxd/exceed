@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Call Center Manager — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -771,8 +774,8 @@
                 <button class="df-tab" id="dfCustom" onclick="setDateRange(this)">Custom Range</button>
               </div>
               <div class="date-custom" id="dateCustom">
-                <label>From<input type="date" id="dateFrom"></label>
-                <label>To<input type="date" id="dateTo"></label>
+                <label>From<input type="text" id="dateFrom" placeholder="dd.mm.yyyy"></label>
+                <label>To<input type="text" id="dateTo" placeholder="dd.mm.yyyy"></label>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
             </div>
@@ -1203,6 +1206,39 @@
     }
     function mdrTab(btn){ btn.parentNode.querySelectorAll('.mdr-tab').forEach(function(t){ t.classList.remove('on'); }); btn.classList.add('on'); }
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMetric(); });
+  </script>
+  <style>
+    .avt-td{display:flex;align-items:center;gap:9px;}
+    .avt{width:26px;height:26px;border-radius:50%;flex-shrink:0;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;letter-spacing:.02em;}
+    .avt-text{min-width:0;}
+  </style>
+  <script>
+    (function(){
+      var COLORS=['#3b6fb5','#c13584','#2d8a7a','#b26a1a','#7a5bc0','#c25b4e','#4285f4','#d1544f'];
+      function initials(n){var p=n.trim().split(/\s+/);var s=((p[0]?p[0][0]:'')+(p[1]?p[1][0]:'')).toUpperCase();return s||n.slice(0,2).toUpperCase();}
+      function color(n){var s=0;for(var i=0;i<n.length;i++)s+=n.charCodeAt(i);return COLORS[s%COLORS.length];}
+      var SEL='.c-name,.ml-name,.dd-nm';
+      function decorate(el){
+        var td=el.closest?el.closest('td'):null; if(!td||td.getAttribute('data-avt'))return;
+        var name=(el.textContent||'').trim(); if(!name)return;
+        td.setAttribute('data-avt','1');
+        var wrap=document.createElement('div'); wrap.className='avt-text';
+        while(td.firstChild) wrap.appendChild(td.firstChild);
+        var av=document.createElement('span'); av.className='avt'; av.style.background=color(name); av.textContent=initials(name);
+        td.classList.add('avt-td'); td.appendChild(av); td.appendChild(wrap);
+      }
+      function scan(root){ if(root&&root.querySelectorAll) Array.prototype.forEach.call(root.querySelectorAll(SEL),decorate); }
+      function run(){
+        scan(document);
+        try{
+          var mo=new MutationObserver(function(muts){
+            muts.forEach(function(m){ Array.prototype.forEach.call(m.addedNodes||[],function(n){ if(n.nodeType===1){ if(n.matches&&n.matches(SEL))decorate(n); scan(n); } }); });
+          });
+          mo.observe(document.body,{childList:true,subtree:true});
+        }catch(e){}
+      }
+      if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
+    })();
   </script>
   <script src="copilot-widget.js?v=8" defer></script>
 </body>

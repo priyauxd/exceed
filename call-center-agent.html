@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Call Center Agent — AGM Sales EXEED CRM</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -161,7 +164,7 @@
     .greeting-left { flex: 1 1 auto; min-width: 0; }
     .greeting h1 {
       font-size: 18px; font-weight: 700; color: var(--ink);
-      letter-spacing: -.01em; margin-bottom: 1px;
+      letter-spacing: -.01em; margin-bottom: 1px; white-space: nowrap;
     }
     .greeting h1 .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
     @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
@@ -184,9 +187,9 @@
     .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
     .shift-pill {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 11px; background: transparent;
+      padding: 5px 11px; background: var(--green-soft);
       border: none; border-radius: 20px;
-      font-size: 11.5px; color: var(--ink-muted);
+      font-size: 11.5px; color: #3d8a5b;
     }
     .shift-pill .dot {
       width: 6px; height: 6px; border-radius: 50%;
@@ -336,6 +339,9 @@
       transition: box-shadow .2s;
     }
     .metric-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
+    .kpi-grid.g7 .metric-card { text-align: center; }
+    .metric-card.mc-center { text-align: center; }
+    .metric-card.mc-center .mc-icon { margin-left: auto; margin-right: auto; }
     .mc-icon {
       width: 28px; height: 28px; border-radius: 7px;
       display: flex; align-items: center; justify-content: center;
@@ -428,6 +434,16 @@
     .qt:hover { background: var(--blue-soft); color: var(--blue); }
     .qt.on { background: var(--blue); color: #fff; border-color: var(--blue); }
 
+    .qac-btn { display:inline-flex; align-items:center; gap:5px; background:transparent; border:none; color:var(--blue); font-size:12.5px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .qac-btn span:last-child { text-decoration:underline; }
+    .qac-btn .material-symbols-outlined { font-size:16px; }
+    .qac-menu { position:absolute; top:calc(100% + 6px); right:0; min-width:224px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 8px 26px rgba(20,24,34,.15); padding:8px; z-index:200; display:none; }
+    .qac-menu.open { display:block; }
+    .qac-title { font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); padding:6px 8px 8px; }
+    .qac-opt { display:flex; align-items:center; gap:11px; width:100%; background:transparent; border:none; padding:8px; border-radius:8px; font-size:14px; font-weight:500; color:var(--ink); font-family:inherit; cursor:pointer; text-align:left; }
+    .qac-opt:hover { background:var(--bg); }
+    .qac-ring { width:18px; height:18px; border:2px solid var(--blue); border-radius:50%; flex-shrink:0; box-sizing:border-box; }
+    .qac-opt.on .qac-ring { background:var(--blue); box-shadow:inset 0 0 0 3px #fff; }
     .qt-table { width: 100%; border-collapse: collapse; }
     .qt-table th {
       text-align: left; padding: 9px 14px;
@@ -760,6 +776,10 @@
     .scope-dd strong { font-weight:600; color:var(--ink-secondary); }
     .scope-dd .material-symbols-outlined { font-size:15px; color:var(--ink-muted); }
     .scope-info { font-size:15px; color:var(--ink-muted); cursor:help; }
+    .scope-info-wrap { position:relative; display:inline-flex; align-items:center; }
+    .scope-tip { position:absolute; top:calc(100% + 8px); right:-20px; left:auto; width:300px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 8px 26px rgba(20,24,34,.15); padding:14px 16px; font-size:13px; line-height:1.55; color:var(--ink-secondary); font-weight:400; text-align:left; white-space:normal; z-index:300; opacity:0; visibility:hidden; transform:translateY(-4px); transition:opacity .12s, transform .12s; pointer-events:none; }
+    .scope-info-wrap:hover .scope-tip, .scope-info-wrap:focus-within .scope-tip { opacity:1; visibility:visible; transform:translateY(0); }
+    .scope-tip strong { font-weight:700; color:var(--ink); }
     .scope-menu { position:absolute; top:calc(100% + 6px); right:0; background:var(--surface); border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 28px rgba(20,24,34,.14); padding:5px; min-width:206px; z-index:50; display:none; }
     .scope-menu.open { display:block; }
     .scope-menu button { display:block; width:100%; text-align:left; background:none; border:none; font-family:inherit; font-size:12.5px; color:var(--ink-secondary); padding:8px 10px; border-radius:7px; cursor:pointer; }
@@ -767,7 +787,87 @@
     /* Simulated incoming call */
     .inc-overlay { position:fixed; inset:0; background:rgba(15,20,28,.4); opacity:0; visibility:hidden; transition:.2s; z-index:210; }
     .inc-overlay.open { opacity:1; visibility:visible; }
-    .inc-modal { position:fixed; top:0; left:50%; transform:translateX(-50%) translateY(-130%); transition:transform .34s cubic-bezier(.34,1.3,.5,1); z-index:211; width:384px; max-width:92vw; background:var(--surface); border-radius:0 0 16px 16px; box-shadow:0 16px 44px rgba(20,24,34,.24); overflow:hidden; }
+    .inc-modal { position:fixed; top:0; left:50%; transform:translateX(-50%) translateY(-130%); transition:transform .34s cubic-bezier(.34,1.3,.5,1); z-index:211; width:420px; max-width:92vw; background:var(--surface); border-radius:0 0 16px 16px; box-shadow:0 16px 44px rgba(20,24,34,.24); overflow:hidden; }
+    .dc-overlay { position:fixed; inset:0; background:rgba(15,20,28,.45); opacity:0; visibility:hidden; transition:.2s; z-index:230; }
+    .dc-overlay.open { opacity:1; visibility:visible; }
+    .dc-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-46%); opacity:0; visibility:hidden; transition:opacity .2s, transform .2s, visibility .2s; z-index:231; width:440px; max-width:92vw; background:#f7f7f8; border-radius:16px; box-shadow:0 24px 60px rgba(20,24,34,.28); padding:26px 28px; }
+    .dc-modal.open { opacity:1; visibility:visible; transform:translate(-50%,-50%); }
+    .dc-x { position:absolute; top:18px; right:18px; background:transparent; border:none; color:var(--ink-muted); cursor:pointer; padding:2px; display:flex; }
+    .dc-x .material-symbols-outlined { font-size:20px; }
+    .dc-title { font-size:21px; font-weight:700; color:var(--ink); }
+    .dc-sub { font-size:13.5px; color:var(--ink-secondary); line-height:1.5; margin-top:6px; }
+    .dc-lbl { display:block; font-size:13.5px; font-weight:700; color:var(--ink); margin:20px 0 8px; }
+    .dc-req { color:var(--red); }
+    .dc-select, .dc-ta { width:100%; box-sizing:border-box; border:1px solid var(--border); border-radius:9px; padding:11px 13px; font-family:inherit; font-size:14px; color:var(--ink); background:var(--surface); outline:none; }
+    .dc-select:focus, .dc-ta:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(23,41,61,.12); }
+    .dc-ta { resize:vertical; min-height:96px; }
+    .dc-foot { display:flex; justify-content:flex-end; gap:11px; margin-top:24px; }
+    .dc-cancel { border:1px solid var(--border); background:var(--surface); color:var(--ink-secondary); border-radius:9px; padding:10px 20px; font-size:13.5px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-confirm { border:none; background:var(--red); color:#fff; border-radius:9px; padding:10px 20px; font-size:13.5px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .dc-confirm:disabled { background:#e0a3a0; cursor:not-allowed; }
+    .lc-overlay,.es-overlay{position:fixed;inset:0;background:rgba(15,20,28,.45);opacity:0;visibility:hidden;transition:.2s;}
+    .lc-overlay{z-index:240;} .es-overlay{z-index:250;}
+    .lc-overlay.open,.es-overlay.open{opacity:1;visibility:visible;}
+    .lc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;z-index:241;width:600px;max-width:94vw;max-height:90vh;background:var(--surface);border-radius:16px;box-shadow:0 24px 60px rgba(20,24,34,.3);display:flex;flex-direction:column;overflow:hidden;}
+    .lc-panel.open{opacity:1;visibility:visible;transform:translate(-50%,-50%);}
+    .lc-hd{background:linear-gradient(135deg,#17293d,#2f5b8a);color:#fff;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
+    .lc-hd-l{display:flex;align-items:center;gap:11px;}
+    .lc-spark{font-size:22px;}
+    .lc-hd-t{font-size:15px;font-weight:700;}
+    .lc-hd-s{font-size:12px;opacity:.85;display:flex;align-items:center;gap:4px;margin-top:1px;}
+    .lc-hd-r{display:flex;align-items:center;gap:14px;font-size:12.5px;}
+    .lc-timer-wrap,.lc-lang{display:inline-flex;align-items:center;gap:4px;opacity:.9;}
+    .lc-end{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;}
+    .lc-end:hover{background:rgba(255,255,255,.24);}
+    .lc-body{padding:16px 20px 20px;overflow-y:auto;}
+    .lc-say{border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-bottom:16px;background:#f8f9fb;}
+    .lc-say-t{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;}
+    .lc-say-t .material-symbols-outlined{font-size:15px;}
+    .lc-say-x{font-size:14px;color:var(--ink);font-weight:600;}
+    .lc-miss-h,.lc-det-h,.lc-tr-h{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin:16px 0 10px;}
+    .lc-miss-h{color:#b26a1a;} .lc-miss-h .material-symbols-outlined{font-size:15px;}
+    .lc-det-h,.lc-tr-h{color:var(--ink-muted);} .lc-det-h .material-symbols-outlined{font-size:15px;}
+    .lc-chips{display:flex;flex-wrap:wrap;gap:8px;}
+    .lc-chip{font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;background:var(--amber-soft);color:#b26a1a;border:1px solid #f0dcc0;}
+    .lc-card{border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:#f8f9fb;}
+    .lc-card-top{display:flex;align-items:center;justify-content:space-between;}
+    .lc-card-k{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted);}
+    .lc-conf{font-size:11.5px;font-weight:700;color:var(--ink-secondary);background:#e7e9ee;border-radius:6px;padding:2px 8px;}
+    .lc-card-v{font-size:15px;font-weight:700;color:var(--ink);margin:3px 0 8px;}
+    .lc-apply{display:inline-flex;align-items:center;gap:5px;background:transparent;border:none;color:var(--blue);font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;padding:0;}
+    .lc-apply .material-symbols-outlined{font-size:16px;}
+    .lc-apply.applied{color:#3d8a5b;}
+    .lc-transcript{border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:9px;min-height:64px;}
+    .lc-line-in{animation:lcIn .32s ease;}
+    @keyframes lcIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+    .lc-hidden{display:none;}
+    .lc-wait{font-size:12.5px;color:var(--ink-muted);font-style:italic;display:flex;align-items:center;gap:8px;}
+    .lc-listen-dot{width:7px;height:7px;border-radius:50%;background:#5cb97f;box-shadow:0 0 0 0 rgba(92,185,127,.5);animation:lcPulse 1.3s infinite;}
+    @keyframes lcPulse{0%,100%{box-shadow:0 0 0 0 rgba(92,185,127,.5);}50%{box-shadow:0 0 0 7px rgba(92,185,127,0);}}
+    .lc-line{font-size:13px;color:var(--ink);line-height:1.4;}
+    .lc-ts{font-family:'SF Mono',Consolas,monospace;font-size:11.5px;color:var(--ink-muted);margin-right:6px;}
+    .lc-line .cust{color:var(--blue);}
+    .es-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;z-index:251;width:720px;max-width:94vw;max-height:92vh;overflow-y:auto;background:#f7f7f8;border-radius:16px;box-shadow:0 24px 60px rgba(20,24,34,.3);padding:26px 30px;}
+    .es-modal.open{opacity:1;visibility:visible;transform:translate(-50%,-50%);}
+    .es-x{position:absolute;top:20px;right:22px;background:transparent;border:none;color:var(--ink-muted);cursor:pointer;padding:2px;display:flex;}
+    .es-x .material-symbols-outlined{font-size:20px;}
+    .es-t{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:700;color:var(--ink);}
+    .es-spark{font-size:22px;color:var(--blue);}
+    .es-s{font-size:13.5px;color:var(--ink-secondary);margin-top:6px;}
+    .es-warn{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid #f0dcc0;border-radius:10px;padding:13px 15px;margin:16px 0 20px;font-size:13.5px;color:var(--ink);line-height:1.5;}
+    .es-warn .material-symbols-outlined{color:#d99a2b;font-size:20px;flex-shrink:0;}
+    .es-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;}
+    .es-fld{display:flex;flex-direction:column;gap:7px;}
+    .es-fld label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted);}
+    .es-fld input,.es-fld textarea{border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-family:inherit;font-size:13.5px;color:var(--ink);background:var(--surface);outline:none;}
+    .es-fld input:focus,.es-fld textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(23,41,61,.1);}
+    .es-fld textarea{resize:vertical;min-height:80px;}
+    .es-foot{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;flex-wrap:wrap;}
+    .es-btn{display:inline-flex;align-items:center;gap:6px;border-radius:9px;padding:11px 18px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;}
+    .es-btn.ghost{background:var(--surface);border:1px solid var(--border);color:var(--ink-secondary);}
+    .es-btn.outline{background:var(--surface);border:1.5px solid var(--blue);color:var(--blue);}
+    .es-btn.primary{background:var(--blue);border:none;color:#fff;}
+    .es-btn.primary .material-symbols-outlined{font-size:16px;}
     .inc-modal.open { transform:translateX(-50%) translateY(0); }
     .inc-hd { background:linear-gradient(135deg,#0a0e14,#16293c); color:#fff; padding:16px 20px; display:flex; align-items:center; gap:13px; }
     .inc-ring { width:44px; height:44px; border-radius:50%; background:rgba(92,185,127,.2); display:flex; align-items:center; justify-content:center; color:#7ed6a0; flex-shrink:0; animation:incRing 1s ease-in-out infinite; }
@@ -787,6 +887,29 @@
     .inc-btn.accept:hover { background:#4fa870; }
     .inc-btn.decline { background:var(--red-soft); color:var(--red); }
     .inc-btn.decline:hover { background:#f8dede; }
+    .inc-body { max-height:calc(100vh - 120px); overflow-y:auto; }
+    .inc-ringmeta { font-size:11px; opacity:.85; text-align:right; line-height:1.55; flex-shrink:0; }
+    .inc-automiss { opacity:.7; }
+    .inc-badge { display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; background:var(--amber-soft); color:#8a6420; margin-bottom:13px; }
+    .inc-rows { display:flex; flex-direction:column; gap:8px; }
+    .inc-row { display:flex; align-items:baseline; justify-content:space-between; gap:14px; }
+    .inc-k { font-size:10.5px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--ink-muted); flex-shrink:0; }
+    .inc-v { font-size:12.5px; font-weight:600; color:var(--ink); text-align:right; }
+    .inc-v.warn { color:#b26a1a; }
+    .inc-sec { font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); margin:15px 0 10px; padding-top:13px; border-top:1px solid var(--border); }
+    .inc-ai { background:var(--blue-soft); border-radius:10px; padding:11px 13px; margin:14px 0 4px; }
+    .inc-ai-t { display:flex; align-items:center; gap:6px; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--blue); margin-bottom:4px; }
+    .inc-ai-t .material-symbols-outlined { font-size:15px; }
+    .inc-ai-x { font-size:12.5px; color:var(--ink); line-height:1.5; }
+    .inc-langrow { margin-top:13px; }
+    .inc-langlbl { font-size:11.5px; font-weight:600; color:var(--ink-secondary); }
+    .inc-langchips { display:flex; gap:7px; margin-top:7px; }
+    .inc-lang { flex:1; padding:8px; border:1px solid var(--border); background:var(--surface); border-radius:8px; font-family:inherit; font-size:12px; font-weight:600; color:var(--ink-secondary); cursor:pointer; }
+    .inc-lang:hover { background:var(--green-soft); color:#3d8a5b; border-color:#bfe3cd; }
+    .inc-links { display:flex; flex-direction:column; gap:9px; margin-top:14px; padding-top:13px; border-top:1px solid var(--border); }
+    .inc-links a { display:inline-flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-muted); text-decoration:none; }
+    .inc-links a:hover { color:var(--ink); }
+    .inc-links a .material-symbols-outlined { font-size:16px; }
     .tc-ov { position:fixed; inset:0; background:rgba(20,24,34,.5); opacity:0; visibility:hidden; transition:opacity .2s; z-index:130; }
     .tc-ov.open { opacity:1; visibility:visible; }
     .tc-panel { position:fixed; top:0; right:0; bottom:0; width:1000px; max-width:96vw; background:var(--surface); box-shadow:-14px 0 44px rgba(0,0,0,.22); z-index:131; display:flex; flex-direction:column; overflow:hidden; transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1); }
@@ -894,6 +1017,15 @@
     .pct-g { color:#3d8a5b; font-weight:700; } .pct-a { color:#8a6420; font-weight:700; } .pct-r { color: var(--red); font-weight:700; }
     .temp { display:inline-block; padding:2px 10px; border-radius:11px; font-size:10.5px; font-weight:600; }
     .temp.hot { background: var(--red-soft); color: var(--red); }
+    .ncb { display:flex; align-items:center; gap:14px; background:#fafafa; border:1px solid #eeeeee; border-radius:12px; padding:13px 18px; margin-bottom:14px; }
+    .ncb-ico { color:var(--ink-muted); display:flex; align-items:center; }
+    .ncb-ico .material-symbols-outlined { font-size:20px; }
+    .ncb-body { flex:1 1 auto; min-width:0; line-height:1.35; }
+    .ncb-eyebrow { font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-muted); }
+    .ncb-title { font-size:15px; font-weight:700; color:var(--ink); margin:1px 0; }
+    .ncb-sub { font-size:12.5px; color:var(--ink-secondary); }
+    .ncb-btn { margin-left:auto; flex-shrink:0; background:var(--blue); color:#fff; border:none; border-radius:8px; padding:9px 15px; font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; display:inline-flex; align-items:center; gap:3px; text-decoration:none; }
+    .ncb-btn .material-symbols-outlined { font-size:17px; }
     .temp.warm { background: var(--amber-soft); color: #8a6420; }
 
     .panels3 { display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-top:14px; align-items:stretch; }
@@ -1087,7 +1219,7 @@
           <div class="greeting-left">
             <h1>Good afternoon, Nadia <span class="wave">&#128075;</span></h1>
             <div class="greeting-sub">
-              <span class="date">30 Jun 2026</span> &middot; <strong style="color:var(--red)">7 to action</strong> &middot; <strong style="color:var(--green)">3 ready to hand over</strong>
+              <span class="date">Tue, 30 Jun 2026</span>
             </div>
           </div>
           <div class="greeting-right">
@@ -1098,11 +1230,12 @@
             <button class="train-chip" onclick="openTraining()" title="Open training coach"><span class="material-symbols-outlined">school</span> 5 modules due <span class="material-symbols-outlined" style="font-size:15px">chevron_right</span></button>
             <div class="scope-wrap">
               <button class="scope-dd" onclick="toggleScope(event)"><span class="material-symbols-outlined">tune</span> Scope: <strong id="scopeVal">Call Centre-owned leads</strong> <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
-              <span class="scope-info material-symbols-outlined" title="Only leads owned by the Call Centre are shown here. Direct-to-showroom Website · WhatsApp · Social leads appear only when rerouted.">info</span>
+              <span class="scope-info-wrap" tabindex="0"><span class="scope-info material-symbols-outlined">info</span>
+                <div class="scope-tip">Scope controls which of your leads power the KPIs. <strong>Call Centre-owned leads</strong> shows only leads currently owned by the call centre and assigned to you. <strong>All inbound leads</strong> also includes direct-to-showroom sources (Website / WhatsApp / Social / Walk-in) assigned to you.</div>
+              </span>
               <div class="scope-menu" id="scopeMenu">
                 <button onclick="setScope('Call Centre-owned leads')">Call Centre-owned leads</button>
                 <button onclick="setScope('All inbound leads')">All inbound leads</button>
-                <button onclick="setScope('My leads only')">My leads only</button>
               </div>
             </div>
             <div class="date-filter-wrap">
@@ -1114,13 +1247,24 @@
                 <button class="df-tab" id="dfCustom" onclick="setDateRange(this)">Custom Range</button>
               </div>
               <div class="date-custom" id="dateCustom">
-                <label>From<input type="date" id="dateFrom"></label>
-                <label>To<input type="date" id="dateTo"></label>
+                <label>From<input type="text" id="dateFrom" placeholder="dd.mm.yyyy"></label>
+                <label>To<input type="text" id="dateTo" placeholder="dd.mm.yyyy"></label>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
             </div>
             <button class="btn-soft btn-icon-only" id="refreshBtn" onclick="doRefresh(this)" title="Refresh"><span class="material-symbols-outlined">refresh</span></button>
           </div>
+        </div>
+
+        <!-- My next call (standalone banner) -->
+        <div class="ncb">
+          <div class="ncb-ico"><span class="material-symbols-outlined">auto_awesome</span></div>
+          <div class="ncb-body">
+            <div class="ncb-eyebrow">My next call</div>
+            <div class="ncb-title">Start call &mdash; Meera Shah</div>
+            <div class="ncb-sub">800 Number &middot; EXEED LX. Highest-priority in your queue. &middot; <strong style="color:var(--red)">8 min left</strong> &middot; <span class="temp hot">Hot</span> &middot; WhatsApp</div>
+          </div>
+          <a href="lead-detail.html?lead=Meera+Shah" class="ncb-btn">Start call <span class="material-symbols-outlined">chevron_right</span></a>
         </div>
 
         <!-- Ask Copilot -->
@@ -1210,9 +1354,9 @@
               </div>
               <div class="dial-sub">of connected calls</div>
             </div>
-            <div class="metric-card clk" onclick="openKpi('open3d')">
+            <div class="metric-card clk mc-center" onclick="openKpi('open3d')">
               <div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div>
-              <div class="mc-lbl">Open Leads &gt; 3 Days</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Re-engage</div>
+              <div class="mc-val txt-amber">3</div><div class="mc-lbl">Open Leads &gt; 3 Days</div>
             </div>
           </div>
         </div>
@@ -1221,13 +1365,13 @@
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My Queue</span><span class="kpi-sec-sub">&middot; Your queue right now</span></div>
           <div class="kpi-grid g7 kpi-group">
-            <div class="metric-card clk" onclick="openKpi('assigned')"><div class="mc-icon blue"><span class="material-symbols-outlined">group</span></div><div class="mc-lbl">Leads Assigned</div><div class="mc-val">5</div><div class="mc-sub">Call Centre-owned only</div></div>
-            <div class="metric-card clk" onclick="openKpi('notActioned')"><div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">5</div><div class="mc-sub">Action first</div></div>
-            <div class="metric-card clk" onclick="openKpi('callbacks')"><div class="mc-icon amber"><span class="material-symbols-outlined">schedule</span></div><div class="mc-lbl">Callbacks Due</div><div class="mc-val">2</div><div class="mc-sub">1 overdue</div></div>
-            <div class="metric-card clk" onclick="openKpi('contact')"><div class="mc-icon green"><span class="material-symbols-outlined">check_circle</span></div><div class="mc-lbl">Contact</div><div class="mc-val txt-green">2</div><div class="mc-sub">100% qualified</div></div>
-            <div class="metric-card clk" onclick="openKpi('returned')"><div class="mc-icon amber"><span class="material-symbols-outlined">undo</span></div><div class="mc-lbl">Returned by Sales</div><div class="mc-val">2</div><div class="mc-sub">Fix and resend</div></div>
-            <div class="metric-card clk" onclick="openKpi('aht')"><div class="mc-icon teal"><span class="material-symbols-outlined">timer</span></div><div class="mc-lbl">AHT &middot; Qual &middot; Return</div><div class="mc-val" style="font-size:19px">4m 05s</div><div class="mc-sub">Qual 88% &middot; Return 3%</div></div>
-            <div class="metric-card clk" onclick="openKpi('lost')" style="background:var(--red-soft);border-color:#f4cfcf"><div class="mc-icon red"><span class="material-symbols-outlined">person_off</span></div><div class="mc-lbl">Lost Leads</div><div class="mc-val txt-red">1</div><div class="mc-sub">Separated from queue</div></div>
+            <div class="metric-card clk" onclick="openKpi('assigned')"><div class="mc-lbl">Leads Assigned</div><div class="mc-val">5</div><div class="mc-sub">Call Centre-owned only</div></div>
+            <div class="metric-card clk" onclick="openKpi('notActioned')"><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">5</div><div class="mc-sub">Action first</div></div>
+            <div class="metric-card clk" onclick="openKpi('callbacks')"><div class="mc-lbl">Callbacks Due</div><div class="mc-val">2</div><div class="mc-sub">1 overdue</div></div>
+            <div class="metric-card clk" onclick="openKpi('contact')"><div class="mc-lbl">Contact</div><div class="mc-val txt-green">2</div><div class="mc-sub">100% qualified</div></div>
+            <div class="metric-card clk" onclick="openKpi('returned')"><div class="mc-lbl">Returned by Sales</div><div class="mc-val">2</div><div class="mc-sub">Fix and resend</div></div>
+            <div class="metric-card clk" onclick="openKpi('aht')"><div class="mc-lbl">AHT &middot; Qual &middot; Return</div><div class="mc-val" style="font-size:19px">4m 05s</div><div class="mc-sub">Qual 88% &middot; Return 3%</div></div>
+            <div class="metric-card clk" onclick="openKpi('lost')" style="background:var(--red-soft);border-color:#f4cfcf"><div class="mc-lbl">Lost Leads</div><div class="mc-val txt-red">1</div><div class="mc-sub">Separated from queue</div></div>
           </div>
         </div>
 
@@ -1235,10 +1379,16 @@
         <div class="q-panel">
             <div class="q-head">
               <div class="q-head-left"><h3>Lead queue</h3><span class="q-cnt">5 of 5 &middot; sorted by urgency</span></div>
-              <div class="q-nextcall">
-                <div class="nc-ico"><span class="material-symbols-outlined">wifi_calling_3</span></div>
-                <div class="qnc-info"><span class="qnc-lbl">My next call</span><span class="qnc-line"><span class="qnc-name">Meera Shah</span> <span class="qnc-meta">&middot; EXEED LX &middot; <strong style="color:var(--red)">8 min left</strong> &middot; <span class="temp hot">Hot</span></span></span></div>
-                <a href="lead-detail.html?lead=Meera+Shah" class="nc-btn"><span class="material-symbols-outlined" style="font-size:16px">call</span> Start call</a>
+              <div class="q-head-right" style="position:relative">
+                <button class="qac-btn" onclick="qacToggle(event)"><span class="material-symbols-outlined">view_column</span><span>Add column</span></button>
+                <div class="qac-menu" id="qacMenu">
+                  <div class="qac-title">Additional columns</div>
+                  <button class="qac-opt" onclick="qToggleCol('channel','Channel',this)"><span class="qac-ring"></span> Channel</button>
+                  <button class="qac-opt" onclick="qToggleCol('temperature','Temperature',this)"><span class="qac-ring"></span> Temperature</button>
+                  <button class="qac-opt" onclick="qToggleCol('created','Created',this)"><span class="qac-ring"></span> Created</button>
+                  <button class="qac-opt" onclick="qToggleCol('routing','Routing',this)"><span class="qac-ring"></span> Routing</button>
+                  <button class="qac-opt" onclick="qToggleCol('language','Language',this)"><span class="qac-ring"></span> Language</button>
+                </div>
               </div>
             </div>
             <div class="q-filters">
@@ -1413,27 +1563,108 @@
   </div>
 
   <!-- Simulated incoming call -->
-  <div class="inc-overlay" id="incOverlay" onclick="declineIncoming()"></div>
+  <div class="inc-overlay" id="incOverlay" onclick="closeIncoming()"></div>
   <div class="inc-modal" id="incModal" role="dialog" aria-label="Incoming call">
     <div class="inc-hd">
       <div class="inc-ring"><span class="material-symbols-outlined">phone_in_talk</span></div>
-      <div>
-        <div class="inc-eyebrow">Incoming call · 800 Number</div>
-        <div class="inc-name" id="incName">Meera Shah</div>
-        <div class="inc-sub" id="incNum">+971 50 662 0148</div>
+      <div style="flex:1">
+        <div class="inc-eyebrow">AGM Call Center · Incoming call</div>
+        <div class="inc-name" id="incName">Yulia Ivanova</div>
+        <div class="inc-sub" id="incNum">+971 55 123 4567</div>
       </div>
+      <div class="inc-ringmeta">Ringing<br><span class="inc-automiss">Auto-miss 15s</span></div>
     </div>
     <div class="inc-body">
-      <div class="inc-meta">
-        <span class="inc-tag">EXEED LX</span>
-        <span class="inc-tag hot">Hot lead</span>
-        <span class="inc-tag">Highest priority · 8 min SLA</span>
+      <span class="inc-badge">Existing open lead</span>
+      <div class="inc-rows">
+        <div class="inc-row"><span class="inc-k">Source</span><span class="inc-v">Website callback</span></div>
+        <div class="inc-row"><span class="inc-k">Language</span><span class="inc-v">English</span></div>
+        <div class="inc-row"><span class="inc-k">CRM Match</span><span class="inc-v">Matched by phone</span></div>
+        <div class="inc-row"><span class="inc-k">Showroom</span><span class="inc-v">SZR</span></div>
+        <div class="inc-row"><span class="inc-k">Open Leads</span><span class="inc-v">1</span></div>
+      </div>
+      <div class="inc-sec">Customer context</div>
+      <div class="inc-rows">
+        <div class="inc-row"><span class="inc-k">Model Interest</span><span class="inc-v">EXEED VX</span></div>
+        <div class="inc-row"><span class="inc-k">Last Interaction</span><span class="inc-v">Configurator submit · 2 days ago</span></div>
+        <div class="inc-row"><span class="inc-k">Previous Enquiry</span><span class="inc-v">VX Luxury pricing</span></div>
+        <div class="inc-row"><span class="inc-k">Open Task</span><span class="inc-v warn">Send comparison — due today</span></div>
+        <div class="inc-row"><span class="inc-k">SLA Impact</span><span class="inc-v warn">First-contact SLA in 42 min.</span></div>
+      </div>
+      <div class="inc-ai">
+        <div class="inc-ai-t"><span class="material-symbols-outlined">auto_awesome</span> AI Suggested Action</div>
+        <div class="inc-ai-x">Accept — pick up the open enquiry and confirm next step.</div>
       </div>
       <div class="inc-actions">
-        <button class="inc-btn decline" onclick="declineIncoming()"><span class="material-symbols-outlined" style="font-size:18px">call_end</span> Decline</button>
         <button class="inc-btn accept" onclick="acceptIncoming()"><span class="material-symbols-outlined" style="font-size:18px">call</span> Accept call</button>
+        <button class="inc-btn decline" onclick="openDeclineCall()"><span class="material-symbols-outlined" style="font-size:18px">call_end</span> Decline</button>
+      </div>
+      <div class="inc-langrow">
+        <span class="inc-langlbl">Accept in specific language</span>
+        <div class="inc-langchips">
+          <button class="inc-lang" onclick="acceptIncoming()">English</button>
+          <button class="inc-lang" onclick="acceptIncoming()">Arabic</button>
+          <button class="inc-lang" onclick="acceptIncoming()">Hindi/Urdu</button>
+        </div>
+      </div>
+      <div class="inc-links">
+        <a href="#" onclick="closeIncoming();ccShowToast('Sent to queue');return false"><span class="material-symbols-outlined">schedule</span> Send to queue</a>
+        <a href="#" onclick="openDeclineCall();return false"><span class="material-symbols-outlined">report</span> Mark as spam / wrong number</a>
       </div>
     </div>
+  </div>
+
+  <!-- Decline call modal -->
+  <div class="dc-overlay" id="dcOverlay" onclick="closeDeclineCall()"></div>
+  <div class="dc-modal" id="dcModal" role="dialog" aria-label="Decline call">
+    <button class="dc-x" onclick="closeDeclineCall()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+    <div class="dc-title">Decline call</div>
+    <div class="dc-sub"><span id="dcWho">Yulia Ivanova · +971 55 123 4567</span> — pick a reason so the activity is logged.</div>
+    <label class="dc-lbl">Reason <span class="dc-req">*</span></label>
+    <select class="dc-select" id="dcReason" onchange="dcValidate()">
+      <option value="">Select reason…</option>
+      <option>Spam</option>
+      <option>Wrong number</option>
+      <option>Customer called back later</option>
+      <option>Duplicate call</option>
+      <option>After-hours / queue transfer</option>
+      <option>Other</option>
+    </select>
+    <label class="dc-lbl">Notes</label>
+    <textarea class="dc-ta" id="dcNotes" placeholder="Optional context"></textarea>
+    <div class="dc-foot">
+      <button class="dc-cancel" onclick="closeDeclineCall()">Cancel</button>
+      <button class="dc-confirm" id="dcConfirm" onclick="confirmDeclineCall()" disabled>Confirm decline</button>
+    </div>
+  </div>
+
+  <!-- AI Co-Pilot live call -->
+  <div class="lc-overlay" id="lcOverlay" onclick="closeLiveCall()"></div>
+  <div class="lc-panel" id="lcPanel" role="dialog" aria-label="AI Co-Pilot live call">
+    <div class="lc-hd">
+      <div class="lc-hd-l"><span class="material-symbols-outlined lc-spark">auto_awesome</span><div><div class="lc-hd-t">AI Co-Pilot</div><div class="lc-hd-s"><span class="material-symbols-outlined" style="font-size:13px">mic</span> Live call &middot; listening</div></div></div>
+      <div class="lc-hd-r"><span class="lc-timer-wrap"><span class="material-symbols-outlined" style="font-size:14px">schedule</span> <span id="lcTimer">00:23</span></span><span class="lc-lang"><span class="material-symbols-outlined" style="font-size:14px">language</span> English</span><button class="lc-end" onclick="endLiveCall()"><span class="material-symbols-outlined" style="font-size:15px">call_end</span> End</button></div>
+    </div>
+    <div class="lc-body">
+      <div class="lc-say"><div class="lc-say-t"><span class="material-symbols-outlined">auto_awesome</span> What to say next</div><div class="lc-say-x">Confirm the next step and end the call politely.</div></div>
+      <div class="lc-miss-h"><span class="material-symbols-outlined">warning</span> Missing qualification</div>
+      <div class="lc-chips"><span class="lc-chip">Reason for enquiry</span><span class="lc-chip">Primary use case</span><span class="lc-chip">Preferred showroom</span><span class="lc-chip">Preferred contact time</span><span class="lc-chip">Test drive interest</span><span class="lc-chip">Next step</span></div>
+      <div class="lc-det-h"><span class="material-symbols-outlined">bolt</span> Detected from transcript</div>
+      <div class="lc-card"><div class="lc-card-top"><span class="lc-card-k">Model Interest</span><span class="lc-conf">96%</span></div><div class="lc-card-v">EXEED LX</div><button class="lc-apply" onclick="lcApplyCrm(this)"><span class="material-symbols-outlined">check_circle</span> Apply to CRM</button></div><div class="lc-card"><div class="lc-card-top"><span class="lc-card-k">Primary Use Case</span><span class="lc-conf">92%</span></div><div class="lc-card-v">Family car</div><button class="lc-apply" onclick="lcApplyCrm(this)"><span class="material-symbols-outlined">check_circle</span> Apply to CRM</button></div><div class="lc-card"><div class="lc-card-top"><span class="lc-card-k">Preferred Showroom</span><span class="lc-conf">94%</span></div><div class="lc-card-v">SZR Dubai</div><button class="lc-apply" onclick="lcApplyCrm(this)"><span class="material-symbols-outlined">check_circle</span> Apply to CRM</button></div>
+      <div class="lc-tr-h">Live transcript</div>
+      <div class="lc-transcript" id="lcTranscript"><div class="lc-wait"><span class="lc-listen-dot"></span> Connecting — waiting for audio…</div></div>
+    </div>
+  </div>
+
+  <!-- AI end-call summary -->
+  <div class="es-overlay" id="esOverlay" onclick="closeEndSummary()"></div>
+  <div class="es-modal" id="esModal" role="dialog" aria-label="AI end-call summary">
+    <button class="es-x" onclick="closeEndSummary()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+    <div class="es-t"><span class="material-symbols-outlined es-spark">auto_awesome</span> AI end-call summary</div>
+    <div class="es-s">Review and edit before saving. Nothing is written to CRM until you approve.</div>
+    <div class="es-warn"><span class="material-symbols-outlined">warning</span><div><strong>Qualification: 25%</strong> &middot; Missing: Reason for enquiry, Primary use case, Preferred showroom, Preferred contact time, Test drive interest, Next step</div></div>
+    <div class="es-grid"><div class="es-fld"><label>Customer Interest</label><input value="Returned lead · EXEED LX"></div><div class="es-fld"><label>Model Requested</label><input value="EXEED LX"></div><div class="es-fld"><label>Reason for Enquiry</label><input value=""></div><div class="es-fld"><label>Preferred Showroom</label><input value=""></div><div class="es-fld"><label>Preferred Time</label><input value=""></div><div class="es-fld"><label>Language / Channel</label><input value="English"></div><div class="es-fld"><label>Test Drive</label><input value=""></div><div class="es-fld"><label>Next Step</label><input value=""></div><div class="es-fld"><label>Call Outcome</label><input value="Captured"></div><div class="es-fld"><label>Open Questions</label><textarea></textarea></div></div>
+    <div class="es-foot"><button class="es-btn ghost" onclick="esSave('incomplete')">Save as incomplete</button><button class="es-btn outline" onclick="esSave('summary')">Save summary</button><button class="es-btn primary" onclick="esSave('sales')"><span class="material-symbols-outlined">send</span> Send to Sales</button></div>
   </div>
 
   <!-- KPI drill-down drawer -->
@@ -1532,7 +1763,14 @@
       document.getElementById('ddSub').textContent = d.s;
       document.getElementById('ddCount').textContent = d.c;
       var h = '<thead><tr>'+d.head+'</tr></thead><tbody>';
-      d.rows.forEach(function(r){ h += '<tr>'+r.map(function(c){ return '<td>'+c+'</td>'; }).join('')+'</tr>'; });
+      d.rows.forEach(function(r){
+        var nm = ''; var mm = String(r[0]).match(/class="dd-nm">([^<]+)</); if (mm) nm = mm[1];
+        h += '<tr>'+r.map(function(c){
+          var cell = String(c);
+          if (nm) cell = cell.replace(/href="lead-detail\.html"/g, 'href="lead-detail.html?lead='+encodeURIComponent(nm)+'"');
+          return '<td>'+cell+'</td>';
+        }).join('')+'</tr>';
+      });
       h += '</tbody>';
       document.getElementById('ddTable').innerHTML = h;
       document.getElementById('ddOv').classList.add('open');
@@ -1869,7 +2107,39 @@
     document.addEventListener('click', function(e){
       var w = e.target.closest ? e.target.closest('.scope-wrap') : null;
       if (!w){ var m = document.getElementById('scopeMenu'); if (m) m.classList.remove('open'); }
+      var q = e.target.closest ? e.target.closest('.q-head-right') : null;
+      if (!q){ var qm = document.getElementById('qacMenu'); if (qm) qm.classList.remove('open'); }
     });
+
+    // ── Lead queue: add column ──
+    var QCOLS = {
+      channel:     ['WhatsApp &middot; EN','Phone &middot; EN','WhatsApp &middot; AR','Phone &middot; AR','WhatsApp &middot; EN'],
+      temperature: ['<span style="color:var(--red);font-weight:600">Hot</span>','<span style="color:var(--amber);font-weight:600">Warm</span>','<span style="color:var(--amber);font-weight:600">Warm</span>','<span style="color:var(--blue);font-weight:600">Cold</span>','<span style="color:var(--amber);font-weight:600">Warm</span>'],
+      created:     ['30.06.2026 09:20','30.06.2026 09:05','30.06.2026 08:48','30.06.2026 08:30','30.06.2026 08:12'],
+      routing:     ['Direct','Direct','Rerouted from Showroom','Manual CC queue','Direct'],
+      language:    ['English','English','Arabic','Arabic','English']
+    };
+    function qacToggle(e){ if(e) e.stopPropagation(); document.getElementById('qacMenu').classList.toggle('open'); }
+    function qToggleCol(key,label,btn){
+      var tbl=document.getElementById('qtTableEl');
+      var existing=tbl.querySelector('th[data-col="'+key+'"]');
+      if(existing){
+        var idx=Array.prototype.indexOf.call(existing.parentNode.children,existing);
+        Array.prototype.forEach.call(tbl.querySelectorAll('tr'),function(tr){ if(tr.children[idx]) tr.removeChild(tr.children[idx]); });
+        btn.classList.remove('on');
+      } else {
+        var headRow=tbl.tHead.rows[0];
+        var th=document.createElement('th'); th.textContent=label; th.setAttribute('data-col',key);
+        headRow.insertBefore(th, headRow.lastElementChild);
+        var rows=tbl.tBodies[0].rows;
+        for(var i=0;i<rows.length;i++){
+          var td=document.createElement('td'); td.setAttribute('data-col',key);
+          td.innerHTML=(QCOLS[key]&&QCOLS[key][i]!=null)?QCOLS[key][i]:'&mdash;';
+          rows[i].insertBefore(td, rows[i].lastElementChild);
+        }
+        btn.classList.add('on');
+      }
+    }
 
     // ── Simulated incoming call ──
     var _incRingT;
@@ -1887,12 +2157,57 @@
       document.getElementById('incOverlay').classList.remove('open');
       document.getElementById('incModal').classList.remove('open');
     }
-    function acceptIncoming(){
-      closeIncoming();
-      ccShowToast('Call connected — opening lead');
-      setTimeout(function(){ window.location.href = 'lead-detail.html?lead=Meera+Shah'; }, 550);
-    }
+    function acceptIncoming(){ closeIncoming(); openLiveCall(); }
     function declineIncoming(){ closeIncoming(); }
+    // ── Decline call modal ──
+    function openDeclineCall(){ closeIncoming(); var r=document.getElementById('dcReason'); if(r)r.value=''; var n=document.getElementById('dcNotes'); if(n)n.value=''; dcValidate(); document.getElementById('dcOverlay').classList.add('open'); document.getElementById('dcModal').classList.add('open'); }
+    function closeDeclineCall(){ document.getElementById('dcOverlay').classList.remove('open'); document.getElementById('dcModal').classList.remove('open'); }
+    function dcValidate(){ var r=document.getElementById('dcReason'); var b=document.getElementById('dcConfirm'); if(b) b.disabled=!(r&&r.value); }
+    function confirmDeclineCall(){ var r=document.getElementById('dcReason'); var reason=(r&&r.value)||'logged'; closeDeclineCall(); ccShowToast('Call declined — '+reason); }
+    // ── AI Co-Pilot live call ──
+    var _lcT, _lcSecs, _lcRevealT, _lcIdx;
+    var LC_TR = [
+      {t:'00:03', who:'Agent',    cust:false, x:'Thank you for calling AGM EXEED, this is Nadia. How can I help today?'},
+      {t:'00:06', who:'Customer', cust:true,  x:"Hi Nadia, this is Sara Khalid. I'm interested in the EXEED LX."},
+      {t:'00:09', who:'Agent',    cust:false, x:'Wonderful — is this mainly a family car or for daily commuting?'},
+      {t:'00:12', who:'Customer', cust:true,  x:'Mostly family, five of us.'},
+      {t:'00:15', who:'Agent',    cust:false, x:'Understood. Which showroom is most convenient for you?'},
+      {t:'00:19', who:'Customer', cust:true,  x:'SZR would be easiest.'},
+      {t:'00:22', who:'Agent',    cust:false, x:'Would you like to test drive it this weekend?'}
+    ];
+    function openLiveCall(){
+      var p=document.getElementById('lcPanel');
+      document.getElementById('lcOverlay').classList.add('open'); p.classList.add('open');
+      _lcSecs=0; lcTick(); clearInterval(_lcT); _lcT=setInterval(lcTick,1000);
+      var box=document.getElementById('lcTranscript'); if(box) box.innerHTML='<div class="lc-wait"><span class="lc-listen-dot"></span> Connecting — waiting for audio…</div>';
+      Array.prototype.forEach.call(p.querySelectorAll('.lc-card'), function(c){ c.classList.add('lc-hidden'); });
+      _lcIdx=0; clearInterval(_lcRevealT); _lcRevealT=setInterval(lcRevealNext, 1700);
+      setTimeout(lcRevealNext, 800);
+    }
+    function lcRevealNext(){
+      var box=document.getElementById('lcTranscript'); if(!box) return;
+      if(_lcIdx>=LC_TR.length){ clearInterval(_lcRevealT); return; }
+      if(_lcIdx===0) box.innerHTML='';
+      var l=LC_TR[_lcIdx];
+      var div=document.createElement('div'); div.className='lc-line lc-line-in';
+      div.innerHTML='<span class="lc-ts">'+l.t+'</span> <b'+(l.cust?' class="cust"':'')+'>'+l.who+':</b> '+l.x;
+      box.appendChild(div);
+      var p=document.getElementById('lcPanel'); var cards=p.querySelectorAll('.lc-card');
+      if(_lcIdx===1&&cards[0]) cards[0].classList.remove('lc-hidden');
+      if(_lcIdx===3&&cards[1]) cards[1].classList.remove('lc-hidden');
+      if(_lcIdx===5&&cards[2]) cards[2].classList.remove('lc-hidden');
+      _lcIdx++;
+      var bodyEl=p.querySelector('.lc-body'); if(bodyEl) bodyEl.scrollTop=bodyEl.scrollHeight;
+    }
+    function closeLiveCall(){ document.getElementById('lcOverlay').classList.remove('open'); document.getElementById('lcPanel').classList.remove('open'); clearInterval(_lcT); clearInterval(_lcRevealT); }
+    function lcTick(){ var el=document.getElementById('lcTimer'); if(el) el.textContent=lcFmt(_lcSecs); _lcSecs++; }
+    function lcFmt(s){ var m=Math.floor(s/60), ss=s%60; return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss; }
+    function lcApplyCrm(btn){ btn.innerHTML='<span class="material-symbols-outlined">check_circle</span> Applied to CRM'; btn.classList.add('applied'); btn.disabled=true; }
+    function endLiveCall(){ closeLiveCall(); openEndSummary(); }
+    // ── AI end-call summary ──
+    function openEndSummary(){ document.getElementById('esOverlay').classList.add('open'); document.getElementById('esModal').classList.add('open'); }
+    function closeEndSummary(){ document.getElementById('esOverlay').classList.remove('open'); document.getElementById('esModal').classList.remove('open'); }
+    function esSave(kind){ closeEndSummary(); if(kind==='sales'){ ccShowToast('Summary sent to Sales'); setTimeout(function(){ window.location.href='lead-detail.html?lead=Sara+Khalid'; },600); } else if(kind==='summary'){ ccShowToast('Summary saved'); } else { ccShowToast('Saved as incomplete'); } }
 
     function ccShowToast(msg) {
       var t = document.getElementById('ccToast');
@@ -1911,6 +2226,39 @@
       if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(text).then(done, done); }
       else { var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch(e) {} document.body.removeChild(ta); done(); }
     }
+  </script>
+  <style>
+    .avt-td{display:flex;align-items:center;gap:9px;}
+    .avt{width:26px;height:26px;border-radius:50%;flex-shrink:0;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;letter-spacing:.02em;}
+    .avt-text{min-width:0;}
+  </style>
+  <script>
+    (function(){
+      var COLORS=['#3b6fb5','#c13584','#2d8a7a','#b26a1a','#7a5bc0','#c25b4e','#4285f4','#d1544f'];
+      function initials(n){var p=n.trim().split(/\s+/);var s=((p[0]?p[0][0]:'')+(p[1]?p[1][0]:'')).toUpperCase();return s||n.slice(0,2).toUpperCase();}
+      function color(n){var s=0;for(var i=0;i<n.length;i++)s+=n.charCodeAt(i);return COLORS[s%COLORS.length];}
+      var SEL='.c-name,.ml-name,.dd-nm';
+      function decorate(el){
+        var td=el.closest?el.closest('td'):null; if(!td||td.getAttribute('data-avt'))return;
+        var name=(el.textContent||'').trim(); if(!name)return;
+        td.setAttribute('data-avt','1');
+        var wrap=document.createElement('div'); wrap.className='avt-text';
+        while(td.firstChild) wrap.appendChild(td.firstChild);
+        var av=document.createElement('span'); av.className='avt'; av.style.background=color(name); av.textContent=initials(name);
+        td.classList.add('avt-td'); td.appendChild(av); td.appendChild(wrap);
+      }
+      function scan(root){ if(root&&root.querySelectorAll) Array.prototype.forEach.call(root.querySelectorAll(SEL),decorate); }
+      function run(){
+        scan(document);
+        try{
+          var mo=new MutationObserver(function(muts){
+            muts.forEach(function(m){ Array.prototype.forEach.call(m.addedNodes||[],function(n){ if(n.nodeType===1){ if(n.matches&&n.matches(SEL))decorate(n); scan(n); } }); });
+          });
+          mo.observe(document.body,{childList:true,subtree:true});
+        }catch(e){}
+      }
+      if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
+    })();
   </script>
   <script src="copilot-widget.js?v=8" defer></script>
 </body>
