@@ -9,7 +9,7 @@
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f5f5f5;
+      --bg: #fafafa;
       --surface: #ffffff;
       --surface-warm: #fefdfb;
       --ink: #242424;
@@ -81,7 +81,7 @@
     }
 
     /* ── Sidebar ── */
-    .shell { display: flex; min-height: 100vh; }
+    .shell { display: flex; min-height: 100vh; background: #ffffff; }
     .sidebar {
       width: var(--sidebar-w);
       background: var(--surface);
@@ -126,6 +126,7 @@
     .main {
       margin-left: var(--sidebar-w); margin-top: var(--topbar-h);
       flex: 1; display: flex; flex-direction: column; min-width: 0;
+      background: #ffffff;
     }
 
     /* Command bar */
@@ -154,25 +155,26 @@
 
     /* ── Greeting / header ── */
     .greeting {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; margin-bottom: 14px;
     }
-    .greeting-left { flex: 1; }
+    .greeting-left { flex: 1 1 auto; min-width: 0; }
     .greeting h1 {
-      font-size: 24px; font-weight: 700; color: var(--ink);
-      letter-spacing: -.02em; margin-bottom: 4px;
+      font-size: 18px; font-weight: 700; color: var(--ink);
+      letter-spacing: -.01em; margin-bottom: 1px;
     }
     .greeting-sub {
-      font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6;
+      font-size: 13px; color: var(--ink-muted); line-height: 1.45; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis; max-width: 100%;
     }
-    .greeting-sub .date { font-weight: 600; color: var(--ink); }
-    .greeting-right { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .greeting-sub .date { font-weight: 600; color: var(--ink-secondary); }
+    .greeting-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
     .greeting h1 .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
     @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
 
-    .date-filter { display:inline-flex; align-items:center; gap:2px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:3px 5px 3px 11px; }
-    .date-filter .df-cal { font-size:16px; color:var(--blue); margin-right:6px; }
-    .df-tab { padding:6px 13px; border:none; background:transparent; color:var(--ink-secondary); font-size:12.5px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:7px; transition:all .12s; }
+    .date-filter { display:inline-flex; align-items:center; gap:1px; background:transparent; border:1px solid var(--border); border-radius:7px; padding:2px 3px 2px 9px; }
+    .date-filter .df-cal { font-size:15px; color:var(--ink-muted); margin-right:5px; }
+    .df-tab { padding:4px 10px; border:none; background:transparent; color:var(--ink-muted); font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; border-radius:6px; transition:all .12s; }
     .df-tab:hover { color:var(--ink); }
     .df-tab.on { background:var(--blue); color:#fff; }
     .date-filter-wrap { position:relative; }
@@ -312,15 +314,15 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px 16px;
+      padding: 10px 12px;
       transition: box-shadow .2s;
       position: relative;
     }
     .metric-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
     .mc-icon {
-      width: 28px; height: 28px; border-radius: 7px;
+      width: 24px; height: 24px; border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 8px; font-size: 15px;
+      margin-bottom: 5px; font-size: 13px;
     }
     .mc-icon.blue { background: var(--blue-soft); color: var(--blue); }
     .mc-icon.red { background: var(--red-soft); color: var(--red); }
@@ -329,14 +331,14 @@
     .mc-icon.teal { background: var(--teal-soft); color: var(--teal); }
     .mc-icon.purple { background: var(--purple-soft); color: var(--purple); }
     .mc-lbl {
-      font-size: 10px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 4px;
+      font-size: 9.5px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .05em; color: var(--ink-muted); margin-bottom: 2px;
     }
-    .mc-val { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+    .mc-val { font-size: 20px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
     .mc-val.txt-red { color: var(--red); }
     .mc-val.txt-green { color: var(--green); }
     .mc-val.txt-amber { color: #8a6420; }
-    .mc-sub { font-size: 10.5px; color: var(--ink-muted); margin-top: 3px; }
+    .mc-sub { font-size: 10px; color: var(--ink-muted); margin-top: 2px; }
     .mc-tag {
       position: absolute; right: 12px; top: 12px;
       font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 11px;
@@ -353,10 +355,10 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 18px 16px;
-      min-height: 170px;
+      padding: 12px 10px;
+      min-height: 128px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 12px;
+      gap: 6px;
       transition: box-shadow .2s;
     }
     .dial-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
@@ -365,8 +367,8 @@
       letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 0;
       text-align: center;
     }
-    .dial-wrap { position: relative; width: 132px; height: 74px; }
-    .dial-svg { position: absolute; top: 0; left: 0; width: 132px; height: 72px; }
+    .dial-wrap { position: relative; width: 118px; height: 66px; }
+    .dial-svg { position: absolute; top: 0; left: 0; width: 118px; height: 65px; }
     .dial-track {
       fill: none; stroke: #e9ecf1; stroke-width: 10;
       stroke-linecap: round;
@@ -380,10 +382,10 @@
       display: flex; flex-direction: column;
       align-items: center; gap: 2px;
     }
-    .dial-value { font-size: 26px; font-weight: 700; line-height: 1; }
+    .dial-value { font-size: 22px; font-weight: 700; line-height: 1; }
     .dial-inner {
-      font-size: 10.5px; color: var(--ink-muted); margin-top: 3px;
-      text-align: center; line-height: 1.25; max-width: 84px;
+      font-size: 10.5px; color: var(--ink-muted); margin-top: 0;
+      text-align: center; line-height: 1.25; max-width: none; white-space: nowrap;
     }
     .dial-sub { font-size: 11px; color: var(--ink-muted); margin-top: 0; text-align: center; }
 
@@ -410,6 +412,16 @@
     .sec-head-spacer { flex: 1; }
     .sec-ctrl { border: none; background: none; font-family: inherit; font-size: 11px; font-weight: 600; color: var(--blue); cursor: pointer; padding: 4px 8px; border-radius: 6px; }
     .sec-ctrl:hover { background: var(--blue-soft); }
+    .x-addwrap { position:relative; display:inline-block; }
+    .x-addmenu { position:absolute; top:calc(100% + 6px); right:0; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 30px rgba(20,24,34,.16); padding:8px; min-width:190px; z-index:40; display:none; }
+    .x-addmenu.open { display:block; }
+    .x-addhead { font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); padding:4px 8px 8px; }
+    .x-addopt { display:flex; align-items:center; gap:9px; padding:7px 8px; border-radius:7px; font-size:13px; color:var(--ink-secondary); cursor:pointer; white-space:nowrap; }
+    .x-addopt:hover { background:var(--blue-soft); }
+    .x-addopt input { accent-color:var(--blue); width:15px; height:15px; cursor:pointer; }
+    .qt-table th.xcol { white-space:nowrap; }
+    .qt-table td.xcol { white-space:nowrap; color:var(--ink-secondary); }
+
 
     /* ── Uniform accent metric card ── */
     .acc-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
@@ -430,18 +442,25 @@
     .acc-live .lv-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse-dot 1.4s ease-in-out infinite; }
 
     /* ── Pipeline column bar chart ── */
-    .pipe-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px 12px; }
+    .pipe-wrap { background: #ffffff; border: none; border-radius: 14px; padding: 12px 14px 10px; height:100%; display:flex; flex-direction:column; box-sizing:border-box; }
     .pipe-chart { display: flex; align-items: flex-end; gap: 10px; height: 210px; padding: 0 2px; }
     .pipe-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; min-width: 0; }
+    .hbar { padding: 6px 4px; display: flex; flex-direction: column; gap: 10px; flex:1; justify-content:center; }
+    .hbar-row { display: grid; grid-template-columns: 106px 1fr; align-items: center; gap: 12px; }
+    .hbar-name { font-size: 12px; font-weight: 600; color: var(--ink-secondary); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hbar-track { display: flex; align-items: center; gap: 9px; min-width: 0; }
+    .hbar-fill { flex: 0 0 auto; height: 22px; border-radius: 999px; min-width: 8px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+    .hbar-val { flex: 0 0 auto; font-size: 12.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+    .hbar-val .conv { font-size: 10.5px; font-weight: 600; color: var(--ink-muted); margin-left: 5px; }
     .pipe-chip { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 9px; margin-bottom: 6px; white-space: nowrap; }
     .pipe-chip.grey { background: var(--bg); color: var(--ink-muted); }
     .pipe-chip.green { background: var(--green-soft); color: #3d8a5b; }
     .pipe-chip.amber { background: var(--amber-soft); color: #8a6420; }
     .pipe-chip.blue { background: var(--blue-soft); color: var(--blue); }
     .pipe-count { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; font-variant-numeric: tabular-nums; }
-    .pipe-bar { width: 100%; max-width: 54px; background: #cfe0f0; border-radius: 6px 6px 0 0; transition: height .8s cubic-bezier(.4,0,.2,1); min-height: 4px; }
-    .pipe-axis { display: flex; gap: 10px; padding: 8px 2px 0; border-top: 1px solid var(--border-soft); margin-top: 8px; }
-    .pipe-axis-lbl { flex: 1; text-align: center; font-size: 10px; font-weight: 600; color: var(--ink-secondary); min-width: 0; }
+    .pipe-bar { width: 100%; max-width: 26px; background: #cfe0f0; border-radius: 5px 5px 0 0; transition: height .8s cubic-bezier(.4,0,.2,1); min-height: 4px; }
+    .pipe-axis { display: flex; gap: 10px; padding: 6px 2px 0; border-top: 1px solid var(--border-soft); margin-top: 8px; min-height: 52px; overflow: hidden; }
+    .pipe-axis-lbl { flex: 1; min-width: 0; text-align: center; font-size: 9.5px; font-weight: 600; color: var(--ink-secondary); white-space: nowrap; transform: rotate(-32deg); transform-origin: center top; }
     .pipe-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 10px; gap: 10px; flex-wrap: wrap; }
     .pipe-foot-l { font-size: 11px; color: var(--ink-muted); font-style: italic; }
     .pipe-foot-r { font-size: 11px; color: var(--ink-secondary); font-weight: 600; }
@@ -471,17 +490,28 @@
     .ev-pill.teal { background: var(--teal-soft); color: var(--teal); }
 
     .kpi-grid { display: grid; gap: 10px; }
+    .kpi-group { background: #fafafa; border-radius: 14px; padding: 14px; }
+    .ao-block { background: #fafafa; border-radius: 14px; padding: 14px; }
+    .cal-block { background: #fafafa; border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+    .kpi-group .metric-card, .kpi-group .dial-card { border-color: transparent; }
     .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
     .kpi-grid.g7 { grid-template-columns: repeat(7, 1fr); }
     .kpi-grid.g4 { grid-template-columns: repeat(4, 1fr); }
-    .kpi-grid.g3 { grid-template-columns: repeat(3, 1fr); }
+    .kpi-grid.g3 { grid-template-columns: repeat(3, minmax(150px, 220px)); justify-content: start; }
+    .tbl-pager { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px; border-top:1px solid var(--border-soft); flex-wrap:wrap; }
+    .pg-info { font-size:11.5px; color:var(--ink-muted); font-weight:600; }
+    .pg-btns { display:flex; align-items:center; gap:4px; }
+    .pg-num, .pg-nav { min-width:26px; height:26px; border:1px solid #eeeeee; background:var(--surface); border-radius:7px; font-size:12px; font-weight:600; font-family:inherit; color:var(--ink-secondary); cursor:pointer; padding:0 6px; }
+    .pg-num:hover, .pg-nav:hover:not(:disabled) { background:var(--bg); }
+    .pg-num.on { background:var(--blue); color:#fff; border-color:var(--blue); }
+    .pg-nav:disabled { opacity:.4; cursor:default; }
     @media (max-width: 1200px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g4 { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g4, .kpi-grid.g3 { grid-template-columns: repeat(2, 1fr); } }
 
     /* ── Queue / table panel ── */
     .q-panel {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid #eeeeee;
       border-radius: var(--radius);
       overflow: hidden;
       margin-bottom: 14px;
@@ -504,7 +534,7 @@
       text-align: left; padding: 9px 14px;
       font-size: 10px; font-weight: 600;
       text-transform: uppercase; letter-spacing: .07em;
-      color: var(--ink-muted); background: #fafbfd;
+      color: var(--ink-muted); background: #fafafa;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
     }
@@ -578,7 +608,7 @@
     .scope-dd { display:inline-flex; align-items:center; gap:7px; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:8px 13px; font-size:12.5px; font-weight:600; color:var(--ink-secondary); cursor:pointer; font-family:inherit; }
     .scope-dd:hover { background:var(--bg); }
     .scope-dd .material-symbols-outlined { font-size:16px; color:var(--ink-muted); }
-    .loc-select { border:1px solid var(--border); background:var(--surface); border-radius:8px; padding:8px 11px; font-size:12.5px; font-weight:600; color:var(--ink-secondary); font-family:inherit; cursor:pointer; outline:none; }
+    .loc-select { border:1px solid var(--border); background:transparent; border-radius:7px; padding:5px 10px; font-size:12px; font-weight:600; color:var(--ink-muted); font-family:inherit; cursor:pointer; outline:none; }
     .loc-select:focus { border-color:var(--blue); }
 
     /* ── Two-column ── */
@@ -586,7 +616,7 @@
     @media (max-width: 1000px) { .two-col { grid-template-columns:1fr; } }
 
     /* ── Manager NBA banner ── */
-    .nba { display:flex; align-items:center; gap:14px; background:var(--blue-soft); border:1px solid #d0dbe6; border-radius:var(--radius); padding:14px 18px; margin-bottom:18px; }
+    .nba { display:flex; align-items:center; gap:14px; background:#fafafa; border:none; border-radius:var(--radius); padding:14px 18px; margin-bottom:18px; }
     .nba-ico { width:38px; height:38px; border-radius:10px; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .nba-ico .material-symbols-outlined { font-size:21px; }
     .nba-body { flex:1; min-width:0; }
@@ -799,7 +829,7 @@
 
     <!-- Main -->
     <div class="main">
-      <div class="cmdbar">
+      <div class="cmdbar" style="display:none">
         <span class="ro"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle">info</span> Read-only &middot; Scope: <b>Network &mdash; all showrooms</b></span>
         <div class="cmd-sep"></div>
         <button class="cb"><span class="material-symbols-outlined">arrow_back</span></button>
@@ -876,306 +906,59 @@
         <!-- SECTION — Today's Actions -->
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Today's Actions</span><span class="kpi-sec-sub">&middot; What to move now</span></div>
-          <div class="kpi-grid g4">
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">person_add</span></div><div class="mc-lbl">New to Assign</div><div class="mc-val">5</div><div class="mc-sub">Direct-to-showroom</div></div>
-            <div class="metric-card"><span class="mc-tag live"><span class="lv-dot"></span> LIVE</span><div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Customers Waiting</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Longest 18m</div></div>
-            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div><div class="mc-lbl">Overdue Commitments</div><div class="mc-val txt-red">2</div><div class="mc-sub">By executive</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">group_add</span></div><div class="mc-lbl">New Leads Today</div><div class="mc-val">30</div><div class="mc-sub">Received today</div></div>
-            <div class="metric-card"><div class="mc-icon amber"><span class="material-symbols-outlined">call</span></div><div class="mc-lbl">Pending 1st Contact</div><div class="mc-val txt-amber">30</div><div class="mc-sub">Awaiting first contact</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">event</span></div><div class="mc-lbl">Follow-up Due</div><div class="mc-val">1</div><div class="mc-sub">Due today</div></div>
-            <div class="metric-card"><div class="mc-icon teal"><span class="material-symbols-outlined">directions_car</span></div><div class="mc-lbl">Test Drives</div><div class="mc-val">2</div><div class="mc-sub">Confirm &middot; reschedule</div></div>
-            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">request_quote</span></div><div class="mc-lbl">Open Quotes</div><div class="mc-val txt-red">5</div><div class="mc-sub">AED 1,049k at risk</div></div>
+          <div class="kpi-grid g4 kpi-group">
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newAssign');}"><div class="mc-icon blue"><span class="material-symbols-outlined">person_add</span></div><div class="mc-lbl">New to Assign</div><div class="mc-val">5</div><div class="mc-sub">Direct-to-showroom</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('waiting')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('waiting');}"><span class="mc-tag live"><span class="lv-dot"></span> LIVE</span><div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Customers Waiting</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Longest 18m</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('overdue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('overdue');}"><div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div><div class="mc-lbl">Overdue Commitments</div><div class="mc-val txt-red">2</div><div class="mc-sub">By executive</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newLeads');}"><div class="mc-icon blue"><span class="material-symbols-outlined">group_add</span></div><div class="mc-lbl">New Leads Today</div><div class="mc-val">30</div><div class="mc-sub">Received today</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('pending1c')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pending1c');}"><div class="mc-icon amber"><span class="material-symbols-outlined">call</span></div><div class="mc-lbl">Pending 1st Contact</div><div class="mc-val txt-amber">30</div><div class="mc-sub">Awaiting first contact</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('followUp')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('followUp');}"><div class="mc-icon blue"><span class="material-symbols-outlined">event</span></div><div class="mc-lbl">Follow-up Due</div><div class="mc-val">1</div><div class="mc-sub">Due today</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('testDrives')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('testDrives');}"><div class="mc-icon teal"><span class="material-symbols-outlined">directions_car</span></div><div class="mc-lbl">Test Drives</div><div class="mc-val">2</div><div class="mc-sub">Confirm &middot; reschedule</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('openQuotes')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('openQuotes');}"><div class="mc-icon red"><span class="material-symbols-outlined">request_quote</span></div><div class="mc-lbl">Open Quotes</div><div class="mc-val txt-red">5</div><div class="mc-sub">AED 1,049k at risk</div></div>
           </div>
         </div>
 
-        <!-- SECTION — SLA Performance -->
-        <div class="kpi-section warm">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">SLA Performance</span><span class="kpi-sec-sub">&middot; Compliance vs targets</span></div>
-          <div class="kpi-grid g5">
-            <div class="dial-card">
-              <div class="dial-inner">Lead Assignment &rarr; SE</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaAssign)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="9.42"/>
-                  <defs><linearGradient id="gradSlaAssign" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:#b5642a">94%</div>
-                  <div class="dial-sub">Target 95%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Customer 1st Contact</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaContact)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="18.84"/>
-                  <defs><linearGradient id="gradSlaContact" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red)">88%</div>
-                  <div class="dial-sub">Target 95%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Assigned to Showroom</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaShow)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="14.13"/>
-                  <defs><linearGradient id="gradSlaShow" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:#b5642a">91%</div>
-                  <div class="dial-sub">Target 95%</div>
-                </div>
-              </div>
-            </div>
-            <div class="metric-card">
-              <div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div>
-              <div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">3</div><div class="mc-sub">Target &lt; 3</div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Add-on Penetration</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaAddon)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="50.24"/>
-                  <defs><linearGradient id="gradSlaAddon" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:#3d8a5b">68%</div>
-                  <div class="dial-sub">Target 55%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION — Conversion Funnel -->
+        <!-- SECTION — Customers Waiting -->
         <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--purple)"></span><span class="kpi-sec-title">Conversion Funnel</span><span class="kpi-sec-sub">&middot; Stage-to-stage conversion — network</span></div>
-          <div class="kpi-grid g7">
-            <div class="dial-card">
-              <div class="dial-inner">Leads &rarr; Visits</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="75.36"/>
-                  <defs><linearGradient id="gradFn1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red)">52%</div>
-                  <div class="dial-sub">Target 55%</div>
-                </div>
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--red)"></span><span class="kpi-sec-title">Customers Waiting</span><span class="kpi-sec-sub">&middot; Live showroom queue</span></div>
+          <div class="q-panel">
+            <div class="q-head">
+              <div class="q-head-left"><h3>Customers waiting</h3><span class="q-cnt">3 in queue &middot; longest 18m</span></div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="x-addwrap"><button class="sec-ctrl" onclick="xMenu(event,'cwMenu')"><span class="material-symbols-outlined" style="font-size:15px;vertical-align:-2px">view_column</span> Add column</button><div class="x-addmenu" id="cwMenu"><div class="x-addhead">Additional columns</div><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'cwTable','cw','Waiting ID')"> Waiting ID</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'cwTable','cw','SLA impact')"> SLA impact</label></div></div>
+                <span class="mc-tag live" style="position:static"><span class="lv-dot"></span> LIVE</span>
               </div>
             </div>
-            <div class="dial-card">
-              <div class="dial-inner">Visits+Walk-ins &rarr; Test Drives</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn2)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="65.94"/>
-                  <defs><linearGradient id="gradFn2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red)">58%</div>
-                  <div class="dial-sub">Target 60%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Visits+Walk-ins &rarr; Booking</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn3)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="114.61"/>
-                  <defs><linearGradient id="gradFn3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red)">27%</div>
-                  <div class="dial-sub">Target 30%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Lead &rarr; Booking</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn4)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="139.73"/>
-                  <defs><linearGradient id="gradFn4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red);font-size:19px">11.4%</div>
-                  <div class="dial-sub">Target 12%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Booking &rarr; Invoice</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn5)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="28.26"/>
-                  <defs><linearGradient id="gradFn5" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red)">82%</div>
-                  <div class="dial-sub">Target 85%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Invoice &rarr; Delivery</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn6)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="18.84"/>
-                  <defs><linearGradient id="gradFn6" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red)">88%</div>
-                  <div class="dial-sub">Target 90%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Cancellation &rarr; Booking</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradFn7)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="130.31"/>
-                  <defs><linearGradient id="gradFn7" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:var(--red)">17%</div>
-                  <div class="dial-sub">Target 20%</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION — Volumetrics -->
-        <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Volumetrics</span><span class="kpi-sec-sub">&middot; Operational counts · MTD</span></div>
-          <div class="kpi-grid g7">
-            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">payments</span></div><div class="mc-lbl">Revenue MTD</div><div class="mc-val txt-green" style="font-size:20px">AED 9.45M</div><div class="mc-sub">Target 10.0M</div></div>
-            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">savings</span></div><div class="mc-lbl">Gross Profit MTD</div><div class="mc-val txt-green" style="font-size:20px">AED 1.32M</div><div class="mc-sub">Target 1.5M</div></div>
-            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">percent</span></div><div class="mc-lbl">Gross Profit %</div><div class="mc-val txt-green">14.0%</div><div class="mc-sub">Target 15%</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">directions_walk</span></div><div class="mc-lbl">Walks</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">event_available</span></div><div class="mc-lbl">Bookings</div><div class="mc-val">39</div><div class="mc-sub">Target 45</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">receipt_long</span></div><div class="mc-lbl">Sales Orders</div><div class="mc-val">34</div><div class="mc-sub">Target 40</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">description</span></div><div class="mc-lbl">Invoices</div><div class="mc-val">30</div><div class="mc-sub">Target 35</div></div>
-            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">local_shipping</span></div><div class="mc-lbl">Deliveries</div><div class="mc-val txt-green">27</div><div class="mc-sub">Target 30</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">storefront</span></div><div class="mc-lbl">Visits + Walk-ins</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">task_alt</span></div><div class="mc-lbl">Follow-ups On Time</div><div class="mc-val">214</div><div class="mc-sub">Target 250</div></div>
-            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">cancel</span></div><div class="mc-lbl">Cancellations</div><div class="mc-val txt-red">12</div><div class="mc-sub">Target &lt; 10</div></div>
-            <div class="metric-card"><div class="mc-icon amber"><span class="material-symbols-outlined">swap_horiz</span></div><div class="mc-lbl">Trade-ins</div><div class="mc-val txt-amber">18</div><div class="mc-sub">Target 25</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">add_circle</span></div><div class="mc-lbl">Add-ons Sold</div><div class="mc-val">71</div><div class="mc-sub">Target 80</div></div>
-          </div>
-        </div>
-
-        <!-- SECTION — Customer Experience -->
-        <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--teal)"></span><span class="kpi-sec-title">Customer Experience &amp; Lead Management</span><span class="kpi-sec-sub">&middot; Quality, aging &amp; waiting customers</span></div>
-          <div class="kpi-grid g3">
-            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">sentiment_satisfied</span></div><div class="mc-lbl">CSI</div><div class="mc-val txt-green">91</div><div class="mc-sub">Target 90</div></div>
-            <div class="metric-card"><div class="mc-icon green"><span class="material-symbols-outlined">recommend</span></div><div class="mc-lbl">NPS</div><div class="mc-val txt-green">62</div><div class="mc-sub">Target 60</div></div>
-            <div class="metric-card"><div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">7</div><div class="mc-sub">Target 0</div></div>
-          </div>
-        </div>
-
-        <!-- SECTION — Network Pipeline -->
-        <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Network pipeline — All</span><span class="kpi-sec-sub">&middot; Stage volume &amp; conversion</span></div>
-          <div class="pipe-wrap">
-            <div class="pipe-chart">
-              <div class="pipe-col"><span class="pipe-chip grey">0%</span><span class="pipe-count">5</span><div class="pipe-bar" style="height:62%"></div></div>
-              <div class="pipe-col"><span class="pipe-chip green">400%</span><span class="pipe-count">1</span><div class="pipe-bar" style="height:14%"></div></div>
-              <div class="pipe-col"><span class="pipe-chip blue">200%</span><span class="pipe-count">2</span><div class="pipe-bar" style="height:26%"></div></div>
-              <div class="pipe-col"><span class="pipe-chip amber">50%</span><span class="pipe-count">4</span><div class="pipe-bar" style="height:90%"></div></div>
-              <div class="pipe-col"><span class="pipe-chip green">125%</span><span class="pipe-count">5</span><div class="pipe-bar" style="height:100%"></div></div>
-              <div class="pipe-col"><span class="pipe-chip amber">60%</span><span class="pipe-count">3</span><div class="pipe-bar" style="height:50%"></div></div>
-              <div class="pipe-col"><span class="pipe-chip amber">33%</span><span class="pipe-count">1</span><div class="pipe-bar" style="height:14%"></div></div>
-              <div class="pipe-col"><span class="pipe-chip grey">&mdash;</span><span class="pipe-count">&mdash;</span><div class="pipe-bar" style="height:3%"></div></div>
-            </div>
-            <div class="pipe-axis">
-              <span class="pipe-axis-lbl">New Leads</span>
-              <span class="pipe-axis-lbl">Lead Assignment</span>
-              <span class="pipe-axis-lbl">Contact</span>
-              <span class="pipe-axis-lbl">Nurture</span>
-              <span class="pipe-axis-lbl">Test Drive</span>
-              <span class="pipe-axis-lbl">Offer</span>
-              <span class="pipe-axis-lbl">Booking</span>
-              <span class="pipe-axis-lbl">Delivery</span>
-            </div>
-            <div class="pipe-foot">
-              <span class="pipe-foot-l">Bar height = volume &middot; chip = stage-to-stage conversion</span>
-              <span class="pipe-foot-r">Top 5 &middot; Delivered 1 &middot; Overall 20%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION — Team Diary -->
-        <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">Team calendar</span><span class="kpi-sec-sub">&middot; Sales consultant diaries — SZR — Sheikh Zayed Road</span></div>
-          <div class="diary-legend">
-            <span class="dl-item"><span class="dl-dot" style="background:var(--blue)"></span> Appointment</span>
-            <span class="dl-item"><span class="dl-dot" style="background:var(--amber)"></span> Follow-up</span>
-            <span class="dl-item"><span class="dl-dot" style="background:var(--green)"></span> Test Drive</span>
-            <span class="dl-item"><span class="dl-dot" style="background:var(--purple)"></span> Customer Call</span>
-            <span class="dl-item"><span class="dl-dot" style="background:var(--teal)"></span> Delivery</span>
-          </div>
-          <div class="stream-bar">
-            <div class="stream-seg" id="diaryBranch">
-              <button class="seg-tab on" onclick="setDiaryBranch(this)">SZR</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Deira</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Abu Dhabi</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Sharjah</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Al Ain</button>
-            </div>
-            <div class="stream-seg" id="diaryRange">
-              <button class="seg-tab on" onclick="setDiaryRange(this)">Today</button>
-              <button class="seg-tab" onclick="setDiaryRange(this)">Week</button>
-            </div>
-          </div>
-          <div class="tl-wrap">
-            <div class="tl-row">
-              <div class="tl-gutter">09:00</div>
-              <div class="tl-event ev-green"><span class="tl-time">09:30&ndash;10:15</span><span class="tl-name">Hiren Patel</span><span class="tl-pills"><span class="ev-pill green">Test Drive</span><span class="st-badge ok">On Track</span></span></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-gutter">10:00</div>
-              <div class="tl-event ev-purple"><span class="tl-time">10:30&ndash;10:45</span><span class="tl-name">Sara Khalid</span><span class="tl-pills"><span class="ev-pill purple">Customer Call</span><span class="st-badge brch">Overdue</span></span></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-gutter">11:00</div>
-              <div class="tl-event ev-blue"><span class="tl-time">11:00&ndash;12:00</span><span class="tl-name">Fatima Al Ali</span><span class="tl-pills"><span class="ev-pill blue">Appointment</span><span class="st-badge ok">On Track</span></span></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-gutter">12:00</div>
-              <div class="tl-event ev-amber"><span class="tl-time">12:15&ndash;13:00</span><span class="tl-name">Karim Saleh</span><span class="tl-pills"><span class="ev-pill amber">Follow-up</span><span class="st-badge wrn">Due Soon</span></span></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-gutter">14:00</div>
-              <div class="tl-event ev-teal"><span class="tl-time">14:00&ndash;15:30</span><span class="tl-name">Linda George</span><span class="tl-pills"><span class="ev-pill teal">Delivery</span><span class="st-badge ok">On Track</span></span></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-gutter">15:00</div>
-              <div class="tl-event ev-green"><span class="tl-time">15:45&ndash;16:30</span><span class="tl-name">Ahmed Mansoor</span><span class="tl-pills"><span class="ev-pill green">Test Drive</span><span class="st-badge wrn">Due Soon</span></span></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-gutter">16:00</div>
-              <div class="tl-event ev-blue"><span class="tl-time">16:45&ndash;17:15</span><span class="tl-name">Maya Hassan</span><span class="tl-pills"><span class="ev-pill blue">Appointment</span><span class="st-badge ok">On Track</span></span></div>
-            </div>
-            <div class="tl-row">
-              <div class="tl-gutter">17:00</div>
-              <div class="tl-event ev-amber"><span class="tl-time">17:30&ndash;18:00</span><span class="tl-name">Rita Sami</span><span class="tl-pills"><span class="ev-pill amber">Follow-up</span><span class="st-badge ok">On Track</span></span></div>
+            <div class="q-scroll">
+            <table class="qt-table" id="cwTable">
+<thead><tr><th>Customer</th><th>Arrived</th><th>Wait</th><th>Purpose</th><th>Executive</th><th>Bottleneck</th><th style="text-align:right">Action</th></tr></thead>
+              <tbody>
+                <tr class="urg">
+                  <td><div class="c-name">Maya Hassan</div></td>
+                  <td class="num">10:45</td>
+                  <td><span class="sla-tag brch">18m</span></td>
+                  <td>Test drive</td><td>Ahmad Nasr</td>
+                  <td><a href="#" class="row-link">Vehicle prep &mdash; VIN pending</a></td>
+                  <td style="text-align:right"><button class="tbl-btn red" onclick="showToast('Notifying Ahmad Nasr')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Maya Hassan')">Reassign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Bilal Qureshi</div></td>
+                  <td class="num">10:52</td>
+                  <td><span class="sla-tag wrn">11m</span></td>
+                  <td>Delivery</td><td>Rania Khoury</td>
+                  <td><a href="#" class="row-link">Insurance doc missing</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Notifying Rania Khoury')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Bilal Qureshi')">Reassign</button></td>
+                </tr>
+                <tr>
+                  <td><div class="c-name">Elena Costa</div></td>
+                  <td class="num">11:05</td>
+                  <td><span class="sla-tag ok">6m</span></td>
+                  <td>Enquiry</td><td><span class="none-txt">&mdash;</span></td>
+                  <td><a href="#" class="row-link">Awaiting assignment</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Elena Costa')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Elena Costa')">Reassign</button></td>
+                </tr>
+              </tbody>
+            </table>
             </div>
           </div>
         </div>
@@ -1187,13 +970,13 @@
             <div class="q-head">
               <div class="q-head-left"><h3>New leads to assign</h3><span class="q-cnt">5 waiting &middot; sorted by SLA + temperature</span></div>
               <div style="display:flex;align-items:center;gap:6px">
-                <button class="sec-ctrl" onclick="showToast('Add column')">Add column</button>
+                <div class="x-addwrap"><button class="sec-ctrl" onclick="xMenu(event,'nlMenu')"><span class="material-symbols-outlined" style="font-size:15px;vertical-align:-2px">view_column</span> Add column</button><div class="x-addmenu" id="nlMenu"><div class="x-addhead">Additional columns</div><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'nlTable','nl','Channel')"> Channel</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'nlTable','nl','Created')"> Created</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'nlTable','nl','Competitor')"> Competitor</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'nlTable','nl','Quote')"> Quote</label></div></div>
                 <button class="sec-ctrl" onclick="showToast('Returned to Call Center')">Return to Call Center</button>
                 <button class="btn-soft" onclick="showToast('Auto-assigning by availability')"><span class="material-symbols-outlined">bolt</span> Auto-assign</button>
               </div>
             </div>
             <div class="q-scroll">
-            <table class="qt-table">
+            <table class="qt-table" id="nlTable">
               <thead><tr><th>Age</th><th>Customer</th><th>Source</th><th>Model</th><th>Temp</th><th>Language</th><th>Showroom</th><th>Suggested exec</th><th>SLA</th><th style="text-align:right">Action</th></tr></thead>
               <tbody>
                 <tr class="urg">
@@ -1202,7 +985,7 @@
                   <td><span class="src-chip">WhatsApp</span></td><td>EXEED TXL</td>
                   <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>DEI</td><td><a href="#" class="row-link">Layla Habib</a></td>
                   <td><span class="sla-tag brch">5m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn red" onclick="assign(event,'Omar Nasser')">Assign</button> <a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a> <a href="#" class="why" onclick="showToast('Why this exec?');return false">Why?</a></td>
+                  <td style="text-align:right"><button class="tbl-btn red" onclick="openMetric('newAssign')">Assign</button><div style="margin-top:5px"><a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a></div></td>
                 </tr>
                 <tr>
                   <td class="num">22m</td>
@@ -1210,7 +993,7 @@
                   <td><span class="src-chip">Website</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>AUH</td><td><span class="none-txt">&mdash;</span></td>
                   <td><span class="sla-tag wrn">8m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Grace Onu')">Assign</button></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openMetric('newAssign')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">15m</td>
@@ -1218,7 +1001,7 @@
                   <td><span class="src-chip">Social Form</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>SZR</td><td><a href="#" class="row-link">Ahmad Nasr</a></td>
                   <td><span class="sla-tag wrn">15m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Mira Nabil')">Assign</button> <a href="#" class="why" onclick="showToast('Why this exec?');return false">Why?</a></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openMetric('newAssign')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">0m</td>
@@ -1226,7 +1009,7 @@
                   <td><span class="src-chip">WhatsApp</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
                   <td><span class="sla-tag ok">30m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Amir Zaki')">Assign</button></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openMetric('newAssign')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">0m</td>
@@ -1234,7 +1017,7 @@
                   <td><span class="src-chip">Social Form</span></td><td>EXEED TXL</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
                   <td><span class="sla-tag ok">45m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Maya Hassan')">Assign</button></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openMetric('newAssign')">Assign</button></td>
                 </tr>
               </tbody>
             </table>
@@ -1249,16 +1032,16 @@
             <div class="q-head">
               <div class="q-head-left"><h3>Sales executive availability</h3><span class="q-cnt">6 on track &middot; 2 blocked &middot; 1 offline</span></div>
               <div style="display:flex;align-items:center;gap:6px">
-                <button class="sec-ctrl" onclick="showToast('Add column')">Add column</button>
+                <div class="x-addwrap"><button class="sec-ctrl" onclick="xMenu(event,'seMenu')"><span class="material-symbols-outlined" style="font-size:15px;vertical-align:-2px">view_column</span> Add column</button><div class="x-addmenu" id="seMenu"><div class="x-addhead">Additional columns</div><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'seTable','se','SLA %')"> SLA %</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'seTable','se','Bookings MTD')"> Bookings MTD</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'seTable','se','Sales MTD')"> Sales MTD</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'seTable','se','Add-on %')"> Add-on %</label><label class="x-addopt"><input type="checkbox" onchange="xToggle(this,'seTable','se','Avg response')"> Avg response</label></div></div>
                 <button class="sec-ctrl" onclick="showToast('Rebalancing floor')">Rebalance floor</button>
               </div>
             </div>
             <div class="q-scroll">
-            <table class="qt-table">
+            <table class="qt-table" id="seTable">
               <thead><tr>
                 <th>Executive</th><th>Status</th><th>Active</th><th>New</th><th>Pend. FC</th><th>Overdue</th><th>Appt</th><th>Test Drive</th><th>Languages</th><th>Recommendation</th><th style="text-align:right">Action</th>
               </tr></thead>
-              <tbody>
+              <tbody id="seTbody">
                 <tr class="urg">
                   <td><div class="c-name">Fadi Haddad</div><div class="c-shift">AAN</div></td>
                   <td><span class="st-badge gry">Offline</span></td>
@@ -1361,62 +1144,63 @@
           </div>
         </div>
 
-        <!-- SECTION — Customers Waiting -->
-        <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--red)"></span><span class="kpi-sec-title">Customers Waiting</span><span class="kpi-sec-sub">&middot; Live showroom queue</span></div>
-          <div class="q-panel">
-            <div class="q-head">
-              <div class="q-head-left"><h3>Customers waiting</h3><span class="q-cnt">3 in queue &middot; longest 18m</span></div>
-              <div style="display:flex;align-items:center;gap:8px">
-                <button class="sec-ctrl" onclick="showToast('Add column')">Add column</button>
-                <span class="mc-tag live" style="position:static"><span class="lv-dot"></span> LIVE</span>
-              </div>
-            </div>
-            <div class="q-scroll">
-            <table class="qt-table">
-              <thead><tr><th>Customer</th><th>Arrived</th><th>Wait</th><th>Purpose</th><th>Executive</th><th>Bottleneck</th><th style="text-align:right">Action</th></tr></thead>
-              <tbody>
-                <tr class="urg">
-                  <td><div class="c-name">Maya Hassan</div></td>
-                  <td class="num">10:45</td>
-                  <td><span class="sla-tag brch">18m</span></td>
-                  <td>Test drive</td><td>Ahmad Nasr</td>
-                  <td><a href="#" class="row-link">Vehicle prep &mdash; VIN pending</a></td>
-                  <td style="text-align:right"><button class="tbl-btn red" onclick="showToast('Notifying Ahmad Nasr')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Maya Hassan')">Reassign</button></td>
-                </tr>
-                <tr>
-                  <td><div class="c-name">Bilal Qureshi</div></td>
-                  <td class="num">10:52</td>
-                  <td><span class="sla-tag wrn">11m</span></td>
-                  <td>Delivery</td><td>Rania Khoury</td>
-                  <td><a href="#" class="row-link">Insurance doc missing</a></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Notifying Rania Khoury')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Bilal Qureshi')">Reassign</button></td>
-                </tr>
-                <tr>
-                  <td><div class="c-name">Elena Costa</div></td>
-                  <td class="num">11:05</td>
-                  <td><span class="sla-tag ok">6m</span></td>
-                  <td>Enquiry</td><td><span class="none-txt">&mdash;</span></td>
-                  <td><a href="#" class="row-link">Awaiting assignment</a></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="assign(event,'Elena Costa')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Elena Costa')">Reassign</button></td>
-                </tr>
-              </tbody>
-            </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION — Add-on Penetration -->
-        <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--green)"></span><span class="kpi-sec-title">Add-on penetration</span><span class="kpi-sec-sub">&middot; Attach rate by category — last 30 days</span></div>
-          <div class="kpi-grid g5">
-            <div class="dial-card">
-              <div class="dial-inner">Overall</div>
+        <!-- SECTION — SLA Performance -->
+        <div class="kpi-section warm">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">SLA Performance</span><span class="kpi-sec-sub">&middot; Compliance vs targets</span></div>
+          <div class="kpi-grid g5 kpi-group">
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('slaLeadAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('slaLeadAssign');}">
+              <div class="dial-inner">Lead Assignment &rarr; SE</div>
               <div class="dial-wrap">
                 <svg class="dial-svg" viewBox="0 0 120 66">
                   <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo1)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="50.24"/>
-                  <defs><linearGradient id="gradAo1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaAssign)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="9.42"/>
+                  <defs><linearGradient id="gradSlaAssign" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#b5642a">94%</div>
+                  <div class="dial-sub">Target 95%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('slaFirstContact')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('slaFirstContact');}">
+              <div class="dial-inner">Customer 1st Contact</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaContact)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="18.84"/>
+                  <defs><linearGradient id="gradSlaContact" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:var(--red)">88%</div>
+                  <div class="dial-sub">Target 95%</div>
+                </div>
+              </div>
+            </div>
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('slaAssignShow')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('slaAssignShow');}">
+              <div class="dial-inner">Assigned to Showroom</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaShow)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="14.13"/>
+                  <defs><linearGradient id="gradSlaShow" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
+                </svg>
+                <div class="dial-center">
+                  <div class="dial-value" style="color:#b5642a">91%</div>
+                  <div class="dial-sub">Target 95%</div>
+                </div>
+              </div>
+            </div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('slaOpenLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('slaOpenLeads');}">
+              <div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div>
+              <div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">3</div><div class="mc-sub">Target &lt; 3</div>
+            </div>
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('addonPen')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('addonPen');}">
+              <div class="dial-inner">Add-on Penetration</div>
+              <div class="dial-wrap">
+                <svg class="dial-svg" viewBox="0 0 120 66">
+                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
+                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradSlaAddon)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="50.24"/>
+                  <defs><linearGradient id="gradSlaAddon" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
                 </svg>
                 <div class="dial-center">
                   <div class="dial-value" style="color:#3d8a5b">68%</div>
@@ -1424,68 +1208,137 @@
                 </div>
               </div>
             </div>
-            <div class="dial-card">
-              <div class="dial-inner">Accessories</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo2)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="45.53"/>
-                  <defs><linearGradient id="gradAo2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:#3d8a5b">71%</div>
-                  <div class="dial-sub">Target 60%</div>
-                </div>
-              </div>
+          </div>
+        </div>
+
+        <!-- SECTION — Customer Experience -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--teal)"></span><span class="kpi-sec-title">Customer Experience &amp; Lead Management</span><span class="kpi-sec-sub">&middot; Quality, aging &amp; waiting customers</span></div>
+          <div class="kpi-grid g3 kpi-group">
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxCSI')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxCSI');}"><div class="mc-icon green"><span class="material-symbols-outlined">sentiment_satisfied</span></div><div class="mc-lbl">CSI</div><div class="mc-val txt-green">91</div><div class="mc-sub">Target 90</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxNPS')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxNPS');}"><div class="mc-icon green"><span class="material-symbols-outlined">recommend</span></div><div class="mc-lbl">NPS</div><div class="mc-val txt-green">62</div><div class="mc-sub">Target 60</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxOpenLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxOpenLeads');}"><div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">7</div><div class="mc-sub">Target 0</div></div>
+          </div>
+        </div>
+
+        <div class="side2">
+        <!-- SECTION — Conversion Funnel -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--purple)"></span><span class="kpi-sec-title">Conversion Funnel</span><span class="kpi-sec-sub">&middot; Stage-to-stage conversion — network</span></div>
+          <style>
+            .mfunnel { background:#ffffff; border:none; border-radius:12px; padding:12px 14px 12px; }
+            .mfunnel-head { display:flex; align-items:baseline; gap:10px; margin-bottom:10px; }
+            .mfunnel-big { font-size:23px; font-weight:800; color:#6d5fe0; letter-spacing:-.02em; line-height:1; }
+            .mfunnel-cap { font-size:11.5px; font-weight:600; color:var(--ink-muted); }
+            .mfunnel-cap strong { color:var(--ink-secondary); font-weight:700; }
+            .mf-funnelsvg { display:flex; align-items:center; justify-content:center; }
+            .mf-funnelsvg svg { width:100%; height:auto; display:block; }
+            .mf-fn-cnt { fill:#2b2b2b; font-weight:800; font-size:17px; font-family:inherit; }
+            .mf-fn-sub { fill:#6d6d6d; font-weight:600; font-size:11.5px; font-family:inherit; }
+            .mf-chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; padding-top:12px; border-top:1px solid var(--border-soft); }
+            .mf-chip { flex:1; min-width:0; background:#ffffff; border:1px solid var(--border-soft); border-radius:8px; padding:7px 10px; }
+            .mf-chip-lbl { font-size:9px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+            .mf-chip-val { font-size:15px; font-weight:800; color:var(--ink); margin-top:2px; line-height:1; }
+            .mf-chip-val.below { color:#cf7f6a; }
+            .mf-chip-tgt { font-size:9.5px; font-weight:600; color:var(--ink-muted); margin-top:2px; }
+            .side2 { display:grid; grid-template-columns:1fr; gap:16px; align-items:stretch; background:#fafafa; border-radius:14px; padding:14px; margin-bottom:18px; }
+            .side2 > .kpi-section { margin-bottom:0; display:flex; flex-direction:column; }
+            .cfun-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; }
+            .cfun-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+            .cfun-lbl { font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+            .cfun-val { font-size:23px; font-weight:800; color:var(--ink); margin:4px 0 2px; letter-spacing:-.02em; }
+            .cfun-tgt { font-size:11px; color:var(--ink-muted); font-weight:600; }
+            .cfun-card.warn { border-left:3px solid #e8952c; }
+            .cfun-card.warn .cfun-val { color:#e8952c; }
+            .cfun-card.cfun-bad { border-left:3px solid #d1544f; }
+            .cfun-card.cfun-bad .cfun-val { color:#d1544f; }
+          </style>
+          <div class="cfun-grid">
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadsVisits')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadsVisits');}"><div class="cfun-lbl">Leads &rarr; Visits</div><div class="cfun-val">52%</div><div class="cfun-tgt">Target 55%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsTestDrives')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsTestDrives');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Test Drives</div><div class="cfun-val">58%</div><div class="cfun-tgt">Target 60%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsBooking');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Booking</div><div class="cfun-val">27%</div><div class="cfun-tgt">Target 30%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadBooking');}"><div class="cfun-lbl">Lead &rarr; Booking</div><div class="cfun-val">11.4%</div><div class="cfun-tgt">Target 12%</div></div>
+            <div class="cfun-card warn mdr-open" role="button" tabindex="0" onclick="openMetric('fBookingInvoice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fBookingInvoice');}"><div class="cfun-lbl">Booking &rarr; Invoice</div><div class="cfun-val">82%</div><div class="cfun-tgt">Target 85%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fInvoiceDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fInvoiceDelivery');}"><div class="cfun-lbl">Invoice &rarr; Delivery</div><div class="cfun-val">88%</div><div class="cfun-tgt">Target 90%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fCancellationBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fCancellationBooking');}"><div class="cfun-lbl">Cancellation &rarr; Booking</div><div class="cfun-val">17%</div><div class="cfun-tgt">Target 20%</div></div>
+          </div>
+        </div>
+        </div>
+
+        <!-- SECTION — Network Pipeline (separate) -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Network pipeline — All</span><span class="kpi-sec-sub">&middot; Stage volume &amp; conversion</span></div>
+          <style>
+            .np-wrap { background:#fafafa; border-radius:14px; padding:18px 20px 14px; }
+            .np-chart { display:flex; align-items:flex-end; gap:14px; height:250px; padding:0 4px; }
+            .np-col { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-width:0; }
+            .np-val { font-size:13px; font-weight:800; color:var(--ink); margin-bottom:6px; white-space:nowrap; }
+            .np-val .conv { font-size:10px; font-weight:600; color:var(--ink-muted); }
+            .np-bar { width:100%; max-width:66px; border-radius:8px 8px 0 0; min-height:6px; transition:height .8s cubic-bezier(.4,0,.2,1); }
+            .np-axis { display:flex; gap:14px; padding:9px 4px 0; border-top:1px solid var(--border); margin-top:8px; }
+            .np-axis-lbl { flex:1; min-width:0; text-align:center; font-size:11px; font-weight:600; color:var(--ink-secondary); }
+            .np-foot { display:flex; justify-content:space-between; padding-top:12px; gap:10px; flex-wrap:wrap; }
+            .np-foot-l { font-size:11px; color:var(--ink-muted); font-style:italic; }
+            .np-foot-r { font-size:11px; color:var(--ink-secondary); font-weight:600; }
+          </style>
+          <div class="np-wrap">
+            <div class="np-chart">
+              <div class="np-col"><div class="np-val">340</div><div class="np-bar" style="height:100%;background:#b4aef0"></div></div>
+              <div class="np-col"><div class="np-val">300 <span class="conv">88%</span></div><div class="np-bar" style="height:88.2%;background:#f0b6a3"></div></div>
+              <div class="np-col"><div class="np-val">260 <span class="conv">87%</span></div><div class="np-bar" style="height:76.5%;background:#a6ddd2"></div></div>
+              <div class="np-col"><div class="np-val">180 <span class="conv">69%</span></div><div class="np-bar" style="height:52.9%;background:#f2dca3"></div></div>
+              <div class="np-col"><div class="np-val">102 <span class="conv">57%</span></div><div class="np-bar" style="height:30%;background:#cfa7b5"></div></div>
+              <div class="np-col"><div class="np-val">64 <span class="conv">63%</span></div><div class="np-bar" style="height:18.8%;background:#bcd6f4"></div></div>
+              <div class="np-col"><div class="np-val">39 <span class="conv">61%</span></div><div class="np-bar" style="height:11.5%;background:#aad9bd"></div></div>
+              <div class="np-col"><div class="np-val">28 <span class="conv">72%</span></div><div class="np-bar" style="height:8.2%;background:#eec6db"></div></div>
             </div>
-            <div class="dial-card">
-              <div class="dial-inner">Maintenance</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo3)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="59.66"/>
-                  <defs><linearGradient id="gradAo3" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:#b5642a">62%</div>
-                  <div class="dial-sub">Target 65%</div>
-                </div>
-              </div>
+            <div class="np-axis">
+              <span class="np-axis-lbl">New Leads</span>
+              <span class="np-axis-lbl">Lead Assignment</span>
+              <span class="np-axis-lbl">Contact</span>
+              <span class="np-axis-lbl">Nurture</span>
+              <span class="np-axis-lbl">Test Drive</span>
+              <span class="np-axis-lbl">Offer</span>
+              <span class="np-axis-lbl">Booking</span>
+              <span class="np-axis-lbl">Delivery</span>
             </div>
-            <div class="dial-card">
-              <div class="dial-inner">Insurance</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo4)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="34.54"/>
-                  <defs><linearGradient id="gradAo4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#5cb97f" /><stop offset="100%" stop-color="#4fb8a8" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:#3d8a5b">78%</div>
-                  <div class="dial-sub">Target 60%</div>
-                </div>
-              </div>
-            </div>
-            <div class="dial-card">
-              <div class="dial-inner">Warranty</div>
-              <div class="dial-wrap">
-                <svg class="dial-svg" viewBox="0 0 120 66">
-                  <path class="dial-track" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#e9ecf1" stroke-width="10" stroke-linecap="round"/>
-                  <path class="dial-fill" d="M 10 60 A 50 50 0 0 1 110 60" fill="none" stroke="url(#gradAo5)" stroke-width="10" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="70.65"/>
-                  <defs><linearGradient id="gradAo5" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e8a84c" /><stop offset="100%" stop-color="#e76e6e" /></linearGradient></defs>
-                </svg>
-                <div class="dial-center">
-                  <div class="dial-value" style="color:#b5642a">55%</div>
-                  <div class="dial-sub">Target 60%</div>
-                </div>
-              </div>
-            </div>
-            <div class="metric-card">
-              <div class="mc-icon red"><span class="material-symbols-outlined">money_off</span></div>
-              <div class="mc-lbl">Zero Add-on Deals</div><div class="mc-val txt-red">4</div><div class="mc-sub">Target 0</div>
+            <div class="np-foot">
+              <span class="np-foot-l">Bar height = stage volume &middot; % = stage-to-stage conversion</span>
+              <span class="np-foot-r">340 in pipeline &middot; 28 delivered &middot; Overall 8%</span>
             </div>
           </div>
-          <div class="nba" style="margin-top:14px">
+        </div>
+
+        <!-- SECTION — Volumetrics -->
+        <div class="kpi-section" style="margin-top:22px">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Volumetrics</span><span class="kpi-sec-sub">&middot; Operational counts · MTD</span></div>
+          <div class="kpi-grid g7 kpi-group">
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">directions_walk</span></div><div class="mc-lbl">Walks</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vBookings')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vBookings');}"><div class="mc-icon blue"><span class="material-symbols-outlined">event_available</span></div><div class="mc-lbl">Bookings</div><div class="mc-val">39</div><div class="mc-sub">Target 45</div></div>
+            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">receipt_long</span></div><div class="mc-lbl">Sales Orders</div><div class="mc-val">34</div><div class="mc-sub">Target 40</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vInvoices')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vInvoices');}"><div class="mc-icon blue"><span class="material-symbols-outlined">description</span></div><div class="mc-lbl">Invoices</div><div class="mc-val">30</div><div class="mc-sub">Target 35</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vDeliveries')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vDeliveries');}"><div class="mc-icon green"><span class="material-symbols-outlined">local_shipping</span></div><div class="mc-lbl">Deliveries</div><div class="mc-val txt-green">27</div><div class="mc-sub">Target 30</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vVisitsWalkins')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vVisitsWalkins');}"><div class="mc-icon blue"><span class="material-symbols-outlined">storefront</span></div><div class="mc-lbl">Visits + Walk-ins</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vFollowups')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vFollowups');}"><div class="mc-icon blue"><span class="material-symbols-outlined">task_alt</span></div><div class="mc-lbl">Follow-ups On Time</div><div class="mc-val">214</div><div class="mc-sub">Target 250</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vCancellations')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vCancellations');}"><div class="mc-icon red"><span class="material-symbols-outlined">cancel</span></div><div class="mc-lbl">Cancellations</div><div class="mc-val txt-red">12</div><div class="mc-sub">Target &lt; 10</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vTradeins')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vTradeins');}"><div class="mc-icon amber"><span class="material-symbols-outlined">swap_horiz</span></div><div class="mc-lbl">Trade-ins</div><div class="mc-val txt-amber">18</div><div class="mc-sub">Target 25</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vAddonsSold')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vAddonsSold');}"><div class="mc-icon blue"><span class="material-symbols-outlined">add_circle</span></div><div class="mc-lbl">Add-ons Sold</div><div class="mc-val">71</div><div class="mc-sub">Target 80</div></div>
+          </div>
+        </div>
+
+        <!-- SECTION — Add-on Penetration -->
+        <div class="kpi-section">
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--green)"></span><span class="kpi-sec-title">Add-on penetration</span><span class="kpi-sec-sub">&middot; Attach rate by category — last 30 days</span></div>
+          <div class="ao-block">
+          <div class="cfun-grid" style="margin-bottom:0">
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('apOverall')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('apOverall');}"><div class="cfun-lbl">Overall</div><div class="cfun-val" style="color:#3d8a5b">68%</div><div class="cfun-tgt">Target 55%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('apAccessories')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('apAccessories');}"><div class="cfun-lbl">Accessories</div><div class="cfun-val">71%</div><div class="cfun-tgt">Target 60%</div></div>
+            <div class="cfun-card warn mdr-open" role="button" tabindex="0" onclick="openMetric('apMaintenance')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('apMaintenance');}"><div class="cfun-lbl">Maintenance</div><div class="cfun-val">62%</div><div class="cfun-tgt">Target 65%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('apInsurance')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('apInsurance');}"><div class="cfun-lbl">Insurance</div><div class="cfun-val" style="color:#3d8a5b">78%</div><div class="cfun-tgt">Target 60%</div></div>
+            <div class="cfun-card warn mdr-open" role="button" tabindex="0" onclick="openMetric('apWarranty')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('apWarranty');}"><div class="cfun-lbl">Warranty</div><div class="cfun-val">55%</div><div class="cfun-tgt">Target 60%</div></div>
+            <div class="cfun-card cfun-bad mdr-open" role="button" tabindex="0" onclick="openMetric('apZero')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('apZero');}"><div class="cfun-lbl">Zero Add-on Deals</div><div class="cfun-val">4</div><div class="cfun-tgt">Target 0</div></div>
+          </div>
+          <div class="nba" style="margin-top:12px;background:#fff;border:1px solid var(--border)">
             <div class="nba-ico"><span class="material-symbols-outlined">school</span></div>
             <div class="nba-body">
               <div class="nba-eyebrow">Coaching Alert</div>
@@ -1496,13 +1349,235 @@
               <button class="nba-btn" onclick="showToast('Coaching session scheduled for Omar Al Khoury')">Schedule coaching &rsaquo;</button>
             </div>
           </div>
+          </div>
         </div>
+        <!-- SECTION — Team Diary -->
+        <div class="kpi-section">
+          <div class="cal-block">
+          <div class="kpi-sec-head" style="margin-bottom:12px"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">Team calendar</span><span class="kpi-sec-sub">&middot; Sales consultant diaries — SZR — Sheikh Zayed Road</span></div>
+          <div class="diary-legend">
+            <span class="dl-item"><span class="dl-dot" style="background:var(--blue)"></span> Appointment</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--amber)"></span> Follow-up</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--green)"></span> Test Drive</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--purple)"></span> Customer Call</span>
+            <span class="dl-item"><span class="dl-dot" style="background:var(--teal)"></span> Delivery</span>
+          </div>
+          <div class="stream-bar">
+            <div class="stream-seg" id="diaryBranch">
+              <button class="seg-tab on" onclick="setDiaryBranch(this)">SZR</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Deira</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Abu Dhabi</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Sharjah</button>
+              <button class="seg-tab" onclick="setDiaryBranch(this)">Al Ain</button>
+            </div>
+            <div class="stream-seg" id="diaryRange">
+              <button class="seg-tab on" onclick="setDiaryRange(this)">Today</button>
+              <button class="seg-tab" onclick="setDiaryRange(this)">Week</button>
+            </div>
+          </div>
+          <style>
+            .cal-wrap { border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#fff; }
+            .cal-header, .cal-body { display:grid; grid-template-columns:56px repeat(5,1fr); }
+            .cal-header { border-bottom:1px solid var(--border); background:#fafafa; }
+            .cal-hname { padding:9px 6px; font-size:11.5px; font-weight:700; color:var(--ink-secondary); text-align:center; border-left:1px solid var(--border-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+            .cal-timecol { }
+            .cal-hr { height:56px; font-size:10px; color:var(--ink-muted); text-align:right; padding:2px 8px 0 0; box-sizing:border-box; }
+            .cal-col { position:relative; border-left:1px solid var(--border-soft); background-image:repeating-linear-gradient(to bottom, var(--border-soft), var(--border-soft) 1px, transparent 1px, transparent 56px); }
+            .cal-event { position:absolute; left:3px; right:3px; border-radius:6px; padding:3px 7px; color:#fff; overflow:hidden; box-shadow:0 1px 2px rgba(20,24,34,.16); cursor:pointer; }
+            .cal-event .ce-n { display:block; font-size:10.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+            .cal-event .ce-t { display:block; font-size:9.5px; font-weight:600; opacity:.92; }
+            .cal-event.over { outline:2px solid #d1544f; outline-offset:-2px; }
+            .wk-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; }
+            .wk-day { border:1px solid var(--border-soft); border-radius:8px; padding:8px; min-height:180px; background:#fff; }
+            .wk-dhead { font-size:11px; font-weight:700; color:var(--ink-secondary); margin-bottom:8px; display:flex; justify-content:space-between; align-items:baseline; }
+            .wk-dhead span { font-size:13px; font-weight:800; color:var(--ink); }
+            .wk-dhead.today, .wk-dhead.today span { color:var(--blue); }
+            .wk-chip { font-size:10px; font-weight:600; color:#fff; border-radius:5px; padding:3px 6px; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+            .wk-empty { font-size:10.5px; color:var(--ink-muted); text-align:center; padding-top:24px; }
+            @media (max-width:900px){ .wk-grid { grid-template-columns:repeat(4,1fr); } }
+          </style>
+          <div class="cal-wrap" id="calDay">
+            <div class="cal-header">
+              <div></div>
+              <div class="cal-hname">Rania Khoury</div>
+              <div class="cal-hname">Mariam Saeed</div>
+              <div class="cal-hname">Ahmad Nasr</div>
+              <div class="cal-hname">Layla Habib</div>
+              <div class="cal-hname">Karim Mostafa</div>
+            </div>
+            <div class="cal-body">
+              <div class="cal-timecol">
+                <div class="cal-hr">09:00</div><div class="cal-hr">10:00</div><div class="cal-hr">11:00</div><div class="cal-hr">12:00</div><div class="cal-hr">13:00</div><div class="cal-hr">14:00</div><div class="cal-hr">15:00</div><div class="cal-hr">16:00</div><div class="cal-hr">17:00</div>
+              </div>
+              <div class="cal-col">
+                <div class="cal-event" style="top:28px;height:42px;background:#5cb97f"><span class="ce-n">Hiren Patel</span><span class="ce-t">09:30 · Test Drive</span></div>
+                <div class="cal-event" style="top:280px;height:84px;background:#4fb8a8"><span class="ce-n">Linda George</span><span class="ce-t">14:00 · Delivery</span></div>
+              </div>
+              <div class="cal-col">
+                <div class="cal-event over" style="top:84px;height:18px;background:#8b7bdf"><span class="ce-n">Sara Khalid · Call</span></div>
+                <div class="cal-event" style="top:434px;height:28px;background:#4a7fb5"><span class="ce-n">Maya Hassan</span><span class="ce-t">16:45 · Appt</span></div>
+              </div>
+              <div class="cal-col">
+                <div class="cal-event" style="top:112px;height:56px;background:#4a7fb5"><span class="ce-n">Fatima Al Ali</span><span class="ce-t">11:00 · Appointment</span></div>
+                <div class="cal-event" style="top:378px;height:42px;background:#5cb97f"><span class="ce-n">Ahmed Mansoor</span><span class="ce-t">15:45 · Test Drive</span></div>
+              </div>
+              <div class="cal-col">
+                <div class="cal-event" style="top:182px;height:42px;background:#d99a3c"><span class="ce-n">Karim Saleh</span><span class="ce-t">12:15 · Follow-up</span></div>
+                <div class="cal-event" style="top:476px;height:28px;background:#d99a3c"><span class="ce-n">Rita Sami</span><span class="ce-t">17:30 · Follow-up</span></div>
+              </div>
+              <div class="cal-col">
+                <div class="cal-event" style="top:56px;height:56px;background:#4a7fb5"><span class="ce-n">Tariq Ahmad</span><span class="ce-t">10:00 · Appointment</span></div>
+                <div class="cal-event" style="top:252px;height:42px;background:#5cb97f"><span class="ce-n">Salma Idris</span><span class="ce-t">13:30 · Test Drive</span></div>
+              </div>
+            </div>
+          </div>
+          <div id="calWeek" style="display:none">
+            <div class="wk-grid">
+              <div class="wk-day"><div class="wk-dhead">Mon <span>29</span></div><div class="wk-chip" style="background:#4a7fb5">10:00 Tariq Ahmad</div><div class="wk-chip" style="background:#5cb97f">14:30 Salma Idris</div></div>
+              <div class="wk-day"><div class="wk-dhead today">Tue <span>30</span></div><div class="wk-chip" style="background:#5cb97f">09:30 Hiren Patel</div><div class="wk-chip" style="background:#4a7fb5">11:00 Fatima Al Ali</div><div class="wk-chip" style="background:#4fb8a8">14:00 Linda George</div><div class="wk-chip" style="background:#4a7fb5">16:45 Maya Hassan</div></div>
+              <div class="wk-day"><div class="wk-dhead">Wed <span>01</span></div><div class="wk-chip" style="background:#8b7bdf">10:30 Sara Khalid</div><div class="wk-chip" style="background:#5cb97f">15:45 Ahmed Mansoor</div></div>
+              <div class="wk-day"><div class="wk-dhead">Thu <span>02</span></div><div class="wk-chip" style="background:#d99a3c">12:15 Karim Saleh</div><div class="wk-chip" style="background:#d99a3c">17:30 Rita Sami</div></div>
+              <div class="wk-day"><div class="wk-dhead">Fri <span>03</span></div><div class="wk-chip" style="background:#4fb8a8">09:00 Grace Onu</div><div class="wk-chip" style="background:#4a7fb5">13:00 Amir Zaki</div></div>
+              <div class="wk-day"><div class="wk-dhead">Sat <span>04</span></div><div class="wk-chip" style="background:#5cb97f">11:00 Nour Jaber</div></div>
+              <div class="wk-day"><div class="wk-dhead">Sun <span>05</span></div><div class="wk-empty">No events</div></div>
+            </div>
+          </div>
+          </div>
+        </div>
+
 
       </div>
     </div>
   </div>
 
   <!-- Toast -->
+  <!-- KPI metric drill-down drawer -->
+  <style>
+    .mdr-overlay{position:fixed;inset:0;background:rgba(15,20,28,.42);opacity:0;visibility:hidden;transition:.2s;z-index:60;}
+    .mdr-overlay.open{opacity:1;visibility:visible;}
+    .mdr{position:fixed;top:0;right:0;height:100vh;width:600px;max-width:94vw;background:var(--surface);box-shadow:-8px 0 30px rgba(15,20,28,.18);transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;}
+    .mdr.open{transform:translateX(0);}
+    .mdr-scroll{overflow-y:auto;height:100%;}
+    .mdr-hd{background:linear-gradient(135deg,#17293d,#2a4a6b);color:#fff;padding:20px 24px;position:relative;}
+    .mdr-ey{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.82;}
+    .mdr-ttl{font-size:22px;font-weight:700;margin-top:2px;}
+    .mdr-sub{font-size:12.5px;opacity:.85;margin-top:4px;max-width:60%;}
+    .mdr-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+    .mdr-close:hover{background:rgba(255,255,255,.28);}
+    .mdr-close .material-symbols-outlined{font-size:19px;}
+    .mdr-kpi{position:absolute;top:20px;right:60px;text-align:right;}
+    .mdr-kpi-val{font-size:34px;font-weight:800;line-height:1;}
+    .mdr-kpi-tgt{font-size:12px;font-weight:600;margin-top:6px;opacity:.92;}
+    .mdr-delta{margin-left:4px;font-weight:700;}
+    .mdr-delta.down{color:#ffd0d0;}
+    .mdr-delta.up{color:#bff0cf;}
+    .mdr-kpi-per{font-size:11px;opacity:.75;margin-top:3px;}
+    .mdr-tools{display:flex;align-items:center;gap:10px;padding:13px 24px;border-bottom:1px solid var(--border);background:#fafbfc;}
+    .mdr-tools .bd{display:flex;align-items:center;gap:7px;color:var(--ink-muted);font-size:12.5px;font-weight:600;}
+    .mdr-tools .bd .material-symbols-outlined{font-size:17px;}
+    .mdr-sel{border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-family:inherit;font-size:12.5px;color:var(--ink);background:var(--surface);cursor:pointer;font-weight:600;}
+    .mdr-report{margin-left:auto;display:flex;align-items:center;gap:5px;color:#17293d;font-weight:700;font-size:13px;text-decoration:none;}
+    .mdr-report:hover{text-decoration:underline;}
+    .mdr-report .material-symbols-outlined{font-size:16px;}
+    .mdr-body{padding:20px 24px;}
+    .mdr-secl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;}
+    .mdr-chart{border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 8px;}
+    .mdr-trend-svg,.mdr-branch-svg{width:100%;height:auto;display:block;}
+    .mdr-grid{stroke:#eceef1;stroke-width:1;}
+    .mdr-axl{fill:#98a1ac;font-size:10px;font-family:inherit;}
+    .mdr-target{stroke:#17293d;stroke-width:1.4;stroke-dasharray:4 4;opacity:.75;}
+    .mdr-tlab{fill:#17293d;font-size:10px;font-weight:600;font-family:inherit;}
+    .mdr-line{fill:none;stroke:#17293d;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;}
+    .mdr-dot{fill:#fff;stroke:#17293d;stroke-width:2;}
+    .mdr-bar{fill:#17293d;}
+    .mdr-bl{fill:var(--ink-secondary);font-size:11px;font-family:inherit;}
+    .mdr-rank{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0;}
+    .mdr-rbox{border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;}
+    .mdr-rbox.top{background:var(--green-soft);border-color:#cfe9d9;}
+    .mdr-rbox.bot{background:var(--red-soft);border-color:#f3d6d6;}
+    .mdr-rh{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+    .mdr-rbox.top .mdr-rh{color:#3d8a5b;}
+    .mdr-rbox.bot .mdr-rh{color:#c0392b;}
+    .mdr-rrow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;font-size:13px;}
+    .mdr-rrow .nm{color:var(--ink);}
+    .mdr-rrow .vv{font-weight:700;color:var(--ink);white-space:nowrap;}
+    .mdr-tabs{display:flex;border-top:1px solid var(--border);}
+    .mdr-tab{flex:1;text-align:center;padding:14px 0;font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--ink-muted);background:none;border:none;cursor:pointer;font-family:inherit;text-transform:uppercase;}
+    .mdr-tab.on{color:#17293d;box-shadow:inset 0 -2px 0 #17293d;}
+    .mdr-open{cursor:pointer;position:relative;}
+    .mdr-open:hover{box-shadow:0 2px 12px rgba(20,24,34,.10);}
+    .mdr-open:focus-visible{outline:2px solid #17293d;outline-offset:2px;}
+    .mdr-open::after{content:"insights";font-family:'Material Symbols Outlined';position:absolute;top:9px;right:9px;font-size:15px;color:var(--ink-muted);opacity:0;transition:.15s;}
+    .mdr-open:hover::after{opacity:.7;}
+    /* leads-list drawer */
+    .ml-tbar{display:flex;align-items:center;gap:8px;}
+    .ml-addwrap{position:relative;}
+    .ml-tbtn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface);color:var(--ink-secondary);border-radius:8px;padding:6px 11px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap;}
+    .ml-tbtn:hover{background:var(--bg);}
+    .ml-tbtn .material-symbols-outlined{font-size:15px;}
+    .ml-tbtn.primary{background:var(--blue);color:#fff;border-color:var(--blue);}
+    .ml-tbtn.primary:hover{filter:brightness(1.08);}
+    .ml-addmenu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(20,24,34,.16);padding:8px;min-width:190px;z-index:70;display:none;}
+    .ml-addmenu.open{display:block;}
+    .ml-addhead{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:4px 8px 8px;}
+    .ml-addopt{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:7px;font-size:13px;color:var(--ink-secondary);cursor:pointer;}
+    .ml-addopt:hover{background:var(--blue-soft);}
+    .ml-addopt input{accent-color:var(--blue);width:15px;height:15px;cursor:pointer;}
+    .mdr-leadswrap{overflow-x:auto;}
+    .mdr-leads{width:100%;border-collapse:collapse;font-size:12px;}
+    .mdr-leads th{text-align:left;padding:7px 9px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+    .mdr-leads td{padding:9px 9px;border-bottom:1px solid var(--border-soft);color:var(--ink-secondary);vertical-align:middle;white-space:nowrap;}
+    .mdr-leads tbody tr:last-child td{border-bottom:none;}
+    .ml-name{font-weight:700;color:var(--ink);font-size:12.5px;}
+    .ml-id{font-size:10.5px;color:var(--ink-muted);font-family:'SF Mono',Consolas,monospace;}
+    .ml-temp{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:700;}
+    .ml-temp.hot{background:#fdeaea;color:#d1544f;}
+    .ml-temp.warm{background:#fdf3e3;color:#b26a1a;}
+    .ml-temp.cold{background:#eaf1fb;color:#3b6fb5;}
+    .ml-sla-u{color:#d97a2b;font-weight:700;}
+    .ml-sla-red{color:#d1544f;font-weight:700;}
+    .ml-sla-amber{color:#d97a2b;font-weight:700;}
+    .ml-unassigned{font-style:italic;color:var(--ink-muted);}
+    .ml-breach{color:#d1544f;font-weight:600;}
+    .cx-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;}
+    .cx-table th{padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted);border-bottom:1px solid var(--border);text-align:left;}
+    .cx-table th:not(:first-child),.cx-table td:not(:first-child){text-align:right;}
+    .cx-table td{padding:9px 10px;border-bottom:1px solid var(--border-soft);color:var(--ink);}
+    .cx-table tbody tr:last-child td{border-bottom:none;}
+    .cx-up{color:#3d8a5b;font-weight:700;}
+    .cx-down{color:#d1544f;font-weight:700;}
+    .cx-note{font-size:11px;color:var(--ink-muted);font-style:italic;margin-top:12px;}
+    .ml-act{color:var(--ink);font-weight:600;}
+    .ax-sec{border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;background:var(--surface);}
+    .ax-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+    .ax-cap{font-size:11.5px;color:var(--ink-muted);margin-top:1px;}
+    .ax-toggle{display:inline-flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+    .ax-toggle button{border:none;background:var(--surface);color:var(--ink-secondary);font-size:12px;font-weight:600;font-family:inherit;padding:5px 12px;cursor:pointer;}
+    .ax-toggle button.on{background:var(--blue);color:#fff;}
+    .ax-sec .mdr-chart{border:none;padding:0;}
+    .ax-empty{display:flex;align-items:center;justify-content:center;min-height:120px;color:var(--ink-muted);font-size:13px;text-align:center;}
+    .ax-empty2{text-align:center;padding:26px 16px;}
+    .ax-empty2-t{font-size:14px;font-weight:700;color:var(--ink);}
+    .ax-empty2-s{font-size:12px;color:var(--ink-muted);margin-top:4px;}
+    .ap-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+    .ap-card{border:1px solid var(--border);border-radius:10px;padding:12px 14px;}
+    .ap-lbl{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted);}
+    .ap-val{font-size:20px;font-weight:800;color:var(--ink);margin-top:3px;}
+    .ap-badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:700;}
+    .ap-badge.attached{background:#e8f5ee;color:#3d8a5b;}
+    .ap-badge.declined{background:#fdeaea;color:#d1544f;}
+    .ap-badge.pending{background:transparent;color:var(--ink-muted);}
+
+    .mdr-records{position:absolute;top:20px;right:60px;font-size:13px;font-weight:600;color:rgba(255,255,255,.82);}
+    .mdr-hd-list{padding-bottom:18px;}
+    .ml-assign{color:var(--blue);font-weight:700;text-decoration:none;white-space:nowrap;}
+    .ml-assign:hover{text-decoration:underline;}
+  </style>
+  <div class="mdr-overlay" id="mdrOverlay" onclick="closeMetric()"></div>
+  <aside class="mdr" id="mdr" role="dialog" aria-modal="true" aria-label="Metric detail">
+    <div class="mdr-scroll" id="mdrContent"></div>
+  </aside>
+
   <div class="toast" id="toast"><span class="material-symbols-outlined">check_circle</span><span id="toastMsg">Done</span></div>
 
   <script>
@@ -1516,7 +1591,7 @@
     function changeLocation(sel){ showToast('Switched to ' + sel.value); }
     function exportQueue(){ showToast('Queue exported to CSV'); }
     function setDiaryBranch(btn){ btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on'); showToast('Diary — ' + btn.textContent); }
-    function setDiaryRange(btn){ btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on'); showToast('Diary — ' + btn.textContent); }
+    function setDiaryRange(btn){ btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on'); var wk=/week/i.test(btn.textContent); var d=document.getElementById('calDay'), w=document.getElementById('calWeek'); if(d) d.style.display=wk?'none':''; if(w) w.style.display=wk?'':'none'; }
   </script>
 
   <script>
@@ -1561,6 +1636,492 @@
     function markAllRead(){ document.querySelectorAll('.notif-item.unread').forEach(function(n){n.classList.remove('unread');}); updateBellBadge(); }
     function dismissNotif(btn){ var item=btn.closest('.notif-item'); item.style.transition='all .2s'; item.style.opacity='0'; item.style.maxHeight='0'; item.style.padding='0 16px'; setTimeout(function(){ item.remove(); updateBellBadge(); },200); }
     function updateBellBadge(){ var count=document.querySelectorAll('.notif-item.unread').length; ['bellBadge','notifBadge'].forEach(function(id){ var b=document.getElementById(id); if(!b)return; if(count>0){ b.textContent=count; b.style.display=''; } else { b.style.display='none'; } }); }
+  </script>
+  <script>
+    // ── KPI metric drill-down drawer (Today's Actions) ──
+    // Branch order reference: SZR, Deira, Abu Dhabi, Sharjah, Al Ain
+    var METRICS = {
+      apOverall: {"apen":true,"title":"Add-on Penetration — Overall · SZR — Sheikh Zayed Road","sub":"Overall penetration 68% · target 55% · 55 records · scoped to SZR — Sheikh Zayed Road","records":55,"attached":31,"revenue":"AED 222,930","gp":"AED 58,500","trend":[205,215,225,270,300,305,315,340,410,410,405,540],"trendMax":600,"tx":[{"date":"2026-07-15","cust":"Hiren Patel","item":"Boot liner","cat":"Accessories","status":"Pending","price":"620"},{"date":"2026-07-15","cust":"Hiren Patel","item":"5-year service pack","cat":"Maintenance","status":"Attached","price":"6,800"},{"date":"2026-07-15","cust":"Hiren Patel","item":"3-year service pack","cat":"Maintenance","status":"Declined","price":"4,200"},{"date":"2026-07-15","cust":"Hiren Patel","item":"Comprehensive — 1 year","cat":"Insurance","status":"Pending","price":"5,400"},{"date":"2026-07-15","cust":"Hiren Patel","item":"Third-party — 1 year","cat":"Insurance","status":"Attached","price":"2,100"},{"date":"2026-07-15","cust":"Hiren Patel","item":"Extended warranty — 5 yr","cat":"Warranty","status":"Attached","price":"7,600"},{"date":"2026-07-15","cust":"Hiren Patel","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Declined","price":"3,200"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Dash cam (front + rear)","cat":"Accessories","status":"Declined","price":"1,900"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Window tint — heat 70%","cat":"Accessories","status":"Attached","price":"1,450"},{"date":"2026-07-15","cust":"Sara Khalid","item":"3-year service pack","cat":"Maintenance","status":"Attached","price":"4,200"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Third-party — 1 year","cat":"Insurance","status":"Declined","price":"2,100"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Comprehensive — 1 year","cat":"Insurance","status":"Attached","price":"5,400"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Attached","price":"3,200"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Extended warranty — 5 yr","cat":"Warranty","status":"Attached","price":"7,600"},{"date":"2026-07-15","cust":"Maya Hassan","item":"All-weather floor mats","cat":"Accessories","status":"Declined","price":"850"},{"date":"2026-07-15","cust":"Maya Hassan","item":"5-year service pack","cat":"Maintenance","status":"Attached","price":"6,800"},{"date":"2026-07-15","cust":"Maya Hassan","item":"Comprehensive — 1 year","cat":"Insurance","status":"Declined","price":"5,400"},{"date":"2026-07-15","cust":"Maya Hassan","item":"Third-party — 1 year","cat":"Insurance","status":"Pending","price":"2,100"},{"date":"2026-07-15","cust":"Maya Hassan","item":"Extended warranty — 5 yr","cat":"Warranty","status":"Attached","price":"7,600"},{"date":"2026-07-15","cust":"Maya Hassan","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Attached","price":"3,200"},{"date":"2026-07-15","cust":"Aisha Khalifa","item":"Window tint — heat 70%","cat":"Accessories","status":"Attached","price":"1,450"},{"date":"2026-07-15","cust":"Aisha Khalifa","item":"5-year service pack","cat":"Maintenance","status":"Pending","price":"6,800"}]},
+      apAccessories: {"apen":true,"title":"Add-on Penetration — Accessories · SZR — Sheikh Zayed Road","sub":"Accessories penetration 71% · 13 records · scoped to SZR — Sheikh Zayed Road","records":13,"attached":7,"revenue":"AED 16,630","gp":"AED 5,860","trend":[8,10,20,18,20,23,40,52,60,58,78,80],"trendMax":80,"tx":[{"date":"2026-07-15","cust":"Hiren Patel","item":"Boot liner","cat":"Accessories","status":"Pending","price":"620"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Dash cam (front + rear)","cat":"Accessories","status":"Declined","price":"1,900"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Window tint — heat 70%","cat":"Accessories","status":"Attached","price":"1,450"},{"date":"2026-07-15","cust":"Maya Hassan","item":"All-weather floor mats","cat":"Accessories","status":"Declined","price":"850"},{"date":"2026-07-15","cust":"Aisha Khalifa","item":"Window tint — heat 70%","cat":"Accessories","status":"Attached","price":"1,450"},{"date":"2026-07-12","cust":"Linda George","item":"Boot liner","cat":"Accessories","status":"Pending","price":"620"},{"date":"2026-07-15","cust":"Salma Idris","item":"Boot liner","cat":"Accessories","status":"Attached","price":"620"},{"date":"2026-07-15","cust":"Salma Idris","item":"Roof rack + crossbars","cat":"Accessories","status":"Declined","price":"2,400"},{"date":"2026-07-12","cust":"Amir Zaki","item":"Dash cam (front + rear)","cat":"Accessories","status":"Declined","price":"1,900"},{"date":"2026-07-12","cust":"Amir Zaki","item":"Window tint — heat 70%","cat":"Accessories","status":"Attached","price":"1,450"},{"date":"2026-07-15","cust":"Rita Sami","item":"Dash cam (front + rear)","cat":"Accessories","status":"Attached","price":"1,900"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"All-weather floor mats","cat":"Accessories","status":"Attached","price":"850"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"Boot liner","cat":"Accessories","status":"Attached","price":"620"}]},
+      apMaintenance: {"apen":true,"title":"Add-on Penetration — Maintenance · SZR — Sheikh Zayed Road","sub":"Maintenance penetration 62% · 13 records · scoped to SZR — Sheikh Zayed Road","records":13,"attached":7,"revenue":"AED 65,000","gp":"AED 18,400","trend":[5,5,15,25,26,43,42,50,62,72,78,72],"trendMax":80,"tx":[{"date":"2026-07-15","cust":"Hiren Patel","item":"3-year service pack","cat":"Maintenance","status":"Pending","price":"4,200"},{"date":"2026-07-15","cust":"Sara Khalid","item":"5-year service pack","cat":"Maintenance","status":"Declined","price":"6,800"},{"date":"2026-07-15","cust":"Sara Khalid","item":"3-year service pack","cat":"Maintenance","status":"Attached","price":"4,200"},{"date":"2026-07-15","cust":"Maya Hassan","item":"3-year service pack","cat":"Maintenance","status":"Declined","price":"4,200"},{"date":"2026-07-15","cust":"Aisha Khalifa","item":"3-year service pack","cat":"Maintenance","status":"Attached","price":"4,200"},{"date":"2026-07-12","cust":"Linda George","item":"3-year service pack","cat":"Maintenance","status":"Pending","price":"4,200"},{"date":"2026-07-15","cust":"Salma Idris","item":"5-year service pack","cat":"Maintenance","status":"Attached","price":"6,800"},{"date":"2026-07-15","cust":"Salma Idris","item":"3-year service pack","cat":"Maintenance","status":"Declined","price":"4,200"},{"date":"2026-07-12","cust":"Amir Zaki","item":"5-year service pack","cat":"Maintenance","status":"Declined","price":"6,800"},{"date":"2026-07-12","cust":"Amir Zaki","item":"3-year service pack","cat":"Maintenance","status":"Attached","price":"4,200"},{"date":"2026-07-15","cust":"Rita Sami","item":"3-year service pack","cat":"Maintenance","status":"Attached","price":"4,200"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"5-year service pack","cat":"Maintenance","status":"Attached","price":"6,800"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"3-year service pack","cat":"Maintenance","status":"Attached","price":"4,200"}]},
+      apInsurance: {"apen":true,"title":"Add-on Penetration — Insurance · SZR — Sheikh Zayed Road","sub":"Insurance penetration 78% · 13 records · scoped to SZR — Sheikh Zayed Road","records":13,"attached":7,"revenue":"AED 57,000","gp":"AED 7,520","trend":[8,3,22,22,30,38,36,57,54,68,80,85],"trendMax":100,"tx":[{"date":"2026-07-15","cust":"Hiren Patel","item":"Comprehensive — 1 year","cat":"Insurance","status":"Pending","price":"5,400"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Third-party — 1 year","cat":"Insurance","status":"Declined","price":"2,100"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Comprehensive — 1 year","cat":"Insurance","status":"Attached","price":"5,400"},{"date":"2026-07-15","cust":"Maya Hassan","item":"Comprehensive — 1 year","cat":"Insurance","status":"Declined","price":"5,400"},{"date":"2026-07-15","cust":"Aisha Khalifa","item":"Comprehensive — 1 year","cat":"Insurance","status":"Attached","price":"5,400"},{"date":"2026-07-12","cust":"Linda George","item":"Comprehensive — 1 year","cat":"Insurance","status":"Pending","price":"5,400"},{"date":"2026-07-15","cust":"Salma Idris","item":"Third-party — 1 year","cat":"Insurance","status":"Attached","price":"2,100"},{"date":"2026-07-15","cust":"Salma Idris","item":"Comprehensive — 1 year","cat":"Insurance","status":"Declined","price":"5,400"},{"date":"2026-07-12","cust":"Amir Zaki","item":"Third-party — 1 year","cat":"Insurance","status":"Declined","price":"2,100"},{"date":"2026-07-12","cust":"Amir Zaki","item":"Comprehensive — 1 year","cat":"Insurance","status":"Attached","price":"5,400"},{"date":"2026-07-15","cust":"Rita Sami","item":"Comprehensive — 1 year","cat":"Insurance","status":"Attached","price":"5,400"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"Third-party — 1 year","cat":"Insurance","status":"Attached","price":"2,100"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"Comprehensive — 1 year","cat":"Insurance","status":"Attached","price":"5,400"}]},
+      apWarranty: {"apen":true,"title":"Add-on Penetration — Warranty · SZR — Sheikh Zayed Road","sub":"Warranty penetration 55% · 13 records · scoped to SZR — Sheikh Zayed Road","records":13,"attached":7,"revenue":"AED 59,200","gp":"AED 17,750","trend":[4,8,13,32,36,33,37,42,62,64,64,72],"trendMax":80,"tx":[{"date":"2026-07-15","cust":"Hiren Patel","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Pending","price":"3,200"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Extended warranty — 5 yr","cat":"Warranty","status":"Declined","price":"7,600"},{"date":"2026-07-15","cust":"Sara Khalid","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Attached","price":"3,200"},{"date":"2026-07-15","cust":"Maya Hassan","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Declined","price":"3,200"},{"date":"2026-07-15","cust":"Aisha Khalifa","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Attached","price":"3,200"},{"date":"2026-07-12","cust":"Linda George","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Pending","price":"3,200"},{"date":"2026-07-15","cust":"Salma Idris","item":"Extended warranty — 5 yr","cat":"Warranty","status":"Attached","price":"7,600"},{"date":"2026-07-15","cust":"Salma Idris","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Declined","price":"3,200"},{"date":"2026-07-12","cust":"Amir Zaki","item":"Extended warranty — 5 yr","cat":"Warranty","status":"Declined","price":"7,600"},{"date":"2026-07-12","cust":"Amir Zaki","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Attached","price":"3,200"},{"date":"2026-07-15","cust":"Rita Sami","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Attached","price":"3,200"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"Extended warranty — 5 yr","cat":"Warranty","status":"Attached","price":"7,600"},{"date":"2026-07-15","cust":"Hamza Iqbal","item":"Extended warranty — 2 yr","cat":"Warranty","status":"Attached","price":"3,200"}]},
+      apZero: {"apen":true,"title":"Add-on Penetration — Zero add-on deals · SZR — Sheikh Zayed Road","sub":"Deals delivered without any add-on attached · 4 records · scoped to SZR — Sheikh Zayed Road","records":4,"attached":0,"revenue":"AED 0","gp":"AED 0","trend":[12,17,18,17,22,25,28,32,31,35,37,39],"trendMax":40,"tx":[{"date":"2026-07-18","cust":"Karim Saleh","item":"No add-on attached","cat":"—","status":"Declined","price":"—"},{"date":"2026-07-20","cust":"Ahmed Mansoor","item":"No add-on attached","cat":"—","status":"Declined","price":"—"},{"date":"2026-06-24","cust":"Mira Nabil","item":"No add-on attached","cat":"—","status":"Declined","price":"—"},{"date":"2026-06-29","cust":"Sana Rehman","item":"No add-on attached","cat":"—","status":"Declined","price":"—"}]},
+      vBookings: {"addon":true,"title":"Bookings — SZR — Sheikh Zayed Road","records":2,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open booking","trend":[2,0,2,2,6,6,7,9,9,8,12,14],"trendMax":16,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"}]},
+      vInvoices: {"addon":true,"title":"Invoices — SZR — Sheikh Zayed Road","records":2,"cols":[{"k":"cust","l":"Customer"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"idle","l":"Days Idle"},{"k":"act","l":"Next Action"}],"action":"Open invoice","trend":[8,11,11,13,13,14,14,18,18,18,18,20],"trendMax":20,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","idle":"0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","idle":"0d","act":"Collect booking deposit"}]},
+      vDeliveries: {"addon":true,"title":"Deliveries — SZR — Sheikh Zayed Road","records":0,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"idle","l":"Days Idle"},{"k":"act","l":"Next Action"}],"action":"Open lead","tx":[]},
+      vVisitsWalkins: {"addon":true,"title":"Visits + Walk-ins — SZR — Sheikh Zayed Road","records":7,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"source","l":"Source"},{"k":"channel","l":"Channel"},{"k":"stage","l":"Stage"},{"k":"act","l":"Next Action"}],"action":"Open lead","trend":[32,38,31,45,49,49,52,49,62,62,68,79],"trendMax":80,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","source":"Walk-in","channel":"WhatsApp · English","stage":"Booking","act":"Confirm booking"},{"cust":"Ahmed Mansoor","id":"L-2026-05013","temp":"Hot","owner":"Ahmad Nasr","source":"Website","channel":"WhatsApp · English","stage":"Test Drive","act":"Position VX on comfort & safety"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","source":"Walk-in","channel":"WhatsApp · English","stage":"Booking","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","source":"Social Form","channel":"WhatsApp · English","stage":"Offer","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","source":"Website","channel":"WhatsApp · English","stage":"Offer","act":"Follow up on quote (5d)"},{"cust":"Aisha Khalifa","id":"L-2026-05005","temp":"Warm","owner":"Rania Khoury","source":"Walk-in","channel":"WhatsApp · English","stage":"Nurture","act":"Greet & discovery"},{"cust":"Rita Sami","id":"L-2026-05025","temp":"Warm","owner":"Mariam Saeed","source":"WhatsApp","channel":"WhatsApp · English","stage":"Nurture","act":"Match service package"}]},
+      vFollowups: {"addon":true,"title":"Follow-ups on time — SZR — Sheikh Zayed Road","records":0,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"channel","l":"Channel"},{"k":"stage","l":"Stage"},{"k":"status","l":"Status"},{"k":"act","l":"Next Action"}],"action":"Open lead","tx":[]},
+      vCancellations: {"addon":true,"title":"Cancellations — SZR — Sheikh Zayed Road","records":3,"cols":[{"k":"cust","l":"Customer"},{"k":"owner","l":"Owner"},{"k":"source","l":"Source"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"lostreason","l":"Lost Reason"},{"k":"idle","l":"Days Idle"}],"action":"Open lead","trend":[0,3,5,2,9,7,8,10,13,14,13,19],"trendMax":20,"tx":[{"cust":"Ziad Baroudi","id":"L-2026-07001","owner":"Ahmad Nasr","source":"Website","model":"EXEED LX","stage":"Offer","lostreason":"Competitor selected","idle":"6d"},{"cust":"Vera Kim","id":"L-2026-07002","owner":"Rania Khoury","source":"WhatsApp","model":"EXEED LX","stage":"Nurture","lostreason":"Price","idle":"8d"},{"cust":"Nabil Farha","id":"L-2026-07006","owner":"Nadia Al Suwaidi","source":"800 Number","model":"EXEED LX","stage":"Contact","lostreason":"Duplicate","idle":"15d"}]},
+      vTradeins: {"addon":true,"title":"Trade-ins — SZR — Sheikh Zayed Road","records":4,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open lead","trend":[15,18,22,24,24,29,31,31,33,34,40,44],"trendMax":60,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Offer","quote":"AED 185k · 4d","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","model":"EXEED LX","stage":"Offer","quote":"AED 175k · 5d","act":"Follow up on quote (5d)"}]},
+      vAddonsSold: {"addon":true,"title":"Add-ons sold — SZR — Sheikh Zayed Road","records":4,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open lead","trend":[18,19,18,22,24,26,29,31,32,36,38,40],"trendMax":60,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Offer","quote":"AED 185k · 4d","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","model":"EXEED LX","stage":"Offer","quote":"AED 175k · 5d","act":"Follow up on quote (5d)"}]},
+      fLeadsVisits: {"addon":true,"title":"Leads → Visits — SZR — Sheikh Zayed Road","records":13,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"source","l":"Source"},{"k":"stage","l":"Stage"},{"k":"act","l":"Next Action"}],"action":"Open lead","trend":[2,10,11,11,32,24,45,52,60,60,63,74],"trendMax":80,"tx":[{"cust":"Sara Khalid","id":"L-2026-05002","temp":"Hot","owner":"Mariam Saeed","source":"WhatsApp","stage":"Contact","act":"Call customer — SLA breached"},{"cust":"Hiren Patel","id":"L-2026-05001","temp":"Hot","owner":"Mariam Saeed","source":"Website","stage":"Contact","act":"Call customer"},{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","source":"Walk-in","stage":"Booking","act":"Confirm booking"},{"cust":"Mira Nabil","id":"L-2026-05022","temp":"Hot","owner":"Unassigned","source":"Social Form","stage":"New Leads","act":"Assign urgently"},{"cust":"Ahmed Mansoor","id":"L-2026-05013","temp":"Hot","owner":"Ahmad Nasr","source":"Website","stage":"Test Drive","act":"Position VX on comfort & safety"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","source":"Walk-in","stage":"Booking","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","source":"Social Form","stage":"Offer","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","source":"Website","stage":"Offer","act":"Follow up on quote (5d)"},{"cust":"Aisha Khalifa","id":"L-2026-05005","temp":"Warm","owner":"Rania Khoury","source":"Walk-in","stage":"Nurture","act":"Greet & discovery"},{"cust":"Amir Zaki","id":"L-2026-05020","temp":"Warm","owner":"Unassigned","source":"WhatsApp","stage":"New Leads","act":"Assign to executive"},{"cust":"Rita Sami","id":"L-2026-05025","temp":"Warm","owner":"Mariam Saeed","source":"WhatsApp","stage":"Nurture","act":"Match service package"},{"cust":"Maya Hassan","id":"L-2026-05003","temp":"Warm","owner":"Unassigned","source":"Social Form","stage":"New Leads","act":"Assign to executive"},{"cust":"Karim Saleh","id":"L-2026-05004","temp":"Warm","owner":"Ahmad Nasr","source":"Website","stage":"Contact","act":"Call customer"}]},
+      fVisitsTestDrives: {"addon":true,"title":"(Visits + Walk-ins) → Test Drives — SZR — Sheikh Zayed Road","records":7,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"act","l":"Next Action"}],"action":"Open test drive","trend":[1,1,7,13,18,18,18,30,29,29,42,38],"trendMax":60,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Ahmed Mansoor","id":"L-2026-05013","temp":"Hot","owner":"Ahmad Nasr","model":"EXEED VX","stage":"Test Drive","quote":"—","act":"Position VX on comfort & safety"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Offer","quote":"AED 185k · 4d","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","model":"EXEED LX","stage":"Offer","quote":"AED 175k · 5d","act":"Follow up on quote (5d)"},{"cust":"Aisha Khalifa","id":"L-2026-05005","temp":"Warm","owner":"Rania Khoury","model":"EXEED RX","stage":"Nurture","quote":"—","act":"Greet & discovery"},{"cust":"Rita Sami","id":"L-2026-05025","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Nurture","quote":"—","act":"Match service package"}]},
+      fVisitsBooking: {"addon":true,"title":"(Visits + Walk-ins) → Booking — SZR — Sheikh Zayed Road","records":7,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open booking","trend":[1,3,8,15,20,20,20,22,36,34,41,41],"trendMax":60,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Ahmed Mansoor","id":"L-2026-05013","temp":"Hot","owner":"Ahmad Nasr","model":"EXEED VX","stage":"Test Drive","quote":"—","act":"Position VX on comfort & safety"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Offer","quote":"AED 185k · 4d","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","model":"EXEED LX","stage":"Offer","quote":"AED 175k · 5d","act":"Follow up on quote (5d)"},{"cust":"Aisha Khalifa","id":"L-2026-05005","temp":"Warm","owner":"Rania Khoury","model":"EXEED RX","stage":"Nurture","quote":"—","act":"Greet & discovery"},{"cust":"Rita Sami","id":"L-2026-05025","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Nurture","quote":"—","act":"Match service package"}]},
+      fLeadBooking: {"addon":true,"title":"Lead → Booking — SZR — Sheikh Zayed Road","records":2,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open booking","trend":[10,8,9,13,14,17,14,16,17,16,20,20],"trendMax":20,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"}]},
+      fBookingInvoice: {"addon":true,"title":"Booking → Invoice — SZR — Sheikh Zayed Road","records":2,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"idle","l":"Days Idle"},{"k":"act","l":"Next Action"}],"action":"Progress to invoice","trend":[10,8,9,13,14,17,14,16,17,16,20,20],"trendMax":20,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","idle":"0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","idle":"0d","act":"Collect booking deposit"}]},
+      fInvoiceDelivery: {"addon":true,"title":"Invoice → Delivery — SZR — Sheikh Zayed Road","records":0,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"idle","l":"Days Idle"},{"k":"act","l":"Next Action"}],"action":"Open lead","tx":[]},
+      fCancellationBooking: {"addon":true,"title":"Cancellation → Booking — SZR — Sheikh Zayed Road","records":3,"cols":[{"k":"cust","l":"Customer"},{"k":"source","l":"Source"},{"k":"owner","l":"Owner"},{"k":"stage","l":"Stage"},{"k":"lostreason","l":"Lost Reason"},{"k":"idle","l":"Days Idle"}],"action":"Recover","trend":[13,13,12,15,16,20,25,27,26,22,31,33],"trendMax":36,"tx":[{"cust":"Ziad Baroudi","id":"L-2026-07001","owner":"Ahmad Nasr","source":"Website","model":"EXEED LX","stage":"Offer","lostreason":"Competitor selected","idle":"6d"},{"cust":"Vera Kim","id":"L-2026-07002","owner":"Rania Khoury","source":"WhatsApp","model":"EXEED LX","stage":"Nurture","lostreason":"Price","idle":"8d"},{"cust":"Nabil Farha","id":"L-2026-07006","owner":"Nadia Al Suwaidi","source":"800 Number","model":"EXEED LX","stage":"Contact","lostreason":"Duplicate","idle":"15d"}]},
+      cxCSI: { cx:true, kind:'Experience Score', title:'CSI', sub:'', value:90, target:90, period:'MTD', higherIsBetter:true, yTrendMax:100, trend:[96,97,96,95,94,95,97], xMax:100,
+        branches:[{n:'Deira',v:93.8,vt:3.8,vol:30},{n:'Al Ain',v:92.8,vt:2.8,vol:99},{n:'SZR — Sheikh Zayed Road',v:92.7,vt:2.7,vol:28},{n:'Abu Dhabi',v:92.5,vt:2.5,vol:43},{n:'Sharjah',v:88.4,vt:-1.6,vol:56}] },
+      cxNPS: { cx:true, kind:'Experience Score', title:'NPS', sub:'', value:60, target:60, period:'MTD', higherIsBetter:true, yTrendMax:80, trend:[62,61,62,60,61,62,62], xMax:80,
+        branches:[{n:'SZR — Sheikh Zayed Road',v:64.7,vt:4.7,vol:30},{n:'Sharjah',v:64.6,vt:4.6,vol:70},{n:'Deira',v:61.9,vt:1.9,vol:45},{n:'Al Ain',v:60.4,vt:0.4,vol:37},{n:'Abu Dhabi',v:59.1,vt:-0.9,vol:94}] },
+      cxOpenLeads: { cx:true, kind:'Aging List', title:'Open leads > 90 days', sub:'Aged open leads with no meaningful action in 90+ days.', value:0, target:0, period:'MTD', higherIsBetter:false, noRank:true, valueRed:true, yTrendMax:8, trend:[3,4,5,5,5,3,5], xMax:4,
+        branches:[{n:'SZR — Sheikh Zayed Road',v:0,vt:0,vol:3},{n:'Deira',v:0,vt:0,vol:-14},{n:'Abu Dhabi',v:0,vt:0,vol:-24},{n:'Sharjah',v:0,vt:0,vol:-8},{n:'Al Ain',v:0,vt:0,vol:-49}] },
+      slaLeadAssign: { list:true, title:'Lead Assignment → SE → SLA breaches', sub:'Placeholder mock → swap for live SLA query', records:2, action:'Open',
+        cols:[{k:'cust',l:'Customer'},{k:'slatype',l:'SLA Type'},{k:'due',l:'Due Time'},{k:'breach',l:'Breach Duration'},{k:'owner',l:'Owner'}],
+        rows:[
+          {cust:'Meera Shah', slatype:'Lead Assignment → CA', due:'10:00', breach:'8m', owner:'Unassigned queue'},
+          {cust:'Amir Zaki', slatype:'Lead Assignment → CA', due:'10:20', breach:'15m', owner:'Unassigned queue'}
+        ] },
+      slaFirstContact: { list:true, title:'Customer 1st Contact → SLA breaches', sub:'Placeholder mock → swap for live SLA query', records:3, action:'Open',
+        cols:[{k:'cust',l:'Customer'},{k:'slatype',l:'SLA Type'},{k:'due',l:'Due Time'},{k:'breach',l:'Breach Duration'},{k:'owner',l:'Owner'}],
+        rows:[
+          {cust:'Ali Kassem', slatype:'Customer 1st Contact', due:'10:15', breach:'12m', owner:'Rahul Krishnan'},
+          {cust:'Farida Zohra', slatype:'Customer 1st Contact', due:'09:40', breach:'40m', owner:'Aisha Hussein'},
+          {cust:'Diego Alvarez', slatype:'Customer 1st Contact', due:'10:30', breach:'30m', owner:'Fadi Haddad'}
+        ] },
+      slaAssignShow: { list:true, title:'Assigned to Showroom → SLA breaches', sub:'Placeholder mock → swap for live SLA query', records:2, action:'Open',
+        cols:[{k:'cust',l:'Customer'},{k:'slatype',l:'SLA Type'},{k:'due',l:'Due Time'},{k:'breach',l:'Breach Duration'},{k:'owner',l:'Owner'}],
+        rows:[
+          {cust:'Sara Ali', slatype:'Assigned to Showroom', due:'09:30', breach:'1h', owner:'Nadia Al Suwaidi'},
+          {cust:'Mira Khaled', slatype:'Assigned to Showroom', due:'10:05', breach:'25m', owner:'Nadia Al Suwaidi'}
+        ] },
+      slaOpenLeads: { list:true, title:'Open leads > 3 days', sub:'Placeholder mock → swap for live SLA query', records:3, action:'',
+        cols:[{k:'cust',l:'Customer'},{k:'slatype',l:'SLA Type'},{k:'due',l:'Due Time'},{k:'breach',l:'Breach Duration'},{k:'owner',l:'Owner'}],
+        rows:[
+          {cust:'Talal Baig', slatype:'Lead Assignment → CA', due:'3d ago', breach:'4d', owner:'Karim Mostafa'},
+          {cust:'Huda Baker', slatype:'Lead Assignment → CA', due:'4d ago', breach:'11d', owner:'Talal Baig'},
+          {cust:'Naif Alavi', slatype:'Customer 1st Contact', due:'3d ago', breach:'6d', owner:'Omar Al Khoury'}
+        ] },
+      addonPen: { addon:true, title:'Add-on Penetration → SZR → Sheikh Zayed Road', sub:'Penetration 68% · target 55% · scoped to your showroom', records:4,
+        trend:[16,17,22,23,27,28,31,34,32,36,38,36], trendMax:40,
+        tx:[
+          {cust:'Salma Idris', id:'L-2026-05015', owner:'Rania Khoury', model:'EXEED LX', stage:'Booking', quote:'AED 199k · 0d', act:'Confirm booking'},
+          {cust:'Sana Rehman', id:'L-2026-05027', owner:'Rania Khoury', model:'EXEED LX', stage:'Booking', quote:'—', act:'Collect booking deposit'},
+          {cust:'Linda George', id:'L-2026-05010', owner:'Mariam Saeed', model:'EXEED LX', stage:'Offer', quote:'AED 185k · 4d', act:'Follow up on quote'},
+          {cust:'Hamza Iqbal', id:'L-2026-05026', owner:'Ahmad Nasr', model:'EXEED LX', stage:'Offer', quote:'AED 175k · 5d', act:'Follow up on quote (5d)'}
+        ] },
+      newAssign:  { kind:'Assignment Queue', title:'New to Assign', sub:'Direct-to-showroom leads awaiting assignment.', value:5, unit:'', target:0, delta:1, higherIsBetter:false,
+        leads:[
+          {n:'Omar Nasser', id:'L-2026-05006', temp:'Hot',  src:'WhatsApp',    model:'EXEED TXL', sla:'5 min left',  slaU:true,  ch:'WhatsApp · English', created:'Today 09:20', competitor:'BYD Seal', quote:'—',        act:'Assign — SLA due soon'},
+          {n:'Grace Onu',   id:'L-2026-05021', temp:'Warm', src:'Website',     model:'EXEED LX',  sla:'8 min left',  slaU:true,  ch:'WhatsApp · English', created:'Today 09:05', competitor:'—',        quote:'AED 172k', act:'Assign — SLA due soon'},
+          {n:'Mira Nabil',  id:'L-2026-05022', temp:'Hot',  src:'Social Form', model:'EXEED LX',  sla:'15 min left', slaU:false, ch:'WhatsApp · English', created:'Today 08:48', competitor:'Geely',    quote:'—',        act:'Assign urgently'},
+          {n:'Amir Zaki',   id:'L-2026-05020', temp:'Warm', src:'WhatsApp',    model:'EXEED LX',  sla:'30 min left', slaU:false, ch:'WhatsApp · English', created:'Today 08:30', competitor:'—',        quote:'—',        act:'Assign to executive'},
+          {n:'Maya Hassan', id:'L-2026-05003', temp:'Warm', src:'Social Form', model:'EXEED TXL', sla:'45 min left', slaU:false, ch:'WhatsApp · English', created:'Today 08:12', competitor:'Nio ET5',  quote:'AED 168k', act:'Assign to executive'}
+        ] },
+      waiting:    { list:true, title:'Customers waiting', sub:'Live showroom queue', value:3, records:3, action:'Notify exec',
+        cols:[{k:'cust',l:'Customer'},{k:'wait',l:'Wait'},{k:'purpose',l:'Purpose'},{k:'exec',l:'Executive'},{k:'bottleneck',l:'Bottleneck'}],
+        rows:[
+          {cust:'Maya Hassan',   id:'L-2026-05003', wait:'18m', purpose:'Test drive', exec:'Ahmad Nasr',  bottleneck:'Vehicle prep — VIN pending'},
+          {cust:'Bilal Qureshi', id:'L-2026-05014', wait:'11m', purpose:'Delivery',  exec:'Rania Khoury', bottleneck:'Insurance doc missing'},
+          {cust:'Elena Costa',   id:'L-2026-05030', wait:'6m',  purpose:'Enquiry',   exec:'—',          bottleneck:'Awaiting assignment'}
+        ] },
+      overdue:    { list:true, title:'Overdue commitments', value:2, records:2, action:'Remind exec',
+        cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'stage',l:'Stage'},{k:'idle',l:'Days Idle'},{k:'act',l:'Next Action'}],
+        rows:[
+          {cust:'Yousef Rahman', id:'L-2026-05009', temp:'Hot',  owner:'Omar Al Khoury', stage:'Offer', idle:'0d', act:'Follow up on quote'},
+          {cust:'Linda George',  id:'L-2026-05010', temp:'Warm', owner:'Mariam Saeed',   stage:'Offer', idle:'0d', act:'Follow up on quote'}
+        ] },
+      newLeads:   { list:true, title:'New leads today', sub:'Received today for this branch', value:30, records:30, action:'Assign',
+        cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'src',l:'Source'},{k:'model',l:'Model'},{k:'channel',l:'Channel'},{k:'act',l:'Next Action'}],
+        rows:[
+          {cust:'Sara Khalid', id:'L-2026-05002', temp:'Hot', src:'WhatsApp', model:'EXEED TXL Flagship', channel:'WhatsApp · English', act:'Call customer — SLA breached'},
+          {cust:'Diego Alvarez', id:'L-2026-05017', temp:'Cold', src:'Social Form', model:'EXEED LX', channel:'WhatsApp · English', act:'Call — SLA breached'},
+          {cust:'Omar Nasser', id:'L-2026-05006', temp:'Hot', src:'WhatsApp', model:'EXEED TXL', channel:'WhatsApp · English', act:'Assign — SLA due soon'},
+          {cust:'Hiren Patel', id:'L-2026-05001', temp:'Hot', src:'Website', model:'EXEED LX Luxury', channel:'WhatsApp · English', act:'Call customer'},
+          {cust:'Grace Onu', id:'L-2026-05021', temp:'Warm', src:'Website', model:'EXEED LX', channel:'WhatsApp · English', act:'Assign — SLA due soon'},
+          {cust:'Peter John', id:'L-2026-05019', temp:'Hot', src:'Walk-in', model:'EXEED VX', channel:'WhatsApp · English', act:'Follow up on quote'},
+          {cust:'Yousef Rahman', id:'L-2026-05009', temp:'Hot', src:'Walk-in', model:'EXEED LX', channel:'WhatsApp · English', act:'Follow up on quote'},
+          {cust:'Salma Idris', id:'L-2026-05015', temp:'Hot', src:'Walk-in', model:'EXEED LX', channel:'WhatsApp · English', act:'Confirm booking'},
+          {cust:'Mira Nabil', id:'L-2026-05022', temp:'Hot', src:'Social Form', model:'EXEED LX', channel:'WhatsApp · English', act:'Assign urgently'},
+          {cust:'Ahmed Mansoor', id:'L-2026-05013', temp:'Hot', src:'Website', model:'EXEED VX', channel:'WhatsApp · English', act:'Position VX on comfort & safety'},
+          {cust:'Sana Rehman', id:'L-2026-05027', temp:'Hot', src:'Walk-in', model:'EXEED LX', channel:'WhatsApp · English', act:'Collect booking deposit'},
+          {cust:'Bilal Qureshi', id:'L-2026-05014', temp:'Warm', src:'Referral', model:'EXEED TXL', channel:'WhatsApp · English', act:'Finance approval follow-up'}
+        ] },
+      pending1c:  { kind:'First Contact', title:'Pending 1st Contact', sub:'Leads still awaiting their first contact.', value:30, unit:'', target:10, delta:2, higherIsBetter:false, yTrendMax:40, trend:[26,28,25,33,30,28,30], xMax:12,
+        branches:[{n:'SZR — Sheikh Zayed Road',v:9},{n:'Deira',v:8},{n:'Abu Dhabi',v:6},{n:'Sharjah',v:4},{n:'Al Ain',v:3}] },
+      followUp:   { list:true, title:'Follow-ups due', sub:'Due today', value:1, records:1, action:'Complete',
+        cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'stage',l:'Stage'},{k:'channel',l:'Channel'},{k:'act',l:'Next Action'}],
+        rows:[
+          {cust:'Yara Zein', id:'L-2026-05028', temp:'Warm', owner:'Sara Ali', stage:'Test Drive', channel:'WhatsApp · English', act:'Prep test drive'}
+        ] },
+      testDrives: { list:true, title:'Test drives to confirm', value:2, records:2, action:'Confirm',
+        cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'model',l:'Model'},{k:'stage',l:'Stage'},{k:'act',l:'Next Action'}],
+        rows:[
+          {cust:'Tariq Ahmad',  id:'L-2026-05023', temp:'Warm', owner:'Layla Habib',   model:'EXEED LX', stage:'Test Drive', act:'Confirm test drive today'},
+          {cust:'Fatima Al Ali', id:'L-2026-05007', temp:'Warm', owner:'Karim Mostafa', model:'EXEED VX', stage:'Test Drive', act:'Confirm test drive Sat 11:00'}
+        ] },
+      openQuotes: { list:true, title:'Quotes awaiting follow-up', value:5, records:5, action:'Remind exec',
+        cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'quote',l:'Quote'},{k:'idle',l:'Days Idle'},{k:'act',l:'Next Action'}],
+        rows:[
+          {cust:'Peter John', id:'L-2026-05019', temp:'Hot', owner:'Omar Al Khoury', quote:'AED 260k · 2d', idle:'0d', act:'Follow up on quote'},
+          {cust:'Yousef Rahman', id:'L-2026-05009', temp:'Hot', owner:'Omar Al Khoury', quote:'AED 220k · 3d', idle:'0d', act:'Follow up on quote'},
+          {cust:'Naif Alavi', id:'L-2026-05029', temp:'Warm', owner:'Omar Al Khoury', quote:'AED 210k · 6d', idle:'0d', act:'Follow up on quote (6d)'},
+          {cust:'Linda George', id:'L-2026-05010', temp:'Warm', owner:'Mariam Saeed', quote:'AED 185k · 4d', idle:'0d', act:'Follow up on quote'},
+          {cust:'Hamza Iqbal', id:'L-2026-05026', temp:'Warm', owner:'Ahmad Nasr', quote:'AED 175k · 5d', idle:'0d', act:'Follow up on quote (5d)'}
+        ] }
+    };
+
+    function fmtVal(v, unit){ var n = (Math.round(v*10)/10); return unit === '%' ? n + '%' : ('' + n); }
+
+    function trendSVG(m){
+      var W=520,H=200,padL=32,padR=14,padT=14,padB=26;
+      var pw=W-padL-padR, ph=H-padT-padB, n=m.trend.length, yMax=m.yTrendMax;
+      var X=function(i){ return padL + pw*(i/(n-1)); };
+      var Y=function(v){ return padT + ph*(1 - v/yMax); };
+      var grid='',ylab='';
+      [0,.25,.5,.75,1].forEach(function(t){ var v=Math.round(yMax*t), yy=Y(v);
+        grid+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" class="mdr-grid"/>';
+        ylab+='<text x="'+(padL-6)+'" y="'+(yy+3)+'" class="mdr-axl" text-anchor="end">'+v+'</text>'; });
+      var ty=Y(m.target);
+      var tline='<line x1="'+padL+'" y1="'+ty+'" x2="'+(W-padR)+'" y2="'+ty+'" class="mdr-target"/>'+
+                '<text x="'+((padL+W-padR)/2)+'" y="'+(ty-4)+'" class="mdr-tlab" text-anchor="middle">Target</text>';
+      var pts=m.trend.map(function(v,i){ return X(i)+','+Y(v); });
+      var poly='<polyline class="mdr-line" points="'+pts.join(' ')+'"/>';
+      var dots=m.trend.map(function(v,i){ return '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3" class="mdr-dot"/>'; }).join('');
+      var xl=['-6w','-5w','-4w','-3w','-2w','-1w','Now'];
+      var xlab=xl.map(function(l,i){ return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+l+'</text>'; }).join('');
+      return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+tline+poly+dots+xlab+'</svg>';
+    }
+
+    function branchSVG(m){
+      var sorted=m.branches.slice().sort(function(a,b){ return m.higherIsBetter ? b.v-a.v : a.v-b.v; });
+      var W=520,padL=118,padR=22,padT=6,padB=24, rowH=34;
+      var H=padT+padB+rowH*sorted.length, pw=W-padL-padR, xMax=m.xMax||1;
+      var BX=function(v){ return pw*(v/xMax); };
+      var gl='',ax='';
+      [0,.25,.5,.75,1].forEach(function(t){ var v=Math.round(xMax*t), xx=padL+BX(v);
+        gl+='<line x1="'+xx+'" y1="'+padT+'" x2="'+xx+'" y2="'+(H-padB)+'" class="mdr-grid"/>';
+        ax+='<text x="'+xx+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+v+'</text>'; });
+      var tx=padL+BX(m.target);
+      var tl='<line x1="'+tx+'" y1="'+padT+'" x2="'+tx+'" y2="'+(H-padB)+'" class="mdr-target"/>';
+      var rows='';
+      sorted.forEach(function(b,i){
+        var cy=padT+rowH*i, barH=20, by=cy+(rowH-barH)/2, mid=by+barH/2;
+        if (b.n.indexOf(' — ')>-1){ var p=b.n.split(' — ');
+          rows+='<text x="'+(padL-8)+'" y="'+(mid-3)+'" class="mdr-bl" text-anchor="end">'+p[0]+' —<tspan x="'+(padL-8)+'" dy="12">'+p[1]+'</tspan></text>';
+        } else {
+          rows+='<text x="'+(padL-8)+'" y="'+(mid+3)+'" class="mdr-bl" text-anchor="end">'+b.n+'</text>';
+        }
+        rows+='<rect x="'+padL+'" y="'+by+'" width="'+Math.max(0,BX(b.v))+'" height="'+barH+'" rx="3" class="mdr-bar"/>';
+      });
+      return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-branch-svg">'+gl+tl+rows+ax+'</svg>';
+    }
+
+    function rankRows(list, unit){
+      return list.map(function(b){ return '<div class="mdr-rrow"><span class="nm">'+b.n+'</span><span class="vv">'+fmtVal(b.v, unit)+'</span></div>'; }).join('');
+    }
+
+    function breakdownSVG(items, mx){
+      var s=items.slice().sort(function(a,b){ return b.v-a.v; });
+      var W=520,padL=118,padR=44,padT=6,padB=6,rowH=34;
+      var H=padT+padB+rowH*s.length, pw=W-padL-padR, m=mx||Math.max.apply(null,s.map(function(x){return x.v;}))||1;
+      var rows='';
+      s.forEach(function(b,i){
+        var cy=padT+rowH*i, barH=20, by=cy+(rowH-barH)/2, mid=by+barH/2, w=Math.max(6,pw*(b.v/m));
+        rows+='<text x="'+(padL-8)+'" y="'+(mid+4)+'" class="mdr-bl" text-anchor="end">'+b.n+'</text>';
+        rows+='<rect x="'+padL+'" y="'+by+'" width="'+w+'" height="'+barH+'" rx="4" class="mdr-bar"/>';
+        rows+='<text x="'+(padL+w+8)+'" y="'+(mid+4)+'" text-anchor="start" style="font-weight:700;font-size:12px;fill:var(--ink);font-family:inherit">'+b.v+'</text>';
+      });
+      return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-branch-svg">'+rows+'</svg>';
+    }
+
+    var ML_EXTRA_COLS=['Channel','Created','Competitor','Quote'];
+    var mlExtra={Channel:false,Created:false,Competitor:false,Quote:false};
+    var mlLeads=[];
+    function leadCell(l,c){ return c==='Channel'?l.ch : c==='Created'?l.created : c==='Competitor'?l.competitor : c==='Quote'?l.quote : ''; }
+    function renderLeadsTable(){
+      var extras=ML_EXTRA_COLS.filter(function(k){ return mlExtra[k]; });
+      var head='<tr><th>Customer</th><th>Temp</th><th>Source</th><th>Model</th><th>SLA</th>'+extras.map(function(c){return '<th>'+c+'</th>';}).join('')+'<th>Next Action</th><th></th></tr>';
+      var body=mlLeads.map(function(l){
+        var tc=l.temp==='Hot'?'hot':'warm';
+        return '<tr>'+
+          '<td><div class="ml-name">'+l.n+'</div><div class="ml-id">'+l.id+'</div></td>'+
+          '<td><span class="ml-temp '+tc+'">'+l.temp+'</span></td>'+
+          '<td>'+l.src+'</td><td>'+l.model+'</td>'+
+          '<td class="'+(l.slaU?'ml-sla-u':'ml-sla')+'">'+l.sla+'</td>'+
+          extras.map(function(c){ return '<td>'+(leadCell(l,c)||'&mdash;')+'</td>'; }).join('')+
+          '<td>'+l.act+'</td>'+
+          '<td style="text-align:right"><a href="#" class="ml-assign" onclick="return false">Assign &rsaquo;</a></td>'+
+        '</tr>';
+      }).join('');
+      var host=document.getElementById('mdrLeadsHost'); if(host) host.innerHTML='<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+    }
+    function mlToggleCol(cb,name){ mlExtra[name]=cb.checked; renderLeadsTable(); }
+    function mlAddColMenu(e){ if(e) e.stopPropagation(); var mn=document.getElementById('mlAddMenu'); if(mn) mn.classList.toggle('open'); }
+    function mlAutoAssign(){ if(window.showToast) showToast('Auto-assigning '+mlLeads.length+' leads by availability'); closeMetric(); }
+    document.addEventListener('click',function(e){ var w=e.target.closest?e.target.closest('.ml-addwrap'):null; if(!w){ var mn=document.getElementById('mlAddMenu'); if(mn) mn.classList.remove('open'); } });
+
+    function mlCell(k,r){
+      if(k==='cust') return '<td><div class="ml-name">'+r.cust+'</div>'+(r.id?'<div class="ml-id">'+r.id+'</div>':'')+'</td>';
+      if(k==='temp'){ var tc=r.temp==='Hot'?'hot':(r.temp==='Cold'?'cold':'warm'); return '<td><span class="ml-temp '+tc+'">'+r.temp+'</span></td>'; }
+      if(k==='owner') return r.owner==='Unassigned' ? '<td><span class="ml-unassigned">Unassigned</span></td>' : '<td>'+r.owner+'</td>';
+      if(k==='sla') return '<td class="'+(r.slaC==='red'?'ml-sla-red':(r.slaC==='amber'?'ml-sla-amber':''))+'">'+r.sla+'</td>';
+      if(k==='breach') return '<td class="ml-breach">'+r.breach+'</td>';
+      if(k==='act') return '<td class="ml-act">'+r.act+'</td>';
+      return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
+    }
+    function listTable(m){
+      var head='<tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr>';
+      var body=m.rows.map(function(r){
+        var act=m.action ? '<td style="text-align:right"><a href="#" class="ml-assign" onclick="return false">'+m.action+' &rsaquo;</a></td>' : '<td></td>';
+        return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r);}).join('')+act+'</tr>';
+      }).join('');
+      return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+    }
+    function addonLineSVG(m){
+      var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=m.trend.length,yMax=m.trendMax||40;
+      var pw=W-padL-padR,ph=H-padT-padB;
+      var X=function(i){return padL+pw*(i/(n-1));},Y=function(v){return padT+ph*(1-v/yMax);};
+      var grid='',ylab='';
+      [0,.25,.5,.75,1].forEach(function(t){var v=Math.round(yMax*t),yy=Y(v);
+        grid+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" class="mdr-grid"/>';
+        ylab+='<text x="'+(padL-6)+'" y="'+(yy+3)+'" class="mdr-axl" text-anchor="end">'+v+'</text>';});
+      var pts=m.trend.map(function(v,i){return X(i)+','+Y(v);});
+      var poly='<polyline class="mdr-line" points="'+pts.join(' ')+'"/>';
+      var xlab=m.trend.map(function(v,i){return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">W'+(i+1)+'</text>';}).join('');
+      return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+poly+xlab+'</svg>';
+    }
+    function openAddonMetric(m){
+      var has=m.tx && m.tx.length>0;
+      var recs=(m.records!=null)?m.records:(m.tx?m.tx.length:0);
+      var sub=m.sub || (recs+' records &middot; scoped to your showroom');
+      var trendHtml = has ? '<div class="mdr-chart">'+addonLineSVG(m)+'</div>'
+                          : '<div class="mdr-chart ax-empty">No records in this stage for your showroom yet.</div>';
+      var head='<tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr>';
+      var txHtml;
+      if(has){
+        var body=m.tx.map(function(r){
+          return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r);}).join('')+
+            '<td style="text-align:right"><a href="#" class="ml-assign" onclick="return false">'+m.action+'</a></td></tr>';
+        }).join('');
+        txHtml='<div class="mdr-leadswrap"><table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
+      } else {
+        txHtml='<div class="mdr-leadswrap"><table class="mdr-leads"><thead>'+head+'</thead></table></div>'+
+          '<div class="ax-empty2"><div class="ax-empty2-t">No leads in this stage for your showroom.</div><div class="ax-empty2-s">Try adjusting the funnel period or clearing filters.</div></div>';
+      }
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd mdr-hd-list">' +
+          '<div class="mdr-ttl">'+m.title+'</div>' +
+          '<div class="mdr-sub">'+sub+'</div>' +
+          '<div class="mdr-records">'+recs+' record'+(recs===1?'':'s')+'</div>' +
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>' +
+        '<div class="mdr-body">' +
+          '<div class="ax-sec">' +
+            '<div class="ax-head"><div><div class="mdr-secl">Trend</div><div class="ax-cap">Stage volume over time &middot; SZR &mdash; Sheikh Zayed Road</div></div>' +
+              '<div class="ax-toggle"><button onclick="axToggle(this)">Daily</button><button class="on" onclick="axToggle(this)">Weekly</button><button onclick="axToggle(this)">Monthly</button></div></div>' +
+            trendHtml +
+          '</div>' +
+          '<div class="ax-sec">' +
+            '<div class="ax-head"><div><div class="mdr-secl">Transactions</div><div class="ax-cap">Underlying leads in this stage</div></div>' +
+              '<div class="ml-tbar"><button class="ml-tbtn" onclick="showToast(\'Add column\')"><span class="material-symbols-outlined">view_column</span> Add column</button>' +
+              '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div></div>' +
+            txHtml +
+          '</div>' +
+        '</div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
+    function axToggle(btn){ btn.parentNode.querySelectorAll('button').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); }
+    function openListMetric(m){
+      var recs=(m.records!=null)?m.records:m.rows.length;
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd mdr-hd-list">' +
+          '<div class="mdr-ttl">'+m.title+'</div>' +
+          (m.sub?'<div class="mdr-sub">'+m.sub+'</div>':'') +
+          '<div class="mdr-records">'+recs+' record'+(recs===1?'':'s')+'</div>' +
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>' +
+        '<div class="mdr-body"><div class="mdr-leadswrap">'+listTable(m)+'</div></div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
+
+    function cxNum(v){ return (Math.round(v*10)/10); }
+    function cxRankRows(list){ return list.map(function(b){ return '<div class="mdr-rrow"><span class="nm">'+b.n+'</span><span class="vv">'+cxNum(b.v)+'</span></div>'; }).join(''); }
+    function openCxMetric(m){
+      var byGood=m.branches.slice().sort(function(a,b){ return m.higherIsBetter? b.v-a.v : a.v-b.v; });
+      var top=byGood.slice(0,3), bottom=byGood.slice(-3).reverse();
+      var rankHtml = m.noRank ? '' :
+        '<div class="mdr-rank"><div class="mdr-rbox top"><div class="mdr-rh">Top 3</div>'+cxRankRows(top)+'</div>'+
+        '<div class="mdr-rbox bot"><div class="mdr-rh">Bottom 3</div>'+cxRankRows(bottom)+'</div></div>';
+      var tbl = byGood.map(function(b){
+        var vtc=b.vt<0?'cx-down':'cx-up', vt=(b.vt>0?'+':'')+cxNum(b.vt), valc=m.valueRed?'cx-down':'cx-up';
+        return '<tr><td>'+b.n+'</td><td class="'+valc+'">'+cxNum(b.v)+'</td><td class="'+vtc+'">'+vt+'</td><td>'+b.vol+'</td></tr>';
+      }).join('');
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd">' +
+          '<div class="mdr-ey">'+m.kind+'</div>' +
+          '<div class="mdr-ttl">'+m.title+'</div>' +
+          (m.sub?'<div class="mdr-sub">'+m.sub+'</div>':'') +
+          '<div class="mdr-kpi"><div class="mdr-kpi-val">'+m.value+'</div>' +
+            '<div class="mdr-kpi-tgt">Target '+m.target+'</div>' +
+            '<div class="mdr-kpi-per">Period: '+m.period+'</div></div>' +
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>' +
+        '<div class="mdr-tools">' +
+          '<span class="bd"><span class="material-symbols-outlined">filter_list</span> Break down by</span>' +
+          '<select class="mdr-sel"><option>Branch</option><option>Executive</option><option>Source</option></select>' +
+          '<a href="#" class="mdr-report" onclick="return false">View Full Report <span class="material-symbols-outlined">open_in_new</span></a>' +
+        '</div>' +
+        '<div class="mdr-body">' +
+          '<div class="mdr-secl">Trend</div><div class="mdr-chart">'+trendSVG(m)+'</div>' +
+          rankHtml +
+          '<div class="mdr-secl">By Branch</div><div class="mdr-chart">'+branchSVG(m)+'</div>' +
+          '<table class="cx-table"><thead><tr><th>Branch</th><th>Value</th><th>Vs Target</th><th>Volume</th></tr></thead><tbody>'+tbl+'</tbody></table>' +
+          '<div class="cx-note">Data shown is mock and refreshed with the dashboard period selector.</div>' +
+        '</div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
+
+    function apenBadge(s){ var c=s==='Attached'?'attached':(s==='Declined'?'declined':'pending'); return '<span class="ap-badge '+c+'">'+s+'</span>'; }
+    function openApenMetric(m){
+      var has=m.tx.length>0;
+      var trendHtml = has ? '<div class="mdr-chart">'+addonLineSVG(m)+'</div>' : '<div class="mdr-chart ax-empty">No records in this stage for your showroom yet.</div>';
+      var body=m.tx.map(function(x){ return '<tr><td>'+x.date+'</td><td>'+x.cust+'</td><td>'+x.item+'</td><td>'+x.cat+'</td><td>'+apenBadge(x.status)+'</td><td style="text-align:right">'+x.price+'</td></tr>'; }).join('');
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd mdr-hd-list"><div class="mdr-ttl">'+m.title+'</div><div class="mdr-sub">'+m.sub+'</div><div class="mdr-records">'+m.records+' records</div>'+
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
+        '<div class="mdr-body">'+
+          '<div class="ap-cards"><div class="ap-card"><div class="ap-lbl">Records</div><div class="ap-val">'+m.records+'</div></div>'+
+            '<div class="ap-card"><div class="ap-lbl">Attached</div><div class="ap-val" style="color:#3d8a5b">'+m.attached+'</div></div>'+
+            '<div class="ap-card"><div class="ap-lbl">Revenue</div><div class="ap-val">'+m.revenue+'</div></div>'+
+            '<div class="ap-card"><div class="ap-lbl">Gross Profit</div><div class="ap-val">'+m.gp+'</div></div></div>'+
+          '<div class="ax-sec"><div class="ax-head"><div><div class="mdr-secl">Trend</div><div class="ax-cap">Attach volume over time · SZR — Sheikh Zayed Road</div></div>'+
+            '<div class="ax-toggle"><button onclick="axToggle(this)">Daily</button><button class="on" onclick="axToggle(this)">Weekly</button><button onclick="axToggle(this)">Monthly</button></div></div>'+trendHtml+'</div>'+
+          '<div class="ax-sec"><div class="ax-head"><div><div class="mdr-secl">Add-on Transactions</div><div class="ax-cap">Individual accessory / service / policy records</div></div>'+
+            '<div class="ml-tbar"><button class="ml-tbtn" onclick="showToast(\'Add column\')"><span class="material-symbols-outlined">view_column</span> Add column</button>'+
+            '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div></div>'+
+            '<div class="mdr-leadswrap"><table class="mdr-leads"><thead><tr><th>Sale Date</th><th>Customer</th><th>Item</th><th>Category</th><th>Status</th><th style="text-align:right">Price (AED)</th></tr></thead><tbody>'+body+'</tbody></table></div></div>'+
+        '</div>';
+      document.getElementById('mdr').classList.add('open'); document.getElementById('mdrOverlay').classList.add('open'); document.getElementById('mdrContent').scrollTop=0;
+    }
+    function openMetric(id){
+      var m=METRICS[id]; if(!m) return;
+      if(m.apen){ openApenMetric(m); return; }
+      if(m.cx){ openCxMetric(m); return; }
+      if(m.addon){ openAddonMetric(m); return; }
+      if(m.list){ openListMetric(m); return; }
+      var d=m.delta, good=m.higherIsBetter ? d>=0 : d<=0;
+      var arrow=d>0?'&#9650;':(d<0?'&#9660;':'&ndash;');
+      var chip=(d===0)?'':' <span class="mdr-delta '+(good?'up':'down')+'">'+arrow+' '+(d>0?'+':'')+d+'</span>';
+      var mdrHead =
+        '<div class="mdr-hd">' +
+          '<div class="mdr-ey">'+m.kind+'</div>' +
+          '<div class="mdr-ttl">'+m.title+'</div>' +
+          '<div class="mdr-sub">'+m.sub+'</div>' +
+          '<div class="mdr-kpi"><div class="mdr-kpi-val">'+fmtVal(m.value,m.unit)+'</div></div>' +
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>';
+      if(m.leads){
+        mlLeads=m.leads; mlExtra={Channel:false,Created:false,Competitor:false,Quote:false};
+        var addOpts=ML_EXTRA_COLS.map(function(c){ return '<label class="ml-addopt"><input type="checkbox" onchange="mlToggleCol(this,\''+c+'\')"> '+c+'</label>'; }).join('');
+        document.getElementById('mdrContent').innerHTML = mdrHead +
+          '<div class="mdr-tools">' +
+            '<span class="bd"><span class="material-symbols-outlined">list_alt</span> '+m.leads.length+' records &middot; sorted by SLA</span>' +
+            '<div class="ml-tbar">' +
+              '<div class="ml-addwrap"><button class="ml-tbtn" onclick="mlAddColMenu(event)"><span class="material-symbols-outlined">view_column</span> Add column</button>' +
+                '<div class="ml-addmenu" id="mlAddMenu"><div class="ml-addhead">Additional columns</div>'+addOpts+'</div>' +
+              '</div>' +
+              '<button class="ml-tbtn primary" onclick="mlAutoAssign()"><span class="material-symbols-outlined">bolt</span> Auto-assign</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mdr-body"><div class="mdr-leadswrap" id="mdrLeadsHost"></div></div>';
+        renderLeadsTable();
+        document.getElementById('mdr').classList.add('open');
+        document.getElementById('mdrOverlay').classList.add('open');
+        document.getElementById('mdrContent').scrollTop=0;
+        return;
+      }
+      var byGood=(m.branches||[]).slice().sort(function(a,b){ return m.higherIsBetter ? b.v-a.v : a.v-b.v; });
+      var top=byGood.slice(0,3), bottom=byGood.slice(-3).reverse();
+      var ddopts = m.dim ? ('<option>'+m.dim+'</option>'+(m.dim2?'<option>'+m.dim2+'</option>':'')+'<option>Branch</option><option>Executive</option>') : '<option>Branch</option><option>Executive</option><option>Source</option><option>Lead type</option>';
+      var bodyMid = m.dist
+        ? ('<div class="mdr-secl">By '+m.dim+'</div><div class="mdr-chart">'+breakdownSVG(m.dist,m.distMax)+'</div>'+
+           '<div class="mdr-secl">By '+m.dim2+'</div><div class="mdr-chart">'+breakdownSVG(m.dist2,m.dist2Max)+'</div>')
+        : ('<div class="mdr-rank"><div class="mdr-rbox top"><div class="mdr-rh">Top 3</div>'+rankRows(top,m.unit)+'</div>'+
+           '<div class="mdr-rbox bot"><div class="mdr-rh">Bottom 3</div>'+rankRows(bottom,m.unit)+'</div></div>'+
+           '<div class="mdr-secl">By Branch</div><div class="mdr-chart">'+branchSVG(m)+'</div>');
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd">' +
+          '<div class="mdr-ey">'+m.kind+'</div>' +
+          '<div class="mdr-ttl">'+m.title+'</div>' +
+          '<div class="mdr-sub">'+m.sub+'</div>' +
+          '<div class="mdr-kpi"><div class="mdr-kpi-val">'+fmtVal(m.value,m.unit)+'</div></div>' +
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>' +
+        '<div class="mdr-tools">' +
+          '<span class="bd"><span class="material-symbols-outlined">filter_list</span> Break down by</span>' +
+          '<select class="mdr-sel">'+ddopts+'</select>' +
+          '<a href="#" class="mdr-report" onclick="return false">View Full Report <span class="material-symbols-outlined">open_in_new</span></a>' +
+        '</div>' +
+        '<div class="mdr-body">' +
+          '<div class="mdr-secl">Trend</div><div class="mdr-chart">'+trendSVG(m)+'</div>' +
+          bodyMid +
+        '</div>' +
+        '<div class="mdr-tabs">' +
+          '<button class="mdr-tab on" onclick="mdrTab(this)">Value</button>' +
+          '<button class="mdr-tab" onclick="mdrTab(this)">Vs Target</button>' +
+          '<button class="mdr-tab" onclick="mdrTab(this)">Volume</button>' +
+        '</div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
+    function closeMetric(){
+      document.getElementById('mdr').classList.remove('open');
+      document.getElementById('mdrOverlay').classList.remove('open');
+    }
+    function mdrTab(btn){ btn.parentNode.querySelectorAll('.mdr-tab').forEach(function(t){ t.classList.remove('on'); }); btn.classList.add('on'); }
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMetric(); });
+  </script>
+  <script>
+    // Sales Executive table pagination (10 rows / page)
+    var SE_PAGE_SIZE=5, sePage=1;
+    function seRows(){ var tb=document.getElementById('seTbody'); return tb?Array.prototype.slice.call(tb.children).filter(function(n){return n.tagName==='TR';}):[]; }
+    function renderSePage(){
+      var tb=document.getElementById('seTbody'); if(!tb) return;
+      var rows=seRows(), total=rows.length, pages=Math.max(1,Math.ceil(total/SE_PAGE_SIZE));
+      if(sePage>pages) sePage=pages;
+      var start=(sePage-1)*SE_PAGE_SIZE, end=start+SE_PAGE_SIZE;
+      rows.forEach(function(r,i){ r.style.display=(i>=start&&i<end)?'':'none'; });
+      var pager=document.getElementById('sePager');
+      if(!pager){ var panel=tb.closest('.q-panel'), scroll=panel.querySelector('.q-scroll');
+        pager=document.createElement('div'); pager.id='sePager'; pager.className='tbl-pager';
+        scroll.parentNode.insertBefore(pager, scroll.nextSibling); }
+      var btns='';
+      for(var p=1;p<=pages;p++){ btns+='<button class="pg-num'+(p===sePage?' on':'')+'" onclick="goSePage('+p+')">'+p+'</button>'; }
+      pager.innerHTML='<span class="pg-info">Showing '+(total?start+1:0)+'–'+Math.min(end,total)+' of '+total+'</span>'+
+        '<div class="pg-btns"><button class="pg-nav" onclick="goSePage('+(sePage-1)+')"'+(sePage===1?' disabled':'')+'>&lsaquo;</button>'+btns+
+        '<button class="pg-nav" onclick="goSePage('+(sePage+1)+')"'+(sePage===pages?' disabled':'')+'>&rsaquo;</button></div>';
+    }
+    function goSePage(p){ var pages=Math.max(1,Math.ceil(seRows().length/SE_PAGE_SIZE)); sePage=Math.min(Math.max(1,p),pages); renderSePage(); }
+    document.addEventListener('DOMContentLoaded', renderSePage);
+  </script>
+  <script>
+    var XDATA={"cw":{"Waiting ID":["W-1042","W-1043","W-1044"],"SLA impact":["High","Medium","Low"]},"nl":{"Channel":["WhatsApp · English","WhatsApp · English","WhatsApp · English","WhatsApp · English","WhatsApp · English"],"Created":["Today 09:20","Today 09:05","Today 08:48","Today 08:30","Today 08:12"],"Competitor":["BYD Seal","—","Geely","—","Nio ET5"],"Quote":["—","AED 172k","—","—","AED 168k"]},"se":{"SLA %":["82%","88%","90%","76%","91%","100%","94%","96%","93%","97%","95%","92%"],"Bookings MTD":["3","9","7","5","8","2","6","5","4","3","4","5"],"Sales MTD":["AED 420k","AED 1.1M","AED 880k","AED 640k","AED 1.0M","AED 260k","AED 760k","AED 690k","AED 540k","AED 380k","AED 470k","AED 610k"],"Add-on %":["48%","83%","71%","33%","76%","60%","68%","72%","64%","58%","62%","70%"],"Avg response":["—","6m","8m","14m","5m","—","7m","5m","9m","11m","8m","6m"]}};
+    function xMenu(e,id){ if(e) e.stopPropagation(); var m=document.getElementById(id); if(m) m.classList.toggle("open"); }
+    function xKey(s){ return s.replace(/[^a-z0-9]/gi,""); }
+    function xToggle(cb,tableId,dataKey,colName){
+      var tbl=document.getElementById(tableId); if(!tbl) return;
+      var vals=(XDATA[dataKey]||{})[colName]||[]; var key=xKey(colName);
+      var thead=tbl.querySelector("thead tr");
+      if(cb.checked){
+        var th=document.createElement("th"); th.className="xcol xcol-"+key; th.textContent=colName;
+        thead.insertBefore(th, thead.lastElementChild);
+        var rows=tbl.querySelectorAll("tbody tr");
+        Array.prototype.forEach.call(rows,function(r,i){ var td=document.createElement("td"); td.className="xcol xcol-"+key; td.textContent=(vals[i]!=null?vals[i]:"—"); r.insertBefore(td, r.lastElementChild); });
+      } else {
+        Array.prototype.forEach.call(tbl.querySelectorAll(".xcol-"+key),function(el){ el.remove(); });
+      }
+    }
+    document.addEventListener("click",function(e){ var w=e.target.closest?e.target.closest(".x-addwrap"):null; if(!w){ var o=document.querySelectorAll(".x-addmenu.open"); Array.prototype.forEach.call(o,function(m){m.classList.remove("open");}); } });
   </script>
   <script src="copilot-widget.js?v=8" defer></script>
 </body>

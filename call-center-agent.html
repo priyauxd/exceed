@@ -81,7 +81,7 @@
     }
 
     /* ── Sidebar ── */
-    .shell { display: flex; min-height: 100vh; }
+    .shell { display: flex; min-height: 100vh; background: #ffffff; }
     .sidebar {
       width: var(--sidebar-w);
       background: var(--surface);
@@ -126,6 +126,7 @@
     .main {
       margin-left: var(--sidebar-w); margin-top: var(--topbar-h);
       flex: 1; display: flex; flex-direction: column; min-width: 0;
+      background: #ffffff;
     }
 
     /* Command bar */
@@ -398,7 +399,7 @@
     /* ── Queue panel ── */
     .q-panel {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: 1px solid #eeeeee;
       border-radius: var(--radius);
       overflow: hidden;
     }
@@ -432,7 +433,7 @@
       text-align: left; padding: 9px 14px;
       font-size: 10px; font-weight: 600;
       text-transform: uppercase; letter-spacing: .07em;
-      color: var(--ink-muted); background: #fafbfd;
+      color: var(--ink-muted); background: #fafafa;
       border-bottom: 1px solid var(--border);
     }
     .qt-table td {
@@ -731,6 +732,8 @@
     .kpi-sec-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
     .kpi-sec-sub { font-size: 11px; color: var(--ink-muted); }
     .kpi-grid { display: grid; gap: 10px; }
+    .kpi-group { background: #fafafa; border-radius: 14px; padding: 14px; }
+    .kpi-group .metric-card, .kpi-group .dial-card { border-color: transparent; }
     .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
     .kpi-grid.g7 { grid-template-columns: repeat(7, 1fr); }
     .metric-card.clk:hover { border-color: #d5d9e0; }
@@ -1059,7 +1062,7 @@
 
     <!-- Main -->
     <div class="main">
-      <div class="cmdbar">
+      <div class="cmdbar" style="display:none">
         <span class="ro"><span class="material-symbols-outlined" style="font-size:12px;vertical-align:middle">info</span> Read-only &middot; Status: <b>Qualified</b></span>
         <div class="cmd-sep"></div>
         <button class="cb"><span class="material-symbols-outlined">arrow_back</span></button>
@@ -1158,7 +1161,7 @@
         <!-- SLA Performance -->
         <div class="kpi-section warm">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">SLA Performance</span><span class="kpi-sec-sub">&middot; Compliance vs targets</span></div>
-          <div class="kpi-grid g5">
+          <div class="kpi-grid g5 kpi-group">
             <div class="dial-card clk" onclick="openKpi('c1c')">
               <div class="dial-label">Customer 1st Contact</div>
               <div class="dial-wrap">
@@ -1217,7 +1220,7 @@
         <!-- Volumetrics -->
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My Queue</span><span class="kpi-sec-sub">&middot; Your queue right now</span></div>
-          <div class="kpi-grid g7">
+          <div class="kpi-grid g7 kpi-group">
             <div class="metric-card clk" onclick="openKpi('assigned')"><div class="mc-icon blue"><span class="material-symbols-outlined">group</span></div><div class="mc-lbl">Leads Assigned</div><div class="mc-val">5</div><div class="mc-sub">Call Centre-owned only</div></div>
             <div class="metric-card clk" onclick="openKpi('notActioned')"><div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">5</div><div class="mc-sub">Action first</div></div>
             <div class="metric-card clk" onclick="openKpi('callbacks')"><div class="mc-icon amber"><span class="material-symbols-outlined">schedule</span></div><div class="mc-lbl">Callbacks Due</div><div class="mc-val">2</div><div class="mc-sub">1 overdue</div></div>
