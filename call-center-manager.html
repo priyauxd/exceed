@@ -677,10 +677,84 @@
     .ml-temp.hot{ background:#fdecec; color:#d1544f; } .ml-temp.warm{ background:#fdeede; color:#b5731f; } .ml-temp.cold{ background:#eef1fb; color:#3f63c8; }
     .ml-breach{ color:#d1544f; font-weight:700; }
     .ml-reason{ color:var(--blue); font-weight:600; }
-    .ml-qual{ color:#b5731f; font-weight:700; } .ml-qual.g{ color:#3d8a5b; }
+    .ml-qual{ color:#b5731f; font-weight:700; } .ml-qual.g{ color:#3d8a5b; } .ml-qual.r{ color:#d1544f; }
+    .ml-sla-amber{ color:#b5731f; font-weight:700; }
     .ml-next{ color:var(--ink); font-weight:600; }
     .ml-assign{ color:var(--blue); font-weight:700; text-decoration:none; white-space:nowrap; }
     .ml-assign:hover{ text-decoration:underline; }
+    /* ── Workload tab ── */
+    .wl-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .wl-cap-lbl{ font-size:13px; color:var(--ink-secondary); font-weight:600; }
+    .wl-auto{ font-size:13px; font-weight:700; color:var(--ink); text-decoration:none; }
+    .wl-auto:hover{ color:var(--blue); }
+    .wl-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    @media (max-width:1100px){ .wl-grid{ grid-template-columns:repeat(2,1fr); } }
+    .wl-card{ border:1px solid var(--border); border-radius:10px; padding:13px 15px; }
+    .wl-top{ display:flex; align-items:center; justify-content:space-between; }
+    .wl-name{ font-size:13.5px; font-weight:700; color:var(--ink); }
+    .wl-cap{ font-size:13px; font-weight:700; color:var(--ink-secondary); }
+    .wl-cap.over{ color:#d1544f; }
+    .wl-bar{ height:6px; border-radius:4px; background:#eceef1; margin:10px 0 9px; overflow:hidden; }
+    .wl-bar>i{ display:block; height:100%; border-radius:4px; }
+    .wl-bar>i.over{ background:#d1544f; } .wl-bar>i.amber{ background:#e8952c; } .wl-bar>i.green{ background:#5cb97f; }
+    .wl-foot{ display:flex; align-items:center; justify-content:space-between; font-size:11.5px; color:var(--ink-muted); }
+    .wl-status{ font-weight:600; } .wl-status.over{ color:#d1544f; }
+    /* ── Lead queue tab ── */
+    .lq-bar{ display:flex; align-items:center; gap:10px; padding:12px 16px; border-bottom:1px solid var(--border); flex-wrap:wrap; }
+    .lq-filter-lbl{ font-size:12px; font-weight:600; color:var(--ink-muted); }
+    .lq-chips{ display:flex; gap:7px; flex-wrap:wrap; }
+    .lq-chip{ font-size:12px; font-weight:600; color:var(--ink-secondary); background:#fff; border:1px solid var(--border); border-radius:16px; padding:5px 12px; cursor:pointer; }
+    .lq-chip:hover{ border-color:#cfd4de; }
+    .lq-chip.on{ background:var(--blue); color:#fff; border-color:var(--blue); }
+    .lq-count{ margin-left:auto; font-size:12px; color:var(--ink-muted); font-weight:600; }
+    .lq-addcol{ font-size:12.5px; font-weight:600; color:var(--ink); text-decoration:none; }
+    .lq-addcol:hover{ color:var(--blue); }
+    .lq-table td, .lq-table th{ white-space:nowrap; }
+    .lq-st{ display:inline-block; padding:3px 11px; border-radius:12px; font-size:11px; font-weight:700; }
+    .lq-st.brch{ background:#fdecec; color:#d1544f; } .lq-st.na{ background:#fdf0ef; color:#c96a63; } .lq-st.con{ background:#eaf6ee; color:#3d8a5b; } .lq-st.ret{ background:#fdeede; color:#b5731f; } .lq-st.cb{ background:#eef1fb; color:#3f63c8; } .lq-st.new{ background:#eef1fb; color:#3f63c8; }
+    .lq-act{ display:inline-flex; align-items:center; gap:12px; justify-content:flex-end; }
+    .lq-act a{ font-size:12.5px; font-weight:600; text-decoration:none; }
+    .lq-reassign{ color:var(--ink-secondary); } .lq-escalate{ color:var(--blue); } .lq-open{ color:var(--ink); font-weight:700; }
+    .lq-act a:hover{ text-decoration:underline; }
+    /* ── Manager action modals (coaching / quality / reassign) ── */
+    .frm-agent{ font-size:13px; color:var(--ink-secondary); margin-bottom:16px; }
+    .frm-field{ margin-bottom:14px; }
+    .frm-lbl{ display:block; font-size:12.5px; color:var(--ink-secondary); margin-bottom:6px; }
+    .frm-ctrl{ width:100%; border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-family:inherit; font-size:13px; color:var(--ink); background:#fff; box-sizing:border-box; }
+    .frm-ctrl:focus{ outline:none; border-color:var(--blue); }
+    textarea.frm-ctrl{ min-height:80px; resize:vertical; }
+    .frm-foot{ display:flex; justify-content:flex-end; gap:10px; margin-top:8px; padding-top:14px; border-top:1px solid var(--border); }
+    .frm-cancel{ border:1px solid var(--border); background:#fff; color:var(--ink-secondary); border-radius:8px; padding:9px 18px; font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .frm-save{ border:none; background:#17293d; color:#fff; border-radius:8px; padding:9px 18px; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .frm-card{ border:1px solid var(--border); border-radius:10px; padding:15px 16px; margin-bottom:14px; background:#fafbfc; }
+    .frm-card h4{ margin:0 0 4px; font-size:15px; font-weight:700; color:var(--ink); }
+    .fc-meta{ font-size:12.5px; color:var(--ink-muted); }
+    .fc-eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-secondary); margin-bottom:6px; }
+    .qr-fields div{ font-size:13px; margin:4px 0; }
+    .qr-ok{ color:#3d8a5b; } .qr-bad{ color:#d1544f; }
+    .frm-link{ color:var(--blue); font-weight:600; text-decoration:none; }
+    .frm-link:hover{ text-decoration:underline; }
+    .ra-badge{ display:inline-block; padding:4px 12px; border-radius:14px; font-size:12px; font-weight:700; }
+    .ra-badge.brch{ background:#fdecec; color:#d1544f; } .ra-badge.blk{ background:#eef1f4; color:#5b6472; }
+    .ra-sec-lbl{ font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-secondary); margin:16px 0 8px; }
+    .ra-recv tr.sel td{ background:#eef4fd; }
+    .ra-recv .num{ text-align:right; }
+    .ra-check, .ra-radio, .ra-lead-check{ accent-color:var(--blue); width:16px; height:16px; cursor:pointer; }
+    .kebab{ border:none; background:none; cursor:pointer; color:var(--ink-muted); padding:2px 4px; border-radius:6px; vertical-align:middle; margin-left:4px; }
+    .kebab:hover{ background:var(--bg); color:var(--ink); }
+    .kebab .material-symbols-outlined{ font-size:18px; }
+    .row-menu{ position:fixed; z-index:300; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 30px rgba(20,24,34,.16); padding:5px; min-width:210px; display:none; }
+    .row-menu button{ display:block; width:100%; text-align:left; background:none; border:none; font-family:inherit; font-size:13px; color:var(--ink-secondary); padding:9px 11px; border-radius:7px; cursor:pointer; }
+    .row-menu button:hover{ background:var(--blue-soft); color:var(--blue); }
+    /* ── KPI definitions modal ── */
+    .kd-card{ border:1px solid var(--border); border-radius:10px; padding:15px 16px; margin-bottom:14px; background:#fafbfc; }
+    .kd-title{ font-size:15px; font-weight:700; color:var(--ink); display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px; }
+    .kd-badge{ font-size:11px; font-weight:700; color:#b5731f; background:#fdeede; border-radius:12px; padding:3px 10px; }
+    .kd-desc{ font-size:13.5px; color:var(--ink-secondary); line-height:1.55; margin-bottom:10px; }
+    .kd-meta{ font-size:12.5px; color:var(--ink-muted); line-height:1.5; }
+    .kd-meta b{ color:var(--ink-secondary); }
+    .kd-notes{ border-top:1px solid var(--border); margin-top:4px; padding-top:14px; }
+    .kd-notes div{ font-size:12.5px; color:var(--ink-muted); font-style:italic; margin:6px 0; }
     .mdr-secl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;}
     .mdr-chart{border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 8px;}
     .mdr-trend-svg,.mdr-branch-svg{width:100%;height:auto;display:block;}
@@ -787,7 +861,7 @@
           </div>
           <div class="greeting-right">
             <button class="scope-dd"><span class="material-symbols-outlined">tune</span> Scope: Call Centre-owned leads <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
-            <button class="btn-soft"><span class="material-symbols-outlined">menu_book</span> KPI definitions</button>
+            <button class="btn-soft" onclick="openKpiDefs()"><span class="material-symbols-outlined">menu_book</span> KPI definitions</button>
             <div class="date-filter-wrap">
               <div class="date-filter">
                 <span class="material-symbols-outlined df-cal">calendar_today</span>
@@ -900,14 +974,14 @@
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Volumetrics</span><span class="kpi-sec-sub">&middot; What the team owes right now</span></div>
           <div class="kpi-grid g8">
-            <div class="metric-card"><div class="mc-lbl">Leads Assigned</div><div class="mc-val">21</div><div class="mc-sub">Call Centre-owned</div></div>
-            <div class="metric-card"><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">18</div><div class="mc-sub">Sorted by SLA</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAllLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAllLeads');}"><div class="mc-lbl">Leads Assigned</div><div class="mc-val">21</div><div class="mc-sub">Call Centre-owned</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccNotActioned')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccNotActioned');}"><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">18</div><div class="mc-sub">Sorted by SLA</div></div>
             <div class="metric-card"><div class="mc-lbl">Callbacks Due</div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('contactList')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('contactList');}"><div class="mc-lbl">Contact</div><div class="mc-val txt-green">4</div><div class="mc-sub">100% qualified</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}"><div class="mc-lbl">Returned by Sales</div><div class="mc-val">4</div><div class="mc-sub">Coach &amp; fix</div></div>
             <div class="metric-card"><div class="mc-lbl">Avg Handle Time</div><div class="mc-val" style="font-size:19px">4m 32s</div><div class="mc-sub">Across all agents</div></div>
             <div class="metric-card"><div class="mc-lbl">Agents on Shift</div><div class="mc-val">8</div><div class="mc-sub">4 on track</div></div>
-            <div class="metric-card"><div class="mc-lbl">Lost CC Leads</div><div class="mc-val">2</div><div class="mc-sub">Separate view</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccLostLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccLostLeads');}"><div class="mc-lbl">Lost CC Leads</div><div class="mc-val">2</div><div class="mc-sub">Separate view</div></div>
           </div>
         </div>
 
@@ -920,8 +994,8 @@
             <div class="metric-card"><div class="mc-lbl">Calls Declined</div><div class="mc-val txt-red">1</div><div class="mc-sub">Today &middot; with reason logged</div></div>
             <div class="metric-card"><div class="mc-lbl">Agents Available</div><div class="mc-val txt-green">3</div><div class="mc-sub">3 unavailable</div></div>
             <div class="metric-card"><div class="mc-lbl">Agents Unavailable</div><div class="mc-val">3</div><div class="mc-sub">Break &middot; TD &middot; Delivery &middot; Offline</div></div>
-            <div class="metric-card"><div class="mc-lbl">Training Overdue</div><div class="mc-val txt-amber">5</div><div class="mc-sub">Modules pending / failed</div></div>
-            <div class="dial-card">
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openTraining()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTraining();}"><div class="mc-lbl">Training Overdue</div><div class="mc-val txt-amber">5</div><div class="mc-sub">Modules pending / failed</div></div>
+            <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openTraining()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openTraining();}" style="cursor:pointer">
               <div class="dial-label">Training Completed</div>
               <div class="dial-wrap">
                 <svg class="dial-svg" viewBox="0 0 120 65">
@@ -953,10 +1027,11 @@
 
         <!-- Bottom tabs + agents table -->
         <div class="tbl-tabs">
-          <button class="tbl-tab on">Agents (8)</button>
-          <button class="tbl-tab">Workload</button>
-          <button class="tbl-tab">Lead queue (21)</button>
+          <button class="tbl-tab on" onclick="switchCcTab('agents',this)">Agents (8)</button>
+          <button class="tbl-tab" onclick="switchCcTab('workload',this)">Workload</button>
+          <button class="tbl-tab" onclick="switchCcTab('queue',this)">Lead queue (21)</button>
         </div>
+        <div id="ccTabAgents">
         <div class="expand-note"><span class="material-symbols-outlined">info</span> Agent status logic &mdash; how each status is triggered &mdash; click to expand</div>
 
         <div class="q-panel">
@@ -973,32 +1048,32 @@
                 <td class="num">22</td><td class="num red">7</td><td class="num">3</td><td class="num">4</td><td class="num">2</td><td class="num red">3</td><td class="num">4m 42s</td>
                 <td><span class="pct-a">72</span></td>
                 <td><span class="st-badge brch">SLA Breached</span></td>
-                <td><a href="#" class="row-link">Reassign 3 leads + coach</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:right"><button class="tbl-btn red">Reassign + coach</button></td>
+                <td><a href="#" class="row-link" onclick="openReassign('Rahul Krishnan');return false">Reassign 3 leads + coach</a><a href="#" class="why">Why?</a></td>
+                <td style="text-align:right"><button class="tbl-btn red" onclick="openReassign('Rahul Krishnan')">Reassign + coach</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
               <tr class="urg">
                 <td><div class="c-name">Lina Osman</div><div class="c-shift">10:00&ndash;19:00</div></td>
                 <td class="num">25</td><td class="num red">8</td><td class="num">4</td><td class="num">2</td><td class="num">1</td><td class="num red">4</td><td class="num">5m 30s</td>
                 <td><span class="pct-a">78</span></td>
                 <td><span class="st-badge blk">Blocked</span></td>
-                <td><a href="#" class="row-link">Reassign 5 leads</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:right"><button class="tbl-btn">Reassign 5</button></td>
+                <td><a href="#" class="row-link" onclick="openReassign('Lina Osman');return false">Reassign 5 leads</a><a href="#" class="why">Why?</a></td>
+                <td style="text-align:right"><button class="tbl-btn" onclick="openReassign('Lina Osman')">Reassign 5</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
               <tr>
                 <td><div class="c-name">Mohammed Zaid</div><div class="c-shift">09:00&ndash;18:00</div></td>
                 <td class="num">19</td><td class="num">3</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">1</td><td class="num">3m 12s</td>
                 <td><span class="pct-r">65</span></td>
                 <td><span class="st-badge ret">Returned</span></td>
-                <td><a href="#" class="row-link">Quality review</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:right"><button class="tbl-btn">Review quality</button></td>
+                <td><a href="#" class="row-link" onclick="openQuality('Mohammed Zaid');return false">Quality review</a><a href="#" class="why">Why?</a></td>
+                <td style="text-align:right"><button class="tbl-btn" onclick="openQuality('Mohammed Zaid')">Review quality</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
               <tr>
                 <td><div class="c-name">Aisha Hussein</div><div class="c-shift">11:00&ndash;20:00</div></td>
                 <td class="num">17</td><td class="num red">5</td><td class="num">2</td><td class="num">2</td><td class="num">2</td><td class="num red">2</td><td class="num">5m 55s</td>
                 <td><span class="pct-a">70</span></td>
                 <td><span class="st-badge wrn">Due Soon</span></td>
-                <td><a href="#" class="row-link">1:1 coaching</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:right"><button class="tbl-btn ghost">Add coaching note</button></td>
+                <td><a href="#" class="row-link" onclick="openCoaching('Aisha Hussein');return false">1:1 coaching</a><a href="#" class="why">Why?</a></td>
+                <td style="text-align:right"><button class="tbl-btn ghost" onclick="openCoaching('Aisha Hussein')">Add coaching note</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
               <tr>
                 <td><div class="c-name">Nadia Al Suwaidi</div><div class="c-shift">08:00&ndash;17:00</div></td>
@@ -1006,7 +1081,7 @@
                 <td><span class="pct-g">92</span></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:right"><button class="tbl-btn ghost">View queue</button></td>
+                <td style="text-align:right"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
               <tr>
                 <td><div class="c-name">Priya Nair</div><div class="c-shift">09:00&ndash;18:00</div></td>
@@ -1014,7 +1089,7 @@
                 <td><span class="pct-g">88</span></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:right"><button class="tbl-btn ghost">View queue</button></td>
+                <td style="text-align:right"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
               <tr>
                 <td><div class="c-name">Farhan Aslam</div><div class="c-shift">10:00&ndash;19:00</div></td>
@@ -1022,7 +1097,7 @@
                 <td><span class="pct-g">90</span></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:right"><button class="tbl-btn ghost">View queue</button></td>
+                <td style="text-align:right"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
               <tr>
                 <td><div class="c-name">Ivan Petrov</div><div class="c-shift">13:00&ndash;22:00</div></td>
@@ -1030,10 +1105,34 @@
                 <td><span class="pct-g">85</span></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:right"><button class="tbl-btn ghost">View queue</button></td>
+                <td style="text-align:right"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
               </tr>
             </tbody>
           </table>
+        </div>
+        </div><!-- /ccTabAgents -->
+
+        <!-- Workload tab -->
+        <div id="ccTabWorkload" style="display:none">
+          <div class="q-panel" style="padding:16px 18px">
+            <div class="wl-head"><span class="wl-cap-lbl">Capacity out of 20 leads per agent</span><a href="#" class="wl-auto" onclick="return false">Auto-balance &rarr;</a></div>
+            <div class="wl-grid" id="wlGrid"></div>
+          </div>
+        </div>
+
+        <!-- Lead queue tab -->
+        <div id="ccTabQueue" style="display:none">
+          <div class="q-panel">
+            <div class="lq-bar">
+              <span class="lq-filter-lbl"><span class="material-symbols-outlined" style="font-size:15px;vertical-align:-2px">filter_list</span> Filter</span>
+              <div class="lq-chips" id="lqChips"></div>
+              <span class="lq-count" id="lqCount"></span>
+              <a href="#" class="lq-addcol" onclick="return false"><span class="material-symbols-outlined" style="font-size:15px;vertical-align:-2px">view_column</span> Add column</a>
+            </div>
+            <div class="q-scroll"><table class="qt-table lq-table"><thead><tr>
+              <th>Lead</th><th>Agent</th><th>Source</th><th>Status</th><th>SLA</th><th>Qual %</th><th>Next Action</th><th style="text-align:right">Actions</th>
+            </tr></thead><tbody id="lqBody"></tbody></table></div>
+          </div>
         </div>
         </div><!-- /streamSales -->
 
@@ -1164,9 +1263,11 @@
     function mlCell(k,r){
       if(k==='lead') return '<td><div class="ml-name">'+r.lead+'</div>'+(r.id?'<div class="ml-id">'+r.id+'</div>':'')+'</td>';
       if(k==='temp'){ var t=(r.temp||'').toLowerCase(); return '<td><span class="ml-temp '+t+'">'+r.temp+'</span></td>'; }
+      if(k==='owner') return '<td>'+((!r.owner||r.owner==='Unassigned')?'<span style="font-style:italic;color:var(--ink-muted)">Unassigned</span>':r.owner)+'</td>';
       if(k==='breach') return '<td class="ml-breach">'+r.breach+'</td>';
+      if(k==='sla') return '<td class="'+(r.slaC==='red'?'ml-breach':(r.slaC==='amber'?'ml-sla-amber':''))+'">'+r.sla+'</td>';
       if(k==='reason') return '<td class="ml-reason">'+r.reason+'</td>';
-      if(k==='qual') return '<td class="ml-qual'+(r.qual==='100%'?' g':'')+'">'+r.qual+'</td>';
+      if(k==='qual'){ var qn=parseInt(r.qual,10); var qc=(r.qual==='100%')?' g':((qn>=0&&qn<60)?' r':''); return '<td class="ml-qual'+qc+'">'+r.qual+'</td>'; }
       if(k==='next') return '<td class="ml-next">'+r.next+'</td>';
       return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
     }
@@ -1319,6 +1420,677 @@
       }
       if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
     })();
+  </script>
+  <script>
+  // ── Volumetrics drill-downs + Workload / Lead queue tabs ──
+  (function(){
+    if(typeof METRICS==='undefined') return;
+    var CC = [
+      {lead:'Zayed Al Nuaimi',id:'L-2026-06015',temp:'Hot', source:'Call Center Inbound',stage:'New Leads',owner:'Unassigned',      sla:'5 min overdue', slaC:'red',  qual:'0%',  next:'Assign to agent — SLA breached', routing:'Call center',  status:'SLA Breached'},
+      {lead:'Farida Zohra',   id:'L-2026-06007',temp:'Warm',source:'Campaign Callback',   stage:'Contact',  owner:'Aisha Hussein',    sla:'40 min overdue',slaC:'red',  qual:'30%', next:'Escalate — 40 min overdue',     routing:'Call center',  status:'SLA Breached'},
+      {lead:'Ali Kassem',     id:'L-2026-06001',temp:'Warm',source:'Call Center Inbound',stage:'Contact',  owner:'Rahul Krishnan',   sla:'12 min overdue',slaC:'red',  qual:'40%', next:'Start call — SLA breached',     routing:'Call center',  status:'SLA Breached'},
+      {lead:'Meera Shah',     id:'L-2026-06002',temp:'Hot', source:'800 Number',         stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'8 min left',    slaC:'amber',qual:'20%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
+      {lead:'Hana Barakat',   id:'L-2026-06016',temp:'Warm',source:'800 Number',         stage:'New Leads',owner:'Unassigned',      sla:'4 min left',    slaC:'amber',qual:'0%',  next:'Assign to agent — SLA due soon', routing:'Call center',  status:'Not Actioned'},
+      {lead:'Layan Otaibi',   id:'L-2026-06011',temp:'Hot', source:'Campaign Callback',   stage:'Contact',  owner:'Ivan Petrov',      sla:'15 min left',   slaC:'',     qual:'50%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
+      {lead:'Sam Fadi',       id:'L-2026-06006',temp:'Hot', source:'800 Number',         stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'25 min left',   slaC:'',     qual:'100%',next:'Hand over to Sales',             routing:'Call center',  status:'Contact'},
+      {lead:'Ranya Al Amir',  id:'L-2026-06017',temp:'Warm',source:'Campaign Callback',   stage:'New Leads',owner:'Unassigned',      sla:'22 min left',   slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'Not Actioned'},
+      {lead:'Rerouted Web',   id:'L-2026-06014',temp:'Warm',source:'Website',            stage:'Contact',  owner:'Priya Nair',       sla:'30 min left',   slaC:'',     qual:'20%', next:'Start call · CC qualification',  routing:'Rerouted to CC',status:'Not Actioned'},
+      {lead:'Sara Ali',       id:'L-2026-06101',temp:'Warm',source:'Call Center Inbound',stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'30 min left',   slaC:'',     qual:'90%', next:'Complete missing field',         routing:'Returned by sales',status:'Returned'},
+      {lead:'Mira Khaled',    id:'L-2026-06102',temp:'Warm',source:'Manual CC Queue',    stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'30 min left',   slaC:'',     qual:'70%', next:'Verify number',                  routing:'Returned by sales',status:'Returned'},
+      {lead:'Anil Krishnan',  id:'L-2026-06103',temp:'Warm',source:'Call Center Inbound',stage:'Contact',  owner:'Aisha Hussein',    sla:'30 min left',   slaC:'',     qual:'80%', next:'Re-qualify enquiry',             routing:'Returned by sales',status:'Returned'},
+      {lead:'Rasha Nabhan',   id:'L-2026-06104',temp:'Warm',source:'Campaign Callback',   stage:'Contact',  owner:'Lina Osman',       sla:'30 min left',   slaC:'',     qual:'85%', next:'Reassign to Arabic agent',       routing:'Returned by sales',status:'Returned'},
+      {lead:'Iman Sabri',     id:'L-2026-06009',temp:'Warm',source:'Call Center Inbound',stage:'Contact',  owner:'Farhan Aslam',     sla:'35 min left',   slaC:'',     qual:'100%',next:'Hand over to Sales',             routing:'Call center',  status:'Contact'},
+      {lead:'Dana Alwan',     id:'L-2026-06013',temp:'Warm',source:'Call Center Inbound',stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'40 min left',   slaC:'',     qual:'100%',next:'Hand over to Sales',             routing:'Call center',  status:'Contact'},
+      {lead:'Rita Fernandez', id:'L-2026-06005',temp:'Cold',source:'Call Center Inbound',stage:'Contact',  owner:'Mohammed Zaid',    sla:'2h left',       slaC:'',     qual:'100%',next:'Callback tomorrow',              routing:'Call center',  status:'Callback'},
+      {lead:'Karim Mansour',  id:'L-2026-06008',temp:'Warm',source:'Website',            stage:'Contact',  owner:'Priya Nair',       sla:'45 min left',   slaC:'',     qual:'60%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
+      {lead:'Noor Fahad',     id:'L-2026-06010',temp:'Hot', source:'800 Number',         stage:'Contact',  owner:'Ivan Petrov',      sla:'50 min left',   slaC:'',     qual:'70%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
+      {lead:'Bassel Nasr',    id:'L-2026-06012',temp:'Warm',source:'Manual CC Queue',    stage:'New Leads',owner:'Unassigned',      sla:'1h left',       slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'New'},
+      {lead:'Dina Salah',     id:'L-2026-06018',temp:'Warm',source:'Campaign Callback',   stage:'Contact',  owner:'Mohammed Zaid',    sla:'1h 10m left',   slaC:'',     qual:'80%', next:'Start call',                     routing:'Call center',  status:'Contact'},
+      {lead:'Omar Zaki',      id:'L-2026-06019',temp:'Cold',source:'Website',            stage:'New Leads',owner:'Unassigned',      sla:'1h 20m left',   slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'New'}
+    ];
+    CC.forEach(function(l){ l.channel='WhatsApp · English'; });
+
+    Object.assign(METRICS, {
+      ccAllLeads: { list:true, title:'All CC assigned leads', action:'Open lead', records:21,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'owner',l:'Owner'},{k:'sla',l:'SLA'},{k:'qual',l:'Qual %'},{k:'next',l:'Next Action'},{k:'routing',l:'Routing'}],
+        rows: CC },
+      ccNotActioned: { list:true, title:'Not actioned', action:'Start call', records:18,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'owner',l:'Owner'},{k:'sla',l:'SLA'},{k:'channel',l:'Channel'},{k:'next',l:'Next Action'},{k:'routing',l:'Routing'}],
+        rows: CC.slice(0,18) },
+      ccLostLeads: { list:true, title:'Lost CC leads', action:'Open', records:2,
+        cols:[{k:'lead',l:'Lead'},{k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'owner',l:'Owner'},{k:'lostreason',l:'Lost Reason'},{k:'days',l:'Days Idle'}],
+        rows:[
+          {lead:'Sami Doss',  id:'L-2026-07003', source:'Call Center Inbound', stage:'Contact', owner:'Rahul Krishnan',   lostreason:'No response', days:'12d'},
+          {lead:'Nabil Farha',id:'L-2026-07006', source:'800 Number',          stage:'Contact', owner:'Nadia Al Suwaidi', lostreason:'Duplicate',   days:'15d'}
+        ] }
+    });
+
+    // ── Workload cards ──
+    var WL=[
+      {n:'Rahul Krishnan',cap:22,pend:7,sla:3,cl:'over', st:'Overloaded',   sc:'over'},
+      {n:'Nadia Al Suwaidi',cap:18,pend:1,sla:0,cl:'amber',st:'On track',    sc:''},
+      {n:'Priya Nair',cap:16,pend:2,sla:0,cl:'amber',st:'On track',    sc:''},
+      {n:'Mohammed Zaid',cap:19,pend:3,sla:1,cl:'amber',st:'High return rate',sc:''},
+      {n:'Lina Osman',cap:25,pend:8,sla:4,cl:'over', st:'Overloaded',   sc:'over'},
+      {n:'Farhan Aslam',cap:14,pend:1,sla:0,cl:'green',st:'On track',    sc:''},
+      {n:'Aisha Hussein',cap:17,pend:5,sla:2,cl:'amber',st:'Needs support',sc:''},
+      {n:'Ivan Petrov',cap:13,pend:2,sla:0,cl:'green',st:'On track',    sc:''}
+    ];
+    function renderWorkload(){
+      var host=document.getElementById('wlGrid'); if(!host) return;
+      host.innerHTML=WL.map(function(a){
+        var w=Math.min(100,Math.round(a.cap/20*100));
+        return '<div class="wl-card"><div class="wl-top"><span class="wl-name">'+a.n+'</span><span class="wl-cap'+(a.sc==='over'?' over':'')+'">'+a.cap+'/20</span></div>'+
+          '<div class="wl-bar"><i class="'+a.cl+'" style="width:'+w+'%"></i></div>'+
+          '<div class="wl-foot"><span>'+a.pend+' pending &middot; '+a.sla+' SLA</span><span class="wl-status'+(a.sc?' '+a.sc:'')+'">'+a.st+'</span></div></div>';
+      }).join('');
+    }
+
+    // ── Lead queue ──
+    var LQ_FILTERS=[['all','All'],['New','New'],['Not Actioned','Not Actioned'],['Callback','Callback'],['Contact','Contact'],['SLA Breached','SLA Breached'],['Returned','Returned by Sales']];
+    var STCLS={'SLA Breached':'brch','Not Actioned':'na','Contact':'con','Returned':'ret','Callback':'cb','New':'new'};
+    var lqFilter='all';
+    function renderQueue(){
+      var body=document.getElementById('lqBody'); if(!body) return;
+      var rows=CC.filter(function(l){ return lqFilter==='all' || l.status===lqFilter; });
+      body.innerHTML=rows.map(function(l){
+        var slaTxt=l.sla.replace(' min','m');
+        var slaCls=l.slaC==='red'?'ml-breach':(l.slaC==='amber'?'ml-sla-amber':'');
+        var qn=parseInt(l.qual,10), qcls=(l.qual==='100%')?'ml-qual g':((qn<60)?'ml-qual r':'ml-qual');
+        return '<tr><td><div class="c-name">'+l.lead+'</div><div class="c-id">'+l.id+'</div></td>'+
+          '<td>'+((!l.owner||l.owner==='Unassigned')?'<span style="font-style:italic;color:var(--ink-muted)">—</span>':l.owner)+'</td>'+
+          '<td>'+l.source+'</td>'+
+          '<td><span class="lq-st '+(STCLS[l.status]||'')+'">'+l.status+'</span></td>'+
+          '<td class="'+slaCls+'">'+slaTxt+'</td>'+
+          '<td class="'+qcls+'" style="font-weight:700">'+l.qual+'</td>'+
+          '<td class="ml-next">'+l.next+'</td>'+
+          '<td style="text-align:right"><span class="lq-act"><a href="#" class="lq-reassign" onclick="return false">Reassign</a><a href="#" class="lq-escalate" onclick="return false">Escalate</a><a href="lead-detail.html?lead='+encodeURIComponent(l.lead)+'" class="lq-open">Open &rarr;</a></span></td></tr>';
+      }).join('');
+      var cnt=document.getElementById('lqCount'); if(cnt) cnt.textContent=rows.length+' of '+CC.length;
+      var chips=document.getElementById('lqChips'); if(chips){
+        chips.innerHTML=LQ_FILTERS.map(function(f){ var label=f[0]==='all'?('All &middot; '+CC.length):f[1]; return '<span class="lq-chip'+(lqFilter===f[0]?' on':'')+'" onclick="lqSetFilter(\''+f[0]+'\')">'+label+'</span>'; }).join('');
+      }
+    }
+    window.lqSetFilter=function(f){ lqFilter=f; renderQueue(); };
+
+    window.switchCcTab=function(tab, btn){
+      if(btn){ btn.parentNode.querySelectorAll('.tbl-tab').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); }
+      var map={agents:'ccTabAgents',workload:'ccTabWorkload',queue:'ccTabQueue'};
+      Object.keys(map).forEach(function(k){ var el=document.getElementById(map[k]); if(el) el.style.display=(k===tab)?'':'none'; });
+      if(tab==='workload') renderWorkload();
+      if(tab==='queue') renderQueue();
+    };
+  })();
+  </script>
+  <script>
+  // ── Manager action modals + agent row menu ──
+  (function(){
+    function ccToast(msg){
+      var t=document.getElementById('ccToast');
+      if(!t){ t=document.createElement('div'); t.id='ccToast'; t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#17293d;color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;z-index:400;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transition:opacity .2s;'; document.body.appendChild(t); }
+      t.textContent=msg; t.style.opacity='1'; clearTimeout(t._h); t._h=setTimeout(function(){ t.style.opacity='0'; }, 1800);
+    }
+    window.ccToast=ccToast;
+    function openMdr(){ document.getElementById('mdr').classList.add('open'); document.getElementById('mdrOverlay').classList.add('open'); document.getElementById('mdrContent').scrollTop=0; }
+    var HD=function(t,sub){ return '<div class="mdr-hd mdr-hd-list"><div class="mdr-ttl">'+t+'</div>'+(sub?'<div class="mdr-sub">'+sub+'</div>':'')+'<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'; };
+    function frmField(label, inner){ return '<div class="frm-field"><label class="frm-lbl">'+label+'</label>'+inner+'</div>'; }
+    function frmSelect(label, opts){ return frmField(label, '<select class="frm-ctrl">'+opts.map(function(o){return '<option>'+o+'</option>';}).join('')+'</select>'); }
+    function frmTextarea(label, ph){ return frmField(label, '<textarea class="frm-ctrl" placeholder="'+(ph||'')+'"></textarea>'); }
+
+    var QUALITY={ 'Mohammed Zaid': { qscore:65, aht:'3m 12s', returned:4, lastLead:{ name:'Sara Ali', id:'L-2026-06101', by:'Ahmad Nasr',
+      fields:[['Customer name',true],['Mobile',true],['Model interest',true],['Preferred showroom',false],['Enquiry reason',false]], returnReason:'Missing preferred showroom' } } };
+    var REASSIGN={
+      'Rahul Krishnan': { shift:'08:00–17:00', assigned:22, notact:7, sla:3, status:'SLA Breached', statusCls:'brch', note:'3 SLA breaches today and 7 leads not actioned.',
+        leads:[{lead:'Ali Kassem',id:'L-2026-06001',source:'Call Center Inbound',temp:'Warm',sla:'12m over',slaC:'red',qual:'40%',next:'Start call — SLA breached'},
+               {lead:'Nadeem Farah',id:'L-2026-06004',source:'Manual CC Queue',temp:'Warm',sla:'90m left',slaC:'',qual:'70%',next:'Complete qualification'}] },
+      'Lina Osman': { shift:'10:00–19:00', assigned:25, notact:8, sla:4, status:'Blocked', statusCls:'blk', note:'25 assigned vs 20 capacity, 8 not actioned — cannot clear queue within SLA.',
+        leads:[{lead:'Rasha Nabhan',id:'L-2026-06104',source:'Campaign Callback',temp:'Warm',sla:'30m left',slaC:'',qual:'85%',next:'Reassign to Arabic agent'},
+               {lead:'Ravi Prasad',id:'L-2026-06012',source:'Manual CC Queue',temp:'Warm',sla:'45m left',slaC:'',qual:'65%',next:'Complete qualification'},
+               {lead:'Waleed Kanaan',id:'L-2026-06008',source:'Manual CC Queue',temp:'Warm',sla:'60m left',slaC:'',qual:'55%',next:'Complete qualification'}] }
+    };
+    var RECV=[
+      {n:'Ivan Petrov',shift:'13:00–22:00',status:'On Track',sc:'ok',assigned:13,notact:2,quality:85},
+      {n:'Farhan Aslam',shift:'10:00–19:00',status:'On Track',sc:'ok',assigned:14,notact:1,quality:90},
+      {n:'Priya Nair',shift:'09:00–18:00',status:'On Track',sc:'ok',assigned:16,notact:2,quality:88},
+      {n:'Nadia Al Suwaidi',shift:'08:00–17:00',status:'On Track',sc:'ok',assigned:18,notact:1,quality:92},
+      {n:'Aisha Hussein',shift:'11:00–20:00',status:'Due Soon',sc:'wrn',assigned:17,notact:5,quality:70}
+    ];
+
+    window.openCoaching=function(agent){
+      document.getElementById('mdrContent').innerHTML = HD('Add Coaching Note') +
+        '<div class="mdr-body"><div class="frm-agent">Agent &middot; <strong>'+agent+'</strong></div>'+
+          frmSelect('Coaching reason',['SLA breaches','Quality issues','High return rate','Low qualification','Attendance','Other'])+
+          frmSelect('Related KPI',['SLA compliance','Qual completion','Return rate','AHT','CSAT'])+
+          frmTextarea('Evidence / examples','Lead IDs, breach durations…')+
+          frmTextarea('Coaching note','')+
+          frmField('Follow-up date','<input type="date" class="frm-ctrl" lang="en-GB">')+
+          '<div class="frm-foot"><button class="frm-cancel" onclick="closeMetric()">Cancel</button><button class="frm-save" onclick="ccToast(\'Coaching note saved\');closeMetric()">Save Coaching Note</button></div>'+
+        '</div>';
+      openMdr();
+    };
+    window.openQuality=function(agent){
+      var q=QUALITY[agent]||QUALITY['Mohammed Zaid'];
+      var flds=q.lastLead.fields.map(function(f){ return '<div class="'+(f[1]?'qr-ok':'qr-bad')+'">'+(f[1]?'&#10003;':'&#10007;')+' '+f[0]+'</div>'; }).join('');
+      document.getElementById('mdrContent').innerHTML = HD('Call Quality Review','Review recent handovers and mandatory qualification fields.') +
+        '<div class="mdr-body">'+
+          '<div class="frm-card"><h4>'+agent+'</h4><div class="fc-meta">Quality score '+q.qscore+' &middot; AHT '+q.aht+' &middot; Returned '+q.returned+'</div></div>'+
+          '<div class="frm-card"><div class="fc-eyebrow">Last returned lead</div>'+
+            '<div style="font-size:14px;font-weight:700;color:var(--ink)">'+q.lastLead.name+' &middot; '+q.lastLead.id+'</div>'+
+            '<div class="fc-meta" style="margin-bottom:12px">Returned by sales exec '+q.lastLead.by+'</div>'+
+            '<div class="fc-eyebrow">Mandatory fields</div><div class="qr-fields">'+flds+'</div>'+
+            '<div class="fc-meta" style="margin-top:12px;color:var(--ink-secondary)">Return reason: <strong style="color:var(--ink)">'+q.lastLead.returnReason+'</strong></div>'+
+            '<div style="margin-top:6px"><a href="#" class="frm-link" onclick="return false">Open transcript &rarr;</a></div>'+
+          '</div>'+
+          '<div class="frm-field"><textarea class="frm-ctrl" placeholder="Coaching note…"></textarea></div>'+
+          '<div class="frm-foot"><button class="frm-cancel" onclick="closeMetric()">Cancel</button><button class="frm-save" onclick="ccToast(\'Quality review saved\');closeMetric()">Save Quality Review</button></div>'+
+        '</div>';
+      openMdr();
+    };
+    function raCount(){ var n=document.querySelectorAll('.ra-lead-check:checked').length; var el=document.getElementById('raSelCount'); if(el) el.textContent=n; }
+    window.raCount=raCount;
+    window.raSelect=function(row){ Array.prototype.forEach.call(row.parentNode.querySelectorAll('tr'),function(t){t.classList.remove('sel');}); row.classList.add('sel'); var rb=row.querySelector('input[type=radio]'); if(rb) rb.checked=true; };
+    window.openReassign=function(agent){
+      var r=REASSIGN[agent]||REASSIGN['Rahul Krishnan'];
+      var leadRows=r.leads.map(function(l){ return '<tr><td><input type="checkbox" class="ra-lead-check" onchange="raCount()"></td>'+
+        '<td><div class="ml-name">'+l.lead+'</div><div class="ml-id">'+l.id+'</div></td><td>'+l.source+'</td>'+
+        '<td><span class="ml-temp warm">'+l.temp+'</span></td><td class="'+(l.slaC==='red'?'ml-breach':'')+'">'+l.sla+'</td>'+
+        '<td>'+l.qual+'</td><td class="ml-next">'+l.next+'</td></tr>'; }).join('');
+      var recvRows=RECV.map(function(a,i){ return '<tr class="'+(i===0?'sel':'')+'" onclick="raSelect(this)"><td><input type="radio" name="raRecv" class="ra-radio"'+(i===0?' checked':'')+'></td>'+
+        '<td><div class="ml-name">'+a.n+'</div><div class="ml-id">'+a.shift+'</div></td><td><span class="st-badge '+a.sc+'">'+a.status+'</span></td>'+
+        '<td class="num">'+a.assigned+'</td><td class="num">'+a.notact+'</td><td class="num" style="font-weight:700">'+a.quality+'</td></tr>'; }).join('');
+      document.getElementById('mdrContent').innerHTML = HD('Reassign Call Center Leads','Move leads to another agent to protect SLA or balance workload.') +
+        '<div class="mdr-body">'+
+          '<div class="frm-card"><div class="fc-eyebrow">Current agent</div>'+
+            '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px"><div><div style="font-size:16px;font-weight:700;color:var(--ink)">'+agent+'</div>'+
+            '<div class="fc-meta">'+r.shift+' &middot; Assigned '+r.assigned+' &middot; Not act '+r.notact+' &middot; SLA '+r.sla+'</div></div>'+
+            '<span class="ra-badge '+r.statusCls+'">'+r.status+'</span></div>'+
+            '<div class="fc-meta" style="font-style:italic;margin-top:8px">'+r.note+'</div></div>'+
+          '<div class="ra-sec-lbl">Leads to reassign &middot; <span id="raSelCount">0</span> selected</div>'+
+          '<div class="mdr-leadswrap"><table class="mdr-leads"><thead><tr><th></th><th>Lead</th><th>Source</th><th>Temp</th><th>SLA</th><th>Qual %</th><th>Next Action</th></tr></thead><tbody>'+leadRows+'</tbody></table></div>'+
+          '<div class="ra-sec-lbl">Suggested receiving agent</div>'+
+          '<div class="mdr-leadswrap"><table class="mdr-leads ra-recv"><thead><tr><th></th><th>Agent</th><th>Status</th><th class="num">Assigned</th><th class="num">Not act</th><th class="num">Quality</th></tr></thead><tbody>'+recvRows+'</tbody></table></div>'+
+          frmSelect('Reassignment reason (required)',['— Select reason —','SLA protection','Workload balance','Language match','Agent unavailable','Manager override'])+
+          '<label class="frm-lbl" style="display:flex;align-items:center;gap:8px;margin:2px 0 12px"><input type="checkbox" class="ra-check" checked> Notify receiving agent</label>'+
+          '<div class="frm-field"><textarea class="frm-ctrl" placeholder="Manager note (optional)…"></textarea></div>'+
+          '<div class="frm-foot"><button class="frm-cancel" onclick="closeMetric()">Cancel</button><button class="frm-save" onclick="ccToast(\'Leads reassigned\');closeMetric()">Confirm reassignment</button></div>'+
+        '</div>';
+      openMdr();
+    };
+
+    // ── Agent row kebab menu ──
+    window.agentMenu=function(e){
+      e.stopPropagation();
+      var tr=e.currentTarget.closest('tr'); var nm=tr?tr.querySelector('.c-name'):null; var agent=nm?nm.textContent.trim():'';
+      var m=document.getElementById('agentRowMenu');
+      if(!m){ m=document.createElement('div'); m.id='agentRowMenu'; m.className='row-menu'; document.body.appendChild(m); }
+      var A="'"+agent.replace(/'/g,"\\'")+"'";
+      var items=[['list_alt','View agent queue',"openMetric('ccAllLeads')"],['undo','Reassign leads',"openReassign("+A+")"],['warning','Review returned leads',"openMetric('returnRate')"],['fact_check','Review call quality',"openQuality("+A+")"],['edit_note','Add coaching note',"openCoaching("+A+")"],['warning','View SLA breaches',"openMetric('firstContact')"]];
+      m.innerHTML=items.map(function(it){ return '<button onclick="closeAgentMenu();'+it[2]+'"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px;margin-right:8px">'+it[0]+'</span>'+it[1]+'</button>'; }).join('');
+      var rc=e.currentTarget.getBoundingClientRect(); m.style.display='block'; m.style.top=(rc.bottom+4)+'px'; m.style.left=Math.max(8,rc.right-212)+'px';
+    };
+    window.closeAgentMenu=function(){ var m=document.getElementById('agentRowMenu'); if(m) m.style.display='none'; };
+    document.addEventListener('click',function(e){ if(!(e.target.closest && e.target.closest('#agentRowMenu'))) closeAgentMenu(); });
+
+    // ── KPI definitions modal ──
+    var KPIDEFS=[
+      {t:'Leads Assigned', desc:'Total leads currently owned by the call center within the selected scope and period.', formula:"TODO — count(leads where owner_team = 'CC' AND transactionDate in period)", source:'TODO — CRM lead entity'},
+      {t:'Not Actioned', sla:true, desc:'Assigned leads where first contact has not started and SLA has not yet breached.'},
+      {t:'SLA Overdue', sla:true, desc:'Leads whose first-contact SLA is past due.'},
+      {t:'Callbacks Due', sla:true, desc:'Scheduled callbacks with a due time in the current period.'},
+      {t:'Contact', desc:'Fully qualified leads waiting to be handed to the showroom.'},
+      {t:'Returned by Sales', desc:'Leads that sales bounced back to the call center for rework.'},
+      {t:'First Contact SLA', sla:true, desc:'Share of assigned leads reached within the first-contact SLA target.'},
+      {t:'Avg Handle Time', desc:'Average call handle time across all completed calls in the period.', source:'TODO — telephony logs'},
+      {t:'Qualification Completion', desc:'Share of connected calls where the mandatory qualification pack is fully captured.'},
+      {t:'Return Rate', desc:'Share of handed-over leads that sales returned.'},
+      {t:'Agents on Shift', desc:'Agents rostered and active in the current shift window.', source:'TODO — WFM roster'},
+      {t:'Lost CC Leads', desc:'Call-center-owned leads marked as lost within the period.'},
+      {t:'Agent SLA Break', sla:true, desc:'Per-agent count of SLA breaches in the period.'},
+      {t:'Agent Quality Status', desc:'Rolled-up quality signal per agent — combines quality-review score, return rate and SLA compliance.'}
+    ];
+    window.openKpiDefs=function(){
+      var cards=KPIDEFS.map(function(k){
+        return '<div class="kd-card"><div class="kd-title">'+k.t+(k.sla?' <span class="kd-badge">SLA-dependent</span>':'')+'</div>'+
+          '<div class="kd-desc">'+k.desc+'</div>'+
+          '<div class="kd-meta"><b>Formula:</b> '+(k.formula||'TODO')+'</div>'+
+          '<div class="kd-meta"><b>Source:</b> '+(k.source||'TODO')+'</div></div>';
+      }).join('');
+      var notes='<div class="kd-notes"><div>&middot; Final KPI and SLA logic to be aligned by Chaitanya and George.</div>'+
+        '<div>&middot; Data source mapping to be provided by Data Direct / data owners.</div>'+
+        '<div>&middot; SLA logic pending final alignment (Chaitanya / George).</div></div>';
+      document.getElementById('mdrContent').innerHTML =
+        HD('<span class="material-symbols-outlined" style="font-size:19px;vertical-align:-4px;margin-right:6px">menu_book</span>Call Center — KPI definitions') +
+        '<div class="mdr-body">'+cards+notes+'</div>';
+      openMdr();
+    };
+  })();
+  </script>
+  <!-- Ported Training Coach modal (from call-center-agent) -->
+  <style>
+    /* ── Training Coach modal ── */
+    .train-banner { cursor:pointer; }
+    .train-chip { display:inline-flex; align-items:center; gap:5px; background:var(--blue-soft); border:1px solid #d5e0ec; color:var(--blue); border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
+    .train-chip:hover { background:#dbe6f0; }
+    .train-chip .material-symbols-outlined { font-size:15px; }
+    .train-badge { display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px; padding:0 4px; background:var(--blue); color:#fff; border-radius:8px; font-size:11px; font-weight:700; line-height:1; }
+    .sim-call-btn { display:inline-flex; align-items:center; gap:5px; background:var(--green-soft); border:1px solid #cfe8d9; color:#2f8b57; border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
+    .sim-call-btn:hover { background:#dbf0e4; }
+    .sim-call-btn .material-symbols-outlined { font-size:16px; }
+    .scope-wrap { position:relative; display:inline-flex; align-items:center; gap:4px; }
+    .scope-dd { display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--border); border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; color:var(--ink-muted); cursor:pointer; font-family:inherit; }
+    .scope-dd:hover { background:var(--bg); }
+    .scope-dd strong { font-weight:600; color:var(--ink-secondary); }
+    .scope-dd .material-symbols-outlined { font-size:15px; color:var(--ink-muted); }
+    .scope-info { font-size:15px; color:var(--ink-muted); cursor:help; }
+    .scope-info-wrap { position:relative; display:inline-flex; align-items:center; }
+    .scope-tip { position:absolute; top:calc(100% + 8px); right:-20px; left:auto; width:300px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 8px 26px rgba(20,24,34,.15); padding:14px 16px; font-size:13px; line-height:1.55; color:var(--ink-secondary); font-weight:400; text-align:left; white-space:normal; z-index:300; opacity:0; visibility:hidden; transform:translateY(-4px); transition:opacity .12s, transform .12s; pointer-events:none; }
+    .scope-info-wrap:hover .scope-tip, .scope-info-wrap:focus-within .scope-tip { opacity:1; visibility:visible; transform:translateY(0); }
+    .scope-tip strong { font-weight:700; color:var(--ink); }
+    .scope-menu { position:absolute; top:calc(100% + 6px); right:0; background:var(--surface); border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 28px rgba(20,24,34,.14); padding:5px; min-width:206px; z-index:50; display:none; }
+    .scope-menu.open { display:block; }
+    .scope-menu button { display:block; width:100%; text-align:left; background:none; border:none; font-family:inherit; font-size:12.5px; color:var(--ink-secondary); padding:8px 10px; border-radius:7px; cursor:pointer; }
+    .scope-menu button:hover { background:var(--blue-soft); color:var(--blue); }
+    /* Simulated incoming call */
+    .inc-overlay { position:fixed; inset:0; background:rgba(15,20,28,.4); opacity:0; visibility:hidden; transition:.2s; z-index:210; }
+    .inc-overlay.open { opacity:1; visibility:visible; }
+    .inc-modal { position:fixed; top:0; left:50%; transform:translateX(-50%) translateY(-130%); transition:transform .34s cubic-bezier(.34,1.3,.5,1); z-index:211; width:420px; max-width:92vw; background:var(--surface); border-radius:0 0 16px 16px; box-shadow:0 16px 44px rgba(20,24,34,.24); overflow:hidden; }
+    .dc-overlay { position:fixed; inset:0; background:rgba(15,20,28,.45); opacity:0; visibility:hidden; transition:.2s; z-index:230; }
+    .dc-overlay.open { opacity:1; visibility:visible; }
+    .dc-modal { position:fixed; top:50%; left:50%; transform:translate(-50%,-46%); opacity:0; visibility:hidden; transition:opacity .2s, transform .2s, visibility .2s; z-index:231; width:440px; max-width:92vw; background:#f7f7f8; border-radius:16px; box-shadow:0 24px 60px rgba(20,24,34,.28); padding:26px 28px; }
+    .dc-modal.open { opacity:1; visibility:visible; transform:translate(-50%,-50%); }
+    .dc-x { position:absolute; top:18px; right:18px; background:transparent; border:none; color:var(--ink-muted); cursor:pointer; padding:2px; display:flex; }
+    .dc-x .material-symbols-outlined { font-size:20px; }
+    .dc-title { font-size:21px; font-weight:700; color:var(--ink); }
+    .dc-sub { font-size:13.5px; color:var(--ink-secondary); line-height:1.5; margin-top:6px; }
+    .dc-lbl { display:block; font-size:13.5px; font-weight:700; color:var(--ink); margin:20px 0 8px; }
+    .dc-req { color:var(--red); }
+    .dc-select, .dc-ta { width:100%; box-sizing:border-box; border:1px solid var(--border); border-radius:9px; padding:11px 13px; font-family:inherit; font-size:14px; color:var(--ink); background:var(--surface); outline:none; }
+    .dc-select:focus, .dc-ta:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(23,41,61,.12); }
+    .dc-ta { resize:vertical; min-height:96px; }
+    .dc-foot { display:flex; justify-content:flex-end; gap:11px; margin-top:24px; }
+    .dc-cancel { border:1px solid var(--border); background:var(--surface); color:var(--ink-secondary); border-radius:9px; padding:10px 20px; font-size:13.5px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-confirm { border:none; background:var(--red); color:#fff; border-radius:9px; padding:10px 20px; font-size:13.5px; font-weight:700; font-family:inherit; cursor:pointer; }
+    .dc-confirm:disabled { background:#e0a3a0; cursor:not-allowed; }
+    .lc-overlay,.es-overlay{position:fixed;inset:0;background:rgba(15,20,28,.45);opacity:0;visibility:hidden;transition:.2s;}
+    .lc-overlay{z-index:240;} .es-overlay{z-index:250;}
+    .lc-overlay.open,.es-overlay.open{opacity:1;visibility:visible;}
+    .lc-panel{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;z-index:241;width:600px;max-width:94vw;max-height:90vh;background:var(--surface);border-radius:16px;box-shadow:0 24px 60px rgba(20,24,34,.3);display:flex;flex-direction:column;overflow:hidden;}
+    .lc-panel.open{opacity:1;visibility:visible;transform:translate(-50%,-50%);}
+    .lc-hd{background:linear-gradient(135deg,#17293d,#2f5b8a);color:#fff;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;}
+    .lc-hd-l{display:flex;align-items:center;gap:11px;}
+    .lc-spark{font-size:22px;}
+    .lc-hd-t{font-size:15px;font-weight:700;}
+    .lc-hd-s{font-size:12px;opacity:.85;display:flex;align-items:center;gap:4px;margin-top:1px;}
+    .lc-hd-r{display:flex;align-items:center;gap:14px;font-size:12.5px;}
+    .lc-timer-wrap,.lc-lang{display:inline-flex;align-items:center;gap:4px;opacity:.9;}
+    .lc-end{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:6px 12px;font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;}
+    .lc-end:hover{background:rgba(255,255,255,.24);}
+    .lc-body{padding:16px 20px 20px;overflow-y:auto;}
+    .lc-say{border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-bottom:16px;background:#f8f9fb;}
+    .lc-say-t{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;}
+    .lc-say-t .material-symbols-outlined{font-size:15px;}
+    .lc-say-x{font-size:14px;color:var(--ink);font-weight:600;}
+    .lc-miss-h,.lc-det-h,.lc-tr-h{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin:16px 0 10px;}
+    .lc-miss-h{color:#b26a1a;} .lc-miss-h .material-symbols-outlined{font-size:15px;}
+    .lc-det-h,.lc-tr-h{color:var(--ink-muted);} .lc-det-h .material-symbols-outlined{font-size:15px;}
+    .lc-chips{display:flex;flex-wrap:wrap;gap:8px;}
+    .lc-chip{font-size:12px;font-weight:600;padding:5px 12px;border-radius:20px;background:var(--amber-soft);color:#b26a1a;border:1px solid #f0dcc0;}
+    .lc-card{border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;background:#f8f9fb;}
+    .lc-card-top{display:flex;align-items:center;justify-content:space-between;}
+    .lc-card-k{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted);}
+    .lc-conf{font-size:11.5px;font-weight:700;color:var(--ink-secondary);background:#e7e9ee;border-radius:6px;padding:2px 8px;}
+    .lc-card-v{font-size:15px;font-weight:700;color:var(--ink);margin:3px 0 8px;}
+    .lc-apply{display:inline-flex;align-items:center;gap:5px;background:transparent;border:none;color:var(--blue);font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;padding:0;}
+    .lc-apply .material-symbols-outlined{font-size:16px;}
+    .lc-apply.applied{color:#3d8a5b;}
+    .lc-transcript{border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:9px;min-height:64px;}
+    .lc-line-in{animation:lcIn .32s ease;}
+    @keyframes lcIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:none;}}
+    .lc-hidden{display:none;}
+    .lc-wait{font-size:12.5px;color:var(--ink-muted);font-style:italic;display:flex;align-items:center;gap:8px;}
+    .lc-listen-dot{width:7px;height:7px;border-radius:50%;background:#5cb97f;box-shadow:0 0 0 0 rgba(92,185,127,.5);animation:lcPulse 1.3s infinite;}
+    @keyframes lcPulse{0%,100%{box-shadow:0 0 0 0 rgba(92,185,127,.5);}50%{box-shadow:0 0 0 7px rgba(92,185,127,0);}}
+    .lc-line{font-size:13px;color:var(--ink);line-height:1.4;}
+    .lc-ts{font-family:'SF Mono',Consolas,monospace;font-size:11.5px;color:var(--ink-muted);margin-right:6px;}
+    .lc-line .cust{color:var(--blue);}
+    .es-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-46%);opacity:0;visibility:hidden;transition:opacity .2s,transform .2s,visibility .2s;z-index:251;width:720px;max-width:94vw;max-height:92vh;overflow-y:auto;background:#f7f7f8;border-radius:16px;box-shadow:0 24px 60px rgba(20,24,34,.3);padding:26px 30px;}
+    .es-modal.open{opacity:1;visibility:visible;transform:translate(-50%,-50%);}
+    .es-x{position:absolute;top:20px;right:22px;background:transparent;border:none;color:var(--ink-muted);cursor:pointer;padding:2px;display:flex;}
+    .es-x .material-symbols-outlined{font-size:20px;}
+    .es-t{display:flex;align-items:center;gap:9px;font-size:20px;font-weight:700;color:var(--ink);}
+    .es-spark{font-size:22px;color:var(--blue);}
+    .es-s{font-size:13.5px;color:var(--ink-secondary);margin-top:6px;}
+    .es-warn{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid #f0dcc0;border-radius:10px;padding:13px 15px;margin:16px 0 20px;font-size:13.5px;color:var(--ink);line-height:1.5;}
+    .es-warn .material-symbols-outlined{color:#d99a2b;font-size:20px;flex-shrink:0;}
+    .es-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;}
+    .es-fld{display:flex;flex-direction:column;gap:7px;}
+    .es-fld label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted);}
+    .es-fld input,.es-fld textarea{border:1px solid var(--border);border-radius:9px;padding:10px 13px;font-family:inherit;font-size:13.5px;color:var(--ink);background:var(--surface);outline:none;}
+    .es-fld input:focus,.es-fld textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(23,41,61,.1);}
+    .es-fld textarea{resize:vertical;min-height:80px;}
+    .es-foot{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;flex-wrap:wrap;}
+    .es-btn{display:inline-flex;align-items:center;gap:6px;border-radius:9px;padding:11px 18px;font-family:inherit;font-size:13.5px;font-weight:700;cursor:pointer;}
+    .es-btn.ghost{background:var(--surface);border:1px solid var(--border);color:var(--ink-secondary);}
+    .es-btn.outline{background:var(--surface);border:1.5px solid var(--blue);color:var(--blue);}
+    .es-btn.primary{background:var(--blue);border:none;color:#fff;}
+    .es-btn.primary .material-symbols-outlined{font-size:16px;}
+    .inc-modal.open { transform:translateX(-50%) translateY(0); }
+    .inc-hd { background:linear-gradient(135deg,#0a0e14,#16293c); color:#fff; padding:16px 20px; display:flex; align-items:center; gap:13px; }
+    .inc-ring { width:44px; height:44px; border-radius:50%; background:rgba(92,185,127,.2); display:flex; align-items:center; justify-content:center; color:#7ed6a0; flex-shrink:0; animation:incRing 1s ease-in-out infinite; }
+    .inc-ring .material-symbols-outlined { font-size:24px; animation:incShake 1s ease-in-out infinite; transform-origin:50% 60%; }
+    @keyframes incRing { 0%,100%{ box-shadow:0 0 0 0 rgba(92,185,127,.5); } 50%{ box-shadow:0 0 0 11px rgba(92,185,127,0); } }
+    @keyframes incShake { 0%,60%,100%{ transform:rotate(0); } 10%,30%{ transform:rotate(15deg); } 20%,40%{ transform:rotate(-15deg); } }
+    .inc-eyebrow { font-size:11px; letter-spacing:.06em; text-transform:uppercase; opacity:.7; font-weight:700; }
+    .inc-name { font-size:16px; font-weight:700; line-height:1.3; }
+    .inc-sub { font-size:12px; opacity:.82; }
+    .inc-body { padding:14px 20px 18px; }
+    .inc-meta { display:flex; gap:7px; flex-wrap:wrap; margin-bottom:14px; }
+    .inc-tag { font-size:11px; font-weight:600; padding:3px 9px; border-radius:20px; background:var(--blue-soft); color:var(--blue); }
+    .inc-tag.hot { background:#fdeaea; color:var(--red); }
+    .inc-actions { display:flex; gap:10px; }
+    .inc-btn { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:11px; border-radius:10px; border:none; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; }
+    .inc-btn.accept { background:#5cb97f; color:#fff; }
+    .inc-btn.accept:hover { background:#4fa870; }
+    .inc-btn.decline { background:var(--red-soft); color:var(--red); }
+    .inc-btn.decline:hover { background:#f8dede; }
+    .inc-body { max-height:calc(100vh - 120px); overflow-y:auto; }
+    .inc-ringmeta { font-size:11px; opacity:.85; text-align:right; line-height:1.55; flex-shrink:0; }
+    .inc-automiss { opacity:.7; }
+    .inc-badge { display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; background:var(--amber-soft); color:#8a6420; margin-bottom:13px; }
+    .inc-rows { display:flex; flex-direction:column; gap:8px; }
+    .inc-row { display:flex; align-items:baseline; justify-content:space-between; gap:14px; }
+    .inc-k { font-size:10.5px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--ink-muted); flex-shrink:0; }
+    .inc-v { font-size:12.5px; font-weight:600; color:var(--ink); text-align:right; }
+    .inc-v.warn { color:#b26a1a; }
+    .inc-sec { font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); margin:15px 0 10px; padding-top:13px; border-top:1px solid var(--border); }
+    .inc-ai { background:var(--blue-soft); border-radius:10px; padding:11px 13px; margin:14px 0 4px; }
+    .inc-ai-t { display:flex; align-items:center; gap:6px; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--blue); margin-bottom:4px; }
+    .inc-ai-t .material-symbols-outlined { font-size:15px; }
+    .inc-ai-x { font-size:12.5px; color:var(--ink); line-height:1.5; }
+    .inc-langrow { margin-top:13px; }
+    .inc-langlbl { font-size:11.5px; font-weight:600; color:var(--ink-secondary); }
+    .inc-langchips { display:flex; gap:7px; margin-top:7px; }
+    .inc-lang { flex:1; padding:8px; border:1px solid var(--border); background:var(--surface); border-radius:8px; font-family:inherit; font-size:12px; font-weight:600; color:var(--ink-secondary); cursor:pointer; }
+    .inc-lang:hover { background:var(--green-soft); color:#3d8a5b; border-color:#bfe3cd; }
+    .inc-links { display:flex; flex-direction:column; gap:9px; margin-top:14px; padding-top:13px; border-top:1px solid var(--border); }
+    .inc-links a { display:inline-flex; align-items:center; gap:7px; font-size:12px; color:var(--ink-muted); text-decoration:none; }
+    .inc-links a:hover { color:var(--ink); }
+    .inc-links a .material-symbols-outlined { font-size:16px; }
+    .tc-ov { position:fixed; inset:0; background:rgba(20,24,34,.5); opacity:0; visibility:hidden; transition:opacity .2s; z-index:130; }
+    .tc-ov.open { opacity:1; visibility:visible; }
+    .tc-panel { position:fixed; top:0; right:0; bottom:0; width:1000px; max-width:96vw; background:var(--surface); box-shadow:-14px 0 44px rgba(0,0,0,.22); z-index:131; display:flex; flex-direction:column; overflow:hidden; transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1); }
+    .tc-panel.open { transform:translateX(0); }
+    .tc-head { background:var(--blue); color:#fff; padding:18px 22px; display:flex; align-items:flex-start; gap:12px; }
+    .tc-head > .material-symbols-outlined { font-size:22px; margin-top:2px; }
+    .tc-htitle { font-size:19px; font-weight:700; }
+    .tc-hsub { font-size:12.5px; color:rgba(255,255,255,.85); margin-top:3px; }
+    .tc-close { margin-left:auto; background:transparent; border:none; color:#fff; font-size:24px; cursor:pointer; line-height:1; }
+    .tc-body { flex:1; display:flex; min-height:0; }
+    .tc-list { width:300px; border-right:1px solid var(--border); overflow-y:auto; flex-shrink:0; }
+    .tc-mod { padding:14px 16px; border-bottom:1px solid var(--border-soft); cursor:pointer; border-left:3px solid transparent; }
+    .tc-mod:hover { background:#f8f9fd; }
+    .tc-mod.active { border-left-color:var(--blue); background:var(--blue-soft); box-shadow:inset 0 0 0 1px #cdd8e4; }
+    .tc-mod-title { font-size:13.5px; font-weight:700; }
+    .tc-mod-desc { font-size:11.5px; color:var(--ink-muted); margin:2px 0 8px; }
+    .tc-badge { display:inline-flex; align-items:center; gap:4px; font-size:10.5px; font-weight:700; padding:3px 10px; border-radius:11px; }
+    .tc-badge.completed { background:var(--green-soft); color:#3d8a5b; }
+    .tc-badge.due { background:var(--amber-soft); color:#8a6420; }
+    .tc-badge.failed { background:var(--red-soft); color:var(--red); }
+    .tc-badge .material-symbols-outlined { font-size:13px; }
+    .tc-main { flex:1; display:flex; flex-direction:column; min-width:0; padding:18px; gap:14px; overflow-y:auto; }
+    .tc-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px; gap:4px; }
+    .tc-empty > .material-symbols-outlined { font-size:44px; color:var(--blue); margin-bottom:6px; }
+    .tc-empty h4 { font-size:21px; font-weight:800; letter-spacing:-.01em; }
+    .tc-empty p { font-size:13.5px; color:var(--ink-muted); max-width:440px; line-height:1.6; margin-top:2px; }
+    .tc-halo { position:relative; width:88px; height:88px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+    .tc-halo::before, .tc-halo::after { content:''; position:absolute; width:70px; height:70px; border-radius:50%; border:2px solid var(--blue); opacity:0; animation: tchalo 2.4s ease-out infinite; }
+    .tc-halo::after { animation-delay:1.2s; }
+    @keyframes tchalo { 0% { transform:scale(.85); opacity:.55; } 100% { transform:scale(1.9); opacity:0; } }
+    .tc-halo-core { width:70px; height:70px; border-radius:50%; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 28px rgba(23,41,61,.28); z-index:1; }
+    .tc-halo-core .material-symbols-outlined { font-size:34px; }
+    .tc-waves { display:flex; align-items:center; gap:4px; height:22px; margin-bottom:14px; }
+    .tc-waves i { width:4px; background:var(--blue); border-radius:3px; opacity:.55; animation: tcwave 1s ease-in-out infinite; }
+    .tc-waves i:nth-child(1){ height:8px; animation-delay:0s; } .tc-waves i:nth-child(2){ height:16px; animation-delay:.1s; } .tc-waves i:nth-child(3){ height:22px; animation-delay:.2s; } .tc-waves i:nth-child(4){ height:12px; animation-delay:.3s; } .tc-waves i:nth-child(5){ height:20px; animation-delay:.4s; } .tc-waves i:nth-child(6){ height:10px; animation-delay:.5s; } .tc-waves i:nth-child(7){ height:16px; animation-delay:.6s; }
+    @keyframes tcwave { 0%,100% { transform:scaleY(.35); } 50% { transform:scaleY(1); } }
+    .tc-steps { display:flex; align-items:center; gap:10px; margin-top:20px; }
+    .tc-step { display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .tc-step-ico { width:44px; height:44px; border-radius:12px; background:var(--blue-soft); color:var(--blue); display:flex; align-items:center; justify-content:center; }
+    .tc-step-ico .material-symbols-outlined { font-size:22px; }
+    .tc-step-t { font-size:11.5px; font-weight:600; color:var(--ink-secondary); }
+    .tc-step-arrow { color:var(--blue-muted); font-size:20px; }
+    .tc-playarea { flex:1; display:flex; flex-direction:column; gap:14px; min-height:0; }
+    .tc-scenario { background:#eef0f4; border-radius:10px; padding:14px 16px; }
+    .tc-sc-lbl { font-size:10.5px; font-weight:700; letter-spacing:.06em; color:var(--ink-muted); text-transform:uppercase; }
+    .tc-sc-rule { font-size:15px; font-weight:600; margin-top:3px; }
+    .tc-callbar { background:#0b0f1a; color:#fff; border-radius:10px; padding:15px 18px; display:none; }
+    .tc-callbar.show { display:block; }
+    .tc-callbar-top { display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px; }
+    .tc-dots { display:flex; gap:5px; margin-top:12px; flex-wrap:wrap; }
+    .tc-dots i { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.4); }
+    .tc-callbar.live .tc-dots i { animation: tcpulse 1.3s infinite; }
+    @keyframes tcpulse { 0%,100% { opacity:.25; } 50% { opacity:1; } }
+    .tc-hint { font-size:11.5px; color:var(--ink-muted); display:flex; align-items:center; gap:6px; }
+    .tc-hint .material-symbols-outlined { font-size:15px; }
+    .tc-chat { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px; display:flex; flex-direction:column; gap:14px; overflow-y:auto; min-height:170px; }
+    .tc-msg { display:flex; gap:10px; align-items:flex-start; }
+    .tc-msg.you { flex-direction:row-reverse; }
+    .tc-av { width:34px; height:34px; border-radius:50%; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; }
+    .tc-av.customer { background:var(--blue); }
+    .tc-av.you { background:#17293d; }
+    .tc-av.coach { background:#3d8a5b; }
+    .tc-bubble { max-width:74%; border-radius:12px; padding:11px 14px; font-size:13.5px; line-height:1.5; }
+    .tc-msg.customer .tc-bubble { background:#fff; border:1px solid var(--border); }
+    .tc-msg.you .tc-bubble { background:#e9edf2; text-align:right; }
+    .tc-msg.coach .tc-bubble { background:var(--green-soft); border:1px solid #cfe9d8; }
+    .tc-role { font-size:10px; font-weight:700; letter-spacing:.05em; color:var(--ink-muted); text-transform:uppercase; margin-bottom:4px; }
+    .tc-inputrow { display:flex; gap:8px; }
+    .tc-input { flex:1; border:1px solid var(--border); border-radius:8px; padding:10px 13px; font-size:13.5px; font-family:inherit; outline:none; }
+    .tc-input:focus { border-color:var(--blue); }
+    .tc-input:disabled { background:#f5f5f5; }
+    .tc-send { background:var(--blue); color:#fff; border:none; border-radius:8px; padding:0 16px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .tc-complete { background:var(--blue); color:#fff; border:none; border-radius:9px; padding:12px 20px; font-size:13.5px; font-weight:700; font-family:inherit; cursor:pointer; display:inline-flex; align-items:center; gap:7px; align-self:flex-start; opacity:.5; pointer-events:none; }
+    .tc-complete.ready { opacity:1; pointer-events:auto; }
+  </style>
+  <div class="tc-ov" id="tcOv" onclick="closeTraining()"></div>
+  <div class="tc-panel" id="tcPanel" role="dialog" aria-label="Call Center Training Coach">
+    <div class="tc-head">
+      <span class="material-symbols-outlined">school</span>
+      <div><div class="tc-htitle">Call Center Training Coach</div><div class="tc-hsub">Click a module to start a live AI role-play. Listen, then complete the module when the call ends.</div></div>
+      <button class="tc-close" onclick="closeTraining()" aria-label="Close">&times;</button>
+    </div>
+    <div class="tc-body">
+      <div class="tc-list" id="tcList"></div>
+      <div class="tc-main">
+        <div class="tc-empty" id="tcEmpty">
+          <div class="tc-halo"><div class="tc-halo-core"><span class="material-symbols-outlined">support_agent</span></div></div>
+          <h4>Ready to practice?</h4>
+          <p>Pick a module on the left &mdash; the AI customer will call in and role-play the scenario live. You'll hear both sides, then score yourself.</p>
+          <div class="tc-steps">
+            <div class="tc-step"><div class="tc-step-ico"><span class="material-symbols-outlined">list_alt</span></div><div class="tc-step-t">Pick a module</div></div>
+            <span class="tc-step-arrow material-symbols-outlined">chevron_right</span>
+            <div class="tc-step"><div class="tc-step-ico"><span class="material-symbols-outlined">hearing</span></div><div class="tc-step-t">Listen live</div></div>
+            <span class="tc-step-arrow material-symbols-outlined">chevron_right</span>
+            <div class="tc-step"><div class="tc-step-ico"><span class="material-symbols-outlined">military_tech</span></div><div class="tc-step-t">Get scored</div></div>
+          </div>
+        </div>
+        <div class="tc-playarea" id="tcPlayArea" style="display:none">
+          <div class="tc-scenario"><div class="tc-sc-lbl" id="tcScLbl">Live role-play</div><div class="tc-sc-rule" id="tcScRule">Select a module to begin.</div></div>
+          <div class="tc-callbar" id="tcCallbar"><div class="tc-callbar-top"><span class="material-symbols-outlined" id="tcMuteIco" onclick="tcToggleMute()" style="cursor:pointer" title="Mute / unmute voice">volume_up</span> <span id="tcCallText">Live call in progress &mdash; listening&hellip;</span></div><div class="tc-dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+          <div class="tc-chat" id="tcChat"></div>
+          <div class="tc-hint"><span class="material-symbols-outlined">hearing</span> The AI plays both the customer and your responses — just listen, then complete the module.</div>
+          <button class="tc-complete" id="tcComplete" onclick="tcComplete()"><span class="material-symbols-outlined" style="font-size:18px">check_circle</span> Complete Module</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // ── Training Coach: live AI role-play ──
+    var TC_MODULES = [
+      { t:'Inbound lead greeting', d:'Warm, branded, bilingual-ready.', st:'completed', score:92, rule:'Warm, branded, bilingual-ready.',
+        script:[
+          {r:'you', t:"Hello, thank you for calling AGM EXEED — this is Nadia. May I have your name and how I can help today?"},
+          {r:'customer', t:"Hi Nadia, I'm Omar — I saw the EXEED LX online and wanted more info."},
+          {r:'you', t:"Wonderful, Omar — I'd be happy to help with the EXEED LX. Is it for yourself or the family?"},
+          {r:'customer', t:"For the family, mostly city driving."},
+          {r:'you', t:"Perfect. I'll capture your details now and hand you to a sales specialist who will confirm within 15 minutes."},
+          {r:'customer', t:"Okay, that sounds good — what's the next step?"}
+        ], coach:"Great practice run — captured: Greeting, Name capture. Click Complete Module to save your score." },
+      { t:'Structured qualification', d:'Follow the CC qualification form.', st:'due', rule:'Follow the CC qualification form — budget, usage, timeline.',
+        script:[
+          {r:'you', t:"To find the best fit, may I ask a few quick questions? What's your budget range?"},
+          {r:'customer', t:"Around 150k, mostly city driving."},
+          {r:'you', t:"Great. And how many people usually travel with you?"},
+          {r:'customer', t:"We're five — we need good space."},
+          {r:'you', t:"Noted — 5 seats, city use, ~150k budget. When are you hoping to buy?"},
+          {r:'customer', t:"Within the next month."}
+        ], coach:"Great practice run — captured: Budget, Usage, Timeline. Click Complete Module to save your score." },
+      { t:'Model interest capture', d:'Confirm exact model and trim.', st:'completed', score:88, rule:'Confirm the exact model and trim.',
+        script:[
+          {r:'customer', t:"I like the EXEED range but I'm not sure which one fits."},
+          {r:'you', t:"Happy to help — are you after 5 seats or a 3-row 7-seater?"},
+          {r:'customer', t:"I want the bigger one with 3 rows."},
+          {r:'you', t:"That's the EXEED VX. Would you like the top trim with the panoramic roof?"},
+          {r:'customer', t:"Yes, the top trim sounds right."},
+          {r:'you', t:"Perfect — EXEED VX, top trim. I'll note that on your profile."}
+        ], coach:"Great practice run — captured: Model, Trim. Click Complete Module to save your score." },
+      { t:'Preferred showroom capture', d:'Always confirm branch.', st:'due', rule:'Always confirm branch.',
+        script:[
+          {r:'customer', t:"I'd like to come and see the car this weekend."},
+          {r:'you', t:"Love that — which area are you in so I can find the nearest showroom?"},
+          {r:'customer', t:"I'm in Sharjah — which branch is closest?"},
+          {r:'you', t:"Our Sharjah showroom on Al Wahda Street is closest. Shall I book you in there this weekend?"},
+          {r:'customer', t:"Okay, that sounds good — what's the next step?"},
+          {r:'you', t:"I'll capture your details now and hand you to a sales specialist who will confirm your appointment within 15 minutes."}
+        ], coach:"Great practice run — captured: Preferred showroom, Preferred contact time. Click Complete Module to save your score." },
+      { t:'Test drive enquiry', d:'Offer & confirm test drive.', st:'completed', score:95, rule:'Offer and confirm a test-drive slot.',
+        script:[
+          {r:'customer', t:"Can I test drive the EXEED VX?"},
+          {r:'you', t:"Absolutely! We have slots this weekend — would Saturday morning suit you?"},
+          {r:'customer', t:"Saturday morning works for me."},
+          {r:'you', t:"Great. Please bring your driving licence and Emirates ID. I'll confirm the booking now."},
+          {r:'customer', t:"Do I need to bring anything else?"},
+          {r:'you', t:"That's everything — I'll text you the address and time shortly."}
+        ], coach:"Great practice run — captured: Test-drive slot, Documents. Click Complete Module to save your score." },
+      { t:'Finance question handling', d:'Capture interest only — do NOT quote.', st:'failed', score:48, rule:'Capture interest only — do NOT quote a price.',
+        script:[
+          {r:'customer', t:"What's the monthly installment for the LX?"},
+          {r:'you', t:"Great question — I can't quote exact figures, but our finance team offers flexible plans. May I capture your interest so a specialist can share options?"},
+          {r:'customer', t:"So roughly how much per month?"},
+          {r:'you', t:"I'd rather not give an inaccurate number — a finance specialist will call you with tailored options. Is that okay?"},
+          {r:'customer', t:"Okay, can someone call me with the options?"},
+          {r:'you', t:"Absolutely — I'll flag your profile for a finance callback today."}
+        ], coach:"Great practice run — captured: Finance interest (no quote given). Click Complete Module to save your score." },
+      { t:'Competitor question handling', d:'Empathise, redirect to strengths.', st:'due', rule:'Empathise, then redirect to EXEED strengths.',
+        script:[
+          {r:'customer', t:"I'm also looking at a Toyota — why should I pick EXEED?"},
+          {r:'you', t:"That's a fair comparison — both are strong. What EXEED adds is a longer warranty and more standard features at this price."},
+          {r:'customer', t:"The Toyota has good resale value though."},
+          {r:'you', t:"True — and EXEED's resale is improving fast, plus you get a 5-year warranty and a free service package. Shall I book a test drive so you can feel the difference?"},
+          {r:'customer', t:"Hmm — tell me more about the warranty."},
+          {r:'you', t:"Of course — 5 years or 150,000 km, whichever comes first, fully transferable. Let me capture your details."}
+        ], coach:"Great practice run — captured: Empathy, Redirect to strengths. Click Complete Module to save your score." }
+    ];
+    var tcActive = -1, tcTimers = [], tcToken = 0, tcMuted = false, tcVoices = [];
+    if (window.speechSynthesis) { tcVoices = speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = function(){ tcVoices = speechSynthesis.getVoices(); }; }
+    function tcClearTimers(){ tcTimers.forEach(function(t){ clearTimeout(t); }); tcTimers = []; if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} } }
+    function tcPickVoice(role){
+      if (!tcVoices.length) return null;
+      var en = tcVoices.filter(function(v){ return /en[-_]/i.test(v.lang); });
+      var pool = en.length ? en : tcVoices;
+      function find(names){ for (var i=0;i<pool.length;i++){ var n=pool[i].name.toLowerCase(); for (var j=0;j<names.length;j++){ if (n.indexOf(names[j])>=0) return pool[i]; } } return null; }
+      if (role === 'customer') return find(['daniel','male','fred','rishi','google uk english male']) || pool[pool.length>1?1:0];
+      return find(['samantha','female','victoria','karen','moira','google uk english female']) || pool[0];
+    }
+    function tcSpeak(text, role, cb){
+      if (tcMuted || !window.speechSynthesis) { if (cb) tcTimers.push(setTimeout(cb, 850)); return; }
+      try { speechSynthesis.cancel(); } catch(e){}
+      var u = new SpeechSynthesisUtterance(text);
+      var v = tcPickVoice(role); if (v) u.voice = v;
+      u.rate = 1.02; u.pitch = role === 'you' ? 1.12 : (role === 'customer' ? 0.95 : 1.0);
+      var done = false; function fin(){ if (done) return; done = true; if (cb) cb(); }
+      u.onend = fin; u.onerror = fin;
+      tcTimers.push(setTimeout(fin, Math.max(2500, text.length * 75)));  // fallback if onend never fires
+      speechSynthesis.speak(u);
+    }
+    function tcToggleMute(){
+      tcMuted = !tcMuted;
+      var ico = document.getElementById('tcMuteIco'); if (ico) ico.textContent = tcMuted ? 'volume_off' : 'volume_up';
+      if (tcMuted && window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
+    }
+    function tcBadge(m){
+      if (m.st==='completed') return '<span class="tc-badge completed"><span class="material-symbols-outlined">check_circle</span> completed &middot; '+m.score+'%</span>';
+      if (m.st==='failed') return '<span class="tc-badge failed"><span class="material-symbols-outlined">cancel</span> failed &middot; '+m.score+'%</span>';
+      return '<span class="tc-badge due">due</span>';
+    }
+    function tcRenderList(){
+      document.getElementById('tcList').innerHTML = TC_MODULES.map(function(m,i){
+        return '<div class="tc-mod'+(i===tcActive?' active':'')+'" onclick="tcSelect('+i+')"><div class="tc-mod-title">'+m.t+'</div><div class="tc-mod-desc">'+m.d+'</div>'+tcBadge(m)+'</div>';
+      }).join('');
+    }
+    function openTraining(){
+      tcClearTimers(); tcToken++; tcActive = -1; tcRenderList();
+      document.getElementById('tcEmpty').style.display = 'flex';
+      document.getElementById('tcPlayArea').style.display = 'none';
+      document.getElementById('tcOv').classList.add('open');
+      document.getElementById('tcPanel').classList.add('open');
+    }
+    function closeTraining(){
+      tcClearTimers(); tcToken++; tcActive = -1;
+      if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
+      document.getElementById('tcOv').classList.remove('open');
+      document.getElementById('tcPanel').classList.remove('open');
+    }
+    function tcMsg(role, who, text){
+      var chat = document.getElementById('tcChat');
+      var av = role==='customer' ? '<span class="material-symbols-outlined" style="font-size:18px">person</span>' : (role==='coach' ? 'AI' : 'N');
+      var d = document.createElement('div'); d.className = 'tc-msg '+role;
+      d.innerHTML = '<div class="tc-av '+role+'">'+av+'</div><div class="tc-bubble"><div class="tc-role">'+who+'</div>'+text+'</div>';
+      chat.appendChild(d); chat.scrollTop = chat.scrollHeight;
+    }
+    // Auto-play the role-play — the AI speaks BOTH the customer and the agent (you); the trainee just listens.
+    function tcSelect(i){
+      tcClearTimers();
+      tcToken++; var token = tcToken;
+      tcActive = i; tcRenderList();
+      document.getElementById('tcEmpty').style.display = 'none';
+      document.getElementById('tcPlayArea').style.display = 'flex';
+      var m = TC_MODULES[i];
+      document.getElementById('tcScLbl').textContent = 'Live role-play · ' + m.t.toUpperCase();
+      document.getElementById('tcScRule').textContent = m.rule;
+      document.getElementById('tcChat').innerHTML = '';
+      var bar = document.getElementById('tcCallbar'); bar.classList.add('show','live');
+      document.getElementById('tcCallText').innerHTML = 'Live call in progress &mdash; listening&hellip;';
+      document.getElementById('tcComplete').classList.remove('ready');
+      tcTimers.push(setTimeout(function(){ tcPlay(0, token); }, 450));
+    }
+    // Play a turn, speak it, then advance when the voice finishes (keeps audio + captions in sync).
+    function tcPlay(idx, token){
+      if (token !== tcToken) return;
+      var m = TC_MODULES[tcActive];
+      if (idx >= m.script.length){
+        tcMsg('coach', 'Coach', m.coach);
+        document.getElementById('tcCallbar').classList.remove('live');
+        document.getElementById('tcCallText').innerHTML = 'Call complete &mdash; click Complete Module';
+        document.getElementById('tcComplete').classList.add('ready');
+        tcSpeak(m.coach, 'coach', null);
+        return;
+      }
+      var turn = m.script[idx];
+      tcMsg(turn.r, turn.r === 'you' ? 'Nadia (You)' : 'Customer', turn.t);
+      tcSpeak(turn.t, turn.r, function(){
+        if (token !== tcToken) return;
+        tcTimers.push(setTimeout(function(){ tcPlay(idx + 1, token); }, 350));
+      });
+    }
+    function tcComplete(){
+      if (tcActive < 0) return;
+      var m = TC_MODULES[tcActive];
+      if (!m.score || m.st !== 'completed') m.score = 90;
+      m.st = 'completed';
+      tcRenderList();
+      tcMsg('coach', 'Coach', 'Module saved — score '+m.score+'%. Pick another module to keep practising.');
+      document.getElementById('tcComplete').classList.remove('ready');
+    }
   </script>
   <script src="copilot-widget.js?v=9" defer></script>
 </body>
