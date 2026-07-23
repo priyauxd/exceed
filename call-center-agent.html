@@ -767,6 +767,7 @@
     .train-chip { display:inline-flex; align-items:center; gap:5px; background:var(--blue-soft); border:1px solid #d5e0ec; color:var(--blue); border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
     .train-chip:hover { background:#dbe6f0; }
     .train-chip .material-symbols-outlined { font-size:15px; }
+    .train-badge { display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px; padding:0 4px; background:var(--blue); color:#fff; border-radius:8px; font-size:11px; font-weight:700; line-height:1; }
     .sim-call-btn { display:inline-flex; align-items:center; gap:5px; background:var(--green-soft); border:1px solid #cfe8d9; color:#2f8b57; border-radius:7px; padding:5px 11px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; white-space:nowrap; }
     .sim-call-btn:hover { background:#dbf0e4; }
     .sim-call-btn .material-symbols-outlined { font-size:16px; }
@@ -1160,7 +1161,7 @@
         <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
         <a href="call-center-agent.html" class="sb-item enabled"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
         <div class="sb-group">Call Center</div>
-        <a href="#" class="sb-item active"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
+        <a href="#" class="sb-item active"><span class="material-symbols-outlined">monitoring</span>Call center agent's dashboard</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today's Leads</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Follow-ups</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manag&hellip;</a>
@@ -1228,7 +1229,7 @@
               <span class="dot"></span> On shift &middot; <span class="tm" id="timer">03:12:47</span>
             </div>
             <button class="sim-call-btn" onclick="simulateIncomingCall()" title="Simulate an inbound call"><span class="material-symbols-outlined">phone_in_talk</span> Simulate incoming call</button>
-            <button class="train-chip" onclick="openTraining()" title="Open training coach"><span class="material-symbols-outlined">school</span> 5 modules due <span class="material-symbols-outlined" style="font-size:15px">chevron_right</span></button>
+            <button class="train-chip" onclick="openTraining()" title="Open training coach"><span class="material-symbols-outlined">school</span> Complete your training <span class="train-badge">5</span> due <span class="material-symbols-outlined" style="font-size:15px">chevron_right</span></button>
             <div class="scope-wrap">
               <button class="scope-dd" onclick="toggleScope(event)"><span class="material-symbols-outlined">tune</span> Scope: <strong id="scopeVal">Call Centre-owned leads</strong> <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
               <span class="scope-info-wrap" tabindex="0"><span class="scope-info material-symbols-outlined">info</span>
@@ -1265,7 +1266,7 @@
             <div class="ncb-title">Start call &mdash; Meera Shah</div>
             <div class="ncb-sub">800 Number &middot; EXEED LX. Highest-priority in your queue. &middot; <strong style="color:var(--red)">8 min left</strong> &middot; <span class="temp hot">Hot</span> &middot; WhatsApp</div>
           </div>
-          <a href="lead-detail.html?lead=Meera+Shah" class="ncb-btn">Start call <span class="material-symbols-outlined">chevron_right</span></a>
+          <a href="lead-detail.html?lead=Meera+Shah&copilot=1" class="ncb-btn">Start call <span class="material-symbols-outlined">chevron_right</span></a>
         </div>
 
         <!-- Ask Copilot -->
@@ -1299,7 +1300,7 @@
             <button class="seg-tab on" id="tabSales" onclick="setStream('sales')">Sales <span class="seg-n">5</span></button>
             <button class="seg-tab" id="tabAfter" onclick="setStream('aftersales')">Aftersales <span class="seg-n">4</span></button>
           </div>
-          <span class="stream-note"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">warning</span> 1 aftersales SLA breach</span>
+          <span class="stream-note" id="afterSlaNote" style="display:none"><span class="material-symbols-outlined" style="font-size:14px;vertical-align:-2px">warning</span> 1 aftersales SLA breach</span>
         </div>
 
         <div id="streamSales">
@@ -1413,7 +1414,7 @@
                   <td>800 Number</td><td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag brch"><span class="blink"></span>8m left</span></td>
                   <td><span class="pct-r">20%</span></td>
-                  <td style="text-align:right"><a class="q-next" href="lead-detail.html?lead=Meera+Shah">Start call &rsaquo;</a></td>
+                  <td style="text-align:right"><a class="q-next" href="lead-detail.html?lead=Meera+Shah&copilot=1">Start call &rsaquo;</a></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Sam Fadi</div><div class="c-id">L-2026-06006</div></td>
@@ -1790,6 +1791,8 @@
       document.getElementById('streamAftersales').style.display = isSales ? 'none' : '';
       document.getElementById('tabSales').classList.toggle('on', isSales);
       document.getElementById('tabAfter').classList.toggle('on', !isSales);
+      var note = document.getElementById('afterSlaNote');
+      if (note) note.style.display = isSales ? 'none' : '';
     }
 
     // Date range filter (Today is the default)
