@@ -2115,6 +2115,38 @@
       if (!q){ var qm = document.getElementById('qacMenu'); if (qm) qm.classList.remove('open'); }
     });
 
+    // ── Lead queue: status filter ──
+    function filterLeadQueue(btn){
+      var bar = btn.parentNode;
+      bar.querySelectorAll('.qt').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var f = btn.getAttribute('data-f');
+      var tbl = document.getElementById('qtTableEl');
+      var tbody = tbl.querySelector('tbody');
+      var rows = tbody.querySelectorAll('tr:not(.lq-empty)');
+      var shown = 0, total = rows.length;
+      rows.forEach(function(r){
+        var badge = r.querySelector('.st-badge');
+        var status = badge ? badge.textContent.trim() : '';
+        var breached = !!r.querySelector('.sla-tag.brch');
+        var match = (f === 'all') ? true : (f === 'breached') ? breached : (status === f);
+        r.style.display = match ? '' : 'none';
+        if(match) shown++;
+      });
+      var empty = tbody.querySelector('.lq-empty');
+      if(shown === 0){
+        if(!empty){
+          empty = document.createElement('tr'); empty.className = 'lq-empty';
+          var td = document.createElement('td'); td.setAttribute('colspan','9');
+          td.style.cssText = 'text-align:center;color:var(--ink-muted);padding:26px 0;font-size:13px';
+          td.textContent = 'No leads in this filter';
+          empty.appendChild(td); tbody.appendChild(empty);
+        } else empty.style.display = '';
+      } else if(empty){ empty.style.display = 'none'; }
+      var cnt = tbl.closest('.q-panel').querySelector('.q-cnt');
+      if(cnt) cnt.innerHTML = shown + ' of ' + total + ' &middot; sorted by urgency';
+    }
+
     // ── Lead queue: add column ──
     var QCOLS = {
       channel:     ['WhatsApp &middot; EN','Phone &middot; EN','WhatsApp &middot; AR','Phone &middot; AR','WhatsApp &middot; EN'],
