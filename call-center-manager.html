@@ -158,19 +158,19 @@
 
     /* ── Greeting / header ── */
     .greeting {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; margin-bottom: 14px;
     }
-    .greeting-left { flex: 1; }
+    .greeting-left { flex: 1 1 auto; min-width: 0; }
     .greeting h1 {
-      font-size: 24px; font-weight: 700; color: var(--ink);
-      letter-spacing: -.02em; margin-bottom: 4px;
+      font-size: 18px; font-weight: 700; color: var(--ink);
+      letter-spacing: -.01em; margin-bottom: 1px;
     }
     .greeting-sub {
-      font-size: 13.5px; color: var(--ink-secondary); line-height: 1.6;
+      font-size: 13px; color: var(--ink-muted); line-height: 1.45;
     }
-    .greeting-sub .date { font-weight: 600; color: var(--ink); }
-    .greeting-right { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; justify-content: flex-end; }
+    .greeting-sub .date { font-weight: 600; color: var(--ink-secondary); }
+    .greeting-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
     .greeting h1 .wave { display: inline-block; animation: wave-hand 2s ease-in-out 1; transform-origin: 70% 70%; }
     @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
 
@@ -857,7 +857,7 @@
         <div class="greeting">
           <div class="greeting-left">
             <h1>Good afternoon, Eman <span class="wave">&#128075;</span></h1>
-            <div class="greeting-sub"><span class="date">Tue, 30 Jun 2026</span> &middot; <strong style="color:var(--red)">18 not actioned</strong> &middot; <strong style="color:var(--green)">8 agents on shift</strong></div>
+            <div class="greeting-sub"><span class="date">Tue, 30 Jun 2026</span></div>
           </div>
           <div class="greeting-right">
             <button class="scope-dd"><span class="material-symbols-outlined">tune</span> Scope: Call Centre-owned leads <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
