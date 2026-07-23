@@ -3153,7 +3153,7 @@
       yes:   { Internal: ['Transfer ownership'], External: ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'] }
     };
     // Flat list of "action" (non-stage-routing) outcomes for submit/validation.
-    var laSalesOutcomes = ['Alerts', 'Return to call center', 'Transfer ownership', 'Send WhatsApp', 'Calls', 'Disqualify', 'Meet customer'];
+    var laSalesOutcomes = ['Alerts', 'Return to call center', 'Transfer ownership', 'Send WhatsApp', 'Calls', 'Disqualify', 'Meet customer', 'Schedule delivery'];
     var laReturnReasons = ['Wrong assignment', 'Not sales-ready', 'Customer request', 'Duplicate lead', 'Other'];
     var laAgents = ['Mariam Saeed', 'Nadia Al Amiri', 'Mariam Khalil', 'Priyamvada K.', 'Saravanakumar Subramani', 'Basel Talalini'];
     function laIsSalesStage(){ return currentStep >= 2; }
@@ -3164,6 +3164,10 @@
       // Qualify and Visit stages get an extra customer-related outcome.
       if (journeySteps[currentStep] && (journeySteps[currentStep].name === 'Qualify' || journeySteps[currentStep].name === 'Visit')) {
         groups = { Internal: groups.Internal, External: ['Meet customer'].concat(groups.External) };
+      }
+      // Ready for delivery stage: offer a "Schedule delivery" action.
+      if (journeySteps[currentStep] && journeySteps[currentStep].name === 'Ready for delivery') {
+        groups = { Internal: groups.Internal, External: ['Schedule delivery'].concat(groups.External) };
       }
       var groupLabels = { Internal: 'Internal', External: 'Customer related' };
       host.innerHTML = ['Internal','External'].map(function(g){
@@ -3326,6 +3330,9 @@
         } else if (laOutcome === 'Meet customer') {
           html += laDateTime('Meeting date & time');
           html += laNotesField();
+        } else if (laOutcome === 'Schedule delivery') {
+          html += laDateTime('Delivery date & time');
+          html += laNotesField();
         } else if (laOutcome === 'Alerts') {
           html += '<div class="cp-field"><label class="cp-label">Alert note <span class="req">*</span></label><textarea class="cp-textarea" id="laNoteText" placeholder="This note will appear as an alert to the agent…"></textarea></div>';
         } else if (laOutcome === 'Transfer ownership') {
@@ -3482,6 +3489,10 @@
           currentStep = 0;
           l.activities.unshift({ type: 'call', text: ['Returned to call center', f.returnReason, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast('Returned to call center' + (f.returnReason ? ' — ' + f.returnReason : ''));
+        } else if (laOutcome === 'Schedule delivery') {
+          l.deliveryBooking = { date: f.date, time: f.time, note: notes };
+          l.activities.unshift({ type: 'visit', text: ['Delivery scheduled', when || '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast('Delivery scheduled' + (when ? ' · ' + when : ''));
         }
       } else {
         var r = laRoutes[laOutcome];
