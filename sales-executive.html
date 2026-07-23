@@ -899,7 +899,7 @@
           </div>
           <div class="nba-right">
             <button class="nba-link" onclick="showToast('Snoozed 15 min')">Snooze 15m</button>
-            <button class="nba-btn" onclick="location.href='lead-detail.html?lead=Sara+Khalid&copilot=1'"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px">chat</span> Send WhatsApp</button>
+            <button class="nba-btn" style="background:#25D366" onclick="location.href='lead-detail.html?lead=Sara+Khalid&copilot=1'"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="vertical-align:-2px;margin-right:3px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.359.101 11.892c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652a11.882 11.882 0 005.71 1.454h.005c6.585 0 11.946-5.359 11.949-11.893a11.821 11.821 0 00-3.484-8.46"/></svg> Send WhatsApp</button>
           </div>
         </div>
 
@@ -1039,14 +1039,14 @@
           </style>
           <div class="np-wrap">
             <div class="np-chart">
-              <div class="np-col"><div class="np-val">5</div><div class="np-bar" style="height:23.8%;background:#b4aef0"></div></div>
-              <div class="np-col"><div class="np-val">0 <span class="conv">0%</span></div><div class="np-bar" style="height:6%;background:#f0b6a3"></div></div>
-              <div class="np-col"><div class="np-val">4 <span class="conv">400%</span></div><div class="np-bar" style="height:19%;background:#a6ddd2"></div></div>
-              <div class="np-col"><div class="np-val">21 <span class="conv">525%</span></div><div class="np-bar" style="height:100%;background:#f2dca3"></div></div>
-              <div class="np-col"><div class="np-val">4 <span class="conv">19%</span></div><div class="np-bar" style="height:19%;background:#cfa7b5"></div></div>
-              <div class="np-col"><div class="np-val">5 <span class="conv">125%</span></div><div class="np-bar" style="height:23.8%;background:#bcd6f4"></div></div>
-              <div class="np-col"><div class="np-val">3 <span class="conv">60%</span></div><div class="np-bar" style="height:14.3%;background:#aad9bd"></div></div>
-              <div class="np-col"><div class="np-val">1 <span class="conv">33%</span></div><div class="np-bar" style="height:6.5%;background:#eec6db"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeNew')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeNew');}"><div class="np-val">5</div><div class="np-bar" style="height:23.8%;background:#b4aef0"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeAssign');}"><div class="np-val">0 <span class="conv">0%</span></div><div class="np-bar" style="height:6%;background:#f0b6a3"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeContact')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeContact');}"><div class="np-val">4 <span class="conv">400%</span></div><div class="np-bar" style="height:19%;background:#a6ddd2"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeVisit')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeVisit');}"><div class="np-val">21 <span class="conv">525%</span></div><div class="np-bar" style="height:100%;background:#f2dca3"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeTestDrive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeTestDrive');}"><div class="np-val">4 <span class="conv">19%</span></div><div class="np-bar" style="height:19%;background:#cfa7b5"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeOffer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeOffer');}"><div class="np-val">5 <span class="conv">125%</span></div><div class="np-bar" style="height:23.8%;background:#bcd6f4"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeBooking');}"><div class="np-val">3 <span class="conv">60%</span></div><div class="np-bar" style="height:14.3%;background:#aad9bd"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeDelivery');}"><div class="np-val">1 <span class="conv">33%</span></div><div class="np-bar" style="height:6.5%;background:#eec6db"></div></div>
             </div>
             <div class="np-axis">
               <span class="np-axis-lbl">New Leads</span>
@@ -1853,9 +1853,24 @@
         '</div>';
       document.getElementById('mdr').classList.add('open'); document.getElementById('mdrOverlay').classList.add('open'); document.getElementById('mdrContent').scrollTop=0;
     }
+    function openPoolMetric(m){
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd mdr-hd-list"><div class="mdr-ttl">'+m.title+'</div>'+(m.sub?'<div class="mdr-sub">'+m.sub+'</div>':'')+
+          '<div class="mdr-records">'+m.total+' record'+(m.total===1?'':'s')+'</div>'+
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
+        '<div class="mdr-body"><div style="border:1px solid var(--border);border-radius:12px;padding:26px;text-align:center;background:#fafbfc;">'+
+          '<div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);">Total</div>'+
+          '<div style="font-size:44px;font-weight:800;color:var(--ink);line-height:1.1;margin:6px 0;">'+m.total+'</div>'+
+          '<div style="font-size:13px;color:var(--ink-secondary);">'+(m.totalSub||'')+'</div>'+
+        '</div></div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
     function openMetric(id){
       var m=METRICS[id]; if(!m) return;
       document.getElementById('mdr').classList.remove('mdr-wide');
+      if(m.pool){ openPoolMetric(m); return; }
       if(m.apen){ openApenMetric(m); return; }
       if(m.cx){ openCxMetric(m); return; }
       if(m.addon){ openAddonMetric(m); return; }
@@ -2232,6 +2247,32 @@
     }
   })();
   </script>
-  <script src="copilot-widget.js?v=8" defer></script>
+  <script>
+  // ── My pipeline: per-stage lead drill-down modals ──
+  (function(){
+    if(typeof METRICS==='undefined') return;
+    var COLS=[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'model',l:'Model'},{k:'stage',l:'Stage'},{k:'act',l:'Next Action'}];
+    function P(stage, rows){ return { list:true, title:stage+' — my leads ('+rows.length+')', sub:'Filtered by pipeline stage', action:'Open', cols:COLS, records:rows.length, rows:rows }; }
+    Object.assign(METRICS, {
+      sePipeNew: { pool:true, title:'New Leads — 5 in pool', sub:'New Leads shows total volume only. Lead-level drill-down is not enabled for this full pool.', total:5, totalSub:'unassigned new leads across the network' },
+      sePipeAssign: P('Lead Assignment', []),
+      sePipeContact: P('Contact', [
+        {cust:'Sara Khalid', id:'L-2026-05002', temp:'Hot', source:'WhatsApp', model:'EXEED TXL Flagship', stage:'Contact', act:'Call customer — SLA breached'},
+        {cust:'Hiren Patel', id:'L-2026-05001', temp:'Hot', source:'Website',  model:'EXEED LX Luxury',   stage:'Contact', act:'Call customer'}
+      ]),
+      sePipeVisit: P('Visit', [
+        {cust:'Linda George', id:'L-2026-05010', temp:'Warm', source:'Social Form', model:'EXEED LX', stage:'Offer',   act:'Follow up on quote'},
+        {cust:'Rita Sami',    id:'L-2026-05025', temp:'Warm', source:'WhatsApp',    model:'EXEED LX', stage:'Nurture', act:'Match service package'}
+      ]),
+      sePipeTestDrive: P('Test Drive', []),
+      sePipeOffer: P('Offer', [
+        {cust:'Linda George', id:'L-2026-05010', temp:'Warm', source:'Social Form', model:'EXEED LX', stage:'Offer', act:'Follow up on quote'}
+      ]),
+      sePipeBooking: P('Booking', []),
+      sePipeDelivery: P('Delivery', [])
+    });
+  })();
+  </script>
+  <script src="copilot-widget.js?v=9" defer></script>
 </body>
 </html>

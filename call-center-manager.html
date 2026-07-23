@@ -129,6 +129,7 @@
     .main {
       margin-left: var(--sidebar-w); margin-top: var(--topbar-h);
       flex: 1; display: flex; flex-direction: column; min-width: 0;
+      background: #ffffff;
     }
 
     /* Command bar */
@@ -313,7 +314,7 @@
     /* ── Metric cards (count KPIs) ── */
     .metric-card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: none;
       border-radius: var(--radius);
       padding: 14px 16px;
       transition: box-shadow .2s;
@@ -332,18 +333,18 @@
     .mc-icon.purple { background: var(--purple-soft); color: var(--purple); }
     .mc-lbl {
       font-size: 10px; font-weight: 600; text-transform: uppercase;
-      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 4px;
+      letter-spacing: .06em; color: var(--ink-muted); margin-bottom: 9px;
     }
     .mc-val { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
     .mc-val.txt-red { color: var(--red); }
     .mc-val.txt-green { color: var(--green); }
     .mc-val.txt-amber { color: #8a6420; }
-    .mc-sub { font-size: 10.5px; color: var(--ink-muted); margin-top: 3px; }
+    .mc-sub { font-size: 10.5px; color: var(--ink-muted); margin-top: 9px; }
 
     /* ── Dial cards (percentage KPIs) ── */
     .dial-card {
       background: var(--surface);
-      border: 1px solid var(--border);
+      border: none;
       border-radius: var(--radius);
       padding: 14px 16px;
       display: flex; flex-direction: column; align-items: center;
@@ -374,9 +375,10 @@
     .dial-sub { font-size: 10px; color: var(--ink-muted); margin-top: 4px; text-align: center; }
 
     /* ── KPI sections ── */
-    .kpi-section { background: transparent; border: none; border-radius: 0; padding: 0; margin-bottom: 18px; }
-    .kpi-sec-head { display: flex; align-items: center; gap: 7px; margin-bottom: 11px; }
-    .kpi-sec-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .kpi-section { background: #fafafa; border: none; border-radius: 14px; padding: 14px; margin-bottom: 18px; }
+    .kpi-section > *:last-child { margin-bottom: 0; }
+    .kpi-sec-head { display: flex; align-items: center; gap: 7px; margin-bottom: 16px; }
+    .kpi-sec-dot { display: none; }
     .kpi-sec-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
     .kpi-sec-sub { font-size: 11px; color: var(--ink-muted); }
     .kpi-grid { display: grid; gap: 10px; }
@@ -489,7 +491,7 @@
     .sla-note { font-size:11.5px; color:var(--ink-muted); font-style:italic; }
 
     /* ── Manager NBA banner ── */
-    .nba { display:flex; align-items:center; gap:14px; background:var(--blue-soft); border:1px solid #d0dbe6; border-radius:var(--radius); padding:14px 18px; margin-bottom:18px; }
+    .nba { display:flex; align-items:center; gap:14px; background:#fafafa; border:none; border-radius:var(--radius); padding:14px 18px; margin-bottom:18px; }
     .nba-ico { width:38px; height:38px; border-radius:10px; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .nba-ico .material-symbols-outlined { font-size:21px; }
     .nba-body { flex:1; min-width:0; }
@@ -659,6 +661,26 @@
     .mdr-report:hover{text-decoration:underline;}
     .mdr-report .material-symbols-outlined{font-size:16px;}
     .mdr-body{padding:20px 24px;}
+    /* ── List drill-down modal (SLA breaches / returned / contact) ── */
+    .mdr-hd-list{ background:#17293d; }
+    .mdr-records{ position:absolute; top:22px; right:56px; font-size:13px; font-weight:600; color:rgba(255,255,255,.82); }
+    .mdr-list-body{ padding:0; }
+    .mdr-leadswrap{ overflow-x:auto; }
+    .mdr-leads{ width:100%; border-collapse:collapse; font-size:13px; }
+    .mdr-leads th{ text-align:left; padding:12px 16px; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-muted); border-bottom:1px solid var(--border); white-space:nowrap; background:#fafbfc; }
+    .mdr-leads td{ padding:14px 16px; border-bottom:1px solid var(--border-soft); color:var(--ink-secondary); vertical-align:middle; }
+    .mdr-leads tbody tr:last-child td{ border-bottom:none; }
+    .mdr-leads tbody tr:hover{ background:#fafbfc; }
+    .ml-name{ font-weight:700; color:var(--ink); }
+    .ml-id{ font-size:11px; color:var(--ink-muted); margin-top:1px; }
+    .ml-temp{ display:inline-block; padding:3px 11px; border-radius:12px; font-size:11px; font-weight:700; }
+    .ml-temp.hot{ background:#fdecec; color:#d1544f; } .ml-temp.warm{ background:#fdeede; color:#b5731f; } .ml-temp.cold{ background:#eef1fb; color:#3f63c8; }
+    .ml-breach{ color:#d1544f; font-weight:700; }
+    .ml-reason{ color:var(--blue); font-weight:600; }
+    .ml-qual{ color:#b5731f; font-weight:700; } .ml-qual.g{ color:#3d8a5b; }
+    .ml-next{ color:var(--ink); font-weight:600; }
+    .ml-assign{ color:var(--blue); font-weight:700; text-decoration:none; white-space:nowrap; }
+    .ml-assign:hover{ text-decoration:underline; }
     .mdr-secl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:10px;}
     .mdr-chart{border:1px solid var(--border);border-radius:var(--radius);padding:12px 12px 8px;}
     .mdr-trend-svg,.mdr-branch-svg{width:100%;height:auto;display:block;}
@@ -761,7 +783,7 @@
         <div class="greeting">
           <div class="greeting-left">
             <h1>Good afternoon, Eman <span class="wave">&#128075;</span></h1>
-            <div class="greeting-sub"><span class="date">30 Jun 2026</span> &middot; <strong style="color:var(--red)">18 not actioned</strong> &middot; <strong style="color:var(--green)">8 agents on shift</strong></div>
+            <div class="greeting-sub"><span class="date">Tue, 30 Jun 2026</span> &middot; <strong style="color:var(--red)">18 not actioned</strong> &middot; <strong style="color:var(--green)">8 agents on shift</strong></div>
           </div>
           <div class="greeting-right">
             <button class="scope-dd"><span class="material-symbols-outlined">tune</span> Scope: Call Centre-owned leads <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
@@ -795,7 +817,7 @@
 
         <!-- Manager Next Best Action -->
         <div class="nba">
-          <div class="nba-ico"><span class="material-symbols-outlined">balance</span></div>
+          <div class="nba-ico" style="background:var(--red)"><span class="material-symbols-outlined">notifications_active</span></div>
           <div class="nba-body">
             <div class="nba-eyebrow">Manager Next Best Action</div>
             <div class="nba-head">Balance Lina Osman's workload &mdash; reassign 5 leads</div>
@@ -844,8 +866,7 @@
               </div>
               <div class="dial-sub">Target 95%</div>
             </div>
-            <div class="metric-card">
-              
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('openLeads3d')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('openLeads3d');}">
               <div class="mc-lbl">Open Leads &gt; 3 Days</div><div class="mc-val txt-red">3</div><div class="mc-sub">Target &lt;3 days &middot; 95%</div>
             </div>
             <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}">
@@ -881,9 +902,9 @@
           <div class="kpi-grid g8">
             <div class="metric-card"><div class="mc-lbl">Leads Assigned</div><div class="mc-val">21</div><div class="mc-sub">Call Centre-owned</div></div>
             <div class="metric-card"><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">18</div><div class="mc-sub">Sorted by SLA</div></div>
-            <div class="metric-card"><div class="mc-lbl">Callbacks Due</div><div class="mc-val">12</div><div class="mc-sub">5 overdue</div></div>
-            <div class="metric-card"><div class="mc-lbl">Contact</div><div class="mc-val txt-green">4</div><div class="mc-sub">100% qualified</div></div>
-            <div class="metric-card"><div class="mc-lbl">Returned by Sales</div><div class="mc-val">4</div><div class="mc-sub">Coach &amp; fix</div></div>
+            <div class="metric-card"><div class="mc-lbl">Callbacks Due</div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('contactList')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('contactList');}"><div class="mc-lbl">Contact</div><div class="mc-val txt-green">4</div><div class="mc-sub">100% qualified</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}"><div class="mc-lbl">Returned by Sales</div><div class="mc-val">4</div><div class="mc-sub">Coach &amp; fix</div></div>
             <div class="metric-card"><div class="mc-lbl">Avg Handle Time</div><div class="mc-val" style="font-size:19px">4m 32s</div><div class="mc-sub">Across all agents</div></div>
             <div class="metric-card"><div class="mc-lbl">Agents on Shift</div><div class="mc-val">8</div><div class="mc-sub">4 on track</div></div>
             <div class="metric-card"><div class="mc-lbl">Lost CC Leads</div><div class="mc-val">2</div><div class="mc-sub">Separate view</div></div>
@@ -1101,16 +1122,73 @@
   </script>
   <script>
     // ── KPI metric drill-down drawer ──
+    var SLA_COLS = [{k:'lead',l:'Lead'},{k:'slatype',l:'SLA Type'},{k:'due',l:'Due Time'},{k:'breach',l:'Breach Duration'},{k:'owner',l:'Owner'}];
     var METRICS = {
-      firstContact: { kind:'SLA Metric', title:'First Contact SLA', sub:'% of interactions handled within SLA window.', value:88, target:95, delta:-3, higherIsBetter:true, yTrendMax:100, trend:[84,80,84,81,85,82,84], xMax:100,
-        branches:[{n:'Al Ain',v:91.6},{n:'Abu Dhabi',v:91},{n:'Sharjah',v:88.5},{n:'Deira',v:87.1},{n:'SZR — Sheikh Zayed Road',v:85.4}] },
-      assignSA: { kind:'SLA Metric', title:'Assign to SA SLA', sub:'% of interactions handled within SLA window.', value:92, target:95, delta:1, higherIsBetter:true, yTrendMax:100, trend:[91,90.6,91,93,91,90,91], xMax:100,
-        branches:[{n:'SZR — Sheikh Zayed Road',v:93.1},{n:'Al Ain',v:90.9},{n:'Deira',v:90.4},{n:'Sharjah',v:89.9},{n:'Abu Dhabi',v:87.4}] },
-      returnRate: { kind:'Quality Metric', title:'Return Rate', sub:'% of qualified leads returned by Sales.', value:8, target:8, delta:-0.6, higherIsBetter:false, yTrendMax:20, trend:[9,8,9,7,8,9,8], xMax:20,
-        branches:[{n:'Al Ain',v:5.2},{n:'Abu Dhabi',v:6.4},{n:'Sharjah',v:8.1},{n:'SZR — Sheikh Zayed Road',v:9.8},{n:'Deira',v:11.2}] },
-      qualCompletion: { kind:'Quality Metric', title:'Qual Completion', sub:'% of connected calls with qualification completed.', value:82, target:90, delta:2, higherIsBetter:true, yTrendMax:100, trend:[80,81,83,82,84,81,82], xMax:100,
-        branches:[{n:'Al Ain',v:86.2},{n:'Abu Dhabi',v:84},{n:'Sharjah',v:82.5},{n:'Deira',v:80.1},{n:'SZR — Sheikh Zayed Road',v:78.4}] }
+      firstContact: { list:true, title:'Customer 1st Contact — SLA breaches', sub:'Placeholder mock — swap for live SLA query', action:'Open', cols:SLA_COLS, records:3, rows:[
+        {lead:'Ali Kassem', slatype:'Customer 1st Contact', due:'10:15', breach:'12m', owner:'Rahul Krishnan'},
+        {lead:'Farida Zohra', slatype:'Customer 1st Contact', due:'09:40', breach:'40m', owner:'Aisha Hussein'},
+        {lead:'Diego Alvarez', slatype:'Customer 1st Contact', due:'10:30', breach:'30m', owner:'Fadi Haddad'}
+      ] },
+      assignSA: { list:true, title:'Assigned to Showroom — SLA breaches', sub:'Placeholder mock — swap for live SLA query', action:'Open', cols:SLA_COLS, records:2, rows:[
+        {lead:'Sara Ali', slatype:'Assigned to Showroom', due:'09:30', breach:'1h', owner:'Nadia Al Suwaidi'},
+        {lead:'Mira Khaled', slatype:'Assigned to Showroom', due:'10:05', breach:'25m', owner:'Nadia Al Suwaidi'}
+      ] },
+      openLeads3d: { list:true, title:'Open leads > 3 days', sub:'Placeholder mock — swap for live SLA query', cols:SLA_COLS, records:3, rows:[
+        {lead:'Talal Baig', slatype:'Lead Assignment → CA', due:'3d ago', breach:'4d', owner:'Karim Mostafa'},
+        {lead:'Huda Baker', slatype:'Lead Assignment → CA', due:'4d ago', breach:'11d', owner:'Talal Baig'},
+        {lead:'Naif Alavi', slatype:'Customer 1st Contact', due:'3d ago', breach:'6d', owner:'Omar Al Khoury'}
+      ] },
+      returnRate: { list:true, title:'Returned by sales', sub:'Track return reasons and repeat rate by agent', action:'Review', records:4,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'reason',l:'Return Reason'},{k:'qual',l:'Qual %'},{k:'next',l:'Next Action'}], rows:[
+        {lead:'Sara Ali', id:'L-2026-06101', temp:'Warm', owner:'Nadia Al Suwaidi', reason:'Missing preferred showroom', qual:'90%', next:'Complete missing field'},
+        {lead:'Mira Khaled', id:'L-2026-06102', temp:'Warm', owner:'Nadia Al Suwaidi', reason:'Wrong contact number', qual:'70%', next:'Verify number'},
+        {lead:'Anil Krishnan', id:'L-2026-06103', temp:'Warm', owner:'Aisha Hussein', reason:'Enquiry reason unclear', qual:'80%', next:'Re-qualify enquiry'},
+        {lead:'Rasha Nabhan', id:'L-2026-06104', temp:'Warm', owner:'Lina Osman', reason:'Language mismatch — Arabic requested', qual:'85%', next:'Reassign to Arabic agent'}
+      ] },
+      contactList: { list:true, title:'Contact', action:'Approve handover', records:4,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'owner',l:'Owner'},{k:'qual',l:'Qual %'},{k:'next',l:'Next Action'},{k:'routing',l:'Routing'}], rows:[
+        {lead:'Sam Fadi', id:'L-2026-06006', temp:'Hot', source:'800 Number', owner:'Nadia Al Suwaidi', qual:'100%', next:'Hand over to Sales', routing:'Call center'},
+        {lead:'Iman Sabri', id:'L-2026-06009', temp:'Warm', source:'Call Center Inbound', owner:'Farhan Aslam', qual:'100%', next:'Hand over to Sales', routing:'Call center'},
+        {lead:'Dana Alwan', id:'L-2026-06013', temp:'Warm', source:'Call Center Inbound', owner:'Nadia Al Suwaidi', qual:'100%', next:'Hand over to Sales', routing:'Call center'},
+        {lead:'Rita Fernandez', id:'L-2026-06005', temp:'Cold', source:'Call Center Inbound', owner:'Mohammed Zaid', qual:'100%', next:'Callback tomorrow', routing:'Call center'}
+      ] },
+      qualCompletion: { list:true, title:'Qual Completion — connected calls', sub:'Qualification completed on connected calls · target 90%', action:'Open', records:5,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'owner',l:'Owner'},{k:'qual',l:'Qual %'},{k:'next',l:'Next Action'}], rows:[
+        {lead:'Sam Fadi', id:'L-2026-06006', temp:'Hot', source:'800 Number', owner:'Nadia Al Suwaidi', qual:'100%', next:'Qualification complete'},
+        {lead:'Iman Sabri', id:'L-2026-06009', temp:'Warm', source:'Call Center Inbound', owner:'Farhan Aslam', qual:'100%', next:'Qualification complete'},
+        {lead:'Dana Alwan', id:'L-2026-06013', temp:'Warm', source:'Call Center Inbound', owner:'Nadia Al Suwaidi', qual:'100%', next:'Qualification complete'},
+        {lead:'Karim Saleh', id:'L-2026-06021', temp:'Warm', source:'Website', owner:'Mohammed Zaid', qual:'60%', next:'Complete qualification'},
+        {lead:'Rita Fernandez', id:'L-2026-06005', temp:'Cold', source:'Call Center Inbound', owner:'Mohammed Zaid', qual:'40%', next:'Complete qualification'}
+      ] }
     };
+    function mlCell(k,r){
+      if(k==='lead') return '<td><div class="ml-name">'+r.lead+'</div>'+(r.id?'<div class="ml-id">'+r.id+'</div>':'')+'</td>';
+      if(k==='temp'){ var t=(r.temp||'').toLowerCase(); return '<td><span class="ml-temp '+t+'">'+r.temp+'</span></td>'; }
+      if(k==='breach') return '<td class="ml-breach">'+r.breach+'</td>';
+      if(k==='reason') return '<td class="ml-reason">'+r.reason+'</td>';
+      if(k==='qual') return '<td class="ml-qual'+(r.qual==='100%'?' g':'')+'">'+r.qual+'</td>';
+      if(k==='next') return '<td class="ml-next">'+r.next+'</td>';
+      return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
+    }
+    function mlListTable(m){
+      var head='<tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+(m.action?'<th></th>':'')+'</tr>';
+      var body=m.rows.map(function(r){
+        var act=m.action?'<td style="text-align:right"><a href="lead-detail.html?lead='+encodeURIComponent(r.lead)+'" class="ml-assign">'+m.action+' &rsaquo;</a></td>':'';
+        return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r);}).join('')+act+'</tr>';
+      }).join('');
+      return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
+    }
+    function openListMetric(m){
+      var recs=(m.records!=null)?m.records:m.rows.length;
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd mdr-hd-list"><div class="mdr-ttl">'+m.title+'</div>'+(m.sub?'<div class="mdr-sub">'+m.sub+'</div>':'')+
+          '<div class="mdr-records">'+recs+' record'+(recs===1?'':'s')+'</div>'+
+          '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
+        '<div class="mdr-body mdr-list-body"><div class="mdr-leadswrap">'+mlListTable(m)+'</div></div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
 
     function fmtPct(v){ return (Math.round(v*10)/10) + '%'; }
 
@@ -1164,6 +1242,7 @@
 
     function openMetric(id){
       var m=METRICS[id]; if(!m) return;
+      if(m.list){ openListMetric(m); return; }
       var d=m.delta, good=m.higherIsBetter ? d>=0 : d<=0;
       var arrow=d>0?'&#9650;':(d<0?'&#9660;':'&ndash;');
       var chip=(d===0)?'':' <span class="mdr-delta '+(good?'up':'down')+'">'+arrow+' '+(d>0?'+':'')+d+'pp</span>';
@@ -1241,6 +1320,6 @@
       if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
     })();
   </script>
-  <script src="copilot-widget.js?v=8" defer></script>
+  <script src="copilot-widget.js?v=9" defer></script>
 </body>
 </html>

@@ -88,9 +88,9 @@
   var PERSONAS = [
     ['Call Center Agent', 'call-center-agent.html'],
     ['Call Center Manager', 'call-center-manager.html'],
-    ['Sales Executive', 'sales-executive.html'],
-    ['Brand Host', 'brand-host.html'],
-    ['Delivery Specialist', 'delivery-consultant.html']
+    ['Showroom Manager', 'showroom-manager.html'],
+    ['Head of Sales', '#'],
+    ['Sales Executive', 'sales-executive.html']
   ];
   var PERSONA_DEFAULT = 'call-center-agent.html';
 
@@ -191,8 +191,10 @@
         psel.appendChild(o);
       });
       psel.onchange = function () {
-        var v = this.value; try { localStorage.setItem('exceed_persona', v); } catch (e) {}
-        if (v && v.toLowerCase() !== here) location.href = v;
+        var v = this.value;
+        if (!v || v === '#') { this.value = current; return; }
+        try { localStorage.setItem('exceed_persona', v); } catch (e) {}
+        if (v.toLowerCase() !== here) location.href = v;
       };
       pwrap.appendChild(psel);
       actions.insertBefore(pwrap, actions.firstChild); // left-most → before Copilot

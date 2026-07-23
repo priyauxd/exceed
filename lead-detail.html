@@ -3233,7 +3233,7 @@
       return fields;
     }
 
-    var laToday = '2026-07-08';
+    var laToday = (function(){ var d = new Date(), p = function(n){ return (n < 10 ? '0' : '') + n; }; return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); })();
     var laNoReasons = ['Call not picked up', 'Invalid number'];
 
     function laSelect(id, label, opts, req) {
@@ -3249,7 +3249,7 @@
       return '<span class="la-sublabel">' + label + ' <span class="req">*</span></span>' +
         '<div class="cp-grid2">' +
           '<div class="cp-field"><input class="cp-input" type="date" id="laDate" value="' + laToday + '"></div>' +
-          '<div class="cp-field"><input class="cp-input" type="time" id="laTime"></div>' +
+          '<div class="cp-field"><input class="cp-input" type="time" id="laTime" lang="en-GB" step="60"></div>' +
         '</div>';
     }
     function laNotesField() {
@@ -4562,6 +4562,6 @@
       }catch(e){}
     });
   </script>
-  <script src="copilot-widget.js?v=8" defer></script>
+  <script src="copilot-widget.js?v=9" defer></script>
 </body>
 </html>
