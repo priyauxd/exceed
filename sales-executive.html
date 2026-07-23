@@ -584,6 +584,7 @@
     @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
     .greeting-sub .date { font-weight: 600; color: var(--ink); }
     </style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; } .metric-card .mc-tag{ text-align:left; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card{ border:none; }</style>
 </head>
 <body>
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
@@ -775,43 +776,43 @@
         <!-- KPI Row 1 -->
         <div class="metrics-row r7">
           <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon blue"><span class="material-symbols-outlined">fiber_new</span></div>
+            
             <div class="mc-lbl">New Leads Today</div>
             <div class="mc-val">4</div>
             <div class="mc-sub" style="color:var(--green)">+2 vs yesterday</div>
           </a>
           <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon amber"><span class="material-symbols-outlined">pending_actions</span></div>
+            
             <div class="mc-lbl">Pending 1st Contact</div>
             <div class="mc-val">3</div>
             <div class="mc-sub">2 within SLA</div>
           </a>
           <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div>
+            
             <div class="mc-lbl">At-Risk</div>
             <div class="mc-val txt-red">2</div>
             <div class="mc-sub" style="color:var(--red)">+1 vs yesterday</div>
           </a>
           <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon red"><span class="material-symbols-outlined">gpp_bad</span></div>
+            
             <div class="mc-lbl">SLA Breached</div>
             <div class="mc-val txt-red">1</div>
             <div class="mc-sub">Action now</div>
           </a>
           <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div>
+            
             <div class="mc-lbl">Stalled &gt;7D</div>
             <div class="mc-val txt-amber">3</div>
             <div class="mc-sub">Re-engage</div>
           </a>
           <div class="metric-card">
-            <div class="mc-icon green"><span class="material-symbols-outlined">trending_up</span></div>
+            
             <div class="mc-lbl">Conversion 30D</div>
             <div class="mc-val txt-green">24%</div>
             <div class="mc-sub" style="color:var(--green)">+3.1pp</div>
           </div>
           <a href="lead-detail.html" class="metric-card" style="text-decoration:none;color:inherit;cursor:pointer">
-            <div class="mc-icon purple"><span class="material-symbols-outlined">flag</span></div>
+            
             <div class="mc-lbl">Competitor-Risk Leads</div>
             <div class="mc-val">3</div>
             <div class="mc-sub">2 objections &middot; 1 ready TD</div>
@@ -821,12 +822,12 @@
         <!-- KPI Row 2 -->
         <div class="metrics-row r6">
           <div class="metric-card">
-            <div class="mc-icon blue"><span class="material-symbols-outlined">today</span></div>
+            
             <div class="mc-lbl">Commitments Due Today</div>
             <div class="mc-val">4</div>
           </div>
           <div class="metric-card">
-            <div class="mc-icon red"><span class="material-symbols-outlined">notification_important</span></div>
+            
             <div class="mc-lbl">Commitments Overdue</div>
             <div class="mc-val txt-red">1</div>
             <div class="mc-sub">Action now</div>
@@ -852,17 +853,17 @@
             <div class="dial-sub">Rolling 30d</div>
           </div>
           <div class="metric-card">
-            <div class="mc-icon green"><span class="material-symbols-outlined">check_circle</span></div>
+            
             <div class="mc-lbl">Missed Commitments</div>
             <div class="mc-val txt-green">0</div>
           </div>
           <div class="metric-card">
-            <div class="mc-icon amber"><span class="material-symbols-outlined">directions_car</span></div>
+            
             <div class="mc-lbl">Test Drives to Confirm</div>
             <div class="mc-val">1</div>
           </div>
           <div class="metric-card">
-            <div class="mc-icon purple"><span class="material-symbols-outlined">request_quote</span></div>
+            
             <div class="mc-lbl">Quotes Awaiting Follow-up</div>
             <div class="mc-val">1</div>
           </div>

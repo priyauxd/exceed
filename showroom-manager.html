@@ -322,6 +322,7 @@
       position: relative;
     }
     .metric-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
+    .kpi-grid.g4 .metric-card { text-align: center; }
     .mc-icon {
       width: 24px; height: 24px; border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
@@ -498,9 +499,10 @@
     .cal-block { background: #fafafa; border-radius: 14px; padding: 14px; margin-bottom: 14px; }
     .kpi-group .metric-card, .kpi-group .dial-card { border-color: transparent; }
     .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
-    .kpi-grid.g7 { grid-template-columns: repeat(7, 1fr); }
-    .kpi-grid.g4 { grid-template-columns: repeat(4, 1fr); }
-    .kpi-grid.g3 { grid-template-columns: repeat(3, minmax(150px, 220px)); justify-content: start; }
+    .kpi-grid.g4, .kpi-grid.g7, .kpi-grid.g3 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    .kpi-grid .metric-card { padding: 15px 16px; }
+    .kpi-grid .mc-val { font-size: 20px; }
+    .kpi-grid .mc-sub { margin-top: 1px; }
     .tbl-pager { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 14px; border-top:1px solid var(--border-soft); flex-wrap:wrap; }
     .pg-info { font-size:11.5px; color:var(--ink-muted); font-weight:600; }
     .pg-btns { display:flex; align-items:center; gap:4px; }
@@ -508,8 +510,8 @@
     .pg-num:hover, .pg-nav:hover:not(:disabled) { background:var(--bg); }
     .pg-num.on { background:var(--blue); color:#fff; border-color:var(--blue); }
     .pg-nav:disabled { opacity:.4; cursor:default; }
-    @media (max-width: 1200px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g4 { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 768px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g4, .kpi-grid.g3 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 1200px) { .kpi-grid.g5 { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .kpi-grid.g5 { grid-template-columns: repeat(2, 1fr); } }
 
     /* ── Queue / table panel ── */
     .q-panel {
@@ -709,6 +711,7 @@
     body.sb-rail .sb-toggle { justify-content: center; padding: 8px 0; }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; } .metric-card .mc-tag{ text-align:left; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card{ border:none; }</style>
 </head>
 <body>
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
@@ -910,14 +913,14 @@
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Today's Actions</span><span class="kpi-sec-sub">&middot; What to move now</span></div>
           <div class="kpi-grid g4 kpi-group">
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newAssign');}"><div class="mc-icon blue"><span class="material-symbols-outlined">person_add</span></div><div class="mc-lbl">New to Assign</div><div class="mc-val">5</div><div class="mc-sub">Direct-to-showroom</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('waiting')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('waiting');}"><span class="mc-tag live"><span class="lv-dot"></span> LIVE</span><div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Customers Waiting</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Longest 18m</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('overdue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('overdue');}"><div class="mc-icon red"><span class="material-symbols-outlined">warning</span></div><div class="mc-lbl">Overdue Commitments</div><div class="mc-val txt-red">2</div><div class="mc-sub">By executive</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newLeads');}"><div class="mc-icon blue"><span class="material-symbols-outlined">group_add</span></div><div class="mc-lbl">New Leads Today</div><div class="mc-val">30</div><div class="mc-sub">Received today</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('pending1c')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pending1c');}"><div class="mc-icon amber"><span class="material-symbols-outlined">call</span></div><div class="mc-lbl">Pending 1st Contact</div><div class="mc-val txt-amber">30</div><div class="mc-sub">Awaiting first contact</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('followUp')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('followUp');}"><div class="mc-icon blue"><span class="material-symbols-outlined">event</span></div><div class="mc-lbl">Follow-up Due</div><div class="mc-val">1</div><div class="mc-sub">Due today</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('testDrives')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('testDrives');}"><div class="mc-icon teal"><span class="material-symbols-outlined">directions_car</span></div><div class="mc-lbl">Test Drives</div><div class="mc-val">2</div><div class="mc-sub">Confirm &middot; reschedule</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('openQuotes')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('openQuotes');}"><div class="mc-icon red"><span class="material-symbols-outlined">request_quote</span></div><div class="mc-lbl">Open Quotes</div><div class="mc-val txt-red">5</div><div class="mc-sub">AED 1,049k at risk</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newAssign');}"><div class="mc-lbl">New to Assign</div><div class="mc-val">5</div><div class="mc-sub">Direct-to-showroom</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('waiting')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('waiting');}"><span class="mc-tag live"><span class="lv-dot"></span> LIVE</span><div class="mc-lbl">Customers Waiting</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Longest 18m</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('overdue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('overdue');}"><div class="mc-lbl">Overdue Commitments</div><div class="mc-val txt-red">2</div><div class="mc-sub">By executive</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newLeads');}"><div class="mc-lbl">New Leads Today</div><div class="mc-val">30</div><div class="mc-sub">Received today</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('pending1c')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pending1c');}"><div class="mc-lbl">Pending 1st Contact</div><div class="mc-val txt-amber">30</div><div class="mc-sub">Awaiting first contact</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('followUp')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('followUp');}"><div class="mc-lbl">Follow-up Due</div><div class="mc-val">1</div><div class="mc-sub">Due today</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('testDrives')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('testDrives');}"><div class="mc-lbl">Test Drives</div><div class="mc-val">2</div><div class="mc-sub">Confirm &middot; reschedule</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('openQuotes')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('openQuotes');}"><div class="mc-lbl">Open Quotes</div><div class="mc-val txt-red">5</div><div class="mc-sub">AED 1,049k at risk</div></div>
           </div>
         </div>
 
@@ -1097,7 +1100,7 @@
                   <td class="num">18</td><td class="num">3</td><td class="num">2</td><td class="num">2</td><td class="num">3</td><td class="num">2</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Sara Ali</div><div class="c-shift">SHJ</div></td>
@@ -1105,7 +1108,7 @@
                   <td class="num">17</td><td class="num">2</td><td class="num">1</td><td class="num">2</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
                 </tr>
                 <tr class="urg">
                   <td><div class="c-name">Karim Mostafa</div><div class="c-shift">DEI</div></td>
@@ -1121,7 +1124,7 @@
                   <td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">1</td><td class="num">3</td><td class="num">2</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">At capacity</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Nour Jaber</div><div class="c-shift">AUH</div></td>
@@ -1153,7 +1156,7 @@
                   <td class="num">14</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num">0</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Yousef Rahman</div><div class="c-shift">SHJ</div></td>
@@ -1177,7 +1180,7 @@
                   <td class="num">13</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Urdu, Hindi</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Opening workload')">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
                 </tr>
               </tbody>
             </table>
@@ -1232,7 +1235,7 @@
               </div>
             </div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('slaOpenLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('slaOpenLeads');}">
-              <div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div>
+              
               <div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">3</div><div class="mc-sub">Target &lt; 3</div>
             </div>
             <div class="dial-card mdr-open" role="button" tabindex="0" onclick="openMetric('addonPen')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('addonPen');}">
@@ -1256,9 +1259,9 @@
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--teal)"></span><span class="kpi-sec-title">Customer Experience &amp; Lead Management</span><span class="kpi-sec-sub">&middot; Quality, aging &amp; waiting customers</span></div>
           <div class="kpi-grid g3 kpi-group">
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxCSI')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxCSI');}"><div class="mc-icon green"><span class="material-symbols-outlined">sentiment_satisfied</span></div><div class="mc-lbl">CSI</div><div class="mc-val txt-green">91</div><div class="mc-sub">Target 90</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxNPS')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxNPS');}"><div class="mc-icon green"><span class="material-symbols-outlined">recommend</span></div><div class="mc-lbl">NPS</div><div class="mc-val txt-green">62</div><div class="mc-sub">Target 60</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxOpenLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxOpenLeads');}"><div class="mc-icon red"><span class="material-symbols-outlined">hourglass_top</span></div><div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">7</div><div class="mc-sub">Target 0</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxCSI')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxCSI');}"><div class="mc-lbl">CSI</div><div class="mc-val txt-green">91</div><div class="mc-sub">Target 90</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxNPS')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxNPS');}"><div class="mc-lbl">NPS</div><div class="mc-val txt-green">62</div><div class="mc-sub">Target 60</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('cxOpenLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('cxOpenLeads');}"><div class="mc-lbl">Open Leads &gt; 90 Days</div><div class="mc-val txt-red">7</div><div class="mc-sub">Target 0</div></div>
           </div>
         </div>
 
@@ -1287,15 +1290,14 @@
             .cfun-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:10px; }
             .cfun-card { background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
             .cfun-lbl { font-size:9.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-            .cfun-val { font-size:23px; font-weight:800; color:var(--ink); margin:4px 0 2px; letter-spacing:-.02em; }
+            .cfun-val { font-size:20px; font-weight:800; color:var(--ink); margin:4px 0 2px; letter-spacing:-.02em; }
             .cfun-tgt { font-size:11px; color:var(--ink-muted); font-weight:600; }
             .cfun-card.warn { border-left:3px solid #e8952c; }
             .cfun-card.warn .cfun-val { color:#e8952c; }
             .cfun-card.cfun-bad { border-left:3px solid #d1544f; }
             .cfun-card.cfun-bad .cfun-val { color:#d1544f; }
-            .side2 .cfun-card { border:none; }
-            .side2 .cfun-card.warn { border-left:3px solid #e8952c; }
-            .side2 .cfun-card.cfun-bad { border-left:3px solid #d1544f; }
+            .side2 .cfun-card { border:none; padding:15px 16px; text-align:center; min-height:94px; display:flex; flex-direction:column; justify-content:center; }
+            .kpi-grid.g3 .metric-card { min-height:94px; display:flex; flex-direction:column; justify-content:center; }
           </style>
           <div class="cfun-grid">
             <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadsVisits')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadsVisits');}"><div class="cfun-lbl">Leads &rarr; Visits</div><div class="cfun-val">52%</div><div class="cfun-tgt">Target 55%</div></div>
@@ -1357,16 +1359,16 @@
         <div class="kpi-section" style="margin-top:22px">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Volumetrics</span><span class="kpi-sec-sub">&middot; Operational counts · MTD</span></div>
           <div class="kpi-grid g7 kpi-group">
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">directions_walk</span></div><div class="mc-lbl">Walks</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vBookings')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vBookings');}"><div class="mc-icon blue"><span class="material-symbols-outlined">event_available</span></div><div class="mc-lbl">Bookings</div><div class="mc-val">39</div><div class="mc-sub">Target 45</div></div>
-            <div class="metric-card"><div class="mc-icon blue"><span class="material-symbols-outlined">receipt_long</span></div><div class="mc-lbl">Sales Orders</div><div class="mc-val">34</div><div class="mc-sub">Target 40</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vInvoices')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vInvoices');}"><div class="mc-icon blue"><span class="material-symbols-outlined">description</span></div><div class="mc-lbl">Invoices</div><div class="mc-val">30</div><div class="mc-sub">Target 35</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vDeliveries')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vDeliveries');}"><div class="mc-icon green"><span class="material-symbols-outlined">local_shipping</span></div><div class="mc-lbl">Deliveries</div><div class="mc-val txt-green">27</div><div class="mc-sub">Target 30</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vVisitsWalkins')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vVisitsWalkins');}"><div class="mc-icon blue"><span class="material-symbols-outlined">storefront</span></div><div class="mc-lbl">Visits + Walk-ins</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vFollowups')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vFollowups');}"><div class="mc-icon blue"><span class="material-symbols-outlined">task_alt</span></div><div class="mc-lbl">Follow-ups On Time</div><div class="mc-val">214</div><div class="mc-sub">Target 250</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vCancellations')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vCancellations');}"><div class="mc-icon red"><span class="material-symbols-outlined">cancel</span></div><div class="mc-lbl">Cancellations</div><div class="mc-val txt-red">12</div><div class="mc-sub">Target &lt; 10</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vTradeins')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vTradeins');}"><div class="mc-icon amber"><span class="material-symbols-outlined">swap_horiz</span></div><div class="mc-lbl">Trade-ins</div><div class="mc-val txt-amber">18</div><div class="mc-sub">Target 25</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vAddonsSold')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vAddonsSold');}"><div class="mc-icon blue"><span class="material-symbols-outlined">add_circle</span></div><div class="mc-lbl">Add-ons Sold</div><div class="mc-val">71</div><div class="mc-sub">Target 80</div></div>
+            <div class="metric-card"><div class="mc-lbl">Walks</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vBookings')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vBookings');}"><div class="mc-lbl">Bookings</div><div class="mc-val">39</div><div class="mc-sub">Target 45</div></div>
+            <div class="metric-card"><div class="mc-lbl">Sales Orders</div><div class="mc-val">34</div><div class="mc-sub">Target 40</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vInvoices')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vInvoices');}"><div class="mc-lbl">Invoices</div><div class="mc-val">30</div><div class="mc-sub">Target 35</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vDeliveries')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vDeliveries');}"><div class="mc-lbl">Deliveries</div><div class="mc-val txt-green">27</div><div class="mc-sub">Target 30</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vVisitsWalkins')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vVisitsWalkins');}"><div class="mc-lbl">Visits + Walk-ins</div><div class="mc-val">176</div><div class="mc-sub">Target 200</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vFollowups')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vFollowups');}"><div class="mc-lbl">Follow-ups On Time</div><div class="mc-val">214</div><div class="mc-sub">Target 250</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vCancellations')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vCancellations');}"><div class="mc-lbl">Cancellations</div><div class="mc-val txt-red">12</div><div class="mc-sub">Target &lt; 10</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vTradeins')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vTradeins');}"><div class="mc-lbl">Trade-ins</div><div class="mc-val txt-amber">18</div><div class="mc-sub">Target 25</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('vAddonsSold')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('vAddonsSold');}"><div class="mc-lbl">Add-ons Sold</div><div class="mc-val">71</div><div class="mc-sub">Target 80</div></div>
           </div>
         </div>
 
@@ -2309,6 +2311,55 @@
       }
       if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
     })();
+  </script>
+  <style>
+    .wl-bar-card{ background:#f4f5f6; border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-bottom:14px; }
+    .wl-bar-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; }
+    .wl-bar-lbl{ font-size:14px; font-weight:600; color:var(--ink); }
+    .wl-bar-val{ font-size:13px; font-weight:700; color:var(--ink-secondary); }
+    .wl-bar{ height:8px; background:#e6e8ec; border-radius:5px; overflow:hidden; }
+    .wl-bar-fill{ height:100%; border-radius:5px; }
+    .wl-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .wl-cell{ background:#f4f5f6; border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+    .wl-k{ font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-muted); }
+    .wl-v{ font-size:22px; font-weight:700; color:var(--ink); margin-top:4px; line-height:1.1; }
+    .wl-v.red{ color:#d1544f; }
+    .wl-v.wl-lang{ font-size:16px; font-weight:600; }
+    .wl-status{ font-size:13px; font-style:italic; color:var(--ink-secondary); margin-top:14px; }
+  </style>
+  <script>
+    function openWorkload(btn){
+      var tr=btn.closest('tr'); if(!tr) return;
+      var c=tr.children;
+      var nmEl=tr.querySelector('.c-name'), locEl=tr.querySelector('.c-shift');
+      var name=nmEl?nmEl.textContent.trim():'', loc=locEl?locEl.textContent.trim():'';
+      function num(i){ return c[i]?c[i].textContent.trim():'0'; }
+      var active=num(2), nw=num(3), pend=num(4), over=num(5), appt=num(6), td=num(7);
+      var langs=c[8]?c[8].textContent.trim():'';
+      var recEl=c[9]?c[9].firstElementChild:null;
+      var rec=recEl?recEl.textContent.trim():'Balanced';
+      var cap=20, av=parseInt(active,10)||0, ratio=Math.min(1, av/cap);
+      var barColor=ratio>=1?'#d1544f':(ratio>=0.85?'#e0932e':'#3d8a5b');
+      var pendRed=(parseInt(pend,10)||0)>0?' red':'';
+      var overRed=(parseInt(over,10)||0)>0?' red':'';
+      document.getElementById('mdrContent').innerHTML =
+        '<div class="mdr-hd mdr-hd-list"><div class="mdr-ttl">Workload &mdash; '+name+'</div><div class="mdr-sub">'+loc+' &middot; capacity out of '+cap+' leads</div><button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
+        '<div class="mdr-body">'+
+          '<div class="wl-bar-card"><div class="wl-bar-top"><span class="wl-bar-lbl">Active leads</span><span class="wl-bar-val">'+active+'/'+cap+'</span></div><div class="wl-bar"><div class="wl-bar-fill" style="width:'+(ratio*100)+'%;background:'+barColor+'"></div></div></div>'+
+          '<div class="wl-grid">'+
+            '<div class="wl-cell"><div class="wl-k">New Today</div><div class="wl-v">'+nw+'</div></div>'+
+            '<div class="wl-cell"><div class="wl-k">Pending 1st Contact</div><div class="wl-v'+pendRed+'">'+pend+'</div></div>'+
+            '<div class="wl-cell"><div class="wl-k">Overdue</div><div class="wl-v'+overRed+'">'+over+'</div></div>'+
+            '<div class="wl-cell"><div class="wl-k">Appts Today</div><div class="wl-v">'+appt+'</div></div>'+
+            '<div class="wl-cell"><div class="wl-k">TD Today</div><div class="wl-v">'+td+'</div></div>'+
+            '<div class="wl-cell"><div class="wl-k">Languages</div><div class="wl-v wl-lang">'+langs+'</div></div>'+
+          '</div>'+
+          '<div class="wl-status">'+rec+'</div>'+
+        '</div>';
+      document.getElementById('mdr').classList.add('open');
+      document.getElementById('mdrOverlay').classList.add('open');
+      document.getElementById('mdrContent').scrollTop=0;
+    }
   </script>
   <script src="copilot-widget.js?v=8" defer></script>
 </body>

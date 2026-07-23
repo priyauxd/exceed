@@ -340,7 +340,7 @@
     }
     .metric-card:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
     .kpi-grid.g7 .metric-card { text-align: center; }
-    .metric-card.mc-center { text-align: center; }
+    .metric-card.mc-center { text-align: center; display: flex; flex-direction: column; justify-content: center; height: 100%; }
     .metric-card.mc-center .mc-icon { margin-left: auto; margin-right: auto; }
     .mc-icon {
       width: 28px; height: 28px; border-radius: 7px;
@@ -1070,6 +1070,7 @@
     .dd-red { color:var(--red); font-weight:600; } .dd-amber { color:#8a6420; font-weight:600; }
     .mono { font-family:'SF Mono',Consolas,monospace; }
     </style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; } .metric-card .mc-tag{ text-align:left; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card{ border:none; }</style>
 </head>
 <body>
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
@@ -1355,7 +1356,7 @@
               <div class="dial-sub">of connected calls</div>
             </div>
             <div class="metric-card clk mc-center" onclick="openKpi('open3d')">
-              <div class="mc-icon amber"><span class="material-symbols-outlined">hourglass_top</span></div>
+              
               <div class="mc-val txt-amber">3</div><div class="mc-lbl">Open Leads &gt; 3 Days</div>
             </div>
           </div>
