@@ -1395,13 +1395,13 @@
             </div>
             <div class="q-filters">
               <span class="material-symbols-outlined">filter_list</span>
-              <button class="qt on">All &middot; 5</button>
-              <button class="qt">New</button>
-              <button class="qt">Not Actioned</button>
-              <button class="qt">Callback</button>
-              <button class="qt">Contact</button>
-              <button class="qt">SLA Breached</button>
-              <button class="qt">Returned by Sales</button>
+              <button class="qt on" data-f="all" onclick="filterLeadQueue(this)">All &middot; 5</button>
+              <button class="qt" data-f="New" onclick="filterLeadQueue(this)">New</button>
+              <button class="qt" data-f="Not Actioned" onclick="filterLeadQueue(this)">Not Actioned</button>
+              <button class="qt" data-f="Callback" onclick="filterLeadQueue(this)">Callback</button>
+              <button class="qt" data-f="Contact" onclick="filterLeadQueue(this)">Contact</button>
+              <button class="qt" data-f="breached" onclick="filterLeadQueue(this)">SLA Breached</button>
+              <button class="qt" data-f="Returned" onclick="filterLeadQueue(this)">Returned by Sales</button>
             </div>
             <table class="qt-table" id="qtTableEl">
               <thead><tr>
@@ -1459,12 +1459,12 @@
               <h4><span class="material-symbols-outlined" style="color:var(--amber)">schedule</span> Callbacks due</h4>
               <span class="sc-cnt">12</span>
             </div>
-            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Farida Zohra</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &times; 3 &middot; Escalate</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
-            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Anita Wong</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &middot; Retry</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
-            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Aisha Khalifa</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &times; 2 &middot; Prefers evenings</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
-            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Layan Otaibi</span><span class="tc norm">08:35</span></div><div class="r-detail">Callback requested &middot; Hot &mdash; quick</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
-            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Linda George</span><span class="tc norm">08:40</span></div><div class="r-detail">Requested callback &middot; Wants LX walkthrough</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
-            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Karam Halabi</span><span class="tc norm">08:45</span></div><div class="r-detail">Requested demo &middot; Hot</div><a href="#" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Farida Zohra</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &times; 3 &middot; Escalate</div><a href="lead-detail.html?lead=Farida+Zohra&copilot=1" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Anita Wong</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &middot; Retry</div><a href="lead-detail.html?lead=Anita+Wong&copilot=1" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Aisha Khalifa</span><span class="tc urg">Overdue</span></div><div class="r-detail">No answer &times; 2 &middot; Prefers evenings</div><a href="lead-detail.html?lead=Aisha+Khalifa&copilot=1" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Layan Otaibi</span><span class="tc norm">08:35</span></div><div class="r-detail">Callback requested &middot; Hot &mdash; quick</div><a href="lead-detail.html?lead=Layan+Otaibi&copilot=1" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Linda George</span><span class="tc norm">08:40</span></div><div class="r-detail">Requested callback &middot; Wants LX walkthrough</div><a href="lead-detail.html?lead=Linda+George&copilot=1" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
+            <div class="sc-row"><div class="sc-row-top"><span class="r-name">Karam Halabi</span><span class="tc norm">08:45</span></div><div class="r-detail">Requested demo &middot; Hot</div><a href="lead-detail.html?lead=Karam+Halabi&copilot=1" class="r-link"><span class="material-symbols-outlined" style="font-size:13px">call</span> Callback now</a></div>
           </div>
 
           <div class="sc">
