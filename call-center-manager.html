@@ -539,6 +539,14 @@
     .tbl-tab.on { background:#fff; color:var(--blue); box-shadow:0 1px 3px rgba(0,0,0,.1); }
     .expand-note { display:flex; align-items:center; gap:7px; padding:10px 16px; background:#fcfcfe; border:1px solid var(--border-soft); border-radius:var(--radius); margin-bottom:12px; font-size:11.5px; color:var(--ink-muted); cursor:pointer; }
     .expand-note .material-symbols-outlined { font-size:15px; color:var(--blue); }
+    .slog-panel{ display:none; margin-bottom:12px; }
+    .slog-panel.open{ display:block; }
+    .slog-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .slog-card{ border:1px solid var(--border-soft); border-radius:10px; padding:12px 14px; background:#fff; }
+    .slog-h{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+    .slog-clr{ font-size:11px; color:var(--ink-muted); }
+    .slog-desc{ font-size:13px; font-weight:600; color:var(--ink); margin-bottom:5px; }
+    .slog-trig{ font-size:11.5px; color:var(--ink-muted); line-height:1.5; }
 
     /* ── Copilot dropdown ── */
     .copilot-dd-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.28); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 45; }
@@ -981,11 +989,11 @@
           <div class="kpi-grid g8">
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAllLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAllLeads');}"><div class="mc-lbl">Leads Assigned</div><div class="mc-val">21</div><div class="mc-sub">Call Centre-owned</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccNotActioned')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccNotActioned');}"><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">18</div><div class="mc-sub">Sorted by SLA</div></div>
-            <div class="metric-card"><div class="mc-lbl">Callbacks Due</div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccCallbacksDue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccCallbacksDue');}"><div class="mc-lbl">Callbacks Due</div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('contactList')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('contactList');}"><div class="mc-lbl">Contact</div><div class="mc-val txt-green">4</div><div class="mc-sub">100% qualified</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}"><div class="mc-lbl">Returned by Sales</div><div class="mc-val">4</div><div class="mc-sub">Coach &amp; fix</div></div>
-            <div class="metric-card"><div class="mc-lbl">Avg Handle Time</div><div class="mc-val" style="font-size:19px">4m 32s</div><div class="mc-sub">Across all agents</div></div>
-            <div class="metric-card"><div class="mc-lbl">Agents on Shift</div><div class="mc-val">8</div><div class="mc-sub">4 on track</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAHT')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAHT');}"><div class="mc-lbl">Avg Handle Time</div><div class="mc-val" style="font-size:19px">4m 32s</div><div class="mc-sub">Across all agents</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAgentsShift')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAgentsShift');}"><div class="mc-lbl">Agents on Shift</div><div class="mc-val">8</div><div class="mc-sub">4 on track</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccLostLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccLostLeads');}"><div class="mc-lbl">Lost CC Leads</div><div class="mc-val">2</div><div class="mc-sub">Separate view</div></div>
           </div>
         </div>
@@ -1037,7 +1045,18 @@
           <button class="tbl-tab" onclick="switchCcTab('queue',this)">Lead queue (21)</button>
         </div>
         <div id="ccTabAgents">
-        <div class="expand-note"><span class="material-symbols-outlined">info</span> Agent status logic &mdash; how each status is triggered &mdash; click to expand</div>
+        <div class="expand-note" onclick="toggleStatusLogic()"><span class="material-symbols-outlined">info</span> Agent status logic &mdash; how each status is triggered &mdash; <span id="slogToggleTxt">click to expand</span></div>
+        <div class="slog-panel" id="statusLogicPanel">
+          <div class="slog-grid">
+            <div class="slog-card"><div class="slog-h"><span class="st-badge ok">On Track</span><span class="slog-clr">Green</span></div><div class="slog-desc">Agent is operating normally.</div><div class="slog-trig">Not actioned within threshold &middot; SLA breaches 0 &middot; returned leads low &middot; quality &ge;85 &middot; callback queue manageable &middot; AHT normal.</div></div>
+            <div class="slog-card"><div class="slog-h"><span class="st-badge wrn">Due Soon</span><span class="slog-clr">Amber</span></div><div class="slog-desc">Leads/callbacks approaching SLA but not breached.</div><div class="slog-trig">First contact due in 10&ndash;15 min &middot; callback due in 15 min &middot; workload rising, no breach yet.</div></div>
+            <div class="slog-card"><div class="slog-h"><span class="st-badge blk">Blocked</span><span class="slog-clr">Blue</span></div><div class="slog-desc">Agent needs manager support to clear queue.</div><div class="slog-trig">Assigned &gt; capacity &middot; several not actioned &middot; system/call issue &middot; high callback queue &middot; qualification failing.</div></div>
+            <div class="slog-card"><div class="slog-h"><span class="st-badge brch">SLA Breached</span><span class="slog-clr">Red</span></div><div class="slog-desc">Agent has one or more breached SLAs.</div><div class="slog-trig">SLA Brk &gt; 0 with breach duration &gt; threshold &middot; multiple not-actioned overdue &middot; callback SLA breached.</div></div>
+            <div class="slog-card"><div class="slog-h"><span class="st-badge ret">Returned</span><span class="slog-clr">Purple</span></div><div class="slog-desc">Leads returned by Sales Executive due to poor qualification.</div><div class="slog-trig">Returned &gt; threshold &middot; repeated missing fields &middot; low qualification completeness.</div></div>
+            <div class="slog-card"><div class="slog-h"><span class="st-badge wrn">Quality Risk</span><span class="slog-clr">Amber/Red</span></div><div class="slog-desc">Agent may be fast but qualification quality is poor.</div><div class="slog-trig">AHT low, quality below target &middot; high handover return rate &middot; missing mandatory fields.</div></div>
+            <div class="slog-card"><div class="slog-h"><span class="st-badge blk">Overloaded</span><span class="slog-clr">Blue/Amber</span></div><div class="slog-desc">Too many assigned leads relative to available time.</div><div class="slog-trig">Assigned &gt; capacity &middot; not actioned &gt; threshold &middot; callback queue high &middot; SLA due soon count high.</div></div>
+          </div>
+        </div>
 
         <div class="q-panel">
           <div class="q-head">
@@ -1471,6 +1490,46 @@
       ccNotActioned: { list:true, title:'Not actioned', action:'Start call', records:18,
         cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'owner',l:'Owner'},{k:'sla',l:'SLA'},{k:'channel',l:'Channel'},{k:'next',l:'Next Action'},{k:'routing',l:'Routing'}],
         rows: CC.slice(0,18) },
+      ccCallbacksDue: { list:true, title:'Callbacks Due', sub:'Scheduled callbacks with a due time in the current period', action:'Open', records:12,
+        cols:[{k:'lead',l:'Lead'},{k:'owner',l:'Owner'},{k:'due',l:'Due'},{k:'status',l:'Status'}],
+        rows:[
+          {lead:'Meera Shah',    id:'L-2026-06002', owner:'Nadia Al Suwaidi', due:'20 min overdue', status:'Overdue'},
+          {lead:'Layan Otaibi',  id:'L-2026-06011', owner:'Ivan Petrov',      due:'15 min overdue', status:'Overdue'},
+          {lead:'Karim Mansour', id:'L-2026-06008', owner:'Priya Nair',       due:'12 min overdue', status:'Overdue'},
+          {lead:'Noor Fahad',    id:'L-2026-06010', owner:'Ivan Petrov',      due:'8 min overdue',  status:'Overdue'},
+          {lead:'Hana Barakat',  id:'L-2026-06016', owner:'Lina Osman',       due:'6 min overdue',  status:'Overdue'},
+          {lead:'Ranya Al Amir', id:'L-2026-06017', owner:'Rahul Krishnan',   due:'3 min overdue',  status:'Overdue'},
+          {lead:'Sami Doss',     id:'L-2026-07003', owner:'Aisha Hussein',    due:'1 min overdue',  status:'Overdue'},
+          {lead:'Nabil Farha',   id:'L-2026-07006', owner:'Nadia Al Suwaidi', due:'in 5 min',       status:'Due soon'},
+          {lead:'Mira Khaled',   id:'L-2026-06102', owner:'Nadia Al Suwaidi', due:'in 12 min',      status:'Due soon'},
+          {lead:'Anil Krishnan', id:'L-2026-06103', owner:'Aisha Hussein',    due:'in 25 min',      status:'Scheduled'},
+          {lead:'Rasha Nabhan',  id:'L-2026-06104', owner:'Lina Osman',       due:'in 40 min',      status:'Scheduled'},
+          {lead:'Adel Rahim',    id:'L-2026-06009', owner:'Priya Nair',       due:'in 1 h',         status:'Scheduled'}
+        ] },
+      ccAHT: { list:true, title:'Avg Handle Time', sub:'Average call handle time across all completed calls — by agent · overall 4m 32s', records:8,
+        cols:[{k:'lead',l:'Agent'},{k:'calls',l:'Calls'},{k:'aht',l:'AHT'},{k:'status',l:'Status'}],
+        rows:[
+          {lead:'Lina Osman',       calls:24, aht:'5m 10s', status:'Above target'},
+          {lead:'Farhan Aslam',     calls:31, aht:'4m 02s', status:'On target'},
+          {lead:'Ivan Petrov',      calls:28, aht:'3m 48s', status:'On target'},
+          {lead:'Nadia Al Suwaidi', calls:22, aht:'4m 55s', status:'Above target'},
+          {lead:'Rahul Krishnan',   calls:26, aht:'4m 20s', status:'On target'},
+          {lead:'Aisha Hussein',    calls:19, aht:'5m 30s', status:'Above target'},
+          {lead:'Priya Nair',       calls:30, aht:'3m 35s', status:'On target'},
+          {lead:'Omar Al Khoury',   calls:21, aht:'4m 12s', status:'On target'}
+        ] },
+      ccAgentsShift: { list:true, title:'Agents on Shift', sub:'Agents rostered and active in the current shift window · 4 on track', records:8,
+        cols:[{k:'lead',l:'Agent'},{k:'shift',l:'Shift'},{k:'calls',l:'Calls Today'},{k:'status',l:'Status'}],
+        rows:[
+          {lead:'Lina Osman',       shift:'09:00 – 17:00', calls:24, status:'On Track'},
+          {lead:'Farhan Aslam',     shift:'09:00 – 17:00', calls:31, status:'On Track'},
+          {lead:'Ivan Petrov',      shift:'10:00 – 18:00', calls:28, status:'On Track'},
+          {lead:'Nadia Al Suwaidi', shift:'08:00 – 16:00', calls:22, status:'On Track'},
+          {lead:'Rahul Krishnan',   shift:'10:00 – 18:00', calls:26, status:'Due Soon'},
+          {lead:'Aisha Hussein',    shift:'11:00 – 19:00', calls:19, status:'Overloaded'},
+          {lead:'Priya Nair',       shift:'09:00 – 17:00', calls:30, status:'Due Soon'},
+          {lead:'Omar Al Khoury',   shift:'12:00 – 20:00', calls:21, status:'Blocked'}
+        ] },
       ccLostLeads: { list:true, title:'Lost CC leads', action:'Open', records:2,
         cols:[{k:'lead',l:'Lead'},{k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'owner',l:'Owner'},{k:'lostreason',l:'Lost Reason'},{k:'days',l:'Days Idle'}],
         rows:[
@@ -1640,9 +1699,11 @@
       var A="'"+agent.replace(/'/g,"\\'")+"'";
       var items=[['list_alt','View agent queue',"openMetric('ccAllLeads')"],['undo','Reassign leads',"openReassign("+A+")"],['warning','Review returned leads',"openMetric('returnRate')"],['fact_check','Review call quality',"openQuality("+A+")"],['edit_note','Add coaching note',"openCoaching("+A+")"],['warning','View SLA breaches',"openMetric('firstContact')"]];
       m.innerHTML=items.map(function(it){ return '<button onclick="closeAgentMenu();'+it[2]+'"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px;margin-right:8px">'+it[0]+'</span>'+it[1]+'</button>'; }).join('');
-      var rc=e.currentTarget.getBoundingClientRect(); m.style.display='block'; m.style.top=(rc.bottom+4)+'px'; m.style.left=Math.max(8,rc.right-212)+'px';
+      var rc=e.currentTarget.getBoundingClientRect(); m.style.display='block'; m.style.left=Math.max(8,rc.right-212)+'px';
+      var mh=m.offsetHeight, top=rc.bottom+4; if(rc.bottom+mh+8>window.innerHeight) top=Math.max(8,rc.top-mh-4); m.style.top=top+'px';
     };
     window.closeAgentMenu=function(){ var m=document.getElementById('agentRowMenu'); if(m) m.style.display='none'; };
+    window.toggleStatusLogic=function(){ var p=document.getElementById('statusLogicPanel'); if(!p) return; p.classList.toggle('open'); var t=document.getElementById('slogToggleTxt'); if(t) t.textContent=p.classList.contains('open')?'click to collapse':'click to expand'; };
     document.addEventListener('click',function(e){ if(!(e.target.closest && e.target.closest('#agentRowMenu'))) closeAgentMenu(); });
 
     // ── KPI definitions modal ──
