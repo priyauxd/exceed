@@ -756,6 +756,14 @@
     .frm-link:hover{ text-decoration:underline; }
     .ra-badge{ display:inline-block; padding:4px 12px; border-radius:14px; font-size:12px; font-weight:700; }
     .ra-badge.brch{ background:#fdecec; color:#d1544f; } .ra-badge.blk{ background:#eef1f4; color:#5b6472; }
+    .ra-badge.ok{ background:var(--green-soft); color:#3d8a5b; } .ra-badge.wrn{ background:var(--amber-soft); color:#8a6420; } .ra-badge.ret{ background:var(--blue-soft); color:var(--blue); }
+    .rl-card{ display:flex; align-items:flex-start; justify-content:space-between; gap:14px; border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px; background:#fafbfc; }
+    .rl-lead{ font-size:15px; font-weight:700; color:var(--ink); }
+    .rl-meta{ font-size:12.5px; color:var(--ink-muted); margin-top:3px; }
+    .rl-reason{ display:flex; align-items:center; gap:6px; font-size:13px; color:var(--blue); margin-top:10px; font-weight:600; }
+    .rl-reason .material-symbols-outlined{ font-size:16px; }
+    .rl-sub{ font-size:12.5px; color:var(--ink-secondary); margin-top:3px; }
+    .rl-btn{ flex-shrink:0; white-space:nowrap; }
     .ra-sec-lbl{ font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-secondary); margin:16px 0 8px; }
     .ra-recv tr.sel td{ background:#eef4fd; }
     .ra-recv .num{ text-align:right; }
@@ -1627,7 +1635,24 @@
       'Lina Osman': { shift:'10:00–19:00', assigned:25, notact:8, sla:4, status:'Blocked', statusCls:'blk', note:'25 assigned vs 20 capacity, 8 not actioned — cannot clear queue within SLA.',
         leads:[{lead:'Rasha Nabhan',id:'L-2026-06104',source:'Campaign Callback',temp:'Warm',sla:'30m left',slaC:'',qual:'85%',next:'Reassign to Arabic agent'},
                {lead:'Ravi Prasad',id:'L-2026-06012',source:'Manual CC Queue',temp:'Warm',sla:'45m left',slaC:'',qual:'65%',next:'Complete qualification'},
-               {lead:'Waleed Kanaan',id:'L-2026-06008',source:'Manual CC Queue',temp:'Warm',sla:'60m left',slaC:'',qual:'55%',next:'Complete qualification'}] }
+               {lead:'Waleed Kanaan',id:'L-2026-06008',source:'Manual CC Queue',temp:'Warm',sla:'60m left',slaC:'',qual:'55%',next:'Complete qualification'}] },
+      'Mohammed Zaid': { shift:'09:00–18:00', assigned:19, notact:3, sla:1, status:'Returned', statusCls:'ret', note:'3 leads not actioned; several returned by sales for missing fields.',
+        leads:[{lead:'Sara Ali',id:'L-2026-06101',source:'Call Center Inbound',temp:'Warm',sla:'25m left',slaC:'',qual:'40%',next:'Complete preferred showroom'},
+               {lead:'Mira Khaled',id:'L-2026-06102',source:'Manual CC Queue',temp:'Warm',sla:'12m over',slaC:'red',qual:'70%',next:'Fix contact number'}] },
+      'Aisha Hussein': { shift:'11:00–20:00', assigned:17, notact:5, sla:2, status:'Due Soon', statusCls:'wrn', note:'5 leads not actioned, 2 approaching SLA within 15 min.',
+        leads:[{lead:'Layan Otaibi',id:'L-2026-06011',source:'Campaign Callback',temp:'Warm',sla:'10m left',slaC:'',qual:'50%',next:'Start call — SLA due soon'},
+               {lead:'Noor Fahad',id:'L-2026-06010',source:'800 Number',temp:'Warm',sla:'14m left',slaC:'',qual:'60%',next:'Start call'}] },
+      'Nadia Al Suwaidi': { shift:'08:00–17:00', assigned:18, notact:1, sla:0, status:'On Track', statusCls:'ok', note:'Operating within SLA — light rebalancing only.',
+        leads:[{lead:'Karim Mansour',id:'L-2026-06009',source:'Website',temp:'Warm',sla:'45m left',slaC:'',qual:'65%',next:'Start call'},
+               {lead:'Ranya Al Amir',id:'L-2026-06017',source:'Campaign Callback',temp:'Warm',sla:'60m left',slaC:'',qual:'30%',next:'Assign to agent'}] },
+      'Priya Nair': { shift:'09:00–18:00', assigned:16, notact:2, sla:0, status:'On Track', statusCls:'ok', note:'Within SLA — 2 leads awaiting first contact.',
+        leads:[{lead:'Rerouted Web',id:'L-2026-06014',source:'Website',temp:'Warm',sla:'30m left',slaC:'',qual:'20%',next:'Start call · CC qualification'},
+               {lead:'Hana Barakat',id:'L-2026-06016',source:'800 Number',temp:'Warm',sla:'40m left',slaC:'',qual:'0%',next:'Assign to agent'}] },
+      'Farhan Aslam': { shift:'10:00–19:00', assigned:14, notact:1, sla:0, status:'On Track', statusCls:'ok', note:'Within SLA — capacity available to receive leads.',
+        leads:[{lead:'Meera Shah',id:'L-2026-06002',source:'800 Number',temp:'Warm',sla:'35m left',slaC:'',qual:'20%',next:'Start call'}] },
+      'Ivan Petrov': { shift:'13:00–22:00', assigned:13, notact:2, sla:0, status:'On Track', statusCls:'ok', note:'Within SLA — capacity available to receive leads.',
+        leads:[{lead:'Sami Doss',id:'L-2026-07003',source:'Call Center Inbound',temp:'Warm',sla:'50m left',slaC:'',qual:'20%',next:'Start call'},
+               {lead:'Adel Rahim',id:'L-2026-06009',source:'Website',temp:'Warm',sla:'70m left',slaC:'',qual:'55%',next:'Complete qualification'}] }
     };
     var RECV=[
       {n:'Ivan Petrov',shift:'13:00–22:00',status:'On Track',sc:'ok',assigned:13,notact:2,quality:85},
@@ -1641,7 +1666,7 @@
       document.getElementById('mdrContent').innerHTML = HD('Add Coaching Note') +
         '<div class="mdr-body"><div class="frm-agent">Agent &middot; <strong>'+agent+'</strong></div>'+
           frmSelect('Coaching reason',['SLA breaches','Quality issues','High return rate','Low qualification','Attendance','Other'])+
-          frmSelect('Related KPI',['SLA compliance','Qual completion','Return rate','AHT','CSAT'])+
+          frmSelect('Related KPI',['SLA compliance','Qual completion','Return rate','AHT','Not actioned','Callback overdue'])+
           frmTextarea('Evidence / examples','Lead IDs, breach durations…')+
           frmTextarea('Coaching note','')+
           frmField('Follow-up date','<input type="date" class="frm-ctrl" lang="en-GB">')+
@@ -1670,6 +1695,25 @@
     function raCount(){ var n=document.querySelectorAll('.ra-lead-check:checked').length; var el=document.getElementById('raSelCount'); if(el) el.textContent=n; }
     window.raCount=raCount;
     window.raSelect=function(row){ Array.prototype.forEach.call(row.parentNode.querySelectorAll('tr'),function(t){t.classList.remove('sel');}); row.classList.add('sel'); var rb=row.querySelector('input[type=radio]'); if(rb) rb.checked=true; };
+    window.openReturnedLeads=function(agent){
+      agent = agent || 'Mohammed Zaid';
+      var rows=[
+        {lead:'Sara Ali', by:'Ahmad Nasr', ago:'42m ago', reason:'Missing preferred showroom', missing:'Preferred showroom'},
+        {lead:'Mira Khaled', by:'Karim Mostafa', ago:'1h 5m ago', reason:'Wrong contact number', missing:'Mobile'},
+        {lead:'Anil Krishnan', by:'Omar Al Khoury', ago:'2h ago', reason:'Enquiry reason unclear', missing:'Enquiry reason'},
+        {lead:'Rasha Nabhan', by:'Sara Ali', ago:'3h ago', reason:'Language mismatch — Arabic', missing:'Language flag'}
+      ];
+      var cards=rows.map(function(r){ return '<div class="rl-card"><div class="rl-main">'+
+        '<div class="rl-lead">'+r.lead+'</div>'+
+        '<div class="rl-meta">Returned by '+r.by+' &middot; '+r.ago+'</div>'+
+        '<div class="rl-reason"><span class="material-symbols-outlined">warning</span> '+r.reason+'</div>'+
+        '<div class="rl-sub">Missing: '+r.missing+'</div>'+
+        '<div class="rl-sub">Original agent: '+agent+'</div></div>'+
+        '<button class="frm-save rl-btn" onclick="ccToast(\'Assigned back to agent\')">Assign back to agent</button></div>'; }).join('');
+      document.getElementById('mdrContent').innerHTML = HD('Returned Leads from Sales','Complete missing information and reassign back to the agent.')+
+        '<div class="mdr-body">'+cards+'</div>';
+      openMdr();
+    };
     window.openReassign=function(agent){
       var r=REASSIGN[agent]||REASSIGN['Rahul Krishnan'];
       var leadRows=r.leads.map(function(l){ return '<tr><td><input type="checkbox" class="ra-lead-check" onchange="raCount()"></td>'+
@@ -1705,7 +1749,7 @@
       var m=document.getElementById('agentRowMenu');
       if(!m){ m=document.createElement('div'); m.id='agentRowMenu'; m.className='row-menu'; document.body.appendChild(m); }
       var A="'"+agent.replace(/'/g,"\\'")+"'";
-      var items=[['list_alt','View agent queue',"openMetric('ccAllLeads')"],['undo','Reassign leads',"openReassign("+A+")"],['warning','Review returned leads',"openMetric('returnRate')"],['fact_check','Review call quality',"openQuality("+A+")"],['edit_note','Add coaching note',"openCoaching("+A+")"],['warning','View SLA breaches',"openMetric('firstContact')"]];
+      var items=[['list_alt','View agent queue',"openMetric('ccAllLeads')"],['undo','Reassign leads',"openReassign("+A+")"],['warning','Review returned leads',"openReturnedLeads("+A+")"],['fact_check','Review call quality',"openQuality("+A+")"],['edit_note','Add coaching note',"openCoaching("+A+")"],['warning','View SLA breaches',"openMetric('firstContact')"]];
       m.innerHTML=items.map(function(it){ return '<button onclick="closeAgentMenu();'+it[2]+'"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px;margin-right:8px">'+it[0]+'</span>'+it[1]+'</button>'; }).join('');
       var rc=e.currentTarget.getBoundingClientRect(); m.style.display='block'; m.style.left=Math.max(8,rc.right-212)+'px';
       var mh=m.offsetHeight, top=rc.bottom+4; if(rc.bottom+mh+8>window.innerHeight) top=Math.max(8,rc.top-mh-4); m.style.top=top+'px';
