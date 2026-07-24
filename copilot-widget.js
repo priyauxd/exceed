@@ -89,7 +89,7 @@
     ['Call Center Agent', 'call-center-agent.html'],
     ['Call Center Manager', 'call-center-manager.html'],
     ['Showroom Manager', 'showroom-manager.html'],
-    ['Head of Sales', '#'],
+    ['Head of Sales', 'head-of-sales.html'],
     ['Sales Executive', 'sales-executive.html']
   ];
   var PERSONA_DEFAULT = 'call-center-agent.html';

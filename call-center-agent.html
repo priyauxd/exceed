@@ -172,6 +172,8 @@
       font-size: 13px; color: var(--ink-muted); line-height: 1.45; white-space: nowrap;
     }
     .greeting-sub .date { font-weight: 600; color: var(--ink-secondary); }
+    .persona-badge { display:inline-flex; align-items:center; gap:5px; background:#eef0f4; color:var(--ink-secondary); font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; border-radius:14px; padding:4px 11px; vertical-align:middle; margin-right:8px; }
+    .persona-badge .material-symbols-outlined { font-size:14px; }
     .greeting-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
     .date-filter { display:inline-flex; align-items:center; gap:1px; background:transparent; border:1px solid var(--border); border-radius:7px; padding:2px 3px 2px 9px; }
     .date-filter .df-cal { font-size:15px; color:var(--ink-muted); margin-right:5px; }
@@ -1222,7 +1224,7 @@
           <div class="greeting-left">
             <h1>Good afternoon, Nadia <span class="wave">&#128075;</span></h1>
             <div class="greeting-sub">
-              <span class="date">Tue, 30 Jun 2026</span>
+              <span class="persona-badge"><span class="material-symbols-outlined">badge</span> Call Center Agent</span> <span class="date">Tue, 30 Jun 2026</span>
             </div>
           </div>
           <div class="greeting-right">
@@ -1832,7 +1834,8 @@
           {r:'customer', t:"Around 150k, mostly city driving."},
           {r:'you', t:"Great. And how many people usually travel with you?"},
           {r:'customer', t:"We're five — we need good space."},
-          {r:'you', t:"Noted — 5 seats, city use, ~150k budget. When are you hoping to buy?"},
+          {r:'you', t:"Noted — 5 seats, city use, 
+150k budget. When are you hoping to buy?"},
           {r:'customer', t:"Within the next month."}
         ], coach:"Great practice run — captured: Budget, Usage, Timeline. Click Complete Module to save your score." },
       { t:'Model interest capture', d:'Confirm exact model and trim.', st:'completed', score:88, rule:'Confirm the exact model and trim.',
@@ -2297,6 +2300,6 @@
       if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
     })();
   </script>
-  <script src="copilot-widget.js?v=9" defer></script>
+  <script src="copilot-widget.js?v=10" defer></script>
 </body>
 </html>
