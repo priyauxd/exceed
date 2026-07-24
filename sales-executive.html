@@ -189,6 +189,8 @@
     .date-custom input[type=date] { border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; }
     .date-custom input[type=date]:focus { border-color:var(--blue); }
     .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel { background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:7px; padding:8px 14px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel:hover { background:#f5f5f5; }
     .btn-soft {
       padding: 7px 14px; border: 1px solid var(--border);
       border-radius: 8px; background: var(--surface);
@@ -905,6 +907,7 @@
               <div class="date-custom" id="dateCustom">
                 <label>From<input type="text" id="dateFrom" placeholder="dd.mm.yyyy"></label>
                 <label>To<input type="text" id="dateTo" placeholder="dd.mm.yyyy"></label>
+                <button class="dc-cancel" onclick="cancelCustomRange()">Cancel</button>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
             </div>
@@ -1022,7 +1025,7 @@
 
         <!-- SECTION — Monthly Targets -->
         <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--green)"></span><span class="kpi-sec-title">Monthly targets — MTD</span><span class="kpi-sec-sub">&middot; Cascaded from a monthly booking goal of 20</span></div>
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--green)"></span><span class="kpi-sec-title">Monthly targets — MTD</span><span class="kpi-sec-sub">&middot; Cascaded from a monthly booking goal of 20</span><span class="kpi-sec-sub" style="margin-left:auto">Refreshes daily &middot; TODO confirm targets</span></div>
           <style>
             .mt-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; }
             .mt-card { background:#fff; border-radius:12px; padding:14px 16px; }
@@ -1046,7 +1049,7 @@
 
         <!-- SECTION — My Pipeline -->
         <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My pipeline</span><span class="kpi-sec-sub">&middot; Click a stage to drill in &middot; New Leads is count-only</span></div>
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My pipeline</span><span class="kpi-sec-sub">&middot; Click a stage to drill in &middot; New Leads is count-only</span><div class="date-filter-wrap" style="margin-left:auto"><div class="date-filter"><button class="df-tab" onclick="setDateRange(this)">Today</button><button class="df-tab" onclick="setDateRange(this)">This week</button><button class="df-tab on" onclick="setDateRange(this)">MTD</button><button class="df-tab" onclick="setDateRange(this)">Last 30 days</button></div></div>
           <style>
             .np-wrap { background:#fafafa; border-radius:14px; padding:18px 20px 14px; }
             .np-chart { display:flex; align-items:flex-end; gap:14px; height:250px; padding:0 4px; }
@@ -1288,7 +1291,7 @@
     .mdr-scroll{overflow-y:auto;height:100%;}
     .mdr-hd{background:linear-gradient(135deg,#17293d,#2a4a6b);color:#fff;padding:20px 24px;position:relative;}
     .mdr-ey{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.82;}
-    .mdr-ttl{font-size:22px;font-weight:700;margin-top:2px;}
+    .mdr-ttl{font-size:22px;font-weight:700;margin-top:2px;padding-right:110px;}
     .mdr-sub{font-size:12.5px;opacity:.85;margin-top:4px;max-width:60%;}
     .mdr-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
     .mdr-close:hover{background:rgba(255,255,255,.28);}
@@ -1437,6 +1440,17 @@
 
     .mdr-records{position:absolute;top:20px;right:60px;font-size:13px;font-weight:600;color:rgba(255,255,255,.82);}
     .mdr-hd-list{padding-bottom:18px;}
+    .mdr-addcol-wrap{position:relative;display:inline-block;margin-top:10px;}
+    .mdr-addcol{display:inline-flex;align-items:center;gap:6px;color:#fff;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.95;}
+    .mdr-addcol:hover{opacity:1;}
+    .mdr-addcol .material-symbols-outlined{font-size:17px;}
+    .mdr-addcol-menu{display:none;position:absolute;top:calc(100% + 8px);right:0;left:auto;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 14px 40px rgba(15,20,28,.22);padding:14px 16px;min-width:210px;z-index:70;}
+    .mdr-listnote{font-size:12px;color:var(--ink-muted);margin-top:12px;}
+    .mdr-listnote-2{margin-top:4px;}
+    .mdr-addcol-menu.open{display:block;}
+    .mdr-addcol-h{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:8px;}
+    .mdr-addcol-opt{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--ink);padding:6px 0;cursor:pointer;}
+    .mdr-addcol-opt input{width:18px;height:18px;accent-color:var(--blue);cursor:pointer;}
     .ml-assign{color:var(--blue);font-weight:700;text-decoration:none;white-space:nowrap;}
     .ml-assign:hover{text-decoration:underline;}
   </style>
@@ -1525,11 +1539,14 @@
 
   <script>
     // Date range filter (Today is the default)
+    var prevDateTab = null;
     function setDateRange(btn){
+      var isCustom = /custom/i.test(btn.textContent);
+      if (isCustom) { var cur = btn.parentNode.querySelector('.df-tab.on'); if (cur && cur !== btn) prevDateTab = cur; }
+      else { prevDateTab = null; }
       btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
       btn.classList.add('on');
       var custom = document.getElementById('dateCustom');
-      var isCustom = /custom/i.test(btn.textContent);
       if (custom) custom.classList.toggle('open', isCustom);
       if (isCustom) { var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
     }
@@ -1541,6 +1558,11 @@
       else if (f) lbl = 'From '+fmt(f);
       document.getElementById('dfCustom').textContent = lbl;
       document.getElementById('dateCustom').classList.remove('open');
+      prevDateTab = null;
+    }
+    function cancelCustomRange(){
+      document.getElementById('dateCustom').classList.remove('open');
+      if (prevDateTab) { document.getElementById('dfCustom').classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
     }
   </script>
 
@@ -1782,6 +1804,38 @@
     function mlAutoAssign(){ if(window.showToast) showToast('Auto-assigning '+mlLeads.length+' leads by availability'); closeMetric(); }
     document.addEventListener('click',function(e){ var w=e.target.closest?e.target.closest('.ml-addwrap'):null; if(!w){ var mn=document.getElementById('mlAddMenu'); if(mn) mn.classList.remove('open'); } });
 
+    // ── Metric-modal "Add column" popover ──
+    var mdrCurrentId = null;
+    var ADD_COLS = [
+      {k:'source',l:'Source'},{k:'channel',l:'Channel'},{k:'model',l:'Model'},
+      {k:'stage',l:'Stage'},{k:'idle',l:'Days idle'},{k:'quote',l:'Quote'},{k:'status',l:'Status'}
+    ];
+    function mdrAddColHtml(m){
+      if(!m || !m.cols) return '';
+      var have={}; m.cols.forEach(function(c){ have[c.k]=true; have[(c.l||'').toLowerCase()]=true; });
+      var opts=ADD_COLS.filter(function(o){ return !have[o.k] && !have[o.l.toLowerCase()]; });
+      if(!opts.length) return '';
+      return '<div class="mdr-addcol-wrap">'+
+        '<button class="ml-tbtn" onclick="mdrToggleAddCol(event)"><span class="material-symbols-outlined">view_column</span> Add column</button>'+
+        '<div class="mdr-addcol-menu" id="mdrAddColMenu">'+
+          '<div class="mdr-addcol-h">Additional columns</div>'+
+          opts.map(function(o){ return '<label class="mdr-addcol-opt"><input type="radio" name="mdraddcol" onclick="mdrAddCol(\''+o.k+'\',\''+o.l+'\')"><span>'+o.l+'</span></label>'; }).join('')+
+        '</div>'+
+      '</div>';
+    }
+    function mdrToggleAddCol(e){ if(e){ e.preventDefault(); e.stopPropagation(); } var mn=document.getElementById('mdrAddColMenu'); if(mn) mn.classList.toggle('open'); }
+    function mdrAddCol(k,l){
+      var m=METRICS[mdrCurrentId]; if(!m||!m.cols) return;
+      var exists=false; for(var i=0;i<m.cols.length;i++){ if(m.cols[i].k===k){ exists=true; break; } }
+      if(!exists){
+        var idx=-1; for(var j=0;j<m.cols.length;j++){ if(m.cols[j].k==='act'){ idx=j; break; } }
+        var col={k:k,l:l};
+        if(idx>=0) m.cols.splice(idx,0,col); else m.cols.push(col);
+      }
+      openMetric(mdrCurrentId);
+    }
+    document.addEventListener('click',function(e){ var w=e.target.closest?e.target.closest('.mdr-addcol-wrap'):null; if(!w){ var mn=document.getElementById('mdrAddColMenu'); if(mn) mn.classList.remove('open'); } });
+
     function mlCell(k,r){
       if(k==='cust') return '<td><div class="ml-name">'+r.cust+'</div>'+(r.id?'<div class="ml-id">'+r.id+'</div>':'')+'</td>';
       if(k==='temp'){ var tc=r.temp==='Hot'?'hot':(r.temp==='Cold'?'cold':'warm'); return '<td><span class="ml-temp '+tc+'">'+r.temp+'</span></td>'; }
@@ -1848,7 +1902,7 @@
           '</div>' +
           '<div class="ax-sec">' +
             '<div class="ax-head"><div><div class="mdr-secl">Transactions</div><div class="ax-cap">Underlying leads in this stage</div></div>' +
-              '<div class="ml-tbar"><button class="ml-tbtn" onclick="showToast(\'Add column\')"><span class="material-symbols-outlined">view_column</span> Add column</button>' +
+              '<div class="ml-tbar">'+ mdrAddColHtml(m) +
               '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div></div>' +
             txHtml +
           '</div>' +
@@ -1867,11 +1921,17 @@
           '<div class="mdr-records">'+recs+' record'+(recs===1?'':'s')+'</div>' +
           '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
         '</div>' +
-        '<div class="mdr-body"><div class="mdr-leadswrap">'+
+        '<div class="mdr-body">'+
+          '<div class="ml-tbar" style="justify-content:flex-end;margin-bottom:10px;">'+ mdrAddColHtml(m) +
+            '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div>'+
+          '<div class="mdr-leadswrap">'+
           ((m.rows && m.rows.length) ? listTable(m) :
             '<table class="mdr-leads"><thead><tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr></thead></table>'+
             '<div class="ax-empty2"><div class="ax-empty2-t">'+(m.emptyT||'No leads match this KPI right now.')+'</div><div class="ax-empty2-s">'+(m.emptyS||'Try changing the period or clearing filters.')+'</div></div>')+
-        '</div></div>';
+          '</div>'+
+          '<div class="mdr-listnote">Data shown is mock. Use &ldquo;Add columns&rdquo; to bring additional fields into view.</div>'+
+          '<div class="mdr-listnote mdr-listnote-2">Click any row for full transaction detail.</div>'+
+        '</div>';
       document.getElementById('mdr').classList.add('open');
       document.getElementById('mdrOverlay').classList.add('open');
       document.getElementById('mdrContent').scrollTop=0;
@@ -1954,6 +2014,7 @@
     }
     function openMetric(id){
       var m=METRICS[id]; if(!m) return;
+      mdrCurrentId=id;
       document.getElementById('mdr').classList.remove('mdr-wide');
       if(m.pool){ openPoolMetric(m); return; }
       if(m.apen){ openApenMetric(m); return; }
@@ -2290,9 +2351,9 @@
       fCancellationBooking: L({title:'Cancellation → Booking — Mariam Saeed', sub:'Your cancelled/lost leads — recovery candidates · MTD', cols:C.cancel, rows:[], records:0}),
       // ── Volumetrics (transactions, scoped) ──
       vWalks: L({title:'Walks', sub:'Scope: Mariam Saeed · MTD', cols:C.tx6, rows:walkRows, records:2}),
-      vVisitsWalkins: L({title:'Visits + Walk-ins', sub:'Scope: Mariam Saeed · MTD', cols:C.tx6, rows:walkRows, records:2}),
+      vVisitsWalkins: L({title:'Visits + Walk-ins', sub:'Scope: Mariam Saeed · MTD', cols:[{k:'date',l:'Date'},{k:'cust',l:'Customer'},{k:'channel',l:'Channel'},{k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'branch',l:'Branch'}], rows:walkRows, records:2}),
       vBookings: L({title:'Bookings', sub:'Scope: Mariam Saeed · MTD', cols:C.txamt, rows:[], records:0, emptyT:'No transactions in the current scope.', emptyS:'Data shown is mock. Try a different period.'}),
-      vSalesOrders: L({title:'Sales Orders', sub:'Scope: Mariam Saeed · MTD', cols:C.txamt, rows:[], records:0, emptyT:'No transactions in the current scope.', emptyS:'Data shown is mock. Try a different period.'}),
+      vSalesOrders: L({title:'Sales Orders', sub:'Scope: Mariam Saeed · MTD', cols:[{k:'date',l:'Date'},{k:'cust',l:'Customer'},{k:'model',l:'Model'},{k:'amount',l:'Amount (AED)'},{k:'tradein',l:'Trade-in'},{k:'branch',l:'Branch'}], rows:[], records:0, emptyT:'No transactions in the current scope.', emptyS:'Data shown is mock. Try a different period.'}),
       vInvoices: L({title:'Invoices', sub:'Scope: Mariam Saeed · MTD', cols:C.txamt, rows:[], records:0, emptyT:'No transactions in the current scope.', emptyS:'Data shown is mock. Try a different period.'}),
       vDeliveries: L({title:'Deliveries', sub:'Scope: Mariam Saeed · MTD', cols:C.txamt, rows:[], records:0, emptyT:'No transactions in the current scope.', emptyS:'Data shown is mock. Try a different period.'}),
       vFollowups: L({title:'Follow-ups on time', sub:'Scope: Mariam Saeed · MTD', cols:C.tx6, rows:[], records:0, emptyT:'No transactions in the current scope.', emptyS:'Data shown is mock. Try a different period.'}),

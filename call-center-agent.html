@@ -187,6 +187,8 @@
     .date-custom input[type=date] { border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; }
     .date-custom input[type=date]:focus { border-color:var(--blue); }
     .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel { background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:7px; padding:8px 14px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel:hover { background:#f5f5f5; }
     .shift-pill {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 5px 11px; background: var(--green-soft);
@@ -1254,6 +1256,7 @@
               <div class="date-custom" id="dateCustom">
                 <label>From<input type="text" id="dateFrom" placeholder="dd.mm.yyyy"></label>
                 <label>To<input type="text" id="dateTo" placeholder="dd.mm.yyyy"></label>
+                <button class="dc-cancel" onclick="cancelCustomRange()">Cancel</button>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
             </div>
@@ -1799,11 +1802,14 @@
     }
 
     // Date range filter (Today is the default)
+    var prevDateTab = null;
     function setDateRange(btn){
+      var isCustom = /custom/i.test(btn.textContent);
+      if (isCustom) { var cur = btn.parentNode.querySelector('.df-tab.on'); if (cur && cur !== btn) prevDateTab = cur; }
+      else { prevDateTab = null; }
       btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
       btn.classList.add('on');
       var custom = document.getElementById('dateCustom');
-      var isCustom = /custom/i.test(btn.textContent);
       if (custom) custom.classList.toggle('open', isCustom);
       if (isCustom) { var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
     }
@@ -1815,6 +1821,11 @@
       else if (f) lbl = 'From '+fmt(f);
       document.getElementById('dfCustom').textContent = lbl;
       document.getElementById('dateCustom').classList.remove('open');
+      prevDateTab = null;
+    }
+    function cancelCustomRange(){
+      document.getElementById('dateCustom').classList.remove('open');
+      if (prevDateTab) { document.getElementById('dfCustom').classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
     }
 
     // ── Training Coach: live AI role-play ──
