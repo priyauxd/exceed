@@ -1227,7 +1227,17 @@
             <div class="tp-panel">
               <div class="tp-phead">
                 <div><h3>Today's priorities</h3><span class="tp-sub">Sorted by SLA breach &rarr; SLA due &rarr; hot &rarr; quote value &rarr; TD timing</span></div>
-                <a href="#" class="tp-link" onclick="showToast('Add column');return false"><span class="material-symbols-outlined" style="font-size:16px">view_column</span> Add column</a>
+                <div class="tp-addwrap" style="position:relative">
+                  <a href="#" class="tp-link" onclick="tpAddColMenu(event);return false"><span class="material-symbols-outlined" style="font-size:16px">view_column</span> Add column</a>
+                  <div class="mdr-addcol-menu" id="tpAddMenu">
+                    <div class="mdr-addcol-h">Additional columns</div>
+                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('source','Source')"><span>Source</span></label>
+                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('model','Model')"><span>Model</span></label>
+                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('idle','Days idle')"><span>Days idle</span></label>
+                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('quote','Quote')"><span>Quote</span></label>
+                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('owner','Owner')"><span>Owner</span></label>
+                  </div>
+                </div>
               </div>
               <div class="tp-scroll">
               <table class="tp-table">
@@ -1247,7 +1257,7 @@
             <div class="tp-panel">
               <div class="tp-phead">
                 <div><h3>Appointments today</h3></div>
-                <a href="#" class="tp-link" onclick="showToast('Opening calendar');return false">Open all &rarr;</a>
+                <a href="#" class="tp-link" onclick="openMetric('seAppointmentsToday');return false">Open all &rarr;</a>
               </div>
               <div class="ap-item">
                 <div class="ap-top"><span class="ap-name">11:00 &middot; Hiren Patel</span><span class="ap-st ok">On Track</span></div>
@@ -1440,7 +1450,7 @@
 
     .mdr-records{position:absolute;top:20px;right:60px;font-size:13px;font-weight:600;color:rgba(255,255,255,.82);}
     .mdr-hd-list{padding-bottom:18px;}
-    .mdr-addcol-wrap{position:relative;display:inline-block;margin-top:10px;}
+    .mdr-addcol-wrap{position:relative;display:inline-flex;align-items:center;}
     .mdr-addcol{display:inline-flex;align-items:center;gap:6px;color:#fff;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;opacity:.95;}
     .mdr-addcol:hover{opacity:1;}
     .mdr-addcol .material-symbols-outlined{font-size:17px;}
@@ -1813,7 +1823,7 @@
     function mdrAddColHtml(m){
       if(!m || !m.cols) return '';
       var have={}; m.cols.forEach(function(c){ have[c.k]=true; have[(c.l||'').toLowerCase()]=true; });
-      var opts=ADD_COLS.filter(function(o){ return !have[o.k] && !have[o.l.toLowerCase()]; });
+      var opts=(m.addCols||ADD_COLS).filter(function(o){ return !have[o.k] && !have[o.l.toLowerCase()]; });
       if(!opts.length) return '';
       return '<div class="mdr-addcol-wrap">'+
         '<button class="ml-tbtn" onclick="mdrToggleAddCol(event)"><span class="material-symbols-outlined">view_column</span> Add column</button>'+
@@ -1828,7 +1838,7 @@
       var m=METRICS[mdrCurrentId]; if(!m||!m.cols) return;
       var exists=false; for(var i=0;i<m.cols.length;i++){ if(m.cols[i].k===k){ exists=true; break; } }
       if(!exists){
-        var idx=-1; for(var j=0;j<m.cols.length;j++){ if(m.cols[j].k==='act'){ idx=j; break; } }
+        var idx=-1; for(var j=0;j<m.cols.length;j++){ if(m.cols[j].k==='act'||m.cols[j].k==='price'){ idx=j; break; } }
         var col={k:k,l:l};
         if(idx>=0) m.cols.splice(idx,0,col); else m.cols.push(col);
       }
@@ -1843,6 +1853,8 @@
       if(k==='sla') return '<td class="'+(r.slaC==='red'?'ml-sla-red':(r.slaC==='amber'?'ml-sla-amber':''))+'">'+r.sla+'</td>';
       if(k==='breach') return '<td class="ml-breach">'+r.breach+'</td>';
       if(k==='act') return '<td class="ml-act">'+r.act+'</td>';
+      if(k==='idle') return '<td>'+(r.idle!=null?r.idle:(r.stage==='Nurture'?'4d':r.stage==='Offer'?'2d':(r.days||'1d')))+'</td>';
+      if(k==='status'&&(r.status==null||r.status==='')) return '<td>'+(r.temp==='Hot'?'Active':'Open')+'</td>';
       return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
     }
     function listTable(m){
@@ -1977,10 +1989,47 @@
     }
 
     function apenBadge(s){ var c=s==='Attached'?'attached':(s==='Declined'?'declined':'pending'); return '<span class="ap-badge '+c+'">'+s+'</span>'; }
+    function apenGP(price){ var n=parseInt(String(price||'').replace(/[^0-9]/g,''),10); if(!n) return '&mdash;'; return (Math.round(n*0.27)).toLocaleString('en-US'); }
+    function apenCell(k,r){
+      if(k==='status') return '<td>'+apenBadge(r.status)+'</td>';
+      if(k==='price') return '<td style="text-align:right">'+(r.price||'&mdash;')+'</td>';
+      if(k==='gp') return '<td>'+apenGP(r.price)+'</td>';
+      if(k==='owner') return '<td>Mariam Saeed</td>';
+      if(k==='payment') return '<td>'+((parseInt(String(r.price||'').replace(/[^0-9]/g,''),10)%2)?'Finance':'Cash')+'</td>';
+      return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
+    }
+    var APEN_BASECOLS=[{k:'date',l:'Sale Date'},{k:'cust',l:'Customer'},{k:'item',l:'Item'},{k:'cat',l:'Category'},{k:'status',l:'Status'},{k:'price',l:'Price (AED)'}];
+    var APEN_ADDCOLS=[{k:'owner',l:'Owner'},{k:'gp',l:'GP (AED)'},{k:'payment',l:'Payment'}];
+    function apenLineSVG(vals,labels,yMax){
+      var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=vals.length,pw=W-padL-padR,ph=H-padT-padB;
+      var X=function(i){return padL+pw*(n>1?i/(n-1):0);},Y=function(v){return padT+ph*(1-v/yMax);};
+      var grid='',ylab='';
+      [0,.25,.5,.75,1].forEach(function(t){var v=Math.round(yMax*t),yy=Y(v);
+        grid+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" class="mdr-grid"/>';
+        ylab+='<text x="'+(padL-6)+'" y="'+(yy+3)+'" class="mdr-axl" text-anchor="end">'+v+'</text>';});
+      var pts=vals.map(function(v,i){return X(i)+','+Y(v);});
+      var xlab=vals.map(function(v,i){return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+labels[i]+'</text>';}).join('');
+      return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+'<polyline class="mdr-line" points="'+pts.join(' ')+'"/>'+xlab+'</svg>';
+    }
+    function apenTrendData(m,g){
+      var base=m.trend||[],mx=m.trendMax||40;
+      if(g==='Daily'){ var d=[],lab=[]; for(var i=0;i<14;i++){ var f=i/13*(base.length-1),lo=Math.floor(f),hi=Math.ceil(f),v=base[lo]+(base[hi]-base[lo])*(f-lo); d.push(Math.round(v)); lab.push('D'+(i+1)); } return {vals:d,labels:lab,yMax:mx}; }
+      if(g==='Monthly'){ var mo=['Feb','Mar','Apr','May','Jun','Jul'],mv=[]; for(var j=0;j<6;j++){ mv.push(base[Math.round(j/5*(base.length-1))]||0); } return {vals:mv,labels:mo,yMax:mx}; }
+      return {vals:base,labels:base.map(function(_,i){return 'W'+(i+1);}),yMax:mx};
+    }
+    function apenTrendToggle(btn,g){
+      btn.parentNode.querySelectorAll('button').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on');
+      var host=document.getElementById('apenTrendHost'),m=METRICS[mdrCurrentId]; if(!host||!m) return;
+      var d=apenTrendData(m,g); host.innerHTML=apenLineSVG(d.vals,d.labels,d.yMax);
+    }
     function openApenMetric(m){
-      var has=m.tx.length>0;
-      var trendHtml = has ? '<div class="mdr-chart">'+addonLineSVG(m)+'</div>' : '<div class="mdr-chart ax-empty">No records in this stage for your showroom yet.</div>';
-      var body=m.tx.map(function(x){ return '<tr><td>'+x.date+'</td><td>'+x.cust+'</td><td>'+x.item+'</td><td>'+x.cat+'</td><td>'+apenBadge(x.status)+'</td><td style="text-align:right">'+x.price+'</td></tr>'; }).join('');
+      if(!m.cols) m.cols=APEN_BASECOLS.slice();
+      if(!m.addCols) m.addCols=APEN_ADDCOLS;
+      var has=m.tx.length>0, showTrend=has && m.trend && m.trend.length;
+      var td=apenTrendData(m,'Weekly');
+      var trendHtml = showTrend ? '<div class="mdr-chart" id="apenTrendHost">'+apenLineSVG(td.vals,td.labels,td.yMax)+'</div>' : '<div class="mdr-chart ax-empty">No records in this stage for your showroom yet.</div>';
+      var head='<tr>'+m.cols.map(function(c){return '<th'+(c.k==='price'?' style="text-align:right"':'')+'>'+c.l+'</th>';}).join('')+'</tr>';
+      var body=m.tx.map(function(x){ return '<tr>'+m.cols.map(function(c){return apenCell(c.k,x);}).join('')+'</tr>'; }).join('');
       document.getElementById('mdrContent').innerHTML =
         '<div class="mdr-hd mdr-hd-list"><div class="mdr-ttl">'+m.title+'</div><div class="mdr-sub">'+m.sub+'</div><div class="mdr-records">'+m.records+' records</div>'+
           '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
@@ -1990,11 +2039,12 @@
             '<div class="ap-card"><div class="ap-lbl">Revenue</div><div class="ap-val">'+m.revenue+'</div></div>'+
             '<div class="ap-card"><div class="ap-lbl">Gross Profit</div><div class="ap-val">'+m.gp+'</div></div></div>'+
           '<div class="ax-sec"><div class="ax-head"><div><div class="mdr-secl">Trend</div><div class="ax-cap">Attach volume over time · SZR — Sheikh Zayed Road</div></div>'+
-            '<div class="ax-toggle"><button onclick="axToggle(this)">Daily</button><button class="on" onclick="axToggle(this)">Weekly</button><button onclick="axToggle(this)">Monthly</button></div></div>'+trendHtml+'</div>'+
+            '<div class="ax-toggle"><button onclick="apenTrendToggle(this,\'Daily\')">Daily</button><button class="on" onclick="apenTrendToggle(this,\'Weekly\')">Weekly</button><button onclick="apenTrendToggle(this,\'Monthly\')">Monthly</button></div></div>'+trendHtml+'</div>'+
           '<div class="ax-sec"><div class="ax-head"><div><div class="mdr-secl">Add-on Transactions</div><div class="ax-cap">Individual accessory / service / policy records</div></div>'+
-            '<div class="ml-tbar"><button class="ml-tbtn" onclick="showToast(\'Add column\')"><span class="material-symbols-outlined">view_column</span> Add column</button>'+
-            '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div></div>'+
-            '<div class="mdr-leadswrap"><table class="mdr-leads"><thead><tr><th>Sale Date</th><th>Customer</th><th>Item</th><th>Category</th><th>Status</th><th style="text-align:right">Price (AED)</th></tr></thead><tbody>'+body+'</tbody></table></div></div>'+
+            '<div class="ml-tbar">'+mdrAddColHtml(m)+'<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div></div>'+
+            '<div class="mdr-leadswrap"><table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>'+
+            '<div class="mdr-listnote">Data shown is mock. Use &ldquo;Add columns&rdquo; to bring additional fields into view.</div>'+
+            '<div class="mdr-listnote mdr-listnote-2">Click any row for full transaction detail.</div></div>'+
         '</div>';
       document.getElementById('mdr').classList.add('open'); document.getElementById('mdrOverlay').classList.add('open'); document.getElementById('mdrContent').scrollTop=0;
     }
@@ -2327,6 +2377,12 @@
 
     Object.assign(METRICS, {
       // ── Today's Actions ──
+      seAppointmentsToday: L({title:'Appointments today', sub:'Scope: Mariam Saeed · Today', cols:[{k:'time',l:'Time'},{k:'cust',l:'Customer'},{k:'type',l:'Type'},{k:'model',l:'Model'},{k:'branch',l:'Branch'},{k:'status',l:'Status'}], records:4, rows:[
+        {time:'11:00',cust:'Hiren Patel',type:'Test drive',model:'EXEED LX',branch:'SZR',status:'On Track'},
+        {time:'14:30',cust:'Fatima Al Ali',type:'Test drive',model:'EXEED VX',branch:'SZR',status:'Due Soon'},
+        {time:'16:00',cust:'Linda George',type:'Delivery',model:'EXEED VX',branch:'SZR',status:'On Track'},
+        {time:'17:15',cust:'Maya Hassan',type:'Appointment',model:'EXEED TXL',branch:'SZR',status:'On Track'}
+      ]}),
       seNewLeads: L({title:'New leads today', sub:'Assigned to you in the last 24h', action:'Accept · Call', cols:C.newlead, rows:pendingRows, records:4}),
       sePending1c: L({title:'Pending first contact', sub:'Sorted by shortest SLA remaining', action:'Call customer', cols:C.pending, rows:pendingRows, records:4}),
       seFollowOverdue: L({title:'Follow-ups overdue', sub:'Overdue or missed commitments — recover', action:'Take action', cols:C.overdue, rows:[R(B.linda,{stage:'Offer',days:'0d',act:'Follow up on quote'})], records:1}),
@@ -2420,5 +2476,44 @@
   })();
   </script>
   <script src="copilot-widget.js?v=10" defer></script>
+  <script>
+    var tpAdded={};
+    function tpAddColMenu(e){ if(e){e.preventDefault();e.stopPropagation();} var mn=document.getElementById('tpAddMenu'); if(mn) mn.classList.toggle('open'); }
+    function tpCellVal(k,row,i){
+      var idEl=row.querySelector('.tp-id'), id=idEl?idEl.textContent:'';
+      var stage=row.children[3]?row.children[3].textContent.trim():'';
+      if(k==='source'){ var p=id.split('·'); return (p[1]||'').trim()||'&mdash;'; }
+      if(k==='model'){ return ['EXEED TXL','EXEED VX','EXEED LX','EXEED LX','EXEED RX','EXEED LX','EXEED LX'][i]||'EXEED LX'; }
+      if(k==='idle'){ return stage==='Nurture'?'4d':(stage==='Offer'?'2d':'1d'); }
+      if(k==='quote'){ return (stage==='Offer'||stage==='Nurture')?'AED 185k':'&mdash;'; }
+      if(k==='owner'){ return 'Mariam Saeed'; }
+      return '&mdash;';
+    }
+    function tpAddCol(k,l){
+      if(tpAdded[k]) return; tpAdded[k]=true;
+      var table=document.querySelector('.tp-table'); if(!table) return;
+      var htr=table.querySelector('thead tr'); var th=document.createElement('th'); th.textContent=l; htr.insertBefore(th, htr.lastElementChild);
+      var rows=table.querySelectorAll('tbody tr');
+      for(var i=0;i<rows.length;i++){ var td=document.createElement('td'); td.innerHTML=tpCellVal(k,rows[i],i); rows[i].insertBefore(td, rows[i].lastElementChild); }
+      var mn=document.getElementById('tpAddMenu'); if(mn) mn.classList.remove('open');
+    }
+    document.addEventListener('click',function(e){ var w=e.target.closest?e.target.closest('.tp-addwrap'):null; if(!w){ var mn=document.getElementById('tpAddMenu'); if(mn) mn.classList.remove('open'); } });
+  </script>
+  <script>
+    (function(){
+      var css='.cal-event .ce-s{display:inline-block;margin-top:2px;font-size:8.5px;font-weight:700;background:rgba(255,255,255,.28);border-radius:4px;padding:0 5px;letter-spacing:.02em;}';
+      var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+      var map={'Test Drive':'Confirmed','Appointment':'Scheduled','Appt':'Scheduled','Delivery':'Scheduled','Follow-up':'Pending','Call':'Due','Customer Call':'Due'};
+      function run(){
+        var evs=document.querySelectorAll('.cal-event');
+        for(var i=0;i<evs.length;i++){ var ev=evs[i]; if(ev.querySelector('.ce-s')) continue;
+          var t=ev.querySelector('.ce-t'), src=t||ev.querySelector('.ce-n'); if(!src) continue;
+          var parts=src.textContent.split('·'); var type=(parts[parts.length-1]||'').trim();
+          var s=document.createElement('span'); s.className='ce-s'; s.textContent=map[type]||'Scheduled'; ev.appendChild(s);
+        }
+      }
+      if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded',run);
+    })();
+  </script>
 </body>
 </html>

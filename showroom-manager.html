@@ -2559,5 +2559,21 @@
   })();
   </script>
   <script src="copilot-widget.js?v=10" defer></script>
+  <script>
+    (function(){
+      var css='.cal-event .ce-s{display:inline-block;margin-top:2px;font-size:8.5px;font-weight:700;background:rgba(255,255,255,.28);border-radius:4px;padding:0 5px;letter-spacing:.02em;}';
+      var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
+      var map={'Test Drive':'Confirmed','Appointment':'Scheduled','Appt':'Scheduled','Delivery':'Scheduled','Follow-up':'Pending','Call':'Due','Customer Call':'Due'};
+      function run(){
+        var evs=document.querySelectorAll('.cal-event');
+        for(var i=0;i<evs.length;i++){ var ev=evs[i]; if(ev.querySelector('.ce-s')) continue;
+          var t=ev.querySelector('.ce-t'), src=t||ev.querySelector('.ce-n'); if(!src) continue;
+          var parts=src.textContent.split('·'); var type=(parts[parts.length-1]||'').trim();
+          var s=document.createElement('span'); s.className='ce-s'; s.textContent=map[type]||'Scheduled'; ev.appendChild(s);
+        }
+      }
+      if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded',run);
+    })();
+  </script>
 </body>
 </html>
