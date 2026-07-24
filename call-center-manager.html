@@ -344,6 +344,14 @@
     .mc-val.txt-green { color: var(--green); }
     .mc-val.txt-amber { color: #8a6420; }
     .mc-sub { font-size: 10.5px; color: var(--ink-muted); margin-top: 9px; }
+    .mc-i { font-size:14px; color:var(--ink-muted); cursor:help; vertical-align:-2px; margin-left:3px; opacity:.7; }
+    .mc-i:hover { opacity:1; color:var(--blue); }
+    .kpi-tip { position:fixed; z-index:400; width:300px; max-width:calc(100vw - 24px); background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 12px 34px rgba(20,24,34,.16); padding:14px 16px; font-size:13px; color:var(--ink-secondary); display:none; line-height:1.5; text-align:left; }
+    .kpi-tip.show { display:block; }
+    .kpi-tip h4 { font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--blue); margin:0 0 6px; }
+    .kpi-tip .d { color:var(--ink); font-size:13.5px; margin-bottom:9px; }
+    .kpi-tip .row { font-size:12.5px; margin-top:3px; } .kpi-tip .row b { color:var(--ink); font-weight:700; }
+    .kpi-tip .sla { font-style:italic; color:var(--ink-muted); font-size:12px; margin-top:9px; }
 
     /* ── Dial cards (percentage KPIs) ── */
     .dial-card {
@@ -987,14 +995,14 @@
         <div class="kpi-section">
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Volumetrics</span><span class="kpi-sec-sub">&middot; What the team owes right now</span></div>
           <div class="kpi-grid g8">
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAllLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAllLeads');}"><div class="mc-lbl">Leads Assigned</div><div class="mc-val">21</div><div class="mc-sub">Call Centre-owned</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccNotActioned')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccNotActioned');}"><div class="mc-lbl">Not Actioned</div><div class="mc-val txt-red">18</div><div class="mc-sub">Sorted by SLA</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccCallbacksDue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccCallbacksDue');}"><div class="mc-lbl">Callbacks Due</div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('contactList')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('contactList');}"><div class="mc-lbl">Contact</div><div class="mc-val txt-green">4</div><div class="mc-sub">100% qualified</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}"><div class="mc-lbl">Returned by Sales</div><div class="mc-val">4</div><div class="mc-sub">Coach &amp; fix</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAHT')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAHT');}"><div class="mc-lbl">Avg Handle Time</div><div class="mc-val" style="font-size:19px">4m 32s</div><div class="mc-sub">Across all agents</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAgentsShift')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAgentsShift');}"><div class="mc-lbl">Agents on Shift</div><div class="mc-val">8</div><div class="mc-sub">4 on track</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccLostLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccLostLeads');}"><div class="mc-lbl">Lost CC Leads</div><div class="mc-val">2</div><div class="mc-sub">Separate view</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAllLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAllLeads');}"><div class="mc-lbl">Leads Assigned <span class="mc-i material-symbols-outlined" data-kpi="Leads Assigned" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val">21</div><div class="mc-sub">Call Centre-owned</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccNotActioned')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccNotActioned');}"><div class="mc-lbl">Not Actioned <span class="mc-i material-symbols-outlined" data-kpi="Not Actioned" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val txt-red">18</div><div class="mc-sub">Sorted by SLA</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccCallbacksDue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccCallbacksDue');}"><div class="mc-lbl">Callbacks Due <span class="mc-i material-symbols-outlined" data-kpi="Callbacks Due" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('contactList')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('contactList');}"><div class="mc-lbl">Contact <span class="mc-i material-symbols-outlined" data-kpi="Contact" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val txt-green">4</div><div class="mc-sub">100% qualified</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}"><div class="mc-lbl">Returned by Sales <span class="mc-i material-symbols-outlined" data-kpi="Returned by Sales" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val">4</div><div class="mc-sub">Coach &amp; fix</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAHT')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAHT');}"><div class="mc-lbl">Avg Handle Time <span class="mc-i material-symbols-outlined" data-kpi="Avg Handle Time" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val" style="font-size:19px">4m 32s</div><div class="mc-sub">Across all agents</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAgentsShift')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAgentsShift');}"><div class="mc-lbl">Agents on Shift <span class="mc-i material-symbols-outlined" data-kpi="Agents on Shift" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val">8</div><div class="mc-sub">4 on track</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccLostLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccLostLeads');}"><div class="mc-lbl">Lost CC Leads <span class="mc-i material-symbols-outlined" data-kpi="Lost CC Leads" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val">2</div><div class="mc-sub">Separate view</div></div>
           </div>
         </div>
 
@@ -1723,6 +1731,20 @@
       {t:'Agent SLA Break', sla:true, desc:'Per-agent count of SLA breaches in the period.'},
       {t:'Agent Quality Status', desc:'Rolled-up quality signal per agent — combines quality-review score, return rate and SLA compliance.'}
     ];
+    var KPIMAP={}; KPIDEFS.forEach(function(k){ KPIMAP[k.t.toLowerCase()]=k; });
+    window.kpiTip=function(el){
+      var k=KPIMAP[(el.getAttribute('data-kpi')||'').toLowerCase()]; if(!k) return;
+      var box=document.getElementById('kpiTipBox');
+      if(!box){ box=document.createElement('div'); box.id='kpiTipBox'; box.className='kpi-tip'; document.body.appendChild(box); }
+      var h='<h4>'+k.t+'</h4><div class="d">'+k.desc+'</div>';
+      h+='<div class="row"><b>Formula:</b> '+(k.formula||'TODO')+'</div>';
+      h+='<div class="row"><b>Source:</b> '+(k.source||'TODO')+'</div>';
+      if(k.sla) h+='<div class="sla">SLA-dependent &middot; SLA logic pending final alignment (Chaitanya / George).</div>';
+      box.innerHTML=h; box.classList.add('show');
+      var r=el.getBoundingClientRect(); box.style.left=Math.min(window.innerWidth-312, Math.max(8, r.left))+'px';
+      var top=r.bottom+8, bh=box.offsetHeight; if(top+bh>window.innerHeight) top=Math.max(8, r.top-bh-8); box.style.top=top+'px';
+    };
+    window.kpiTipHide=function(){ var b=document.getElementById('kpiTipBox'); if(b) b.classList.remove('show'); };
     window.openKpiDefs=function(){
       var cards=KPIDEFS.map(function(k){
         return '<div class="kd-card"><div class="kd-title">'+k.t+(k.sla?' <span class="kd-badge">SLA-dependent</span>':'')+'</div>'+
