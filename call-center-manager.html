@@ -188,6 +188,8 @@
     .date-custom input[type=date] { border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; }
     .date-custom input[type=date]:focus { border-color:var(--blue); }
     .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel { background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:7px; padding:8px 14px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel:hover { background:#f5f5f5; }
     .btn-soft {
       padding: 7px 14px; border: 1px solid var(--border);
       border-radius: 8px; background: var(--surface);
@@ -674,7 +676,7 @@
     .mdr-leads tbody tr:last-child td{ border-bottom:none; }
     .mdr-leads tbody tr:hover{ background:#fafbfc; }
     .ml-name{ font-weight:700; color:var(--ink); }
-    .ml-id{ font-size:11px; color:var(--ink-muted); margin-top:1px; }
+    .ml-id{ font-size:11px; color:var(--ink-muted); margin-top:1px; white-space:nowrap; }
     .ml-temp{ display:inline-block; padding:3px 11px; border-radius:12px; font-size:11px; font-weight:700; }
     .ml-temp.hot{ background:#fdecec; color:#d1544f; } .ml-temp.warm{ background:#fdeede; color:#b5731f; } .ml-temp.cold{ background:#eef1fb; color:#3f63c8; }
     .ml-breach{ color:#d1544f; font-weight:700; }
@@ -873,8 +875,9 @@
                 <button class="df-tab" id="dfCustom" onclick="setDateRange(this)">Custom Range</button>
               </div>
               <div class="date-custom" id="dateCustom">
-                <label>From<input type="text" id="dateFrom" placeholder="dd.mm.yyyy"></label>
-                <label>To<input type="text" id="dateTo" placeholder="dd.mm.yyyy"></label>
+                <label>From<input type="date" id="dateFrom"></label>
+                <label>To<input type="date" id="dateTo"></label>
+                <button class="dc-cancel" onclick="cancelCustomRange()">Cancel</button>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
             </div>
@@ -1180,13 +1183,17 @@
     });
 
     // Date range filter (Today is the default)
+    var prevDateTab = null;
+    function dcDefaultToday(){ var t=new Date().toISOString().slice(0,10); var f=document.getElementById('dateFrom'), tt=document.getElementById('dateTo'); if(f && !f.value) f.value=t; if(tt && !tt.value) tt.value=t; }
     function setDateRange(btn){
+      var isCustom = /custom/i.test(btn.textContent);
+      if (isCustom) { var cur = btn.parentNode.querySelector('.df-tab.on'); if (cur && cur !== btn) prevDateTab = cur; }
+      else { prevDateTab = null; }
       btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
       btn.classList.add('on');
       var custom = document.getElementById('dateCustom');
-      var isCustom = /custom/i.test(btn.textContent);
       if (custom) custom.classList.toggle('open', isCustom);
-      if (isCustom) { var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
+      if (isCustom) { dcDefaultToday(); var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
     }
     function applyCustomRange(){
       var f = document.getElementById('dateFrom').value, t = document.getElementById('dateTo').value;
@@ -1196,6 +1203,11 @@
       else if (f) lbl = 'From '+fmt(f);
       document.getElementById('dfCustom').textContent = lbl;
       document.getElementById('dateCustom').classList.remove('open');
+      prevDateTab = null;
+    }
+    function cancelCustomRange(){
+      document.getElementById('dateCustom').classList.remove('open');
+      if (prevDateTab) { document.getElementById('dfCustom').classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
     }
   </script>
 
@@ -1943,8 +1955,7 @@
           {r:'customer', t:"Around 150k, mostly city driving."},
           {r:'you', t:"Great. And how many people usually travel with you?"},
           {r:'customer', t:"We're five — we need good space."},
-          {r:'you', t:"Noted — 5 seats, city use, 
-150k budget. When are you hoping to buy?"},
+          {r:'you', t:"Noted — 5 seats, city use, 150k budget. When are you hoping to buy?"},
           {r:'customer', t:"Within the next month."}
         ], coach:"Great practice run — captured: Budget, Usage, Timeline. Click Complete Module to save your score." },
       { t:'Model interest capture', d:'Confirm exact model and trim.', st:'completed', score:88, rule:'Confirm the exact model and trim.',

@@ -189,6 +189,8 @@
     .date-custom input[type=date] { border:1px solid var(--border); border-radius:7px; padding:7px 9px; font-size:12.5px; font-family:inherit; color:var(--ink); outline:none; }
     .date-custom input[type=date]:focus { border-color:var(--blue); }
     .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel { background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:7px; padding:8px 14px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .dc-cancel:hover { background:#f5f5f5; }
     .btn-soft {
       padding: 7px 14px; border: 1px solid var(--border);
       border-radius: 8px; background: var(--surface);
@@ -871,8 +873,9 @@
                 <button class="df-tab" id="dfCustom" onclick="setDateRange(this)">Custom Range</button>
               </div>
               <div class="date-custom" id="dateCustom">
-                <label>From<input type="text" id="dateFrom" placeholder="dd.mm.yyyy"></label>
-                <label>To<input type="text" id="dateTo" placeholder="dd.mm.yyyy"></label>
+                <label>From<input type="date" id="dateFrom"></label>
+                <label>To<input type="date" id="dateTo"></label>
+                <button class="dc-cancel" onclick="cancelCustomRange()">Cancel</button>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
             </div>
@@ -1437,13 +1440,17 @@
 
   <script>
     // Date range filter (Today is the default)
+    var prevDateTab = null;
+    function dcDefaultToday(){ var t=new Date().toISOString().slice(0,10); var f=document.getElementById('dateFrom'), tt=document.getElementById('dateTo'); if(f && !f.value) f.value=t; if(tt && !tt.value) tt.value=t; }
     function setDateRange(btn){
+      var isCustom = /custom/i.test(btn.textContent);
+      if (isCustom) { var cur = btn.parentNode.querySelector('.df-tab.on'); if (cur && cur !== btn) prevDateTab = cur; }
+      else { prevDateTab = null; }
       btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
       btn.classList.add('on');
       var custom = document.getElementById('dateCustom');
-      var isCustom = /custom/i.test(btn.textContent);
       if (custom) custom.classList.toggle('open', isCustom);
-      if (isCustom) { var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
+      if (isCustom) { dcDefaultToday(); var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
     }
     function applyCustomRange(){
       var f = document.getElementById('dateFrom').value, t = document.getElementById('dateTo').value;
@@ -1453,6 +1460,11 @@
       else if (f) lbl = 'From '+fmt(f);
       document.getElementById('dfCustom').textContent = lbl;
       document.getElementById('dateCustom').classList.remove('open');
+      prevDateTab = null;
+    }
+    function cancelCustomRange(){
+      document.getElementById('dateCustom').classList.remove('open');
+      if (prevDateTab) { document.getElementById('dfCustom').classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
     }
   </script>
 

@@ -905,8 +905,8 @@
                 <button class="df-tab" id="dfCustom" onclick="setDateRange(this)">Custom</button>
               </div>
               <div class="date-custom" id="dateCustom">
-                <label>From<input type="text" id="dateFrom" placeholder="dd.mm.yyyy"></label>
-                <label>To<input type="text" id="dateTo" placeholder="dd.mm.yyyy"></label>
+                <label>From<input type="date" id="dateFrom"></label>
+                <label>To<input type="date" id="dateTo"></label>
                 <button class="dc-cancel" onclick="cancelCustomRange()">Cancel</button>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
@@ -1550,6 +1550,7 @@
   <script>
     // Date range filter (Today is the default)
     var prevDateTab = null;
+    function dcDefaultToday(){ var t=new Date().toISOString().slice(0,10); var f=document.getElementById('dateFrom'), tt=document.getElementById('dateTo'); if(f && !f.value) f.value=t; if(tt && !tt.value) tt.value=t; }
     function setDateRange(btn){
       var isCustom = /custom/i.test(btn.textContent);
       if (isCustom) { var cur = btn.parentNode.querySelector('.df-tab.on'); if (cur && cur !== btn) prevDateTab = cur; }
@@ -1558,7 +1559,7 @@
       btn.classList.add('on');
       var custom = document.getElementById('dateCustom');
       if (custom) custom.classList.toggle('open', isCustom);
-      if (isCustom) { var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
+      if (isCustom) { dcDefaultToday(); var f = document.getElementById('dateFrom'); if (f) setTimeout(function(){ f.focus(); }, 50); }
     }
     function applyCustomRange(){
       var f = document.getElementById('dateFrom').value, t = document.getElementById('dateTo').value;
