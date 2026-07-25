@@ -1506,6 +1506,13 @@
       ccNotActioned: { list:true, title:'Not actioned', action:'Start call', records:18,
         cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'owner',l:'Owner'},{k:'sla',l:'SLA'},{k:'channel',l:'Channel'},{k:'next',l:'Next Action'},{k:'routing',l:'Routing'}],
         rows: CC.slice(0,18) },
+      slaOverdue: { list:true, title:'SLA overdue', sub:'Escalate to agent or reassign', action:'Reassign', records:3,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'source',l:'Source'},{k:'sla',l:'SLA'},{k:'channel',l:'Channel'},{k:'next',l:'Next Action'}],
+        rows:[
+          {lead:'Zayed Al Nuaimi',id:'L-2026-06015',temp:'Hot', owner:'Unassigned',    source:'Call Center Inbound',sla:'5 min overdue', slaC:'red',channel:'WhatsApp · English',next:'Assign to agent — SLA breached'},
+          {lead:'Farida Zohra',   id:'L-2026-06007',temp:'Warm',owner:'Aisha Hussein',  source:'Campaign Callback',  sla:'40 min overdue',slaC:'red',channel:'WhatsApp · English',next:'Escalate — 40 min overdue'},
+          {lead:'Ali Kassem',     id:'L-2026-06001',temp:'Warm',owner:'Rahul Krishnan', source:'Call Center Inbound',sla:'12 min overdue',slaC:'red',channel:'WhatsApp · English',next:'Start call — SLA breached'}
+        ] },
       ccCallbacksDue: { list:true, title:'Callbacks Due', sub:'Scheduled callbacks with a due time in the current period', action:'Open', records:12,
         cols:[{k:'lead',l:'Lead'},{k:'owner',l:'Owner'},{k:'due',l:'Due'},{k:'status',l:'Status'}],
         rows:[
@@ -1749,7 +1756,7 @@
       var m=document.getElementById('agentRowMenu');
       if(!m){ m=document.createElement('div'); m.id='agentRowMenu'; m.className='row-menu'; document.body.appendChild(m); }
       var A="'"+agent.replace(/'/g,"\\'")+"'";
-      var items=[['list_alt','View agent queue',"openMetric('ccAllLeads')"],['undo','Reassign leads',"openReassign("+A+")"],['warning','Review returned leads',"openReturnedLeads("+A+")"],['fact_check','Review call quality',"openQuality("+A+")"],['edit_note','Add coaching note',"openCoaching("+A+")"],['warning','View SLA breaches',"openMetric('firstContact')"]];
+      var items=[['list_alt','View agent queue',"openMetric('ccAllLeads')"],['undo','Reassign leads',"openReassign("+A+")"],['warning','Review returned leads',"openReturnedLeads("+A+")"],['fact_check','Review call quality',"openQuality("+A+")"],['edit_note','Add coaching note',"openCoaching("+A+")"],['warning','View SLA breaches',"openMetric('slaOverdue')"]];
       m.innerHTML=items.map(function(it){ return '<button onclick="closeAgentMenu();'+it[2]+'"><span class="material-symbols-outlined" style="font-size:16px;vertical-align:-3px;margin-right:8px">'+it[0]+'</span>'+it[1]+'</button>'; }).join('');
       var rc=e.currentTarget.getBoundingClientRect(); m.style.display='block'; m.style.left=Math.max(8,rc.right-212)+'px';
       var mh=m.offsetHeight, top=rc.bottom+4; if(rc.bottom+mh+8>window.innerHeight) top=Math.max(8,rc.top-mh-4); m.style.top=top+'px';
