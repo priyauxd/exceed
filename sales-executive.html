@@ -714,6 +714,16 @@
     body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
     body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
     body.sb-rail .sb-toggle { justify-content: center; padding: 8px 0; }
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; }
+      .main { margin-left: 60px; }
+      .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
+      .sb-item .material-symbols-outlined { font-size: 18px; }
+      .sb-group { display: none; }
+      .sb-name, .sb-sub { display: none; }
+      .sb-brand { justify-content: center; padding: 14px 0; }
+      .sb-toggle { justify-content: center; padding: 8px 0; }
+    }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
   <style>/* kpi-center */ .metric-card{ text-align:center; } .metric-card .mc-tag{ text-align:left; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card{ border:none; }</style>
