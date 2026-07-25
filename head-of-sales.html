@@ -1197,7 +1197,7 @@
     .mdr-hd-leads .mdr-ttl{margin-top:0;font-size:21px;}
     .mdr-reccount{margin-left:auto;padding-right:40px;font-size:14px;font-weight:600;opacity:.9;white-space:nowrap;}
     .mdr-scroll{overflow-y:auto;height:100%;}
-    .mdr-hd{background:linear-gradient(135deg,#17293d,#2a4a6b);color:#fff;padding:20px 24px;position:relative;}
+    .mdr-hd{background:linear-gradient(135deg,#17293d,#2a4a6b);color:#fff;padding:20px 24px;position:relative;min-height:66px;}
     .mdr-ey{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.82;}
     .mdr-ttl{font-size:22px;font-weight:700;margin-top:2px;}
     .mdr-sub{font-size:12.5px;opacity:.85;margin-top:4px;max-width:60%;}
@@ -1234,7 +1234,7 @@
     .cx-amber{color:#b5731f;font-weight:700;}
     /* ── Invoiced deals modal ── */
     .mdr-hd-list{background:#17293d;}
-    .mdr-hd-list .mdr-kpi{top:20px;right:26px;}
+    .mdr-hd-list .mdr-kpi{top:20px;right:58px;}
     .mdr-hd-list .mdr-kpi-val{font-size:30px;}
     .mdr-hd-list .mdr-kpi-tgt{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.85;}
     .mdr-leads{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap;}
@@ -1268,6 +1268,32 @@
     .adv-rev{font-size:12.5px;color:var(--ink-muted);}
     .adv-sched{font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;cursor:pointer;}
     .adv-sched:hover{color:var(--blue);}
+    .cs-ov{position:fixed;inset:0;background:rgba(15,20,28,.5);display:none;align-items:center;justify-content:center;z-index:200;padding:24px;}
+    .cs-ov.open{display:flex;}
+    .cs-modal{background:#fff;border-radius:16px;width:min(680px,100%);max-height:92vh;overflow:auto;padding:24px 26px;box-shadow:0 24px 60px rgba(0,0,0,.3);}
+    .cs-hd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+    .cs-ttl{font-size:19px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;}
+    .cs-sub{font-size:13px;color:var(--ink-muted);line-height:1.5;margin:4px 0 16px;}
+    .cs-x{background:none;border:none;color:var(--ink-muted);cursor:pointer;padding:2px;line-height:1;}
+    .cs-why{background:#eef2fb;border:1px solid #d9e2f5;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--blue);line-height:1.6;margin-bottom:18px;}
+    .cs-lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);margin:0 0 9px;display:flex;align-items:center;gap:6px;}
+    .cs-times{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;}
+    .cs-time{border:1px solid var(--border);border-radius:9px;padding:11px 8px;font-size:13px;font-weight:600;color:var(--ink);background:#fff;cursor:pointer;text-align:center;font-family:inherit;}
+    .cs-time.on{border-color:var(--blue);background:#eef2fb;box-shadow:inset 0 0 0 1px var(--blue);}
+    .cs-row{display:flex;gap:30px;margin-bottom:18px;flex-wrap:wrap;}
+    .cs-seg{display:flex;gap:8px;flex-wrap:wrap;}
+    .cs-chip{border:1px solid var(--border);border-radius:8px;padding:8px 13px;font-size:13px;font-weight:600;color:var(--ink);background:#fff;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;}
+    .cs-chip.on{border-color:var(--blue);background:#eef2fb;color:var(--blue);}
+    .cs-topics{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px;}
+    .cs-topic{border:1px solid var(--border);border-radius:20px;padding:8px 15px;font-size:13px;font-weight:600;color:var(--ink-secondary);background:#fff;cursor:pointer;font-family:inherit;}
+    .cs-topic.on{border-color:var(--blue);background:#eef2fb;color:var(--blue);}
+    .cs-ta{width:100%;border:1px solid var(--border);border-radius:9px;padding:11px 12px;font-size:13px;font-family:inherit;color:var(--ink);min-height:76px;resize:vertical;box-sizing:border-box;margin-bottom:16px;}
+    .cs-inv{font-size:13px;color:var(--ink-secondary);margin-bottom:18px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+    .cs-inv b{color:var(--ink);font-weight:600;}
+    .cs-foot{display:flex;justify-content:flex-end;gap:10px;}
+    .cs-btn{border-radius:9px;padding:10px 18px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;border:1px solid var(--border);}
+    .cs-btn.sec{background:#fff;color:var(--ink);}
+    .cs-btn.pri{background:var(--blue);color:#fff;border-color:var(--blue);}
     /* ── Table "Add column" pickers ── */
     .hos-addwrap{position:relative;}
     .hos-colmenu{position:absolute;top:calc(100% + 6px);right:0;width:220px;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 14px 40px rgba(20,24,34,.16);padding:8px;display:none;z-index:60;}
@@ -2001,12 +2027,43 @@
       invRenderTable();
       document.getElementById('mdr').classList.add('open'); document.getElementById('mdrOverlay').classList.add('open'); document.getElementById('mdrContent').scrollTop=0;
     }
+    function csOne(el){ var s=el.parentNode.children; for(var i=0;i<s.length;i++) s[i].classList.remove('on'); el.classList.add('on'); }
+    function csToggle(el){ el.classList.toggle('on'); }
+    window.closeCoachingSchedule=function(){ var b=document.getElementById('csModal'); if(b) b.classList.remove('open'); };
+    window.openCoachingSchedule=function(name,branch){
+      branch=branch||'SZR'; var mgr=branch+' Manager';
+      var times=['9:00 AM','10:00 AM','11:00 AM','2:00 PM','3:00 PM','4:00 PM'];
+      var durs=['15 min','30 min','45 min','60 min'];
+      var modes=[['videocam','Teams'],['location_on','In-person'],['group','Phone']];
+      var topics=[['SLA compliance below target',1],['Follow-ups on time trending down',1],['Missed commitments this week',0],['Low add-on attach rate',0]];
+      var box=document.getElementById('csModal');
+      box.innerHTML='<div class="cs-modal">'+
+        '<div class="cs-hd"><div class="cs-ttl"><span class="material-symbols-outlined" style="color:var(--blue)">school</span> Schedule coaching with '+name+'</div>'+
+          '<button class="cs-x" onclick="closeCoachingSchedule()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
+        '<div class="cs-sub">'+branch+' &middot; Sales consultant flagged for coaching. Set up a 1:1 to review performance and agree on next steps.</div>'+
+        '<div class="cs-why"><b>&#10022; Why coach:</b> SLA compliance below target &middot; Follow-ups on time trending down &middot; Missed commitments this week &middot; Low add-on attach rate</div>'+
+        '<div class="cs-lbl"><span class="material-symbols-outlined" style="font-size:15px">event</span> Suggested time</div>'+
+        '<div class="cs-times">'+times.map(function(t,i){return '<button class="cs-time'+(i===1?' on':'')+'" onclick="csOne(this)">Sun, Jul 26 &middot; '+t+'</button>';}).join('')+'</div>'+
+        '<div class="cs-row"><div><div class="cs-lbl"><span class="material-symbols-outlined" style="font-size:15px">schedule</span> Duration</div><div class="cs-seg">'+
+          durs.map(function(d,i){return '<button class="cs-chip'+(i===1?' on':'')+'" onclick="csOne(this)">'+d+'</button>';}).join('')+'</div></div>'+
+          '<div><div class="cs-lbl">Mode</div><div class="cs-seg">'+
+          modes.map(function(m2,i){return '<button class="cs-chip'+(i===0?' on':'')+'" onclick="csOne(this)"><span class="material-symbols-outlined" style="font-size:15px">'+m2[0]+'</span>'+m2[1]+'</button>';}).join('')+'</div></div></div>'+
+        '<div class="cs-lbl">Coaching topics</div>'+
+        '<div class="cs-topics">'+topics.map(function(t){return '<button class="cs-topic'+(t[1]?' on':'')+'" onclick="csToggle(this)">'+t[0]+'</button>';}).join('')+'</div>'+
+        '<div class="cs-lbl">Agenda / notes (visible to consultant)</div>'+
+        '<textarea class="cs-ta">Coaching session with '+name+'. Review last 7 days of activity, focus on SLA &amp; follow-ups, agree on 2-week improvement plan.</textarea>'+
+        '<div class="cs-inv"><span class="material-symbols-outlined" style="font-size:16px">group</span> Invites: <b>'+name+'</b>, you, <b>'+mgr+'</b></div>'+
+        '<div class="cs-foot"><button class="cs-btn sec" onclick="closeCoachingSchedule()">Cancel</button>'+
+          '<button class="cs-btn pri" onclick="showToast(\'Coaching invite sent to '+name.replace(/\x27/g,'')+'\');closeCoachingSchedule()">Send invite</button></div>'+
+      '</div>';
+      box.classList.add('open');
+    };
     function openAdvisorMetric(m){
       var cards=m.advisors.map(function(a){
         return '<div class="adv-card"><div class="adv-top"><div><div class="adv-name">'+a.name+'</div><div class="adv-sub">'+a.branch+' &middot; '+a.deals+' deals</div></div>'+
           '<div class="adv-pct-wrap"><div class="adv-pct">'+a.pct+'%</div><div class="adv-acc">Acceptance ('+a.acc+')</div></div></div>'+
           '<div class="adv-weak">Weak areas: <strong>'+a.weak+'</strong></div>'+
-          '<div class="adv-foot"><span class="adv-rev">Revenue '+a.revenue+' &middot; GP '+a.gp+'</span><a class="adv-sched" onclick="showToast(\'Coaching scheduled — '+a.name.replace(/\x27/g,'')+'\')">Schedule coaching &rarr;</a></div></div>';
+          '<div class="adv-foot"><span class="adv-rev">Revenue '+a.revenue+' &middot; GP '+a.gp+'</span><a class="adv-sched" onclick="openCoachingSchedule(\''+a.name.replace(/\x27/g,'')+'\',\''+a.branch+'\')">Schedule coaching &rarr;</a></div></div>';
       }).join('');
       document.getElementById('mdrContent').innerHTML =
         '<div class="mdr-hd mdr-hd-list"><div class="mdr-ey">'+m.kind+'</div><div class="mdr-ttl">'+m.title+'</div><div class="mdr-sub">'+m.sub+'</div>'+
@@ -2533,5 +2590,6 @@
   })();
   </script>
   <script src="copilot-widget.js?v=10" defer></script>
+  <div class="cs-ov" id="csModal" onclick="if(event.target===this)closeCoachingSchedule()"></div>
 </body>
 </html>
