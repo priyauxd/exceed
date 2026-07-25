@@ -339,7 +339,7 @@
     .mc-icon.teal { background: var(--teal-soft); color: var(--teal); }
     .mc-icon.purple { background: var(--purple-soft); color: var(--purple); }
     .mc-lbl {
-      font-size: 9.5px; font-weight: 600; text-transform: uppercase;
+      font-size: 9.5px; font-weight: 700; text-transform: uppercase;
       letter-spacing: .05em; color: var(--ink-muted); margin-bottom: 9px;
     }
     .mc-val { font-size: 20px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
@@ -1172,12 +1172,12 @@
         <div class="hos-panel">
           <div class="hos-phead"><h3><span class="material-symbols-outlined" style="font-size:17px;color:#b5731f">flag</span> Leadership exceptions</h3><span class="sub">Requires leadership action</span></div>
           <div>
-            <div class="hos-exc"><span class="hos-exc-ico" style="color:#d1544f"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title red">Deal AED 380k blocked — Finance escalation</div><div class="hos-exc-sub">Omar Al Khoury · AUH</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Opening exception')">Open exception &rarr;</a><a class="hos-exc-add" onclick="showToast('Note added')">Add note</a></div></div>
-            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">SZR SLA breaches ↑ 22% WoW</div><div class="hos-exc-sub">SZR</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Reviewing showroom')">Review showroom &rarr;</a><a class="hos-exc-add" onclick="showToast('Note added')">Add note</a></div></div>
-            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">Add-on penetration DEI at 41% — target 55%</div><div class="hos-exc-sub">DEI</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Coaching branch')">Coach branch &rarr;</a><a class="hos-exc-add" onclick="showToast('Note added')">Add note</a></div></div>
-            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">Mohammed Zaid — 4 returns today (21%)</div><div class="hos-exc-sub">Call Center</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Quality review')">Quality review &rarr;</a><a class="hos-exc-add" onclick="showToast('Note added')">Add note</a></div></div>
-            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">3 competitor losses to BYD this week</div><div class="hos-exc-sub">Network</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Opening competitor deep-dive')">Open competitor deep-dive &rarr;</a><a class="hos-exc-add" onclick="showToast('Note added')">Add note</a></div></div>
-            <div class="hos-exc"><span class="hos-exc-ico" style="color:#d1544f"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title red">Delivery blocker — Bilal Qureshi · Insurance</div><div class="hos-exc-sub">SHJ · Yousef R.</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Opening exception')">Open exception &rarr;</a><a class="hos-exc-add" onclick="showToast('Note added')">Add note</a></div></div>
+            <div class="hos-exc"><span class="hos-exc-ico" style="color:#d1544f"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title red">Deal AED 380k blocked — Finance escalation</div><div class="hos-exc-sub">Omar Al Khoury · AUH</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Opening exception')">Open exception &rarr;</a><a class="hos-exc-add" onclick="openAddNote(this)">Add note</a></div></div>
+            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">SZR SLA breaches ↑ 22% WoW</div><div class="hos-exc-sub">SZR</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Reviewing showroom')">Review showroom &rarr;</a><a class="hos-exc-add" onclick="openAddNote(this)">Add note</a></div></div>
+            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">Add-on penetration DEI at 41% — target 55%</div><div class="hos-exc-sub">DEI</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Coaching branch')">Coach branch &rarr;</a><a class="hos-exc-add" onclick="openAddNote(this)">Add note</a></div></div>
+            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">Mohammed Zaid — 4 returns today (21%)</div><div class="hos-exc-sub">Call Center</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Quality review')">Quality review &rarr;</a><a class="hos-exc-add" onclick="openAddNote(this)">Add note</a></div></div>
+            <div class="hos-exc"><span class="hos-exc-ico"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title">3 competitor losses to BYD this week</div><div class="hos-exc-sub">Network</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Opening competitor deep-dive')">Open competitor deep-dive &rarr;</a><a class="hos-exc-add" onclick="openAddNote(this)">Add note</a></div></div>
+            <div class="hos-exc"><span class="hos-exc-ico" style="color:#d1544f"><span class="material-symbols-outlined">warning</span></span><div class="hos-exc-body"><div class="hos-exc-title red">Delivery blocker — Bilal Qureshi · Insurance</div><div class="hos-exc-sub">SHJ · Yousef R.</div></div><div class="hos-exc-act"><a class="hos-exc-open" onclick="showToast('Opening exception')">Open exception &rarr;</a><a class="hos-exc-add" onclick="openAddNote(this)">Add note</a></div></div>
           </div>
         </div>
 
@@ -2030,6 +2030,22 @@
     function csOne(el){ var s=el.parentNode.children; for(var i=0;i<s.length;i++) s[i].classList.remove('on'); el.classList.add('on'); }
     function csToggle(el){ el.classList.toggle('on'); }
     window.closeCoachingSchedule=function(){ var b=document.getElementById('csModal'); if(b) b.classList.remove('open'); };
+    window.openAddNote=function(el){
+      var exc=el&&el.closest?el.closest('.hos-exc'):null;
+      var t=exc?exc.querySelector('.hos-exc-title'):null;
+      var ctx=t?t.textContent.trim():'Leadership exception';
+      var box=document.getElementById('csModal');
+      box.innerHTML='<div class="cs-modal" style="width:min(520px,100%)">'+
+        '<div class="cs-hd"><div class="cs-ttl"><span class="material-symbols-outlined" style="color:var(--blue)">edit_note</span> Add note</div>'+
+          '<button class="cs-x" onclick="closeCoachingSchedule()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
+        '<div class="cs-sub">'+ctx+'</div>'+
+        '<textarea class="cs-ta" style="min-height:110px" placeholder="Add a note to the leadership log…"></textarea>'+
+        '<div class="cs-foot"><button class="cs-btn sec" onclick="closeCoachingSchedule()">Cancel</button>'+
+          '<button class="cs-btn pri" onclick="showToast(\'Note added\');closeCoachingSchedule()">Save note</button></div>'+
+      '</div>';
+      box.classList.add('open');
+      var ta=box.querySelector('.cs-ta'); if(ta) setTimeout(function(){ ta.focus(); },50);
+    };
     window.openCoachingSchedule=function(name,branch){
       branch=branch||'SZR'; var mgr=branch+' Manager';
       var times=['9:00 AM','10:00 AM','11:00 AM','2:00 PM','3:00 PM','4:00 PM'];
@@ -2536,7 +2552,18 @@
         branches:[bt(SZR,64.7,4.7,30),bt('Sharjah',64.6,4.6,70),bt('Deira',61.9,1.9,45),bt('Al Ain',60.4,0.4,37),bt('Abu Dhabi',59.1,-0.9,30)] },
       cxOpenLeads: { cx:true, noPct:true, noRank:true, valueRed:true, kind:'Aging List', title:'Open leads > 90 days', sub:'Aged open leads with no meaningful action in 90+ days.', value:'7', target:0, period:'This Month', higherIsBetter:false, yTrendMax:8, xMax:4, trend:[3,4,5,5,5,3,5],
         branches:[bt(SZR,0,0,3),bt('Deira',0,0,-14),bt('Abu Dhabi',0,0,-24),bt('Sharjah',0,0,-8),bt('Al Ain',0,0,-49)] },
-      pipeNew: { pool:true, title:'New Leads — 8 in pool', sub:'New Leads shows total volume only. Lead-level drill-down is not enabled for this full pool.', total:8, totalSub:'unassigned new leads across the network' }
+      pipeNew: { list:true, title:'New Leads — network leads', action:'Open', records:8,
+        cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'source',l:'Source'},{k:'model',l:'Model'},{k:'stage',l:'Stage'},{k:'sla',l:'SLA'},{k:'act',l:'Next Action'}],
+        rows:[
+          {cust:'Zayed Al Nuaimi',id:'L-2026-06015',temp:'Hot', owner:'Unassigned',source:'Call Center Inbound',model:'EXEED LX', stage:'New Leads',sla:'5 min overdue',slaC:'red',  act:'Assign to agent — SLA breached'},
+          {cust:'Omar Nasser',    id:'L-2026-05006',temp:'Hot', owner:'Unassigned',source:'WhatsApp',           model:'EXEED TXL',stage:'New Leads',sla:'5 min left',  slaC:'amber',act:'Assign — SLA due soon'},
+          {cust:'Hana Barakat',   id:'L-2026-06016',temp:'Warm',owner:'Unassigned',source:'800 Number',         model:'EXEED LX', stage:'New Leads',sla:'4 min left',  slaC:'amber',act:'Assign to agent — SLA due soon'},
+          {cust:'Grace Onu',      id:'L-2026-05021',temp:'Warm',owner:'Unassigned',source:'Website',            model:'EXEED LX', stage:'New Leads',sla:'8 min left',  slaC:'amber',act:'Assign — SLA due soon'},
+          {cust:'Mira Nabil',     id:'L-2026-05022',temp:'Hot', owner:'Unassigned',source:'Social Form',        model:'EXEED LX', stage:'New Leads',sla:'15 min left', act:'Assign urgently'},
+          {cust:'Ranya Al Amir',  id:'L-2026-06017',temp:'Warm',owner:'Unassigned',source:'Campaign Callback',  model:'EXEED LX', stage:'New Leads',sla:'22 min left', act:'Assign to agent'},
+          {cust:'Amir Zaki',      id:'L-2026-05020',temp:'Warm',owner:'Unassigned',source:'WhatsApp',           model:'EXEED LX', stage:'New Leads',sla:'30 min left', act:'Assign to executive'},
+          {cust:'Maya Hassan',    id:'L-2026-05003',temp:'Warm',owner:'Unassigned',source:'Social Form',        model:'EXEED TXL',stage:'New Leads',sla:'45 min left', act:'Assign to executive'}
+        ] }
     });
     var EX=['Mariam Saeed','Ahmad Nasr','Rania Khoury','Omar Al Khoury','Layla Habib','Karim Mostafa'];
     ['cxCSI','cxNPS'].forEach(function(id){ var m=METRICS[id]; var base=parseFloat(m.value)||0; m.execs=EX.map(function(n,i){ var v=Math.round((base+(i-2.5)*1.5)*10)/10; return {n:n,v:v,vt:Math.round((v-m.target)*10)/10,vol:18+i*8}; }); });
