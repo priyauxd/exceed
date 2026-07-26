@@ -898,7 +898,14 @@
             <div class="greeting-sub"><span class="persona-badge"><span class="material-symbols-outlined">badge</span> Call Center Manager</span> <span class="date">Tue, 30 Jun 2026</span></div>
           </div>
           <div class="greeting-right">
-            <button class="scope-dd"><span class="material-symbols-outlined">tune</span> Scope: Call Centre-owned leads <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
+            <div class="scope-wrap">
+              <button class="scope-dd" onclick="toggleScopeMenu(event)"><span class="material-symbols-outlined">tune</span> Scope: <strong id="scopeLabel">Call Centre-owned leads</strong> <span class="material-symbols-outlined" style="font-size:18px;margin-left:-2px">expand_more</span></button>
+              <div class="scope-menu" id="scopeMenu">
+                <button onclick="setScope('Call Centre-owned leads')">Call Centre-owned leads</button>
+                <button onclick="setScope('All inbound leads')">All inbound leads</button>
+              </div>
+              <span class="scope-info-wrap" tabindex="0"><span class="material-symbols-outlined scope-info">info</span><span class="scope-tip">Scope controls which of your leads power the KPIs. <strong>Call Centre-owned leads</strong> shows only leads currently owned by the call centre and assigned to you. <strong>All inbound leads</strong> also includes direct-to-showroom sources (Website / WhatsApp / Social / Walk-in) assigned to you.</span></span>
+            </div>
             <button class="btn-soft" onclick="openKpiDefs()"><span class="material-symbols-outlined">menu_book</span> KPI definitions</button>
             <div class="date-filter-wrap">
               <div class="date-filter">
@@ -1806,6 +1813,9 @@
       var top=r.bottom+8, bh=box.offsetHeight; if(top+bh>window.innerHeight) top=Math.max(8, r.top-bh-8); box.style.top=top+'px';
     };
     window.kpiTipHide=function(){ var b=document.getElementById('kpiTipBox'); if(b) b.classList.remove('show'); };
+    window.toggleScopeMenu=function(e){ if(e){ e.preventDefault(); e.stopPropagation(); } var m=document.getElementById('scopeMenu'); if(m) m.classList.toggle('open'); };
+    window.setScope=function(s){ var l=document.getElementById('scopeLabel'); if(l) l.textContent=s; var m=document.getElementById('scopeMenu'); if(m) m.classList.remove('open'); if(window.ccToast) ccToast('Scope set to '+s); };
+    document.addEventListener('click', function(e){ if(!(e.target.closest && e.target.closest('.scope-wrap'))){ var m=document.getElementById('scopeMenu'); if(m) m.classList.remove('open'); } });
     window.openKpiDefs=function(){
       var cards=KPIDEFS.map(function(k){
         return '<div class="kd-card"><div class="kd-title">'+k.t+(k.sla?' <span class="kd-badge">SLA-dependent</span>':'')+'</div>'+
