@@ -1968,24 +1968,26 @@
       }).join('');
       return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
     }
-    function addonLineSVG(m){
-      var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=m.trend.length,yMax=m.trendMax||40;
+    function addonLineSVG(m,d){
+      d = d || {vals:m.trend, labels:m.trend.map(function(_,i){return 'W'+(i+1);}), yMax:m.trendMax||40};
+      var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=d.vals.length,yMax=d.yMax||40;
       var pw=W-padL-padR,ph=H-padT-padB;
       var X=function(i){return padL+pw*(i/(n-1));},Y=function(v){return padT+ph*(1-v/yMax);};
       var grid='',ylab='';
       [0,.25,.5,.75,1].forEach(function(t){var v=Math.round(yMax*t),yy=Y(v);
         grid+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" class="mdr-grid"/>';
         ylab+='<text x="'+(padL-6)+'" y="'+(yy+3)+'" class="mdr-axl" text-anchor="end">'+v+'</text>';});
-      var pts=m.trend.map(function(v,i){return X(i)+','+Y(v);});
+      var pts=d.vals.map(function(v,i){return X(i)+','+Y(v);});
       var poly='<polyline class="mdr-line" points="'+pts.join(' ')+'"/>';
-      var xlab=m.trend.map(function(v,i){return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">W'+(i+1)+'</text>';}).join('');
+      var xlab=d.vals.map(function(v,i){return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+d.labels[i]+'</text>';}).join('');
       return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+poly+xlab+'</svg>';
     }
     function openAddonMetric(m){
       var has=m.tx && m.tx.length>0;
       var recs=(m.records!=null)?m.records:(m.tx?m.tx.length:0);
       var sub=m.sub || (recs+' records &middot; scoped to your showroom');
-      var trendHtml = has ? '<div class="mdr-chart">'+addonLineSVG(m)+'</div>'
+      _addonTrendM = has ? m : null;
+      var trendHtml = has ? '<div class="mdr-chart" id="addonTrendHost">'+addonLineSVG(m,apenTrendData(m,'Weekly'))+'</div>'
                           : '<div class="mdr-chart ax-empty">No records in this stage for your showroom yet.</div>';
       var head='<tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr>';
       var txHtml;
@@ -2009,7 +2011,7 @@
         '<div class="mdr-body">' +
           '<div class="ax-sec">' +
             '<div class="ax-head"><div><div class="mdr-secl">Trend</div><div class="ax-cap">Stage volume over time &middot; SZR &mdash; Sheikh Zayed Road</div></div>' +
-              '<div class="ax-toggle"><button onclick="axToggle(this)">Daily</button><button class="on" onclick="axToggle(this)">Weekly</button><button onclick="axToggle(this)">Monthly</button></div></div>' +
+              '<div class="ax-toggle"><button onclick="addonTrendToggle(this,\'Daily\')">Daily</button><button class="on" onclick="addonTrendToggle(this,\'Weekly\')">Weekly</button><button onclick="addonTrendToggle(this,\'Monthly\')">Monthly</button></div></div>' +
             trendHtml +
           '</div>' +
           '<div class="ax-sec">' +
@@ -2033,6 +2035,12 @@
       document.getElementById('mdrContent').scrollTop=0;
     }
     function axToggle(btn){ btn.parentNode.querySelectorAll('button').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on'); }
+    var _addonTrendM=null;
+    function addonTrendToggle(btn,g){
+      axToggle(btn);
+      var host=document.getElementById('addonTrendHost'); if(!host||!_addonTrendM) return;
+      host.innerHTML=addonLineSVG(_addonTrendM, apenTrendData(_addonTrendM,g));
+    }
     function openListMetric(m){
       var recs=(m.records!=null)?m.records:m.rows.length;
       document.getElementById('mdrContent').innerHTML =

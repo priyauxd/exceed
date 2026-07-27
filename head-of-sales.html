@@ -1654,9 +1654,30 @@
 
     function fmtVal(v, unit){ var n = (Math.round(v*10)/10); return unit === '%' ? n + '%' : ('' + n); }
 
-    function trendSVG(m){
+    // Weekly by default; `d` supplies a resampled series when the period toggle is used.
+    function cxWeekLabels(n){ var a=[]; for(var i=0;i<n;i++){ a.push(i===n-1?'Now':('-'+(n-1-i)+'w')); } return a; }
+    function cxTrendData(m,g){
+      var w=m.trend||[], mx=m.yTrendMax||40, i, v=[], l=[];
+      if(g==='daily'){
+        for(i=0;i<w.length;i++){ v.push(w[i]); l.push('D'+v.length); if(i<w.length-1){ v.push(Math.round((w[i]+w[i+1])/2)); l.push('D'+v.length); } }
+        return {vals:v, labels:l, yMax:mx};
+      }
+      if(g==='monthly'){
+        for(i=0;i<w.length;i+=2){ v.push(Math.round((w[i]+(w[i+1]!=null?w[i+1]:w[i]))/2)); l.push('M'+v.length); }
+        return {vals:v, labels:l, yMax:mx};
+      }
+      return {vals:w, labels:cxWeekLabels(w.length), yMax:mx};
+    }
+    var _cxTrendM=null;
+    function cxTrendToggle(btn,g){
+      btn.parentNode.querySelectorAll('button').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on');
+      var host=document.getElementById('cxTrendHost'); if(!host||!_cxTrendM) return;
+      host.innerHTML=trendSVG(_cxTrendM, cxTrendData(_cxTrendM,g));
+    }
+    function trendSVG(m,d){
+      var _tv=(d&&d.vals)||m.trend, _tl=(d&&d.labels)||cxWeekLabels((m.trend||[]).length);
       var W=520,H=200,padL=32,padR=14,padT=14,padB=26;
-      var pw=W-padL-padR, ph=H-padT-padB, n=m.trend.length, yMax=m.yTrendMax;
+      var pw=W-padL-padR, ph=H-padT-padB, n=_tv.length, yMax=(d&&d.yMax)||m.yTrendMax;
       var X=function(i){ return padL + pw*(i/(n-1)); };
       var Y=function(v){ return padT + ph*(1 - v/yMax); };
       var grid='',ylab='';
@@ -1667,7 +1688,7 @@
       if(!m.noTarget && m.target!=null){ var ty=Y(m.target);
         tline='<line x1="'+padL+'" y1="'+ty+'" x2="'+(W-padR)+'" y2="'+ty+'" class="mdr-target"/>'+
               '<text x="'+((padL+W-padR)/2)+'" y="'+(ty-4)+'" class="mdr-tlab" text-anchor="middle">Target</text>'; }
-      var xy=m.trend.map(function(v,i){ return [X(i),Y(v)]; });
+      var xy=_tv.map(function(v,i){ return [X(i),Y(v)]; });
       var pts=xy.map(function(p){ return (Math.round(p[0]*10)/10)+','+(Math.round(p[1]*10)/10); });
       var poly;
       if (m._anim){
@@ -1677,8 +1698,8 @@
       } else {
         poly='<polyline class="mdr-line" points="'+pts.join(' ')+'"/>';
       }
-      var dots=m.trend.map(function(v,i){ return '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3" class="mdr-dot"/>'; }).join('');
-      var xl=['-6w','-5w','-4w','-3w','-2w','-1w','Now'];
+      var dots=_tv.map(function(v,i){ return '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3" class="mdr-dot"/>'; }).join('');
+      var xl=_tl;
       var xlab=xl.map(function(l,i){ return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+l+'</text>'; }).join('');
       return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+tline+poly+dots+xlab+'</svg>';
     }
@@ -1949,6 +1970,7 @@
       m._rows=data; m._anim=true;
       var trendChart=trendSVG(m), branchChart=branchSVG(m);
       m._anim=false; m._rows=null;
+      _cxTrendM=m;
       document.getElementById('mdrContent').innerHTML =
         '<div class="mdr-hd">' +
           '<div class="mdr-ey">'+m.kind+'</div>' +
@@ -1965,7 +1987,9 @@
           '<a href="#" class="mdr-report" onclick="return false">View Full Report <span class="material-symbols-outlined">open_in_new</span></a>' +
         '</div>' +
         '<div class="mdr-body">' +
-          '<div class="mdr-secl">Trend</div><div class="mdr-chart">'+trendChart+'</div>' +
+          '<div class="ax-head"><div class="mdr-secl">Trend</div>'+
+            '<div class="ax-toggle"><button onclick="cxTrendToggle(this,\'daily\')">Daily</button><button class="on" onclick="cxTrendToggle(this,\'weekly\')">Weekly</button><button onclick="cxTrendToggle(this,\'monthly\')">Monthly</button></div></div>'+
+          '<div class="mdr-chart" id="cxTrendHost">'+trendChart+'</div>' +
           rankHtml +
           '<div class="mdr-secl">By '+colLbl+'</div><div class="mdr-chart">'+branchChart+'</div>' +
           '<table class="cx-table"><thead>'+tblHead.replace('{COL}',colLbl)+'</thead><tbody>'+tbl+'</tbody></table>' +
@@ -2119,6 +2143,7 @@
       if(m.cx){ openCxMetric(m); return; }
       if(m.addon){ openAddonMetric(m); return; }
       if(m.list){ openListMetric(m); return; }
+      _cxTrendM=m;
       var d=m.delta, good=m.higherIsBetter ? d>=0 : d<=0;
       var arrow=d>0?'&#9650;':(d<0?'&#9660;':'&ndash;');
       var chip=(d===0)?'':' <span class="mdr-delta '+(good?'up':'down')+'">'+arrow+' '+(d>0?'+':'')+d+'</span>';
@@ -2168,7 +2193,9 @@
           '<a href="#" class="mdr-report" onclick="return false">View Full Report <span class="material-symbols-outlined">open_in_new</span></a>' +
         '</div>' +
         '<div class="mdr-body">' +
-          '<div class="mdr-secl">Trend</div><div class="mdr-chart">'+trendSVG(m)+'</div>' +
+          '<div class="ax-head"><div class="mdr-secl">Trend</div>'+
+            '<div class="ax-toggle"><button onclick="cxTrendToggle(this,\'daily\')">Daily</button><button class="on" onclick="cxTrendToggle(this,\'weekly\')">Weekly</button><button onclick="cxTrendToggle(this,\'monthly\')">Monthly</button></div></div>'+
+          '<div class="mdr-chart" id="cxTrendHost">'+trendSVG(m)+'</div>' +
           bodyMid +
         '</div>' +
         '<div class="mdr-tabs">' +
