@@ -1758,7 +1758,7 @@
           '<div class="mdr-leadswrap"><table class="mdr-leads"><thead><tr><th></th><th>Lead</th><th>Source</th><th>Temp</th><th>SLA</th><th>Qual %</th><th>Next Action</th></tr></thead><tbody>'+leadRows+'</tbody></table></div>'+
           '<div class="ra-sec-lbl">Suggested receiving agent</div>'+
           '<div class="mdr-leadswrap"><table class="mdr-leads ra-recv"><thead><tr><th></th><th>Agent</th><th>Status</th><th class="num">Assigned</th><th class="num">Not act</th><th class="num">Quality</th></tr></thead><tbody>'+recvRows+'</tbody></table></div>'+
-          frmSelect('Reassignment reason (required)',['— Select reason —','SLA breach','SLA due soon','Agent overloaded','Callback queue overflow','Quality issue','Language mismatch'])+
+          frmSelect('Reassignment reason (required)',['— Select reason —','SLA breach','SLA due soon','Agent overloaded','Callback queue overflow','Quality issue','Language mismatch','Agent unavailable','Manager override','Other'])+
           '<label class="frm-lbl" style="display:flex;align-items:center;gap:8px;margin:2px 0 12px"><input type="checkbox" class="ra-check" checked> Notify receiving agent</label>'+
           '<div class="frm-field"><textarea class="frm-ctrl" placeholder="Manager note (optional)…"></textarea></div>'+
           '<div class="frm-foot"><button class="frm-cancel" onclick="closeMetric()">Cancel</button><button class="frm-save" onclick="ccToast(\'Leads reassigned\');closeMetric()">Confirm reassignment</button></div>'+
