@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copilot — AGM Sales EXEED CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="fluent-tokens.css?v=3" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --surface: #ffffff;
+      --ink: #242424;
+      --ink-secondary: #424242;
+      --ink-muted: #616161;
+      --border: #e0e0e0;
+      --blue: #0f6cbd;
+      --topbar-h: 42px;
+      --sidebar-w: 228px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px;
+    }
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      height: var(--topbar-h); background: #0b1d33; color: #fff;
+      display: flex; align-items: center; gap: 12px; padding: 0 14px; font-size: 12px;
+    }
+    .topbar .app-name { font-weight: 600; }
+    .topbar .sep { width: 1px; height: 16px; background: rgba(255,255,255,.25); }
+    .topbar .spacer { flex: 1; }
+    .topbar .avatar {
+      width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.2);
+      display: grid; place-items: center; font-size: 10px; font-weight: 600;
+    }
+    .sidebar {
+      position: fixed; top: var(--topbar-h); left: 0; bottom: 0; width: var(--sidebar-w);
+      background: var(--surface); border-right: 1px solid var(--border);
+      padding: 10px 8px; overflow-y: auto;
+    }
+    .sb-item {
+      display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+      border-radius: 6px; color: var(--ink-secondary); text-decoration: none; font-size: 12.5px;
+    }
+    .sb-item:hover { background: #eff6fc; color: var(--blue); }
+    .sb-item.active { background: #eff6fc; color: var(--blue); font-weight: 600; }
+    .sb-item .material-symbols-outlined { font-size: 18px; }
+    .main { margin: var(--topbar-h) 0 0 var(--sidebar-w); padding: 28px 32px; min-height: calc(100vh - var(--topbar-h)); }
+    /* floating launcher */
+    .cp-fab {
+      position: fixed; right: 26px; bottom: 26px; width: 56px; height: 56px;
+      padding: 0; border: none; border-radius: 50%; background: transparent;
+      cursor: pointer; z-index: 44; display: grid; place-items: center;
+      -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 6px 18px rgba(88,52,190,.34), 0 2px 6px rgba(20,24,34,.14);
+      transition: transform .24s cubic-bezier(.34,1.56,.64,1), box-shadow .24s;
+    }
+    .cp-fab .cp-icon { width: 100%; height: 100%; }
+    .cp-fab::before {
+      content: ''; position: absolute; inset: 0; border-radius: 50%;
+      border: 2px solid rgba(124,86,230,.5); pointer-events: none;
+      animation: cp-halo 2.8s ease-out infinite;
+    }
+    @keyframes cp-halo { 0%{transform:scale(1);opacity:.6} 70%,100%{transform:scale(1.5);opacity:0} }
+    .cp-fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 26px rgba(88,52,190,.42), 0 3px 8px rgba(20,24,34,.16); }
+    .cp-fab:active { transform: translateY(-1px) scale(.98); }
+    .cp-fab:focus-visible { outline: 2px solid #5b54d6; outline-offset: 3px; }
+    .cp-fab-tip {
+      position: absolute; right: 68px; top: 50%; white-space: nowrap;
+      transform: translateY(-50%) translateX(6px);
+      background: #242424; color: #fff; font-size: 12px; font-weight: 600;
+      padding: 6px 11px; border-radius: 7px; opacity: 0; pointer-events: none;
+      transition: opacity .18s, transform .18s;
+    }
+    .cp-fab:hover .cp-fab-tip, .cp-fab:focus-visible .cp-fab-tip { opacity: 1; transform: translateY(-50%) translateX(0); }
+    @media (max-width: 768px) {
+      .sidebar { display: none; } .main { margin-left: 0; padding: 18px; }
+      .cp-fab { right: 16px; bottom: 16px; width: 50px; height: 50px; } .cp-fab-tip { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cp-icon animate, .cp-icon animateTransform { display: none; }
+      .cp-fab::before { animation: none; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Copilot mark: steering wheel + sparkle. -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="cpDisc" x1="6%" y1="4%" x2="94%" y2="96%">
+        <stop offset="0" stop-color="#5FC6F7"/>
+        <stop offset=".42" stop-color="#7A5AE6"/>
+        <stop offset="1" stop-color="#A64BF2"/>
+      </linearGradient>
+      <linearGradient id="cpRim" x1="20%" y1="0%" x2="80%" y2="100%">
+        <stop offset="0" stop-color="#463398"/>
+        <stop offset="1" stop-color="#5A3AB8"/>
+      </linearGradient>
+      <linearGradient id="cpSeg" x1="15%" y1="0%" x2="85%" y2="100%">
+        <stop offset="0" stop-color="#A87CEC"/>
+        <stop offset="1" stop-color="#9468E2"/>
+      </linearGradient>
+      <symbol id="cpIcon" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="31" fill="url(#cpDisc)"/>
+        <g>
+          <circle cx="32" cy="32" r="25" fill="url(#cpRim)"/>
+          <path d="M12.8 28.6 A19.5 19.5 0 0 1 51.2 28.6 C47 27.5 40.2 27.6 35.5 24.5 C34 23.4 33 22.6 32 22.6 C31 22.6 30 23.4 28.5 24.5 C23.8 27.6 17 27.5 12.8 28.6 Z" fill="url(#cpSeg)"/>
+          <path d="M12.9 34.4 A19.5 19.5 0 0 0 28.4 51.1 C29.6 51.3 30.4 50.6 30.4 49.4 C30.4 44 30.2 40.4 28.6 38 C26.4 34.8 20.2 33.6 14.6 33.6 C13.4 33.6 12.7 33.6 12.9 34.4 Z" fill="url(#cpSeg)"/>
+          <path d="M51.1 34.4 A19.5 19.5 0 0 1 35.6 51.1 C34.4 51.3 33.6 50.6 33.6 49.4 C33.6 44 33.8 40.4 35.4 38 C37.6 34.8 43.8 33.6 49.4 33.6 C50.6 33.6 51.3 33.6 51.1 34.4 Z" fill="url(#cpSeg)"/>
+          <animateTransform attributeName="transform" type="rotate"
+            values="-7 32 32; 7 32 32; -7 32 32" keyTimes="0;0.5;1"
+            calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"
+            dur="7s" repeatCount="indefinite"/>
+        </g>
+        <g transform="translate(32 32.25)">
+          <g>
+            <path d="M0 -13.75 Q.9 -2.6 9.4 -0.25 Q.9 2.1 0 13.75 Q-.9 2.1 -9.4 -0.25 Q-.9 -2.6 0 -13.75 Z" fill="#fff"/>
+            <animateTransform attributeName="transform" type="scale"
+              values="1;1.13;1" keyTimes="0;0.5;1"
+              calcMode="spline" keySplines=".4 0 .6 1;.4 0 .6 1"
+              dur="2.8s" repeatCount="indefinite"/>
+          </g>
+        </g>
+        <g fill="none" stroke="#8FD9F8" stroke-width="1.3" stroke-linecap="round">
+          <path d="M36.6 25.4 A3 3 0 0 1 38.3 27.8">
+            <animate attributeName="opacity" values=".3;1;.3" dur="2.8s" repeatCount="indefinite"/>
+          </path>
+          <path d="M36.6 39.4 A3 3 0 0 0 38.3 37">
+            <animate attributeName="opacity" values="1;.3;1" dur="2.8s" repeatCount="indefinite"/>
+          </path>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="topbar">
+    <span class="app-name">Dynamics 365</span>
+    <span class="sep"></span><span>AGM Sales</span>
+    <span class="spacer"></span>
+    <div class="avatar">NA</div>
+  </div>
+
+  <div class="sidebar">
+    <a href="index.html" class="sb-item"><span class="material-symbols-outlined">home</span>Home</a>
+    <a href="call-center-agent.html" class="sb-item"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+    <a href="copilot.html" class="sb-item active"><svg class="cp-icon" style="width:18px;height:18px" aria-hidden="true"><use href="#cpIcon"/></svg>Copilot</a>
+  </div>
+
+  <div class="main"></div>
+
+  <button class="cp-fab" id="cpFab" aria-label="Copilot">
+    <svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>
+    <span class="cp-fab-tip">Ask Copilot</span>
+  </button>
+</body>
+</html>
