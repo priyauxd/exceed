@@ -191,6 +191,8 @@
     .dc-apply { background:var(--blue); color:#fff; border:none; border-radius:7px; padding:9px 15px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
     .dc-cancel { background:var(--surface); color:var(--ink); border:1px solid var(--border); border-radius:7px; padding:8px 14px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; }
     .dc-cancel:hover { background:#f5f5f5; }
+    .dc-clear { background:none; color:var(--ink-muted); border:none; border-radius:7px; padding:8px 10px; font-size:12px; font-weight:600; font-family:inherit; cursor:pointer; margin-right:auto; }
+    .dc-clear:hover { color:var(--ink); background:#f5f5f5; }
     .btn-soft {
       padding: 7px 14px; border: 1px solid var(--border);
       border-radius: 8px; background: var(--surface);
@@ -425,6 +427,13 @@
     .x-addmenu { position:absolute; top:calc(100% + 6px); right:0; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 30px rgba(20,24,34,.16); padding:8px; min-width:190px; z-index:40; display:none; }
     .x-addmenu.open { display:block; }
     .x-addhead { font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-muted); padding:4px 8px 8px; }
+    .inv-addwrap { position:relative; }
+    .inv-menu { position:absolute; top:calc(100% + 6px); right:0; width:220px; max-height:420px; overflow-y:auto; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 14px 40px rgba(20,24,34,.16); padding:8px; display:none; z-index:70; }
+    .inv-menu.open { display:block; }
+    .inv-menu-h { font-size:10.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-muted); padding:6px 8px 8px; }
+    .inv-opt { display:flex; align-items:center; gap:10px; padding:8px; font-size:13.5px; color:var(--ink); border-radius:7px; cursor:pointer; }
+    .inv-opt:hover { background:#f5f7fd; }
+    .inv-opt input { accent-color:var(--blue); width:17px; height:17px; cursor:pointer; }
     .x-addopt { display:flex; align-items:center; gap:9px; padding:7px 8px; border-radius:7px; font-size:13px; color:var(--ink-secondary); cursor:pointer; white-space:nowrap; }
     .x-addopt:hover { background:var(--blue-soft); }
     .x-addopt input { accent-color:var(--blue); width:15px; height:15px; cursor:pointer; }
@@ -917,6 +926,7 @@
               <div class="date-custom" id="dateCustom">
                 <label>From<input type="date" id="dateFrom"></label>
                 <label>To<input type="date" id="dateTo"></label>
+                <button class="dc-clear" onclick="clearCustomRange()">Clear</button>
                 <button class="dc-cancel" onclick="cancelCustomRange()">Cancel</button>
                 <button class="dc-apply" onclick="applyCustomRange()">Apply</button>
               </div>
@@ -1059,7 +1069,7 @@
 
         <!-- SECTION — My Pipeline -->
         <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My pipeline</span><span class="kpi-sec-sub">&middot; Click a stage to drill in &middot; New Leads is count-only</span><div class="date-filter-wrap" style="margin-left:auto"><div class="date-filter"><button class="df-tab" onclick="setDateRange(this)">Today</button><button class="df-tab" onclick="setDateRange(this)">This week</button><button class="df-tab on" onclick="setDateRange(this)">MTD</button><button class="df-tab" onclick="setDateRange(this)">Last 30 days</button></div></div>
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My pipeline</span><span class="kpi-sec-sub">&middot; Click a stage to drill in &middot; New Leads is count-only</span><div class="date-filter-wrap" style="margin-left:auto"><div class="date-filter"><button class="df-tab" onclick="setDateRange(this)">Today</button><button class="df-tab" onclick="setDateRange(this)">This week</button><button class="df-tab on" onclick="setDateRange(this)">MTD</button><button class="df-tab" onclick="setDateRange(this)">Last 30 days</button></div></div></div>
           <style>
             .np-wrap { background:#fafafa; border-radius:14px; padding:18px 20px 14px; }
             .np-chart { display:flex; align-items:flex-end; gap:14px; height:250px; padding:0 4px; }
@@ -1245,7 +1255,8 @@
                     <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('model','Model')"><span>Model</span></label>
                     <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('idle','Days idle')"><span>Days idle</span></label>
                     <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('quote','Quote')"><span>Quote</span></label>
-                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('owner','Owner')"><span>Owner</span></label>
+                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('channel','Channel')"><span>Channel</span></label>
+                    <label class="mdr-addcol-opt"><input type="radio" name="tpaddcol" onclick="tpAddCol('language','Language')"><span>Language</span></label>
                   </div>
                 </div>
               </div>
@@ -1560,11 +1571,23 @@
   <script>
     // Date range filter (Today is the default)
     var prevDateTab = null;
+    function dcBtn(){ return document.getElementById('dfCustom'); }
+    // The tab that was active on load — where Clear returns to.
+    var dcDefaultTab = (function(){ var c = dcBtn(); return c ? c.parentNode.querySelector('.df-tab.on') : null; })();
     function dcDefaultToday(){ var t=new Date().toISOString().slice(0,10); var f=document.getElementById('dateFrom'), tt=document.getElementById('dateTo'); if(f && !f.value) f.value=t; if(tt && !tt.value) tt.value=t; }
+    function dcResetLabel(){
+      var c = dcBtn(); if (c) c.textContent = 'Custom';
+      var f = document.getElementById('dateFrom'), t = document.getElementById('dateTo');
+      if (f) f.value = ''; if (t) t.value = '';
+    }
     function setDateRange(btn){
-      var isCustom = /custom/i.test(btn.textContent);
+      // Match on identity, not text — applyCustomRange replaces the label with the date range.
+      var c = dcBtn(), isCustom = !!c && btn === c;
       if (isCustom) { var cur = btn.parentNode.querySelector('.df-tab.on'); if (cur && cur !== btn) prevDateTab = cur; }
-      else { prevDateTab = null; }
+      else {
+        prevDateTab = null;
+        if (c && btn.parentNode === c.parentNode) dcResetLabel();
+      }
       btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
       btn.classList.add('on');
       var custom = document.getElementById('dateCustom');
@@ -1573,17 +1596,23 @@
     }
     function applyCustomRange(){
       var f = document.getElementById('dateFrom').value, t = document.getElementById('dateTo').value;
-      var fmt = function(d){ if(!d) return ''; var p=d.split('-'); return p[2]+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; };
-      var lbl = 'Custom Range';
-      if (f && t) lbl = fmt(f)+' – '+fmt(t);
-      else if (f) lbl = 'From '+fmt(f);
-      document.getElementById('dfCustom').textContent = lbl;
       document.getElementById('dateCustom').classList.remove('open');
       prevDateTab = null;
+      if (!f && !t) { dcResetLabel(); return; }
+      var fmt = function(d){ if(!d) return ''; var p=d.split('-'); return p[2]+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; };
+      var lbl = f && t ? fmt(f)+' – '+fmt(t) : (f ? 'From '+fmt(f) : 'To '+fmt(t));
+      dcBtn().textContent = lbl;
     }
     function cancelCustomRange(){
       document.getElementById('dateCustom').classList.remove('open');
-      if (prevDateTab) { document.getElementById('dfCustom').classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
+      if (prevDateTab) { dcBtn().classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
+    }
+    function clearCustomRange(){
+      dcResetLabel();
+      document.getElementById('dateCustom').classList.remove('open');
+      var c = dcBtn(); if (c) c.classList.remove('on');
+      if (dcDefaultTab) dcDefaultTab.classList.add('on');
+      prevDateTab = null;
     }
   </script>
 
@@ -1845,6 +1874,65 @@
       '</div>';
     }
     function mdrToggleAddCol(e){ if(e){ e.preventDefault(); e.stopPropagation(); } var mn=document.getElementById('mdrAddColMenu'); if(mn) mn.classList.toggle('open'); }
+
+    // ── Full column picker (volumetrics + CX / lead-management modals) ──
+    var ALL_COLS=[
+      {k:'date',l:'Date'},{k:'cust',l:'Customer'},{k:'leadid',l:'Lead ID'},{k:'model',l:'Model'},
+      {k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'temp',l:'Temp'},{k:'channel',l:'Channel'},
+      {k:'language',l:'Language'},{k:'amount',l:'Amount (AED)'},{k:'gp',l:'Gross Profit'},{k:'status',l:'Status'},
+      {k:'branch',l:'Branch'},{k:'owner',l:'Owner'},{k:'created',l:'Created'},{k:'lastaction',l:'Last action'},
+      {k:'tradein',l:'Trade-in'},{k:'addons',l:'Add-ons'},{k:'quoteage',l:'Quote age (d)'},{k:'deposit',l:'Deposit'}
+    ];
+    var mdrTblRender=null;
+    function mdrColCount(m){ var n=0; m.cols.forEach(function(c){ for(var i=0;i<ALL_COLS.length;i++) if(ALL_COLS[i].k===c.k){ n++; break; } }); return n; }
+    function mdrColHtml(m){
+      if(!m||!m.cols) return '';
+      var have={}; m.cols.forEach(function(c){ have[c.k]=1; });
+      return '<div class="inv-addwrap"><button class="ml-tbtn" onclick="mdrColMenu(event)"><span class="material-symbols-outlined">view_column</span> Add columns (<span id="mdrColCount">'+mdrColCount(m)+'</span>/'+ALL_COLS.length+')</button>'+
+        '<div class="inv-menu" id="mdrColMenu"><div class="inv-menu-h">Columns</div>'+
+        ALL_COLS.map(function(c){ return '<label class="inv-opt"><input type="checkbox" '+(have[c.k]?'checked':'')+' onchange="mdrColToggle(\''+c.k+'\')"> '+c.l+'</label>'; }).join('')+
+        '</div></div>';
+    }
+    function mdrColMenu(e){ if(e){ e.preventDefault(); e.stopPropagation(); } var mn=document.getElementById('mdrColMenu'); if(mn) mn.classList.toggle('open'); }
+    function mdrColToggle(k){
+      var m=METRICS[mdrCurrentId]; if(!m||!m.cols) return;
+      var at=-1; for(var j=0;j<m.cols.length;j++){ if(m.cols[j].k===k){ at=j; break; } }
+      if(at>=0){
+        if(mdrColCount(m)<=1) return;           // never leave the table with no columns
+        m.cols.splice(at,1);
+      } else {
+        var def=null; for(var z=0;z<ALL_COLS.length;z++){ if(ALL_COLS[z].k===k){ def=ALL_COLS[z]; break; } }
+        if(!def) return;
+        var actAt=-1; for(var y=0;y<m.cols.length;y++){ if(m.cols[y].k==='act'){ actAt=y; break; } }
+        if(actAt>=0) m.cols.splice(actAt,0,{k:def.k,l:def.l}); else m.cols.push({k:def.k,l:def.l});
+      }
+      if(mdrTblRender) mdrTblRender();
+      var cnt=document.getElementById('mdrColCount'); if(cnt) cnt.textContent=mdrColCount(m);
+    }
+    document.addEventListener('click',function(e){ var w=e.target.closest?e.target.closest('.inv-addwrap'):null; if(!w){ var mn=document.getElementById('mdrColMenu'); if(mn) mn.classList.remove('open'); } });
+
+    // Mock values for columns the row data doesn't carry — keeps the picker meaningful.
+    var MLS_CH=['WhatsApp · EN','Phone · EN','Email · AR','Web · EN'], MLS_LANG=['English','Arabic','English','English'],
+        MLS_BR=['SZR','AUH','SHJ','DXB'], MLS_LA=['Follow-up','Quote sent','Test drive booked','Docs pending','Confirmed'];
+    function mlSynth(k,r,i){
+      i=i||0;
+      if(k==='date')       return r.date || ('Jul '+(10+(i%18)));
+      if(k==='leadid')     return r.id || ('L-2026-0'+(5001+i));
+      if(k==='channel')    return MLS_CH[i%MLS_CH.length];
+      if(k==='language')   return MLS_LANG[i%MLS_LANG.length];
+      if(k==='amount')     return (180000+i*12500).toLocaleString('en-US');
+      if(k==='gp')         return (22000+i*1450).toLocaleString('en-US');
+      if(k==='branch')     return MLS_BR[i%MLS_BR.length];
+      if(k==='created')    return 'Jul '+(4+(i%14));
+      if(k==='lastaction') return MLS_LA[i%MLS_LA.length];
+      if(k==='tradein')    return (i%3===0)?'Yes':'No';
+      if(k==='addons')     return 'AED '+(3+(i%7))+'.'+(i%9)+'k';
+      if(k==='quoteage')   return String(1+(i%9));
+      if(k==='deposit')    return (15000+i*1200).toLocaleString('en-US');
+      if(k==='model')      return r.model || 'EXEED LX';
+      if(k==='source')     return r.source || 'Website';
+      return null;
+    }
     function mdrAddCol(k,l){
       var m=METRICS[mdrCurrentId]; if(!m||!m.cols) return;
       var exists=false; for(var i=0;i<m.cols.length;i++){ if(m.cols[i].k===k){ exists=true; break; } }
@@ -1857,7 +1945,7 @@
     }
     document.addEventListener('click',function(e){ var w=e.target.closest?e.target.closest('.mdr-addcol-wrap'):null; if(!w){ var mn=document.getElementById('mdrAddColMenu'); if(mn) mn.classList.remove('open'); } });
 
-    function mlCell(k,r){
+    function mlCell(k,r,i){
       if(k==='cust') return '<td><div class="ml-name">'+r.cust+'</div>'+(r.id?'<div class="ml-id">'+r.id+'</div>':'')+'</td>';
       if(k==='temp'){ var tc=r.temp==='Hot'?'hot':(r.temp==='Cold'?'cold':'warm'); return '<td><span class="ml-temp '+tc+'">'+r.temp+'</span></td>'; }
       if(k==='owner') return r.owner==='Unassigned' ? '<td><span class="ml-unassigned">Unassigned</span></td>' : '<td>'+r.owner+'</td>';
@@ -1866,16 +1954,17 @@
       if(k==='act') return '<td class="ml-act">'+r.act+'</td>';
       if(k==='idle') return '<td>'+(r.idle!=null?r.idle:(r.stage==='Nurture'?'4d':r.stage==='Offer'?'2d':(r.days||'1d')))+'</td>';
       if(k==='status'&&(r.status==null||r.status==='')) return '<td>'+(r.temp==='Hot'?'Active':'Open')+'</td>';
+      if(r[k]==null||r[k]===''){ var s=mlSynth(k,r,i); if(s!=null) return '<td>'+s+'</td>'; }
       return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
     }
     function listTable(m){
       var head='<tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr>';
-      var body=m.rows.map(function(r){
+      var body=m.rows.map(function(r,_i){
         var _q=r.id?('?id='+encodeURIComponent(r.id)):(r.cust?('?lead='+encodeURIComponent(r.cust)):'');
         var href='lead-detail.html'+_q;
         var act=m.action ? '<td style="text-align:right"><a href="'+href+'" class="ml-assign" style="position:relative;z-index:5">'+m.action+' &rsaquo;</a></td>' : '<td></td>';
         var rowClick=m.action ? ' style="cursor:pointer" onclick="if(!(event.target.closest&&event.target.closest(\'a\')))window.location.href=\''+href+'\'"' : '';
-        return '<tr'+rowClick+'>'+m.cols.map(function(c){return mlCell(c.k,r);}).join('')+act+'</tr>';
+        return '<tr'+rowClick+'>'+m.cols.map(function(c){return mlCell(c.k,r,_i);}).join('')+act+'</tr>';
       }).join('');
       return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
     }
@@ -1901,11 +1990,11 @@
       var head='<tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr>';
       var txHtml;
       if(has){
-        var body=m.tx.map(function(r){
-          return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r);}).join('')+
+        var body=m.tx.map(function(r,_i){
+          return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r,_i);}).join('')+
             '<td style="text-align:right"><a href="lead-detail.html'+(r.id?'?id='+encodeURIComponent(r.id):'')+'" class="ml-assign">'+m.action+'</a></td></tr>';
         }).join('');
-        txHtml='<div class="mdr-leadswrap"><table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
+        txHtml='<div class="mdr-leadswrap" id="mdrTblHost"><table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
       } else {
         txHtml='<div class="mdr-leadswrap"><table class="mdr-leads"><thead>'+head+'</thead></table></div>'+
           '<div class="ax-empty2"><div class="ax-empty2-t">No leads in this stage for your showroom.</div><div class="ax-empty2-s">Try adjusting the funnel period or clearing filters.</div></div>';
@@ -1925,11 +2014,20 @@
           '</div>' +
           '<div class="ax-sec">' +
             '<div class="ax-head"><div><div class="mdr-secl">Transactions</div><div class="ax-cap">Underlying leads in this stage</div></div>' +
-              '<div class="ml-tbar">'+ mdrAddColHtml(m) +
+              '<div class="ml-tbar">'+ mdrColHtml(m) +
               '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div></div>' +
             txHtml +
           '</div>' +
         '</div>';
+      mdrTblRender=function(){
+        var h=document.getElementById('mdrTblHost'); if(!h||!m.tx||!m.tx.length) return;
+        var hd='<tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr>';
+        var bd=m.tx.map(function(r,_i){
+          return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r,_i);}).join('')+
+            '<td style="text-align:right"><a href="lead-detail.html'+(r.id?'?id='+encodeURIComponent(r.id):'')+'" class="ml-assign">'+m.action+'</a></td></tr>';
+        }).join('');
+        h.innerHTML='<table class="mdr-leads"><thead>'+hd+'</thead><tbody>'+bd+'</tbody></table>';
+      };
       document.getElementById('mdr').classList.add('open');
       document.getElementById('mdrOverlay').classList.add('open');
       document.getElementById('mdrContent').scrollTop=0;
@@ -1945,16 +2043,21 @@
           '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
         '</div>' +
         '<div class="mdr-body">'+
-          '<div class="ml-tbar" style="justify-content:flex-end;margin-bottom:10px;">'+ mdrAddColHtml(m) +
-            '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div>'+
-          '<div class="mdr-leadswrap">'+
+          (m.noTools ? '' :
+            '<div class="ml-tbar" style="justify-content:flex-end;margin-bottom:10px;">'+ mdrColHtml(m) +
+            '<button class="ml-tbtn" onclick="showToast(\'Exporting as HTML\')"><span class="material-symbols-outlined">download</span> Export as HTML</button></div>')+
+          '<div class="mdr-leadswrap" id="mdrTblHost">'+
           ((m.rows && m.rows.length) ? listTable(m) :
             '<table class="mdr-leads"><thead><tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr></thead></table>'+
             '<div class="ax-empty2"><div class="ax-empty2-t">'+(m.emptyT||'No leads match this KPI right now.')+'</div><div class="ax-empty2-s">'+(m.emptyS||'Try changing the period or clearing filters.')+'</div></div>')+
           '</div>'+
-          '<div class="mdr-listnote">Data shown is mock. Use &ldquo;Add columns&rdquo; to bring additional fields into view.</div>'+
+          '<div class="mdr-listnote">'+(m.noTools?'Data shown is mock.':'Data shown is mock. Use &ldquo;Add columns&rdquo; to bring additional fields into view.')+'</div>'+
           '<div class="mdr-listnote mdr-listnote-2">Click any row for full transaction detail.</div>'+
         '</div>';
+      mdrTblRender=function(){
+        var h=document.getElementById('mdrTblHost'); if(!h||!m.rows||!m.rows.length) return;
+        h.innerHTML=listTable(m);
+      };
       document.getElementById('mdr').classList.add('open');
       document.getElementById('mdrOverlay').classList.add('open');
       document.getElementById('mdrContent').scrollTop=0;
@@ -2001,7 +2104,9 @@
 
     function apenBadge(s){ var c=s==='Attached'?'attached':(s==='Declined'?'declined':'pending'); return '<span class="ap-badge '+c+'">'+s+'</span>'; }
     function apenGP(price){ var n=parseInt(String(price||'').replace(/[^0-9]/g,''),10); if(!n) return '&mdash;'; return (Math.round(n*0.27)).toLocaleString('en-US'); }
-    function apenCell(k,r){
+    function apenDeal(r,i){ return r.deal || ('DL-'+(4600+(i||0))); }
+    function apenCell(k,r,i){
+      if(k==='deal') return '<td>'+apenDeal(r,i)+'</td>';
       if(k==='status') return '<td>'+apenBadge(r.status)+'</td>';
       if(k==='price') return '<td style="text-align:right">'+(r.price||'&mdash;')+'</td>';
       if(k==='gp') return '<td>'+apenGP(r.price)+'</td>';
@@ -2010,7 +2115,7 @@
       return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
     }
     var APEN_BASECOLS=[{k:'date',l:'Sale Date'},{k:'cust',l:'Customer'},{k:'item',l:'Item'},{k:'cat',l:'Category'},{k:'status',l:'Status'},{k:'price',l:'Price (AED)'}];
-    var APEN_ADDCOLS=[{k:'owner',l:'Owner'},{k:'gp',l:'GP (AED)'},{k:'payment',l:'Payment'}];
+    var APEN_ADDCOLS=[{k:'deal',l:'Deal #'},{k:'owner',l:'Owner'},{k:'gp',l:'GP (AED)'},{k:'payment',l:'Payment'}];
     function apenLineSVG(vals,labels,yMax){
       var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=vals.length,pw=W-padL-padR,ph=H-padT-padB;
       var X=function(i){return padL+pw*(n>1?i/(n-1):0);},Y=function(v){return padT+ph*(1-v/yMax);};
@@ -2040,7 +2145,7 @@
       var td=apenTrendData(m,'Weekly');
       var trendHtml = showTrend ? '<div class="mdr-chart" id="apenTrendHost">'+apenLineSVG(td.vals,td.labels,td.yMax)+'</div>' : '<div class="mdr-chart ax-empty">No records in this stage for your showroom yet.</div>';
       var head='<tr>'+m.cols.map(function(c){return '<th'+(c.k==='price'?' style="text-align:right"':'')+'>'+c.l+'</th>';}).join('')+'</tr>';
-      var body=m.tx.map(function(x){ return '<tr>'+m.cols.map(function(c){return apenCell(c.k,x);}).join('')+'</tr>'; }).join('');
+      var body=m.tx.map(function(x,i){ return '<tr>'+m.cols.map(function(c){return apenCell(c.k,x,i);}).join('')+'</tr>'; }).join('');
       document.getElementById('mdrContent').innerHTML =
         '<div class="mdr-hd mdr-hd-list"><div class="mdr-ttl">'+m.title+'</div><div class="mdr-sub">'+m.sub+'</div><div class="mdr-records">'+m.records+' records</div>'+
           '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>'+
@@ -2388,7 +2493,7 @@
 
     Object.assign(METRICS, {
       // ── Today's Actions ──
-      seAppointmentsToday: L({title:'Appointments today', sub:'Scope: Mariam Saeed · Today', cols:[{k:'time',l:'Time'},{k:'cust',l:'Customer'},{k:'type',l:'Type'},{k:'model',l:'Model'},{k:'branch',l:'Branch'},{k:'status',l:'Status'}], records:4, rows:[
+      seAppointmentsToday: L({noTools:true, title:'Appointments today', sub:'Scope: Mariam Saeed · Today', cols:[{k:'time',l:'Time'},{k:'cust',l:'Customer'},{k:'type',l:'Type'},{k:'model',l:'Model'},{k:'branch',l:'Branch'},{k:'status',l:'Status'}], records:4, rows:[
         {time:'11:00',cust:'Hiren Patel',type:'Test drive',model:'EXEED LX',branch:'SZR',status:'On Track'},
         {time:'14:30',cust:'Fatima Al Ali',type:'Test drive',model:'EXEED VX',branch:'SZR',status:'Due Soon'},
         {time:'16:00',cust:'Linda George',type:'Delivery',model:'EXEED VX',branch:'SZR',status:'On Track'},
@@ -2497,7 +2602,8 @@
       if(k==='model'){ return ['EXEED TXL','EXEED VX','EXEED LX','EXEED LX','EXEED RX','EXEED LX','EXEED LX'][i]||'EXEED LX'; }
       if(k==='idle'){ return stage==='Nurture'?'4d':(stage==='Offer'?'2d':'1d'); }
       if(k==='quote'){ return (stage==='Offer'||stage==='Nurture')?'AED 185k':'&mdash;'; }
-      if(k==='owner'){ return 'Mariam Saeed'; }
+      if(k==='channel'){ return ['WhatsApp','Phone','WhatsApp','Email','Phone','Web','WhatsApp'][i]||'WhatsApp'; }
+      if(k==='language'){ return ['English','Arabic','English','English','Arabic','English','English'][i]||'English'; }
       return '&mdash;';
     }
     function tpAddCol(k,l){
