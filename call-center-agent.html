@@ -1086,9 +1086,99 @@
     .dd-red { color:var(--red); font-weight:600; } .dd-amber { color:#8a6420; font-weight:600; }
     .mono { font-family:'SF Mono',Consolas,monospace; }
     </style>
+  <style>/* copilot mark */
+    .cp-icon { width:16px; height:16px; display:inline-block; vertical-align:-3px; flex:none; }
+    .topbar .copilot .cp-icon { transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
+    .topbar .copilot:hover .cp-icon { transform: scale(1.12) rotate(-8deg); }
+    .copilot-ask-badge .cp-icon { width:15px; height:15px; }
+    .copilot-answer-head .cp-icon { width:14px; height:14px; }
+    .cp-icon-pro { width:19px; height:19px; margin-top:1px; }
+    .cp-icon-lc { width:24px; height:24px; }
+    /* floating launcher */
+    .cp-fab {
+      position:fixed; right:26px; bottom:26px; width:56px; height:56px;
+      padding:0; border:none; border-radius:50%; background:transparent;
+      cursor:pointer; z-index:44; display:grid; place-items:center;
+      -webkit-tap-highlight-color:transparent;
+      box-shadow:0 6px 18px rgba(88,52,190,.34), 0 2px 6px rgba(20,24,34,.14);
+      transition:transform .24s cubic-bezier(.34,1.56,.64,1), box-shadow .24s;
+    }
+    .cp-fab .cp-icon { width:100%; height:100%; }
+    .cp-fab::before {
+      content:''; position:absolute; inset:0; border-radius:50%;
+      border:2px solid rgba(124,86,230,.5); pointer-events:none;
+      animation:cp-halo 2.8s ease-out infinite;
+    }
+    @keyframes cp-halo { 0%{transform:scale(1);opacity:.6} 70%,100%{transform:scale(1.5);opacity:0} }
+    .cp-fab:hover { transform:translateY(-3px) scale(1.05); box-shadow:0 12px 26px rgba(88,52,190,.42), 0 3px 8px rgba(20,24,34,.16); }
+    .cp-fab:active { transform:translateY(-1px) scale(.98); }
+    .cp-fab:focus-visible { outline:2px solid #5b54d6; outline-offset:3px; }
+    .cp-fab-tip {
+      position:absolute; right:68px; top:50%; white-space:nowrap;
+      transform:translateY(-50%) translateX(6px);
+      background:#242424; color:#fff; font-size:12px; font-weight:600;
+      padding:6px 11px; border-radius:7px; opacity:0; pointer-events:none;
+      transition:opacity .18s, transform .18s;
+    }
+    .cp-fab:hover .cp-fab-tip, .cp-fab:focus-visible .cp-fab-tip { opacity:1; transform:translateY(-50%) translateX(0); }
+    @media (max-width:768px) { .cp-fab { right:16px; bottom:16px; width:50px; height:50px; } .cp-fab-tip { display:none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .cp-icon animate, .cp-icon animateTransform { display:none; }
+      .topbar .copilot:hover .cp-icon { transform:none; }
+      .cp-fab::before { animation:none; opacity:0; }
+    }
+    </style>
   <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:left; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; }</style>
 </head>
 <body>
+  <!-- Copilot mark: steering wheel + sparkle. Defined once, referenced via <use>. -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="cpDisc" x1="6%" y1="4%" x2="94%" y2="96%">
+        <stop offset="0" stop-color="#5FC6F7"/>
+        <stop offset=".42" stop-color="#7A5AE6"/>
+        <stop offset="1" stop-color="#A64BF2"/>
+      </linearGradient>
+      <linearGradient id="cpRim" x1="20%" y1="0%" x2="80%" y2="100%">
+        <stop offset="0" stop-color="#463398"/>
+        <stop offset="1" stop-color="#5A3AB8"/>
+      </linearGradient>
+      <linearGradient id="cpSeg" x1="15%" y1="0%" x2="85%" y2="100%">
+        <stop offset="0" stop-color="#A87CEC"/>
+        <stop offset="1" stop-color="#9468E2"/>
+      </linearGradient>
+      <symbol id="cpIcon" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="31" fill="url(#cpDisc)"/>
+        <g>
+          <circle cx="32" cy="32" r="25" fill="url(#cpRim)"/>
+          <path d="M12.8 28.6 A19.5 19.5 0 0 1 51.2 28.6 C47 27.5 40.2 27.6 35.5 24.5 C34 23.4 33 22.6 32 22.6 C31 22.6 30 23.4 28.5 24.5 C23.8 27.6 17 27.5 12.8 28.6 Z" fill="url(#cpSeg)"/>
+          <path d="M12.9 34.4 A19.5 19.5 0 0 0 28.4 51.1 C29.6 51.3 30.4 50.6 30.4 49.4 C30.4 44 30.2 40.4 28.6 38 C26.4 34.8 20.2 33.6 14.6 33.6 C13.4 33.6 12.7 33.6 12.9 34.4 Z" fill="url(#cpSeg)"/>
+          <path d="M51.1 34.4 A19.5 19.5 0 0 1 35.6 51.1 C34.4 51.3 33.6 50.6 33.6 49.4 C33.6 44 33.8 40.4 35.4 38 C37.6 34.8 43.8 33.6 49.4 33.6 C50.6 33.6 51.3 33.6 51.1 34.4 Z" fill="url(#cpSeg)"/>
+          <animateTransform attributeName="transform" type="rotate"
+            values="-7 32 32; 7 32 32; -7 32 32" keyTimes="0;0.5;1"
+            calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"
+            dur="7s" repeatCount="indefinite"/>
+        </g>
+        <g transform="translate(32 32.25)">
+          <g>
+            <path d="M0 -13.75 Q.9 -2.6 9.4 -0.25 Q.9 2.1 0 13.75 Q-.9 2.1 -9.4 -0.25 Q-.9 -2.6 0 -13.75 Z" fill="#fff"/>
+            <animateTransform attributeName="transform" type="scale"
+              values="1;1.13;1" keyTimes="0;0.5;1"
+              calcMode="spline" keySplines=".4 0 .6 1;.4 0 .6 1"
+              dur="2.8s" repeatCount="indefinite"/>
+          </g>
+        </g>
+        <g fill="none" stroke="#8FD9F8" stroke-width="1.3" stroke-linecap="round">
+          <path d="M36.6 25.4 A3 3 0 0 1 38.3 27.8">
+            <animate attributeName="opacity" values=".3;1;.3" dur="2.8s" repeatCount="indefinite"/>
+          </path>
+          <path d="M36.6 39.4 A3 3 0 0 0 38.3 37">
+            <animate attributeName="opacity" values="1;.3;1" dur="2.8s" repeatCount="indefinite"/>
+          </path>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
   <div class="nav-backdrop" onclick="closeSidebar()"></div>
 
@@ -1100,7 +1190,7 @@
     <input class="search" type="text" placeholder="&#128269; Search..." />
     <span class="spacer"></span>
     <div class="actions">
-      <div class="copilot" id="copilotBtn" onclick="toggleCopilot()">&#10024; Copilot</div>
+      <div class="copilot" id="copilotBtn" onclick="toggleCopilot()"><svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>Copilot</div>
       <span style="opacity:.7;font-size:14px">&#9881;</span>
       <div class="notif-bell" id="bellBtn" onclick="toggleNotif()">
         <span class="material-symbols-outlined">notifications</span>
@@ -1288,12 +1378,12 @@
         <!-- Ask Copilot -->
         <div class="copilot-ask copilot-dd" id="copilotDD">
           <div class="copilot-ask-head">
-            <span class="copilot-ask-badge">&#10024; COPILOT</span>
+            <span class="copilot-ask-badge"><svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>COPILOT</span>
             <span class="copilot-ask-sub">Grounded on your dashboard &middot; updated just now</span>
             <button class="copilot-dd-close" onclick="toggleCopilot()" aria-label="Close">&times;</button>
           </div>
           <div class="cp-pro">
-            <span class="material-symbols-outlined">auto_awesome</span>
+            <svg class="cp-icon cp-icon-pro" aria-hidden="true"><use href="#cpIcon"/></svg>
             <div class="cp-pro-body"><span class="cp-pro-tag">Proactive</span>SLA breached &mdash; <strong>Maya Hassan</strong> passed the 1-hour first-contact window and is still not actioned. She&rsquo;s a hot Instagram lead on EXEED TXL &mdash; call her first.</div>
             <a href="lead-detail.html?lead=Maya+Hassan" class="cp-pro-action">Open lead</a>
           </div>
@@ -1303,7 +1393,7 @@
           </div>
           <div class="copilot-chips"><span class="copilot-chip" onclick="askCopilot('priority')">What should I do first?</span><span class="copilot-chip" onclick="askCopilot('sla')">Which leads are at SLA risk?</span><span class="copilot-chip" onclick="askCopilot('handover')">What's ready to hand over?</span><span class="copilot-chip" onclick="askCopilot('draft')">Draft a follow-up for Aisha</span></div>
           <div class="copilot-answer" id="copilotAnswer">
-            <div class="copilot-answer-head"><span class="material-symbols-outlined" style="font-size:14px">auto_awesome</span> COPILOT</div>
+            <div class="copilot-answer-head"><svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>COPILOT</div>
             <div class="copilot-answer-body" id="copilotAnswerBody"></div>
             <div class="copilot-answer-actions" id="copilotAnswerActions"></div>
             <div class="copilot-answer-cite" id="copilotAnswerCite"></div>
@@ -1660,7 +1750,7 @@
   <div class="lc-overlay" id="lcOverlay" onclick="closeLiveCall()"></div>
   <div class="lc-panel" id="lcPanel" role="dialog" aria-label="AI Co-Pilot live call">
     <div class="lc-hd">
-      <div class="lc-hd-l"><span class="material-symbols-outlined lc-spark">auto_awesome</span><div><div class="lc-hd-t">AI Co-Pilot</div><div class="lc-hd-s"><span class="material-symbols-outlined" style="font-size:13px">mic</span> Live call &middot; listening</div></div></div>
+      <div class="lc-hd-l"><svg class="cp-icon cp-icon-lc" aria-hidden="true"><use href="#cpIcon"/></svg><div><div class="lc-hd-t">AI Co-Pilot</div><div class="lc-hd-s"><span class="material-symbols-outlined" style="font-size:13px">mic</span> Live call &middot; listening</div></div></div>
       <div class="lc-hd-r"><span class="lc-timer-wrap"><span class="material-symbols-outlined" style="font-size:14px">schedule</span> <span id="lcTimer">00:23</span></span><span class="lc-lang"><span class="material-symbols-outlined" style="font-size:14px">language</span> English</span><button class="lc-end" onclick="endLiveCall()"><span class="material-symbols-outlined" style="font-size:15px">call_end</span> End</button></div>
     </div>
     <div class="lc-body">
@@ -2321,6 +2411,10 @@
       if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
     })();
   </script>
+  <button class="cp-fab" id="cpFab" onclick="toggleCopilot()" aria-label="Open Copilot">
+    <svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>
+    <span class="cp-fab-tip">Ask Copilot</span>
+  </button>
   <script src="copilot-widget.js?v=10" defer></script>
 </body>
 </html>
