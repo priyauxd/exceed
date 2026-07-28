@@ -58,14 +58,14 @@
     /* dock must NOT clip — it hosts the tooltip */
     .cp-fab-dock { position: fixed; right: 28px; bottom: 28px; z-index: 40; line-height: 0; }
     .cp-fab {
-      position: relative; z-index: 1; width: 56px; height: 56px; padding: 0; border: none;
-      border-radius: 50%; background: #fff; cursor: pointer;
+      position: relative; z-index: 1; width: 56px; height: 56px; padding: 3.5px; border: none;
+      border-radius: 50%; background: #16151b; cursor: pointer;
       display: grid; place-items: center;
       -webkit-tap-highlight-color: transparent;
       box-shadow: 0 6px 18px rgba(88,52,190,.28), 0 2px 6px rgba(20,24,34,.12);
       transition: transform .24s cubic-bezier(.34,1.5,.64,1), box-shadow .24s;
     }
-    .cp-fab .cp-icon { width: 56px; height: 56px; }
+    .cp-fab .cp-icon { width: 100%; height: 100%; }
     .cp-fab-dock:hover .cp-fab, .cp-fab-dock:focus-within .cp-fab {
       transform: translateY(-2px) scale(1.05);
       box-shadow: 0 14px 28px rgba(88,52,190,.4), 0 3px 8px rgba(20,24,34,.16);
@@ -93,6 +93,7 @@
 </head>
 <body>
   <!-- Copilot mark: steering wheel with a badge hub carrying the sparkle. -->
+
   <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <defs>
       <linearGradient id="cpDisc" x1="6%" y1="4%" x2="94%" y2="96%">
