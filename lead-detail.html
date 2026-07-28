@@ -4457,107 +4457,870 @@
       } catch(e) { if (window.console && console.warn) console.warn('lead deep-link failed', e); }
     });
   </script>
-  <!-- Sales Co-Pilot side panel (id=copilotDD suppresses the generic widget copilot) -->
+  <!-- Sales Co-Pilot: docked launcher + tabbed side panel (id=copilotDD suppresses the generic widget copilot) -->
   <style>
+    /* ── launcher ── */
+    .cp-fab-dock{position:fixed;right:28px;bottom:28px;z-index:60;line-height:0;transition:opacity .2s,transform .2s;}
+    body.sc-open .cp-fab-dock{opacity:0;transform:translateY(10px);pointer-events:none;}
+    .cp-fab{position:relative;z-index:1;width:56px;height:56px;padding:0;border:none;border-radius:50%;background:#fff;cursor:pointer;display:grid;place-items:center;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 18px rgba(88,52,190,.28),0 2px 6px rgba(20,24,34,.12);transition:transform .24s cubic-bezier(.34,1.5,.64,1),box-shadow .24s;}
+    .cp-fab .cp-icon{width:56px;height:56px;}
+    .cp-fab-dock:hover .cp-fab,.cp-fab-dock:focus-within .cp-fab{transform:translateY(-2px) scale(1.05);box-shadow:0 14px 28px rgba(88,52,190,.4),0 3px 8px rgba(20,24,34,.16);}
+    .cp-fab:focus-visible{outline:2px solid #5b54d6;outline-offset:4px;}
+    .cp-fab-tip{position:absolute;right:calc(100% + 12px);top:50%;z-index:2;transform:translate(6px,-50%);padding:13px 22px;border-radius:999px;white-space:nowrap;pointer-events:none;background:#26243a;color:#fff;font-size:12.5px;font-weight:600;box-shadow:0 4px 14px rgba(20,24,34,.22);opacity:0;transition:opacity .18s,transform .22s cubic-bezier(.34,1.4,.64,1);}
+    .cp-fab-dock:hover .cp-fab-tip,.cp-fab-dock:focus-within .cp-fab-tip{opacity:1;transform:translate(0,-50%);}
+
+    /* ── panel shell ── */
     .sc-overlay{position:fixed;inset:0;background:rgba(20,24,34,.28);opacity:0;visibility:hidden;transition:opacity .25s;z-index:70;}
     .sc-overlay.open{opacity:1;visibility:visible;}
-    .sc-panel{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:94vw;background:#f3f4f6;box-shadow:-8px 0 32px rgba(20,24,34,.14);z-index:71;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;font-family:inherit;}
+    .sc-panel{position:fixed;top:0;right:0;bottom:0;width:460px;max-width:94vw;background:#ffffff;box-shadow:-8px 0 32px rgba(20,24,34,.14);z-index:71;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;font-family:inherit;}
     .sc-panel.open{transform:translateX(0);}
-    .sc-head{background:#182338;color:#fff;padding:16px 18px;flex-shrink:0;}
+    .sc-head{background:#182338;color:#fff;padding:16px 18px 14px;flex-shrink:0;}
     .sc-head-top{display:flex;align-items:center;gap:9px;}
     .sc-head .material-symbols-outlined{font-size:19px;}
     .sc-title{font-size:16px;font-weight:700;letter-spacing:.01em;}
     .sc-ai{background:#3b5bdb;color:#fff;font-size:11px;font-weight:700;border-radius:11px;padding:2px 8px;letter-spacing:.02em;}
-    .sc-ring{margin-left:auto;width:26px;height:26px;border-radius:50%;border:2px solid #4f6bd0;background:#0f1728;}
-    .sc-sub{font-size:13px;line-height:1.5;color:#aeb6c6;margin-top:9px;max-width:330px;}
-    .sc-body{flex:1;overflow-y:auto;padding:18px;}
+    .sc-close{margin-left:auto;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer;}
+    .sc-close:hover{background:rgba(255,255,255,.12);}
+    .sc-close .material-symbols-outlined{font-size:17px;}
+    .sc-sub{font-size:12.5px;line-height:1.5;color:#aeb6c6;margin-top:8px;}
+    /* what the answers are grounded on — always visible, never a claim without a source */
+    .sc-ground{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;color:#cfd6e4;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 10px;}
+    .sc-ground .material-symbols-outlined{font-size:15px;color:#8fa4d4;}
+    .sc-ground b{color:#fff;font-weight:600;}
+
+    /* ── tabs ── */
+    .sc-tabs{display:flex;gap:4px;background:#fff;border-bottom:1px solid #f5f5f5;padding:8px 10px 0;flex-shrink:0;overflow-x:auto;}
+    .sc-tab{display:flex;align-items:center;gap:6px;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:#5b6472;padding:9px 13px 10px;border-radius:8px 8px 0 0;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;}
+    .sc-tab .material-symbols-outlined{font-size:17px;}
+    .sc-tab:hover{background:#f3f4f6;color:#242b38;}
+    .sc-tab[aria-selected="true"]{color:#3b5bdb;border-bottom-color:#3b5bdb;background:#f5f7ff;}
+    .sc-tab:focus-visible{outline:2px solid #3b5bdb;outline-offset:-2px;}
+    .sc-panes{flex:1;min-height:0;display:flex;}
+    .sc-pane{display:none;flex:1;min-height:0;flex-direction:column;}
+    .sc-pane.active{display:flex;}
+    .sc-scroll{flex:1;overflow-y:auto;padding:16px;}
+
+    /* ── chat ── */
     .sc-msg{display:flex;gap:10px;margin-bottom:14px;}
     .sc-msg.me{flex-direction:row-reverse;}
     .sc-av{width:30px;height:30px;border-radius:50%;background:#3b5bdb;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .sc-av .material-symbols-outlined{font-size:17px;}
-    .sc-bubble{background:#fff;border:1px solid #e6e8ee;border-radius:12px;padding:12px 15px;font-size:14px;line-height:1.55;color:#242b38;max-width:300px;}
+    .sc-bubble{background:#fafafa;border:1px solid #f5f5f5;border-radius:12px;padding:12px 15px;font-size:14px;line-height:1.55;color:#242b38;max-width:320px;}
     .sc-msg.me .sc-bubble{background:#182338;border-color:#182338;color:#fff;}
     .sc-msg.me .sc-av{background:#5b6472;}
-    .sc-foot{background:#fff;border-top:1px solid #e6e8ee;padding:12px 14px;flex-shrink:0;}
+    .sc-av.me{font-size:11.5px;font-weight:700;letter-spacing:.02em;}
+    .sc-typing span{display:inline-block;width:6px;height:6px;margin-right:3px;border-radius:50%;background:#9aa3b2;animation:scBlink 1.1s infinite;}
+    .sc-typing span:nth-child(2){animation-delay:.15s;} .sc-typing span:nth-child(3){animation-delay:.3s;}
+    @keyframes scBlink{0%,80%,100%{opacity:.25;transform:translateY(0);}40%{opacity:1;transform:translateY(-2px);}}
+    .sc-foot{background:#fff;border-top:1px solid #f5f5f5;padding:12px 14px;flex-shrink:0;}
     .sc-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:11px;}
-    .sc-chip{font-size:13px;color:#2b3444;background:#eef0f4;border:1px solid #e2e5ec;border-radius:18px;padding:7px 14px;cursor:pointer;}
+    .sc-chip{font-size:13px;color:#2b3444;background:#fafafa;border:1px solid #e2e5ec;border-radius:18px;padding:7px 14px;cursor:pointer;font-family:inherit;}
     .sc-chip:hover{background:#e3e7ee;border-color:#cfd4de;}
     .sc-inrow{display:flex;align-items:center;gap:8px;}
-    .sc-input{flex:1;border:1px solid #dde0e7;border-radius:9px;padding:11px 13px;font-size:14px;font-family:inherit;color:#242b38;outline:none;}
+    .sc-input{flex:1;background:#fafafa;border:1px solid #f5f5f5;border-radius:9px;padding:11px 13px;font-size:14px;font-family:inherit;color:#242b38;outline:none;}
     .sc-input:focus{border-color:#3b5bdb;}
-    .sc-send,.sc-x{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;border:1px solid transparent;}
-    .sc-send{background:#182338;color:#fff;}
+    .sc-send{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;border:none;background:#182338;color:#fff;}
     .sc-send:hover{background:#22314c;}
-    .sc-x{background:#fff;color:#5b6472;border-color:#dde0e7;}
-    .sc-x:hover{background:#f3f4f6;}
-    .sc-send .material-symbols-outlined,.sc-x .material-symbols-outlined{font-size:19px;}
+    .sc-send .material-symbols-outlined{font-size:19px;}
+
+    /* ── shared card furniture ── */
+    .sc-card{background:#fafafa;border:1px solid #f5f5f5;border-radius:12px;padding:14px 15px;margin-bottom:12px;}
+    .sc-card-h{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:#242b38;margin-bottom:11px;}
+    .sc-card-h .material-symbols-outlined{font-size:17px;color:#3b5bdb;}
+    .sc-srchwrap{padding:14px 16px 0;flex-shrink:0;background:#fff;}
+    .sc-srch{display:flex;align-items:center;gap:8px;background:#fafafa;border:1px solid #f5f5f5;border-radius:9px;padding:10px 12px;}
+    .sc-srch .material-symbols-outlined{font-size:18px;color:#8b93a1;}
+    .sc-srch input{flex:1;border:none;outline:none;font-size:13.5px;font-family:inherit;color:#242b38;background:transparent;}
+    .sc-pill{font-size:11.5px;font-weight:600;border-radius:20px;padding:3px 9px;white-space:nowrap;}
+    .sc-pill.ok{background:#e7f6ec;color:#1e7a41;}
+    .sc-pill.low{background:#fdf1e3;color:#a35b09;}
+    .sc-pill.match{background:#e7f6ec;color:#1e7a41;display:inline-flex;align-items:center;gap:4px;}
+    .sc-pill.match .material-symbols-outlined{font-size:14px;}
+    .sc-src{display:flex;align-items:center;gap:5px;font-size:11.5px;color:#3b5bdb;margin-top:10px;padding-top:9px;border-top:1px dashed #f5f5f5;}
+    .sc-src .material-symbols-outlined{font-size:14px;}
+    .sc-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;}
+    .sc-btn{display:flex;align-items:center;justify-content:center;gap:7px;background:#fafafa;border:1px solid #f5f5f5;border-radius:9px;padding:10px 12px;font-size:12.5px;font-weight:600;color:#2b3444;cursor:pointer;font-family:inherit;text-align:center;}
+    .sc-btn:hover{background:#f5f7ff;border-color:#b9c4e8;color:#3b5bdb;}
+    .sc-btn .material-symbols-outlined{font-size:16px;color:#3b5bdb;}
+    .sc-btn.primary{background:#182338;border-color:#182338;color:#fff;}
+    .sc-btn.primary .material-symbols-outlined{color:#fff;}
+    .sc-btn.primary:hover{background:#22314c;color:#fff;}
+    .sc-note{display:flex;gap:7px;align-items:flex-start;font-size:12px;line-height:1.5;color:#5b6472;background:#fafafa;border:1px solid #f5f5f5;border-radius:9px;padding:10px 12px;margin-bottom:12px;}
+    .sc-note .material-symbols-outlined{font-size:16px;color:#5b6472;flex-shrink:0;}
+    .sc-empty{text-align:center;color:#8b93a1;font-size:13px;line-height:1.6;padding:34px 20px;}
+    .sc-empty .material-symbols-outlined{font-size:30px;display:block;margin:0 auto 10px;color:#c3c9d4;}
+
+    /* ── best fit ── */
+    .sc-bf{background:#fafafa;border:1px solid #f5f5f5;border-radius:12px;padding:14px 15px;margin-bottom:12px;box-shadow:0 1px 3px rgba(59,91,219,.07);}
+    .sc-bf-top{display:flex;gap:12px;align-items:flex-start;}
+    .sc-thumb{width:54px;height:44px;border-radius:8px;background:linear-gradient(150deg,#3b5bdb,#2b2b7a);display:grid;place-items:center;flex-shrink:0;}
+    .sc-thumb .material-symbols-outlined{font-size:22px;color:#fff;}
+    .sc-bf-name{font-size:14px;font-weight:700;color:#242b38;}
+    .sc-bf-meta{font-size:12.5px;color:#5b6472;margin:2px 0 6px;}
+    .sc-why{font-size:13px;line-height:1.6;color:#3d4553;margin-top:11px;}
+    .sc-needs{list-style:none;margin:11px 0 0;padding:0;}
+    .sc-needs li{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.55;color:#3d4553;padding:5px 0;}
+    .sc-needs .material-symbols-outlined{font-size:16px;flex-shrink:0;}
+    .sc-needs .yes .material-symbols-outlined{color:#1e7a41;}
+    .sc-needs .warn .material-symbols-outlined{color:#c07a12;}
+    .sc-alt{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:#5b6472;}
+    .sc-alt b{color:#242b38;font-weight:600;}
+
+    /* ── vehicle rows ── */
+    .sc-veh{background:#fafafa;border:1px solid #f5f5f5;border-radius:12px;padding:13px 15px;margin-bottom:10px;}
+    .sc-veh-top{display:flex;gap:12px;align-items:flex-start;}
+    .sc-veh-name{font-size:13.5px;font-weight:700;color:#242b38;}
+    .sc-veh-tag{font-size:12px;color:#5b6472;margin:1px 0 5px;}
+    .sc-veh-price{font-size:12.5px;color:#242b38;font-weight:600;}
+    .sc-veh-price span{font-weight:400;color:#5b6472;}
+    .sc-veh-offer{font-size:12.5px;color:#3b5bdb;margin-top:3px;}
+    .sc-veh-trim{font-size:12px;color:#5b6472;margin-top:7px;}
+
+    /* ── compete ── */
+    .sc-vs{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px;}
+    .sc-vs-name{font-size:13.5px;font-weight:700;color:#242b38;}
+    .sc-delta{font-size:12px;font-weight:600;color:#1e7a41;background:#e7f6ec;border-radius:20px;padding:3px 9px;white-space:nowrap;}
+    .sc-wl{margin:0;padding:0;list-style:none;}
+    .sc-wl li{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;line-height:1.55;color:#3d4553;padding:4px 0;}
+    .sc-wl .material-symbols-outlined{font-size:15px;flex-shrink:0;margin-top:1px;}
+    .sc-wl.win .material-symbols-outlined{color:#1e7a41;}
+    .sc-wl.lose .material-symbols-outlined{color:#a35b09;}
+    .sc-wl-h{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8b93a1;margin:10px 0 2px;}
+
+    /* ── comms ── */
+    .sc-seg{display:inline-flex;background:#f5f5f5;border-radius:8px;padding:3px;gap:2px;}
+    .sc-seg button{border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:#5b6472;padding:6px 12px;border-radius:6px;cursor:pointer;}
+    .sc-seg button[aria-pressed="true"]{background:#fff;color:#242b38;box-shadow:0 1px 2px rgba(20,24,34,.12);}
+    .sc-draft{font-size:13px;line-height:1.6;color:#3d4553;background:#fafafa;border:1px solid #f5f5f5;border-radius:9px;padding:12px 13px;white-space:pre-wrap;}
+    .sc-draft[dir="rtl"]{text-align:right;}
+    .sc-chan{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#5b6472;}
+    .sc-chan .material-symbols-outlined{font-size:16px;color:#3b5bdb;}
+
+    .sc-grouph{font-size:13px;font-weight:700;color:#242b38;margin-bottom:10px;}
+    .sc-opts{display:flex;flex-wrap:wrap;gap:8px;}
+    .sc-opt{font-size:12.5px;font-weight:600;color:#2b3444;background:#fafafa;border:1px solid #f5f5f5;border-radius:20px;padding:8px 15px;cursor:pointer;font-family:inherit;}
+    .sc-opt:hover{border-color:#b9c4e8;color:#3b5bdb;}
+    .sc-opt.on{background:#182338;border-color:#182338;color:#fff;}
+    .sc-opt.lang.on{background:#3b5bdb;border-color:#3b5bdb;color:#fff;}
+    .sc-dhead{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#242b38;margin-bottom:10px;}
+    .sc-dhead .cp-icon{width:20px;height:20px;}
+    .sc-subj{font-size:12.5px;font-weight:600;color:#242b38;margin-bottom:9px;}
+    .sc-actions.three{grid-template-columns:repeat(3,1fr);}
+    .sc-btn.sm{padding:9px 6px;font-size:12px;gap:5px;}
+    .sc-btn.sm .material-symbols-outlined{font-size:15px;}
+    .sc-card .sc-hint{margin-top:10px;}
+
+    .sc-mark{width:26px;height:26px;flex-shrink:0;}
+    .sc-av.bot{background:transparent;}
+    .sc-av.bot .cp-icon{width:30px;height:30px;}
+
+    /* competitor chip row + spec table */
+    .sc-cchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+    .sc-cchip{font-size:12.5px;font-weight:600;color:#2b3444;background:#fafafa;border:1px solid #f5f5f5;border-radius:20px;padding:8px 15px;cursor:pointer;font-family:inherit;white-space:nowrap;}
+    .sc-cchip:hover{border-color:#b9c4e8;color:#3b5bdb;}
+    .sc-cchip.on{background:#182338;border-color:#182338;color:#fff;}
+    .sc-cchip.add{display:inline-flex;align-items:center;gap:4px;color:#3b5bdb;border-style:dashed;}
+    .sc-cchip.add .material-symbols-outlined{font-size:16px;}
+    .sc-tblwrap{overflow-x:auto;}
+    .sc-tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+    .sc-tbl th,.sc-tbl td{text-align:left;padding:9px 10px 9px 0;border-bottom:1px solid #f5f5f5;vertical-align:top;}
+    .sc-tbl thead th{font-size:11.5px;letter-spacing:.03em;color:#8b93a1;font-weight:700;padding-bottom:7px;}
+    .sc-tbl thead th.us{color:#242b38;}
+    .sc-tbl tbody th{font-weight:500;color:#6b7488;white-space:nowrap;}
+    .sc-tbl td{color:#3d4553;}
+    .sc-tbl td.us{font-weight:700;color:#242b38;}
+    .sc-tbl tbody tr:last-child th,.sc-tbl tbody tr:last-child td{border-bottom:none;}
+    .sc-wl li.edge .material-symbols-outlined{color:#3b5bdb;}
+    .sc-hint{font-size:12px;color:#8b93a1;margin-top:9px;}
+    .sc-sugg{border:1px solid #f5f5f5;border-radius:9px;overflow:hidden;}
+    .sc-sugg-row{display:flex;align-items:center;gap:10px;width:100%;background:#fafafa;border:none;border-bottom:1px solid #f5f5f5;padding:10px 12px;font-family:inherit;text-align:left;cursor:pointer;}
+    .sc-sugg-row:last-child{border-bottom:none;}
+    .sc-sugg-row:hover{background:#f5f7ff;}
+    .sc-sugg-row .material-symbols-outlined{font-size:18px;color:#3b5bdb;}
+    .sc-sugg-row b{display:block;font-size:13px;font-weight:600;color:#242b38;}
+    .sc-sugg-row em{display:block;font-style:normal;font-size:11.5px;color:#8b93a1;margin-top:1px;}
+    .sc-sugg-row.custom b{color:#3b5bdb;}
+
+    @media (prefers-reduced-motion: reduce){
+      .cp-icon animate,.cp-icon animateTransform{display:none;}
+      .cp-fab,.cp-fab-tip,.sc-panel,.sc-overlay{transition:none;}
+      .sc-typing span{animation:none;}
+    }
+    @media (max-width:520px){ .sc-actions{grid-template-columns:1fr;} }
   </style>
+
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <linearGradient id="cpDisc" x1="6%" y1="4%" x2="94%" y2="96%">
+        <stop offset="0" stop-color="#5FC6F7"/><stop offset=".42" stop-color="#7A5AE6"/><stop offset="1" stop-color="#A64BF2"/>
+      </linearGradient>
+      <linearGradient id="cpRim" x1="20%" y1="0%" x2="80%" y2="100%">
+        <stop offset="0" stop-color="#463398"/><stop offset="1" stop-color="#5A3AB8"/>
+      </linearGradient>
+      <linearGradient id="cpSeg" x1="15%" y1="0%" x2="85%" y2="100%">
+        <stop offset="0" stop-color="#A87CEC"/><stop offset="1" stop-color="#9468E2"/>
+      </linearGradient>
+      <linearGradient id="cpHub" x1="18%" y1="0%" x2="82%" y2="100%">
+        <stop offset="0" stop-color="#5B45C0"/><stop offset="1" stop-color="#38287B"/>
+      </linearGradient>
+      <symbol id="cpIcon" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="31" fill="url(#cpDisc)"/>
+        <g>
+          <circle cx="32" cy="32" r="25" fill="url(#cpRim)"/>
+          <path d="M12.8 28.6 A19.5 19.5 0 0 1 51.2 28.6 C47 27.5 40.2 27.6 35.5 24.5 C34 23.4 33 22.6 32 22.6 C31 22.6 30 23.4 28.5 24.5 C23.8 27.6 17 27.5 12.8 28.6 Z" fill="url(#cpSeg)"/>
+          <path d="M12.9 34.4 A19.5 19.5 0 0 0 28.4 51.1 C29.6 51.3 30.4 50.6 30.4 49.4 C30.4 44 30.2 40.4 28.6 38 C26.4 34.8 20.2 33.6 14.6 33.6 C13.4 33.6 12.7 33.6 12.9 34.4 Z" fill="url(#cpSeg)"/>
+          <path d="M51.1 34.4 A19.5 19.5 0 0 1 35.6 51.1 C34.4 51.3 33.6 50.6 33.6 49.4 C33.6 44 33.8 40.4 35.4 38 C37.6 34.8 43.8 33.6 49.4 33.6 C50.6 33.6 51.3 33.6 51.1 34.4 Z" fill="url(#cpSeg)"/>
+          <animateTransform attributeName="transform" type="rotate" values="-7 32 32; 7 32 32; -7 32 32" keyTimes="0;0.5;1"
+            calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1" dur="7s" repeatCount="indefinite"/>
+        </g>
+        <circle cx="32" cy="32.25" r="12.4" fill="#2f2270" opacity=".55"/>
+        <circle cx="32" cy="32.25" r="11.5" fill="url(#cpHub)" stroke="rgba(255,255,255,.28)" stroke-width="1"/>
+        <g transform="translate(32 32.25) scale(.52)">
+          <g>
+            <path d="M0 -13.75 Q.9 -2.6 9.4 -0.25 Q.9 2.1 0 13.75 Q-.9 2.1 -9.4 -0.25 Q-.9 -2.6 0 -13.75 Z" fill="#fff" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>
+            <animateTransform attributeName="transform" type="scale" values="1;.74;1" keyTimes="0;0.5;1"
+              calcMode="spline" keySplines=".4 0 .6 1;.4 0 .6 1" dur="2.8s" repeatCount="indefinite"/>
+          </g>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="cp-fab-dock">
+    <span class="cp-fab-tip" role="tooltip" id="cpFabTip">Ask Sales Co-Pilot</span>
+    <button class="cp-fab" id="cpFab" aria-label="Ask Sales Co-Pilot" aria-describedby="cpFabTip"
+      aria-haspopup="dialog" aria-expanded="false" aria-controls="copilotDD" onclick="toggleSalesCopilot()">
+      <svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>
+    </button>
+  </div>
+
   <div class="sc-overlay" id="scOverlay" onclick="toggleSalesCopilot()"></div>
-  <div class="sc-panel" id="copilotDD" role="dialog" aria-label="Sales Co-Pilot">
+  <div class="sc-panel" id="copilotDD" role="dialog" aria-modal="true" aria-labelledby="scTitle" aria-hidden="true">
     <div class="sc-head">
       <div class="sc-head-top">
-        <span class="material-symbols-outlined">auto_awesome</span>
-        <span class="sc-title">Sales Co-Pilot</span>
+        <svg class="cp-icon sc-mark" aria-hidden="true"><use href="#cpIcon"/></svg>
+        <span class="sc-title" id="scTitle">Sales Co-Pilot</span>
         <span class="sc-ai">AI</span>
-        <span class="sc-ring"></span>
+        <button class="sc-close" onclick="toggleSalesCopilot()" aria-label="Close Sales Co-Pilot"><span class="material-symbols-outlined">close</span></button>
       </div>
       <div class="sc-sub">Grounded in current CRM, vehicle, inventory and competitor data. Confirms before saving anything.</div>
+      <div class="sc-ground" id="scGround"><span class="material-symbols-outlined">database</span><span>No lead open</span></div>
     </div>
-    <div class="sc-body" id="scBody">
-      <div class="sc-msg">
-        <div class="sc-av"><span class="material-symbols-outlined">smart_toy</span></div>
-        <div class="sc-bubble">I'm your Sales Co-Pilot. I can recap a customer, brief you on a vehicle, compare competitors, handle objections, recommend a best-fit vehicle, plan a test drive or draft a customer message. Try a chip below to start.</div>
-      </div>
+
+    <div class="sc-tabs" role="tablist" aria-label="Co-Pilot sections" id="scTabs">
+      <button class="sc-tab" role="tab" id="scTabChat" aria-controls="scPaneChat" aria-selected="true" onclick="scTab('chat')"><span class="material-symbols-outlined">smart_toy</span>Chat</button>
+      <button class="sc-tab" role="tab" id="scTabVehicles" aria-controls="scPaneVehicles" aria-selected="false" tabindex="-1" onclick="scTab('vehicles')"><span class="material-symbols-outlined">directions_car</span>Vehicles</button>
+      <button class="sc-tab" role="tab" id="scTabCompete" aria-controls="scPaneCompete" aria-selected="false" tabindex="-1" onclick="scTab('compete')"><span class="material-symbols-outlined">shield</span>Compete</button>
+      <button class="sc-tab" role="tab" id="scTabComms" aria-controls="scPaneComms" aria-selected="false" tabindex="-1" onclick="scTab('comms')"><span class="material-symbols-outlined">forum</span>Comms</button>
     </div>
-    <div class="sc-foot">
-      <div class="sc-chips">
-        <span class="sc-chip" onclick="scChip('find')">Find a customer</span>
-        <span class="sc-chip" onclick="scChip('compare')">Compare EXEED VX with Nissan Patrol</span>
-        <span class="sc-chip" onclick="scChip('recommend')">Recommend a vehicle</span>
-        <span class="sc-chip" onclick="scChip('draft')">Draft a customer message</span>
-      </div>
-      <div class="sc-inrow">
-        <input class="sc-input" id="scInput" placeholder="Ask the co-pilot..." onkeydown="if(event.key==='Enter')scSend()" />
-        <div class="sc-send" onclick="scSend()" title="Send"><span class="material-symbols-outlined">send</span></div>
-        <div class="sc-x" onclick="toggleSalesCopilot()" title="Close"><span class="material-symbols-outlined">close</span></div>
-      </div>
+
+    <div class="sc-panes">
+      <section class="sc-pane active" id="scPaneChat" role="tabpanel" aria-labelledby="scTabChat">
+        <div class="sc-scroll" id="scBody">
+          <div class="sc-msg">
+            <div class="sc-av bot"><svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg></div>
+            <div class="sc-bubble">I'm your Sales Co-Pilot. Ask me about this lead, the EXEED line-up, a competitor, or have me draft a message. Everything I suggest is a draft until you confirm it.</div>
+          </div>
+        </div>
+        <div class="sc-foot">
+          <div class="sc-chips" id="scChips"></div>
+          <div class="sc-inrow">
+            <input class="sc-input" id="scInput" placeholder="Ask the co-pilot..." aria-label="Ask the co-pilot" onkeydown="if(event.key==='Enter')scSend()" />
+            <button class="sc-send" onclick="scSend()" aria-label="Send"><span class="material-symbols-outlined">send</span></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="sc-pane" id="scPaneVehicles" role="tabpanel" aria-labelledby="scTabVehicles" hidden>
+        <div class="sc-srchwrap">
+          <div class="sc-srch">
+            <span class="material-symbols-outlined">search</span>
+            <input id="scVehQ" placeholder="Ask about a model, trim, feature or offer..." aria-label="Filter vehicles" oninput="scRenderVehicles()" />
+          </div>
+        </div>
+        <div class="sc-scroll" id="scVehList"></div>
+      </section>
+
+      <section class="sc-pane" id="scPaneCompete" role="tabpanel" aria-labelledby="scTabCompete" hidden>
+        <div class="sc-scroll" id="scCompList"></div>
+      </section>
+
+      <section class="sc-pane" id="scPaneComms" role="tabpanel" aria-labelledby="scTabComms" hidden>
+        <div class="sc-scroll" id="scCommsList"></div>
+      </section>
     </div>
   </div>
+
   <script>
-    function toggleSalesCopilot(){
-      var p=document.getElementById('copilotDD'), o=document.getElementById('scOverlay');
-      var open=p.classList.toggle('open'); if(o) o.classList.toggle('open', open);
-      if(open){ var i=document.getElementById('scInput'); if(i) setTimeout(function(){ i.focus(); }, 320); }
+    /* ── data ─────────────────────────────────────────────────────────── */
+    var SC_SRC = 'EXEED UAE spec sheet, Nov 2025';
+    var SC_VEH = [
+      { code:'VX',  name:'EXEED VX',  tag:'7-Seater Luxury SUV',  price:185000, mo:2590, offer:'AED 8,000 cashback', trims:'Premium, Flagship',          stock:8,  seats:7,
+        warranty:'7 yr / 150k km', engine:'2.0T · 261 hp', fuel:'8.9', adas:'L2 standard', boot:480, service:'5 yr included' },
+      { code:'RX',  name:'EXEED RX',  tag:'Premium Family SUV',   price:155000, mo:2150, offer:'0% for 12 mo',       trims:'Luxury, Prestige, Flagship', stock:14, seats:5,
+        warranty:'7 yr / 150k km', engine:'2.0T · 254 hp', fuel:'8.2', adas:'L2 standard', boot:540, service:'5 yr included' },
+      { code:'TXL', name:'EXEED TXL', tag:'Mid-Size Family SUV',  price:125000, mo:1720, offer:'5-yr service pack',  trims:'Comfort, Luxury',            stock:22, seats:5,
+        warranty:'7 yr / 150k km', engine:'1.6T · 197 hp', fuel:'7.8', adas:'L2 standard', boot:500, service:'5 yr included' },
+      { code:'LX',  name:'EXEED LX',  tag:'Compact Crossover',    price:99000,  mo:1390, offer:'Free insurance',     trims:'Comfort, Luxury',            stock:17, seats:5,
+        warranty:'7 yr / 150k km', engine:'1.5T · 156 hp', fuel:'7.1', adas:'L2 from Luxury', boot:450, service:'5 yr included' }
+    ];
+    // Battlecard library. Anything the customer names that is not in here is added with an
+    // empty competitor column — we show what we don't know instead of inventing specs.
+    var SC_COMP = [
+      { name:'Hyundai Santa Fe',  seg:'Mid-size SUV',  price:165000, mo:2490, warranty:'5 yr / 100k km', engine:'2.5T · 281 hp',  fuel:'9.4',  adas:'L2 higher trim', boot:634, service:'3 yr included', edge:'larger boot, established brand recall' },
+      { name:'Toyota Highlander', seg:'Mid-size SUV',  price:175000, mo:2620, warranty:'5 yr / 100k km', engine:'2.4T · 265 hp',  fuel:'9.8',  adas:'L2 standard',    boot:552, service:'3 yr included', edge:'resale value and dealer footprint' },
+      { name:'Nissan Pathfinder', seg:'Mid-size SUV',  price:169000, mo:2540, warranty:'5 yr / 100k km', engine:'3.5 V6 · 284 hp', fuel:'10.6', adas:'L2 higher trim', boot:470, service:'3 yr included', edge:'V6 refinement and towing capacity' },
+      { name:'Geely Monjaro',     seg:'Mid-size SUV',  price:149000, mo:2190, warranty:'5 yr / 150k km', engine:'2.0T · 238 hp',  fuel:'8.8',  adas:'L2 standard',    boot:553, service:'5 yr included', edge:'lower entry price in the same segment' },
+      { name:'Jetour T2',         seg:'Mid-size SUV',  price:135000, mo:1980, warranty:'5 yr / 150k km', engine:'2.0T · 251 hp',  fuel:'9.5',  adas:'L2 higher trim', boot:500, service:'3 yr included', edge:'off-road styling and a lower sticker' },
+      { name:'Lexus NX',          seg:'Premium SUV',   price:205000, mo:3050, warranty:'4 yr / 100k km', engine:'2.4T · 275 hp',  fuel:'8.9',  adas:'L2 standard',    boot:520, service:'4 yr included', edge:'premium badge and dealer experience' },
+      { name:'Nissan Patrol',     seg:'Full-size SUV', price:270000, mo:3980, warranty:'3 yr / 100k km', engine:'3.8 V6 · 320 hp', fuel:'12.4', adas:'L2 higher trim', boot:467, service:'Not included',  edge:'badge familiarity and strong resale' },
+      { name:'Toyota Fortuner',   seg:'Mid-size SUV',  price:172000, mo:2570, warranty:'5 yr / 100k km', engine:'2.7 · 164 hp',   fuel:'11.1', adas:'L1 only',        boot:296, service:'3 yr included', edge:'body-on-frame durability reputation' },
+      { name:'Toyota Prado',      seg:'Full-size SUV', price:245000, mo:3620, warranty:'5 yr / 100k km', engine:'2.8TD · 204 hp', fuel:'9.6',  adas:'L2 standard',    boot:620, service:'3 yr included', edge:'best resale in the segment, off-road heritage' }
+    ];
+    var SC_SEL = ['Hyundai Santa Fe','Toyota Highlander','Nissan Pathfinder','Geely Monjaro','Jetour T2','Lexus NX'];
+    var SC_CUSTOM = [];                  // customer-named cars with no verified data
+    var SC_ACTIVE = 'Hyundai Santa Fe';  // chip currently being compared
+    var SC_ADDING = false, SC_COMP_Q = '';
+
+    /* ── state + helpers ──────────────────────────────────────────────── */
+    var SC_TAB = 'chat', SC_LANG = 'en', scLastFocus = null;
+    var SC_MARK = '<svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>';
+    function scLead(){
+      try { return (window.leads && window.selectedIdx > -1) ? window.leads[window.selectedIdx] : null; } catch(e){ return null; }
     }
+    function scMoney(n){ return 'AED ' + n.toLocaleString('en-US'); }
+    function scEsc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+    function scQ(s){ return scEsc(s).replace(/'/g, "\\'"); }
+    function scFirst(l){ return l ? l.name.split(' ')[0] : 'the customer'; }
+    // longest code first so "TXL" is never matched as "LX"
+    function scBestFit(l){
+      var m = (l && l.model || '').toUpperCase();
+      var byLen = SC_VEH.slice().sort(function(a,b){ return b.code.length - a.code.length; });
+      for (var i = 0; i < byLen.length; i++) if (m.indexOf(byLen[i].code) > -1) return byLen[i];
+      return SC_VEH[1];
+    }
+    function scMatch(l){ return Math.max(72, Math.min(97, (l && l.convertProb || 60) + 22)); }
+    function scTopTrim(v){ return v.trims.split(',').pop().trim(); }
+    function scMe(){
+      var a = document.querySelector('.topbar .avatar');
+      var t = a ? a.textContent.trim() : '';
+      return scEsc(t || 'ME');
+    }
+    function scAct(msg){ if (typeof showToast === 'function') showToast(msg); }
+
+    /* ── open / close ─────────────────────────────────────────────────── */
+    function toggleSalesCopilot(force){
+      var p = document.getElementById('copilotDD'), o = document.getElementById('scOverlay'), f = document.getElementById('cpFab');
+      var open = (typeof force === 'boolean') ? force : !p.classList.contains('open');
+      p.classList.toggle('open', open);
+      p.setAttribute('aria-hidden', open ? 'false' : 'true');
+      if (o) o.classList.toggle('open', open);
+      document.body.classList.toggle('sc-open', open);
+      if (f) f.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open){
+        scLastFocus = document.activeElement;
+        scRenderGround(); scRenderChips(); scRenderTab();
+        setTimeout(function(){
+          var t = document.getElementById('scTab' + SC_TAB.charAt(0).toUpperCase() + SC_TAB.slice(1));
+          if (t) t.focus();
+        }, 320);
+      } else if (scLastFocus && scLastFocus.focus) {
+        scLastFocus.focus();
+      }
+    }
+    document.addEventListener('keydown', function(e){
+      var p = document.getElementById('copilotDD');
+      if (!p || !p.classList.contains('open')) return;
+      if (e.key === 'Escape'){ e.stopPropagation(); toggleSalesCopilot(false); return; }
+      if (e.key !== 'Tab') return;
+      // keep focus inside the dialog while it is modal
+      var f = p.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      var list = []; for (var i = 0; i < f.length; i++) if (f[i].offsetParent !== null) list.push(f[i]);
+      if (!list.length) return;
+      var first = list[0], last = list[list.length - 1];
+      if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    });
+
+    /* ── tabs ─────────────────────────────────────────────────────────── */
+    var SC_TABS = ['chat','vehicles','compete','comms'];
+    function scTab(name){
+      SC_TAB = name;
+      SC_TABS.forEach(function(t){
+        var cap = t.charAt(0).toUpperCase() + t.slice(1);
+        var btn = document.getElementById('scTab' + cap), pane = document.getElementById('scPane' + cap);
+        var on = (t === name);
+        if (btn){ btn.setAttribute('aria-selected', on ? 'true' : 'false'); btn.tabIndex = on ? 0 : -1; }
+        if (pane){ pane.classList.toggle('active', on); if (on) pane.removeAttribute('hidden'); else pane.setAttribute('hidden',''); }
+      });
+      scRenderTab();
+    }
+    (function scTabKeys(){
+      var bar = document.getElementById('scTabs'); if (!bar) return;
+      bar.addEventListener('keydown', function(e){
+        var i = SC_TABS.indexOf(SC_TAB), next = null;
+        if (e.key === 'ArrowRight') next = SC_TABS[(i + 1) % SC_TABS.length];
+        else if (e.key === 'ArrowLeft') next = SC_TABS[(i - 1 + SC_TABS.length) % SC_TABS.length];
+        else if (e.key === 'Home') next = SC_TABS[0];
+        else if (e.key === 'End') next = SC_TABS[SC_TABS.length - 1];
+        if (!next) return;
+        e.preventDefault(); scTab(next);
+        var t = document.getElementById('scTab' + next.charAt(0).toUpperCase() + next.slice(1)); if (t) t.focus();
+      });
+    })();
+    function scRenderTab(){
+      if (SC_TAB === 'vehicles') scRenderVehicles();
+      else if (SC_TAB === 'compete') scRenderCompete();
+      else if (SC_TAB === 'comms') scRenderComms();
+    }
+    function scRenderGround(){
+      var g = document.getElementById('scGround'), l = scLead(); if (!g) return;
+      g.innerHTML = l
+        ? '<span class="material-symbols-outlined">database</span><span>Grounded on <b>' + scEsc(l.name) + '</b> &middot; ' + scEsc(l.id) + ' &middot; ' + scEsc(l.stage) + '</span>'
+        : '<span class="material-symbols-outlined">database</span><span>No lead open &mdash; answers are line-up level only</span>';
+    }
+
+    /* ── chat ─────────────────────────────────────────────────────────── */
     function scPush(text, me){
-      var b=document.getElementById('scBody'); if(!b) return;
-      var row=document.createElement('div'); row.className='sc-msg'+(me?' me':'');
-      var av=me?'person':'smart_toy';
-      row.innerHTML='<div class="sc-av"><span class="material-symbols-outlined">'+av+'</span></div><div class="sc-bubble">'+text+'</div>';
-      b.appendChild(row); b.scrollTop=b.scrollHeight;
+      var b = document.getElementById('scBody'); if (!b) return;
+      var row = document.createElement('div'); row.className = 'sc-msg' + (me ? ' me' : '');
+      var av = me ? '<div class="sc-av me">' + scMe() + '</div>'
+                  : '<div class="sc-av bot">' + SC_MARK + '</div>';
+      row.innerHTML = av + '<div class="sc-bubble">' + text + '</div>';
+      b.appendChild(row); b.scrollTop = b.scrollHeight;
+      return row;
     }
-    var SC_REPLY={
-      find:"Who are you looking for? Give me a name, phone, or lead ID and I'll pull their full CRM record and recent activity.",
-      compare:"<strong>EXEED VX vs Nissan Patrol</strong> — the VX undercuts the Patrol by ~AED 90k, adds a longer 5-yr warranty and quilted-leather interior. The Patrol wins on badge familiarity and resale. Want a side-by-side sheet to send the customer?",
-      recommend:"Based on this lead's family use, budget and EXEED LX interest, the <strong>EXEED VX Flagship</strong> is the best fit — 3rd-row seating and the safety pack they asked about. Shall I draft the pitch?",
-      draft:"Here's a WhatsApp draft: “Hi Meera, thanks for your interest in the EXEED LX. I've held a test-drive slot for you this weekend at SZR — shall I confirm it?” Want me to tweak the tone or send it?"
-    };
+    function scThink(reply){
+      var row = scPush('<span class="sc-typing"><span></span><span></span><span></span></span>');
+      setTimeout(function(){
+        if (!row) return;
+        var bub = row.querySelector('.sc-bubble'); if (bub) bub.innerHTML = reply;
+        var b = document.getElementById('scBody'); if (b) b.scrollTop = b.scrollHeight;
+      }, 520);
+    }
+    function scRenderChips(){
+      var c = document.getElementById('scChips'), l = scLead(); if (!c) return;
+      var v = scBestFit(l), first = scFirst(l);
+      var chips = [
+        ['recap',     l ? 'Recap ' + first : 'Recap this lead'],
+        ['recommend', 'Why ' + v.name + '?'],
+        ['compare',   'Compare ' + v.name + ' with ' + SC_ACTIVE],
+        ['draft',     'Draft a follow-up message']
+      ];
+      c.innerHTML = chips.map(function(ch){
+        return '<button class="sc-chip" onclick="scChip(\'' + ch[0] + '\')">' + scEsc(ch[1]) + '</button>';
+      }).join('');
+    }
+    function scReply(kind){
+      var l = scLead(), v = scBestFit(l);
+      if (kind === 'recap'){
+        if (!l) return 'No lead is open right now. Open a lead record and I\'ll recap it from the CRM.';
+        return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + scEsc(l.stage) + ' &middot; lead score ' + l.score + ', convert ' + l.convertProb + '%.<br>' +
+          'Interested in ' + scEsc(l.model) + ', came in via ' + scEsc(l.source) + ', prefers ' + scEsc(l.preferred) + ' in ' + scEsc(l.lang) + '.<br>' +
+          'SLA: ' + scEsc(l.slaTime) + '. Discovery is ' + l.discovery + '% complete &mdash; budget and finance terms are still missing.';
+      }
+      if (kind === 'recommend'){
+        return '<strong>' + scEsc(v.name) + ' ' + scEsc(scTopTrim(v)) + '</strong> is the closest fit &mdash; ' + scMoney(v.price) + ', from ' + scMoney(v.mo) + '/mo, ' + v.stock + ' in stock. Open the <em>Vehicles</em> tab for the full reasoning and the alternative.';
+      }
+      if (kind === 'compare'){
+        var c = scCompFind(SC_ACTIVE);
+        if (!c) return 'Add a competitor in the <em>Compete</em> tab and I\'ll build the comparison.';
+        return '<strong>' + scEsc(v.name) + ' vs ' + scEsc(c.name) + '</strong> &mdash; ' +
+          (c.price > v.price ? 'we come in ' + scMoney(c.price - v.price) + ' under them at list' : 'they list below us, so lead on total cost') +
+          ', with our ' + scEsc(v.warranty) + ' warranty against their ' + scEsc(c.warranty) + '. Full table is in the <em>Compete</em> tab.';
+      }
+      if (kind === 'draft'){
+        return 'I\'ve prepared three drafts in the <em>Comms</em> tab &mdash; a follow-up, a spec-and-offer email and a test-drive invite. Nothing sends until you press send.';
+      }
+      return 'Checking that against the current CRM record and live inventory &mdash; I\'ll confirm before anything is saved.';
+    }
     function scChip(kind){
-      var labels={find:'Find a customer',compare:'Compare EXEED VX with Nissan Patrol',recommend:'Recommend a vehicle',draft:'Draft a customer message'};
-      scPush(labels[kind], true);
-      setTimeout(function(){ scPush(SC_REPLY[kind]||"On it — give me a moment."); }, 380);
+      var btn = event && event.target ? event.target.textContent : kind;
+      scPush(scEsc(btn), true);
+      scThink(scReply(kind));
     }
     function scSend(){
-      var i=document.getElementById('scInput'); if(!i||!i.value.trim()) return;
-      var q=i.value.trim(); i.value=''; scPush(q, true);
-      setTimeout(function(){ scPush("Looking into that against the current CRM and inventory… I'll confirm before saving anything."); }, 380);
+      var i = document.getElementById('scInput'); if (!i || !i.value.trim()) return;
+      var q = i.value.trim(); i.value = ''; scPush(scEsc(q), true);
+      var k = /recap|summar/i.test(q) ? 'recap' : /compare|vs |patrol|santa|highlander|pathfinder|monjaro|jetour|lexus/i.test(q) ? 'compare'
+            : /recommend|best fit|suggest/i.test(q) ? 'recommend' : /draft|message|whatsapp|email/i.test(q) ? 'draft' : '';
+      scThink(scReply(k));
     }
-    // Auto-open when arriving from "Start call" (?copilot=1)
+
+    /* ── vehicles (best fit first, then the line-up) ──────────────────── */
+    function scRenderVehicles(){
+      var host = document.getElementById('scVehList'); if (!host) return;
+      var l = scLead(), q = (document.getElementById('scVehQ') || {}).value || '';
+      q = q.trim().toLowerCase();
+      var html = '';
+
+      if (!q){
+        var v = scBestFit(l), match = scMatch(l);
+        html += '<div class="sc-bf">' +
+          '<div class="sc-card-h"><span class="material-symbols-outlined">star</span>Best fit' + (l ? ' for ' + scEsc(scFirst(l)) : '') + '</div>' +
+          '<div class="sc-bf-top">' +
+            '<div class="sc-thumb"><span class="material-symbols-outlined">directions_car</span></div>' +
+            '<div style="flex:1">' +
+              '<div class="sc-bf-name">' + scEsc(v.name + ' ' + scTopTrim(v)) + '</div>' +
+              '<div class="sc-bf-meta">' + scMoney(v.price) + ' &middot; ' + scMoney(v.mo) + '/mo &middot; ' + v.stock + ' in stock</div>' +
+              '<span class="sc-pill match"><span class="material-symbols-outlined">trending_up</span>' + match + '% match</span>' +
+            '</div>' +
+          '</div>' +
+          '<p class="sc-why">' + (l
+            ? scEsc(v.name) + ' matches what this record already tells us: ' + scEsc(l.model) + ' interest, ' + scEsc(l.intent.toLowerCase()) + ' intent and a ' + scEsc(l.temp.toLowerCase()) + ' temperature, with stock sitting at ' + scEsc(l.showroom) + '.'
+            : 'Open a lead record and I\'ll rank the line-up against that customer\'s stated needs.') + '</p>' +
+          '<ul class="sc-needs">' +
+            '<li class="yes"><span class="material-symbols-outlined">check_circle</span>' + (l ? 'Enquired on ' + scEsc(l.model) : 'Best-selling trim in this segment') + '</li>' +
+            '<li class="yes"><span class="material-symbols-outlined">check_circle</span>' + v.stock + ' units available &middot; ' + scEsc(v.offer) + '</li>' +
+            '<li class="yes"><span class="material-symbols-outlined">check_circle</span>' + scEsc(v.warranty) + ' warranty &middot; ' + scEsc(v.adas) + ' &middot; 540&deg; camera</li>' +
+            (l && l.discovery < 60
+              ? '<li class="warn"><span class="material-symbols-outlined">error</span>Discovery only ' + l.discovery + '% complete &mdash; budget and finance terms not captured yet</li>'
+              : '<li class="yes"><span class="material-symbols-outlined">check_circle</span>Monthly from ' + scMoney(v.mo) + ' at 20% down over 5 years</li>') +
+            (v.seats < 7 ? '<li class="warn"><span class="material-symbols-outlined">error</span>' + v.seats + '-seat only &mdash; EXEED VX offers 7</li>' : '') +
+          '</ul>' +
+          '<div class="sc-src"><span class="material-symbols-outlined">bolt</span>Confidence ' + match + '% &middot; Source: ' + SC_SRC + ' + live inventory</div>' +
+          '<div class="sc-actions">' +
+            '<button class="sc-btn" onclick="scTab(\'compete\')"><span class="material-symbols-outlined">shield</span>Compare alternatives</button>' +
+            '<button class="sc-btn" onclick="scTab(\'comms\')"><span class="material-symbols-outlined">send</span>Share recommendation</button>' +
+            '<button class="sc-btn" onclick="scAct(\'Checked live inventory for ' + scQ(v.name) + '\')"><span class="material-symbols-outlined">inventory_2</span>Check inventory</button>' +
+            '<button class="sc-btn" onclick="scAct(\'Test-drive booking opened for ' + scQ(v.name) + '\')"><span class="material-symbols-outlined">event</span>Book test drive</button>' +
+          '</div>' +
+        '</div>';
+      }
+
+      var list = SC_VEH.filter(function(v){
+        if (!q) return true;
+        return (v.name + ' ' + v.tag + ' ' + v.trims + ' ' + v.offer).toLowerCase().indexOf(q) > -1;
+      });
+      if (!list.length){
+        html += '<div class="sc-empty"><span class="material-symbols-outlined">search_off</span>Nothing in the line-up matches &ldquo;' + scEsc(q) + '&rdquo;.<br>Try a model name, trim or &ldquo;cashback&rdquo;.</div>';
+      }
+      list.forEach(function(v){
+        html += '<div class="sc-veh">' +
+          '<div class="sc-veh-top">' +
+            '<div class="sc-thumb"><span class="material-symbols-outlined">directions_car</span></div>' +
+            '<div style="flex:1">' +
+              '<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">' +
+                '<div><div class="sc-veh-name">' + scEsc(v.name) + '</div><div class="sc-veh-tag">' + scEsc(v.tag) + '</div></div>' +
+                '<span class="sc-pill ' + (v.stock < 10 ? 'low' : 'ok') + '">' + v.stock + ' in stock</span>' +
+              '</div>' +
+              '<div class="sc-veh-price">' + scMoney(v.price) + ' <span>&middot; from ' + scMoney(v.mo) + '/mo</span></div>' +
+              '<div class="sc-veh-offer">Offer: ' + scEsc(v.offer) + '</div>' +
+              '<div class="sc-veh-trim">Trims: ' + scEsc(v.trims) + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="sc-src"><span class="material-symbols-outlined">bolt</span>Confidence 92% &middot; Source: ' + SC_SRC + '</div>' +
+        '</div>';
+      });
+      host.innerHTML = html;
+    }
+
+    /* ── compete: chips, spec table, talking points ───────────────────── */
+    function scCompFind(name){
+      for (var i = 0; i < SC_COMP.length; i++) if (SC_COMP[i].name === name) return SC_COMP[i];
+      return null;
+    }
+    function scCompList(){ return SC_SEL.concat(SC_CUSTOM); }
+    function scCompPick(name){ SC_ACTIVE = name; SC_ADDING = false; SC_COMP_Q = ''; scRenderCompete(); scRenderChips(); }
+    function scCompAddToggle(){ SC_ADDING = !SC_ADDING; SC_COMP_Q = ''; scRenderCompete(SC_ADDING); }
+    function scCompAdd(name){
+      name = (name || '').trim(); if (!name) return;
+      if (scCompFind(name)){ if (SC_SEL.indexOf(name) === -1) SC_SEL.push(name); }
+      else if (SC_CUSTOM.indexOf(name) === -1) SC_CUSTOM.push(name);
+      SC_ACTIVE = name; SC_ADDING = false; SC_COMP_Q = '';
+      scRenderCompete(); scRenderChips();
+      scAct(name + ' added to this lead’s comparison list');
+    }
+    function scCompDrop(name){
+      SC_SEL = SC_SEL.filter(function(n){ return n !== name; });
+      SC_CUSTOM = SC_CUSTOM.filter(function(n){ return n !== name; });
+      if (SC_ACTIVE === name) SC_ACTIVE = scCompList()[0] || null;
+      scRenderCompete();
+    }
+    function scCompInput(el){ SC_COMP_Q = el.value; scRenderCompete(true); }
+    function scCompKey(e, el){
+      if (e.key === 'Escape'){ e.stopPropagation(); SC_ADDING = false; SC_COMP_Q = ''; scRenderCompete(); return; }
+      if (e.key !== 'Enter') return;
+      var q = el.value.trim(); if (!q) return;
+      var hits = scCompSuggest(q);
+      scCompAdd(hits.length ? hits[0].name : q);
+    }
+    function scCompSuggest(q){
+      q = (q || '').trim().toLowerCase(); if (!q) return [];
+      var picked = scCompList();
+      return SC_COMP.filter(function(c){
+        return picked.indexOf(c.name) === -1 && (c.name + ' ' + c.seg).toLowerCase().indexOf(q) > -1;
+      }).slice(0, 6);
+    }
+    function scYears(s){ var m = /(\d+)/.exec(s || ''); return m ? parseInt(m[1], 10) : 0; }
+    function scRow(label, ours, theirs){
+      return '<tr><th scope="row">' + label + '</th><td class="us">' + ours + '</td><td>' + theirs + '</td></tr>';
+    }
+    function scRenderCompete(focusSearch){
+      var host = document.getElementById('scCompList'); if (!host) return;
+      var l = scLead(), v = scBestFit(l), picked = scCompList();
+      if (picked.indexOf(SC_ACTIVE) === -1) SC_ACTIVE = picked[0] || null;
+
+      var html = '<div class="sc-cchips" role="tablist" aria-label="Competitor vehicles">';
+      picked.forEach(function(n){
+        var on = (n === SC_ACTIVE);
+        html += '<button class="sc-cchip' + (on ? ' on' : '') + '" role="tab" aria-selected="' + on + '"' +
+          ' onclick="scCompPick(\'' + scQ(n) + '\')">' + scEsc(n) + '</button>';
+      });
+      html += '<button class="sc-cchip add" onclick="scCompAddToggle()" aria-expanded="' + SC_ADDING + '">' +
+        '<span class="material-symbols-outlined">add</span>Add</button></div>';
+
+      if (SC_ADDING){
+        html += '<div class="sc-card" style="padding:12px 13px">' +
+          '<div class="sc-srch">' +
+            '<span class="material-symbols-outlined">search</span>' +
+            '<input id="scCompQ" placeholder="Search a vehicle the customer mentioned..." aria-label="Search competitor vehicles"' +
+              ' autocomplete="off" value="' + scEsc(SC_COMP_Q) + '" oninput="scCompInput(this)" onkeydown="scCompKey(event, this)" />' +
+          '</div>';
+        if (SC_COMP_Q.trim()){
+          html += '<div class="sc-sugg" style="margin-top:10px">';
+          scCompSuggest(SC_COMP_Q).forEach(function(c){
+            html += '<button class="sc-sugg-row" onclick="scCompAdd(\'' + scQ(c.name) + '\')">' +
+              '<span class="material-symbols-outlined">add</span><span><b>' + scEsc(c.name) + '</b>' +
+              '<em>' + scEsc(c.seg) + ' &middot; ' + scMoney(c.price) + '</em></span></button>';
+          });
+          html += '<button class="sc-sugg-row custom" onclick="scCompAdd(document.getElementById(\'scCompQ\').value)">' +
+            '<span class="material-symbols-outlined">add_circle</span><span><b>Add &ldquo;' + scEsc(SC_COMP_Q.trim()) + '&rdquo;</b>' +
+            '<em>Not in the battlecard library &mdash; I won\'t invent its specs</em></span></button></div>';
+        } else {
+          html += '<div class="sc-hint">Type a model name, or add one that isn\'t in the library.</div>';
+        }
+        html += '</div>';
+      }
+
+      if (!SC_ACTIVE){
+        html += '<div class="sc-empty"><span class="material-symbols-outlined">shield</span>' +
+          'No comparison vehicles on this lead yet.<br>Add what the customer named and I\'ll build the table.</div>';
+        host.innerHTML = html; if (focusSearch) scCompFocus(); return;
+      }
+
+      var c = scCompFind(SC_ACTIVE);
+
+      if (!c){
+        html += '<div class="sc-card">' +
+          '<div class="sc-card-h" style="margin-bottom:4px">' + scEsc(v.name) + ' vs ' + scEsc(SC_ACTIVE) + '</div>' +
+          '<div class="sc-veh-tag" style="margin-bottom:12px">Added from the conversation &middot; not in the battlecard library</div>' +
+          '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th><th class="us">' + scEsc(v.name) + '</th><th>' + scEsc(SC_ACTIVE) + '</th></tr></thead><tbody>' +
+            scRow('Starting price', scMoney(v.price), '&mdash;') +
+            scRow('Monthly', scMoney(v.mo), '&mdash;') +
+            scRow('Warranty', scEsc(v.warranty), '&mdash;') +
+            scRow('Engine', scEsc(v.engine), '&mdash;') +
+            scRow('Service pack', scEsc(v.service), '&mdash;') +
+          '</tbody></table></div>' +
+          '<div class="sc-note" style="margin:12px 0 0"><span class="material-symbols-outlined">info</span><span>' +
+            'I hold no verified pricing or spec data for the ' + scEsc(SC_ACTIVE) + ', so their column stays blank rather than guessed. ' +
+            'Ask what they liked about it and I\'ll position ' + scEsc(v.name) + ' against that.</span></div>' +
+          '<div class="sc-actions">' +
+            '<button class="sc-btn" onclick="scAct(\'Battlecard requested from marketing\')"><span class="material-symbols-outlined">flag</span>Request battlecard</button>' +
+            '<button class="sc-btn" onclick="scCompDrop(\'' + scQ(SC_ACTIVE) + '\')"><span class="material-symbols-outlined">delete</span>Remove</button>' +
+          '</div></div>';
+        host.innerHTML = html; if (focusSearch) scCompFocus(); return;
+      }
+
+      html += '<div class="sc-card">' +
+        '<div class="sc-card-h" style="margin-bottom:12px">' + scEsc(v.name) + ' vs ' + scEsc(c.name) + '</div>' +
+        '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th><th class="us">' + scEsc(v.name) + '</th><th>' + scEsc(c.name) + '</th></tr></thead><tbody>' +
+          scRow('Starting price', scMoney(v.price), scMoney(c.price)) +
+          scRow('Monthly', scMoney(v.mo), scMoney(c.mo)) +
+          scRow('Warranty', scEsc(v.warranty), scEsc(c.warranty)) +
+          scRow('Engine', scEsc(v.engine), scEsc(c.engine)) +
+          scRow('Fuel (L/100km)', scEsc(v.fuel), scEsc(c.fuel)) +
+          scRow('ADAS', scEsc(v.adas), scEsc(c.adas)) +
+          scRow('Boot (L)', v.boot, c.boot) +
+          scRow('Service pack', scEsc(v.service), scEsc(c.service)) +
+        '</tbody></table></div></div>';
+
+      // talking points are derived from the same numbers as the table, so they can't drift apart
+      var pts = [], ourY = scYears(v.warranty), theirY = scYears(c.warranty);
+      if (ourY > theirY) pts.push('Longer warranty (' + ourY + ' vs ' + theirY + ' years)');
+      if (c.mo > v.mo) pts.push('Lower monthly payment (&minus;' + scMoney(c.mo - v.mo) + '/mo)');
+      if (v.adas === 'L2 standard' && c.adas !== 'L2 standard') pts.push('ADAS L2 standard across all trims');
+      if (parseFloat(v.fuel) < parseFloat(c.fuel)) pts.push('Better fuel figure (' + v.fuel + ' vs ' + c.fuel + ' L/100km)');
+      if (c.price > v.price) pts.push('Undercuts them by ' + scMoney(c.price - v.price) + ' at list');
+      if (v.service.indexOf('included') > -1 && c.service.indexOf('Not') === 0) pts.push('Service pack included, theirs is chargeable');
+      if (!pts.length) pts.push('Lead on total cost of ownership, not sticker price');
+
+      html += '<div class="sc-card">' +
+        '<div class="sc-card-h" style="margin-bottom:8px">Talking points</div><ul class="sc-wl win">' +
+        pts.slice(0, 4).map(function(p){ return '<li><span class="material-symbols-outlined">check_circle</span>' + p + '</li>'; }).join('') +
+        '<li class="edge"><span class="material-symbols-outlined">chevron_right</span>Competitor advantage: ' + scEsc(c.edge) + '</li>' +
+        '</ul>' +
+        '<div class="sc-src"><span class="material-symbols-outlined">bolt</span>Confidence 88% &middot; Source: ' + SC_SRC + ', UAE list prices Q3 2026</div>' +
+        '<div class="sc-actions">' +
+          '<button class="sc-btn" onclick="scTab(\'comms\')"><span class="material-symbols-outlined">edit_note</span>Draft comparison</button>' +
+          '<button class="sc-btn" onclick="scAskAbout(\'' + scQ(c.name) + '\')"><span class="material-symbols-outlined">smart_toy</span>Ask about this</button>' +
+          '<button class="sc-btn" onclick="scAct(\'Comparison sheet queued for ' + scQ(c.name) + '\')"><span class="material-symbols-outlined">description</span>Comparison sheet</button>' +
+          '<button class="sc-btn" onclick="scCompDrop(\'' + scQ(c.name) + '\')"><span class="material-symbols-outlined">close</span>Remove</button>' +
+        '</div></div>';
+
+      host.innerHTML = html;
+      if (focusSearch) scCompFocus();
+    }
+    function scCompFocus(){
+      var box = document.getElementById('scCompQ'); if (!box) return;
+      box.focus(); box.setSelectionRange(box.value.length, box.value.length);
+    }
+    function scAskAbout(name){
+      var l = scLead(), v = scBestFit(l), c = scCompFind(name);
+      scTab('chat');
+      scPush(scEsc('Compare ' + v.name + ' with ' + name), true);
+      if (!c){
+        scThink('I don\'t hold verified data on the ' + scEsc(name) + ', so I won\'t compare specs I can\'t source. What did the customer like about it? I\'ll position ' + scEsc(v.name) + ' against that.');
+        return;
+      }
+      var line = (c.price > v.price ? 'We come in ' + scMoney(c.price - v.price) + ' under them at list' : 'They list below us, so lead on total cost rather than sticker') +
+        ', with our ' + scEsc(v.warranty) + ' warranty against their ' + scEsc(c.warranty) + '.';
+      scThink('<strong>' + scEsc(v.name) + ' vs ' + scEsc(c.name) + '</strong> &mdash; ' + line +
+        ' Expect pushback on ' + scEsc(c.edge) + ' &mdash; meet it with the warranty and service-pack maths. Want this as a message for ' + scEsc(scFirst(l)) + '?');
+    }
+
+    /* ── comms: channel + tone + generated draft ──────────────────────── */
+    var SC_CHAN = 'WhatsApp', SC_TONE = 'Professional', SC_VAR = 0, SC_APPROVED = false;
+    var SC_CHANS = ['WhatsApp','SMS','Email','Call-back script'];
+    var SC_TONES = ['Professional','Friendly','Premium','Concise'];
+
+    function scCommsSet(kind, val){
+      if (kind === 'chan') SC_CHAN = val;
+      else if (kind === 'tone') SC_TONE = val;
+      else if (kind === 'lang') SC_LANG = val;
+      SC_APPROVED = false;
+      scRenderComms();
+    }
+    function scRegen(){ SC_VAR = (SC_VAR + 1) % 2; SC_APPROVED = false; scRenderComms(); scAct('Draft regenerated'); }
+    function scApprove(){ SC_APPROVED = true; scRenderComms(); scAct('Draft approved — ready to send'); }
+
+    // Facts every draft is built from, so no variant can state something the record doesn't hold.
+    function scFacts(){
+      var l = scLead(), v = scBestFit(l);
+      return {
+        first: scFirst(l),
+        veh: v.name + ' ' + scTopTrim(v),
+        price: scMoney(v.price), mo: scMoney(v.mo),
+        offer: v.offer.toLowerCase(),
+        show: l ? l.showroom : 'SZR Showroom — Dubai',
+        rep: l ? l.owner : 'EXEED UAE',
+        comp: SC_ACTIVE || 'the alternatives',
+        slot: 'Saturday at 11:00 AM'
+      };
+    }
+    function scDraftText(){
+      var f = scFacts(), ar = (SC_LANG === 'ar'), alt = SC_VAR === 1;
+
+      if (ar){
+        if (SC_CHAN === 'SMS') return 'مرحباً ' + f.first + '، ' + f.veh + ' متوفرة الآن ابتداءً من ' + f.mo + ' شهرياً. هل نحجز لك تجربة قيادة؟ — ' + f.rep;
+        if (SC_CHAN === 'Call-back script') return '١. افتح بالشكر على وقته وأكد أنك مطّلع على طلبه.\n٢. أعد صياغة أولوياته: الأمان، مساحة العائلة، القسط الشهري.\n٣. اطرح ' + f.veh + ' بسعر ' + f.price + ' وابتداءً من ' + f.mo + ' شهرياً.\n٤. اذكر المقارنة مع ' + f.comp + ' والضمان الأطول.\n٥. أغلق بحجز تجربة القيادة يوم السبت الساعة ١١ صباحاً في ' + f.show + '.';
+        return 'عزيزي ' + f.first + '،\nشكراً لتواصلك مع إكسيد الإمارات. بناءً على أولوياتك المتعلقة بالأمان ومساحة العائلة والقسط الشهري، تُعد ' + f.veh + ' الخيار الأنسب بسعر ' + f.price + ' وابتداءً من ' + f.mo + ' شهرياً، مع ' + f.offer + '.\nحجزت لك موعد تجربة قيادة يوم السبت الساعة ١١ صباحاً في ' + f.show + '، وأرفقت مقارنة مع ' + f.comp + '.\n\nمع التحية،\n' + f.rep + ' — إكسيد الإمارات';
+      }
+
+      if (SC_CHAN === 'SMS'){
+        return alt
+          ? 'EXEED UAE: ' + f.first + ', the ' + f.veh + ' is in stock from ' + f.mo + '/mo with ' + f.offer + '. Test drive ' + f.slot + '? Reply YES. — ' + f.rep
+          : 'Hi ' + f.first + ', ' + f.veh + ' available from ' + f.mo + '/mo, ' + f.offer + '. Shall I hold a test drive ' + f.slot + '? — ' + f.rep;
+      }
+
+      if (SC_CHAN === 'Call-back script'){
+        return '1. Open — thank them for their time and confirm you have their enquiry in front of you.\n' +
+               '2. Play back their priorities: safety, family space and the monthly payment.\n' +
+               '3. Position the ' + f.veh + ' — ' + f.price + ', from ' + f.mo + '/mo, ' + f.offer + '.\n' +
+               '4. Pre-empt the ' + f.comp + ' comparison: lead with the longer warranty and the included service pack.\n' +
+               '5. Close on the test drive — ' + f.slot + ' at ' + f.show + '. Offer a second slot if that one is difficult.\n' +
+               '6. Confirm next step out loud and log the outcome before ending the call.';
+      }
+
+      var greet, body, sign;
+      if (SC_TONE === 'Friendly'){
+        greet = 'Hi ' + f.first + ',';
+        body = 'Great speaking with you today. Going on what matters most to you — safety, space for the family and a comfortable monthly payment — the ' + f.veh + ' really is the one I would put you in. It is ' + f.price + ', or from ' + f.mo + ' a month, and we currently have ' + f.offer + ' on it.\n\nI have kept a test-drive slot for you ' + f.slot + ' at ' + f.show + ', and I am attaching a comparison against the ' + f.comp + ' so you can see it side by side.';
+        sign = 'Talk soon,\n' + f.rep + ' — EXEED UAE';
+      } else if (SC_TONE === 'Premium'){
+        greet = 'Dear ' + f.first + ',';
+        body = 'Thank you for your time with EXEED UAE today. Considering your priorities around safety, family space and monthly commitment, the ' + f.veh + ' is the vehicle I would recommend — ' + f.price + ', from ' + f.mo + ' per month, presently with ' + f.offer + '.\n\nI have reserved a private test drive for you ' + f.slot + ' at ' + f.show + ', and enclosed a considered comparison against the ' + f.comp + ' together with an indicative finance summary.';
+        sign = 'With kind regards,\n' + f.rep + ' — EXEED UAE';
+      } else if (SC_TONE === 'Concise'){
+        greet = 'Hi ' + f.first + ',';
+        body = f.veh + ' — ' + f.price + ', from ' + f.mo + '/mo, ' + f.offer + '. Best match for safety, family space and your monthly target.\n\nTest drive held ' + f.slot + ' at ' + f.show + '. Comparison vs ' + f.comp + ' attached.';
+        sign = f.rep + ' — EXEED UAE';
+      } else {
+        greet = 'Hi ' + f.first + ',';
+        body = (alt
+          ? 'Thank you for your time today. Weighing what you told us about safety, family space and the monthly payment, the ' + f.veh + ' comes out strongest — ' + f.price + ', from ' + f.mo + ' per month, currently with ' + f.offer + '.'
+          : 'Thank you for speaking with EXEED UAE today. Based on your priorities around safety, family space and monthly payments, the ' + f.veh + ' appears to be the strongest fit at ' + f.price + ', from ' + f.mo + ' per month, with ' + f.offer + '.') +
+          '\n\nI have reserved a test-drive slot for you ' + f.slot + ' at ' + f.show + '. I have also attached a comparison with the ' + f.comp + ' and an estimated finance option for your review.';
+        sign = 'Kind regards,\n' + f.rep + ' — EXEED UAE';
+      }
+      return greet + '\n' + body + '\n\n' + sign;
+    }
+    function scSubject(){
+      var f = scFacts();
+      return 'Your ' + f.veh + ' — test drive ' + f.slot + ' and finance summary';
+    }
+    function scRenderComms(){
+      var host = document.getElementById('scCommsList'); if (!host) return;
+      var l = scLead(), ar = (SC_LANG === 'ar');
+      var pref = l ? l.preferred : 'WhatsApp';
+
+      var html = '<div class="sc-card"><div class="sc-grouph">Channel</div><div class="sc-opts">' +
+        SC_CHANS.map(function(c){
+          return '<button class="sc-opt' + (c === SC_CHAN ? ' on' : '') + '" aria-pressed="' + (c === SC_CHAN) + '"' +
+            ' onclick="scCommsSet(\'chan\',\'' + scQ(c) + '\')">' + scEsc(c) + '</button>';
+        }).join('') + '</div>' +
+        (l ? '<div class="sc-hint">This lead prefers <b>' + scEsc(pref) + '</b> &middot; ' + scEsc(l.lang) + '</div>' : '') +
+        '</div>';
+
+      html += '<div class="sc-card"><div class="sc-grouph">Tone</div><div class="sc-opts">' +
+        SC_TONES.map(function(t){
+          return '<button class="sc-opt' + (t === SC_TONE ? ' on' : '') + '" aria-pressed="' + (t === SC_TONE) + '"' +
+            ' onclick="scCommsSet(\'tone\',\'' + scQ(t) + '\')">' + scEsc(t) + '</button>';
+        }).join('') +
+        '<button class="sc-opt lang' + (ar ? ' on' : '') + '" aria-pressed="' + ar + '" onclick="scCommsSet(\'lang\',\'ar\')">Arabic</button>' +
+        '<button class="sc-opt lang' + (!ar ? ' on' : '') + '" aria-pressed="' + (!ar) + '" onclick="scCommsSet(\'lang\',\'en\')">English</button>' +
+        '</div></div>';
+
+      html += '<div class="sc-card">' +
+        '<div class="sc-dhead">' + SC_MARK + scEsc(SC_CHAN) + ' &middot; ' + (ar ? 'Arabic' : 'English') +
+          (SC_APPROVED ? '<span class="sc-pill ok" style="margin-left:auto">Approved</span>' : '') + '</div>' +
+        (SC_CHAN === 'Email' ? '<div class="sc-subj">Subject: ' + scEsc(scSubject()) + '</div>' : '') +
+        '<div class="sc-draft" id="scDraft0"' + (ar ? ' dir="rtl"' : '') + '>' + scEsc(scDraftText()) + '</div>' +
+        '<div class="sc-actions three">' +
+          '<button class="sc-btn sm" onclick="scCopy(0)"><span class="material-symbols-outlined">content_copy</span>Copy</button>' +
+          '<button class="sc-btn sm" onclick="scRegen()"><span class="material-symbols-outlined">autorenew</span>Regenerate</button>' +
+          '<button class="sc-btn sm" onclick="scApprove()"><span class="material-symbols-outlined">thumb_up</span>Approve</button>' +
+          '<button class="sc-btn sm' + (SC_APPROVED ? ' primary' : '') + '" onclick="scSendDraft()"><span class="material-symbols-outlined">send</span>Send</button>' +
+          '<button class="sc-btn sm" onclick="scSaveCrm()"><span class="material-symbols-outlined">description</span>Save to CRM</button>' +
+          '<button class="sc-btn sm" onclick="scCommsSet(\'chan\',\'Email\')"><span class="material-symbols-outlined">mail</span>Email</button>' +
+        '</div>' +
+        '<div class="sc-src"><span class="material-symbols-outlined">bolt</span>Drafted from this record + ' + SC_SRC + ' &middot; nothing sends until you press Send</div>' +
+      '</div>';
+
+      host.innerHTML = html;
+    }
+    function scSendDraft(){
+      if (!SC_APPROVED){ scAct('Approve the draft first — then it can be sent'); return; }
+      scAct(SC_CHAN + ' message sent to ' + scFacts().first);
+    }
+    function scSaveCrm(){ scAct('Draft saved to the lead timeline as an activity'); }
+    function scCopy(i){
+      var el = document.getElementById('scDraft' + i); if (!el) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(el.textContent);
+      scAct('Draft copied to clipboard');
+    }
+
+    /* ── deep links: ?copilot=1 (from "Start call") and ?sctab=vehicles ── */
     window.addEventListener('load', function(){
       try{
-        var params=new URLSearchParams(window.location.search);
-        if(params.get('copilot')==='1' || params.get('copilot')==='true'){
-          setTimeout(toggleSalesCopilot, 400);
+        scRenderGround(); scRenderChips();
+        var params = new URLSearchParams(window.location.search);
+        var wantTab = params.get('sctab');
+        if (params.get('copilot') === '1' || params.get('copilot') === 'true' || wantTab){
+          setTimeout(function(){
+            toggleSalesCopilot(true);
+            if (wantTab && SC_TABS.indexOf(wantTab) > -1) scTab(wantTab);
+          }, 400);
         }
       }catch(e){}
     });

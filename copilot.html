@@ -53,45 +53,46 @@
     .sb-item.active { background: #eff6fc; color: var(--blue); font-weight: 600; }
     .sb-item .material-symbols-outlined { font-size: 18px; }
     .main { margin: var(--topbar-h) 0 0 var(--sidebar-w); padding: 28px 32px; min-height: calc(100vh - var(--topbar-h)); }
-    /* floating launcher */
+
+    /* ── Copilot launcher: extended pill in a gradient ring, docked bottom-right ── */
+    /* dock must NOT clip — it hosts the tooltip */
+    .cp-fab-dock { position: fixed; right: 28px; bottom: 28px; z-index: 40; line-height: 0; }
     .cp-fab {
-      position: fixed; right: 26px; bottom: 26px; width: 56px; height: 56px;
-      padding: 0; border: none; border-radius: 50%; background: transparent;
-      cursor: pointer; z-index: 44; display: grid; place-items: center;
+      position: relative; z-index: 1; width: 56px; height: 56px; padding: 0; border: none;
+      border-radius: 50%; background: #fff; cursor: pointer;
+      display: grid; place-items: center;
       -webkit-tap-highlight-color: transparent;
-      box-shadow: 0 6px 18px rgba(88,52,190,.34), 0 2px 6px rgba(20,24,34,.14);
-      transition: transform .24s cubic-bezier(.34,1.56,.64,1), box-shadow .24s;
+      box-shadow: 0 6px 18px rgba(88,52,190,.28), 0 2px 6px rgba(20,24,34,.12);
+      transition: transform .24s cubic-bezier(.34,1.5,.64,1), box-shadow .24s;
     }
-    .cp-fab .cp-icon { width: 100%; height: 100%; }
-    .cp-fab::before {
-      content: ''; position: absolute; inset: 0; border-radius: 50%;
-      border: 2px solid rgba(124,86,230,.5); pointer-events: none;
-      animation: cp-halo 2.8s ease-out infinite;
+    .cp-fab .cp-icon { width: 56px; height: 56px; }
+    .cp-fab-dock:hover .cp-fab, .cp-fab-dock:focus-within .cp-fab {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 14px 28px rgba(88,52,190,.4), 0 3px 8px rgba(20,24,34,.16);
     }
-    @keyframes cp-halo { 0%{transform:scale(1);opacity:.6} 70%,100%{transform:scale(1.5);opacity:0} }
-    .cp-fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 26px rgba(88,52,190,.42), 0 3px 8px rgba(20,24,34,.16); }
-    .cp-fab:active { transform: translateY(-1px) scale(.98); }
-    .cp-fab:focus-visible { outline: 2px solid #5b54d6; outline-offset: 3px; }
+    .cp-fab:focus-visible { outline: 2px solid #5b54d6; outline-offset: 4px; }
+
+    /* tooltip is out of flow, so it can never push the icon around */
     .cp-fab-tip {
-      position: absolute; right: 68px; top: 50%; white-space: nowrap;
-      transform: translateY(-50%) translateX(6px);
-      background: #242424; color: #fff; font-size: 12px; font-weight: 600;
-      padding: 6px 11px; border-radius: 7px; opacity: 0; pointer-events: none;
-      transition: opacity .18s, transform .18s;
+      position: absolute; right: calc(100% + 12px); top: 50%; z-index: 41;
+      transform: translate(6px, -50%); transform-origin: right center;
+      padding: 13px 22px; border-radius: 999px; white-space: nowrap; pointer-events: none;
+      background: #26243a; color: #fff; font-size: 12.5px; font-weight: 600; letter-spacing: .01em;
+      box-shadow: 0 4px 14px rgba(20,24,34,.22);
+      opacity: 0; transition: opacity .18s, transform .22s cubic-bezier(.34,1.4,.64,1);
     }
-    .cp-fab:hover .cp-fab-tip, .cp-fab:focus-visible .cp-fab-tip { opacity: 1; transform: translateY(-50%) translateX(0); }
-    @media (max-width: 768px) {
-      .sidebar { display: none; } .main { margin-left: 0; padding: 18px; }
-      .cp-fab { right: 16px; bottom: 16px; width: 50px; height: 50px; } .cp-fab-tip { display: none; }
+    .cp-fab-dock:hover .cp-fab-tip, .cp-fab-dock:focus-within .cp-fab-tip {
+      opacity: 1; transform: translate(0, -50%);
     }
+
     @media (prefers-reduced-motion: reduce) {
       .cp-icon animate, .cp-icon animateTransform { display: none; }
-      .cp-fab::before { animation: none; opacity: 0; }
+      .cp-fab, .cp-fab-tip { transition: none; }
     }
   </style>
 </head>
 <body>
-  <!-- Copilot mark: steering wheel + sparkle. -->
+  <!-- Copilot mark: steering wheel with a badge hub carrying the sparkle. -->
   <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <defs>
       <linearGradient id="cpDisc" x1="6%" y1="4%" x2="94%" y2="96%">
@@ -107,6 +108,11 @@
         <stop offset="0" stop-color="#A87CEC"/>
         <stop offset="1" stop-color="#9468E2"/>
       </linearGradient>
+      <linearGradient id="cpHub" x1="18%" y1="0%" x2="82%" y2="100%">
+        <stop offset="0" stop-color="#5B45C0"/>
+        <stop offset="1" stop-color="#38287B"/>
+      </linearGradient>
+
       <symbol id="cpIcon" viewBox="0 0 64 64">
         <circle cx="32" cy="32" r="31" fill="url(#cpDisc)"/>
         <g>
@@ -119,22 +125,17 @@
             calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"
             dur="7s" repeatCount="indefinite"/>
         </g>
-        <g transform="translate(32 32.25)">
+        <!-- hub boss: sits over the spokes so the mark reads like a wheel-centre badge -->
+        <circle cx="32" cy="32.25" r="12.4" fill="#2f2270" opacity=".55"/>
+        <circle cx="32" cy="32.25" r="11.5" fill="url(#cpHub)" stroke="rgba(255,255,255,.28)" stroke-width="1"/>
+        <g transform="translate(32 32.25) scale(.52)">
           <g>
-            <path d="M0 -13.75 Q.9 -2.6 9.4 -0.25 Q.9 2.1 0 13.75 Q-.9 2.1 -9.4 -0.25 Q-.9 -2.6 0 -13.75 Z" fill="#fff"/>
-            <animateTransform attributeName="transform" type="scale"
-              values="1;1.13;1" keyTimes="0;0.5;1"
-              calcMode="spline" keySplines=".4 0 .6 1;.4 0 .6 1"
-              dur="2.8s" repeatCount="indefinite"/>
+            <path d="M0 -13.75 Q.9 -2.6 9.4 -0.25 Q.9 2.1 0 13.75 Q-.9 2.1 -9.4 -0.25 Q-.9 -2.6 0 -13.75 Z"
+              fill="#fff" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/>
+            <!-- breathes downward: full size is the peak, never bigger than the hub allows -->
+            <animateTransform attributeName="transform" type="scale" values="1;.74;1" keyTimes="0;0.5;1"
+              calcMode="spline" keySplines=".4 0 .6 1;.4 0 .6 1" dur="2.8s" repeatCount="indefinite"/>
           </g>
-        </g>
-        <g fill="none" stroke="#8FD9F8" stroke-width="1.3" stroke-linecap="round">
-          <path d="M36.6 25.4 A3 3 0 0 1 38.3 27.8">
-            <animate attributeName="opacity" values=".3;1;.3" dur="2.8s" repeatCount="indefinite"/>
-          </path>
-          <path d="M36.6 39.4 A3 3 0 0 0 38.3 37">
-            <animate attributeName="opacity" values="1;.3;1" dur="2.8s" repeatCount="indefinite"/>
-          </path>
         </g>
       </symbol>
     </defs>
@@ -155,9 +156,11 @@
 
   <div class="main"></div>
 
-  <button class="cp-fab" id="cpFab" aria-label="Copilot">
-    <svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>
-    <span class="cp-fab-tip">Ask Copilot</span>
-  </button>
+  <div class="cp-fab-dock">
+    <span class="cp-fab-tip" role="tooltip" id="cpFabTip">Ask Copilot</span>
+    <button class="cp-fab" id="cpFab" aria-label="Ask Copilot" aria-describedby="cpFabTip">
+      <svg class="cp-icon" aria-hidden="true"><use href="#cpIcon"/></svg>
+    </button>
+  </div>
 </body>
 </html>
