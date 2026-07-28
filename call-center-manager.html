@@ -1236,11 +1236,22 @@
 
     // Date range filter (Today is the default)
     var prevDateTab = null;
+    function dcBtn(){ return document.getElementById('dfCustom'); }
+    function dcResetLabel(){
+      var c = dcBtn(); if (c) c.textContent = 'Custom Range';
+      var f = document.getElementById('dateFrom'), t = document.getElementById('dateTo');
+      if (f) f.value = ''; if (t) t.value = '';
+    }
     function dcDefaultToday(){ var t=new Date().toISOString().slice(0,10); var f=document.getElementById('dateFrom'), tt=document.getElementById('dateTo'); if(f && !f.value) f.value=t; if(tt && !tt.value) tt.value=t; }
     function setDateRange(btn){
-      var isCustom = /custom/i.test(btn.textContent);
+      // Match on identity, not text — applyCustomRange replaces the label with the date range,
+      // so a text test stops recognising the button once a range has been applied.
+      var c = dcBtn(), isCustom = !!c && btn === c;
       if (isCustom) { var cur = btn.parentNode.querySelector('.df-tab.on'); if (cur && cur !== btn) prevDateTab = cur; }
-      else { prevDateTab = null; }
+      else {
+        prevDateTab = null;
+        if (c && btn.parentNode === c.parentNode) dcResetLabel();
+      }
       btn.parentNode.querySelectorAll('.df-tab').forEach(function(b){ b.classList.remove('on'); });
       btn.classList.add('on');
       var custom = document.getElementById('dateCustom');
@@ -1250,16 +1261,15 @@
     function applyCustomRange(){
       var f = document.getElementById('dateFrom').value, t = document.getElementById('dateTo').value;
       var fmt = function(d){ if(!d) return ''; var p=d.split('-'); return p[2]+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+p[1]-1]; };
-      var lbl = 'Custom Range';
-      if (f && t) lbl = fmt(f)+' – '+fmt(t);
-      else if (f) lbl = 'From '+fmt(f);
-      document.getElementById('dfCustom').textContent = lbl;
+      if (!f && !t) { dcResetLabel(); document.getElementById('dateCustom').classList.remove('open'); prevDateTab = null; return; }
+      var lbl = f && t ? fmt(f)+' – '+fmt(t) : (f ? 'From '+fmt(f) : 'To '+fmt(t));
+      dcBtn().textContent = lbl;
       document.getElementById('dateCustom').classList.remove('open');
       prevDateTab = null;
     }
     function cancelCustomRange(){
       document.getElementById('dateCustom').classList.remove('open');
-      if (prevDateTab) { document.getElementById('dfCustom').classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
+      if (prevDateTab) { dcBtn().classList.remove('on'); prevDateTab.classList.add('on'); prevDateTab = null; }
     }
   </script>
 

@@ -4680,6 +4680,18 @@
     .sc-subj-l{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8b93a1;margin-bottom:5px;}
     .sc-subj-i{width:100%;font-family:inherit;font-size:13px;color:#242b38;background:var(--colorNeutralBackground4);border:1px solid #f5f5f5;border-radius:9px;padding:9px 11px;margin-bottom:10px;}
     .sc-subj-i:focus{outline:none;border-color:var(--sc-accent);}
+    .sc-ctx span.mine{display:inline-flex;align-items:center;gap:3px;padding-right:4px;background:var(--sc-accent-soft);border-color:var(--sc-accent);color:var(--sc-accent);}
+    .sc-ctx span.mine button{border:none;background:transparent;padding:0;cursor:pointer;color:inherit;display:grid;place-items:center;}
+    .sc-ctx span.mine .material-symbols-outlined{font-size:14px;}
+    .sc-ctx-add{display:flex;gap:8px;margin-top:9px;}
+    .sc-ctx-add input{flex:1;min-width:0;font-family:inherit;font-size:12.5px;color:#242b38;background:var(--colorNeutralBackground4);border:1px solid #f5f5f5;border-radius:9px;padding:8px 11px;}
+    .sc-ctx-add input:focus{outline:none;border-color:var(--sc-accent);}
+    .sc-ctx-add .sc-btn{flex:0 0 auto;padding:8px 13px;}
+    .sc-gen{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:11px;padding:11px 14px;border:none;border-radius:10px;
+      background:var(--sc-accent);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;}
+    .sc-gen:hover{background:var(--sc-accent-hover);}
+    .sc-gen .material-symbols-outlined{font-size:18px;}
+
     .sc-ctx{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:11px;}
     .sc-ctx-h{width:100%;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8b93a1;margin-bottom:2px;}
     .sc-ctx span:not(.sc-ctx-h){font-size:11.5px;color:#5b6472;background:var(--colorNeutralBackground4);border:1px solid #f5f5f5;border-radius:6px;padding:3px 8px;}
@@ -4898,6 +4910,7 @@
     var SC_CUSTOM = [];                  // customer-named cars with no verified data
     var SC_ACTIVE = 'Hyundai Santa Fe';  // chip currently being compared
     var SC_ADDING = false, SC_COMP_Q = '';
+    var SC_CFB = {};                     // battlecard ratings, keyed by competitor
 
     /* ── state + helpers ──────────────────────────────────────────────── */
     var SC_TAB = 'chat', SC_LANG = 'en', scLastFocus = null;
@@ -5143,12 +5156,9 @@
               : '<span class="material-symbols-outlined">campaign</span>No campaign on this lead &mdash; ' + scEsc(v.offer) + ' still applies') + '</div>' +
             '<div class="sc-sub-h">Why it wins</div>' +
             '<ul class="sc-needs">' +
-              (v.usp || []).map(function(u){
+              (v.usp || []).slice(0, 3).map(function(u){
                 return '<li class="yes"><span class="material-symbols-outlined">check_circle</span>' + scEsc(u) + '</li>';
               }).join('') +
-              (isBest && l && l.discovery < 60
-                ? '<li class="warn"><span class="material-symbols-outlined">error</span>Discovery only ' + l.discovery + '% complete &mdash; budget and finance terms not captured yet</li>' : '') +
-              (v.seats < 7 ? '<li class="warn"><span class="material-symbols-outlined">error</span>' + v.seats + '-seat only &mdash; EXEED VX offers 7</li>' : '') +
             '</ul>' +
             '<div class="sc-src"><span class="material-symbols-outlined">bolt</span>Confidence ' + (isBest ? match : 92) + '% &middot; Source: ' + SC_SRC + (isBest ? ' + live inventory' : '') + '</div>' +
             '<div class="sc-actions">' +
@@ -5183,6 +5193,13 @@
     }
 
     /* ── compete: chips, spec table, talking points ───────────────────── */
+    // ratings train the battlecard content the same way the comms thumbs do
+    function scCompRate(name, v){
+      SC_CFB[name] = (SC_CFB[name] === v) ? null : v;
+      scRenderCompete();
+      if (SC_CFB[name] === 'up') scAct('Battlecard rated helpful');
+      else if (SC_CFB[name] === 'down') scAct('Battlecard rated poor — flagged for review');
+    }
     function scCompFind(name){
       for (var i = 0; i < SC_COMP.length; i++) if (SC_COMP[i].name === name) return SC_COMP[i];
       return null;
@@ -5326,11 +5343,13 @@
         '<li class="edge"><span class="material-symbols-outlined">chevron_right</span>Competitor advantage: ' + scEsc(c.edge) + '</li>' +
         '</ul>' +
         '<div class="sc-src"><span class="material-symbols-outlined">bolt</span>Confidence 88% &middot; Source: ' + SC_SRC + ', UAE list prices Q3 2026</div>' +
-        '<div class="sc-actions">' +
-          '<button class="sc-btn" onclick="scTab(\'comms\')"><span class="material-symbols-outlined">edit_note</span>Draft comparison</button>' +
-          '<button class="sc-btn" onclick="scAskAbout(\'' + scQ(c.name) + '\')"><span class="material-symbols-outlined">smart_toy</span>Ask about this</button>' +
-          '<button class="sc-btn" onclick="scAct(\'Comparison sheet queued for ' + scQ(c.name) + '\')"><span class="material-symbols-outlined">description</span>Comparison sheet</button>' +
-          '<button class="sc-btn" onclick="scCompDrop(\'' + scQ(c.name) + '\')"><span class="material-symbols-outlined">close</span>Remove</button>' +
+        '<div class="sc-actions three">' +
+          '<button class="sc-btn sm" onclick="scAskAbout(\'' + scQ(c.name) + '\')"><span class="material-symbols-outlined">smart_toy</span>Ask about this</button>' +
+          '<button class="sc-btn sm' + (SC_CFB[c.name] === 'up' ? ' on' : '') + '" aria-pressed="' + (SC_CFB[c.name] === 'up') + '"' +
+            ' onclick="scCompRate(\'' + scQ(c.name) + '\',\'up\')" title="Battlecard held up in the room"><span class="material-symbols-outlined">thumb_up</span>Good</button>' +
+          '<button class="sc-btn sm' + (SC_CFB[c.name] === 'down' ? ' on' : '') + '" aria-pressed="' + (SC_CFB[c.name] === 'down') + '"' +
+            ' onclick="scCompRate(\'' + scQ(c.name) + '\',\'down\')" title="Battlecard was wrong or unhelpful"><span class="material-symbols-outlined">thumb_down</span>Poor</button>' +
+          '<button class="sc-btn sm" onclick="scCompDrop(\'' + scQ(c.name) + '\')"><span class="material-symbols-outlined">close</span>Remove</button>' +
         '</div></div>';
 
       host.innerHTML = html;
@@ -5358,12 +5377,27 @@
     var SC_CHAN = 'WhatsApp', SC_VAR = 0, SC_FEEDBACK = null;
     var SC_CHANS = ['WhatsApp','Email'];
     var SC_EDIT = null, SC_SUBJ = null;   // null = still the generated text
+    var SC_CTX_EXTRA = [];                // context the rep adds by hand
 
     function scCommsSet(kind, val){
       if (kind === 'chan') SC_CHAN = val;
       else if (kind === 'lang') SC_LANG = val;
       SC_EDIT = null; SC_SUBJ = null; SC_FEEDBACK = null;   // regenerate for the new channel/language
       scRenderComms();
+    }
+    function scAddCtx(el){
+      var v = (el.value || '').trim(); if (!v) return;
+      SC_CTX_EXTRA.push(v); el.value = '';
+      scRenderComms();
+      var box = document.getElementById('scCtxIn'); if (box) box.focus();
+    }
+    function scCtxKey(e, el){ if (e.key === 'Enter'){ e.preventDefault(); scAddCtx(el); } }
+    function scDropCtx(i){ SC_CTX_EXTRA.splice(i, 1); scRenderComms(); }
+    function scGenerate(){
+      SC_EDIT = null; SC_SUBJ = null; SC_FEEDBACK = null;
+      SC_VAR = (SC_VAR + 1) % 2;
+      scRenderComms();
+      scAct('Message generated from the record and your context');
     }
     function scDraftEdit(el){ SC_EDIT = el.value; scAutoGrow(el); scMarkEdited(); }
     function scSubjEdit(el){ SC_SUBJ = el.value; scMarkEdited(); }
@@ -5398,6 +5432,7 @@
           ' وابتداءً من ' + f.mo + ' شهرياً، مع ' + f.offer + ' و' + f.stock + ' مركبات متوفرة حالياً.\n' +
           'حجزت لك موعد تجربة قيادة يوم السبت الساعة ١١ صباحاً في ' + f.show + '.' +
           (f.comp ? '\nأرفقت أيضاً مقارنة مع ' + f.comp + '.' : '') +
+          (SC_CTX_EXTRA.length ? '\nنقاطك: ' + SC_CTX_EXTRA.join('؛ ') + '.' : '') +
           '\n\nمع التحية،\n' + f.rep + ' — إكسيد الإمارات';
         return arBody;
       }
@@ -5410,7 +5445,8 @@
         f.offer + ' and ' + f.stock + ' in stock.';
       var next = 'I have held a test-drive slot for you ' + f.slot + ' at ' + f.show + '.' +
         (f.comp ? ' I have also attached a comparison with the ' + f.comp + '.' : '');
-      return 'Hi ' + f.first + ',\n' + open + ' ' + ctx + '\n\n' + next + '\n\nKind regards,\n' + f.rep + ' — EXEED UAE';
+      var extra = SC_CTX_EXTRA.length ? '\n\nOn your points: ' + SC_CTX_EXTRA.join('; ') + '.' : '';
+      return 'Hi ' + f.first + ',\n' + open + ' ' + ctx + extra + '\n\n' + next + '\n\nKind regards,\n' + f.rep + ' — EXEED UAE';
     }
     function scSubject(){
       var f = scFacts();
@@ -5442,6 +5478,27 @@
       '</div>';
 
       html += '<div class="sc-card">' +
+        '<div class="sc-ctx"><span class="sc-ctx-h">Context used</span>' +
+          [f.stage && ('Stage: ' + f.stage), 'Interest: ' + f.model, f.camp && ('Campaign: ' + f.camp),
+           'Vehicle: ' + f.veh, 'Location: ' + f.show, f.comp && ('Compared to: ' + f.comp)]
+            .filter(Boolean).map(function(c){ return '<span>' + scEsc(c) + '</span>'; }).join('') +
+          SC_CTX_EXTRA.map(function(c, i){
+            return '<span class="mine">' + scEsc(c) +
+              '<button onclick="scDropCtx(' + i + ')" aria-label="Remove ' + scEsc(c) + '">' +
+              '<span class="material-symbols-outlined">close</span></button></span>';
+          }).join('') +
+        '</div>' +
+        '<div class="sc-ctx-add">' +
+          '<input id="scCtxIn" placeholder="Add context \u2014 what else did they say?" aria-label="Add context"' +
+            ' onkeydown="scCtxKey(event, this)" />' +
+          '<button class="sc-btn sm" onclick="scAddCtx(document.getElementById(\'scCtxIn\'))">' +
+            '<span class="material-symbols-outlined">add</span>Add</button>' +
+        '</div>' +
+        '<button class="sc-gen" onclick="scGenerate()">' +
+          '<span class="material-symbols-outlined">auto_awesome</span>Generate message</button>' +
+      '</div>';
+
+      html += '<div class="sc-card">' +
         '<div class="sc-dhead">' +
           (SC_CHAN === 'WhatsApp' ? '<svg class="sc-wa head" aria-hidden="true"><use href="#cpWa"/></svg>'
                                   : '<span class="material-symbols-outlined" style="font-size:19px;color:var(--sc-accent)">mail</span>') +
@@ -5454,11 +5511,6 @@
           : '') +
         '<textarea class="sc-draft" id="scDraft0" rows="10" aria-label="Message draft"' + (ar ? ' dir="rtl"' : '') +
           ' oninput="scDraftEdit(this)">' + scEsc(text) + '</textarea>' +
-        '<div class="sc-ctx"><span class="sc-ctx-h">Context used</span>' +
-          [f.stage && ('Stage: ' + f.stage), 'Interest: ' + f.model, f.camp && ('Campaign: ' + f.camp),
-           'Vehicle: ' + f.veh, 'Location: ' + f.show, f.comp && ('Compared to: ' + f.comp)]
-            .filter(Boolean).map(function(c){ return '<span>' + scEsc(c) + '</span>'; }).join('') +
-        '</div>' +
         '<div class="sc-actions three">' +
           '<button class="sc-btn sm" onclick="scCopy(0)"><span class="material-symbols-outlined">content_copy</span>Copy</button>' +
           '<button class="sc-btn sm' + (SC_FEEDBACK === 'up' ? ' on' : '') + '" aria-pressed="' + (SC_FEEDBACK === 'up') + '"' +
