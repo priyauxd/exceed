@@ -5004,13 +5004,8 @@
       }
       // the facts every answer in this panel is drawn from, stated up front
       var facts = [
-        { t: l.stage },
-        { t: 'Score ' + l.score },
-        { t: l.intent + ' intent &middot; ' + l.temp },
-        { t: l.model },
-        { t: l.preferred + ' &middot; ' + l.lang },
-        { t: l.owner },
-        { t: 'SLA: ' + l.slaTime, bad: l.slaClass === 'brch', warn: l.slaClass === 'wrn' }
+        { t: 'Preferred: ' + l.model },
+        { t: 'Channel: ' + l.preferred + ' \u00b7 ' + l.lang }
       ];
       g.innerHTML = '<span class="material-symbols-outlined">database</span>' +
         '<span class="sc-gd">' +
