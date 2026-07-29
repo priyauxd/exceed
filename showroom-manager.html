@@ -1529,7 +1529,7 @@
   <style>
     .mdr-overlay{position:fixed;inset:0;background:rgba(15,20,28,.42);opacity:0;visibility:hidden;transition:.2s;z-index:60;}
     .mdr-overlay.open{opacity:1;visibility:visible;}
-    .mdr{position:fixed;top:0;right:0;height:100vh;width:600px;max-width:94vw;background:var(--surface);box-shadow:-8px 0 30px rgba(15,20,28,.18);transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;}
+    .mdr{position:fixed;top:0;right:0;height:100vh;width:50vw;min-width:620px;max-width:96vw;background:var(--surface);box-shadow:-8px 0 30px rgba(15,20,28,.18);transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);z-index:61;display:flex;flex-direction:column;}
     .mdr.open{transform:translateX(0);}
     .mdr.mdr-wide{width:1160px;}
     .mdr-hd-leads{display:flex;align-items:center;padding:22px 24px;}
@@ -1589,32 +1589,38 @@
     .mdr-open::after{content:"insights";font-family:'Material Symbols Outlined';position:absolute;top:9px;right:9px;font-size:15px;color:var(--ink-muted);opacity:0;transition:.15s;}
     .mdr-open:hover::after{opacity:.7;}
     /* leads-list drawer */
-    .ml-tbar{display:flex;align-items:center;gap:8px;}
     .ml-addwrap{position:relative;}
-    .ml-tbtn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface);color:var(--ink-secondary);border-radius:8px;padding:6px 11px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap;}
-    .ml-tbtn:hover{background:var(--bg);}
-    .ml-tbtn .material-symbols-outlined{font-size:15px;}
-    .ml-tbtn.primary{background:var(--blue);color:#fff;border-color:var(--blue);}
-    .ml-tbtn.primary:hover{filter:brightness(1.08);}
     .ml-addmenu{position:absolute;top:calc(100% + 6px);right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 10px 30px rgba(20,24,34,.16);padding:8px;min-width:190px;z-index:70;display:none;}
     .ml-addmenu.open{display:block;}
     .ml-addhead{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:4px 8px 8px;}
     .ml-addopt{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:7px;font-size:13px;color:var(--ink-secondary);cursor:pointer;}
     .ml-addopt:hover{background:var(--blue-soft);}
     .ml-addopt input{accent-color:var(--blue);width:15px;height:15px;cursor:pointer;}
-    .ml-colwrap{position:relative;display:inline-block;}
-    .ml-colbtn{display:inline-flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);color:var(--ink-secondary);border-radius:7px;padding:5px 10px;font-size:12px;font-family:inherit;cursor:pointer;white-space:nowrap;}
-    .ml-colbtn:hover{border-color:var(--blue);color:var(--blue);}
-    .ml-colbtn .material-symbols-outlined{font-size:15px;}
+    /* table toolbar controls are text links, never chips */
     .ml-colmenu{display:none;position:absolute;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--border);border-radius:9px;box-shadow:0 8px 26px rgba(20,24,34,.18);padding:6px;min-width:190px;max-height:320px;overflow:auto;z-index:20;}
     .ml-colmenu.open{display:block;}
     .ml-colmenu-h{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);padding:5px 8px;}
     .ml-colmenu label{display:flex;align-items:center;gap:8px;padding:6px 8px;font-size:12.5px;border-radius:6px;cursor:pointer;white-space:nowrap;}
     .ml-colmenu label:hover{background:var(--bg);}
+    /* modal table toolbar + lead-id control (shared pattern across dashboards) */
+    .ml-tbar{display:flex;align-items:center;gap:18px;padding:16px 20px 12px;}
+    .ml-tcount{margin-right:auto;font-size:13px;font-weight:600;color:var(--ink-secondary);}
+    .ml-tbtn,.ml-colbtn{display:inline-flex;align-items:center;gap:5px;border:none;background:none;padding:0;
+      color:var(--blue);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+    .ml-tbtn:hover,.ml-colbtn:hover{text-decoration:underline;background:none;}
+    .ml-tbtn .material-symbols-outlined,.ml-colbtn .material-symbols-outlined{font-size:16px;line-height:1;}
+    .ml-colwrap{position:relative;display:inline-block;}
+    .ml-idbtn{display:inline-flex;align-items:center;gap:6px;background:none;border:none;padding:0;cursor:pointer;
+      font-family:'SF Mono',Consolas,monospace;font-size:11.5px;color:var(--ink-secondary);white-space:nowrap;}
+    .ml-idbtn .material-symbols-outlined{font-size:14px;color:var(--ink-muted);}
+    .ml-idbtn:hover,.ml-idbtn:hover .material-symbols-outlined{color:var(--blue);}
+    .ml-idbtn.copied,.ml-idbtn.copied .material-symbols-outlined{color:#2d8a5b;}
+
     .mdr-leadswrap{overflow-x:auto;}
     .mdr-leads{width:100%;border-collapse:collapse;font-size:12px;}
-    .mdr-leads th{text-align:left;padding:7px 9px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted);border-bottom:1px solid var(--border);white-space:nowrap;}
-    .mdr-leads td{padding:9px 9px;border-bottom:1px solid var(--border-soft);color:var(--ink-secondary);vertical-align:middle;white-space:nowrap;}
+    .mdr-leads th.wrap{white-space:normal;line-height:1.3;max-width:150px;}
+    .mdr-leads th{white-space:nowrap;text-align:left;padding:7px 9px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+    .mdr-leads td{white-space:nowrap;padding:9px 9px;border-bottom:1px solid var(--border-soft);color:var(--ink-secondary);vertical-align:middle;white-space:nowrap;}
     .mdr-leads tbody tr:last-child td{border-bottom:none;}
     .ml-name{font-weight:700;color:var(--ink);font-size:12.5px;}
     .ml-id{font-size:10.5px;color:var(--ink-muted);font-family:'SF Mono',Consolas,monospace;}
@@ -2019,7 +2025,7 @@
     document.addEventListener('click',function(e){ var w=e.target.closest?e.target.closest('.ml-addwrap'):null; if(!w){ var mn=document.getElementById('mlAddMenu'); if(mn) mn.classList.remove('open'); } });
 
     function mlCell(k,r){
-      if(k==='cust') return '<td><div class="ml-name">'+r.cust+'</div>'+(r.id?'<div class="ml-id">'+r.id+'</div>':'')+'</td>';
+      if(k==='cust') return '<td><div class="ml-name">'+r.cust+'</div>'+'</td>';
       if(k==='temp'){ var tc=r.temp==='Hot'?'hot':(r.temp==='Cold'?'cold':'warm'); return '<td><span class="ml-temp '+tc+'">'+r.temp+'</span></td>'; }
       if(k==='owner') return r.owner==='Unassigned' ? '<td><span class="ml-unassigned">Unassigned</span></td>' : '<td>'+r.owner+'</td>';
       if(k==='sla') return '<td class="'+(r.slaC==='red'?'ml-sla-red':(r.slaC==='amber'?'ml-sla-amber':''))+'">'+r.sla+'</td>';
@@ -2027,14 +2033,27 @@
       if(k==='act') return '<td class="ml-act">'+r.act+'</td>';
       return '<td>'+((r[k]!=null&&r[k]!=='')?r[k]:'&mdash;')+'</td>';
     }
+    // Lead ID is its own column everywhere, copyable, matching the agent dashboard.
+    function mlIdCell(id){
+      if(!id) return '<td><span style="color:var(--ink-muted)">&mdash;</span></td>';
+      return '<td><button class="ml-idbtn" onclick="mlCopyId(event,this,\''+id+'\')" title="Copy lead ID">'+id+
+        '<span class="material-symbols-outlined">content_copy</span></button></td>';
+    }
+    function mlCopyId(e,btn,id){
+      if(e){ e.preventDefault(); e.stopPropagation(); }
+      if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(id);
+      var ic=btn.querySelector('.material-symbols-outlined');
+      btn.classList.add('copied'); if(ic) ic.textContent='check';
+      setTimeout(function(){ btn.classList.remove('copied'); if(ic) ic.textContent='content_copy'; },1200);
+    }
     function listTable(m){
-      var head='<tr>'+mlVisibleCols(m).map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr>';
+      var head='<tr>'+mlVisibleCols(m).map(function(c){return '<th'+(c.l.length>14?' class="wrap"':'')+'>'+c.l+'</th>'+((c.k==='cust')?'<th>Lead ID</th>':'');}).join('')+'<th></th></tr>';
       var body=m.rows.map(function(r){
         var _q=r.id?('?id='+encodeURIComponent(r.id)):(r.cust?('?lead='+encodeURIComponent(r.cust)):'');
         var href='lead-detail.html'+_q;
         var act=m.action ? '<td style="text-align:right"><a href="'+href+'" class="ml-assign" style="position:relative;z-index:5">'+m.action+' &rsaquo;</a></td>' : '<td></td>';
         var rowClick=m.action ? ' style="cursor:pointer" onclick="if(!(event.target.closest&&event.target.closest(\'a\')))window.location.href=\''+href+'\'"' : '';
-        return '<tr'+rowClick+'>'+mlVisibleCols(m).map(function(c){return mlCell(c.k,r);}).join('')+act+'</tr>';
+        return '<tr'+rowClick+'>'+mlVisibleCols(m).map(function(c){return mlCell(c.k,r)+((c.k==='cust')?mlIdCell(r.id):'');}).join('')+act+'</tr>';
       }).join('');
       return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
     }
@@ -2195,7 +2214,7 @@
       if(!m || !m.cols || m.cols.length < 2) return '';
       var shown = mlVisibleCols(m).length;
       return '<div class="ml-colwrap">' +
-        '<button class="ml-colbtn" onclick="mlColMenu(event)" aria-haspopup="true"><span class="material-symbols-outlined">view_column</span>Columns (' + shown + '/' + m.cols.length + ')</button>' +
+        '<button class="ml-colbtn" onclick="mlColMenu(event)" aria-haspopup="true"><span class="material-symbols-outlined">view_column</span>Add column</button>' +
         '<div class="ml-colmenu" id="mlColMenu">' +
           '<div class="ml-colmenu-h">Show columns</div>' +
           m.cols.map(function(c,i){
@@ -2223,7 +2242,7 @@
           '<div class="mdr-records">'+recs+' record'+(recs===1?'':'s')+'</div>' +
           '<button class="mdr-close" onclick="closeMetric()" aria-label="Close"><span class="material-symbols-outlined">close</span></button>' +
         '</div>' +
-        '<div class="mdr-body"><div class="mdr-leadswrap">'+
+        '<div class="mdr-body"><div class="ml-tbar"><span class="ml-tcount">'+recs+' record'+(recs===1?'':'s')+'</span>'+mlColBtn(m)+'</div><div class="mdr-leadswrap">'+
           ((m.rows && m.rows.length) ? listTable(m) :
             '<table class="mdr-leads"><thead><tr>'+m.cols.map(function(c){return '<th>'+c.l+'</th>';}).join('')+'<th></th></tr></thead></table>'+
             '<div class="ax-empty2"><div class="ax-empty2-t">No leads match this KPI right now.</div><div class="ax-empty2-s">Try changing the period or clearing filters.</div></div>')+
@@ -2492,6 +2511,8 @@
     .avt{width:26px;height:26px;border-radius:50%;flex-shrink:0;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;letter-spacing:.02em;}
     .avt-text{min-width:0;}
     .avt.own{background:#e6e7ea;color:#5b6472;font-weight:700;}
+    .avt.own.none{background:#f1f1f4;color:#a2a7b3;}
+    .avt.own.none .material-symbols-outlined{font-size:15px;}
   </style>
   <script>
     (function(){
@@ -2520,12 +2541,14 @@
           if(idx<0) return;
           Array.prototype.forEach.call(tb.querySelectorAll('tbody tr'),function(tr){
             var td=tr.children[idx]; if(!td||td.getAttribute('data-avt')) return;
-            var name=(td.textContent||'').trim();
-            if(!name||name==='\u2014'||/^unassigned$/i.test(name)) return;
+            var name=(td.textContent||'').trim(); if(!name) return;
+            var none=(name==='\u2014'||/^unassigned$/i.test(name));
             td.setAttribute('data-avt','1');
             var wrap=document.createElement('div'); wrap.className='avt-text'; wrap.textContent=name;
             td.innerHTML='';
-            var av=document.createElement('span'); av.className='avt own'; av.textContent=initials(name);
+            var av=document.createElement('span'); av.className='avt own'+(none?' none':'');
+            if(none) av.innerHTML='<span class="material-symbols-outlined">person_off</span>';
+            else av.textContent=initials(name);
             td.classList.add('avt-td'); td.appendChild(av); td.appendChild(wrap);
           });
         });
