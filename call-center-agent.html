@@ -1077,11 +1077,25 @@
     .dd-count { font-size:13px; color:rgba(255,255,255,.9); white-space:nowrap; }
     .dd-close { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); color:#fff; width:30px; height:30px; border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
     .dd-close:hover { background:rgba(255,255,255,.22); }
-    .dd-body { flex:1; overflow-y:auto; }
+    .dd-body { flex:1; overflow:auto; }
     .dd-table { width:100%; border-collapse:collapse; }
-    .dd-table th { text-align:left; padding:12px 22px; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); background:#fafbfd; border-bottom:1px solid var(--border); }
-    .dd-table td { padding:15px 22px; font-size:13px; border-bottom:1px solid var(--border-soft); vertical-align:middle; }
-    .dd-nm { font-weight:600; } .dd-id { font-size:11.5px; color:var(--ink-muted); font-family:'SF Mono',Consolas,monospace; margin-top:1px; }
+    .dd-table { min-width:100%; }
+    .dd-table th { text-align:left; padding:11px 16px; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); background:#fafbfd; border-bottom:1px solid var(--border); white-space:normal; line-height:1.3; max-width:120px; vertical-align:bottom; position:sticky; top:0; z-index:1; }
+    .dd-table td { padding:12px 16px; font-size:13px; border-bottom:1px solid var(--border-soft); vertical-align:middle; white-space:nowrap; }
+    .dd-nm { font-weight:600; white-space:nowrap; }
+    .dd-id { font-size:11.5px; color:var(--ink-muted); font-family:'SF Mono',Consolas,monospace; margin-top:1px; }
+    .dd-idcell { display:inline-flex; align-items:center; gap:6px; background:none; border:none; padding:0; cursor:pointer; font-family:'SF Mono',Consolas,monospace; font-size:12px; color:var(--ink-secondary); }
+    .dd-idcell .material-symbols-outlined { font-size:14px; color:var(--ink-muted); }
+    .dd-idcell:hover { color:var(--blue); } .dd-idcell:hover .material-symbols-outlined { color:var(--blue); }
+    .dd-idcell.copied, .dd-idcell.copied .material-symbols-outlined { color:#2d8a5b; }
+    .dd-colwrap { position:relative; }
+    .dd-colbtn { display:inline-flex; align-items:center; gap:5px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); color:#fff; border-radius:7px; padding:5px 10px; font-size:12px; font-family:inherit; cursor:pointer; white-space:nowrap; }
+    .dd-colbtn:hover { background:rgba(255,255,255,.22); }
+    .dd-colbtn .material-symbols-outlined { font-size:15px; }
+    .dd-colmenu { display:none; position:absolute; right:0; top:calc(100% + 6px); background:#fff; border:1px solid var(--border); border-radius:9px; box-shadow:0 8px 26px rgba(20,24,34,.18); padding:6px; min-width:190px; z-index:5; }
+    .dd-colmenu.open { display:block; }
+    .dd-colmenu label { display:flex; align-items:center; gap:8px; padding:6px 8px; font-size:12.5px; color:var(--ink); border-radius:6px; cursor:pointer; white-space:nowrap; }
+    .dd-colmenu label:hover { background:var(--bg); }
     .dd-link { color:var(--blue); font-weight:600; text-decoration:none; white-space:nowrap; } .dd-link:hover { text-decoration:underline; }
     .dd-red { color:var(--red); font-weight:600; } .dd-amber { color:#8a6420; font-weight:600; }
     .mono { font-family:'SF Mono',Consolas,monospace; }
@@ -1751,7 +1765,12 @@
   <div class="dd-panel" id="ddPanel" role="dialog" aria-label="KPI detail">
     <div class="dd-head">
       <div><div class="dd-title" id="ddTitle"></div><div class="dd-sub" id="ddSub"></div></div>
-      <div class="dd-hr"><span class="dd-count" id="ddCount"></span><button class="dd-close" onclick="closeKpi()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>
+      <div class="dd-hr"><span class="dd-count" id="ddCount"></span>
+        <div class="dd-colwrap">
+          <button class="dd-colbtn" onclick="ddColMenu(event)" aria-haspopup="true" aria-expanded="false"><span class="material-symbols-outlined">view_column</span>Columns</button>
+          <div class="dd-colmenu" id="ddColMenu"></div>
+        </div>
+        <button class="dd-close" onclick="closeKpi()" aria-label="Close"><span class="material-symbols-outlined">close</span></button></div>
     </div>
     <div class="dd-body"><table class="dd-table" id="ddTable"></table></div>
   </div>
@@ -1836,22 +1855,63 @@
           [L('Nabil Farha','L-2026-07006'),'800 Number','Contact','Duplicate','15d','Nadia Al Suwaidi',A('Open')]
         ] }
     };
-    function openKpi(k){
-      var d = KPI[k]; if (!d) return;
-      document.getElementById('ddTitle').textContent = d.t;
-      document.getElementById('ddSub').textContent = d.s;
-      document.getElementById('ddCount').textContent = d.c;
-      var h = '<thead><tr>'+d.head+'</tr></thead><tbody>';
+    var ddCols = [], ddHidden = {}, ddCurrent = null;
+    function ddEsc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+    function ddCopy(btn, id){
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(id);
+      btn.classList.add('copied');
+      var ic = btn.querySelector('.material-symbols-outlined'); if (ic) ic.textContent = 'check';
+      setTimeout(function(){ btn.classList.remove('copied'); if (ic) ic.textContent = 'content_copy'; }, 1200);
+    }
+    function ddColMenu(e){
+      if (e){ e.preventDefault(); e.stopPropagation(); }
+      var mn = document.getElementById('ddColMenu'); if (!mn) return;
+      mn.innerHTML = ddCols.map(function(c, i){
+        return '<label><input type="checkbox" ' + (ddHidden[i] ? '' : 'checked') + ' onchange="ddToggleCol(' + i + ')">' + ddEsc(c || 'Action') + '</label>';
+      }).join('');
+      mn.classList.toggle('open');
+      document.querySelector('.dd-colbtn').setAttribute('aria-expanded', mn.classList.contains('open'));
+    }
+    function ddToggleCol(i){ ddHidden[i] = !ddHidden[i]; ddRender(); }
+    document.addEventListener('click', function(e){
+      var w = e.target.closest ? e.target.closest('.dd-colwrap') : null;
+      if (!w){ var mn = document.getElementById('ddColMenu'); if (mn) mn.classList.remove('open'); }
+    });
+    function ddRender(){
+      var d = ddCurrent; if (!d) return;
+      var h = '<thead><tr>' + ddCols.map(function(c, i){
+        return ddHidden[i] ? '' : '<th>' + (c || '') + '</th>';
+      }).join('') + '</tr></thead><tbody>';
       d.rows.forEach(function(r){
         var nm = ''; var mm = String(r[0]).match(/class="dd-nm">([^<]+)</); if (mm) nm = mm[1];
-        h += '<tr>'+r.map(function(c){
+        // the lead cell carried name and id together; the id is its own column now
+        var id = ''; var im = String(r[0]).match(/class="dd-id">([^<]+)</); if (im) id = im[1];
+        var cells = r.slice();
+        cells[0] = String(cells[0]).replace(/<div class="dd-id">[^<]*<\/div>/, '');
+        cells.splice(1, 0, id
+          ? '<button class="dd-idcell" onclick="ddCopy(this,\'' + id + '\')" title="Copy lead ID">' + id +
+            '<span class="material-symbols-outlined">content_copy</span></button>'
+          : '<span style="color:var(--ink-muted)">&mdash;</span>');
+        h += '<tr>' + cells.map(function(c, i){
+          if (ddHidden[i]) return '';
           var cell = String(c);
-          if (nm) cell = cell.replace(/href="lead-detail\.html"/g, 'href="lead-detail.html?lead='+encodeURIComponent(nm)+'"');
-          return '<td>'+cell+'</td>';
-        }).join('')+'</tr>';
+          if (nm) cell = cell.replace(/href="lead-detail\.html"/g, 'href="lead-detail.html?lead=' + encodeURIComponent(nm) + '"');
+          return '<td>' + cell + '</td>';
+        }).join('') + '</tr>';
       });
       h += '</tbody>';
       document.getElementById('ddTable').innerHTML = h;
+    }
+    function openKpi(k){
+      var d = KPI[k]; if (!d) return;
+      ddCurrent = d; ddHidden = {};
+      document.getElementById('ddTitle').textContent = d.t;
+      document.getElementById('ddSub').textContent = d.s;
+      document.getElementById('ddCount').textContent = d.c;
+      var heads = (d.head.match(/<th[^>]*>(.*?)<\/th>/g) || []).map(function(t){ return t.replace(/<\/?th[^>]*>/g, ''); });
+      heads.splice(1, 0, 'Lead ID');
+      ddCols = heads;
+      ddRender();
       document.getElementById('ddOv').classList.add('open');
       document.getElementById('ddPanel').classList.add('open');
     }
@@ -2363,6 +2423,7 @@
     .avt-td{display:flex;align-items:center;gap:9px;}
     .avt{width:26px;height:26px;border-radius:50%;flex-shrink:0;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;letter-spacing:.02em;}
     .avt-text{min-width:0;}
+    .avt.own{background:#e6e7ea;color:#5b6472;font-weight:700;}
   </style>
   <script>
     (function(){
@@ -2379,7 +2440,29 @@
         var av=document.createElement('span'); av.className='avt'; av.style.background=color(name); av.textContent=initials(name);
         td.classList.add('avt-td'); td.appendChild(av); td.appendChild(wrap);
       }
-      function scan(root){ if(root&&root.querySelectorAll) Array.prototype.forEach.call(root.querySelectorAll(SEL),decorate); }
+      // Owner columns get a muted avatar so people read as people, not strings.
+      var OWNER_HEADS=['owner','agent','assigned to','sales exec','sales executive','handled by','rep'];
+      function decorateOwners(root){
+        var tbs=(root&&root.querySelectorAll)?root.querySelectorAll('table'):[];
+        Array.prototype.forEach.call(tbs,function(tb){
+          var idx=-1;
+          Array.prototype.forEach.call(tb.querySelectorAll('thead th'),function(th,i){
+            if(OWNER_HEADS.indexOf((th.textContent||'').trim().toLowerCase())>-1) idx=i;
+          });
+          if(idx<0) return;
+          Array.prototype.forEach.call(tb.querySelectorAll('tbody tr'),function(tr){
+            var td=tr.children[idx]; if(!td||td.getAttribute('data-avt')) return;
+            var name=(td.textContent||'').trim();
+            if(!name||name==='\u2014'||/^unassigned$/i.test(name)) return;
+            td.setAttribute('data-avt','1');
+            var wrap=document.createElement('div'); wrap.className='avt-text'; wrap.textContent=name;
+            td.innerHTML='';
+            var av=document.createElement('span'); av.className='avt own'; av.textContent=initials(name);
+            td.classList.add('avt-td'); td.appendChild(av); td.appendChild(wrap);
+          });
+        });
+      }
+      function scan(root){ if(root&&root.querySelectorAll){ Array.prototype.forEach.call(root.querySelectorAll(SEL),decorate); decorateOwners(root); } }
       function run(){
         scan(document);
         try{

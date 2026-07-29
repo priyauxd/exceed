@@ -2408,6 +2408,7 @@
     .avt-td{display:flex;align-items:center;gap:9px;}
     .avt{width:26px;height:26px;border-radius:50%;flex-shrink:0;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;letter-spacing:.02em;}
     .avt-text{min-width:0;}
+    .avt.own{background:#e6e7ea;color:#5b6472;font-weight:700;}
   </style>
   <script>
     (function(){
@@ -2424,7 +2425,29 @@
         var av=document.createElement('span'); av.className='avt'; av.style.background=color(name); av.textContent=initials(name);
         td.classList.add('avt-td'); td.appendChild(av); td.appendChild(wrap);
       }
-      function scan(root){ if(root&&root.querySelectorAll) Array.prototype.forEach.call(root.querySelectorAll(SEL),decorate); }
+      // Owner columns get a muted avatar so people read as people, not strings.
+      var OWNER_HEADS=['owner','agent','assigned to','sales exec','sales executive','handled by','rep'];
+      function decorateOwners(root){
+        var tbs=(root&&root.querySelectorAll)?root.querySelectorAll('table'):[];
+        Array.prototype.forEach.call(tbs,function(tb){
+          var idx=-1;
+          Array.prototype.forEach.call(tb.querySelectorAll('thead th'),function(th,i){
+            if(OWNER_HEADS.indexOf((th.textContent||'').trim().toLowerCase())>-1) idx=i;
+          });
+          if(idx<0) return;
+          Array.prototype.forEach.call(tb.querySelectorAll('tbody tr'),function(tr){
+            var td=tr.children[idx]; if(!td||td.getAttribute('data-avt')) return;
+            var name=(td.textContent||'').trim();
+            if(!name||name==='\u2014'||/^unassigned$/i.test(name)) return;
+            td.setAttribute('data-avt','1');
+            var wrap=document.createElement('div'); wrap.className='avt-text'; wrap.textContent=name;
+            td.innerHTML='';
+            var av=document.createElement('span'); av.className='avt own'; av.textContent=initials(name);
+            td.classList.add('avt-td'); td.appendChild(av); td.appendChild(wrap);
+          });
+        });
+      }
+      function scan(root){ if(root&&root.querySelectorAll){ Array.prototype.forEach.call(root.querySelectorAll(SEL),decorate); decorateOwners(root); } }
       function run(){
         scan(document);
         try{
