@@ -1037,7 +1037,8 @@
               <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeTestDrive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeTestDrive');}"><div class="np-val">4 <span class="conv">50%</span></div><div class="np-bar" style="height:18%;background:#cfa7b5"></div></div>
               <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeOffer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeOffer');}"><div class="np-val">5 <span class="conv">125%</span></div><div class="np-bar" style="height:23%;background:#bcd6f4"></div></div>
               <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeBooking');}"><div class="np-val">3 <span class="conv">60%</span></div><div class="np-bar" style="height:14.3%;background:#aad9bd"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeDelivery');}"><div class="np-val">1 <span class="conv">33%</span></div><div class="np-bar" style="height:6.5%;background:#eec6db"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeInvoicing')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeInvoicing');}"><div class="np-val">2 <span class="conv">67%</span></div><div class="np-bar" style="height:10.4%;background:#c9c2ef"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeDelivery');}"><div class="np-val">1 <span class="conv">50%</span></div><div class="np-bar" style="height:6.5%;background:#eec6db"></div></div>
             </div>
             <div class="np-axis">
               <span class="np-axis-lbl">New Leads</span>
@@ -1047,6 +1048,7 @@
               <span class="np-axis-lbl">Test Drive</span>
               <span class="np-axis-lbl">Offer</span>
               <span class="np-axis-lbl">Booking</span>
+              <span class="np-axis-lbl">Invoicing</span>
               <span class="np-axis-lbl">Delivery</span>
             </div>
             <div class="np-foot">
@@ -1664,17 +1666,45 @@
 
     function fmtVal(v, unit){ var n = (Math.round(v*10)/10); return unit === '%' ? n + '%' : ('' + n); }
 
+    // ── Trend axis labels: real calendar dates, never D1/W1/M1 placeholders ──
+    var TREND_MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function trendPad(n){ return (n < 10 ? '0' : '') + n; }
+    function trendDayLabels(n){            // n consecutive days ending today
+      var out = [], now = new Date();
+      for (var i = n - 1; i >= 0; i--){
+        var t = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        out.push(TREND_MON[t.getMonth()] + ' ' + trendPad(t.getDate()));
+      }
+      return out;
+    }
+    function trendWeekLabels(n){           // week beginnings, ending this week
+      var out = [], now = new Date();
+      for (var i = n - 1; i >= 0; i--){
+        var t = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i * 7);
+        out.push(TREND_MON[t.getMonth()] + ' ' + trendPad(t.getDate()));
+      }
+      return out;
+    }
+    function trendMonthLabels(n){          // n months ending this month; year shown where it turns over
+      var out = [], now = new Date();
+      for (var i = n - 1; i >= 0; i--){
+        var t = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        out.push(TREND_MON[t.getMonth()] + (t.getMonth() === 0 || i === n - 1 ? " '" + String(t.getFullYear()).slice(2) : ''));
+      }
+      return out;
+    }
+
     // Weekly by default; `d` supplies a resampled series when the period toggle is used.
-    function cxWeekLabels(n){ var a=[]; for(var i=0;i<n;i++){ a.push(i===n-1?'Now':('-'+(n-1-i)+'w')); } return a; }
+    function cxWeekLabels(n){ return trendWeekLabels(n); }
     function cxTrendData(m,g){
       var w=m.trend||[], mx=m.yTrendMax||40, i, v=[], l=[];
       if(g==='daily'){
-        for(i=0;i<w.length;i++){ v.push(w[i]); l.push('D'+v.length); if(i<w.length-1){ v.push(Math.round((w[i]+w[i+1])/2)); l.push('D'+v.length); } }
-        return {vals:v, labels:l, yMax:mx};
+        for(i=0;i<w.length;i++){ v.push(w[i]); if(i<w.length-1){ v.push(Math.round((w[i]+w[i+1])/2)); } }
+        return {vals:v, labels:trendDayLabels(v.length), yMax:mx};
       }
       if(g==='monthly'){
-        for(i=0;i<w.length;i+=2){ v.push(Math.round((w[i]+(w[i+1]!=null?w[i+1]:w[i]))/2)); l.push('M'+v.length); }
-        return {vals:v, labels:l, yMax:mx};
+        for(i=0;i<w.length;i+=2){ v.push(Math.round((w[i]+(w[i+1]!=null?w[i+1]:w[i]))/2)); }
+        return {vals:v, labels:trendMonthLabels(v.length), yMax:mx};
       }
       return {vals:w, labels:cxWeekLabels(w.length), yMax:mx};
     }
@@ -1807,7 +1837,7 @@
       }).join('');
       return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
     }
-    function lineChart(data, yMax, prefix){
+    function lineChart(data, yMax, labels){
       var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=data.length;
       var pw=W-padL-padR,ph=H-padT-padB;
       var X=function(i){return padL+pw*(i/(n>1?n-1:1));},Y=function(v){return padT+ph*(1-v/yMax);};
@@ -1820,22 +1850,23 @@
       var pts=xy.map(function(p){return (Math.round(p[0]*10)/10)+','+(Math.round(p[1]*10)/10);});
       var poly='<polyline class="mdr-line ax-anim" points="'+pts.join(' ')+'" style="stroke-dasharray:'+Math.round(len)+';stroke-dashoffset:'+Math.round(len)+';"/>';
       var every=(n>12)?2:1;
-      var xlab=data.map(function(v,i){return (i%every===0)?'<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+prefix+(i+1)+'</text>':'';}).join('');
+      var lab=labels||trendWeekLabels(n);
+      var xlab=data.map(function(v,i){return (i%every===0)?'<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+lab[i]+'</text>':'';}).join('');
       return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+poly+xlab+'</svg>';
     }
-    function addonLineSVG(m){ return lineChart(m.trend, m.trendMax||40, 'W'); }
+    function addonLineSVG(m){ return lineChart(m.trend||[], m.trendMax||40, trendWeekLabels((m.trend||[]).length)); }
     // Period series derived from the weekly trend
     function chartSeries(m, period){
       var w=m.trend||[], ymax=m.trendMax||40;
       if(period==='daily'){
         var d=[]; for(var i=0;i<w.length;i++){ d.push(w[i]); if(i<w.length-1) d.push(Math.round((w[i]+w[i+1])/2)); }
-        return {data:d, yMax:ymax, prefix:'D'};
+        return {data:d, yMax:ymax, labels:trendDayLabels(d.length)};
       }
       if(period==='monthly'){
         var mo=[]; for(var j=0;j<w.length;j+=2){ mo.push(Math.round((w[j]+(w[j+1]!=null?w[j+1]:w[j]))/2)); }
-        return {data:mo, yMax:ymax, prefix:'M'};
+        return {data:mo, yMax:ymax, labels:trendMonthLabels(mo.length)};
       }
-      return {data:w, yMax:ymax, prefix:'W'};
+      return {data:w, yMax:ymax, labels:trendWeekLabels(w.length)};
     }
     function animLine(){
       var p=document.querySelector('#apChart .ax-anim'); if(!p) return;
@@ -1845,7 +1876,7 @@
       btn.parentNode.querySelectorAll('button').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on');
       var host=document.getElementById('apChart'); if(!host||!_chartM) return;
       var s=chartSeries(_chartM, period);
-      host.innerHTML=lineChart(s.data, s.yMax, s.prefix);
+      host.innerHTML=lineChart(s.data, s.yMax, s.labels);
       animLine();
     }
     function openAddonMetric(m){
@@ -2461,6 +2492,11 @@
         {cust:'Hamza Iqbal',  id:'L-2026-05026', temp:'Warm', owner:'Ahmad Nasr',     source:'Website',     model:'EXEED LX', sla:'30 min left', act:'Follow up on quote (5d)'}
       ]),
       pipeBooking: S('Booking', [
+        {cust:'Salma Idris',  id:'L-2026-05015', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Confirm booking'},
+        {cust:'Sana Rehman',  id:'L-2026-05027', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Collect booking deposit'},
+        {cust:'Bilal Qureshi',id:'L-2026-05014', temp:'Warm', owner:'Yousef Rahman',  source:'Referral', model:'EXEED TXL', sla:'30 min left', act:'Finance approval follow-up'}
+      ]),
+      pipeInvoicing: S('Invoicing', [
         {cust:'Salma Idris',  id:'L-2026-05015', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Confirm booking'},
         {cust:'Sana Rehman',  id:'L-2026-05027', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Collect booking deposit'},
         {cust:'Bilal Qureshi',id:'L-2026-05014', temp:'Warm', owner:'Yousef Rahman',  source:'Referral', model:'EXEED TXL', sla:'30 min left', act:'Finance approval follow-up'}

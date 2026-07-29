@@ -1022,7 +1022,7 @@
           <div class="kpi-grid g8">
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAllLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAllLeads');}"><div class="mc-lbl">Leads Assigned <span class="mc-i material-symbols-outlined" data-kpi="Leads Assigned" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val">21</div><div class="mc-sub">Call Centre-owned</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccNotActioned')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccNotActioned');}"><div class="mc-lbl">Not Actioned <span class="mc-i material-symbols-outlined" data-kpi="Not Actioned" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val txt-red">18</div><div class="mc-sub">Sorted by SLA</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccCallbacksDue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccCallbacksDue');}"><div class="mc-lbl">Callbacks Due <span class="mc-i material-symbols-outlined" data-kpi="Callbacks Due" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
+            <div class="metric-card"><div class="mc-lbl">Callbacks Due <span class="mc-i material-symbols-outlined" data-kpi="Callbacks Due" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()">info</span></div><div class="mc-val txt-amber">12</div><div class="mc-sub">7 overdue</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('contactList')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('contactList');}"><div class="mc-lbl">Contact <span class="mc-i material-symbols-outlined" data-kpi="Contact" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val txt-green">4</div><div class="mc-sub">100% qualified</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('returnRate')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('returnRate');}"><div class="mc-lbl">Returned by Sales <span class="mc-i material-symbols-outlined" data-kpi="Returned by Sales" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val">4</div><div class="mc-sub">Coach &amp; fix</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('ccAHT')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('ccAHT');}"><div class="mc-lbl">Avg Handle Time <span class="mc-i material-symbols-outlined" data-kpi="Avg Handle Time" onmouseenter="kpiTip(this)" onmouseleave="kpiTipHide()" onclick="event.stopPropagation()">info</span></div><div class="mc-val" style="font-size:19px">4m 32s</div><div class="mc-sub">Across all agents</div></div>
@@ -1556,30 +1556,14 @@
           {lead:'Rasha Nabhan',  id:'L-2026-06104', owner:'Lina Osman',       due:'in 40 min',      status:'Scheduled'},
           {lead:'Adel Rahim',    id:'L-2026-06009', owner:'Priya Nair',       due:'in 1 h',         status:'Scheduled'}
         ] },
-      ccAHT: { list:true, title:'Avg Handle Time', sub:'Average call handle time across all completed calls — by agent · overall 4m 32s', records:8,
-        cols:[{k:'lead',l:'Agent'},{k:'calls',l:'Calls'},{k:'aht',l:'AHT'},{k:'status',l:'Status'}],
-        rows:[
-          {lead:'Lina Osman',       calls:24, aht:'5m 10s', status:'Above target'},
-          {lead:'Farhan Aslam',     calls:31, aht:'4m 02s', status:'On target'},
-          {lead:'Ivan Petrov',      calls:28, aht:'3m 48s', status:'On target'},
-          {lead:'Nadia Al Suwaidi', calls:22, aht:'4m 55s', status:'Above target'},
-          {lead:'Rahul Krishnan',   calls:26, aht:'4m 20s', status:'On target'},
-          {lead:'Aisha Hussein',    calls:19, aht:'5m 30s', status:'Above target'},
-          {lead:'Priya Nair',       calls:30, aht:'3m 35s', status:'On target'},
-          {lead:'Omar Al Khoury',   calls:21, aht:'4m 12s', status:'On target'}
-        ] },
-      ccAgentsShift: { list:true, title:'Agents on Shift', sub:'Agents rostered and active in the current shift window · 4 on track', records:8,
-        cols:[{k:'lead',l:'Agent'},{k:'shift',l:'Shift'},{k:'calls',l:'Calls Today'},{k:'status',l:'Status'}],
-        rows:[
-          {lead:'Lina Osman',       shift:'09:00 – 17:00', calls:24, status:'On Track'},
-          {lead:'Farhan Aslam',     shift:'09:00 – 17:00', calls:31, status:'On Track'},
-          {lead:'Ivan Petrov',      shift:'10:00 – 18:00', calls:28, status:'On Track'},
-          {lead:'Nadia Al Suwaidi', shift:'08:00 – 16:00', calls:22, status:'On Track'},
-          {lead:'Rahul Krishnan',   shift:'10:00 – 18:00', calls:26, status:'Due Soon'},
-          {lead:'Aisha Hussein',    shift:'11:00 – 19:00', calls:19, status:'Overloaded'},
-          {lead:'Priya Nair',       shift:'09:00 – 17:00', calls:30, status:'Due Soon'},
-          {lead:'Omar Al Khoury',   shift:'12:00 – 20:00', calls:21, status:'Blocked'}
-        ] },
+      ccAHT: { list:true, title:'Avg Handle Time \u2014 leads handled', action:'Open lead',
+        sub:'Leads behind the 4m 32s average \u00b7 call centre owned', records:21,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'owner',l:'Owner'},{k:'sla',l:'SLA'},{k:'qual',l:'Qual %'},{k:'next',l:'Next Action'},{k:'routing',l:'Routing'}],
+        rows: CC },
+      ccAgentsShift: { list:true, title:'Agents on Shift \u2014 their open leads', action:'Open lead',
+        sub:'8 agents rostered \u00b7 4 on track \u00b7 leads currently in their hands', records:21,
+        cols:[{k:'lead',l:'Lead'},{k:'temp',l:'Temp'},{k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'owner',l:'Owner'},{k:'sla',l:'SLA'},{k:'qual',l:'Qual %'},{k:'next',l:'Next Action'},{k:'routing',l:'Routing'}],
+        rows: CC },
       ccLostLeads: { list:true, title:'Lost CC leads', action:'Open', records:2,
         cols:[{k:'lead',l:'Lead'},{k:'source',l:'Source'},{k:'stage',l:'Stage'},{k:'owner',l:'Owner'},{k:'lostreason',l:'Lost Reason'},{k:'days',l:'Days Idle'}],
         rows:[

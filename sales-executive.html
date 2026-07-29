@@ -1069,7 +1069,7 @@
 
         <!-- SECTION — My Pipeline -->
         <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My pipeline</span><span class="kpi-sec-sub">&middot; Click a stage to drill in &middot; New Leads is count-only</span><div class="date-filter-wrap" style="margin-left:auto"><div class="date-filter"><button class="df-tab" onclick="setDateRange(this)">Today</button><button class="df-tab" onclick="setDateRange(this)">This week</button><button class="df-tab on" onclick="setDateRange(this)">MTD</button><button class="df-tab" onclick="setDateRange(this)">Last 30 days</button></div></div></div>
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">My pipeline</span><span class="kpi-sec-sub">&middot; Click a stage to drill in &middot; New Leads is count-only</span></div>
           <style>
             .np-wrap { background:#fafafa; border-radius:14px; padding:18px 20px 14px; }
             .np-chart { display:flex; align-items:flex-end; gap:14px; height:250px; padding:0 4px; }
@@ -1092,7 +1092,8 @@
               <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeTestDrive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeTestDrive');}"><div class="np-val">4 <span class="conv">19%</span></div><div class="np-bar" style="height:19%;background:#cfa7b5"></div></div>
               <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeOffer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeOffer');}"><div class="np-val">5 <span class="conv">125%</span></div><div class="np-bar" style="height:23.8%;background:#bcd6f4"></div></div>
               <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeBooking');}"><div class="np-val">3 <span class="conv">60%</span></div><div class="np-bar" style="height:14.3%;background:#aad9bd"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeDelivery');}"><div class="np-val">1 <span class="conv">33%</span></div><div class="np-bar" style="height:6.5%;background:#eec6db"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeInvoicing')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeInvoicing');}"><div class="np-val">4 <span class="conv">133%</span></div><div class="np-bar" style="height:19%;background:#c9c2ef"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('sePipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('sePipeDelivery');}"><div class="np-val">1 <span class="conv">25%</span></div><div class="np-bar" style="height:6.5%;background:#eec6db"></div></div>
             </div>
             <div class="np-axis">
               <span class="np-axis-lbl">New Leads</span>
@@ -1102,6 +1103,7 @@
               <span class="np-axis-lbl">Test Drive</span>
               <span class="np-axis-lbl">Offer</span>
               <span class="np-axis-lbl">Booking</span>
+              <span class="np-axis-lbl">Invoicing</span>
               <span class="np-axis-lbl">Delivery</span>
             </div>
             <div class="np-foot">
@@ -1969,7 +1971,7 @@
       return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
     }
     function addonLineSVG(m,d){
-      d = d || {vals:m.trend, labels:m.trend.map(function(_,i){return 'W'+(i+1);}), yMax:m.trendMax||40};
+      d = d || {vals:m.trend, labels:trendWeekLabels((m.trend||[]).length), yMax:m.trendMax||40};
       var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=d.vals.length,yMax=d.yMax||40;
       var pw=W-padL-padR,ph=H-padT-padB;
       var X=function(i){return padL+pw*(i/(n-1));},Y=function(v){return padT+ph*(1-v/yMax);};
@@ -2124,6 +2126,34 @@
     }
     var APEN_BASECOLS=[{k:'date',l:'Sale Date'},{k:'cust',l:'Customer'},{k:'item',l:'Item'},{k:'cat',l:'Category'},{k:'status',l:'Status'},{k:'price',l:'Price (AED)'}];
     var APEN_ADDCOLS=[{k:'deal',l:'Deal #'},{k:'owner',l:'Owner'},{k:'gp',l:'GP (AED)'},{k:'payment',l:'Payment'}];
+    // ── Trend axis labels: real calendar dates, never D1/W1/M1 placeholders ──
+    var TREND_MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function trendPad(n){ return (n < 10 ? '0' : '') + n; }
+    function trendDayLabels(n){            // n consecutive days ending today
+      var out = [], now = new Date();
+      for (var i = n - 1; i >= 0; i--){
+        var t = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        out.push(TREND_MON[t.getMonth()] + ' ' + trendPad(t.getDate()));
+      }
+      return out;
+    }
+    function trendWeekLabels(n){           // week beginnings, ending this week
+      var out = [], now = new Date();
+      for (var i = n - 1; i >= 0; i--){
+        var t = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i * 7);
+        out.push(TREND_MON[t.getMonth()] + ' ' + trendPad(t.getDate()));
+      }
+      return out;
+    }
+    function trendMonthLabels(n){          // n months ending this month; year shown where it turns over
+      var out = [], now = new Date();
+      for (var i = n - 1; i >= 0; i--){
+        var t = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        out.push(TREND_MON[t.getMonth()] + (t.getMonth() === 0 || i === n - 1 ? " '" + String(t.getFullYear()).slice(2) : ''));
+      }
+      return out;
+    }
+
     function apenLineSVG(vals,labels,yMax){
       var W=760,H=210,padL=32,padR=14,padT=14,padB=26,n=vals.length,pw=W-padL-padR,ph=H-padT-padB;
       var X=function(i){return padL+pw*(n>1?i/(n-1):0);},Y=function(v){return padT+ph*(1-v/yMax);};
@@ -2132,14 +2162,15 @@
         grid+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" class="mdr-grid"/>';
         ylab+='<text x="'+(padL-6)+'" y="'+(yy+3)+'" class="mdr-axl" text-anchor="end">'+v+'</text>';});
       var pts=vals.map(function(v,i){return X(i)+','+Y(v);});
-      var xlab=vals.map(function(v,i){return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+labels[i]+'</text>';}).join('');
+      var every=(n>8)?2:1;
+      var xlab=vals.map(function(v,i){return (i%every===0)?'<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+labels[i]+'</text>':'';}).join('');
       return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+'<polyline class="mdr-line" points="'+pts.join(' ')+'"/>'+xlab+'</svg>';
     }
     function apenTrendData(m,g){
       var base=m.trend||[],mx=m.trendMax||40;
-      if(g==='Daily'){ var d=[],lab=[]; for(var i=0;i<14;i++){ var f=i/13*(base.length-1),lo=Math.floor(f),hi=Math.ceil(f),v=base[lo]+(base[hi]-base[lo])*(f-lo); d.push(Math.round(v)); lab.push('D'+(i+1)); } return {vals:d,labels:lab,yMax:mx}; }
-      if(g==='Monthly'){ var mo=['Feb','Mar','Apr','May','Jun','Jul'],mv=[]; for(var j=0;j<6;j++){ mv.push(base[Math.round(j/5*(base.length-1))]||0); } return {vals:mv,labels:mo,yMax:mx}; }
-      return {vals:base,labels:base.map(function(_,i){return 'W'+(i+1);}),yMax:mx};
+      if(g==='Daily'){ var d=[]; for(var i=0;i<14;i++){ var f=i/13*(base.length-1),lo=Math.floor(f),hi=Math.ceil(f),v=base[lo]+(base[hi]-base[lo])*(f-lo); d.push(Math.round(v)); } return {vals:d,labels:trendDayLabels(d.length),yMax:mx}; }
+      if(g==='Monthly'){ var mv=[]; for(var j=0;j<6;j++){ mv.push(base[Math.round(j/5*(base.length-1))]||0); } return {vals:mv,labels:trendMonthLabels(mv.length),yMax:mx}; }
+      return {vals:base,labels:trendWeekLabels(base.length),yMax:mx};
     }
     function apenTrendToggle(btn,g){
       btn.parentNode.querySelectorAll('button').forEach(function(b){b.classList.remove('on');}); btn.classList.add('on');
@@ -2595,6 +2626,12 @@
         {cust:'Linda George', id:'L-2026-05010', temp:'Warm', source:'Social Form', model:'EXEED LX', stage:'Offer', act:'Follow up on quote'}
       ]),
       sePipeBooking: P('Booking', []),
+      sePipeInvoicing: P('Invoicing', [
+        {cust:'Salma Idris',   id:'L-2026-05015', temp:'Hot',  source:'Walk-in',  model:'EXEED LX', stage:'Invoicing', act:'Raise invoice'},
+        {cust:'Sana Rehman',   id:'L-2026-05027', temp:'Hot',  source:'Walk-in',  model:'EXEED LX', stage:'Invoicing', act:'Collect balance payment'},
+        {cust:'Ahmed Mansoor', id:'L-2026-05013', temp:'Hot',  source:'Website',  model:'EXEED VX', stage:'Invoicing', act:'Confirm finance approval'},
+        {cust:'Linda George',  id:'L-2026-05010', temp:'Warm', source:'Social Form', model:'EXEED LX', stage:'Invoicing', act:'Send invoice for signature'}
+      ]),
       sePipeDelivery: P('Delivery', [])
     });
   })();
@@ -2626,7 +2663,13 @@
   </script>
   <script>
     (function(){
-      var css='.cal-event .ce-s{display:inline-block;margin-top:2px;font-size:8.5px;font-weight:700;background:rgba(255,255,255,.28);border-radius:4px;padding:0 5px;letter-spacing:.02em;}';
+      var css='.cal-event{display:flex;flex-direction:column;justify-content:flex-start;}'+
+        '.cal-event .ce-s{align-self:flex-start;margin-top:3px;font-size:9.5px;font-weight:700;line-height:1.5;'+
+          'background:#fff;color:#1f2733;border-radius:999px;padding:1px 7px;letter-spacing:.02em;box-shadow:0 1px 2px rgba(20,24,34,.2);}'+
+        /* short blocks cannot fit a third line: show the status inline next to the name instead */
+        '.cal-event.tight{flex-direction:row;align-items:center;gap:5px;}'+
+        '.cal-event.tight .ce-n{flex:1;min-width:0;}'+
+        '.cal-event.tight .ce-s{margin-top:0;font-size:9px;padding:0 6px;}';
       var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
       var map={'Test Drive':'Confirmed','Appointment':'Scheduled','Appt':'Scheduled','Delivery':'Scheduled','Follow-up':'Pending','Call':'Due','Customer Call':'Due'};
       function run(){
@@ -2634,7 +2677,11 @@
         for(var i=0;i<evs.length;i++){ var ev=evs[i]; if(ev.querySelector('.ce-s')) continue;
           var t=ev.querySelector('.ce-t'), src=t||ev.querySelector('.ce-n'); if(!src) continue;
           var parts=src.textContent.split('·'); var type=(parts[parts.length-1]||'').trim();
-          var s=document.createElement('span'); s.className='ce-s'; s.textContent=map[type]||'Scheduled'; ev.appendChild(s);
+          var label=map[type]||'Scheduled';
+          var s=document.createElement('span'); s.className='ce-s'; s.textContent=label; ev.appendChild(s);
+          // a 42px block holds name + time + status; anything shorter has to go inline
+          if(ev.offsetHeight < 46) ev.classList.add('tight');
+          ev.title=(ev.querySelector('.ce-n')||{}).textContent+' \u00b7 '+(t?t.textContent+' \u00b7 ':'')+label;
         }
       }
       if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded',run);
