@@ -3249,7 +3249,9 @@
       { q:'Are you comparing any other models, and who else helps you decide?', tag:'Before quote', subs:[
         { l:'Competitor / alternative', opts:['BYD','Jetour','Toyota','Lexus','Nissan','Geely/Changan','Hyundai/Kia','German premium','Not comparing','Other (specify)'] },
         { l:'Decision helper', opts:['Self only','Spouse/partner','Parent/family member','Business partner','Company/procurement','Driver/main user','Other (specify)'] } ], free:true },
-      { q:'What budget range or monthly EMI are you comfortable with?', tag:'Before quote', subs:[], free:true, freeLabel:'Budget range / monthly EMI' },
+      { q:'What budget range or monthly EMI are you comfortable with?', tag:'Before quote', subs:[
+        { l:'Budget range', opts:['<AED 100k','AED 100k-130k','AED 130k-160k','AED 160k-200k','AED 200k+','Not sure / open'] },
+        { l:'Preferred monthly EMI', opts:['<AED 2,000','AED 2,000-3,000','AED 3,000-4,000','AED 4,000-5,000','AED 5,000+','Cash buyer','Not sure / needs finance options'] } ], free:true },
       { q:'What is your expected timeframe to purchase?', tag:'Before quote', subs:[
         { opts:['Immediate / ready now','Within 1 week','Within 2-4 weeks','1-3 months','3+ months','Exploring only / no timeline yet','Other (specify)'] } ] },
       { q:'What would make you feel completely confident moving forward?', subs:[
