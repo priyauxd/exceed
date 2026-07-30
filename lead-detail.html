@@ -1326,6 +1326,28 @@
     .la-chip { font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--borderRadiusCircular); background: var(--surface); color: var(--ink-secondary); cursor: pointer; transition: all .12s; }
     .la-chip:hover { border-color: var(--blue); color: var(--blue); }
     .la-chip.on { background: var(--green-soft); border-color: #46a56b; color: #2f7a4f; }
+    /* segmented control, deliberately unlike the outcome chips above it */
+    .la-subchips{display:inline-flex;gap:3px;margin:9px 0 2px;padding:3px;background:#eef0f4;border-radius:9px;}
+    .la-subchip{border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:#5b6472;
+      padding:6px 13px;border-radius:7px;cursor:pointer;white-space:nowrap;}
+    .la-subchip:hover{color:#242b38;}
+    .la-subchip.on{background:#fff;color:#1e7a41;box-shadow:0 1px 2px rgba(20,24,34,.14);}
+    .la-hint2{font-size:12px;color:var(--ink-muted);margin-top:10px;}
+    .la-guide{margin-top:9px;border:1px solid #eceef3;background:#fbfbfd;border-radius:9px;padding:9px 11px;}
+    .la-guide-h{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8b93a1;}
+    .la-guide-h .material-symbols-outlined{font-size:14px;}
+    .la-guide-hint{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:600;color:#a2a7b3;}
+    .la-guide-l{list-style:none;margin:7px 0 0;padding:0;}
+    .la-guide-l li{margin:0 0 2px;}
+    .la-guide-l button{display:block;width:100%;text-align:left;border:none;background:none;padding:4px 6px;border-radius:6px;
+      font-family:inherit;font-size:12px;line-height:1.5;color:#3d4553;cursor:pointer;}
+    .la-guide-l button:hover{background:#f0f2f7;color:#242b38;}
+
+    .la-ai{margin-top:14px;border:1px solid #e4e2f6;background:#f8f7ff;border-radius:10px;padding:11px 13px;}
+    .la-ai-h{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6C4BE0;}
+    .la-ai-h .material-symbols-outlined{font-size:15px;}
+    .la-ai-b{font-size:12.5px;line-height:1.55;color:#2b3444;margin-top:7px;}
+    .la-ai-f{font-size:11px;color:#8b93a1;margin-top:7px;}
     .la-hint { font-size: 11.5px; color: var(--blue); margin-top: 4px; }
     .la-hint.ok { color: #2f7a4f; font-weight: 600; }
     .la-hint.danger { color: var(--red); font-weight: 600; }
@@ -1647,6 +1669,7 @@
         <div class="la-chips" id="laChips"></div>
       </div>
       <div id="laDynamic"></div>
+      <div class="la-ai" id="laAiSum" hidden></div>
       <div class="la-hint" id="laHint" style="display:none"></div>
       <div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
     </div>
@@ -1890,7 +1913,7 @@
             '<div class="wv-up-info"><span class="wv-up-name">'+name+'</span><span class="wv-up-meta"><span class="material-symbols-outlined">check_circle</span>Uploaded</span></div>' +
             '<label class="wv-up-replace">Replace<input type="file" accept="image/*,.pdf" onchange="onWaiverDocUpload(this,\''+doc.k+'\')" style="display:none"></label>' +
             '<button class="wv-up-remove" onclick="removeWaiverDoc(\''+doc.k+'\')" title="Remove"><span class="material-symbols-outlined">close</span></button>' +
-          '</div></div>';
+          '</div>' + '</div>';
       }
       return '<div class="wv-docslot"><div class="wv-docslot-lbl">'+doc.label+'</div>' +
         '<label class="wv-upload">' +
@@ -3162,62 +3185,41 @@
       var host = document.getElementById('laChips'); if (!host) return;
       var groups = laIsSalesStage() ? laOutcomeGroups.sales : (laAnswer === 'yes' ? laOutcomeGroups.yes : null);
       if (!groups) { host.innerHTML = ''; return; }
-      // Qualify and Visit stages get an extra customer-related outcome.
-      if (journeySteps[currentStep] && (journeySteps[currentStep].name === 'Qualify' || journeySteps[currentStep].name === 'Visit')) {
+      var stepName = journeySteps[currentStep] && journeySteps[currentStep].name;
+      if (stepName === 'Qualify' || stepName === 'Visit') {
         groups = { Internal: groups.Internal, External: ['Meet customer'].concat(groups.External) };
       }
-      // Ready for delivery stage: offer a "Schedule delivery" action.
-      if (journeySteps[currentStep] && journeySteps[currentStep].name === 'Ready for delivery') {
+      if (stepName === 'Ready for delivery') {
         groups = { Internal: groups.Internal, External: ['Schedule delivery'].concat(groups.External) };
       }
+      // WhatsApp and calls are how you reached them, not what happened: collapse them behind
+      // a single Channel chip on every sales stage.
+      var hasChannel = false;
+      if (laIsSalesStage()) {
+        var ext = groups.External.filter(function(o){ return o !== 'Send WhatsApp' && o !== 'Calls'; });
+        var at = ext.indexOf('Disqualify');
+        ext.splice(at > -1 ? at : ext.length, 0, 'Channel');
+        groups = { Internal: groups.Internal, External: ext };
+        hasChannel = true;
+      }
+      var channelOn = (laOutcome === 'Channel' || laOutcome === 'Send WhatsApp' || laOutcome === 'Calls');
       var groupLabels = { Internal: 'Internal', External: 'Customer related' };
       host.innerHTML = ['Internal','External'].map(function(g){
         var outs = groups[g] || []; if (!outs.length) return '';
-        return '<div class="la-outgroup"><div class="la-outgroup-h">'+groupLabels[g]+'</div><div class="la-chips-row">' +
-          outs.map(function(o){ return '<button class="la-chip'+(laOutcome===o?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>'; }).join('') +
-        '</div></div>';
+        var chips = outs.map(function(o){
+          var on = (o === 'Channel') ? channelOn : (laOutcome === o);
+          return '<button class="la-chip'+(on?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>';
+        }).join('');
+        var sub = (g === 'External' && hasChannel && channelOn)
+          ? '<div class="la-subchips">' + ['Send WhatsApp','Calls'].map(function(c){
+              return '<button class="la-subchip'+(laOutcome===c?' on':'')+'" data-out="'+c+'" onclick="setLaOutcome(this)">'+c+'</button>';
+            }).join('') + '</div>'
+          : '';
+        return '<div class="la-outgroup"><div class="la-outgroup-h">'+groupLabels[g]+'</div>' +
+          '<div class="la-chips-row">' + chips + '</div>' + sub + '</div>';
       }).join('');
     }
 
-    var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
-    var laReasonsNewContact = ['Out of Scope', 'Wrong Number', 'Not Interested', 'Submitted by Mistake', 'High Price', 'Inconvenient Location', 'Duplicate', 'General', 'Others'];
-    var laDisqualifyReasons = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands'];
-    var laLocations   = ['EXEED Dubai — SZR', 'EXEED Sharjah', 'EXEED Abu Dhabi — Corniche', 'EXEED Etihad Road'];
-    var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
-    // Call Center discovery questions — shared by the Discovery Questions tab and the Log activity panel.
-    var discoveryCallCenterQs = [
-      { label:'What is the main reason for the enquiry today?', opts:['Book test drive','Visit showroom','Ask about model/features','Check availability','Request brochure/video','Speak to sales executive','Other (specify)'], req:true },
-      { label:'Which EXEED model or vehicle type are you asking about?', opts:['LX','TXL','RX','VX','SUV - not sure','Open to recommendation','Other (specify)'], req:true, model:true },
-      { label:'Which showroom / area is most convenient?', opts:['SZR','Deira','Abu Dhabi','Sharjah / Northern Emirates','Any showroom','Home / office visit requested','Other (specify)'], req:true },
-      { label:'When should the sales executive best contact or meet you?', opts:['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other (specify)'], req:true },
-      { label:'Preferred communication channel?', opts:['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other (specify)'], req:false }
-    ];
-
-    // Sales Executive discovery questions — shown from Qualify onward, above the Call Center set.
-    var discoverySalesExecQs = [
-      { q:'What is your primary use case for the car?', subs:[ { opts:['Family car','Daily commute','Business/company use','Long trips','Upgrade current vehicle','Exploring options','Other (specify)'] } ] },
-      { q:'What are you driving today, and is it your only car or one of a few?', subs:[
-        { l:'Current vehicle', opts:['Toyota','Lexus','Nissan','Hyundai/Kia','German premium','Other Japanese/Korean','Chinese brand','No current vehicle','Other (specify)'] },
-        { l:'Car situation', opts:['Only car','One of multiple personal cars','Shared family car','Company/fleet vehicle','Not shared','Other (specify)'] } ], free:true },
-      { q:'What do you enjoy most about it — and if you could change one thing, what would it be?', subs:[
-        { l:'Enjoy most', opts:['Reliability','Comfort','Space','Technology/connectivity','Safety','Performance','Fuel economy','Brand/status','Low running cost','Nothing specific','Other (specify)'] },
-        { l:'Would change', opts:['Space','Fuel economy','Maintenance/running cost','Technology/connectivity','Safety/ADAS','Comfort/noise','Performance','Age/mileage','Reliability','Exterior/interior design','No change mentioned','Other (specify)'] } ], free:true },
-      { q:'Who usually travels with you — family, colleagues, or mostly yourself?', subs:[
-        { opts:['Self only','Spouse/partner','Family with children','Extended family','Clients/colleagues','Company/fleet users','Driver/chauffeur + passengers','Mixed passengers','Other (specify)'] } ], free:true },
-      { q:'Where do most of your drives take you, and roughly how far each week?', subs:[
-        { l:'Main usage', opts:['Daily city commute','Highway/inter-emirate','School/family errands','Long trips','Business/client transport','Off-road/outdoor','Mixed usage','Other (specify)'] },
-        { l:'Weekly distance', opts:['<100 km','100-250 km','250-500 km','500-800 km','800+ km','Not sure'] } ], free:true },
-      { q:'When choosing a car, what matters most to you?', subs:[
-        { opts:['Safety/ADAS','Space/3rd row','Comfort/luxury','Technology/connectivity','Fuel economy/hybrid','Reliability/warranty','Performance','Price/value','Availability/delivery timing','Brand/image','Resale value','Other (specify)'] } ], free:true },
-      { q:'Are you comparing any other models, and who else helps you decide?', tag:'Before quote', subs:[
-        { l:'Competitor / alternative', opts:['BYD','Jetour','Toyota','Lexus','Nissan','Geely/Changan','Hyundai/Kia','German premium','Not comparing','Other (specify)'] },
-        { l:'Decision helper', opts:['Self only','Spouse/partner','Parent/family member','Business partner','Company/procurement','Driver/main user','Other (specify)'] } ], free:true },
-      { q:'What budget range or monthly EMI are you comfortable with?', tag:'Before quote', subs:[], free:true, freeLabel:'Budget range / monthly EMI' },
-      { q:'What is your expected timeframe to purchase?', tag:'Before quote', subs:[
-        { opts:['Immediate / ready now','Within 1 week','Within 2-4 weeks','1-3 months','3+ months','Exploring only / no timeline yet','Other (specify)'] } ] },
-      { q:'What would make you feel completely confident moving forward?', subs:[
-        { opts:['Test drive experience','Clear final offer','Vehicle availability/color','Warranty/service clarity','Safety proof/reviews','Product comparison','Trade-in valuation','Family/decision-maker approval','Delivery timing','More time to think','Ready to proceed','Other (specify)'] } ], free:true }
-    ];
     function discoverySalesExecFields() {
       var fields = [];
       discoverySalesExecQs.forEach(function(q, i){
@@ -3246,15 +3248,65 @@
         opts.map(function(o, i){ return '<label class="la-radio-item"><input type="radio" name="' + name + '" value="' + o + '"' + (i === 0 ? ' checked' : '') + '><span>' + o + '</span></label>'; }).join('') +
       '</div></div>';
     }
+    // next round half-hour, so date and time are both usable defaults
+    function laNextSlot(){
+      var d = new Date(); d.setMinutes(d.getMinutes() + (30 - (d.getMinutes() % 30)), 0, 0);
+      var p = function(n){ return (n < 10 ? '0' : '') + n; };
+      return p(d.getHours()) + ':' + p(d.getMinutes());
+    }
     function laDateTime(label) {
       return '<span class="la-sublabel">' + label + ' <span class="req">*</span></span>' +
         '<div class="cp-grid2">' +
           '<div class="cp-field"><input class="cp-input" type="date" id="laDate" value="' + laToday + '"></div>' +
-          '<div class="cp-field"><input class="cp-input" type="time" id="laTime" lang="en-GB" step="60"></div>' +
+          '<div class="cp-field"><input class="cp-input" type="time" id="laTime" lang="en-GB" step="60" value="' + laNextSlot() + '"></div>' +
         '</div>';
     }
+    // Stage-specific prompts for the notes box — what a good note covers at this point.
+    var LA_NOTE_GUIDE = {
+      'Qualify': [
+        'Does the customer have a budget or target price in mind?',
+        'Which vehicle models are they considering?',
+        'Are they also looking at other brands or dealerships?',
+        'What is driving their interest in a new vehicle \u2014 a growing family, new technology, replacing an older car, upgrading?'
+      ],
+      'Visit': [
+        'Which vehicle did the customer show the most interest in?',
+        'What did they like most about it \u2014 price, features, performance, design, something else?',
+        'Did the customer raise any questions or concerns?',
+        'Based on the interaction, how likely are they to move forward with a purchase?'
+      ],
+      'Propose': [
+        'How did the customer respond to the proposal(s) you presented?',
+        'Which proposal appealed to them the most, and what influenced their preference?',
+        'How committed does the customer seem to buying at this stage?',
+        'Is there anything preventing them from moving ahead with the purchase?'
+      ],
+      'Accepted': [
+        'Has the customer placed the booking deposit? If not, what is holding them back?'
+      ]
+    };
+    function laNoteGuide(){
+      var stage = journeySteps[currentStep] && journeySteps[currentStep].name;
+      var qs = LA_NOTE_GUIDE[stage]; if (!qs) return '';
+      return '<div class="la-guide"><div class="la-guide-h">' +
+        '<span class="material-symbols-outlined">help</span>What to cover at ' + stage +
+        '<span class="la-guide-hint">tap to add</span></div><ul class="la-guide-l">' +
+        qs.map(function(q, i){
+          return '<li><button type="button" onclick="laAddPrompt(' + i + ')">' + q + '</button></li>';
+        }).join('') + '</ul></div>';
+    }
+    function laAddPrompt(i){
+      var stage = journeySteps[currentStep] && journeySteps[currentStep].name;
+      var qs = LA_NOTE_GUIDE[stage] || []; var q = qs[i]; if (!q) return;
+      var t = document.getElementById('laNoteText'); if (!t) return;
+      t.value = (t.value ? t.value.replace(/\s*$/, '') + '\n' : '') + q + '\n';
+      t.focus(); t.setSelectionRange(t.value.length, t.value.length);
+      if (typeof laRenderAi === 'function') laRenderAi();
+    }
     function laNotesField() {
-      return '<div class="cp-field"><label class="cp-label">Notes</label><textarea class="cp-textarea" id="laNoteText" placeholder="Conversation summary…"></textarea></div>';
+      return '<div class="cp-field"><label class="cp-label">Notes</label>' +
+        '<textarea class="cp-textarea" id="laNoteText" placeholder="Conversation summary…"></textarea>' +
+        laNoteGuide() + '</div>';
     }
     // Surfaces test drives already booked (e.g. from the Test Drive tab) inside the Log activity panel.
     function laExistingBookings() {
@@ -3310,6 +3362,8 @@
           }).join('') + '</div></div>';
         if (laNoReason !== 'Invalid number') { html += laDateTime('Reschedule'); }
         html += laNotesField();
+      } else if (laOutcome === 'Channel') {
+        html += '<div class="la-hint2">Pick WhatsApp or a call to log the outreach.</div>';
       } else if (laAnswer === 'yes' && laOutcome) {
         if (laOutcome === 'Book test drive') {
           html += laExistingBookings();
@@ -3353,6 +3407,50 @@
         }
       }
       host.innerHTML = html;
+      laRenderAi();
+      ['laNoteText','laDate','laTime','laLoc','laReasonComment'].forEach(function(id){
+        var el = document.getElementById(id); if (el) el.addEventListener('input', laRenderAi);
+      });
+    }
+
+    // Reads back what the rep entered — never states anything the form does not hold.
+    function laRenderAi(){
+      var box = document.getElementById('laAiSum'); if (!box) return;
+      var l = (selectedIdx > -1) ? leads[selectedIdx] : null;
+      if (!l || (!laOutcome && !laAnswer) || laOutcome === 'Channel'){ box.hidden = true; box.innerHTML = ''; return; }
+      var g = function(id){ var e = document.getElementById(id); return e && e.value ? e.value.trim() : ''; };
+      var stage = (journeySteps[currentStep] && journeySteps[currentStep].name) || l.stage;
+      var bits = [];
+
+      if (laAnswer === 'no'){
+        bits.push('Call attempt to <b>' + l.name + '</b> did not connect \u2014 ' + laNoReason.toLowerCase() + '.');
+        if (laNoReason !== 'Invalid number' && (g('laDate') || g('laTime'))) bits.push('Retry set for ' + laFmtDT(g('laDate'), g('laTime')) + '.');
+      } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls'){
+        bits.push((laOutcome === 'Calls' ? 'Called' : 'Messaged on WhatsApp') + ' <b>' + l.name + '</b> at the ' + stage + ' stage about ' + l.model + '.');
+        if (g('laDate') || g('laTime')) bits.push('Follow-up scheduled for ' + laFmtDT(g('laDate'), g('laTime')) + '.');
+      } else if (laOutcome === 'Book test drive'){
+        bits.push('Booked a test drive for <b>' + l.name + '</b>' + (tdSched.model ? ' in the ' + tdSched.model : '') + '.');
+        if (tdSched.date) bits.push(laFmtDT(tdSched.date, tdSched.time) + ' at ' + l.showroom + '.');
+      } else if (laOutcome === 'Meet customer'){
+        bits.push('Meeting logged with <b>' + l.name + '</b>' + ((g('laDate') || g('laTime')) ? ' for ' + laFmtDT(g('laDate'), g('laTime')) : '') + '.');
+      } else if (laOutcome === 'Transfer ownership'){
+        bits.push('Ownership of <b>' + l.name + '</b> moves to ' + (g('laTransferAgent') || 'another agent') + '.');
+      } else if (laOutcome === 'Return to call center'){
+        bits.push('<b>' + l.name + '</b> returned to the call centre \u2014 ' + (g('laReturnReason') || 'reason pending') + '.');
+      } else if (laOutcome === 'Disqualify'){
+        bits.push('<b>' + l.name + '</b> disqualified \u2014 ' + (laReasonSel || 'reason pending').toLowerCase() + '.');
+        if (g('laReasonComment')) bits.push(g('laReasonComment'));
+      } else if (laOutcome){
+        bits.push(laOutcome + ' logged against <b>' + l.name + '</b> at the ' + stage + ' stage.');
+      }
+
+      var note = g('laNoteText');
+      if (note) bits.push('Notes: ' + note);
+      if (!bits.length){ box.hidden = true; box.innerHTML = ''; return; }
+      box.hidden = false;
+      box.innerHTML = '<div class="la-ai-h"><span class="material-symbols-outlined">auto_awesome</span>AI summary' +
+        '</div><div class="la-ai-b">' + bits.join(' ') + '</div>' +
+        '<div class="la-ai-f">Saved to the timeline when you press Save \u2014 edit the fields above to change it.</div>';
     }
 
     function openLogActivity() {
@@ -3422,8 +3520,10 @@
 
     function setLaOutcome(btn) {
       laOutcome = btn.getAttribute('data-out');
-      document.querySelectorAll('#laChips .la-chip').forEach(function(c){ c.classList.toggle('on', c === btn); });
+      if (laOutcome === 'Channel') laOutcome = 'Send WhatsApp';
       if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: TD_TODAY, time: TD_NOW }; tdShowToday(); }
+      // re-render the row: the Channel chip opens its channels beneath it, so classes alone are not enough
+      renderOutcomeChips();
       renderLaFields();
       updateLaHint();
     }
