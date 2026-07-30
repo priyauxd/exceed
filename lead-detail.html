@@ -2834,7 +2834,6 @@
             {label:'Model Code', val:''}
           ]},
           { title:'Lead Qualification', fields:[
-            {label:'Qualification', type:'select', radioChips:['Qualify','Not Qualify'], radioName:'leadQualification', val:'Qualify', req:true, ai: !!(l._aiFields && l._aiFields.qualification)},
             {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
             {label:'Lead Source', type:'lookup', val:l.source, req:true},
             {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true, ai: !!(l._aiFields && l._aiFields.channel)},
