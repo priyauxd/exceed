@@ -1333,6 +1333,15 @@
     .la-subchip:hover{color:#242b38;}
     .la-subchip.on{background:#fff;color:#1e7a41;box-shadow:0 1px 2px rgba(20,24,34,.14);}
     .la-hint2{font-size:12px;color:var(--ink-muted);margin-top:10px;}
+    .la-notes-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:5px;}
+    .la-rec{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);background:var(--surface);
+      color:var(--ink-secondary);border-radius:20px;padding:4px 11px;font-family:inherit;font-size:11.5px;font-weight:600;cursor:pointer;}
+    .la-rec:hover{border-color:var(--blue);color:var(--blue);}
+    .la-rec .material-symbols-outlined{font-size:15px;}
+    .la-rec.on{background:#fdecea;border-color:#c0392b;color:#c0392b;}
+    .la-rec.on .material-symbols-outlined{animation:laRecPulse 1.2s ease-in-out infinite;}
+    @keyframes laRecPulse{0%,100%{opacity:1;}50%{opacity:.35;}}
+
     .la-guide{margin-top:9px;border:1px solid #eceef3;background:#fbfbfd;border-radius:9px;padding:9px 11px;}
     .la-guide-h{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#8b93a1;}
     .la-guide-h .material-symbols-outlined{font-size:14px;}
@@ -3167,11 +3176,11 @@
 
     // Outcomes grouped into Internal / External, per stage bucket.
     var laOutcomeGroups = {
-      sales: { Internal: ['Alerts', 'Return to call center', 'Transfer ownership'], External: ['WhatsApp', 'Email', 'Call', 'Disqualify'] },
+      sales: { Internal: ['Follow up', 'Return to call center', 'Transfer ownership'], External: ['WhatsApp', 'Email', 'Call', 'Disqualify'] },
       yes:   { Internal: ['Transfer ownership'], External: ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'] }
     };
     // Flat list of "action" (non-stage-routing) outcomes for submit/validation.
-    var laSalesOutcomes = ['Alerts', 'Return to call center', 'Transfer ownership', 'WhatsApp', 'Email', 'Call', 'Disqualify', 'Meet customer', 'Schedule delivery'];
+    var laSalesOutcomes = ['Follow up', 'Return to call center', 'Transfer ownership', 'WhatsApp', 'Email', 'Call', 'Disqualify', 'Meet customer', 'Schedule delivery'];
     var LA_UPDATE_CHANNELS = ['WhatsApp', 'Email', 'Call'];
     var laReturnReasons = ['Wrong assignment', 'Not sales-ready', 'Customer request', 'Duplicate lead', 'Other'];
     var laAgents = ['Mariam Saeed', 'Nadia Al Amiri', 'Mariam Khalil', 'Priyamvada K.', 'Saravanakumar Subramani', 'Basel Talalini'];
@@ -3361,9 +3370,55 @@
       if (c) c.textContent = done + ' of ' + qs.length + ' covered';
     }
     function laNotesField() {
-      return '<div class="cp-field"><label class="cp-label">Notes</label>' +
+      return '<div class="cp-field"><div class="la-notes-head"><label class="cp-label" style="margin:0">Notes</label>' +
+          '<button type="button" class="la-rec" id="laRecBtn" onclick="laRecToggle()">' +
+            '<span class="material-symbols-outlined">mic</span><span id="laRecLbl">Record</span></button>' +
+        '</div>' +
         '<textarea class="cp-textarea" id="laNoteText" placeholder="Conversation summary…"></textarea>' +
         laNoteGuide() + '</div>';
+    }
+    // Dictation straight into the note. Browser speech API where it exists; nothing is sent anywhere else.
+    var laRec = null, laRecOn = false;
+    function laRecToggle(){
+      var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR){ showToast('Voice notes need Chrome or Edge on this device'); return; }
+      if (laRecOn){ laRecStop(); return; }
+      var t = document.getElementById('laNoteText'); if (!t) return;
+      laRec = new SR();
+      laRec.lang = 'en-AE'; laRec.continuous = true; laRec.interimResults = true;
+      var base = t.value ? t.value.replace(/\s*$/, '') + ' ' : '';
+      laRec.onresult = function(e){
+        var fin = '', mid = '';
+        for (var i = e.resultIndex; i < e.results.length; i++){
+          var r = e.results[i];
+          if (r.isFinal) fin += r[0].transcript; else mid += r[0].transcript;
+        }
+        if (fin) base += fin.trim() + ' ';
+        t.value = (base + mid).replace(/\s+$/, ' ');
+        laNoteTick();
+      };
+      laRec.onerror = function(ev){
+        laRecStop();
+        showToast(ev.error === 'not-allowed' ? 'Microphone blocked \u2014 allow access to dictate' : 'Could not record \u2014 type the note instead');
+      };
+      laRec.onend = function(){ if (laRecOn) laRecStop(); };
+      try { laRec.start(); } catch(e){ return; }
+      laRecOn = true; laRecPaint();
+    }
+    function laRecStop(){
+      laRecOn = false;
+      if (laRec){ try { laRec.stop(); } catch(e){} laRec = null; }
+      laRecPaint();
+      var t = document.getElementById('laNoteText');
+      if (t){ t.value = t.value.replace(/\s+$/, ''); t.focus(); laNoteTick(); }
+    }
+    function laRecPaint(){
+      var b = document.getElementById('laRecBtn'), l = document.getElementById('laRecLbl');
+      if (!b || !l) return;
+      b.classList.toggle('on', laRecOn);
+      l.textContent = laRecOn ? 'Stop' : 'Record';
+      var ico = b.querySelector('.material-symbols-outlined');
+      if (ico) ico.textContent = laRecOn ? 'stop_circle' : 'mic';
     }
     // Surfaces test drives already booked (e.g. from the Test Drive tab) inside the Log activity panel.
     function laExistingBookings() {
@@ -3445,8 +3500,8 @@
         } else if (laOutcome === 'Schedule delivery') {
           html += laDateTime('Delivery date & time');
           html += laNotesField();
-        } else if (laOutcome === 'Alerts') {
-          html += '<div class="cp-field"><label class="cp-label">Alert note <span class="req">*</span></label><textarea class="cp-textarea" id="laNoteText" placeholder="This note will appear as an alert to the agent…"></textarea></div>';
+        } else if (laOutcome === 'Follow up') {
+          html += '<div class="cp-field"><label class="cp-label">Follow-up note <span class="req">*</span></label><textarea class="cp-textarea" id="laNoteText" placeholder="This note will appear as an alert to the agent…"></textarea></div>';
         } else if (laOutcome === 'Transfer ownership') {
           html += laSelect('laTransferAgent', 'Transfer to', laAgents, true);
           html += laNotesField();
@@ -3508,7 +3563,7 @@
         }
         if (laOutcome === 'Return to call center') { h.textContent = 'Saving will return this lead to the call center.'; h.className = 'la-hint danger'; h.style.display = ''; return; }
         if (laOutcome === 'Meet customer') { h.textContent = 'Saving will log the customer meeting.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
-        if (laOutcome === 'Alerts') { h.textContent = 'Saving will raise an alert note for the agent.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
+        if (laOutcome === 'Follow up') { h.textContent = 'Saving will raise a follow-up note for the agent.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         if (laOutcome === 'Transfer ownership') { h.textContent = 'Saving will transfer ownership of this lead.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         h.textContent = 'Saving will log the outreach and schedule a follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
       }
@@ -3583,10 +3638,10 @@
           l.nextCall = { date: f.date, time: f.time, note: notes };
           l.activities.unshift({ type: 'visit', text: ['Met customer', when || '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast('Customer meeting logged' + (when ? ' · ' + when : ''));
-        } else if (laOutcome === 'Alerts') {
+        } else if (laOutcome === 'Follow up') {
           l.alert = notes;
-          l.activities.unshift({ type: 'note', text: ['Alert', notes].filter(Boolean).join(' — '), time: '2026-07-07 12:00' });
-          showToast('Alert raised for the agent');
+          l.activities.unshift({ type: 'note', text: ['Follow up', notes].filter(Boolean).join(' — '), time: '2026-07-07 12:00' });
+          showToast('Follow-up raised for the agent');
         } else if (laOutcome === 'Transfer ownership') {
           var ag = f.transferAgent || l.owner;
           l.owner = ag;
