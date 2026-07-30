@@ -3220,6 +3220,42 @@
       }).join('');
     }
 
+    // Question sets lost in an earlier splice — the Discovery Questions tab threw on click without them.
+    var discoveryCallCenterQs = [
+      { label:'What is the main reason for the enquiry today?', opts:['Book test drive','Visit showroom','Ask about model/features','Check availability','Request brochure/video','Speak to sales executive','Other (specify)'], req:true },
+      { label:'Which EXEED model or vehicle type are you asking about?', opts:['LX','TXL','RX','VX','SUV - not sure','Open to recommendation','Other (specify)'], req:true, model:true },
+      { label:'Which showroom / area is most convenient?', opts:['SZR','Deira','Abu Dhabi','Sharjah / Northern Emirates','Any showroom','Home / office visit requested','Other (specify)'], req:true },
+      { label:'When should the sales executive best contact or meet you?', opts:['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other (specify)'], req:true },
+      { label:'Preferred communication channel?', opts:['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other (specify)'], req:false }
+    ];
+    var discoverySalesExecQs = [
+      { q:'What is your primary use case for the car?', subs:[ { opts:['Family car','Daily commute','Business/company use','Long trips','Upgrade current vehicle','Exploring options','Other (specify)'] } ] },
+      { q:'What are you driving today, and is it your only car or one of a few?', subs:[
+        { l:'Current vehicle', opts:['Toyota','Lexus','Nissan','Hyundai/Kia','German premium','Other Japanese/Korean','Chinese brand','No current vehicle','Other (specify)'] },
+        { l:'Car situation', opts:['Only car','One of multiple personal cars','Shared family car','Company/fleet vehicle','Not shared','Other (specify)'] } ], free:true },
+      { q:'What do you enjoy most about it — and if you could change one thing, what would it be?', subs:[
+        { l:'Enjoy most', opts:['Reliability','Comfort','Space','Technology/connectivity','Safety','Performance','Fuel economy','Brand/status','Low running cost','Nothing specific','Other (specify)'] },
+        { l:'Would change', opts:['Space','Fuel economy','Maintenance/running cost','Technology/connectivity','Safety/ADAS','Comfort/noise','Performance','Age/mileage','Reliability','Exterior/interior design','No change mentioned','Other (specify)'] } ], free:true },
+      { q:'Who usually travels with you — family, colleagues, or mostly yourself?', subs:[
+        { opts:['Self only','Spouse/partner','Family with children','Extended family','Clients/colleagues','Company/fleet users','Driver/chauffeur + passengers','Mixed passengers','Other (specify)'] } ], free:true },
+      { q:'Where do most of your drives take you, and roughly how far each week?', subs:[
+        { l:'Main usage', opts:['Daily city commute','Highway/inter-emirate','School/family errands','Long trips','Business/client transport','Off-road/outdoor','Mixed usage','Other (specify)'] },
+        { l:'Weekly distance', opts:['<100 km','100-250 km','250-500 km','500-800 km','800+ km','Not sure'] } ], free:true },
+      { q:'When choosing a car, what matters most to you?', subs:[
+        { opts:['Safety/ADAS','Space/3rd row','Comfort/luxury','Technology/connectivity','Fuel economy/hybrid','Reliability/warranty','Performance','Price/value','Availability/delivery timing','Brand/image','Resale value','Other (specify)'] } ], free:true },
+      { q:'Are you comparing any other models, and who else helps you decide?', tag:'Before quote', subs:[
+        { l:'Competitor / alternative', opts:['BYD','Jetour','Toyota','Lexus','Nissan','Geely/Changan','Hyundai/Kia','German premium','Not comparing','Other (specify)'] },
+        { l:'Decision helper', opts:['Self only','Spouse/partner','Parent/family member','Business partner','Company/procurement','Driver/main user','Other (specify)'] } ], free:true },
+      { q:'What budget range or monthly EMI are you comfortable with?', tag:'Before quote', subs:[], free:true, freeLabel:'Budget range / monthly EMI' },
+      { q:'What is your expected timeframe to purchase?', tag:'Before quote', subs:[
+        { opts:['Immediate / ready now','Within 1 week','Within 2-4 weeks','1-3 months','3+ months','Exploring only / no timeline yet','Other (specify)'] } ] },
+      { q:'What would make you feel completely confident moving forward?', subs:[
+        { opts:['Test drive experience','Clear final offer','Vehicle availability/color','Warranty/service clarity','Safety proof/reviews','Product comparison','Trade-in valuation','Family/decision-maker approval','Delivery timing','More time to think','Ready to proceed','Other (specify)'] } ], free:true }
+    ];
+    var laDisqualifyReasons = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands'];
+    var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
+    var laReasonsNewContact = ['Out of Scope', 'Wrong Number', 'Not Interested', 'Submitted by Mistake', 'High Price', 'Inconvenient Location', 'Duplicate', 'General', 'Others'];
+
     function discoverySalesExecFields() {
       var fields = [];
       discoverySalesExecQs.forEach(function(q, i){
