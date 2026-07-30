@@ -1338,16 +1338,11 @@
     .la-guide-h .material-symbols-outlined{font-size:14px;}
     .la-guide-hint{margin-left:auto;text-transform:none;letter-spacing:0;font-weight:600;color:#a2a7b3;}
     .la-guide-l{list-style:none;margin:7px 0 0;padding:0;}
-    .la-guide-l li{margin:0 0 2px;}
-    .la-guide-l button{display:block;width:100%;text-align:left;border:none;background:none;padding:4px 6px;border-radius:6px;
-      font-family:inherit;font-size:12px;line-height:1.5;color:#3d4553;cursor:pointer;}
-    .la-guide-l button:hover{background:#f0f2f7;color:#242b38;}
+    .la-guide-l li{display:flex;align-items:flex-start;gap:7px;font-size:12px;line-height:1.5;color:#6b7488;padding:4px 2px;}
+    .la-guide-l li.on{color:#1e7a41;}
+    .la-g-ico{font-size:16px;color:#c3c9d4;flex-shrink:0;margin-top:1px;}
+    .la-guide-l li.on .la-g-ico{color:#1e7a41;font-variation-settings:'FILL' 1;}
 
-    .la-ai{margin-top:14px;border:1px solid #e4e2f6;background:#f8f7ff;border-radius:10px;padding:11px 13px;}
-    .la-ai-h{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6C4BE0;}
-    .la-ai-h .material-symbols-outlined{font-size:15px;}
-    .la-ai-b{font-size:12.5px;line-height:1.55;color:#2b3444;margin-top:7px;}
-    .la-ai-f{font-size:11px;color:#8b93a1;margin-top:7px;}
     .la-hint { font-size: 11.5px; color: var(--blue); margin-top: 4px; }
     .la-hint.ok { color: #2f7a4f; font-weight: 600; }
     .la-hint.danger { color: var(--red); font-weight: 600; }
@@ -1669,7 +1664,6 @@
         <div class="la-chips" id="laChips"></div>
       </div>
       <div id="laDynamic"></div>
-      <div class="la-ai" id="laAiSum" hidden></div>
       <div class="la-hint" id="laHint" style="display:none"></div>
       <div id="laError" style="display:none;color:var(--red);font-size:11.5px;margin-top:4px"></div>
     </div>
@@ -3173,11 +3167,12 @@
 
     // Outcomes grouped into Internal / External, per stage bucket.
     var laOutcomeGroups = {
-      sales: { Internal: ['Alerts', 'Return to call center', 'Transfer ownership'], External: ['Send WhatsApp', 'Calls', 'Disqualify'] },
+      sales: { Internal: ['Alerts', 'Return to call center', 'Transfer ownership'], External: ['WhatsApp', 'Email', 'Call', 'Disqualify'] },
       yes:   { Internal: ['Transfer ownership'], External: ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'] }
     };
     // Flat list of "action" (non-stage-routing) outcomes for submit/validation.
-    var laSalesOutcomes = ['Alerts', 'Return to call center', 'Transfer ownership', 'Send WhatsApp', 'Calls', 'Disqualify', 'Meet customer', 'Schedule delivery'];
+    var laSalesOutcomes = ['Alerts', 'Return to call center', 'Transfer ownership', 'WhatsApp', 'Email', 'Call', 'Disqualify', 'Meet customer', 'Schedule delivery'];
+    var LA_UPDATE_CHANNELS = ['WhatsApp', 'Email', 'Call'];
     var laReturnReasons = ['Wrong assignment', 'Not sales-ready', 'Customer request', 'Duplicate lead', 'Other'];
     var laAgents = ['Mariam Saeed', 'Nadia Al Amiri', 'Mariam Khalil', 'Priyamvada K.', 'Saravanakumar Subramani', 'Basel Talalini'];
     function laIsSalesStage(){ return currentStep >= 2; }
@@ -3196,22 +3191,22 @@
       // a single Channel chip on every sales stage.
       var hasChannel = false;
       if (laIsSalesStage()) {
-        var ext = groups.External.filter(function(o){ return o !== 'Send WhatsApp' && o !== 'Calls'; });
+        var ext = groups.External.filter(function(o){ return LA_UPDATE_CHANNELS.indexOf(o) === -1; });
         var at = ext.indexOf('Disqualify');
-        ext.splice(at > -1 ? at : ext.length, 0, 'Channel');
+        ext.splice(at > -1 ? at : ext.length, 0, 'Update');
         groups = { Internal: groups.Internal, External: ext };
         hasChannel = true;
       }
-      var channelOn = (laOutcome === 'Channel' || laOutcome === 'Send WhatsApp' || laOutcome === 'Calls');
+      var channelOn = (laOutcome === 'Update' || LA_UPDATE_CHANNELS.indexOf(laOutcome) > -1);
       var groupLabels = { Internal: 'Internal', External: 'Customer related' };
       host.innerHTML = ['Internal','External'].map(function(g){
         var outs = groups[g] || []; if (!outs.length) return '';
         var chips = outs.map(function(o){
-          var on = (o === 'Channel') ? channelOn : (laOutcome === o);
+          var on = (o === 'Update') ? channelOn : (laOutcome === o);
           return '<button class="la-chip'+(on?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>';
         }).join('');
         var sub = (g === 'External' && hasChannel && channelOn)
-          ? '<div class="la-subchips">' + ['Send WhatsApp','Calls'].map(function(c){
+          ? '<div class="la-subchips">' + LA_UPDATE_CHANNELS.map(function(c){
               return '<button class="la-subchip'+(laOutcome===c?' on':'')+'" data-out="'+c+'" onclick="setLaOutcome(this)">'+c+'</button>';
             }).join('') + '</div>'
           : '';
@@ -3297,47 +3292,73 @@
           '<div class="cp-field"><input class="cp-input" type="time" id="laTime" lang="en-GB" step="60" value="' + laNextSlot() + '"></div>' +
         '</div>';
     }
-    // Stage-specific prompts for the notes box — what a good note covers at this point.
+    // Stage prompts for the notes box. Each carries the words that mean it was covered —
+    // the tick is a checkpoint for the rep, never a gate on saving.
     var LA_NOTE_GUIDE = {
       'Qualify': [
-        'Does the customer have a budget or target price in mind?',
-        'Which vehicle models are they considering?',
-        'Are they also looking at other brands or dealerships?',
-        'What is driving their interest in a new vehicle \u2014 a growing family, new technology, replacing an older car, upgrading?'
+        { q:'Does the customer have a budget or target price in mind?',
+          kw:['budget','price','aed','monthly','installment','instalment','finance','down payment','afford'] },
+        { q:'Which vehicle models are they considering?',
+          kw:['lx','rx','vx','txl','model','exeed','variant','trim'] },
+        { q:'Are they also looking at other brands or dealerships?',
+          kw:['toyota','nissan','hyundai','kia','honda','jetour','geely','lexus','mg','chery','haval','brand','dealer','competitor','comparing','cross-shop'] },
+        { q:'What is driving their interest in a new vehicle \u2014 a growing family, new technology, replacing an older car, upgrading?',
+          kw:['family','kids','children','upgrade','upgrading','replace','replacing','old car','technology','space','commute','need'] }
       ],
       'Visit': [
-        'Which vehicle did the customer show the most interest in?',
-        'What did they like most about it \u2014 price, features, performance, design, something else?',
-        'Did the customer raise any questions or concerns?',
-        'Based on the interaction, how likely are they to move forward with a purchase?'
+        { q:'Which vehicle did the customer show the most interest in?',
+          kw:['lx','rx','vx','txl','model','interested in','liked the','showed interest'] },
+        { q:'What did they like most about it \u2014 price, features, performance, design, something else?',
+          kw:['price','feature','performance','design','interior','space','safety','screen','comfort','liked'] },
+        { q:'Did the customer raise any questions or concerns?',
+          kw:['concern','question','asked','worried','issue','doubt','hesitant','objection'] },
+        { q:'Based on the interaction, how likely are they to move forward with a purchase?',
+          kw:['likely','ready','keen','hot','warm','cold','unlikely','will buy','considering','decide'] }
       ],
       'Propose': [
-        'How did the customer respond to the proposal(s) you presented?',
-        'Which proposal appealed to them the most, and what influenced their preference?',
-        'How committed does the customer seem to buying at this stage?',
-        'Is there anything preventing them from moving ahead with the purchase?'
+        { q:'How did the customer respond to the proposal(s) you presented?',
+          kw:['proposal','quote','quotation','offer','responded','reaction','feedback','happy','unhappy'] },
+        { q:'Which proposal appealed to them the most, and what influenced their preference?',
+          kw:['preferred','chose','option','package','appealed','because','influenced','favour','favor'] },
+        { q:'How committed does the customer seem to buying at this stage?',
+          kw:['committed','ready','confirm','decide','serious','still thinking','undecided'] },
+        { q:'Is there anything preventing them from moving ahead with the purchase?',
+          kw:['blocker','waiting','approval','spouse','finance','bank','budget','delay','concern','before'] }
       ],
       'Accepted': [
-        'Has the customer placed the booking deposit? If not, what is holding them back?'
+        { q:'Has the customer placed the booking deposit? If not, what is holding them back?',
+          kw:['deposit','booking','paid','payment','transfer','holding','pending','waiting'] }
       ]
     };
     function laNoteGuide(){
       var stage = journeySteps[currentStep] && journeySteps[currentStep].name;
       var qs = LA_NOTE_GUIDE[stage]; if (!qs) return '';
-      return '<div class="la-guide"><div class="la-guide-h">' +
-        '<span class="material-symbols-outlined">help</span>What to cover at ' + stage +
-        '<span class="la-guide-hint">tap to add</span></div><ul class="la-guide-l">' +
-        qs.map(function(q, i){
-          return '<li><button type="button" onclick="laAddPrompt(' + i + ')">' + q + '</button></li>';
+      return '<div class="la-guide" id="laGuide"><div class="la-guide-h">' +
+        '<span class="material-symbols-outlined">checklist</span>Guideline to cover at ' + stage +
+        '<span class="la-guide-hint" id="laGuideCount"></span></div><ul class="la-guide-l">' +
+        qs.map(function(g, i){
+          return '<li id="laG' + i + '"><span class="material-symbols-outlined la-g-ico">radio_button_unchecked</span>' +
+            '<span>' + g.q + '</span></li>';
         }).join('') + '</ul></div>';
     }
-    function laAddPrompt(i){
+    // Ticks a point once the note mentions it. Nothing is blocked either way.
+    function laNoteTick(){
+      var host = document.getElementById('laGuide'); if (!host) return;
       var stage = journeySteps[currentStep] && journeySteps[currentStep].name;
-      var qs = LA_NOTE_GUIDE[stage] || []; var q = qs[i]; if (!q) return;
-      var t = document.getElementById('laNoteText'); if (!t) return;
-      t.value = (t.value ? t.value.replace(/\s*$/, '') + '\n' : '') + q + '\n';
-      t.focus(); t.setSelectionRange(t.value.length, t.value.length);
-      if (typeof laRenderAi === 'function') laRenderAi();
+      var qs = LA_NOTE_GUIDE[stage] || [];
+      var t = document.getElementById('laNoteText');
+      var txt = (t && t.value ? t.value : '').toLowerCase();
+      var done = 0;
+      qs.forEach(function(g, i){
+        var hit = txt.length > 2 && g.kw.some(function(k){ return txt.indexOf(k) > -1; });
+        var li = document.getElementById('laG' + i); if (!li) return;
+        li.classList.toggle('on', hit);
+        var ico = li.querySelector('.la-g-ico');
+        if (ico) ico.textContent = hit ? 'check_circle' : 'radio_button_unchecked';
+        if (hit) done++;
+      });
+      var c = document.getElementById('laGuideCount');
+      if (c) c.textContent = done + ' of ' + qs.length + ' covered';
     }
     function laNotesField() {
       return '<div class="cp-field"><label class="cp-label">Notes</label>' +
@@ -3396,10 +3417,10 @@
           ['Invalid number','Not reachable','Voicemail','Switched off'].map(function(o){
             return '<label class="la-radio-item"><input type="radio" name="laNoReason" value="'+o+'"'+(laNoReason===o?' checked':'')+' onchange="setLaNoReason(\''+o+'\')"><span>'+o+'</span></label>';
           }).join('') + '</div></div>';
-        if (laNoReason !== 'Invalid number') { html += laDateTime('Reschedule'); }
+        if (laNoReason !== 'Invalid number') { html += laDateTime('Retry call'); }
         html += laNotesField();
-      } else if (laOutcome === 'Channel') {
-        html += '<div class="la-hint2">Pick WhatsApp or a call to log the outreach.</div>';
+      } else if (laOutcome === 'Update') {
+        html += '<div class="la-hint2">Pick a channel to log the update.</div>';
       } else if (laAnswer === 'yes' && laOutcome) {
         if (laOutcome === 'Book test drive') {
           html += laExistingBookings();
@@ -3411,13 +3432,13 @@
           html += laDateTime('Date & time');
           html += laNotesField();
         } else if (laOutcome === 'Needs time') {
-          html += laDateTime('Reschedule call');
+          html += laDateTime('Next follow-up');
           html += laNotesField();
         } else if (laOutcome === 'Not interested') {
           html += laReasonField(currentStep <= 1 ? laReasonsNewContact : laReasons);
-        } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls') {
-          html += laDateTime('Reschedule');
+        } else if (LA_UPDATE_CHANNELS.indexOf(laOutcome) > -1) {
           html += laNotesField();
+          html += laDateTime('Next follow-up');
         } else if (laOutcome === 'Meet customer') {
           html += laDateTime('Meeting date & time');
           html += laNotesField();
@@ -3443,50 +3464,9 @@
         }
       }
       host.innerHTML = html;
-      laRenderAi();
-      ['laNoteText','laDate','laTime','laLoc','laReasonComment'].forEach(function(id){
-        var el = document.getElementById(id); if (el) el.addEventListener('input', laRenderAi);
-      });
-    }
-
-    // Reads back what the rep entered — never states anything the form does not hold.
-    function laRenderAi(){
-      var box = document.getElementById('laAiSum'); if (!box) return;
-      var l = (selectedIdx > -1) ? leads[selectedIdx] : null;
-      if (!l || (!laOutcome && !laAnswer) || laOutcome === 'Channel'){ box.hidden = true; box.innerHTML = ''; return; }
-      var g = function(id){ var e = document.getElementById(id); return e && e.value ? e.value.trim() : ''; };
-      var stage = (journeySteps[currentStep] && journeySteps[currentStep].name) || l.stage;
-      var bits = [];
-
-      if (laAnswer === 'no'){
-        bits.push('Call attempt to <b>' + l.name + '</b> did not connect \u2014 ' + laNoReason.toLowerCase() + '.');
-        if (laNoReason !== 'Invalid number' && (g('laDate') || g('laTime'))) bits.push('Retry set for ' + laFmtDT(g('laDate'), g('laTime')) + '.');
-      } else if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls'){
-        bits.push((laOutcome === 'Calls' ? 'Called' : 'Messaged on WhatsApp') + ' <b>' + l.name + '</b> at the ' + stage + ' stage about ' + l.model + '.');
-        if (g('laDate') || g('laTime')) bits.push('Follow-up scheduled for ' + laFmtDT(g('laDate'), g('laTime')) + '.');
-      } else if (laOutcome === 'Book test drive'){
-        bits.push('Booked a test drive for <b>' + l.name + '</b>' + (tdSched.model ? ' in the ' + tdSched.model : '') + '.');
-        if (tdSched.date) bits.push(laFmtDT(tdSched.date, tdSched.time) + ' at ' + l.showroom + '.');
-      } else if (laOutcome === 'Meet customer'){
-        bits.push('Meeting logged with <b>' + l.name + '</b>' + ((g('laDate') || g('laTime')) ? ' for ' + laFmtDT(g('laDate'), g('laTime')) : '') + '.');
-      } else if (laOutcome === 'Transfer ownership'){
-        bits.push('Ownership of <b>' + l.name + '</b> moves to ' + (g('laTransferAgent') || 'another agent') + '.');
-      } else if (laOutcome === 'Return to call center'){
-        bits.push('<b>' + l.name + '</b> returned to the call centre \u2014 ' + (g('laReturnReason') || 'reason pending') + '.');
-      } else if (laOutcome === 'Disqualify'){
-        bits.push('<b>' + l.name + '</b> disqualified \u2014 ' + (laReasonSel || 'reason pending').toLowerCase() + '.');
-        if (g('laReasonComment')) bits.push(g('laReasonComment'));
-      } else if (laOutcome){
-        bits.push(laOutcome + ' logged against <b>' + l.name + '</b> at the ' + stage + ' stage.');
-      }
-
-      var note = g('laNoteText');
-      if (note) bits.push('Notes: ' + note);
-      if (!bits.length){ box.hidden = true; box.innerHTML = ''; return; }
-      box.hidden = false;
-      box.innerHTML = '<div class="la-ai-h"><span class="material-symbols-outlined">auto_awesome</span>AI summary' +
-        '</div><div class="la-ai-b">' + bits.join(' ') + '</div>' +
-        '<div class="la-ai-f">Saved to the timeline when you press Save \u2014 edit the fields above to change it.</div>';
+      var nt = document.getElementById('laNoteText');
+      if (nt) nt.addEventListener('input', laNoteTick);
+      laNoteTick();
     }
 
     function openLogActivity() {
@@ -3556,7 +3536,7 @@
 
     function setLaOutcome(btn) {
       laOutcome = btn.getAttribute('data-out');
-      if (laOutcome === 'Channel') laOutcome = 'Send WhatsApp';
+      if (laOutcome === 'Update') laOutcome = 'WhatsApp';
       if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: TD_TODAY, time: TD_NOW }; tdShowToday(); }
       // re-render the row: the Channel chip opens its channels beneath it, so classes alone are not enough
       renderOutcomeChips();
@@ -3594,9 +3574,9 @@
           showToast('Missed attempt logged — ' + laNoReason + (when ? ' · ' + when : ''));
         }
       } else if (laSalesOutcomes.indexOf(laOutcome) !== -1) {
-        if (laOutcome === 'Send WhatsApp' || laOutcome === 'Calls') {
+        if (LA_UPDATE_CHANNELS.indexOf(laOutcome) > -1) {
           l.nextCall = { date: f.date, time: f.time, note: notes };
-          var ot = laOutcome === 'Send WhatsApp' ? 'whatsapp' : 'call';
+          var ot = laOutcome === 'WhatsApp' ? 'whatsapp' : (laOutcome === 'Email' ? 'email' : 'call');
           l.activities.unshift({ type: ot, text: [laOutcome, when ? 'follow-up ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast(laOutcome + (when ? ' · follow-up ' + when : ''));
         } else if (laOutcome === 'Meet customer') {
