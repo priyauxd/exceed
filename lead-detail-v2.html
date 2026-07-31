@@ -906,6 +906,55 @@
     .sw-td-act { text-align: right; }
     .sw-td-act .tdc-item-action { display: inline-flex; align-items: center; gap: 4px; }
     .sw-td-act .material-symbols-outlined { font-size: 14px; }
+    .dp-if[hidden] { display: none; }
+    /* ── Discovery capture (chips) ── */
+    .dq-prog { display:flex; align-items:center; gap:9px; margin:0 0 14px; }
+    .dq-prog-bar { flex:1; height:4px; background:var(--bg); border-radius:3px; overflow:hidden; }
+    .dq-prog-bar i { display:block; height:100%; background:var(--blue); border-radius:3px; transition:width .25s; }
+    .dq-prog-txt { font-size:10.5px; font-weight:600; color:var(--ink-muted); white-space:nowrap; }
+    .dq-list { display:flex; flex-direction:column; }
+    .dq-group { padding:18px 0 20px; border-bottom:1px solid var(--border-soft); }
+    .dq-group:first-child { padding-top:2px; }
+    .dq-group:last-child { border-bottom:none; }
+    .dq-q.dq-follow { margin-top:16px; }
+    .dq-q[hidden], .dq-note[hidden], .dq-notebtn[hidden], .dq-notebox[hidden], .dq-other[hidden] { display:none; }
+    .dq-head { display:flex; align-items:flex-start; gap:8px; }
+    .dq-n { flex:0 0 auto; width:18px; height:18px; margin-top:1px; border-radius:50%; background:var(--blue-soft);
+      color:var(--blue); font-size:10px; font-weight:700; display:grid; place-items:center; }
+    .dq-label { font-size:12.5px; font-weight:600; color:var(--ink); line-height:1.45; }
+    .dq-tag { margin-left:auto; flex:0 0 auto; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+      color:var(--ink-muted); background:var(--bg); padding:3px 7px; border-radius:10px; white-space:nowrap; }
+    .dq-label .req, .dq-cap .req { color:var(--red); font-weight:700; margin-left:2px; }
+    .dq-cap { font-size:11px; font-weight:600; color:var(--ink-secondary); margin:5px 0 0 26px; }
+    .dq-cap.follow::before { content:'↳ '; color:var(--ink-muted); }
+    .dq-chips { display:flex; flex-wrap:wrap; gap:6px; margin:9px 0 0 26px; }
+    .dq-chip { font-family:inherit; font-size:11px; font-weight:600; color:var(--ink-secondary);
+      background:var(--colorNeutralBackground3); border:1px solid transparent; border-radius:20px;
+      padding:4px 10px; line-height:1.35; cursor:pointer; transition:background .12s, color .12s, border-color .12s; }
+    .dq-chip:hover { border-color:var(--blue); color:var(--blue); }
+    .dq-chip.on { background:var(--blue); border-color:var(--blue); color:#fff; }
+    .dq-chip.skip { background:transparent; border:1px dashed var(--border); color:var(--ink-muted); }
+    .dq-chip.skip:hover { border-color:var(--ink-muted); color:var(--ink-secondary); }
+    .dq-chip.skip.on { background:var(--ink-muted); border:1px solid var(--ink-muted); color:#fff; }
+    .dq-off .dq-label, .dq-off .dq-cap { color:var(--ink-muted); }
+    .dq-hint { font-size:10px; color:var(--ink-muted); margin:6px 0 0 26px; }
+    .dq-other, .dq-notebox { width:calc(100% - 26px); margin:8px 0 0 26px; padding:6px 9px; font-family:inherit;
+      font-size:12.5px; color:var(--ink); background:var(--colorNeutralBackground3); border:1px solid transparent;
+      border-bottom-color:var(--colorNeutralStrokeAccessible); border-radius:var(--borderRadiusMedium);
+      outline:none; box-sizing:border-box; }
+    .dq-notebox { min-height:54px; resize:vertical; line-height:1.4; }
+    .dq-note { margin-top:14px; }
+    .dq-notebtn { display:inline-flex; align-items:center; gap:4px; margin-left:26px; padding:4px 10px;
+      font-family:inherit; font-size:11px; font-weight:600; color:var(--blue); background:transparent;
+      border:1px dashed var(--border); border-radius:var(--borderRadiusMedium); cursor:pointer; }
+    .dq-notebtn:hover { background:var(--blue-soft); border-style:solid; }
+    .dq-notebtn .material-symbols-outlined { font-size:14px; }
+    /* unanswered select reads as a prompt, not as data */
+    select.dp-if-input.is-blank, select.cp-select.is-blank { color: var(--ink-muted); }
+    /* "Other" free-text, revealed only when Other is the selected option */
+    .dp-if-other { margin-top: 6px; }
+    .dp-if-other[hidden], .la-dq-other[hidden] { display: none; }
+    .la-dq-other { margin-top: 6px; }
     .dp-if-input { width: 100%; padding: 5px 9px; font-family: inherit; font-size: 12.5px; color: var(--ink); background: var(--colorNeutralBackground3); border: 1px solid transparent; border-bottom-color: var(--colorNeutralStrokeAccessible); border-radius: var(--borderRadiusMedium); outline: none; transition: background .1s, border-color .1s; box-sizing: border-box; }
     .dp-if-input:hover { background: var(--colorNeutralBackground4); }
     .dp-if-input:focus { background: var(--surface); border-color: var(--border); border-bottom: 2px solid var(--colorCompoundBrandStroke); padding-bottom: 4px; }
@@ -2776,7 +2825,7 @@
               return '<label class="dp-chip-radio'+(on?' on':'')+'"><input type="radio" name="'+(o.radioName||'qualRadio')+'" value="'+x+'"'+(on?' checked':'')+' onchange="onGenericRadio(this)"><span>'+x+'</span></label>';
             }).join('') + '</div>';
           } else if (o.type === 'select') {
-            ctrl = '<select class="dp-if-input" data-prop="'+(o.prop||'')+'" onchange="editIntake(this)">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+x+'</option>';}).join('')+'</select>';
+            ctrl = '<select class="dp-if-input" data-prop="'+(o.prop||'')+'" onchange="editIntake(this)">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+dpEsc(x)+'</option>';}).join('')+'</select>';
           } else if (o.type === 'textarea') {
             ctrl = '<textarea class="dp-if-input dp-if-area" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" placeholder="Manual input…">'+(o.val||'')+'</textarea>';
           } else if (o.type === 'lookup') {
@@ -2889,7 +2938,7 @@
       var ph = o.ph || '';
       var ctrl;
       if (o.type === 'select') {
-        ctrl = '<select class="dp-if-input">'+(o.options||['—']).map(function(x){return '<option>'+x+'</option>';}).join('')+'</select>';
+        ctrl = '<select class="dp-if-input">'+(o.options||['—']).map(function(x){return '<option>'+dpEsc(x)+'</option>';}).join('')+'</select>';
       } else if (o.type === 'textarea') {
         ctrl = '<textarea class="dp-if-input dp-if-area" placeholder="'+(ph||'Manual input…')+'"></textarea>';
       } else if (o.type === 'lookup') {
@@ -3135,7 +3184,7 @@
     function laReasonField(opts){
       var html = '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label>' +
         '<select class="cp-select" id="laReason" onchange="onLaReasonChange(this.value)">' +
-        opts.map(function(o){ return '<option'+(laReasonSel===o?' selected':'')+'>'+o+'</option>'; }).join('') +
+        opts.map(function(o){ return '<option'+(laReasonSel===o?' selected':'')+'>'+dpEsc(o)+'</option>'; }).join('') +
         '</select></div>';
       if (laReasonSel === 'Others') {
         html += '<div class="cp-field"><label class="cp-label">Comment <span class="req">*</span></label><textarea class="cp-textarea" id="laReasonComment" placeholder="Add reason…" oninput="laReasonComment=this.value">'+(laReasonComment||'')+'</textarea></div>';
@@ -3184,52 +3233,203 @@
     var laCars        = ['EXEED LX', 'EXEED TXL', 'EXEED RX', 'EXEED VX'];
     // Call Center discovery questions — shared by the Discovery Questions tab and the Log activity panel.
     var discoveryCallCenterQs = [
-      { label:'What is the main reason for the enquiry today?', opts:['Book test drive','Visit showroom','Ask about model/features','Check availability','Request brochure/video','Speak to sales executive','Other (specify)'], req:true },
-      { label:'Which EXEED model or vehicle type are you asking about?', opts:['LX','TXL','RX','VX','SUV - not sure','Open to recommendation','Other (specify)'], req:true, model:true },
-      { label:'Which showroom / area is most convenient?', opts:['SZR','Deira','Abu Dhabi','Sharjah / Northern Emirates','Any showroom','Home / office visit requested','Other (specify)'], req:true },
-      { label:'When should the sales executive best contact or meet you?', opts:['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other (specify)'], req:true },
-      { label:'Preferred communication channel?', opts:['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other (specify)'], req:false }
+      { label:'What is the main reason for the enquiry today?', opts:['Book test drive','Visit showroom','Ask about model/features','Check availability','Request brochure/video','Speak to sales executive','Other'], req:true },
+      { label:'Which EXEED model or vehicle type are you asking about?', opts:['LX','TXL','RX','VX','SUV - not sure','Open to recommendation','Other'], req:true, model:true },
+      { label:'Which showroom / area is most convenient?', opts:['SZR','Deira','Abu Dhabi','Sharjah / Northern Emirates','Any showroom','Home / office visit requested','Other'], req:true },
+      { label:'When should the sales executive best contact or meet you?', opts:['Now / immediate','Today','Tomorrow','This week','Weekend','Customer requested specific date/time','Other'], req:true },
+      { label:'Preferred communication channel?', opts:['English call','Arabic call','Hindi/Urdu call','WhatsApp only','SMS/email','No preference','Other'], req:false }
     ];
 
     // Sales Executive discovery questions — shown from Qualify onward, above the Call Center set.
     var discoverySalesExecQs = [
-      { q:'What is your primary use case for the car?', subs:[ { opts:['Family car','Daily commute','Business/company use','Long trips','Upgrade current vehicle','Exploring options','Other (specify)'] } ] },
+      { q:'What is your primary use case for the car?', subs:[ { opts:['Family car','Daily commute','Business/company use','Long trips','Upgrade current vehicle','Exploring options','Other'] } ] },
       { q:'What are you driving today, and is it your only car or one of a few?', subs:[
-        { l:'Current vehicle', opts:['Toyota','Lexus','Nissan','Hyundai/Kia','German premium','Other Japanese/Korean','Chinese brand','No current vehicle','Other (specify)'] },
-        { l:'Car situation', opts:['Only car','One of multiple personal cars','Shared family car','Company/fleet vehicle','Not shared','Other (specify)'] } ], free:true },
+        { l:'Current vehicle', opts:['Toyota','Lexus','Nissan','Hyundai/Kia','German premium','Other Japanese/Korean','Chinese brand','No current vehicle','Other'] },
+        { l:'Car situation', opts:['Only car','One of multiple personal cars','Shared family car','Company/fleet vehicle','Not shared','Other'] } ], free:true },
       { q:'What do you enjoy most about it — and if you could change one thing, what would it be?', subs:[
-        { l:'Enjoy most', opts:['Reliability','Comfort','Space','Technology/connectivity','Safety','Performance','Fuel economy','Brand/status','Low running cost','Nothing specific','Other (specify)'] },
-        { l:'Would change', opts:['Space','Fuel economy','Maintenance/running cost','Technology/connectivity','Safety/ADAS','Comfort/noise','Performance','Age/mileage','Reliability','Exterior/interior design','No change mentioned','Other (specify)'] } ], free:true },
+        { l:'Enjoy most', multi:true, opts:['Reliability','Comfort','Space','Technology/connectivity','Safety','Performance','Fuel economy','Brand/status','Low running cost','Nothing specific','Other'] },
+        { l:'Would change', multi:true, opts:['Space','Fuel economy','Maintenance/running cost','Technology/connectivity','Safety/ADAS','Comfort/noise','Performance','Age/mileage','Reliability','Exterior/interior design','No change mentioned','Other'] } ], free:true },
       { q:'Who usually travels with you — family, colleagues, or mostly yourself?', subs:[
-        { opts:['Self only','Spouse/partner','Family with children','Extended family','Clients/colleagues','Company/fleet users','Driver/chauffeur + passengers','Mixed passengers','Other (specify)'] } ], free:true },
+        { multi:true, opts:['Self only','Spouse/partner','Family with children','Extended family','Clients/colleagues','Company/fleet users','Driver/chauffeur + passengers','Mixed passengers','Other'] } ], free:true },
       { q:'Where do most of your drives take you, and roughly how far each week?', subs:[
-        { l:'Main usage', opts:['Daily city commute','Highway/inter-emirate','School/family errands','Long trips','Business/client transport','Off-road/outdoor','Mixed usage','Other (specify)'] },
+        { l:'Main usage', multi:true, opts:['Daily city commute','Highway/inter-emirate','School/family errands','Long trips','Business/client transport','Off-road/outdoor','Mixed usage','Other'] },
         { l:'Weekly distance', opts:['<100 km','100-250 km','250-500 km','500-800 km','800+ km','Not sure'] } ], free:true },
       { q:'When choosing a car, what matters most to you?', subs:[
-        { opts:['Safety/ADAS','Space/3rd row','Comfort/luxury','Technology/connectivity','Fuel economy/hybrid','Reliability/warranty','Performance','Price/value','Availability/delivery timing','Brand/image','Resale value','Other (specify)'] } ], free:true },
+        { multi:true, opts:['Safety/ADAS','Space/3rd row','Comfort/luxury','Technology/connectivity','Fuel economy/hybrid','Reliability/warranty','Performance','Price/value','Availability/delivery timing','Brand/image','Resale value','Other'] } ], free:true },
       { q:'Are you comparing any other models, and who else helps you decide?', tag:'Before quote', subs:[
-        { l:'Competitor / alternative', opts:['BYD','Jetour','Toyota','Lexus','Nissan','Geely/Changan','Hyundai/Kia','German premium','Not comparing','Other (specify)'] },
-        { l:'Decision helper', opts:['Self only','Spouse/partner','Parent/family member','Business partner','Company/procurement','Driver/main user','Other (specify)'] } ], free:true },
+        { l:'Competitor / alternative', multi:true, opts:['BYD','Jetour','Toyota','Lexus','Nissan','Geely/Changan','Hyundai/Kia','German premium','Not comparing','Other'] },
+        { l:'Decision helper', multi:true, opts:['Self only','Spouse/partner','Parent/family member','Business partner','Company/procurement','Driver/main user','Other'] } ], free:true },
       { q:'What budget range or monthly EMI are you comfortable with?', tag:'Before quote', subs:[], free:true, freeLabel:'Budget range / monthly EMI' },
       { q:'What is your expected timeframe to purchase?', tag:'Before quote', subs:[
-        { opts:['Immediate / ready now','Within 1 week','Within 2-4 weeks','1-3 months','3+ months','Exploring only / no timeline yet','Other (specify)'] } ] },
+        { opts:['Immediate / ready now','Within 1 week','Within 2-4 weeks','1-3 months','3+ months','Exploring only / no timeline yet','Other'] } ] },
       { q:'What would make you feel completely confident moving forward?', subs:[
-        { opts:['Test drive experience','Clear final offer','Vehicle availability/color','Warranty/service clarity','Safety proof/reviews','Product comparison','Trade-in valuation','Family/decision-maker approval','Delivery timing','More time to think','Ready to proceed','Other (specify)'] } ], free:true }
+        { multi:true, opts:['Test drive experience','Clear final offer','Vehicle availability/color','Warranty/service clarity','Safety proof/reviews','Product comparison','Trade-in valuation','Family/decision-maker approval','Delivery timing','More time to think','Ready to proceed','Other'] } ], free:true }
     ];
-    function discoverySalesExecFields() {
-      var fields = [];
-      discoverySalesExecQs.forEach(function(q, i){
-        var base = (i + 1) + '. ' + q.q + (q.tag ? '  ·  ' + q.tag : '');
+    // A bare em-dash reads as "no data"; say what the control wants instead.
+    var DISC_NONE = 'Select an answer';
+    /* ── Discovery capture ──────────────────────────────────────────────
+       Built for a rep filling this in front of a customer, not for a data
+       entry clerk afterwards:
+       · chips, not dropdowns — glance and tap, no hidden list to read
+       · answers live on the lead, so leaving the tab mid-conversation keeps them
+       · every question can be marked "Not discussed" instead of forcing an
+         invented answer, which is what mandatory dropdowns actually produce
+       · questions a customer answers with several things accept several       */
+    var DQ_SKIP = 'Not discussed';
+
+    function dqBag(l){ if (!l.dq) l.dq = {}; return l.dq; }
+    function dqSel(l, k){
+      var v = dqBag(l)[k];
+      if (v == null || v === '') return [];
+      return Array.isArray(v) ? v.slice() : [v];
+    }
+    function dqHas(l, k){ return dqSel(l, k).length > 0; }
+    function dqText(l, k){ var v = dqBag(l)[k]; return typeof v === 'string' ? v : ''; }
+    function dqSkipped(l, k){ return dqSel(l, k).indexOf(DQ_SKIP) > -1; }
+
+    // One flat list of everything askable, so visibility and progress are
+    // computed the same way for both question sets.
+    function dqDefs(){
+      var out = [];
+      if (currentStep >= 2) discoverySalesExecQs.forEach(function(q, i){
         q.subs.forEach(function(s, j){
-          var lab = j === 0 ? (base + (s.l ? '  —  ' + s.l : '')) : ('↳ ' + s.l);
-          fields.push({ label: lab, type:'select', val:'—', opts:['—'].concat(s.opts), optional:true, wide:true });
+          out.push({ set:'se', k:'se'+i+'.'+j, grp:'se'+i, step:j,
+            num: j === 0 ? (i + 1) : 0,
+            label: j === 0 ? q.q : s.l,
+            cap:  j === 0 ? (s.l || '') : '',
+            tag:  j === 0 ? (q.tag || '') : '',
+            opts: s.opts, multi: !!s.multi, req: true });
         });
-        if (q.free) {
-          var flab = q.subs.length === 0 ? (base + (q.freeLabel ? '  —  ' + q.freeLabel : '')) : ('↳ ' + (q.freeLabel || 'Add note'));
-          fields.push({ label: flab, type:'text', val:'', optional:true, wide:true });
-        }
+        if (q.free) out.push({ set:'se', k:'se'+i+'.note', grp:'se'+i, step:q.subs.length, note:true });
       });
-      return fields;
+      discoveryCallCenterQs.forEach(function(q, i){
+        out.push({ set:'cc', k:'cc'+i, grp:'cc'+i, step:0, num:i+1,
+          label:q.label, opts:q.opts, multi:!!q.multi, req:!!q.req });
+      });
+      return out;
+    }
+    // A follow-up is only meaningful once the answer above it exists.
+    function dqVisible(l, defs){
+      var vis = {};
+      defs.forEach(function(f){
+        if (f.step === 0){ vis[f.k] = true; return; }
+        var prior = null;
+        defs.forEach(function(g){ if (g.grp === f.grp && g.step === f.step - 1) prior = g; });
+        vis[f.k] = !!(prior && vis[prior.k] && (prior.note || dqHas(l, prior.k)));
+      });
+      return vis;
+    }
+    function dqProgress(l, defs, set){
+      var qs = defs.filter(function(f){ return f.set === set && !f.note; });
+      var done = 0, skip = 0;
+      qs.forEach(function(f){ if (dqHas(l, f.k)){ done++; if (dqSkipped(l, f.k)) skip++; } });
+      return { total: qs.length, done: done, skip: skip };
+    }
+
+    function dqChipHtml(l, f, o){
+      var on = dqSel(l, f.k).indexOf(o) > -1;
+      return '<button class="dq-chip'+(on ? ' on' : '')+(o === DQ_SKIP ? ' skip' : '')+'"' +
+        ' data-v="'+dpEsc(o)+'" aria-pressed="'+on+'" onclick="dqPick(this)">'+dpEsc(o)+'</button>';
+    }
+    function dqBlockHtml(l, f, visible){
+      if (f.note){
+        var t = dqText(l, f.k);
+        return '<div class="dq-note"'+(visible ? '' : ' hidden')+'>' +
+          '<button class="dq-notebtn" onclick="dqNoteOpen(this)"'+(t ? ' hidden' : '')+'>' +
+            '<span class="material-symbols-outlined">add</span>Add note</button>' +
+          '<textarea class="dq-notebox" placeholder="What the customer actually said"' +
+            ' oninput="dqNote(this,\''+f.k+'\')"'+(t ? '' : ' hidden')+'>'+dpEsc(t)+'</textarea>' +
+        '</div>';
+      }
+      var sel = dqSel(l, f.k), star = f.req ? ' <span class="req">*</span>' : '';
+      var head = f.num
+        ? '<div class="dq-head"><span class="dq-n">'+f.num+'</span>' +
+            '<span class="dq-label">'+dpEsc(f.label)+star+'</span>' +
+            (f.tag ? '<span class="dq-tag">'+dpEsc(f.tag)+'</span>' : '') + '</div>' +
+          (f.cap ? '<div class="dq-cap">'+dpEsc(f.cap)+'</div>' : '')
+        : '<div class="dq-cap follow">'+dpEsc(f.label)+star+'</div>';
+      var chips = f.opts.map(function(o){ return dqChipHtml(l, f, o); }).join('') + dqChipHtml(l, f, DQ_SKIP);
+      var other = '';
+      if (f.opts.some(dpIsOther)){
+        var shown = sel.some(dpIsOther);
+        other = '<input class="dq-other" type="text" placeholder="Please specify"' +
+          ' value="'+dpEsc(dqText(l, f.k + '.other'))+'" oninput="dqNote(this,\''+f.k+'.other\')"' +
+          (shown ? '' : ' hidden')+'>';
+      }
+      return '<div class="dq-q'+(f.num ? ' dq-main' : ' dq-follow')+(dqSkipped(l, f.k) ? ' dq-off' : '')+'"'+(visible ? '' : ' hidden')+'>' +
+        head +
+        '<div class="dq-chips" data-k="'+f.k+'" data-multi="'+(f.multi ? 1 : 0)+'">'+chips+'</div>' +
+        other +
+        (f.multi && !sel.length ? '<div class="dq-hint">Pick as many as apply</div>' : '') +
+      '</div>';
+    }
+
+    function dqInner(l){
+      var defs = dqDefs(), vis = dqVisible(l, defs), sets = [];
+      if (currentStep >= 2) sets.push(['se', 'Sales Executive — Discovery Questions']);
+      sets.push(['cc', 'Call Center — Discovery Questions']);
+      return '<div class="dp-intake-groups">' + sets.map(function(pair){
+        var set = pair[0], p = dqProgress(l, defs, set);
+        var pct = p.total ? Math.round(p.done / p.total * 100) : 0;
+        return '<div class="dp-intake-col">' +
+          '<div class="dp-intake-title">'+pair[1]+'</div>' +
+          '<div class="dq-prog"><div class="dq-prog-bar"><i style="width:'+pct+'%"></i></div>' +
+            '<span class="dq-prog-txt">'+p.done+' of '+p.total+' captured' +
+            (p.skip ? ' &middot; '+p.skip+' not discussed' : '')+'</span></div>' +
+          '<div class="dq-list">' + dqGroupsHtml(l, defs, vis, set) + '</div></div>';
+      }).join('') + '</div>';
+    }
+    // one block per question — its follow-ups and note travel with it
+    function dqGroupsHtml(l, defs, vis, set){
+      var order = [], byGrp = {};
+      defs.forEach(function(f){
+        if (f.set !== set) return;
+        if (!byGrp[f.grp]){ byGrp[f.grp] = []; order.push(f.grp); }
+        byGrp[f.grp].push(f);
+      });
+      return order.map(function(g){
+        return '<div class="dq-group">' +
+          byGrp[g].map(function(f){ return dqBlockHtml(l, f, vis[f.k]); }).join('') +
+        '</div>';
+      }).join('');
+    }
+    function dqRender(){
+      var h = document.getElementById('dqPane');
+      if (h && selectedIdx > -1) h.innerHTML = dqInner(leads[selectedIdx]);
+    }
+    // Clearing an answer takes its follow-ups with it — a stale follow-up
+    // sitting under a blank parent reads as something the customer said.
+    function dqRollback(l, k){
+      if (dqHas(l, k)) return;
+      var defs = dqDefs(), me = null;
+      defs.forEach(function(f){ if (f.k === k) me = f; });
+      if (!me) return;
+      defs.forEach(function(f){
+        if (f.grp === me.grp && f.step > me.step){ delete dqBag(l)[f.k]; delete dqBag(l)[f.k + '.other']; }
+      });
+    }
+    function dqPick(btn){
+      var l = (selectedIdx > -1) ? leads[selectedIdx] : null; if (!l) return;
+      var wrap = btn.parentNode, k = wrap.getAttribute('data-k'), multi = wrap.getAttribute('data-multi') === '1';
+      var v = btn.getAttribute('data-v'), cur = dqSel(l, k), at = cur.indexOf(v);
+      if (v === DQ_SKIP) cur = (at > -1) ? [] : [DQ_SKIP];
+      else if (multi){
+        if (at > -1) cur.splice(at, 1); else cur.push(v);
+        cur = cur.filter(function(x){ return x !== DQ_SKIP; });
+      } else cur = (at > -1) ? [] : [v];
+      dqBag(l)[k] = multi ? cur : (cur[0] || '');
+      if (!cur.some(dpIsOther)) delete dqBag(l)[k + '.other'];
+      dqRollback(l, k);
+      dqRender();
+    }
+    function dqNote(el, k){
+      var l = (selectedIdx > -1) ? leads[selectedIdx] : null; if (!l) return;
+      if (el.value) dqBag(l)[k] = el.value; else delete dqBag(l)[k];
+    }
+    function dqNoteOpen(btn){
+      var ta = btn.parentNode.querySelector('.dq-notebox');
+      btn.hidden = true;
+      if (ta){ ta.hidden = false; ta.focus(); }
     }
 
     var laToday = '2026-07-08';
@@ -3237,7 +3437,7 @@
 
     function laSelect(id, label, opts, req) {
       return '<div class="cp-field"><label class="cp-label">' + label + (req ? ' <span class="req">*</span>' : '') + '</label>' +
-        '<select class="cp-select" id="' + id + '">' + opts.map(function(o){ return '<option>' + o + '</option>'; }).join('') + '</select></div>';
+        '<select class="cp-select" id="' + id + '">' + opts.map(function(o){ return '<option>' + dpEsc(o) + '</option>'; }).join('') + '</select></div>';
     }
     function laRadioGroup(name, label, opts) {
       return '<div class="cp-field"><label class="cp-label">' + label + ' <span class="req">*</span></label><div class="la-radio">' +
@@ -3263,13 +3463,22 @@
         }).join('') +
       '</div>';
     }
+    function laDiscOther(sel){
+      sel.classList.toggle('is-blank', dpIsBlank(sel.value));
+      var box = document.getElementById(sel.id + 'Other'); if (!box) return;
+      var on = dpIsOther(sel.value);
+      box.hidden = !on;
+      if (on) box.focus(); else box.value = '';
+    }
     function laDiscovery() {
       return '<div class="la-dqcard">' +
         '<div class="la-dqcard-head"><span class="material-symbols-outlined">quiz</span>Discovery questions</div>' +
         discoveryCallCenterQs.map(function(q, i){
           return '<div class="la-dq">' +
             '<div class="la-dq-q"><span class="la-dq-n">'+(i+1)+'</span><span class="la-dq-label">'+q.label+(q.req?' <span class="req">*</span>':'')+'</span></div>' +
-            '<select class="cp-select" id="laDiscQ'+i+'"><option>—</option>'+q.opts.map(function(o){ return '<option>'+o+'</option>'; }).join('')+'</select>' +
+            '<select class="cp-select is-blank" id="laDiscQ'+i+'" onchange="laDiscOther(this)"><option>'+DISC_NONE+'</option>'+
+              q.opts.map(function(o){ return '<option>'+dpEsc(o)+'</option>'; }).join('')+'</select>' +
+            '<input class="cp-input la-dq-other" type="text" id="laDiscQ'+i+'Other" placeholder="Please specify" hidden>' +
           '</div>';
         }).join('') +
       '</div>';
@@ -3291,7 +3500,7 @@
     }
     function laGather() {
       var g = function(id){ var e = document.getElementById(id); return e ? e.value : ''; };
-      var disc = discoveryCallCenterQs.filter(function(q, i){ var e = document.getElementById('laDiscQ' + i); return e && e.value && e.value !== '—'; });
+      var disc = discoveryCallCenterQs.filter(function(q, i){ var e = document.getElementById('laDiscQ' + i); return e && e.value && !dpIsBlank(e.value); });
       var noReason = (document.querySelector('input[name="laNoReason"]:checked') || {}).value || '';
       return { date: g('laDate'), time: g('laTime'), loc: g('laLoc'), car: g('laCar'), note: g('laNote'), reason: g('laReason'), reasonComment: g('laReasonComment'), rating: g('laRating'), returnReason: g('laReturnReason'), transferAgent: g('laTransferAgent'), noReason: noReason, disc: disc };
     }
@@ -3337,7 +3546,7 @@
         } else if (laOutcome === 'Disqualify') {
           html += '<div class="cp-field"><label class="cp-label">Reason <span class="req">*</span></label>' +
             '<select class="cp-select" id="laReason" onchange="onLaReasonChange(this.value)">' +
-            laDisqualifyReasons.concat(['Others']).map(function(o){ return '<option'+(laReasonSel===o?' selected':'')+'>'+o+'</option>'; }).join('') +
+            laDisqualifyReasons.concat(['Others']).map(function(o){ return '<option'+(laReasonSel===o?' selected':'')+'>'+dpEsc(o)+'</option>'; }).join('') +
             '</select></div>';
           if (laReasonSel === 'Others') {
             html += '<div class="cp-field"><label class="cp-label">Comment <span class="req">*</span></label><textarea class="cp-textarea" id="laReasonComment" placeholder="Add reason…" oninput="laReasonComment=this.value">'+(laReasonComment||'')+'</textarea></div>';
@@ -3529,12 +3738,31 @@
       else { closeLogActivity(); }
     }
 
+    // option text is data, not markup — "<AED 100k" would otherwise open a tag and eat the rest
+    function dpEsc(v){ return String(v == null ? '' : v).replace(/[&<>"]/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+    function dpIsOther(v){ return /^others?$/i.test(String(v == null ? '' : v).trim()); }
+    function dpIsBlank(v){ var t = String(v == null ? '' : v).trim(); return t === '' || t === '\u2014' || t === DISC_NONE; }
+    function dpOtherToggle(sel){
+      sel.classList.toggle('is-blank', dpIsBlank(sel.value));
+      var box = sel.parentNode.querySelector('.dp-if-other'); if (!box) return;
+      var on = dpIsOther(sel.value);
+      box.hidden = !on;
+      if (on) box.focus(); else box.value = '';
+    }
     function dpFieldHtml(o) {
       var esc = function(v){ return v != null ? String(v).replace(/"/g,'&quot;') : ''; };
       var star = o.req ? '<span class="dp-if-req">*</span>' : (o.optional ? '<span class="dp-if-opt">Optional</span>' : '');
       var ctrl, wide = !!o.wide;
       switch (o.type) {
-        case 'select': ctrl = '<select class="dp-if-input">'+(o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+x+'</option>';}).join('')+'</select>'; break;
+        case 'select':
+          var hasOther = (o.opts||[]).some(dpIsOther);
+          ctrl = '<select class="dp-if-input'+(dpIsBlank(o.val)?' is-blank':'')+'" onchange="dpOtherToggle(this)">'+
+            (o.opts||[]).map(function(x){return '<option'+(x===o.val?' selected':'')+'>'+dpEsc(x)+'</option>';}).join('')+'</select>';
+          // "Other" is only useful if the rep can say what it was
+          if (hasOther) ctrl += '<input class="dp-if-input dp-if-other" type="text" placeholder="Please specify"'+
+            (dpIsOther(o.val) ? '' : ' hidden')+'>';
+          break;
         case 'lookup': ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'"><span class="material-symbols-outlined dp-if-lk">search</span></div>'; break;
         case 'date': ctrl = '<div class="dp-if-lookup"><input class="dp-if-input" type="text" value="'+esc(o.val)+'" placeholder="dd/mm/yyyy, --:--"><span class="material-symbols-outlined dp-if-lk">calendar_today</span></div>'; break;
         case 'image': ctrl = '<button class="dp-if-upload"><span class="material-symbols-outlined">upload_file</span>'+(o.val||'Upload image')+'</button>'; break;
@@ -3545,7 +3773,8 @@
         case 'textarea': ctrl = '<textarea class="dp-if-input dp-if-area">'+(o.val||'')+'</textarea>'; wide = true; break;
         default: ctrl = '<input class="dp-if-input" type="text" value="'+esc(o.val)+'">';
       }
-      return '<div class="dp-if'+(wide?' dp-if-wide':'')+'"><label class="dp-if-label">'+o.label+star+'</label>'+ctrl+'</div>';
+      return '<div class="dp-if'+(wide?' dp-if-wide':'')+'"'+(o.attrs||'')+(o.hidden?' hidden':'')+'>'+
+        '<label class="dp-if-label">'+o.label+star+'</label>'+ctrl+'</div>';
     }
     function dpFormSections(sections) {
       return '<div class="dp-intake"><div class="dp-intake-groups">' + sections.map(function(g){
@@ -3652,15 +3881,7 @@
       ]);
     }
     function discoveryQuestionsForm(l) {
-      var mg = (['LX','TXL','RX','VX'].filter(function(m){ return new RegExp('\\b'+m+'\\b').test(l.model || ''); })[0]) || '—';
-      var sections = [];
-      if (currentStep >= 2) {
-        sections.push({ title:'Sales Executive — Discovery Questions', fields: discoverySalesExecFields() });
-      }
-      sections.push({ title:'Call Center — Discovery Questions', fields: discoveryCallCenterQs.map(function(q){
-        return { label:q.label, type:'select', val: q.model ? mg : '—', opts:['—'].concat(q.opts), req:q.req, optional:!q.req, wide:true };
-      }) });
-      return dpFormSections(sections);
+      return '<div class="dp-intake" id="dqPane">' + dqInner(l) + '</div>';
     }
 
     function discoveryTestDriveForm(l) {
