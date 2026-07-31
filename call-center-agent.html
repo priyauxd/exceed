@@ -2456,9 +2456,21 @@
       }
       // Owner columns get a muted avatar so people read as people, not strings.
       var OWNER_HEADS=['owner','agent','assigned to','sales exec','sales executive','handled by','rep'];
+      // The drill-down modal fills a <table> via innerHTML, so the mutation lands on
+      // thead/tbody — the table is above the scanned root, not inside it.
+      function tablesIn(root){
+        var out=[];
+        if(!root||!root.querySelectorAll) return out;
+        var up=root.closest?root.closest('table'):null;
+        if(up) out.push(up);
+        if(root.matches&&root.matches('table')&&out.indexOf(root)<0) out.push(root);
+        Array.prototype.forEach.call(root.querySelectorAll('table'),function(t){
+          if(out.indexOf(t)<0) out.push(t);
+        });
+        return out;
+      }
       function decorateOwners(root){
-        var tbs=(root&&root.querySelectorAll)?root.querySelectorAll('table'):[];
-        Array.prototype.forEach.call(tbs,function(tb){
+        Array.prototype.forEach.call(tablesIn(root),function(tb){
           var idx=-1;
           Array.prototype.forEach.call(tb.querySelectorAll('thead th'),function(th,i){
             if(OWNER_HEADS.indexOf((th.textContent||'').trim().toLowerCase())>-1) idx=i;
