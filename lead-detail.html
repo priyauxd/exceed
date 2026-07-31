@@ -4983,6 +4983,20 @@
     .sc-cw:hover .sc-cx,.sc-cw:focus-within .sc-cx{display:grid;}
     .sc-cx:hover{background:#c0392b;}
 
+    /* our side of the comparison — model + trim picker */
+    .sc-ours{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:2px 0 12px;padding:10px 12px;
+      background:var(--sc-accent-soft);border:1px solid #ece8fb;border-radius:10px;}
+    .sc-ours-lbl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--sc-accent);}
+    .sc-pick{appearance:none;-webkit-appearance:none;font-family:inherit;font-size:12.5px;font-weight:600;color:#2b3444;
+      background:#fff url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+      border:1px solid #e2e0ee;border-radius:8px;padding:7px 28px 7px 11px;cursor:pointer;max-width:100%;}
+    .sc-pick:hover{border-color:var(--sc-accent);}
+    .sc-pick:focus-visible{outline:2px solid var(--sc-accent);outline-offset:1px;}
+    .sc-ours-note{font-size:11px;color:#8a8fa3;margin-left:auto;}
+    .sc-ours-reset{display:inline-flex;align-items:center;gap:4px;margin-left:auto;padding:5px 9px;font-family:inherit;font-size:11px;
+      font-weight:600;color:var(--sc-accent);background:transparent;border:1px dashed #cfc6f2;border-radius:8px;cursor:pointer;}
+    .sc-ours-reset:hover{background:#fff;}
+    .sc-ours-reset .material-symbols-outlined{font-size:14px;}
     .sc-cchips{display:flex;flex-wrap:nowrap;gap:8px;margin-bottom:14px;overflow-x:auto;padding:8px 2px 4px;scrollbar-width:none;-ms-overflow-style:none;}
     .sc-cchips::-webkit-scrollbar{display:none;}
     .sc-cchip{flex:0 0 auto;}
@@ -5129,19 +5143,20 @@
     var SC_SRC = 'EXEED UAE spec sheet, Nov 2025';
     var SC_VEH = [
       { code:'VX',  name:'EXEED VX',  tag:'7-Seater Luxury SUV',  price:185000, mo:2590, offer:'AED 8,000 cashback', trims:'Premium, Flagship',          stock:8,  seats:7,
-              trimStock:[['Premium',5],['Flagship',3]],
+              // [trim, units in stock, list price] — prices are placeholders until product feeds them
+              trimStock:[['Premium',5,185000],['Flagship',3,203000]],
         usp:['Third row an adult can actually sit in, with 480 L still behind it',
              '2.0T 261 hp, quilted leather and twin 12.3-inch screens as standard',
              '7 yr / 150k km warranty and 5 years of servicing included'],
         kw:195, hp:261, torque:400, drive:'AWD', range:620, dims:'4800*1930*1720', eng:'2.0T petrol \u00b7 8AT', accel:'7.6s', warranty:'7 yr / 150k km', engine:'2.0T · 261 hp', fuel:'8.9', adas:'L2 standard', boot:480, service:'5 yr included' },
       { code:'RX',  name:'EXEED RX',  tag:'Premium Family SUV',   price:155000, mo:2150, offer:'0% for 12 mo',       trims:'Luxury, Prestige, Flagship', stock:14, seats:5,
-              trimStock:[['Luxury',6],['Prestige',5],['Flagship',3]],
+              trimStock:[['Luxury',6,155000],['Prestige',5,169000],['Flagship',3,183000]],
         usp:['L2 ADAS and the 540\u00b0 camera on every trim, not just the top one',
              '540 L boot and 8.2 L/100km from the 2.0T',
              'Undercuts the Japanese mid-size set by roughly AED 10\u201320k'],
         kw:190, hp:254, torque:390, drive:'AWD', range:640, dims:'4750*1900*1700', eng:'2.0T petrol \u00b7 7DCT', accel:'7.9s', warranty:'7 yr / 150k km', engine:'2.0T · 254 hp', fuel:'8.2', adas:'L2 standard', boot:540, service:'5 yr included' },
       { code:'TXL', name:'EXEED TXL', tag:'Mid-Size Family SUV',  price:125000, mo:1720, offer:'5-yr service pack',  trims:'Comfort, Luxury',            stock:22, seats:5,
-             trimStock:[['Comfort',12],['Luxury',10]],
+             trimStock:[['Comfort',12,125000],['Luxury',10,137000]],
         usp:['Mid-size space at compact money \u2014 500 L boot',
              '1.6T 197 hp at 7.8 L/100km, the cheapest in the line-up to run',
              'L2 ADAS standard plus the 5-year service pack'],
@@ -5185,6 +5200,31 @@
     }
     function scMatch(l){ return Math.max(72, Math.min(97, (l && l.convertProb || 60) + 22)); }
     function scTopTrim(v){ return v.trims.split(',').pop().trim(); }
+
+    // Our side of the comparison. Defaults to the lead's preferred model and its entry trim,
+    // but the agent can quote any model/trim we actually hold — the customer rarely stays on
+    // the car the lead was created against.
+    var SC_OURS = null, SC_OURS_TRIM = null;
+    function scOurs(){
+      var l = scLead();
+      if (SC_OURS){
+        for (var i = 0; i < SC_VEH.length; i++) if (SC_VEH[i].code === SC_OURS) return SC_VEH[i];
+      }
+      return scBestFit(l);
+    }
+    function scTrims(v){ return v.trimStock || []; }
+    function scTrim(v){
+      var ts = scTrims(v);
+      for (var i = 0; i < ts.length; i++) if (ts[i][0] === SC_OURS_TRIM) return ts[i];
+      return ts[0] || [scTopTrim(v), 0, v.price];
+    }
+    function scTrimPrice(v){ var t = scTrim(v); return t[2] || v.price; }
+    function scOursLabel(v){ return v.name + ' · ' + scTrim(v)[0]; }
+    function scOursModel(code){
+      SC_OURS = code; SC_OURS_TRIM = null;   // trim resets to the new model's entry trim
+      scRenderCompete();
+    }
+    function scOursTrim(name){ SC_OURS_TRIM = name; scRenderCompete(); }
     function scMe(){
       var a = document.querySelector('.topbar .avatar');
       var t = a ? a.textContent.trim() : '';
@@ -5498,12 +5538,34 @@
     function scRow(label, ours, theirs){
       return '<tr><th scope="row">' + label + '</th><td class="us">' + ours + '</td><td>' + theirs + '</td></tr>';
     }
+    // Model + trim picker for our own column. Sits above the rival chips so the two sides of the
+    // comparison are edited in the same place.
+    function scOursBar(v, l){
+      var t = scTrim(v), pref = scBestFit(l), stockCls = (t[1] < 4 ? 'low' : 'ok');
+      var models = SC_VEH.map(function(m){
+        return '<option value="' + scEsc(m.code) + '"' + (m.code === v.code ? ' selected' : '') + '>' + scEsc(m.name) + '</option>';
+      }).join('');
+      var trims = scTrims(v).map(function(x){
+        return '<option value="' + scEsc(x[0]) + '"' + (x[0] === t[0] ? ' selected' : '') + '>' + scEsc(x[0]) + '</option>';
+      }).join('');
+      return '<div class="sc-ours">' +
+        '<span class="sc-ours-lbl">Our car</span>' +
+        '<select class="sc-pick" aria-label="Our model" onchange="scOursModel(this.value)">' + models + '</select>' +
+        '<select class="sc-pick" aria-label="Trim" onchange="scOursTrim(this.value)">' + trims + '</select>' +
+        '<span class="sc-pill ' + stockCls + '">' + t[1] + ' in stock</span>' +
+        (v.code !== pref.code
+          ? '<button class="sc-ours-reset" onclick="scOursModel(null)" title="Back to the preferred model on this lead">' +
+              '<span class="material-symbols-outlined">undo</span>' + scEsc(pref.name) + '</button>'
+          : '<span class="sc-ours-note">Preferred on this lead</span>') +
+      '</div>';
+    }
     function scRenderCompete(focusSearch){
       var host = document.getElementById('scCompList'); if (!host) return;
-      var l = scLead(), v = scBestFit(l), picked = scCompList();
+      var l = scLead(), v = scOurs(), picked = scCompList();
       if (picked.indexOf(SC_ACTIVE) === -1) SC_ACTIVE = picked[0] || null;
 
-      var html = '<div class="sc-cchips" role="tablist" aria-label="Competitor vehicles">';
+      var html = scOursBar(v, l);
+      html += '<div class="sc-cchips" role="tablist" aria-label="Competitor vehicles">';
       picked.forEach(function(n){
         var on = (n === SC_ACTIVE);
         html += '<span class="sc-cw">' +
@@ -5543,10 +5605,11 @@
       // to "what are we selling", and the empty side says what it is waiting for.
       if (!SC_ACTIVE){
         html += '<div class="sc-card">' +
-          '<div class="sc-card-h" style="margin-bottom:12px">' + scEsc(v.name) + ' &mdash; no car to compare</div>' +
+          '<div class="sc-card-h" style="margin-bottom:12px">' + scEsc(scOursLabel(v)) + ' &mdash; no car to compare</div>' +
           '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th>' +
-            '<th class="us">' + scEsc(v.name) + '</th><th class="empty">Add a car</th></tr></thead><tbody>' +
-          scRow('Starting price', scMoney(v.price), '&mdash;') +
+            '<th class="us">' + scEsc(scOursLabel(v)) + '</th><th class="empty">Add a car</th></tr></thead><tbody>' +
+          scRow('Trim', scEsc(scTrim(v)[0]), '&mdash;') +
+          scRow('Starting price', scMoney(scTrimPrice(v)), '&mdash;') +
           scRow('Existing offer', scEsc(v.offer), '&mdash;') +
           scRow('Warranty', scEsc(v.warranty), '&mdash;') +
           scRow('L-W-H (mm)', scEsc(v.dims), '&mdash;') +
@@ -5572,10 +5635,11 @@
 
       if (!c){
         html += '<div class="sc-card">' +
-          '<div class="sc-card-h" style="margin-bottom:4px">' + scEsc(v.name) + ' vs ' + scEsc(SC_ACTIVE) + '</div>' +
+          '<div class="sc-card-h" style="margin-bottom:4px">' + scEsc(scOursLabel(v)) + ' vs ' + scEsc(SC_ACTIVE) + '</div>' +
           '<div class="sc-veh-tag" style="margin-bottom:12px">Added from the conversation &middot; not in the battlecard library</div>' +
-          '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th><th class="us">' + scEsc(v.name) + '</th><th>' + scEsc(SC_ACTIVE) + '</th></tr></thead><tbody>' +
-          scRow('Starting price', scMoney(v.price), '&mdash;') +
+          '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th><th class="us">' + scEsc(scOursLabel(v)) + '</th><th>' + scEsc(SC_ACTIVE) + '</th></tr></thead><tbody>' +
+          scRow('Trim', scEsc(scTrim(v)[0]), '&mdash;') +
+          scRow('Starting price', scMoney(scTrimPrice(v)), '&mdash;') +
           scRow('Existing offer', scEsc(v.offer), '&mdash;') +
           scRow('Warranty', scEsc(v.warranty), '&mdash;') +
           scRow('L-W-H (mm)', scEsc(v.dims), '&mdash;') +
@@ -5597,10 +5661,12 @@
         host.innerHTML = html; if (focusSearch) scCompFocus(); return;
       }
 
+      var ourPrice = scTrimPrice(v);
       html += '<div class="sc-card">' +
-        '<div class="sc-card-h" style="margin-bottom:12px">' + scEsc(v.name) + ' vs ' + scEsc(c.name) + '</div>' +
-        '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th><th class="us">' + scEsc(v.name) + '</th><th>' + scEsc(c.name) + '</th></tr></thead><tbody>' +
-          scRow('Starting price', scMoney(v.price), scMoney(c.price)) +
+        '<div class="sc-card-h" style="margin-bottom:12px">' + scEsc(scOursLabel(v)) + ' vs ' + scEsc(c.name) + '</div>' +
+        '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th><th class="us">' + scEsc(scOursLabel(v)) + '</th><th>' + scEsc(c.name) + '</th></tr></thead><tbody>' +
+          scRow('Trim', scEsc(scTrim(v)[0]), '&mdash;') +
+          scRow('Starting price', scMoney(ourPrice), scMoney(c.price)) +
           scRow('Existing offer', scEsc(v.offer), scEsc(c.offer)) +
           scRow('Warranty', scEsc(v.warranty), scEsc(c.warranty)) +
           scRow('L-W-H (mm)', scEsc(v.dims), scEsc(c.dims)) +
@@ -5620,7 +5686,7 @@
       if (c.mo > v.mo) pts.push('Lower monthly payment (&minus;' + scMoney(c.mo - v.mo) + '/mo)');
       if (v.adas === 'L2 standard' && c.adas !== 'L2 standard') pts.push('ADAS L2 standard across all trims');
       if (parseFloat(v.fuel) < parseFloat(c.fuel)) pts.push('Better fuel figure (' + v.fuel + ' vs ' + c.fuel + ' L/100km)');
-      if (c.price > v.price) pts.push('Undercuts them by ' + scMoney(c.price - v.price) + ' at list');
+      if (c.price > ourPrice) pts.push('Undercuts them by ' + scMoney(c.price - ourPrice) + ' at list');
       if (v.service.indexOf('included') > -1 && c.service.indexOf('Not') === 0) pts.push('Service pack included, theirs is chargeable');
       if (!pts.length) pts.push('Lead on total cost of ownership, not sticker price');
 
@@ -5649,14 +5715,15 @@
       box.focus(); box.setSelectionRange(box.value.length, box.value.length);
     }
     function scAskAbout(name){
-      var l = scLead(), v = scBestFit(l), c = scCompFind(name);
+      var l = scLead(), v = scOurs(), c = scCompFind(name);
       scTab('chat');
-      scPush(scEsc('Compare ' + v.name + ' with ' + name), true);
+      scPush(scEsc('Compare ' + scOursLabel(v) + ' with ' + name), true);
       if (!c){
         scThink('I don\'t hold verified data on the ' + scEsc(name) + ', so I won\'t compare specs I can\'t source. What did the customer like about it? I\'ll position ' + scEsc(v.name) + ' against that.');
         return;
       }
-      var line = (c.price > v.price ? 'We come in ' + scMoney(c.price - v.price) + ' under them at list' : 'They list below us, so lead on total cost rather than sticker') +
+      var vp = scTrimPrice(v);
+      var line = (c.price > vp ? 'We come in ' + scMoney(c.price - vp) + ' under them at list' : 'They list below us, so lead on total cost rather than sticker') +
         ', with our ' + scEsc(v.warranty) + ' warranty against their ' + scEsc(c.warranty) + '.';
       scThink('<strong>' + scEsc(v.name) + ' vs ' + scEsc(c.name) + '</strong> &mdash; ' + line +
         ' Expect pushback on ' + scEsc(c.edge) + ' &mdash; meet it with the warranty and service-pack maths. Want this as a message for ' + scEsc(scFirst(l)) + '?');
