@@ -62,7 +62,7 @@
       border-radius: 50%; background: #ffffff; cursor: pointer;
       display: grid; place-items: center;
       -webkit-tap-highlight-color: transparent;
-      box-shadow: 0 6px 18px rgba(88,52,190,.28), 0 2px 6px rgba(20,24,34,.12);
+      box-shadow: 0 6px 18px rgba(118,50,205,.30), 0 2px 6px rgba(20,24,34,.12);
       transition: transform .24s cubic-bezier(.34,1.5,.64,1), box-shadow .24s;
     }
     /* fixed px: a percentage height on an auto-sized grid item leaves the svg at its intrinsic 231px */
@@ -73,7 +73,7 @@
     .cp-halo {
       position: absolute; left: 50%; top: 50%; width: 78%; height: 78%; border-radius: 50%;
       transform: translate(-50%,-50%); pointer-events: none;
-      background: radial-gradient(circle, rgba(160,130,255,.65) 0%, rgba(120,90,230,0) 70%);
+      background: radial-gradient(circle, rgba(170,115,245,.65) 0%, rgba(125,65,225,0) 70%);
       animation: cpHalo 3.6s ease-in-out infinite;
     }
     @keyframes cpHalo { 0%,100% { opacity: .3; transform: translate(-50%,-50%) scale(.8); } 50% { opacity: .85; transform: translate(-50%,-50%) scale(1.2); } }
@@ -90,7 +90,7 @@
 
     .cp-fab-dock:hover .cp-fab, .cp-fab-dock:focus-within .cp-fab {
       transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 14px 28px rgba(88,52,190,.4), 0 3px 8px rgba(20,24,34,.16);
+      box-shadow: 0 14px 28px rgba(118,50,205,.42), 0 3px 8px rgba(20,24,34,.16);
     }
     .cp-fab:focus-visible { outline: 2px solid #5b54d6; outline-offset: 4px; }
 
@@ -118,14 +118,17 @@
   <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <defs>
       <linearGradient id="cpGrad" x1="8%" y1="0%" x2="92%" y2="100%">
-        <stop offset="0" stop-color="#5FC6F7">
-          <animate attributeName="stop-color" values="#5FC6F7;#7A5AE6;#A64BF2;#5FC6F7" dur="7s" repeatCount="indefinite"/>
+        <stop offset="0" stop-color="#0E8FA6">
+          <animate attributeName="stop-color" values="#0E8FA6;#1682B5;#2A63C4;#0E8FA6" dur="7s" repeatCount="indefinite"/>
         </stop>
-        <stop offset=".55" stop-color="#7A5AE6">
-          <animate attributeName="stop-color" values="#7A5AE6;#A64BF2;#5FC6F7;#7A5AE6" dur="7s" repeatCount="indefinite"/>
+        <stop offset=".28" stop-color="#6E45D9">
+          <animate attributeName="stop-color" values="#6E45D9;#8B3FE0;#A43CD0;#6E45D9" dur="7s" repeatCount="indefinite"/>
         </stop>
-        <stop offset="1" stop-color="#A64BF2">
-          <animate attributeName="stop-color" values="#A64BF2;#5FC6F7;#7A5AE6;#A64BF2" dur="7s" repeatCount="indefinite"/>
+        <stop offset=".62" stop-color="#8B3FE0">
+          <animate attributeName="stop-color" values="#8B3FE0;#A43CD0;#6E45D9;#8B3FE0" dur="7s" repeatCount="indefinite"/>
+        </stop>
+        <stop offset="1" stop-color="#A43CD0">
+          <animate attributeName="stop-color" values="#A43CD0;#6E45D9;#8B3FE0;#A43CD0" dur="7s" repeatCount="indefinite"/>
         </stop>
       </linearGradient>
       <symbol id="cpMark" viewBox="0 0 231 232">
