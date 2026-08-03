@@ -3573,12 +3573,16 @@
       var c = document.getElementById('laGuideCount');
       if (c) c.textContent = done + ' of ' + qs.length + ' covered';
     }
+    // Meeting the customer in person is the one outcome whose opening line is always
+    // the same, so it is pre-written and editable rather than typed out each time.
+    var LA_NOTE_PREFILL = { 'Meet customer': 'Customer has come to the showroom and I am meeting them in person now.' };
     function laNotesField() {
+      var pre = LA_NOTE_PREFILL[laOutcome] || '';
       return '<div class="cp-field"><div class="la-notes-head"><label class="cp-label" style="margin:0">Notes</label>' +
           '<button type="button" class="la-rec" id="laRecBtn" onclick="laRecToggle()">' +
             '<span class="material-symbols-outlined">mic</span><span id="laRecLbl">Record</span></button>' +
         '</div>' +
-        '<textarea class="cp-textarea" id="laNoteText" placeholder="Conversation summary…"></textarea>' +
+        '<textarea class="cp-textarea" id="laNoteText" placeholder="Conversation summary…">' + scEsc(pre) + '</textarea>' +
         laNoteGuide() + '</div>';
     }
     // Dictation straight into the note. Browser speech API where it exists; nothing is sent anywhere else.
