@@ -3541,6 +3541,9 @@
       ]
     };
     function laNoteGuide(){
+      // Booking a meeting is scheduling, not a conversation to cover points in —
+      // the checklist belongs to outcomes that log what was discussed.
+      if (laOutcome === 'Meet customer') return '';
       var stage = journeySteps[currentStep] && journeySteps[currentStep].name;
       var qs = LA_NOTE_GUIDE[stage]; if (!qs) return '';
       return '<div class="la-guide" id="laGuide"><div class="la-guide-h">' +
