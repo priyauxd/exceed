@@ -4971,6 +4971,13 @@
     .sc-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px;}
     .sc-chip{flex:0 0 auto;white-space:nowrap;font-size:12px;color:#2b3444;background:var(--colorNeutralBackground4);border:1px solid #f5f5f5;border-radius:18px;padding:6px 12px;cursor:pointer;font-family:inherit;}
     .sc-chip:hover{background:#e3e7ee;border-color:#cfd4de;}
+    /* used, not spent — still tappable, tap jumps back to the answer */
+    .sc-chip.done{display:inline-flex;align-items:center;gap:3px;color:#8b93a1;background:#f7f7f9;border-color:#eceef3;}
+    .sc-chip.done .material-symbols-outlined{font-size:13px;color:#1e7a41;}
+    .sc-chip.done:hover{color:#2b3444;background:#eef0f4;border-color:#d9dde5;}
+    .sc-msg.flash .sc-bubble{animation:scFlash 1.5s ease-out;}
+    @keyframes scFlash{0%{box-shadow:0 0 0 3px rgba(139,63,224,.30);}100%{box-shadow:0 0 0 3px rgba(139,63,224,0);}}
+
     .sc-inrow{display:flex;align-items:center;gap:8px;}
     .sc-input{flex:1;background:var(--colorNeutralBackground4);border:1px solid #f5f5f5;border-radius:9px;padding:11px 13px;font-size:14px;font-family:inherit;color:#242b38;outline:none;}
     .sc-input:focus{border-color:var(--sc-accent);}
@@ -5588,21 +5595,58 @@
         var bub = row.querySelector('.sc-bubble'); if (bub) bub.innerHTML = reply;
         var b = document.getElementById('scBody'); if (b) b.scrollTop = b.scrollHeight;
       }, 950);
+      return row;
+    }
+    /* ── suggestion chips ────────────────────────────────────────────────
+       The three business-approved prompts, fixed. Once one has been answered
+       its chip carries a tick and stays tappable — tapping it again jumps
+       back to that answer instead of repeating it.                        */
+    var SC_ASK = {};          // kind -> the row its answer landed in
+    var SC_ASK_FOR = null;    // lead the above belongs to
+
+    var SC_CHIP_TXT = {
+      recap:     function(l){ return l ? 'Recap ' + scFirst(l) : 'Recap lead'; },
+      recommend: 'Why EXEED?',
+      resale:    'Resale value?'
+    };
+    var SC_CHIP_ORDER = ['recap','recommend','resale'];
+    function scChipTxt(kind){
+      var v = SC_CHIP_TXT[kind];
+      return typeof v === 'function' ? v(scLead()) : (v || kind);
+    }
+    function scAskReset(){
+      var l = scLead(), id = l ? l.id : null;
+      if (SC_ASK_FOR !== id){ SC_ASK = {}; SC_ASK_FOR = id; }
     }
     function scRenderChips(){
-      var c = document.getElementById('scChips'), l = scLead(); if (!c) return;
-      var v = scBestFit(l), first = scFirst(l);
-      var chips = [
-        ['recap',     l ? 'Recap ' + first : 'Recap lead'],
-        ['recommend', 'Why EXEED?'],
-        ['resale',    'Resale value?']
-      ];
-      c.innerHTML = chips.map(function(ch){
-        return '<button class="sc-chip" onclick="scChip(\'' + ch[0] + '\')">' + scEsc(ch[1]) + '</button>';
+      var c = document.getElementById('scChips'); if (!c) return;
+      scAskReset();
+      c.innerHTML = SC_CHIP_ORDER.map(function(k){
+        var done = !!SC_ASK[k];
+        return '<button class="sc-chip' + (done ? ' done' : '') + '" onclick="scChip(\'' + k + '\')"' +
+          (done ? ' title="Asked already — tap to jump to the answer"' : '') + '>' +
+          (done ? '<span class="material-symbols-outlined">check</span>' : '') +
+          scEsc(scChipTxt(k)) + '</button>';
       }).join('');
     }
+    function scJump(row){
+      if (!row) return;
+      row.classList.remove('flash');
+      void row.offsetWidth;
+      row.classList.add('flash');
+      if (row.scrollIntoView) { try { row.scrollIntoView({ block:'center' }); } catch(e){ row.scrollIntoView(); } }
+      setTimeout(function(){ row.classList.remove('flash'); }, 1500);
+    }
+    function scChip(kind){
+      scAskReset();
+      var prev = SC_ASK[kind];
+      if (prev && prev.parentNode){ scJump(prev); return; }   // already answered — take them to it
+      scPush(scEsc(scChipTxt(kind)), true);
+      SC_ASK[kind] = scThink(scReply(kind));
+      scRenderChips();
+    }
     function scReply(kind){
-      var l = scLead(), v = scBestFit(l);
+      var l = scLead(), v = scOurs();
       if (kind === 'recap'){
         if (!l) return 'No lead is open right now. Open a lead record and I\'ll recap it from the CRM.';
         return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + scEsc(l.stage) + ' &middot; lead score ' + l.score + ', convert ' + l.convertProb + '%.<br>' +
@@ -5637,11 +5681,6 @@
         return 'I\'ve prepared three drafts in the <em>Comms</em> tab &mdash; a follow-up, a spec-and-offer email and a test-drive invite. Nothing sends until you press send.';
       }
       return 'Checking that against the current CRM record and live inventory &mdash; I\'ll confirm before anything is saved.';
-    }
-    function scChip(kind){
-      var btn = event && event.target ? event.target.textContent : kind;
-      scPush(scEsc(btn), true);
-      scThink(scReply(kind));
     }
     function scSend(){
       var i = document.getElementById('scInput'); if (!i || !i.value.trim()) return;
