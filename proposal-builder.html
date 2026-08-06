@@ -66,10 +66,11 @@
   .stage-badge{position:absolute; top:18px; left:26px; display:flex; flex-direction:column; gap:2px; z-index:2;}
   .stage-badge .m{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;}
   .stage-badge .t{font-size:12px; color:var(--ink2);}
-  .badge-line{display:flex; align-items:center; gap:8px;}
-  /* Model year rides beside the name as a badge, not in the card row — it
-     re-labels the build you already picked rather than being one of the
-     things you are choosing between. */
+  /* Model year sits in the dock header, paired with SELECT MODEL — year and
+     model are the one decision, and the header already reads as the label for
+     what the row below is asking. */
+  .dock-year{display:flex; align-items:center; gap:8px;}
+  .dock-year .dy-l{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:var(--muted);}
   .year-pick{position:relative; display:inline-flex; align-items:center;}
   .year-pick select{appearance:none; -webkit-appearance:none; font-family:inherit; font-size:10.5px; font-weight:800;
     letter-spacing:.05em; color:var(--ink); background:var(--panel2); border:1px solid var(--line); border-radius:999px;
@@ -319,17 +320,16 @@
   <div class="wrap">
     <!-- Stage + dock -->
     <div class="stage">
-      <div class="stage-badge">
-        <div class="badge-line"><span class="m" id="badgeModel">EXEED ES</span>
-          <span class="year-pick"><select id="yearSel" aria-label="Model year" onchange="setYear(this.value)"></select><span class="mi yc">expand_more</span></span>
-          <span class="year-note" id="yearNote"></span>
-        </div>
-        <span class="t" id="badgeCls">Fully electric SUV</span>
-      </div>
+      <div class="stage-badge"><span class="m" id="badgeModel">EXEED ES</span><span class="t" id="badgeCls">Fully electric SUV</span></div>
       <div class="stage-img-wrap"><img class="stage-img" id="stageImg" src="assets/es/ext-white.png" alt="EXEED ES"></div>
       <div class="stage-caption"><div class="big" id="stageBig">EXEED ES</div><div class="sub" id="stageSub">Choose your configuration</div></div>
       <div class="dock">
-        <div class="dock-h"><span class="t" id="dockTitle">Select</span></div>
+        <div class="dock-h"><span class="t" id="dockTitle">Select</span>
+          <span class="dock-year" id="dockYear"><span class="dy-l">Model year</span>
+            <span class="year-pick"><select id="yearSel" aria-label="Model year" onchange="setYear(this.value)"></select><span class="mi yc">expand_more</span></span>
+            <span class="year-note" id="yearNote"></span>
+          </span>
+        </div>
         <div id="dockBody"></div>
         <div class="dock-nav">
           <button class="btn ghost" id="backBtn" onclick="go(-1)"><span class="mi">chevron_left</span> Back</button>
@@ -584,6 +584,7 @@
       body.innerHTML = '<div class="vas-sub">Pick accessories &amp; services. The total feeds into the financing on the right.</div><div id="vasTable"></div>';
       renderVasChooser();
     }
+    renderYear();
     document.getElementById('nextBtn').style.visibility = state.step === STEPS.length-1 ? 'hidden' : 'visible';
     document.getElementById('backBtn').style.visibility = state.step === 0 ? 'hidden' : 'visible';
   }
@@ -596,6 +597,12 @@
     // the badge line was hardcoded to the ES, so every other model read as a
     // "Fully Electric SUV" — it follows the picked model now
     var bc = document.getElementById('badgeCls'); if (bc) bc.textContent = model().cls;
+  }
+
+  // Only on the model step: past it the dock is asking about trim and colour,
+  // and a year sitting in that header would be captioning the wrong question.
+  // The summary keeps it on screen for the rest of the flow.
+  function renderYear(){
     var ys = document.getElementById('yearSel');
     if (ys){
       if (!ys.options.length) ys.innerHTML = YEARS.map(function(y){
@@ -604,6 +611,7 @@
       ys.value = String(state.year);
     }
     var yn = document.getElementById('yearNote'); if (yn) yn.textContent = YEAR_NOTE[state.year] || '';
+    var dy = document.getElementById('dockYear'); if (dy) dy.style.display = (state.step === 0) ? '' : 'none';
   }
 
   function renderSummary(){
@@ -669,7 +677,7 @@
     renderSummary();
   }
   function setCampaign(v){ state.campaign = v; renderSummary(); }
-  function setYear(v){ state.year = parseInt(v, 10) || state.year; renderStage(); renderSummary(); }
+  function setYear(v){ state.year = parseInt(v, 10) || state.year; renderYear(); renderSummary(); }
   function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
   function goTo(i){ state.step=i; renderAll(); }
 
