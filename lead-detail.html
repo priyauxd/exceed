@@ -912,7 +912,7 @@
     .dq-group:first-child { padding-top:2px; }
     .dq-group:last-child { border-bottom:none; }
     .dq-q.dq-follow { margin-top:16px; }
-    .dq-q[hidden], .dq-note[hidden], .dq-notebtn[hidden], .dq-notebox[hidden], .dq-other[hidden] { display:none; }
+    .dq-q[hidden], .dq-note[hidden], .dq-notebtn[hidden], .dq-notebox[hidden], .dq-other[hidden], .dq-menu[hidden] { display:none; }
     .dq-head { display:flex; align-items:flex-start; gap:8px; }
     .dq-n { flex:0 0 auto; width:18px; height:18px; margin-top:1px; border-radius:50%; background:var(--blue-soft);
       color:var(--blue); font-size:10px; font-weight:700; display:grid; place-items:center; }
@@ -922,17 +922,30 @@
     .dq-label .req, .dq-cap .req { color:var(--red); font-weight:700; margin-left:2px; }
     .dq-cap { font-size:11px; font-weight:600; color:var(--ink-secondary); margin:5px 0 0 26px; }
     .dq-cap.follow::before { content:'↳ '; color:var(--ink-muted); }
-    .dq-chips { display:flex; flex-wrap:wrap; gap:6px; margin:9px 0 0 26px; }
-    .dq-chip { font-family:inherit; font-size:11px; font-weight:600; color:var(--ink-secondary);
-      background:var(--colorNeutralBackground3); border:1px solid transparent; border-radius:20px;
-      padding:4px 10px; line-height:1.35; cursor:pointer; transition:background .12s, color .12s, border-color .12s; }
-    .dq-chip:hover { border-color:var(--blue); color:var(--blue); }
-    .dq-chip.on { background:var(--blue); border-color:var(--blue); color:#fff; }
-    .dq-chip.skip { background:transparent; border:1px dashed var(--border); color:var(--ink-muted); }
-    .dq-chip.skip:hover { border-color:var(--ink-muted); color:var(--ink-secondary); }
-    .dq-chip.skip.on { background:var(--ink-muted); border:1px solid var(--ink-muted); color:#fff; }
+    .dq-field { position:relative; max-width:440px; margin:9px 0 0 26px; }
+    .dq-select { width:100%; box-sizing:border-box; display:flex; align-items:center; gap:6px; padding:6px 9px;
+      font-family:inherit; font-size:12.5px; font-weight:500; color:var(--ink); text-align:left; cursor:pointer;
+      background:var(--colorNeutralBackground3); border:1px solid transparent; border-bottom-color:var(--colorNeutralStrokeAccessible);
+      border-radius:var(--borderRadiusMedium); outline:none; transition:background .1s, border-color .1s; }
+    select.dq-select { display:block; }
+    .dq-select:hover { background:var(--colorNeutralBackground4); }
+    .dq-select:focus-visible { background:var(--surface); border-color:var(--border); border-bottom:2px solid var(--colorCompoundBrandStroke); padding-bottom:5px; }
+    .dq-select.is-blank { color:var(--ink-muted); }
+    .dq-select.is-skip { color:var(--ink-muted); border-bottom-style:dashed; }
+    .dq-val { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .dq-count { flex:0 0 auto; font-size:10px; font-weight:700; color:var(--blue); background:var(--blue-soft); border-radius:9px; padding:1px 6px; }
+    .dq-caret { flex:0 0 auto; font-size:16px; color:var(--ink-muted); transition:transform .15s; }
+    .dq-field.open .dq-caret { transform:rotate(180deg); }
+    .dq-menu { position:absolute; z-index:40; left:0; right:0; top:calc(100% + 4px); max-height:238px; overflow:auto;
+      padding:4px; background:var(--surface); border:1px solid var(--border-soft);
+      border-radius:var(--borderRadiusMedium); box-shadow:var(--shadow2); }
+    .dq-opt { display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:4px; cursor:pointer;
+      font-size:12px; font-weight:500; color:var(--ink); line-height:1.35; }
+    .dq-opt:hover { background:var(--colorNeutralBackground3); }
+    .dq-opt input { accent-color:var(--blue); margin:0; cursor:pointer; }
+    .dq-opt.on { color:var(--blue); font-weight:600; }
+    .dq-opt.skip { margin-top:4px; padding-top:8px; border-top:1px solid var(--border-soft); color:var(--ink-muted); font-weight:600; }
     .dq-off .dq-label, .dq-off .dq-cap { color:var(--ink-muted); }
-    .dq-hint { font-size:10px; color:var(--ink-muted); margin:6px 0 0 26px; }
     .dq-other, .dq-notebox { width:calc(100% - 26px); margin:8px 0 0 26px; padding:6px 9px; font-family:inherit;
       font-size:12.5px; color:var(--ink); background:var(--colorNeutralBackground3); border:1px solid transparent;
       border-bottom-color:var(--colorNeutralStrokeAccessible); border-radius:var(--borderRadiusMedium);
@@ -3315,7 +3328,9 @@
     /* ── Discovery capture ──────────────────────────────────────────────
        Built for a rep filling this in front of a customer, not for a data
        entry clerk afterwards:
-       · chips, not dropdowns — glance and tap, no hidden list to read
+       · dropdowns, matching the rest of the CRM's forms — long option sets stay
+         inside one field instead of pushing the next question off screen, and
+         they are keyboard- and screen-reader-native
        · answers live on the lead, so leaving the tab mid-conversation keeps them
        · every question can be marked "Not discussed" instead of forcing an
          invented answer, which is what mandatory dropdowns actually produce
@@ -3371,10 +3386,34 @@
       return { total: qs.length, done: done, skip: skip };
     }
 
-    function dqChipHtml(l, f, o){
+    // Which menu is open and where focus goes after the pane re-renders.
+    var dqOpenKey = null, dqFocus = null;
+
+    function dqMenuRow(l, f, o){
       var on = dqSel(l, f.k).indexOf(o) > -1;
-      return '<button class="dq-chip'+(on ? ' on' : '')+(o === DQ_SKIP ? ' skip' : '')+'"' +
-        ' data-v="'+dpEsc(o)+'" aria-pressed="'+on+'" onclick="dqPick(this)">'+dpEsc(o)+'</button>';
+      return '<label class="dq-opt'+(on ? ' on' : '')+(o === DQ_SKIP ? ' skip' : '')+'">' +
+        '<input type="checkbox" value="'+dpEsc(o)+'"'+(on ? ' checked' : '')+' onchange="dqCheck(this)">' +
+        '<span>'+dpEsc(o)+'</span></label>';
+    }
+    // A native <select multiple> is the one dropdown nobody can use, so questions
+    // that take several answers get a checkbox menu behind the same field.
+    function dqControlHtml(l, f){
+      var sel = dqSel(l, f.k);
+      var cls = (sel.length ? '' : ' is-blank') + (dqSkipped(l, f.k) ? ' is-skip' : '');
+      if (f.multi){
+        var open = dqOpenKey === f.k;
+        return '<button type="button" class="dq-select'+cls+'" aria-haspopup="listbox" aria-expanded="'+open+'" onclick="dqMenu(this)">' +
+            '<span class="dq-val">'+dpEsc(sel.length ? sel.join(', ') : 'Select all that apply')+'</span>' +
+            (sel.length > 1 ? '<span class="dq-count">'+sel.length+'</span>' : '') +
+            '<span class="material-symbols-outlined dq-caret">expand_more</span></button>' +
+          '<div class="dq-menu" role="listbox" aria-multiselectable="true"'+(open ? '' : ' hidden')+'>' +
+            f.opts.map(function(o){ return dqMenuRow(l, f, o); }).join('') + dqMenuRow(l, f, DQ_SKIP) +
+          '</div>';
+      }
+      var opt = function(o){ return '<option'+(sel.indexOf(o) > -1 ? ' selected' : '')+'>'+dpEsc(o)+'</option>'; };
+      return '<select class="dq-select'+cls+'" onchange="dqSet(this)">' +
+        '<option value="">'+dpEsc(DISC_NONE)+'</option>' + f.opts.map(opt).join('') + opt(DQ_SKIP) +
+      '</select>';
     }
     function dqBlockHtml(l, f, visible){
       if (f.note){
@@ -3393,7 +3432,6 @@
             (f.tag ? '<span class="dq-tag">'+dpEsc(f.tag)+'</span>' : '') + '</div>' +
           (f.cap ? '<div class="dq-cap">'+dpEsc(f.cap)+'</div>' : '')
         : '<div class="dq-cap follow">'+dpEsc(f.label)+star+'</div>';
-      var chips = f.opts.map(function(o){ return dqChipHtml(l, f, o); }).join('') + dqChipHtml(l, f, DQ_SKIP);
       var other = '';
       if (f.opts.some(dpIsOther)){
         var shown = sel.some(dpIsOther);
@@ -3403,9 +3441,8 @@
       }
       return '<div class="dq-q'+(f.num ? ' dq-main' : ' dq-follow')+(dqSkipped(l, f.k) ? ' dq-off' : '')+'"'+(visible ? '' : ' hidden')+'>' +
         head +
-        '<div class="dq-chips" data-k="'+f.k+'" data-multi="'+(f.multi ? 1 : 0)+'">'+chips+'</div>' +
+        '<div class="dq-field'+(dqOpenKey === f.k ? ' open' : '')+'" data-k="'+f.k+'">'+dqControlHtml(l, f)+'</div>' +
         other +
-        (f.multi && !sel.length ? '<div class="dq-hint">Pick as many as apply</div>' : '') +
       '</div>';
     }
 
@@ -3438,9 +3475,20 @@
         '</div>';
       }).join('');
     }
+    // The pane rebuilds wholesale on every answer, so put the caret back where
+    // the rep left it — otherwise keyboard entry restarts at the top each pick.
     function dqRender(){
       var h = document.getElementById('dqPane');
-      if (h && selectedIdx > -1) h.innerHTML = dqInner(leads[selectedIdx]);
+      if (!h || selectedIdx < 0) return;
+      h.innerHTML = dqInner(leads[selectedIdx]);
+      if (!dqFocus) return;
+      var want = dqFocus; dqFocus = null;
+      var wrap = h.querySelector('.dq-field[data-k="'+want.k+'"]');
+      if (!wrap) return;
+      var el = want.v
+        ? wrap.querySelector('.dq-menu input[value="'+want.v.replace(/"/g, '\\"')+'"]')
+        : wrap.querySelector('.dq-select');
+      if (el) el.focus();
     }
     // Clearing an answer takes its follow-ups with it — a stale follow-up
     // sitting under a blank parent reads as something the customer said.
@@ -3453,20 +3501,56 @@
         if (f.grp === me.grp && f.step > me.step){ delete dqBag(l)[f.k]; delete dqBag(l)[f.k + '.other']; }
       });
     }
-    function dqPick(btn){
-      var l = (selectedIdx > -1) ? leads[selectedIdx] : null; if (!l) return;
-      var wrap = btn.parentNode, k = wrap.getAttribute('data-k'), multi = wrap.getAttribute('data-multi') === '1';
-      var v = btn.getAttribute('data-v'), cur = dqSel(l, k), at = cur.indexOf(v);
-      if (v === DQ_SKIP) cur = (at > -1) ? [] : [DQ_SKIP];
-      else if (multi){
-        if (at > -1) cur.splice(at, 1); else cur.push(v);
-        cur = cur.filter(function(x){ return x !== DQ_SKIP; });
-      } else cur = (at > -1) ? [] : [v];
-      dqBag(l)[k] = multi ? cur : (cur[0] || '');
+    function dqLead(){ return (selectedIdx > -1) ? leads[selectedIdx] : null; }
+    function dqStore(l, k, cur, multi){
+      if (cur.length) dqBag(l)[k] = multi ? cur : cur[0]; else delete dqBag(l)[k];
       if (!cur.some(dpIsOther)) delete dqBag(l)[k + '.other'];
       dqRollback(l, k);
       dqRender();
     }
+    function dqSet(sel){
+      var l = dqLead(); if (!l) return;
+      var k = sel.parentNode.getAttribute('data-k');
+      dqFocus = { k: k };
+      dqStore(l, k, sel.value ? [sel.value] : [], false);
+    }
+    function dqMenu(btn){
+      var k = btn.parentNode.getAttribute('data-k');
+      dqOpenKey = (dqOpenKey === k) ? null : k;
+      dqFocus = { k: k };
+      dqRender();
+    }
+    // Ticking leaves the menu open — a customer names three things in one breath.
+    function dqCheck(box){
+      var l = dqLead(); if (!l) return;
+      var k = box.closest('.dq-field').getAttribute('data-k');
+      var v = box.value, cur = dqSel(l, k), at = cur.indexOf(v);
+      if (v === DQ_SKIP) cur = (at > -1) ? [] : [DQ_SKIP];
+      else {
+        if (at > -1) cur.splice(at, 1); else cur.push(v);
+        cur = cur.filter(function(x){ return x !== DQ_SKIP; });
+      }
+      dqOpenKey = k;
+      dqFocus = { k: k, v: v };
+      dqStore(l, k, cur, true);
+    }
+    function dqClose(){
+      if (dqOpenKey == null) return;
+      dqOpenKey = null;
+      dqRender();
+    }
+    document.addEventListener('click', function(e){
+      if (dqOpenKey == null) return;
+      if (e.target && e.target.closest && e.target.closest('.dq-field')) return;
+      dqClose();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key !== 'Escape' || dqOpenKey == null) return;
+      var k = dqOpenKey;
+      dqOpenKey = null;
+      dqFocus = { k: k };
+      dqRender();
+    });
     function dqNote(el, k){
       var l = (selectedIdx > -1) ? leads[selectedIdx] : null; if (!l) return;
       if (el.value) dqBag(l)[k] = el.value; else delete dqBag(l)[k];
