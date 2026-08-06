@@ -78,10 +78,6 @@
   .year-pick select:hover{border-color:var(--ink2);}
   .year-pick select:focus-visible{border-color:var(--ink);}
   .year-pick .yc{position:absolute; right:4px; font-size:13px; color:var(--ink2); pointer-events:none;}
-  /* the note stays outside the pill so run-out stock is visible without
-     stretching the badge to twice the model name's width */
-  .year-note{font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--ink2);}
-  .year-note:empty{display:none;}
   .stage-img-wrap{flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:clamp(10px,2.5vh,24px) 34px 0;}
   .stage-img{max-width:86%; max-height:92%; object-fit:contain; filter:drop-shadow(0 36px 48px rgba(20,24,34,.26)); transition:opacity .35s ease, transform .5s ease;}
   .stage-img.swap{opacity:0; transform:translateY(8px) scale(.99);}
@@ -327,7 +323,6 @@
         <div class="dock-h"><span class="t" id="dockTitle">Select</span>
           <span class="dock-year" id="dockYear"><span class="dy-l">Model year</span>
             <span class="year-pick"><select id="yearSel" aria-label="Model year" onchange="setYear(this.value)"></select><span class="mi yc">expand_more</span></span>
-            <span class="year-note" id="yearNote"></span>
           </span>
         </div>
         <div id="dockBody"></div>
@@ -467,11 +462,9 @@
     { id:'custom',   name:'Custom',   desc:'Pick your own',   items:null }
   ];
   var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
-  // Model years quotable today: the current one, last year's run-out stock, and
-  // the incoming one customers ask to wait for. Descriptive only — any run-out
-  // price delta is a campaign, so it belongs in CAMPAIGNS, not here.
+  // Model years quotable today. Descriptive only — a run-out or pre-order price
+  // delta is a campaign, so it belongs in CAMPAIGNS, not here.
   var YEARS = [2027, 2026, 2025];
-  var YEAR_NOTE = { 2027: 'Arriving', 2025: 'Run-out' };
 
   var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'evperf', vasVal:{ cmi:5000, gap:2499, smc:4000 }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
@@ -610,7 +603,6 @@
       }).join('');
       ys.value = String(state.year);
     }
-    var yn = document.getElementById('yearNote'); if (yn) yn.textContent = YEAR_NOTE[state.year] || '';
     var dy = document.getElementById('dockYear'); if (dy) dy.style.display = (state.step === 0) ? '' : 'none';
   }
 
