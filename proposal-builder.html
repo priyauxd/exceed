@@ -66,6 +66,21 @@
   .stage-badge{position:absolute; top:18px; left:26px; display:flex; flex-direction:column; gap:2px; z-index:2;}
   .stage-badge .m{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;}
   .stage-badge .t{font-size:12px; color:var(--ink2);}
+  .badge-line{display:flex; align-items:center; gap:8px;}
+  /* Model year rides beside the name as a badge, not in the card row — it
+     re-labels the build you already picked rather than being one of the
+     things you are choosing between. */
+  .year-pick{position:relative; display:inline-flex; align-items:center;}
+  .year-pick select{appearance:none; -webkit-appearance:none; font-family:inherit; font-size:10.5px; font-weight:800;
+    letter-spacing:.05em; color:var(--ink); background:var(--panel2); border:1px solid var(--line); border-radius:999px;
+    padding:2px 21px 2px 9px; cursor:pointer; outline:none; transition:border-color .12s, background .12s;}
+  .year-pick select:hover{border-color:var(--ink2);}
+  .year-pick select:focus-visible{border-color:var(--ink);}
+  .year-pick .yc{position:absolute; right:4px; font-size:13px; color:var(--ink2); pointer-events:none;}
+  /* the note stays outside the pill so run-out stock is visible without
+     stretching the badge to twice the model name's width */
+  .year-note{font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--ink2);}
+  .year-note:empty{display:none;}
   .stage-img-wrap{flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:clamp(10px,2.5vh,24px) 34px 0;}
   .stage-img{max-width:86%; max-height:92%; object-fit:contain; filter:drop-shadow(0 36px 48px rgba(20,24,34,.26)); transition:opacity .35s ease, transform .5s ease;}
   .stage-img.swap{opacity:0; transform:translateY(8px) scale(.99);}
@@ -304,7 +319,13 @@
   <div class="wrap">
     <!-- Stage + dock -->
     <div class="stage">
-      <div class="stage-badge"><span class="m" id="badgeModel">EXEED ES</span><span class="t">Fully Electric SUV &middot; 2026</span></div>
+      <div class="stage-badge">
+        <div class="badge-line"><span class="m" id="badgeModel">EXEED ES</span>
+          <span class="year-pick"><select id="yearSel" aria-label="Model year" onchange="setYear(this.value)"></select><span class="mi yc">expand_more</span></span>
+          <span class="year-note" id="yearNote"></span>
+        </div>
+        <span class="t" id="badgeCls">Fully electric SUV</span>
+      </div>
       <div class="stage-img-wrap"><img class="stage-img" id="stageImg" src="assets/es/ext-white.png" alt="EXEED ES"></div>
       <div class="stage-caption"><div class="big" id="stageBig">EXEED ES</div><div class="sub" id="stageSub">Choose your configuration</div></div>
       <div class="dock">
@@ -446,8 +467,13 @@
     { id:'custom',   name:'Custom',   desc:'Pick your own',   items:null }
   ];
   var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
+  // Model years quotable today: the current one, last year's run-out stock, and
+  // the incoming one customers ask to wait for. Descriptive only — any run-out
+  // price delta is a campaign, so it belongs in CAMPAIGNS, not here.
+  var YEARS = [2027, 2026, 2025];
+  var YEAR_NOTE = { 2027: 'Arriving', 2025: 'Run-out' };
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'evperf', vasVal:{ cmi:5000, gap:2499, smc:4000 }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'evperf', vasVal:{ cmi:5000, gap:2499, smc:4000 }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -567,6 +593,17 @@
     if (state.step === 3){ setStageImg(ic.img); document.getElementById('stageBig').textContent = ic.name; document.getElementById('stageSub').textContent = 'Interior'; }
     else { setStageImg(c.img); document.getElementById('stageBig').textContent = model().name + ' · ' + t.name; document.getElementById('stageSub').textContent = c.name + ' · ' + ic.name; }
     var bm = document.getElementById('badgeModel'); if (bm) bm.textContent = model().name;
+    // the badge line was hardcoded to the ES, so every other model read as a
+    // "Fully Electric SUV" — it follows the picked model now
+    var bc = document.getElementById('badgeCls'); if (bc) bc.textContent = model().cls;
+    var ys = document.getElementById('yearSel');
+    if (ys){
+      if (!ys.options.length) ys.innerHTML = YEARS.map(function(y){
+        return '<option value="'+y+'">'+y+'</option>';
+      }).join('');
+      ys.value = String(state.year);
+    }
+    var yn = document.getElementById('yearNote'); if (yn) yn.textContent = YEAR_NOTE[state.year] || '';
   }
 
   function renderSummary(){
@@ -583,7 +620,7 @@
     var netPrice = baseNet + vas;
     var loanW = (pay === 'cash') ? 0 : Math.max(0, netPrice - booking - downpay - dpSupport);
     document.getElementById('sumHead').textContent = model().name;
-    document.getElementById('sumSubhead').textContent = [t.name, c.name, ic.name].join(' · ');
+    document.getElementById('sumSubhead').textContent = [state.year, t.name, c.name, ic.name].join(' · ');
     document.getElementById('sumRows').innerHTML =
       row('Trim', t.name, 'tune') +
       rowColor('Exterior', c.name, c.hex, 'palette') +
@@ -632,13 +669,14 @@
     renderSummary();
   }
   function setCampaign(v){ state.campaign = v; renderSummary(); }
+  function setYear(v){ state.year = parseInt(v, 10) || state.year; renderStage(); renderSummary(); }
   function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
   function goTo(i){ state.step=i; renderAll(); }
 
   function saveProposal(){
     var t = trim(), c = ext(), ic = intr();
     var proposal = {
-      model:model().name+' · '+t.name, trim:t.name, year:'2026',
+      model:model().name+' · '+t.name, trim:t.name, year:String(state.year),
       extColor:c.name, extHex:c.hex, image:c.img,
       intColor:ic.name, intHex:ic.hex,
       range:t.range, power:t.power,

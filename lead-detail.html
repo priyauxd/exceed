@@ -4374,7 +4374,7 @@
       for (var k = 0; k < n; k++) {
         out.push({
           chassis: 'LVX-2026-0' + (56100 + k * 137 + (p.nsp % 100)),
-          model: model, trim: p.trim || '', year: '2026',
+          model: model, trim: p.trim || '', year: p.year || '2026',
           extColor: p.extColor, extHex: p.extHex, image: p.image,
           intColor: p.intColor,
           location: 'DIP Warehouse',
