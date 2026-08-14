@@ -104,14 +104,14 @@
   .card.mcard .cn{font-size:14px;}
   .card.mcard .cs{font-size:11px; margin-top:2px;}
   .card.mcard .specs{gap:8px; margin-top:8px;}
-  .card.mcard .cp{font-size:12.5px; margin-top:auto; padding-top:8px;}
+  .card.mcard .cp{font-size:11.5px; margin-top:auto; padding-top:8px; white-space:nowrap;}
   .card.mcard .check{top:10px; right:10px; width:18px; height:18px;}
   .card{border:1.5px solid var(--line); border-radius:14px; padding:15px; cursor:pointer; background:var(--panel); transition:.15s; position:relative;}
   .card:hover{border-color:var(--card-hover);}
   .card.on{border-color:var(--sel-border); box-shadow:0 8px 24px var(--card-shadow);}
   .card .cn{font-size:15px; font-weight:800;}
   .card .cs{font-size:12px; color:var(--ink2); margin-top:3px;}
-  .card .cp{font-size:14px; font-weight:800; margin-top:10px;}
+  .card .cp{font-size:12px; font-weight:600; margin-top:10px;}
   .card .specs{display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;}
   .card .specs span{font-size:11px; color:var(--ink2); display:inline-flex; align-items:center; gap:4px;}
   .card .check{position:absolute; top:12px; right:12px; width:20px; height:20px; border-radius:50%; background:var(--ink); color:var(--btn-text); display:none; align-items:center; justify-content:center;}
@@ -166,6 +166,8 @@
   .vas-item-p{font-weight:700; color:var(--ink2); white-space:nowrap;}
   .vas-item.on .vas-item-p{color:var(--ink);}
   .vas-rec{display:inline-flex; align-items:center; margin-left:8px; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:#3d9b63; background:rgba(92,185,127,.16); border:1px solid rgba(92,185,127,.4); border-radius:20px; padding:1px 7px; vertical-align:middle; white-space:nowrap;}
+  /* Campaign-covered services lead the table at zero on both sides. */
+  .vas-catrow.is-free .pc-v{color:var(--ink2);}
   .vas-cat{cursor:pointer;}
   .vas-cat:hover{background:var(--panel2);}
   .vas-cat .pc-i, .vas-catrow .pc-i{display:flex; align-items:center; gap:10px;}
@@ -227,6 +229,9 @@
   .sum-row .k{display:flex; align-items:center; gap:4px; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
   .sum-k-ic{font-size:13px; line-height:1; color:var(--ink2); text-transform:none; letter-spacing:0;}
   .sum-row .v{font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; color:var(--ink);}
+  .sum-row .v .sum-empty{color:var(--muted); font-weight:600;}
+  .sum-row.off{background:transparent; border-style:dashed;}
+  .sum-row.off .k, .sum-row.off .v{opacity:.6;}
   .sum-row .v .cdot{width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); flex-shrink:0;}
 
   .pay-toggle{display:flex; gap:6px; margin-bottom:8px;}
@@ -253,6 +258,10 @@
   .fin-sub{font-size:10px; font-weight:700; color:var(--muted); text-transform:none; letter-spacing:0; margin-left:4px;}
   .fin-field .fin-v{font-weight:800; display:inline-flex; align-items:center; gap:6px;}
   .fin-cur{font-size:12px; font-weight:700; color:var(--ink2);}
+  .yn{display:inline-flex; gap:4px;}
+  .yn-btn{padding:3px 12px; border:1px solid var(--line); border-radius:7px; background:var(--panel); color:var(--ink2); font-family:inherit; font-size:11.5px; font-weight:700; cursor:pointer; transition:.12s;}
+  .yn-btn:hover{border-color:var(--card-hover);}
+  .yn-btn.on{background:var(--cta-bg); color:var(--cta-text); border-color:var(--cta-bg);}
   .vas-info{position:relative; display:inline-flex; align-items:center; margin-left:4px; color:var(--ink2); cursor:help; vertical-align:middle;}
   .vas-info .mi{font-size:14px;}
   .vas-tip{position:absolute; bottom:calc(100% + 8px); left:0; min-width:210px; max-width:250px; background:var(--panel); border:1px solid var(--line); border-radius:10px; box-shadow:0 12px 30px rgba(8,10,14,.35); padding:9px 11px; display:none; z-index:30; white-space:normal; text-transform:none; letter-spacing:0; font-weight:400;}
@@ -324,6 +333,9 @@
           <span class="dock-year" id="dockYear"><span class="dy-l">Model year</span>
             <span class="year-pick"><select id="yearSel" aria-label="Model year" onchange="setYear(this.value)"></select><span class="mi yc">expand_more</span></span>
           </span>
+          <span class="dock-year" id="dockCamp"><span class="dy-l">Campaign</span>
+            <span class="year-pick"><select id="campSel" aria-label="Campaign" onchange="setCampaign(this.value)"></select><span class="mi yc">expand_more</span></span>
+          </span>
         </div>
         <div id="dockBody"></div>
         <div class="dock-nav">
@@ -349,7 +361,10 @@
       <div class="fin">
         <div class="fin-field"><span class="k">List price</span><span class="fin-v" id="finList">AED 0</span></div>
         <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-v" id="finTrade">AED 0</span></div>
-        <div class="fin-field"><span class="k">Booking amount</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="bookingAmt" type="number" min="2000" step="500" value="2000" oninput="setBooking(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Is trade-in accepted</span><span class="yn">
+          <button type="button" class="yn-btn" data-yn="yes" onclick="setTradeAccepted(true)">Yes</button>
+          <button type="button" class="yn-btn" data-yn="no" onclick="setTradeAccepted(false)">No</button>
+        </span></div>
         <div class="fin-field" id="rowDiscount"><span class="k">Discount amount<span class="fin-sub" id="discHint"></span></span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="discountAmt" type="number" min="0" step="500" value="0" oninput="setDiscount(this.value)"></span></div>
         <div class="fin-field" id="rowDpSupport"><span class="k">DP support</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="dpSupportAmt" type="number" min="0" step="500" value="20000" oninput="setDpSupport(this.value)"></span></div>
         <div class="fin-field"><span class="k">Value added services<span class="vas-info"><span class="mi">info</span><span class="vas-tip" id="vasTip"></span></span></span><span class="fin-v" id="finVas">AED 0</span></div>
@@ -380,9 +395,9 @@
 <script>
   var RATE = 0.035;
   var TRIMS = [
-    { id:'std', name:'Standard Range', range:'520 km', power:'204 hp', accel:'7.9s', price:159900 },
-    { id:'lr',  name:'Long Range',     range:'620 km', power:'279 hp', accel:'6.5s', price:179900 },
-    { id:'awd', name:'AWD Performance',range:'580 km', power:'517 hp', accel:'3.9s', price:209900 }
+    { id:'std', name:'Standard Range', engine:'2T', range:'520 km', power:'204 hp', price:159900, priceTo:169900 },
+    { id:'lr',  name:'Long Range',     engine:'2T', range:'620 km', power:'279 hp', price:179900, priceTo:194900 },
+    { id:'awd', name:'AWD Performance',engine:'2T', range:'580 km', power:'517 hp', price:209900, priceTo:229900 }
   ];
   var EXT = [
     { id:'white',  name:'Pearl White',     hex:'#eceff2', img:'assets/es/ext-white.png' },
@@ -440,21 +455,23 @@
       { id:'acc-batt',   label:'Battery Booster', price:1100 }
     ]}
   ];
+  // price = entry trim, priceTo = top trim. ES matches the TRIMS range exactly.
   var MODELS = [
-    { id:'vx',  name:'EXEED VX',  cls:'Flagship 7-seat SUV', s1:'2.0T · 261 hp',  s2:'6/7 seats', price:189900 },
-    { id:'txl', name:'EXEED TXL', cls:'Premium SUV',         s1:'1.6T · 197 hp',  s2:'5 seats',   price:129900 },
-    { id:'lx',  name:'EXEED LX',  cls:'Compact SUV',         s1:'1.5T · 156 hp',  s2:'5 seats',   price:99900 },
-    { id:'rx',  name:'EXEED RX',  cls:'Coupe SUV',           s1:'2.0T · 261 hp',  s2:'Sport',     price:169900 },
-    { id:'es',  name:'EXEED ES',  cls:'Fully electric SUV',  s1:'Up to 620 km',   s2:'517 hp',    price:159900 },
-    { id:'et',  name:'EXEED ET',  cls:'Electric REEV SUV',   s1:'Up to 1400 km',  s2:'Hybrid EV', price:199900 }
+    { id:'vx', body:'SUV',  name:'EXEED VX',  cls:'Flagship 7-seat SUV', s1:'2.0T · 261 hp',  s2:'6/7 seats', price:189900, priceTo:239900 },
+    { id:'txl', body:'SUV', name:'EXEED TXL', cls:'Premium SUV',         s1:'1.6T · 197 hp',  s2:'5 seats',   price:129900, priceTo:159900 },
+    { id:'lx', body:'SUV',  name:'EXEED LX',  cls:'Compact SUV',         s1:'1.5T · 156 hp',  s2:'5 seats',   price:99900,  priceTo:124900 },
+    { id:'rx', body:'SUV',  name:'EXEED RX',  cls:'Coupe SUV',           s1:'2.0T · 261 hp',  s2:'Sport',     price:169900, priceTo:199900 },
+    { id:'es', body:'Sedan',name:'EXEED ES',  cls:'Fully electric sedan',  s1:'Up to 620 km',   s2:'517 hp',    price:159900, priceTo:209900 },
+    { id:'et', body:'SUV',  name:'EXEED ET',  cls:'Electric REEV SUV',   s1:'Up to 1400 km',  s2:'Hybrid EV', price:199900, priceTo:249900 }
   ];
+  // gifts[] are the campaign's giveaways — they head the VAS table at zero once
+  // the campaign is picked, and cost the customer nothing either way.
   var CAMPAIGNS = [
-    { id:'evperf',  name:'EV - Performance 2025', free:[] },
-    { id:'none',    name:'No campaign',           free:[] },
-    { id:'ramadan', name:'Ramadan Offer',         free:['tinting','ceramic'] },
-    { id:'launch',  name:'EXEED Launch Bundle',   free:['insurance','service','tinting','ceramic'] }
+    { id:'none',    name:'No campaign',           gifts:[] },
+    { id:'evperf',  name:'EV - Performance 2025', gifts:['Free Registration','Free Tinting','Free Charger'] },
+    { id:'ramadan', name:'Ramadan Offer',         gifts:['Free Registration','Free Tinting'] },
+    { id:'launch',  name:'EXEED Launch Bundle',   gifts:['Free Registration','Free Tinting','Free Charger','Free Ceramic Coating'] }
   ];
-  var BOOKING = 2000;
   // Add-on bundles — 2 curated packages + custom (per business direction).
   var BUNDLES = [
     { id:'platinum', name:'Platinum', desc:'Full protection', items:['insurance','service','tinting','ceramic'] },
@@ -466,7 +483,7 @@
   // delta is a campaign, so it belongs in CAMPAIGNS, not here.
   var YEARS = [2027, 2026, 2025];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, booking:2000, downAmt:0, dpSupportAmt:20000, campaign:'evperf', vasVal:{ cmi:5000, gap:2499, smc:4000 }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499, smc:4000 }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -474,7 +491,7 @@
   function dh(n){ return DH + fmt(n); }
   function model(){ return MODELS.filter(function(m){return m.id===state.model;})[0] || MODELS[4]; }
   function campaign(){ return CAMPAIGNS.filter(function(c){return c.id===state.campaign;})[0] || CAMPAIGNS[0]; }
-  function isFree(k){ return campaign().free.indexOf(k) !== -1; }
+  function gifts(){ return campaign().gifts || []; }
   function trim(){ return TRIMS.filter(function(t){return t.id===state.trim;})[0]; }
   function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
   function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
@@ -490,6 +507,15 @@
   function renderVasChooser(){
     var host = document.getElementById('vasTable'); if (!host) return;
     var totalRec = 0, totalCust = 0, rows = '';
+    // The campaign's giveaways head the table at zero on both sides, so they read
+    // as part of the deal without loading either total.
+    var freeRows = gifts().map(function(g){
+      return '<div class="pc-row vas-catrow is-free">' +
+        '<span class="pc-i"><span class="mi vas-cat-chev" style="visibility:hidden">expand_more</span><span class="mi vas-cat-ic">redeem</span><span class="vas-cat-name">'+g+'</span></span>' +
+        '<span class="pc-v">'+dh(0)+'</span>' +
+        '<span class="pc-v">'+dh(0)+'</span>' +
+      '</div>';
+    }).join('');
     VAS_CATS.forEach(function(c){
       var cust = catCustomer(c);
       totalRec += c.rec; totalCust += cust;
@@ -517,7 +543,7 @@
     var emiInfo = '<div class="vas-emi-info"><div class="pc-row vas-emirow"><span class="pc-i vas-emi-note"><span class="mi">info</span>Based on 3.5% interest &middot; 5-yr installment &middot; est. added EMI</span><span class="pc-v">+ '+dh(Math.round(totalRec/60))+' /mo</span><span class="pc-v" id="vasEmiCust">+ '+dh(Math.round(totalCust/60))+' /mo</span></div></div>';
     host.innerHTML = '<div class="pc">' +
       '<div class="pc-row pc-head"><span class="pc-i">Service</span><span class="pc-v">Recommended</span><span class="pc-v">Customer choice</span></div>' +
-      rows +
+      freeRows + rows +
     '</div>' + emiInfo;
   }
   function updateVasTotal(){ var t = addTotal(); var el = document.getElementById('vasTotalCust'); if (el) el.innerHTML = dh(t); var em = document.getElementById('vasEmiCust'); if (em) em.innerHTML = '+ ' + dh(Math.round(t/60)) + ' /mo'; }
@@ -550,17 +576,16 @@
       title.textContent = 'Select model';
       body.innerHTML = '<div class="cards models">' + MODELS.map(function(m){
         return '<div class="card mcard'+(state.model===m.id?' on':'')+'" onclick="pick(\'model\',\''+m.id+'\')"><span class="check"><span class="mi">check</span></span>' +
-          '<div class="cn">'+m.name+'</div><div class="cs">'+m.cls+'</div>' +
-          '<div class="specs"><span>'+m.s1+'</span><span>'+m.s2+'</span></div>' +
-          '<div class="cp">'+DH+fmt(m.price)+'</div></div>';
+          '<div class="cn">'+m.name+'</div><div class="cs">'+m.body+'</div>' +
+          '<div class="cp">'+DH+fmt(m.price)+'<span class="cpto"> – '+fmt(m.priceTo)+'</span></div></div>';
       }).join('') + '</div>';
     } else if (state.step === 1){ // Trim
       title.textContent = 'Select trim';
       body.innerHTML = '<div class="cards">' + TRIMS.map(function(t){
         return '<div class="card'+(state.trim===t.id?' on':'')+'" onclick="pick(\'trim\',\''+t.id+'\')"><span class="check"><span class="mi">check</span></span>' +
           '<div class="cn">'+t.name+'</div><div class="cs">'+model().name+'</div>' +
-          '<div class="specs"><span><span class="mi" style="font-size:14px">bolt</span>'+t.range+'</span><span><span class="mi" style="font-size:14px">speed</span>'+t.power+'</span><span><span class="mi" style="font-size:14px">timer</span>'+t.accel+'</span></div>' +
-          '<div class="cp">'+DH+fmt(t.price)+'</div></div>';
+          '<div class="specs"><span><span class="mi" style="font-size:14px">settings</span>'+t.engine+'</span><span><span class="mi" style="font-size:14px">speed</span>'+t.power+'</span><span><span class="mi" style="font-size:14px">bolt</span>'+t.range+'</span></div>' +
+          '<div class="cp">'+DH+fmt(t.price)+'<span class="cpto"> – '+fmt(t.priceTo)+'</span></div></div>';
       }).join('') + '</div>';
     } else if (state.step === 2){ // Exterior
       title.textContent = 'Exterior colour';
@@ -604,6 +629,14 @@
       ys.value = String(state.year);
     }
     var dy = document.getElementById('dockYear'); if (dy) dy.style.display = (state.step === 0) ? '' : 'none';
+    var cs = document.getElementById('campSel');
+    if (cs){
+      if (!cs.options.length) cs.innerHTML = CAMPAIGNS.map(function(c){
+        return '<option value="'+c.id+'">'+c.name+'</option>';
+      }).join('');
+      cs.value = state.campaign;
+    }
+    var dc = document.getElementById('dockCamp'); if (dc) dc.style.display = (state.step === 4) ? '' : 'none';
   }
 
   function renderSummary(){
@@ -612,20 +645,34 @@
     var list = t.price;
     var tradeIn = state.tradeIn || 0;
     var discount = (pay === 'dpassist') ? 0 : state.discount;
-    var booking = state.booking || 0;
     var dpSupport = (pay === 'dpassist') ? (state.dpSupportAmt || 0) : 0;
     var downpay = (pay === 'cash') ? 0 : (state.downAmt || 0);
     var baseNet = Math.max(0, list - discount - tradeIn);
     var at = addTotal(), vas = at;
     var netPrice = baseNet + vas;
-    var loanW = (pay === 'cash') ? 0 : Math.max(0, netPrice - booking - downpay - dpSupport);
+    var loanW = (pay === 'cash') ? 0 : Math.max(0, netPrice - downpay - dpSupport);
+    // All four blocks are on screen from the first step so the shape of the
+    // proposal is visible, but each holds a dash until its own step is behind
+    // the customer — the card never reports a choice they haven't made.
+    var em = '<span class="sum-empty">&ndash;</span>';
+    var hasTrim = state.step >= 1, hasExt = state.step >= 2, hasInt = state.step >= 3;
+    var hasCamp = state.campaign !== 'none';
+    var parts = [state.year];
+    if (hasTrim) parts.push(t.name);
+    if (hasExt) parts.push(c.name);
+    if (hasInt) parts.push(ic.name);
+    var sum =
+      row('Trim', hasTrim ? t.name : em, 'tune') +
+      (hasExt ? rowColor('Exterior', c.name, c.hex, 'palette') : row('Exterior', em, 'palette')) +
+      (hasInt ? rowColor('Interior', ic.name, ic.hex, 'weekend') : row('Interior', em, 'weekend')) +
+      // Campaign only joins the card on the finance step, where its picker lives.
+      // It sits there disabled until one is chosen.
+      (state.step >= 4
+        ? row('Campaign', hasCamp ? campaign().name : em, 'campaign', hasCamp ? '' : 'off')
+        : '');
     document.getElementById('sumHead').textContent = model().name;
-    document.getElementById('sumSubhead').textContent = [state.year, t.name, c.name, ic.name].join(' · ');
-    document.getElementById('sumRows').innerHTML =
-      row('Trim', t.name, 'tune') +
-      rowColor('Exterior', c.name, c.hex, 'palette') +
-      rowColor('Interior', ic.name, ic.hex, 'weekend') +
-      row('Campaign', campaign().name, 'campaign');
+    document.getElementById('sumSubhead').textContent = parts.join(' · ');
+    document.getElementById('sumRows').innerHTML = sum;
     // Financing output card — only revealed on the Finance step (calculated at the end).
     var fo = document.getElementById('finOutput');
     fo.innerHTML = '';
@@ -636,6 +683,9 @@
     var finV = function(n){ return '<span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><span class="fin-num">' + fmt(n) + '</span>'; };
     document.getElementById('finList').innerHTML = finV(list);
     document.getElementById('finTrade').innerHTML = finV(tradeIn);
+    Array.prototype.forEach.call(document.querySelectorAll('.yn-btn'), function(b){
+      b.classList.toggle('on', (b.getAttribute('data-yn') === 'yes') === !!state.tradeAccepted);
+    });
     document.getElementById('finNet').innerHTML = finV(netPrice);
     document.getElementById('finVas').innerHTML = finV(vas);
     var vasSel = VAS_CATS.filter(function(c){ return catCustomer(c) > 0; });
@@ -645,19 +695,19 @@
     document.getElementById('discHint').textContent = (pay === 'dpassist') ? 'fixed' : '';
     document.getElementById('rowDpSupport').style.display = (pay === 'dpassist') ? '' : 'none';
     document.getElementById('rowDownpay').style.display = (pay === 'cash') ? 'none' : '';
-    var loanRec = (pay === 'cash') ? 0 : Math.max(0, (baseNet + recVasTotal()) - booking - downpay - dpSupport);
+    var loanRec = (pay === 'cash') ? 0 : Math.max(0, (baseNet + recVasTotal()) - downpay - dpSupport);
     document.getElementById('emiTable').style.display = (pay === 'cash') ? 'none' : '';
     document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
       return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loanRec,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
     }).join('');
   }
-  function row(k,v,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v">'+v+'</span></div>'; }
+  function row(k,v,ic,cls){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row'+(cls?' '+cls:'')+'"><span class="k">'+i+k+'</span><span class="v">'+v+'</span></div>'; }
   function rowColor(k,v,hex,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v"><span class="cdot" style="background:'+hex+'"></span>'+v+'</span></div>'; }
 
   function renderAll(){ renderSteps(); renderDock(); renderStage(); renderSummary(); }
   function pick(kind,val){ state[kind]=val; renderAll(); }
   function setDiscount(v){ state.discount = Math.max(0, parseInt(v,10)||0); renderSummary(); }
-  function setBooking(v){ state.booking = Math.max(2000, parseInt(v,10)||2000); renderSummary(); }
+  function setTradeAccepted(v){ state.tradeAccepted = v; renderSummary(); }
   function setDownpayment(v){ state.downAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
   function setDpSupport(v){ state.dpSupportAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
   function setPayType(t){
@@ -668,7 +718,7 @@
     if (disc){ if (t === 'dpassist'){ disc.readOnly = true; disc.value = 0; disc.classList.add('dp-ro-input'); } else { disc.readOnly = false; disc.value = state.discount; disc.classList.remove('dp-ro-input'); } }
     renderSummary();
   }
-  function setCampaign(v){ state.campaign = v; renderSummary(); }
+  function setCampaign(v){ state.campaign = v; renderVasChooser(); renderSummary(); }
   function setYear(v){ state.year = parseInt(v, 10) || state.year; renderYear(); renderSummary(); }
   function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
   function goTo(i){ state.step=i; renderAll(); }
@@ -680,7 +730,7 @@
       extColor:c.name, extHex:c.hex, image:c.img,
       intColor:ic.name, intHex:ic.hex,
       range:t.range, power:t.power,
-      nsp:t.price, payType:state.payType, downPct:Math.round((state.downAmt||0)/t.price*100), discount:(state.payType==='dpassist'?0:state.discount), tradeIn:state.tradeIn, booking:state.booking, downAmt:state.downAmt, dpSupport:(state.payType==='dpassist'?state.dpSupportAmt:0), pdi:0,
+      nsp:t.price, payType:state.payType, downPct:Math.round((state.downAmt||0)/t.price*100), discount:(state.payType==='dpassist'?0:state.discount), tradeIn:state.tradeIn, tradeAccepted:state.tradeAccepted, downAmt:state.downAmt, dpSupport:(state.payType==='dpassist'?state.dpSupportAmt:0), pdi:0,
       addOns:{ insurance:(state.vasVal.cmi||0)>0, service:(state.vasVal.smc||0)>0, tinting:catCustomer(VAS_CATS.filter(function(c){return c.id==='tinting';})[0])>0, ceramic:catCustomer(VAS_CATS.filter(function(c){return c.id==='ppf';})[0])>0 },
       vasTotal:addTotal(),
       isQuote:false

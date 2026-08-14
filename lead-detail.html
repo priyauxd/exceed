@@ -1063,7 +1063,7 @@
     .qc-tick .material-symbols-outlined { font-size: 16px; font-weight: 700; }
     .qc-photo { height: 92px; display: flex; align-items: center; justify-content: center; background: repeating-linear-gradient(135deg, #eef1f5, #eef1f5 10px, #e7ebf0 10px, #e7ebf0 20px); color: var(--ink-muted); font-size: 11px; letter-spacing: .05em; }
     .qc-photo img { width: 82%; height: 82%; object-fit: contain; }
-    .qc-body { padding: 10px 12px 12px; display: flex; flex-direction: column; }
+    .qc-body { padding: 12px 14px 16px; display: flex; flex-direction: column; }
     .qc-draft { font-size: 10px; color: var(--ink-muted); font-weight: 600; }
     .qc-model { font-size: 13.5px; font-weight: 800; color: var(--ink); margin-top: 1px; letter-spacing: -.01em; }
     .qc-sub { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; }
@@ -1077,7 +1077,7 @@
     .qc-vin { font-size: 10px; color: var(--ink-muted); font-weight: 600; letter-spacing: .02em; }
     .qc-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
     .qc-chip { font-size: 10px; font-weight: 600; color: var(--ink-secondary); background: var(--bg); border-radius: 20px; padding: 2px 9px; }
-    .qc-share { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 10px; }
+    .qc-share { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 12px; }
     .qc-sbtn { display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-family: inherit; font-size: 10px; font-weight: 600; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 7px; padding: 6px 2px; cursor: pointer; transition: .12s; }
     .qc-sbtn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
     .qc-sbtn .material-symbols-outlined { font-size: 13px; }
@@ -1087,10 +1087,18 @@
     .qc-cta.done .material-symbols-outlined { font-size: 16px; }
     .qc-cta:disabled { display: flex; align-items: center; justify-content: center; gap: 5px; background: var(--bg); color: var(--ink-muted); cursor: not-allowed; }
     .qc-cta:disabled .material-symbols-outlined { font-size: 15px; }
-    .qc-quote-actions { display:flex; flex-direction:column; gap:6px; }
+    .qc-quote-actions { display:flex; flex-direction:column; gap:9px; margin-top:10px; }
     .qc-cta.accept { margin-top:0; display:flex; align-items:center; justify-content:center; gap:5px; background:#eef7f1; color:#2f7a4f; border:1px solid #bfe3cc; }
     .qc-cta.accept:hover { background:#e2f1e8; }
     .qc-cta.accept .material-symbols-outlined { font-size:16px; }
+    /* Both CTAs in the quotation block sit flush under the status tag and share
+       its metrics, so the icon never drives the button height. */
+    .qc-quote-actions .qc-cta { margin-top:0; display:flex; align-items:center; justify-content:center; gap:5px; }
+    .qc-quote-actions .qc-cta .material-symbols-outlined { font-size:16px; }
+    .qc-status { margin-top:0; display:flex; align-items:center; justify-content:center; gap:5px; font-size:12px; font-weight:700; border-radius:9px; padding:9px; white-space:nowrap; }
+    .qc-status .material-symbols-outlined { font-size:16px; }
+    .qc-status.wait { background:#fff4e5; color:#b26a1a; border:1px solid #f2cf9b; }
+    .qc-status.ok { background:var(--green-soft); color:#2f7a4f; }
     .qc-cta.pending { margin-top:0; display:flex; align-items:center; justify-content:center; gap:5px; white-space:nowrap; background:#fff4e5; color:#b26a1a; border:1px solid #f2cf9b; }
     .qc-cta.pending:hover { background:#ffecd1; }
     .qc-cta.pending .material-symbols-outlined { font-size:16px; }
@@ -1142,8 +1150,9 @@
     .confirm-ic { width: 52px; height: 52px; border-radius: 50%; background: var(--red-soft); color: var(--red); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
     .confirm-ic .material-symbols-outlined { font-size: 28px; }
     .confirm-title { font-size: 16px; font-weight: 800; color: var(--ink); }
-    .confirm-text { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.5; margin: 7px 0 18px; }
-    .confirm-actions { display: flex; gap: 10px; justify-content: center; }
+    .confirm-text { font-size: 12.5px; color: var(--ink-secondary); line-height: 1.5; margin: 7px 0 0; }
+    /* Spacing lives on the actions row so a dialog with no description keeps it. */
+    .confirm-actions { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
     .confirm-actions .cp-btn { min-width: 96px; justify-content: center; }
     .cp-btn.danger { background: var(--red); border-color: var(--red); color: #fff; }
     .cp-btn.danger:hover { background: #c0392b; border-color: #c0392b; }
@@ -1756,17 +1765,6 @@
     <div class="wv-fs-footer" id="waiverFooter"></div>
   </div>
 
-  <div class="create-overlay" id="stockOverlay" onclick="closeStockModal()"></div>
-  <div class="stock-modal" id="stockModal" role="dialog" aria-label="Select vehicle from stock">
-    <div class="stock-hd">
-      <span class="material-symbols-outlined" style="color:var(--blue)">inventory_2</span>
-      <div class="stock-hd-t"><div class="stock-hd-title">Choose a vehicle from stock</div><div class="stock-hd-sub" id="stockSub">Available units matching this proposal</div></div>
-      <button class="dp-header-btn" title="Close" onclick="closeStockModal()"><span class="material-symbols-outlined">close</span></button>
-    </div>
-    <div class="stock-body" id="stockBody"></div>
-    <div class="stock-ft"><button class="cp-btn" onclick="closeStockModal()">Cancel</button></div>
-  </div>
-
   <div class="create-overlay" id="confirmOverlay" onclick="closeConfirm()"></div>
   <div class="confirm-modal" id="confirmModal" role="alertdialog">
     <div class="confirm-ic"><span class="material-symbols-outlined">warning</span></div>
@@ -1871,19 +1869,38 @@
     function tdSetStatus(i, s){ if (!tdBookings[i]) return; tdBookings[i].status = s; showToast(s === 'Complete' ? 'Test drive completed' : 'Waiver signed — drive in progress'); schedRerender(); }
     function completeTestDrive(i){
       if (!tdBookings[i]) return;
-      var html = '<div style="text-align:left"><label class="flow-lbl">Odometer reading at return (km)</label><input id="tdMileage" type="number" min="0" step="1" class="flow-inp" placeholder="e.g. 12345"></div>';
+      // Text inputs rather than number ones so the reading can carry thousands
+      // separators as it is typed.
+      var html = '<div style="text-align:left">' +
+        '<label class="flow-lbl">Odometer reading at start (km)</label>' +
+        '<input id="tdMileageStart" type="text" inputmode="numeric" class="flow-inp" placeholder="e.g. 12,345" oninput="formatKm(this)">' +
+        '<label class="flow-lbl" style="margin-top:12px">Odometer reading at return (km)</label>' +
+        '<input id="tdMileage" type="text" inputmode="numeric" class="flow-inp" placeholder="e.g. 12,389" oninput="formatKm(this)">' +
+      '</div>';
       openConfirm('Complete test drive', html, 'Complete drive', function(){
-        var el = document.getElementById('tdMileage');
-        var km = el && el.value ? parseInt(el.value, 10) : 0;
-        tdBookings[i].status = 'Complete'; tdBookings[i].mileage = km;
-        showToast('Test drive completed' + (km ? ' — ' + km.toLocaleString('en-US') + ' km' : ''));
+        var start = kmValue('tdMileageStart'), km = kmValue('tdMileage');
+        tdBookings[i].status = 'Complete'; tdBookings[i].mileageStart = start; tdBookings[i].mileage = km;
+        var covered = (start && km && km > start) ? (km - start) : 0;
+        showToast('Test drive completed' + (km ? ' — ' + km.toLocaleString('en-US') + ' km' : '') +
+          (covered ? ' · ' + covered.toLocaleString('en-US') + ' km driven' : ''));
         schedRerender();
       }, 'Cancel', 'check_circle', true);
+    }
+    function formatKm(el){
+      var digits = (el.value || '').replace(/\D/g, '');
+      el.value = digits ? parseInt(digits, 10).toLocaleString('en-US') : '';
+    }
+    function kmValue(id){
+      var el = document.getElementById(id);
+      var digits = el && el.value ? el.value.replace(/\D/g, '') : '';
+      return digits ? parseInt(digits, 10) : 0;
     }
     var confirmCb = null;
     function openConfirm(title, text, okLabel, cb, cancelLabel, icon, neutral){
       document.getElementById('confirmTitle').textContent = title;
-      document.getElementById('confirmText').innerHTML = text;
+      var txtEl = document.getElementById('confirmText');
+      txtEl.innerHTML = text || '';
+      txtEl.style.display = text ? '' : 'none';
       document.getElementById('confirmOkBtn').textContent = okLabel || 'Confirm';
       document.getElementById('confirmCancelBtn').textContent = cancelLabel || 'Keep';
       var icEl = document.querySelector('#confirmModal .confirm-ic');
@@ -4365,8 +4382,8 @@
       renderDetail(selectedIdx, currentStep);
     }
 
-    // Choosing "Create Quotation" opens a stock picker to allocate a specific vehicle.
-    var stockForProposal = -1, stockList = [];
+    // Submitting for approval allocates the matching unit straight away — the
+    // proposal already pins trim and colour, so there is nothing left to choose.
     function stockForProposalList(p){
       var model = (p.model || '').split(' · ')[0];
       // Units of the chosen proposal are identical trim/colour — only the VIN differs.
@@ -4384,43 +4401,12 @@
       return out;
     }
     function createQuotation(i){
-      var p = leads[selectedIdx].proposals[i]; if (!p) return;
-      stockForProposal = i;
-      stockList = stockForProposalList(p);
-      document.getElementById('stockSub').textContent = p.model + ' · ' + stockList.length + ' units available';
-      document.getElementById('stockBody').innerHTML = stockList.map(function(s, k){
-        return '<div class="stock-row">' +
-          '<img class="stock-img" src="'+s.image+'" alt="">' +
-          '<div class="stock-info">' +
-            '<div class="stock-model">'+s.model+(s.trim?' · '+s.trim:'')+'</div>' +
-            '<div class="stock-vin">VIN &middot; '+s.chassis+'</div>' +
-            '<div class="stock-meta">' +
-              '<span><span class="stock-dot" style="background:'+s.extHex+'"></span><span class="b">'+s.extColor+'</span></span>' +
-              '<span>Interior: <span class="b">'+s.intColor+'</span></span>' +
-              '<span>Year: <span class="b">'+s.year+'</span></span>' +
-              '<span><span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle">location_on</span>'+s.location+'</span>' +
-              '<span class="stock-status'+(s.status==='In transit'?' transit':'')+'">'+s.status+'</span>' +
-            '</div>' +
-          '</div>' +
-          '<button class="stock-sel" onclick="selectStockCar('+k+')">Select</button>' +
-        '</div>';
-      }).join('');
-      document.getElementById('stockOverlay').classList.add('show');
-      document.getElementById('stockModal').classList.add('open');
-    }
-    function closeStockModal(){
-      document.getElementById('stockOverlay').classList.remove('show');
-      document.getElementById('stockModal').classList.remove('open');
-      stockForProposal = -1;
-    }
-    function selectStockCar(k){
-      var l = leads[selectedIdx], p = l.proposals[stockForProposal], s = stockList[k];
-      if (!p || !s) { closeStockModal(); return; }
+      var l = leads[selectedIdx], p = l.proposals[i]; if (!p) return;
+      var s = stockForProposalList(p)[0];
       l.proposals.forEach(function(x){ x.isQuote = false; });  // only one active quotation per lead
-      p.chassis = s.chassis; p.extColor = s.extColor; p.extHex = s.extHex; p.image = s.image;
-      p.intColor = s.intColor; p.allocLocation = s.location; p.isQuote = true; p._sel = false;
-      closeStockModal();
-      showToast('Quotation created — ' + p.id + ' · ' + s.chassis);
+      if (s){ p.chassis = s.chassis; p.allocLocation = s.location; }
+      p.isQuote = true; p._sel = false;
+      showToast('Submitted for approval — ' + p.id + (s ? ' · ' + s.chassis : ''));
       renderDetail(selectedIdx, currentStep);
     }
     function shareProposal(i, ch){ var p = leads[selectedIdx].proposals[i]; if (p) showToast((p.isQuote ? 'Quotation ' : 'Proposal ') + p.id + ' sent via ' + ch); }
@@ -4437,26 +4423,23 @@
         createQuotation(i);
       }
     }
-    // Customer accepts the quotation → move the deal to the Confirmed state.
-    function requestManagerApproval(i){
-      var l = leads[selectedIdx], p = l.proposals[i]; if (!p || !p.isQuote || p.mgrPending || p.mgrApproved) return;
-      p.mgrPending = true;
+    // The manager clears the proposal from the card — approval is an action here,
+    // not a wait state, so the status line above it just reports where it stands.
+    function approveProposal(i){
+      var l = leads[selectedIdx], p = l.proposals[i]; if (!p || !p.isQuote || p.mgrApproved) return;
+      p.mgrPending = false; p.mgrApproved = true;
       renderDetail(selectedIdx, currentStep);
-      showToast('Sent to manager for approval…');
-      setTimeout(function(){
-        var pp = (leads[selectedIdx].proposals || [])[i];
-        if (pp && pp.mgrPending){ pp.mgrPending = false; pp.mgrApproved = true; renderDetail(selectedIdx, currentStep); showToast('Quotation ' + pp.id + ' approved by manager'); }
-      }, 1600);
+      showToast('Proposal ' + p.id + ' approved by manager');
     }
     function acceptQuotation(i){
       var l = leads[selectedIdx], p = l.proposals[i]; if (!p || !p.isQuote) return;
-      openConfirm('Send quotation to customer?',
-        'Send quotation <strong>' + p.id + '</strong> to the customer by email. This moves the deal to the <strong>Confirmed</strong> state.',
-        'Send quotation', function(){
+      // Sending is a normal forward step, not a destructive one — neutral styling.
+      openConfirm('Send Proposal to customer.', '',
+        'Send', function(){
           l.propState = 'confirmed'; l._acceptedProp = i;
           renderDetail(selectedIdx, currentStep);
-          showToast('Quotation ' + p.id + ' sent to customer — moved to Confirmed');
-        }, 'Cancel');
+          showToast('Proposal ' + p.id + ' sent to customer — moved to Confirmed');
+        }, 'Cancel', 'send', true);
     }
     function backToDraft(){
       var l = leads[selectedIdx]; l.propState = 'draft';
@@ -4486,7 +4469,7 @@
       var ons = propAddOns.filter(function(a){ return p.addOns && p.addOns[a.k]; }).map(function(a){ return a.label; });
       var addonsStr = ons.length ? ons.join(' · ') : 'None';
       return '<div class="dp-essential" style="margin-bottom:14px">' +
-        '<div class="prop-head"><div><div class="dp-essential-title">Confirmed &mdash; Accepted quotation</div>' +
+        '<div class="prop-head"><div><div class="dp-essential-title">Confirmed: Accepted proposal</div>' +
           '<div class="dp-essential-sub" style="margin:0">Customer accepted ' + p.id + '. Complete the booking and paperwork below.</div></div>' +
           '<div style="display:flex; gap:8px">' +
             '<button class="prop-support-btn" onclick="editConfirmedQuotation()"><span class="material-symbols-outlined">edit</span> Edit</button>' +
@@ -4494,7 +4477,7 @@
           '</div>' +
         '</div>' +
         '<div class="conf-quote">' +
-          '<div class="conf-quote-top"><span class="conf-badge"><span class="material-symbols-outlined">verified</span> Accepted quotation</span><span class="conf-id">' + p.id + '</span></div>' +
+          '<div class="conf-quote-top"><span class="conf-badge"><span class="material-symbols-outlined">verified</span> Confirmed: Accepted proposal</span><span class="conf-id">' + p.id + '</span></div>' +
           (p.image ? '<img class="conf-photo" src="' + p.image + '" alt="">' : '') +
           '<div class="conf-model">' + (modelName || p.model) + '</div>' +
           ((p.trim || p.extColor || p.chassis) ? '<div class="conf-sub">' + [p.trim, p.extColor, p.chassis ? ('VIN · ' + p.chassis) : ''].filter(Boolean).join(' · ') + '</div>' : '') +
@@ -4588,15 +4571,13 @@
           (p.isQuote
             ? '<div class="qc-quote-actions">' +
                 (p.mgrApproved
-                  ? '<button class="qc-cta done"><span class="material-symbols-outlined">verified_user</span> Approved by manager</button>'
-                  : (p.mgrPending
-                    ? '<button class="qc-cta pending" disabled><span class="material-symbols-outlined">hourglass_top</span> Sent for approval&hellip;</button>'
-                    : '<button class="qc-cta pending" onclick="requestManagerApproval('+i+')"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval</button>')) +
+                  ? '<span class="qc-status ok"><span class="material-symbols-outlined">verified_user</span> Approved by manager</span>'
+                  : '<span class="qc-status wait"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval</span>') +
                 (p.mgrApproved
-                  ? '<button class="qc-cta accept" onclick="acceptQuotation('+i+')"><span class="material-symbols-outlined">send</span> Send quotation to customer</button>'
-                  : '<button class="qc-cta" disabled><span class="material-symbols-outlined">lock</span> Send to customer &middot; needs approval</button>') +
+                  ? '<button class="qc-cta send" onclick="acceptQuotation('+i+')"><span class="material-symbols-outlined">send</span> Send Proposal to customer</button>'
+                  : '<button class="qc-cta" onclick="approveProposal('+i+')"><span class="material-symbols-outlined">check_circle</span> Approve Proposal</button>') +
               '</div>'
-            : '<button class="qc-cta" onclick="requestCreateQuotation('+i+')">Create Quotation</button>') +
+            : '<button class="qc-cta" onclick="requestCreateQuotation('+i+')">Submit for Approval</button>') +
         '</div>' +
       '</div>';
     }
