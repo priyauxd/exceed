@@ -88,6 +88,7 @@
   var PERSONAS = [
     ['Call Center Agent', 'call-center-agent.html'],
     ['Call Center Manager', 'call-center-manager.html'],
+    ['Brand Host', 'brand-host.html'],
     ['Showroom Manager', 'showroom-manager.html'],
     ['Head of Sales', 'head-of-sales.html'],
     ['Sales Executive', 'sales-executive.html']
