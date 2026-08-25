@@ -988,7 +988,7 @@
         <!-- SECTION — Team Diary -->
         <div class="kpi-section">
           <div class="cal-block">
-          <div class="kpi-sec-head" style="margin-bottom:12px"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">Team calendar</span><span class="kpi-sec-sub">&middot; Sales consultant diaries — SZR — Sheikh Zayed Road</span><span class="kpi-sec-sub" id="diaryCount">&middot; 8 events &middot; no conflicts</span></div>
+          <div class="kpi-sec-head" style="margin-bottom:12px"><span class="kpi-sec-dot" style="background:var(--amber)"></span><span class="kpi-sec-title">Team calendar</span><span class="kpi-sec-sub" id="diaryTitle">&middot; Sales consultant diaries — SZR — Sheikh Zayed Road</span><span class="kpi-sec-sub" id="diaryCount">&middot; 8 events &middot; no conflicts</span></div>
           <div class="diary-legend">
             <span class="dl-item"><span class="dl-dot" style="background:var(--blue)"></span> Appointment</span>
             <span class="dl-item"><span class="dl-dot" style="background:var(--amber)"></span> Follow-up</span>
@@ -998,11 +998,11 @@
           </div>
           <div class="stream-bar">
             <div class="stream-seg" id="diaryBranch">
-              <button class="seg-tab on" onclick="setDiaryBranch(this)">SZR</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Deira</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Abu Dhabi</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Sharjah</button>
-              <button class="seg-tab" onclick="setDiaryBranch(this)">Al Ain</button>
+              <button class="seg-tab on" data-b="SZR" onclick="setDiaryBranch(this)">SZR</button>
+              <button class="seg-tab" data-b="DEI" onclick="setDiaryBranch(this)">Deira</button>
+              <button class="seg-tab" data-b="AUH" onclick="setDiaryBranch(this)">Abu Dhabi</button>
+              <button class="seg-tab" data-b="SHJ" onclick="setDiaryBranch(this)">Sharjah</button>
+              <button class="seg-tab" data-b="AAN" onclick="setDiaryBranch(this)">Al Ain</button>
             </div>
             <div class="stream-seg" id="diaryRange">
               <button class="seg-tab on" onclick="setDiaryRange(this)">Today</button>
@@ -1011,10 +1011,6 @@
             <label class="diary-consult" style="margin-left:auto;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink-secondary);">Sales consultant
               <select id="diaryConsultant" onchange="filterDiaryConsultant(this)" style="border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--ink);background:var(--surface);cursor:pointer;">
                 <option value="all">All consultants</option>
-                <option>Rania Khoury</option>
-                <option>Mariam Saeed</option>
-                <option>Ahmad Nasr</option>
-                <option>Layla Habib</option>
               </select>
             </label>
             <label class="diary-consult" style="display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--ink-secondary);">Status
@@ -1029,6 +1025,7 @@
           <style>
             .cal-wrap { border:1px solid var(--border); border-radius:12px; overflow:hidden; background:#fff; }
             .cal-header, .cal-body { display:grid; grid-template-columns:56px repeat(4,1fr); }
+            .cal-none { padding:38px 12px; text-align:center; font-size:12px; color:var(--ink-muted); }
             .cal-header { border-bottom:1px solid var(--border); background:#fafafa; }
             .cal-hname { padding:9px 6px; font-size:11.5px; font-weight:700; color:var(--ink-secondary); text-align:center; border-left:1px solid var(--border-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
             .cal-timecol { }
@@ -1048,47 +1045,8 @@
             .wk-empty { font-size:10.5px; color:var(--ink-muted); text-align:center; padding-top:24px; }
             @media (max-width:900px){ .wk-grid { grid-template-columns:repeat(4,1fr); } }
           </style>
-          <div class="cal-wrap" id="calDay">
-            <div class="cal-header">
-              <div></div>
-              <div class="cal-hname">Rania Khoury</div>
-              <div class="cal-hname">Mariam Saeed</div>
-              <div class="cal-hname">Ahmad Nasr</div>
-              <div class="cal-hname">Layla Habib</div>
-                          </div>
-            <div class="cal-body">
-              <div class="cal-timecol">
-                <div class="cal-hr">09:00</div><div class="cal-hr">10:00</div><div class="cal-hr">11:00</div><div class="cal-hr">12:00</div><div class="cal-hr">13:00</div><div class="cal-hr">14:00</div><div class="cal-hr">15:00</div><div class="cal-hr">16:00</div><div class="cal-hr">17:00</div>
-              </div>
-              <div class="cal-col">
-                <div class="cal-event" style="top:28px;height:42px;background:#5cb97f"><span class="ce-n">Hiren Patel</span><span class="ce-t">09:30 · Test Drive</span></div>
-                <div class="cal-event" style="top:280px;height:84px;background:#4fb8a8"><span class="ce-n">Linda George</span><span class="ce-t">14:00 · Delivery</span></div>
-              </div>
-              <div class="cal-col">
-                <div class="cal-event over" style="top:84px;height:18px;background:#8b7bdf"><span class="ce-n">Sara Khalid · Call</span></div>
-                <div class="cal-event" style="top:434px;height:28px;background:#4a7fb5"><span class="ce-n">Maya Hassan</span><span class="ce-t">16:45 · Appt</span></div>
-              </div>
-              <div class="cal-col">
-                <div class="cal-event" style="top:112px;height:56px;background:#4a7fb5"><span class="ce-n">Fatima Al Ali</span><span class="ce-t">11:00 · Appointment</span></div>
-                <div class="cal-event due" style="top:378px;height:42px;background:#5cb97f"><span class="ce-n">Ahmed Mansoor</span><span class="ce-t">15:45 · Test Drive</span></div>
-              </div>
-              <div class="cal-col">
-                <div class="cal-event due" style="top:182px;height:42px;background:#d99a3c"><span class="ce-n">Karim Saleh</span><span class="ce-t">12:15 · Follow-up</span></div>
-                <div class="cal-event" style="top:476px;height:28px;background:#d99a3c"><span class="ce-n">Rita Sami</span><span class="ce-t">17:30 · Follow-up</span></div>
-              </div>
-            </div>
-          </div>
-          <div id="calWeek" style="display:none">
-            <div class="wk-grid">
-              <div class="wk-day"><div class="wk-dhead">Mon <span>03</span></div><div class="wk-chip" style="background:#4a7fb5">10:00 Tariq Ahmad</div><div class="wk-chip" style="background:#5cb97f">14:30 Salma Idris</div></div>
-              <div class="wk-day"><div class="wk-dhead today">Tue <span>04</span></div><div class="wk-chip" style="background:#5cb97f">09:30 Hiren Patel</div><div class="wk-chip" style="background:#4a7fb5">11:00 Fatima Al Ali</div><div class="wk-chip" style="background:#4fb8a8">14:00 Linda George</div><div class="wk-chip" style="background:#4a7fb5">16:45 Maya Hassan</div></div>
-              <div class="wk-day"><div class="wk-dhead">Wed <span>05</span></div><div class="wk-chip" style="background:#8b7bdf">10:30 Sara Khalid</div><div class="wk-chip" style="background:#5cb97f">15:45 Ahmed Mansoor</div></div>
-              <div class="wk-day"><div class="wk-dhead">Thu <span>06</span></div><div class="wk-chip" style="background:#d99a3c">12:15 Karim Saleh</div><div class="wk-chip" style="background:#d99a3c">17:30 Rita Sami</div></div>
-              <div class="wk-day"><div class="wk-dhead">Fri <span>07</span></div><div class="wk-chip" style="background:#4fb8a8">09:00 Grace Onu</div><div class="wk-chip" style="background:#4a7fb5">13:00 Amir Zaki</div></div>
-              <div class="wk-day"><div class="wk-dhead">Sat <span>08</span></div><div class="wk-chip" style="background:#5cb97f">11:00 Nour Jaber</div></div>
-              <div class="wk-day"><div class="wk-dhead">Sun <span>09</span></div><div class="wk-empty">No events</div></div>
-            </div>
-          </div>
+          <div class="cal-wrap" id="calDay"></div>
+          <div id="calWeek" style="display:none"><div class="wk-grid"></div></div>
           </div>
         </div>
         <!-- SECTION — New Leads to Assign -->
@@ -1112,7 +1070,7 @@
                   <td><span class="src-chip">WhatsApp</span></td><td>EXEED TXL</td>
                   <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>DEI</td><td><a href="#" class="row-link">Layla Habib</a></td>
                   <td><span class="sla-tag brch">5m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn red" onclick="openAssignLead('Omar Nasser')">Assign</button><div style="margin-top:5px"><a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a></div></td>
+                  <td style="text-align:right"><button class="tbl-btn red" onclick="openAssignLead('Omar Nasser')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">22m</td>
@@ -1120,7 +1078,7 @@
                   <td><span class="src-chip">Website</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>AUH</td><td><span class="none-txt">&mdash;</span></td>
                   <td><span class="sla-tag wrn">8m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Grace Onu')">Assign</button><div style="margin-top:5px"><a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a></div></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Grace Onu')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">15m</td>
@@ -1128,7 +1086,7 @@
                   <td><span class="src-chip">Social Form</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>SZR</td><td><a href="#" class="row-link">Ahmad Nasr</a></td>
                   <td><span class="sla-tag wrn">15m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Mira Nabil')">Assign</button><div style="margin-top:5px"><a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a></div></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Mira Nabil')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">0m</td>
@@ -1136,7 +1094,7 @@
                   <td><span class="src-chip">WhatsApp</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
                   <td><span class="sla-tag ok">30m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Amir Zaki')">Assign</button><div style="margin-top:5px"><a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a></div></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Amir Zaki')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">0m</td>
@@ -1144,7 +1102,7 @@
                   <td><span class="src-chip">Social Form</span></td><td>EXEED TXL</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
                   <td><span class="sla-tag ok">45m left</span></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Maya Hassan')">Assign</button><div style="margin-top:5px"><a href="#" class="why" onclick="showToast('Merging duplicate');return false">Merge</a></div></td>
+                  <td style="text-align:right"><button class="tbl-btn" onclick="openAssignLead('Maya Hassan')">Assign</button></td>
                 </tr>
               </tbody>
             </table>
@@ -1166,10 +1124,13 @@
             .stlog-desc { font-size:12px; color:var(--ink); font-weight:600; margin-bottom:4px; }
             .stlog-trig { font-size:11px; color:var(--ink-muted); line-height:1.5; }
     .st-info{ font-size:14px; color:var(--ink-muted); cursor:help; vertical-align:-2px; margin-left:4px; }
+    .sec-info{ font-size:15px; margin-left:0; vertical-align:-3px; }
     .st-info:hover{ color:var(--blue); }
     .st-tip{ position:fixed; z-index:300; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 28px rgba(20,24,34,.18); padding:11px 13px; max-width:280px; display:none; pointer-events:none; }
     .st-tip-h{ font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); margin-bottom:4px; }
     .st-tip-b{ font-size:12px; color:var(--ink-secondary); line-height:1.5; }
+    .c-namebtn{ border:none; background:none; padding:0; margin:0; font:inherit; color:inherit; text-align:left; cursor:pointer; }
+    .c-namebtn:hover .c-name{ color:var(--blue); text-decoration:underline; }
     .kebab{ border:none; background:none; cursor:pointer; color:var(--ink-muted); padding:2px 4px; border-radius:6px; vertical-align:middle; margin-left:2px; }
     .kebab:hover{ background:var(--bg); color:var(--ink); }
     .kebab .material-symbols-outlined{ font-size:18px; }
@@ -1188,7 +1149,7 @@
           </style>
           <div class="q-panel">
             <div class="q-head">
-              <div class="q-head-left"><h3>Sales executive availability</h3><span class="q-cnt">6 on track &middot; 2 blocked &middot; 1 offline</span></div>
+              <div class="q-head-left"><h3>Sales executive availability</h3><span class="material-symbols-outlined st-info sec-info" data-title="HOW THIS TABLE WORKS" data-tip="Status is derived from executive availability, workload, SLA risk, overdue commitments and language / showroom fit." onmouseenter="stTip(this)" onmouseleave="stTipHide()" tabindex="0" aria-label="How this table works">info</span><span class="q-cnt">6 on track &middot; 2 blocked &middot; 1 offline</span></div>
               <div style="display:flex;align-items:center;gap:6px">
                 <details class="stlog stlog-hd">
                   <summary class="stlog-sum sec-ctrl"><span class="material-symbols-outlined" style="font-size:15px;vertical-align:-2px">info</span> Status logic</summary>
@@ -1207,104 +1168,92 @@
             <div class="q-scroll">
             <table class="qt-table" id="seTable">
               <thead><tr>
-                <th>Executive</th><th>Status <span class="material-symbols-outlined st-info" data-title="STATUS" data-tip="On Track / Due Soon / Blocked / Stalled / At Capacity / Offline — derived from availability, workload and SLA risk." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Active</th><th>New</th><th>Pend. FC <span class="material-symbols-outlined st-info" data-title="PENDING FIRST CONTACT" data-tip="Assigned leads where the executive has not made first contact yet — SLA-critical." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Overdue <span class="material-symbols-outlined st-info" data-title="OVERDUE COMMITMENTS" data-tip="Promised follow-ups, callbacks or actions past their due time." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Appt</th><th>Test Drive</th><th>Languages</th><th>Recommendation <span class="material-symbols-outlined st-info" data-title="RECOMMENDATION" data-tip="Rule-based next action for the manager. Click 'Why?' on any row for the reasoning." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th style="text-align:right">Action</th>
+                <th>Executive</th><th>Status <span class="material-symbols-outlined st-info" data-title="STATUS" data-tip="On Track / Due Soon / Blocked / Stalled / At Capacity / Offline — derived from availability, workload and SLA risk." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Active</th><th>New</th><th>Pend. FC <span class="material-symbols-outlined st-info" data-title="PENDING FIRST CONTACT" data-tip="Assigned leads where the executive has not made first contact yet — SLA-critical." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Overdue <span class="material-symbols-outlined st-info" data-title="OVERDUE COMMITMENTS" data-tip="Promised follow-ups, callbacks or actions past their due time." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Appt</th><th>Test Drive</th><th>Languages</th><th>Recommendation <span class="material-symbols-outlined st-info" data-title="RECOMMENDATION" data-tip="Rule-based next action for the manager. Click 'Why?' on any row for the reasoning." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th>
               </tr></thead>
               <tbody id="seTbody">
                 <tr class="urg">
-                  <td><div class="c-name">Fadi Haddad</div><div class="c-shift">AAN</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Fadi Haddad</div><div class="c-shift">AAN</div></button></td>
                   <td><span class="st-badge gry">Offline</span> <span class="material-symbols-outlined st-info" data-title="OFFLINE" data-tip="Not logged in / off shift. 3 overdue commitments remain on their queue." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num red">3</td><td class="num">0</td><td class="num">0</td>
                   <td>English, Arabic</td>
-                  <td><a href="#" class="row-link">Escalate &mdash; offline</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn red" onclick="showToast('Escalating Fadi Haddad')">Escalate</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><a href="#" class="row-link" onclick="showToast('Escalating '+seName(this));return false">Escalate &mdash; offline</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Omar Al Khoury</div><div class="c-shift">AUH</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Omar Al Khoury</div><div class="c-shift">AUH</div></button></td>
                   <td><span class="st-badge blk">Blocked</span> <span class="material-symbols-outlined st-info" data-title="BLOCKED" data-tip="Currently with a customer — cannot accept immediate handover, but no urgent blocker on active leads." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">18</td><td class="num">3</td><td class="num">2</td><td class="num">2</td><td class="num">3</td><td class="num">2</td>
                   <td>English, Arabic</td>
-                  <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Sara Ali</div><div class="c-shift">SHJ</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Sara Ali</div><div class="c-shift">SHJ</div></button></td>
                   <td><span class="st-badge blk">Blocked</span> <span class="material-symbols-outlined st-info" data-title="BLOCKED" data-tip="Customer waiting without an accepted handover — resolve before assigning more leads." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">17</td><td class="num">2</td><td class="num">1</td><td class="num">2</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Arabic</td>
-                  <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr class="urg">
-                  <td><div class="c-name">Karim Mostafa</div><div class="c-shift">DEI</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Karim Mostafa</div><div class="c-shift">DEI</div></button></td>
                   <td><span class="st-badge gry">Stalled</span> <span class="material-symbols-outlined st-info" data-title="STALLED" data-tip="27 active leads with 4 pending first contact and 4 overdue commitments — dormant opportunities not moving." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">27</td><td class="num">5</td><td class="num red">4</td><td class="num red">4</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Arabic, Hindi</td>
-                  <td><a href="#" class="row-link">Reassign 3 leads</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Reassigning 3 leads')">Reassign 3</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><a href="#" class="row-link" onclick="showToast('Reassigning 3 leads');return false">Reassign 3 leads</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Mariam Saeed</div><div class="c-shift">SZR</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Mariam Saeed</div><div class="c-shift">SZR</div></button></td>
                   <td><span class="st-badge gry">At Capacity</span> <span class="material-symbols-outlined st-info" data-title="AT CAPACITY" data-tip="22 active leads, 4 new today, 3 appointments and 2 test drives — over capacity threshold." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">1</td><td class="num">3</td><td class="num">2</td>
                   <td>English, Arabic</td>
-                  <td><span class="none-txt">At capacity</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><span class="none-txt">At capacity</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Nour Jaber</div><div class="c-shift">AUH</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Nour Jaber</div><div class="c-shift">AUH</div></button></td>
                   <td><span class="st-badge wrn">Due Soon</span> <span class="material-symbols-outlined st-info" data-title="DUE SOON" data-tip="Temporarily unavailable — on break, expected back at 14:30." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">11</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td>
                   <td>English, Arabic</td>
-                  <td><a href="#" class="row-link">Back at 14:30</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="showToast('Reminder set for Nour Jaber')">Remind</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><a href="#" class="row-link" onclick="showToast('Reminder set for '+seName(this));return false">Back at 14:30</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Ahmad Nasr</div><div class="c-shift">SZR</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Ahmad Nasr</div><div class="c-shift">SZR</div></button></td>
                   <td><span class="st-badge ok">On Track</span> <span class="material-symbols-outlined st-info" data-title="ON TRACK" data-tip="Available, workload within capacity, no SLA risk, no overdue commitments." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">15</td><td class="num">2</td><td class="num">1</td><td class="num">3</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Arabic</td>
-                  <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Ahmad Nasr')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><a href="#" class="row-link" onclick="showToast('Assigning next to '+seName(this));return false">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Rania Khoury</div><div class="c-shift">SZR</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Rania Khoury</div><div class="c-shift">SZR</div></button></td>
                   <td><span class="st-badge ok">On Track</span> <span class="material-symbols-outlined st-info" data-title="ON TRACK" data-tip="Available, workload within capacity, no SLA risk, no overdue commitments." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">12</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
                   <td>English, Arabic, French</td>
-                  <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Rania Khoury')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><a href="#" class="row-link" onclick="showToast('Assigning next to '+seName(this));return false">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Layla Habib</div><div class="c-shift">DEI</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Layla Habib</div><div class="c-shift">DEI</div></button></td>
                   <td><span class="st-badge ok">On Track</span> <span class="material-symbols-outlined st-info" data-title="ON TRACK" data-tip="Available, workload within capacity, no SLA risk, no overdue commitments." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">14</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num">0</td>
                   <td>English, Arabic</td>
-                  <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Yousef Rahman</div><div class="c-shift">SHJ</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Yousef Rahman</div><div class="c-shift">SHJ</div></button></td>
                   <td><span class="st-badge ok">On Track</span> <span class="material-symbols-outlined st-info" data-title="ON TRACK" data-tip="Available, workload within capacity, no SLA risk, no overdue commitments." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">9</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
                   <td>English, Urdu, Hindi</td>
-                  <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Yousef Rahman')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><a href="#" class="row-link" onclick="showToast('Assigning next to '+seName(this));return false">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Zahra Iqbal</div><div class="c-shift">AAN</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Zahra Iqbal</div><div class="c-shift">AAN</div></button></td>
                   <td><span class="st-badge ok">On Track</span> <span class="material-symbols-outlined st-info" data-title="ON TRACK" data-tip="Available, workload within capacity, no SLA risk, no overdue commitments." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">10</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
                   <td>English, Urdu, Arabic</td>
-                  <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn" onclick="showToast('Assigning next to Zahra Iqbal')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><a href="#" class="row-link" onclick="showToast('Assigning next to '+seName(this));return false">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
                 <tr>
-                  <td><div class="c-name">Talal Baig</div><div class="c-shift">DEI</div></td>
+                  <td><button class="c-namebtn" onclick="openWorkload(this)"><div class="c-name">Talal Baig</div><div class="c-shift">DEI</div></button></td>
                   <td><span class="st-badge ok">On Track</span> <span class="material-symbols-outlined st-info" data-title="ON TRACK" data-tip="Available, workload within capacity, no SLA risk, no overdue commitments." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></td>
                   <td class="num">13</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Urdu, Hindi</td>
-                  <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:right"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="se-rec"><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
                 </tr>
               </tbody>
             </table>
@@ -1560,39 +1509,154 @@
     function assign(e, name){ e.stopPropagation(); showToast('Assigning ' + name + ' to next available executive'); }
     function changeLocation(sel){ showToast('Switched to ' + sel.value); }
     function exportQueue(){ showToast('Queue exported to CSV'); }
-    function setDiaryBranch(btn){ btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on'); showToast('Diary — ' + btn.textContent); }
-    function filterDiaryConsultant(sel){
-      var name = sel.value;
-      var day = document.getElementById('calDay'); if(!day) return;
-      var heads = day.querySelectorAll('.cal-hname');
-      var cols = day.querySelectorAll('.cal-body .cal-col');
-      var visible = 0;
-      heads.forEach(function(h,i){
-        var show = (name === 'all') || (h.textContent.trim() === name);
-        h.style.display = show ? '' : 'none';
-        if (cols[i]) cols[i].style.display = show ? '' : 'none';
-        if (show) visible++;
+    // ── Team calendar: branch → consultants → today's diary ──────────────
+    var DIARY_BRANCHES = {
+      SZR: { name:'SZR — Sheikh Zayed Road', consultants:['Rania Khoury','Mariam Saeed','Ahmad Nasr'], events:[
+        { by:'Rania Khoury', n:'Hiren Patel',   t:'09:30', e:'10:15', type:'Test Drive',    st:'ok'   },
+        { by:'Rania Khoury', n:'Linda George',  t:'14:00', e:'15:30', type:'Delivery',      st:'ok'   },
+        { by:'Mariam Saeed', n:'Sara Khalid',   t:'10:30', e:'10:45', type:'Customer Call', st:'over' },
+        { by:'Mariam Saeed', n:'Maya Hassan',   t:'16:45', e:'17:15', type:'Appointment',   st:'ok'   },
+        { by:'Ahmad Nasr',   n:'Fatima Al Ali', t:'11:00', e:'12:00', type:'Appointment',   st:'ok'   },
+        { by:'Ahmad Nasr',   n:'Karim Saleh',   t:'12:15', e:'13:00', type:'Follow-up',     st:'due'  },
+        { by:'Ahmad Nasr',   n:'Ahmed Mansoor', t:'15:45', e:'16:30', type:'Test Drive',    st:'due'  },
+        { by:'Ahmad Nasr',   n:'Rita Sami',     t:'17:30', e:'18:00', type:'Follow-up',     st:'ok'   }
+      ]},
+      DEI: { name:'Deira', consultants:['Karim Mostafa','Layla Habib','Talal Baig'], events:[
+        { by:'Karim Mostafa', n:'Reem Al Zaabi', t:'09:00', e:'09:45', type:'Appointment',   st:'ok'   },
+        { by:'Karim Mostafa', n:'Tariq Ahmad',   t:'13:30', e:'14:15', type:'Test Drive',    st:'due'  },
+        { by:'Layla Habib',   n:'Bilal Qureshi', t:'10:15', e:'10:45', type:'Delivery',      st:'ok'   },
+        { by:'Layla Habib',   n:'Peter John',    t:'15:00', e:'15:30', type:'Follow-up',     st:'over' },
+        { by:'Talal Baig',    n:'Diego Alvarez', t:'11:30', e:'12:15', type:'Customer Call', st:'ok'   },
+        { by:'Talal Baig',    n:'Naif Alavi',    t:'16:00', e:'16:45', type:'Appointment',   st:'ok'   },
+        { by:'Talal Baig',    n:'Hamza Iqbal',   t:'17:00', e:'17:30', type:'Follow-up',     st:'due'  }
+      ]},
+      AUH: { name:'Abu Dhabi', consultants:['Omar Al Khoury','Nour Jaber'], events:[
+        { by:'Omar Al Khoury', n:'Yousef Rahman', t:'09:45', e:'10:30', type:'Test Drive',    st:'ok'   },
+        { by:'Omar Al Khoury', n:'Elena Costa',   t:'14:15', e:'15:00', type:'Appointment',   st:'due'  },
+        { by:'Nour Jaber',     n:'Grace Onu',     t:'11:00', e:'11:30', type:'Customer Call', st:'ok'   },
+        { by:'Nour Jaber',     n:'Yara Zein',     t:'13:00', e:'14:00', type:'Delivery',      st:'ok'   },
+        { by:'Nour Jaber',     n:'Amir Zaki',     t:'16:30', e:'17:00', type:'Follow-up',     st:'over' }
+      ]},
+      SHJ: { name:'Sharjah', consultants:['Sara Ali','Yousef Rahman'], events:[
+        { by:'Sara Ali',      n:'Salma Idris',   t:'10:00', e:'10:45', type:'Test Drive',  st:'ok'  },
+        { by:'Sara Ali',      n:'Sana Rehman',   t:'15:15', e:'16:00', type:'Appointment', st:'due' },
+        { by:'Yousef Rahman', n:'Mira Nabil',    t:'12:00', e:'12:45', type:'Follow-up',   st:'ok'  },
+        { by:'Yousef Rahman', n:'Aisha Khalifa', t:'14:30', e:'15:15', type:'Delivery',    st:'ok'  }
+      ]},
+      AAN: { name:'Al Ain', consultants:['Fadi Haddad','Zahra Iqbal'], events:[
+        { by:'Fadi Haddad', n:'Omar Nasser', t:'09:30', e:'10:00', type:'Customer Call', st:'over' },
+        { by:'Zahra Iqbal', n:'Nabil Farha', t:'11:15', e:'12:00', type:'Appointment',   st:'ok'   },
+        { by:'Zahra Iqbal', n:'Vera Kim',    t:'16:00', e:'16:45', type:'Test Drive',    st:'due'  }
+      ]}
+    };
+    var DIARY_COLORS = { 'Appointment':'#4a7fb5', 'Follow-up':'#d99a3c', 'Test Drive':'#5cb97f', 'Customer Call':'#8b7bdf', 'Delivery':'#4fb8a8' };
+    var DIARY_STATUS = { ok:'On Track', due:'Due Soon', over:'Overdue' };
+    var diaryState = { branch:'SZR', consultant:'all', status:'all', range:'today' };
+
+    function diaryMin(t){ var p=t.split(':'); return (+p[0])*60 + (+p[1]); }
+    function diaryTop(t){ return (diaryMin(t) - 540) / 60 * 56; }
+
+    function diaryEvents(){
+      var b = DIARY_BRANCHES[diaryState.branch];
+      return b.events.filter(function(ev){
+        if(diaryState.consultant !== 'all' && ev.by !== diaryState.consultant) return false;
+        if(diaryState.status !== 'all' && ev.st !== diaryState.status) return false;
+        return true;
       });
-      var gt = '56px repeat(' + visible + ',1fr)';
-      var header = day.querySelector('.cal-header'), body = day.querySelector('.cal-body');
-      if (header) header.style.gridTemplateColumns = gt;
-      if (body) body.style.gridTemplateColumns = gt;
-      showToast(name === 'all' ? 'Showing all consultants' : 'Diary — ' + name);
+    }
+    function diaryColumns(){
+      var b = DIARY_BRANCHES[diaryState.branch];
+      return diaryState.consultant === 'all' ? b.consultants : [diaryState.consultant];
+    }
+
+    function renderDiaryDay(){
+      var cols = diaryColumns(), evs = diaryEvents();
+      var gt = '56px repeat(' + cols.length + ',1fr)';
+      var hrs = ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+      var head = '<div class="cal-header" style="grid-template-columns:' + gt + '"><div></div>' +
+        cols.map(function(c){ return '<div class="cal-hname">' + c + '</div>'; }).join('') + '</div>';
+      var body = '<div class="cal-body" style="grid-template-columns:' + gt + '">' +
+        '<div class="cal-timecol">' + hrs.map(function(x){ return '<div class="cal-hr">' + x + '</div>'; }).join('') + '</div>' +
+        cols.map(function(c){
+          var mine = evs.filter(function(ev){ return ev.by === c; });
+          return '<div class="cal-col">' + mine.map(function(ev){
+            var top = diaryTop(ev.t), hgt = (diaryMin(ev.e) - diaryMin(ev.t)) / 60 * 56;
+            var cls = 'cal-event' + (ev.st === 'ok' ? '' : ' ' + ev.st);
+            var label = hgt >= 26
+              ? '<span class="ce-n">' + ev.n + '</span><span class="ce-t">' + ev.t + ' &middot; ' + ev.type + '</span>'
+              : '<span class="ce-n">' + ev.n + ' &middot; ' + ev.type + '</span>';
+            return '<div class="' + cls + '" style="top:' + top + 'px;height:' + hgt + 'px;background:' + DIARY_COLORS[ev.type] + '"' +
+              ' title="' + ev.n + ' — ' + ev.t + '–' + ev.e + ' &middot; ' + ev.type + ' &middot; ' + DIARY_STATUS[ev.st] + '">' + label + '</div>';
+          }).join('') + '</div>';
+        }).join('') + '</div>';
+      var host = document.getElementById('calDay');
+      host.innerHTML = evs.length ? (head + body)
+        : (head + '<div class="cal-none">No diary entries match this filter.</div>');
+    }
+
+    // Week view spreads the branch's diary across Mon–Sat; today (Tue) keeps the full day.
+    var DIARY_WEEK_DAYS = [['Mon','03'],['Tue','04'],['Wed','05'],['Thu','06'],['Fri','07'],['Sat','08'],['Sun','09']];
+    function renderDiaryWeek(){
+      var evs = diaryEvents();
+      var buckets = DIARY_WEEK_DAYS.map(function(){ return []; });
+      evs.forEach(function(ev,i){ buckets[1].push(ev); buckets[[0,2,3,4,5][i % 5]].push(ev); });
+      var html = DIARY_WEEK_DAYS.map(function(d,i){
+        var list = buckets[i].slice().sort(function(a,b){ return diaryMin(a.t) - diaryMin(b.t); });
+        var chips = list.length
+          ? list.map(function(ev){ return '<div class="wk-chip" style="background:' + DIARY_COLORS[ev.type] + '">' + ev.t + ' ' + ev.n + '</div>'; }).join('')
+          : '<div class="wk-empty">No events</div>';
+        return '<div class="wk-day"><div class="wk-dhead' + (i === 1 ? ' today' : '') + '">' + d[0] + ' <span>' + d[1] + '</span></div>' + chips + '</div>';
+      }).join('');
+      document.querySelector('#calWeek .wk-grid').innerHTML = html;
+    }
+
+    function renderDiaryChrome(){
+      var b = DIARY_BRANCHES[diaryState.branch], evs = diaryEvents();
+      var t = document.getElementById('diaryTitle');
+      if(t) t.innerHTML = '&middot; Sales consultant diaries — ' + b.name +
+        (diaryState.consultant === 'all' ? '' : ' &middot; ' + diaryState.consultant) +
+        (diaryState.status === 'all' ? '' : ' &middot; ' + DIARY_STATUS[diaryState.status]);
+      var c = document.getElementById('diaryCount');
+      if(c) c.innerHTML = '&middot; ' + evs.length + ' event' + (evs.length === 1 ? '' : 's') + ' &middot; no conflicts';
+    }
+
+    function syncDiaryConsultants(){
+      var sel = document.getElementById('diaryConsultant'); if(!sel) return;
+      var list = DIARY_BRANCHES[diaryState.branch].consultants;
+      if(list.indexOf(diaryState.consultant) === -1) diaryState.consultant = 'all';
+      sel.innerHTML = '<option value="all">All consultants</option>' +
+        list.map(function(n){ return '<option' + (n === diaryState.consultant ? ' selected' : '') + '>' + n + '</option>'; }).join('');
+    }
+
+    function renderDiary(){ syncDiaryConsultants(); renderDiaryChrome(); renderDiaryDay(); renderDiaryWeek(); if(window.__decorateCalEvents) window.__decorateCalEvents(); }
+
+    function setDiaryBranch(btn){
+      btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      diaryState.branch = btn.getAttribute('data-b');
+      renderDiary();
+      showToast('Diary — ' + DIARY_BRANCHES[diaryState.branch].name);
+    }
+    function filterDiaryConsultant(sel){
+      diaryState.consultant = sel.value;
+      renderDiary();
+      showToast(sel.value === 'all' ? 'Showing all consultants' : 'Diary — ' + sel.value);
     }
     function filterDiaryStatus(sel){
-      var v = sel.value, day = document.getElementById('calDay'); if(!day) return;
-      var shown = 0;
-      day.querySelectorAll('.cal-event').forEach(function(e){
-        var st = e.classList.contains('over') ? 'over' : (e.classList.contains('due') ? 'due' : 'ok');
-        var show = (v === 'all') || (st === v);
-        e.style.display = show ? '' : 'none';
-        if (show) shown++;
-      });
-      var c = document.getElementById('diaryCount');
-      if (c) c.innerHTML = '&middot; ' + shown + ' event' + (shown === 1 ? '' : 's') + ' &middot; no conflicts';
-      showToast(v === 'all' ? 'Showing all statuses' : 'Diary — ' + sel.options[sel.selectedIndex].text);
+      diaryState.status = sel.value;
+      renderDiary();
+      showToast(sel.value === 'all' ? 'Showing all statuses' : 'Diary — ' + DIARY_STATUS[sel.value]);
     }
-    function setDiaryRange(btn){ btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); }); btn.classList.add('on'); var wk=/week/i.test(btn.textContent); var d=document.getElementById('calDay'), w=document.getElementById('calWeek'); if(d) d.style.display=wk?'none':''; if(w) w.style.display=wk?'':'none'; }
+    function setDiaryRange(btn){
+      btn.parentNode.querySelectorAll('.seg-tab').forEach(function(b){ b.classList.remove('on'); });
+      btn.classList.add('on');
+      var wk = /week/i.test(btn.textContent);
+      diaryState.range = wk ? 'week' : 'today';
+      var d = document.getElementById('calDay'), w = document.getElementById('calWeek');
+      if(d) d.style.display = wk ? 'none' : '';
+      if(w) w.style.display = wk ? '' : 'none';
+    }
+    if(document.readyState !== 'loading') renderDiary(); else document.addEventListener('DOMContentLoaded', renderDiary);
   </script>
 
   <script>
@@ -1669,9 +1733,9 @@
       apZero: {"apen":true,"title":"Add-on Penetration — Zero add-on deals · SZR — Sheikh Zayed Road","sub":"Deals delivered without any add-on attached · 4 records · scoped to SZR — Sheikh Zayed Road","records":4,"attached":0,"revenue":"AED 0","gp":"AED 0","trend":[12,17,18,17,22,25,28,32,31,35,37,39],"trendMax":40,"tx":[{"date":"2026-07-18","cust":"Karim Saleh","item":"No add-on attached","cat":"—","status":"Declined","price":"—"},{"date":"2026-07-20","cust":"Ahmed Mansoor","item":"No add-on attached","cat":"—","status":"Declined","price":"—"},{"date":"2026-06-24","cust":"Mira Nabil","item":"No add-on attached","cat":"—","status":"Declined","price":"—"},{"date":"2026-06-29","cust":"Sana Rehman","item":"No add-on attached","cat":"—","status":"Declined","price":"—"}]},
       vBookings: {"addon":true,"title":"Bookings — SZR — Sheikh Zayed Road","records":2,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open booking","trend":[2,0,2,2,6,6,7,9,9,8,12,14],"trendMax":16,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"}]},
       vInvoices: {"addon":true,"title":"Invoices — SZR — Sheikh Zayed Road","records":2,"cols":[{"k":"cust","l":"Customer"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"idle","l":"Days Idle"},{"k":"act","l":"Next Action"}],"action":"Open invoice","trend":[8,11,11,13,13,14,14,18,18,18,18,20],"trendMax":20,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","idle":"0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","idle":"0d","act":"Collect booking deposit"}]},
-      vDeliveries: {"addon":true,"title":"Deliveries — SZR — Sheikh Zayed Road","records":0,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"idle","l":"Days Idle"},{"k":"act","l":"Next Action"}],"action":"Open lead","tx":[]},
-      vVisitsWalkins: {"addon":true,"title":"Visits + Walk-ins — SZR — Sheikh Zayed Road","records":7,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"source","l":"Source"},{"k":"channel","l":"Channel"},{"k":"stage","l":"Stage"},{"k":"act","l":"Next Action"}],"action":"Open lead","trend":[32,38,31,45,49,49,52,49,62,62,68,79],"trendMax":80,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","source":"Walk-in","channel":"WhatsApp · English","stage":"Booking","act":"Confirm booking"},{"cust":"Ahmed Mansoor","id":"L-2026-05013","temp":"Hot","owner":"Ahmad Nasr","source":"Website","channel":"WhatsApp · English","stage":"Test Drive","act":"Position VX on comfort & safety"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","source":"Walk-in","channel":"WhatsApp · English","stage":"Booking","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","source":"Social Form","channel":"WhatsApp · English","stage":"Offer","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","source":"Website","channel":"WhatsApp · English","stage":"Offer","act":"Follow up on quote (5d)"},{"cust":"Aisha Khalifa","id":"L-2026-05005","temp":"Warm","owner":"Rania Khoury","source":"Walk-in","channel":"WhatsApp · English","stage":"Nurture","act":"Greet & discovery"},{"cust":"Rita Sami","id":"L-2026-05025","temp":"Warm","owner":"Mariam Saeed","source":"WhatsApp","channel":"WhatsApp · English","stage":"Nurture","act":"Match service package"}]},
-      vFollowups: {"addon":true,"title":"Follow-ups on time — SZR — Sheikh Zayed Road","records":0,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"channel","l":"Channel"},{"k":"stage","l":"Stage"},{"k":"status","l":"Status"},{"k":"act","l":"Next Action"}],"action":"Open lead","tx":[]},
+      vDeliveries: {"addon": true, "title": "Deliveries — SZR — Sheikh Zayed Road", "records": 6, "action": "Open delivery", "trend": [12, 14, 13, 17, 16, 19, 18, 21, 20, 23, 25, 27], "trendMax": 30, "cols": [{"k": "cust", "l": "Customer"}, {"k": "temp", "l": "Temp"}, {"k": "owner", "l": "Owner"}, {"k": "model", "l": "Model"}, {"k": "stage", "l": "Stage"}, {"k": "idle", "l": "Days Idle"}, {"k": "act", "l": "Next Action"}], "addCols": [{"k": "source", "l": "Source"}, {"k": "channel", "l": "Channel"}, {"k": "quote", "l": "Quote"}, {"k": "status", "l": "Status"}], "tx": [{"cust": "Linda George", "id": "L-2026-05010", "temp": "Warm", "owner": "Mariam Saeed", "model": "EXEED LX", "stage": "Delivery", "idle": "0d", "act": "Confirm delivery slot", "source": "Social Form", "channel": "WhatsApp · English", "quote": "AED 185k", "status": "Active"}, {"cust": "Bilal Qureshi", "id": "L-2026-05014", "temp": "Warm", "owner": "Karim Mostafa", "model": "EXEED TXL", "stage": "Delivery", "idle": "1d", "act": "Insurance doc missing", "source": "Referral", "channel": "Phone · Urdu", "quote": "AED 232k", "status": "Blocked"}, {"cust": "Yara Zein", "id": "L-2026-05028", "temp": "Warm", "owner": "Sara Ali", "model": "EXEED VX", "stage": "Delivery", "idle": "0d", "act": "Prep handover pack", "source": "Website", "channel": "WhatsApp · English", "quote": "AED 249k", "status": "Active"}, {"cust": "Salma Idris", "id": "L-2026-05015", "temp": "Hot", "owner": "Rania Khoury", "model": "EXEED LX", "stage": "Delivery", "idle": "2d", "act": "Schedule PDI", "source": "Walk-in", "channel": "Phone · English", "quote": "AED 199k", "status": "Active"}, {"cust": "Naif Alavi", "id": "L-2026-05029", "temp": "Warm", "owner": "Omar Al Khoury", "model": "EXEED LX", "stage": "Delivery", "idle": "1d", "act": "Confirm plate registration", "source": "WhatsApp", "channel": "Phone · Arabic", "quote": "AED 210k", "status": "Active"}, {"cust": "Tariq Ahmad", "id": "L-2026-05023", "temp": "Warm", "owner": "Layla Habib", "model": "EXEED LX", "stage": "Delivery", "idle": "3d", "act": "Awaiting finance release", "source": "Website", "channel": "WhatsApp · English", "quote": "AED 204k", "status": "Blocked"}]},
+      vVisitsWalkins: {"addon": true, "title": "Visits + Walk-ins — SZR — Sheikh Zayed Road", "records": 7, "cols": [{"k": "cust", "l": "Customer"}, {"k": "temp", "l": "Temp"}, {"k": "owner", "l": "Owner"}, {"k": "source", "l": "Source"}, {"k": "channel", "l": "Channel"}, {"k": "stage", "l": "Stage"}, {"k": "act", "l": "Next Action"}], "action": "Open lead", "trend": [32, 38, 31, 45, 49, 49, 52, 49, 62, 62, 68, 79], "trendMax": 80, "tx": [{"cust": "Salma Idris", "id": "L-2026-05015", "temp": "Hot", "owner": "Rania Khoury", "source": "Walk-in", "channel": "WhatsApp · English", "stage": "Booking", "act": "Confirm booking", "model": "EXEED LX", "quote": "AED 199k", "days": "0d", "status": "Active"}, {"cust": "Ahmed Mansoor", "id": "L-2026-05013", "temp": "Hot", "owner": "Ahmad Nasr", "source": "Website", "channel": "WhatsApp · English", "stage": "Test Drive", "act": "Position VX on comfort & safety", "model": "EXEED VX", "quote": "—", "days": "1d", "status": "Active"}, {"cust": "Sana Rehman", "id": "L-2026-05027", "temp": "Hot", "owner": "Rania Khoury", "source": "Walk-in", "channel": "WhatsApp · English", "stage": "Booking", "act": "Collect booking deposit", "model": "EXEED LX", "quote": "AED 205k", "days": "0d", "status": "Active"}, {"cust": "Linda George", "id": "L-2026-05010", "temp": "Warm", "owner": "Mariam Saeed", "source": "Social Form", "channel": "WhatsApp · English", "stage": "Offer", "act": "Follow up on quote", "model": "EXEED LX", "quote": "AED 185k", "days": "4d", "status": "Active"}, {"cust": "Hamza Iqbal", "id": "L-2026-05026", "temp": "Warm", "owner": "Ahmad Nasr", "source": "Website", "channel": "WhatsApp · English", "stage": "Offer", "act": "Follow up on quote (5d)", "model": "EXEED TXL", "quote": "AED 175k", "days": "5d", "status": "Active"}, {"cust": "Aisha Khalifa", "id": "L-2026-05005", "temp": "Warm", "owner": "Rania Khoury", "source": "Walk-in", "channel": "WhatsApp · English", "stage": "Nurture", "act": "Greet & discovery", "model": "EXEED RX", "quote": "—", "days": "2d", "status": "Active"}, {"cust": "Rita Sami", "id": "L-2026-05025", "temp": "Warm", "owner": "Mariam Saeed", "source": "WhatsApp", "channel": "WhatsApp · English", "stage": "Nurture", "act": "Match service package", "model": "EXEED LX", "quote": "—", "days": "3d", "status": "Active"}], "addCols": [{"k": "model", "l": "Model"}, {"k": "quote", "l": "Quote"}, {"k": "days", "l": "Days idle"}, {"k": "status", "l": "Status"}]},
+      vFollowups: {"addon": true, "title": "Follow-ups on time — SZR — Sheikh Zayed Road", "records": 6, "action": "Open lead", "trend": [148, 155, 162, 170, 168, 178, 185, 190, 196, 203, 209, 214], "trendMax": 250, "cols": [{"k": "cust", "l": "Customer"}, {"k": "temp", "l": "Temp"}, {"k": "owner", "l": "Owner"}, {"k": "channel", "l": "Channel"}, {"k": "stage", "l": "Stage"}, {"k": "status", "l": "Status"}, {"k": "act", "l": "Next Action"}], "addCols": [{"k": "source", "l": "Source"}, {"k": "model", "l": "Model"}, {"k": "quote", "l": "Quote"}, {"k": "days", "l": "Days idle"}], "tx": [{"cust": "Yara Zein", "id": "L-2026-05028", "temp": "Warm", "owner": "Sara Ali", "channel": "WhatsApp · English", "stage": "Test Drive", "status": "Due today", "act": "Prep test drive", "source": "Website", "model": "EXEED VX", "quote": "AED 249k", "days": "0d"}, {"cust": "Peter John", "id": "L-2026-05019", "temp": "Hot", "owner": "Omar Al Khoury", "channel": "Phone · English", "stage": "Offer", "status": "Done", "act": "Follow up on quote", "source": "Walk-in", "model": "EXEED VX", "quote": "AED 260k", "days": "2d"}, {"cust": "Hamza Iqbal", "id": "L-2026-05026", "temp": "Warm", "owner": "Ahmad Nasr", "channel": "WhatsApp · English", "stage": "Offer", "status": "Open", "act": "Follow up on quote (5d)", "source": "Website", "model": "EXEED TXL", "quote": "AED 175k", "days": "5d"}, {"cust": "Naif Alavi", "id": "L-2026-05029", "temp": "Warm", "owner": "Omar Al Khoury", "channel": "Phone · Arabic", "stage": "Offer", "status": "Done", "act": "Follow up on quote (6d)", "source": "WhatsApp", "model": "EXEED LX", "quote": "AED 210k", "days": "6d"}, {"cust": "Aisha Khalifa", "id": "L-2026-05005", "temp": "Warm", "owner": "Rania Khoury", "channel": "WhatsApp · English", "stage": "Nurture", "status": "Done", "act": "Greet & discovery", "source": "Walk-in", "model": "EXEED RX", "quote": "—", "days": "2d"}, {"cust": "Tariq Ahmad", "id": "L-2026-05023", "temp": "Warm", "owner": "Layla Habib", "channel": "Phone · English", "stage": "Test Drive", "status": "Open", "act": "Confirm test drive today", "source": "Website", "model": "EXEED LX", "quote": "AED 204k", "days": "1d"}]},
       vCancellations: {"addon":true,"title":"Cancellations — SZR — Sheikh Zayed Road","records":3,"cols":[{"k":"cust","l":"Customer"},{"k":"owner","l":"Owner"},{"k":"source","l":"Source"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"lostreason","l":"Lost Reason"},{"k":"idle","l":"Days Idle"}],"action":"Open lead","trend":[0,3,5,2,9,7,8,10,13,14,13,19],"trendMax":20,"tx":[{"cust":"Ziad Baroudi","id":"L-2026-07001","owner":"Ahmad Nasr","source":"Website","model":"EXEED LX","stage":"Offer","lostreason":"Competitor selected","idle":"6d"},{"cust":"Vera Kim","id":"L-2026-07002","owner":"Rania Khoury","source":"WhatsApp","model":"EXEED LX","stage":"Nurture","lostreason":"Price","idle":"8d"},{"cust":"Nabil Farha","id":"L-2026-07006","owner":"Nadia Al Suwaidi","source":"800 Number","model":"EXEED LX","stage":"Contact","lostreason":"Duplicate","idle":"15d"}]},
       vTradeins: {"addon":true,"title":"Trade-ins — SZR — Sheikh Zayed Road","records":4,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open lead","trend":[15,18,22,24,24,29,31,31,33,34,40,44],"trendMax":60,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Offer","quote":"AED 185k · 4d","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","model":"EXEED LX","stage":"Offer","quote":"AED 175k · 5d","act":"Follow up on quote (5d)"}]},
       vAddonsSold: {"addon":true,"title":"Add-ons sold — SZR — Sheikh Zayed Road","records":4,"cols":[{"k":"cust","l":"Customer"},{"k":"temp","l":"Temp"},{"k":"owner","l":"Owner"},{"k":"model","l":"Model"},{"k":"stage","l":"Stage"},{"k":"quote","l":"Quote"},{"k":"act","l":"Next Action"}],"action":"Open lead","trend":[18,19,18,22,24,26,29,31,32,36,38,40],"trendMax":60,"tx":[{"cust":"Salma Idris","id":"L-2026-05015","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"AED 199k · 0d","act":"Confirm booking"},{"cust":"Sana Rehman","id":"L-2026-05027","temp":"Hot","owner":"Rania Khoury","model":"EXEED LX","stage":"Booking","quote":"—","act":"Collect booking deposit"},{"cust":"Linda George","id":"L-2026-05010","temp":"Warm","owner":"Mariam Saeed","model":"EXEED LX","stage":"Offer","quote":"AED 185k · 4d","act":"Follow up on quote"},{"cust":"Hamza Iqbal","id":"L-2026-05026","temp":"Warm","owner":"Ahmad Nasr","model":"EXEED LX","stage":"Offer","quote":"AED 175k · 5d","act":"Follow up on quote (5d)"}]},
@@ -1759,8 +1823,22 @@
           {cust:'Sana Rehman', id:'L-2026-05027', temp:'Hot', src:'Walk-in', model:'EXEED LX', channel:'WhatsApp · English', act:'Collect booking deposit'},
           {cust:'Bilal Qureshi', id:'L-2026-05014', temp:'Warm', src:'Referral', model:'EXEED TXL', channel:'WhatsApp · English', act:'Finance approval follow-up'}
         ] },
-      pending1c:  { kind:'First Contact', title:'Pending 1st Contact', sub:'Leads still awaiting their first contact.', value:30, unit:'', target:10, delta:2, higherIsBetter:false, yTrendMax:40, trend:[26,28,25,33,30,28,30], xMax:12,
-        branches:[{n:'SZR — Sheikh Zayed Road',v:9},{n:'Deira',v:8},{n:'Abu Dhabi',v:6},{n:'Sharjah',v:4},{n:'Al Ain',v:3}] },
+      pending1c:  { list:true, title:'Pending first contact', sub:'Awaiting first contact', value:30, records:30, action:'Remind exec',
+        cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'source',l:'Source'},{k:'sla',l:'SLA'},{k:'act',l:'Next Action'}],
+        rows:[
+          {cust:'Sara Khalid',   id:'L-2026-05002', temp:'Hot',  owner:'Mariam Saeed',   source:'WhatsApp',    sla:'8m overdue',  slaC:'red',   act:'Call customer — SLA breached'},
+          {cust:'Diego Alvarez', id:'L-2026-05017', temp:'Cold', owner:'Layla Habib',    source:'Social Form', sla:'3m overdue',  slaC:'red',   act:'Call — SLA breached'},
+          {cust:'Omar Nasser',   id:'L-2026-05006', temp:'Hot',  owner:'Unassigned',     source:'WhatsApp',    sla:'5m left',     slaC:'amber', act:'Assign — SLA due soon'},
+          {cust:'Grace Onu',     id:'L-2026-05021', temp:'Warm', owner:'Unassigned',     source:'Website',     sla:'8m left',     slaC:'amber', act:'Assign — SLA due soon'},
+          {cust:'Hiren Patel',   id:'L-2026-05001', temp:'Hot',  owner:'Mariam Saeed',   source:'Website',     sla:'12m left',    slaC:'amber', act:'Call customer'},
+          {cust:'Mira Nabil',    id:'L-2026-05022', temp:'Hot',  owner:'Ahmad Nasr',     source:'Social Form', sla:'15m left',    slaC:'amber', act:'Call customer'},
+          {cust:'Aisha Khalifa', id:'L-2026-05005', temp:'Warm', owner:'Rania Khoury',   source:'Walk-in',     sla:'25m left',    slaC:'',      act:'Greet & discovery'},
+          {cust:'Amir Zaki',     id:'L-2026-05020', temp:'Warm', owner:'Ahmad Nasr',     source:'WhatsApp',    sla:'30m left',    slaC:'',      act:'Call customer'},
+          {cust:'Maya Hassan',   id:'L-2026-05003', temp:'Warm', owner:'Unassigned',     source:'Social Form', sla:'45m left',    slaC:'',      act:'Assign to executive'},
+          {cust:'Karim Saleh',   id:'L-2026-05004', temp:'Warm', owner:'Ahmad Nasr',     source:'Website',     sla:'1h 20m left', slaC:'',      act:'Call customer'},
+          {cust:'Bilal Qureshi', id:'L-2026-05014', temp:'Warm', owner:'Karim Mostafa',  source:'Referral',    sla:'2h 05m left', slaC:'',      act:'Finance approval follow-up'},
+          {cust:'Reem Al Zaabi', id:'L-2026-05008', temp:'Warm', owner:'Layla Habib',    source:'Social Form', sla:'3h 20m left', slaC:'',      act:'Call customer'}
+        ] },
       followUp:   { list:true, title:'Follow-ups due', sub:'Due today', value:1, records:1, action:'Complete',
         cols:[{k:'cust',l:'Customer'},{k:'temp',l:'Temp'},{k:'owner',l:'Owner'},{k:'stage',l:'Stage'},{k:'channel',l:'Channel'},{k:'act',l:'Next Action'}],
         rows:[
@@ -2082,6 +2160,7 @@
       if(!w){ var mn=document.getElementById('mlColMenu'); if(mn) mn.classList.remove('open'); }
     });
     function openListMetric(m){
+      if(mlMetric !== m){ mlHidden = {}; }
       mlMetric = m;
       var recs=(m.records!=null)?m.records:m.rows.length;
       document.getElementById('mdrContent').innerHTML =
@@ -2431,6 +2510,7 @@
     .wl-status{ font-size:13px; font-style:italic; color:var(--ink-secondary); margin-top:14px; }
   </style>
   <script>
+    function seName(el){ var tr=el.closest('tr'), n=tr?tr.querySelector('.c-name'):null; return n?n.textContent.trim():''; }
     function openWorkload(btn){
       var tr=btn.closest('tr'); if(!tr) return;
       var c=tr.children;
@@ -2439,7 +2519,8 @@
       function num(i){ return c[i]?c[i].textContent.trim():'0'; }
       var active=num(2), nw=num(3), pend=num(4), over=num(5), appt=num(6), td=num(7);
       var langs=c[8]?c[8].textContent.trim():'';
-      var recEl=c[9]?c[9].firstElementChild:null;
+      var recCell=tr.querySelector('.se-rec');
+      var recEl=recCell?recCell.firstElementChild:null;
       var rec=recEl?recEl.textContent.trim():'Balanced';
       var cap=20, av=parseInt(active,10)||0, ratio=Math.min(1, av/cap);
       var barColor=ratio>=1?'#d1544f':(ratio>=0.85?'#e0932e':'#3d8a5b');
@@ -2559,6 +2640,7 @@
           var s=document.createElement('span'); s.className='ce-s'; s.textContent=map[type]||'Scheduled'; ev.appendChild(s);
         }
       }
+      window.__decorateCalEvents = run;
       if(document.readyState!=='loading') run(); else document.addEventListener('DOMContentLoaded',run);
     })();
   </script>
