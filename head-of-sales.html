@@ -703,9 +703,12 @@
 
     /* ── Collapsible icon-rail sidebar ── */
     .sidebar, .main { transition: width .25s ease, margin-left .25s ease; }
-    .sb-toggle { display: flex; align-items: center; gap: 9px; width: 100%; border: none; background: none; cursor: pointer; padding: 8px 10px; margin-bottom: 4px; color: var(--ink-secondary); border-radius: 8px; font-family: inherit; }
-    .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); }
-    .sb-toggle .material-symbols-outlined { font-size: 20px; }
+    .sb-toggle { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0;
+      margin: 2px 2px 10px auto; border: 1px solid var(--border); background: var(--surface); color: var(--blue);
+      border-radius: 50%; cursor: pointer; font-family: inherit; box-shadow: 0 1px 4px rgba(20,24,34,.08);
+      transition: background .15s ease, box-shadow .15s ease, color .15s ease; }
+    .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); box-shadow: 0 2px 10px rgba(20,24,34,.14); }
+    .sb-toggle .material-symbols-outlined { font-size: 20px; transition: transform .25s ease; }
     body.sb-rail .sidebar { width: 60px; }
     body.sb-rail .main { margin-left: 60px; }
     body.sb-rail .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
@@ -713,7 +716,8 @@
     body.sb-rail .sb-group { display: none; }
     body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
     body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
-    body.sb-rail .sb-toggle { justify-content: center; padding: 8px 0; }
+    body.sb-rail .sb-toggle { margin: 2px auto 10px; }
+    body.sb-rail .sb-toggle .material-symbols-outlined { transform: rotate(180deg); }
     @media (max-width: 768px) {
       .sidebar { width: 60px; }
       .main { margin-left: 60px; }
@@ -722,7 +726,7 @@
       .sb-group { display: none; }
       .sb-name, .sb-sub { display: none; }
       .sb-brand { justify-content: center; padding: 14px 0; }
-      .sb-toggle { justify-content: center; padding: 8px 0; }
+      .sb-toggle { margin: 2px auto 10px; }
     }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
@@ -811,7 +815,7 @@
         <div><span class="sb-name">AGM Sales</span><br><span class="sb-sub">EXEED CRM</span></div>
       </div>
       <nav class="sb-nav">
-        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="material-symbols-outlined">chevron_left</span></button>
         <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
         <a href="head-of-sales.html" class="sb-item active"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
         <div class="sb-group">Call Center</div>
