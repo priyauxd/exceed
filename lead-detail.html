@@ -1488,9 +1488,12 @@
     /* ── Collapsible icon-rail sidebar ── */
     .sidebar, .main { transition: width .25s ease, margin-left .25s ease; }
     .topbar .waffle { cursor: pointer; }
-    .sb-toggle { display: flex; align-items: center; gap: 9px; width: 100%; border: none; background: none; cursor: pointer; padding: 8px 10px; margin-bottom: 4px; color: var(--ink-secondary); border-radius: 8px; font-family: inherit; }
-    .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); }
-    .sb-toggle .material-symbols-outlined { font-size: 20px; }
+    .sb-toggle { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0;
+      margin: 2px 2px 10px auto; border: 1px solid var(--border); background: var(--surface); color: var(--blue);
+      border-radius: 50%; cursor: pointer; font-family: inherit; box-shadow: 0 1px 4px rgba(20,24,34,.08);
+      transition: background .15s ease, box-shadow .15s ease, color .15s ease; }
+    .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); box-shadow: 0 2px 10px rgba(20,24,34,.14); }
+    .sb-toggle .material-symbols-outlined { font-size: 20px; transition: transform .25s ease; }
     body.sb-rail .sidebar { width: 60px; }
     body.sb-rail .main { margin-left: 60px; }
     body.sb-rail .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
@@ -1498,7 +1501,8 @@
     body.sb-rail .sb-group { display: none; }
     body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
     body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
-    body.sb-rail .sb-toggle { justify-content: center; padding: 8px 0; }
+    body.sb-rail .sb-toggle { margin: 2px auto 10px; }
+    body.sb-rail .sb-toggle .material-symbols-outlined { transform: rotate(180deg); }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
 </head>
@@ -1525,7 +1529,7 @@
     <aside class="sidebar">
       <div class="sb-brand"><div class="sb-logo">A</div><div><span class="sb-name">AGM Sales</span><br><span class="sb-sub">EXEED CRM</span></div></div>
       <nav class="sb-nav">
-        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar"><span class="material-symbols-outlined">menu</span></button>
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="material-symbols-outlined">chevron_left</span></button>
         <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
         <a href="call-center-agent.html" class="sb-item enabled"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
         <div class="sb-group">Call Center</div>
@@ -5417,7 +5421,6 @@
     .sc-ours.their{background:#f6f7f9;border-color:#e6e8ec;}
     .sc-ours.their .sc-ours-lbl{color:#6b7280;}
     .sc-their-name{font-size:12.5px;font-weight:700;color:#2b3444;}
-    .sc-ours.their .sc-pill{margin-left:auto;background:#eef0f4;color:#4b5563;}
     .sc-ours-note{font-size:11px;color:#8a8fa3;margin-left:auto;}
     .sc-ours-reset{display:inline-flex;align-items:center;gap:4px;margin-left:auto;padding:5px 9px;font-family:inherit;font-size:11px;
       font-weight:600;color:var(--sc-accent);background:transparent;border:1px dashed #cfc6f2;border-radius:8px;cursor:pointer;}
@@ -6067,30 +6070,25 @@
     // comparison are edited in the same place.
     function scOursBar(v, l){
       var t = scTrim(v), pref = scBestFit(l);
-      var incoming = (t[4] === 'incoming');
-      var stockCls = incoming ? 'soon' : (t[2] < 4 ? 'low' : 'ok');
-      var stockTxt = incoming ? (t[2] + ' on order') : (t[2] + ' in stock');
       var models = SC_VEH.map(function(m){
         return '<option value="' + scEsc(m.code) + '"' + (m.code === v.code ? ' selected' : '') + '>' + scEsc(m.name) + '</option>';
       }).join('');
       var trims = scTrimNames(v).map(function(n){
         return '<option value="' + scEsc(n) + '"' + (n === t[0] ? ' selected' : '') + '>' + scEsc(n) + '</option>';
       }).join('');
-      // Only years we can actually sell — each labelled with why it is on the list.
+      // Only years we can actually sell.
       var years = scYearRows(v, t[0]).map(function(r){
-        var note = (r[4] === 'incoming') ? (r[2] + ' on order') : (r[2] + ' in stock');
-        return '<option value="' + r[1] + '"' + (r[1] === t[1] ? ' selected' : '') + '>' + r[1] + ' &middot; ' + note + '</option>';
+        return '<option value="' + r[1] + '"' + (r[1] === t[1] ? ' selected' : '') + '>' + r[1] + '</option>';
       }).join('');
       return '<div class="sc-ours">' +
         '<span class="sc-ours-lbl">Our car</span>' +
         '<select class="sc-pick" aria-label="Our model" onchange="scOursModel(this.value)">' + models + '</select>' +
         '<select class="sc-pick" aria-label="Trim" onchange="scOursTrim(this.value)">' + trims + '</select>' +
         '<select class="sc-pick" aria-label="Model year" onchange="scOursSetYear(this.value)">' + years + '</select>' +
-        '<span class="sc-pill ' + stockCls + '">' + stockTxt + '</span>' +
         (v.code !== pref.code
-          ? '<button class="sc-ours-reset" onclick="scOursModel(null)" title="Back to the preferred model on this lead">' +
+          ? '<button class="sc-ours-reset" onclick="scOursModel(null)" title="Back to the best fit for this lead">' +
               '<span class="material-symbols-outlined">undo</span>' + scEsc(pref.name) + '</button>'
-          : '<span class="sc-ours-note">Preferred on this lead</span>') +
+          : '<span class="sc-ours-note">Best fit for this lead</span>') +
       '</div>';
     }
     // Their side of the comparison — trim and model year for the rival currently on screen.
@@ -6104,11 +6102,10 @@
         return '<option value="' + y + '"' + (y === sel.year ? ' selected' : '') + '>' + y + '</option>';
       }).join('');
       return '<div class="sc-ours their">' +
-        '<span class="sc-ours-lbl">Their car</span>' +
+        '<span class="sc-ours-lbl">Competing with</span>' +
         '<span class="sc-their-name">' + scEsc(c.name) + '</span>' +
-        '<select class="sc-pick" aria-label="Their trim" onchange="scCompSetTrim(\'' + scQ(c.name) + '\', this.value)">' + trims + '</select>' +
-        '<select class="sc-pick" aria-label="Their model year" onchange="scCompSetYear(\'' + scQ(c.name) + '\', this.value)">' + years + '</select>' +
-        '<span class="sc-pill">' + scMoney(scCompPrice(c)) + '</span>' +
+        '<select class="sc-pick" aria-label="Competitor trim" onchange="scCompSetTrim(\'' + scQ(c.name) + '\', this.value)">' + trims + '</select>' +
+        '<select class="sc-pick" aria-label="Competitor model year" onchange="scCompSetYear(\'' + scQ(c.name) + '\', this.value)">' + years + '</select>' +
       '</div>';
     }
     function scRenderCompete(focusSearch){
@@ -6157,9 +6154,9 @@
       // to "what are we selling", and the empty side says what it is waiting for.
       if (!SC_ACTIVE){
         html += '<div class="sc-card">' +
-          '<div class="sc-card-h" style="margin-bottom:12px">' + scEsc(scOursLabel(v)) + ' &mdash; no car to compare</div>' +
+          '<div class="sc-card-h" style="margin-bottom:12px">' + scEsc(scOursLabel(v)) + ' &mdash; nothing to compare against yet</div>' +
           '<div class="sc-tblwrap"><table class="sc-tbl"><thead><tr><th>Attribute</th>' +
-            '<th class="us">' + scEsc(scOursLabel(v)) + '</th><th class="empty">Add a car</th></tr></thead><tbody>' +
+            '<th class="us">' + scEsc(scOursLabel(v)) + '</th><th class="empty">Waiting for a car</th></tr></thead><tbody>' +
           scRow('Trim', scEsc(scTrim(v)[0]), '&mdash;') +
           scRow('Model year', scOursYear(v), '&mdash;') +
           scRow('Starting price', scMoney(scTrimPrice(v)), '&mdash;') +
@@ -6176,7 +6173,7 @@
           scRow('Fuel consumption (L/100km)', scEsc(v.fuel), '&mdash;') +
           '</tbody></table></div>' +
           '<div class="sc-note" style="margin:12px 0 0"><span class="material-symbols-outlined">info</span><span>' +
-            'Add the car the customer named and this column fills in, with talking points underneath.</span></div>' +
+            'Name the car the customer is cross-shopping and this column fills in, with talking points underneath.</span></div>' +
           '<div class="sc-actions">' +
             '<button class="sc-btn" onclick="scCompAddToggle()"><span class="material-symbols-outlined">add</span>Add a car</button>' +
             '<button class="sc-btn" onclick="scTab(\'vehicles\')"><span class="material-symbols-outlined">directions_car</span>Our line-up</button>' +
