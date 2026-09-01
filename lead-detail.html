@@ -1182,6 +1182,25 @@
     .flow-ro-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-muted); border:1px solid var(--border); border-radius:5px; padding:2px 6px; background:var(--surface); }
     .flow-note { display:flex; align-items:flex-start; gap:6px; margin-top:12px; font-size:11.5px; color:var(--ink-secondary); line-height:1.4; text-align:left; }
     .flow-note .material-symbols-outlined { font-size:16px; color:var(--blue); }
+    .flow-lk { position:relative; }
+    .flow-lk-field { position:relative; display:flex; align-items:center; gap:6px; min-height:34px; box-sizing:border-box; padding:5px 28px 5px 10px; border:1px solid var(--border); border-radius:8px; background:var(--surface); cursor:text; }
+    .flow-lk-field:hover { border-color:var(--ink-muted); }
+    .flow-lk.open .flow-lk-field { border-color:var(--blue); }
+    .flow-lk-ic { position:absolute; right:8px; top:50%; transform:translateY(-50%); font-size:17px; color:var(--ink-muted); pointer-events:none; }
+    .flow-lk-inp { flex:1; min-width:40px; padding:2px 0; border:0; outline:none; background:transparent; font-family:inherit; font-size:13px; color:var(--ink); }
+    .flow-lk-chip { display:inline-flex; align-items:center; gap:5px; max-width:100%; padding:3px 5px 3px 8px; border:1px solid var(--blue); border-radius:6px; background:var(--blue-soft); font-size:12.5px; font-weight:600; color:var(--blue); }
+    .flow-lk-chip span.t { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .flow-lk-chip button { display:flex; padding:0; border:0; background:none; color:inherit; cursor:pointer; }
+    .flow-lk-chip .material-symbols-outlined { font-size:14px; }
+    .flow-lk-panel { display:none; position:absolute; left:0; right:0; top:calc(100% + 4px); z-index:5; max-height:198px; overflow:auto; background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:0 12px 28px rgba(20,24,34,.16); text-align:left; }
+    .flow-lk.open .flow-lk-panel { display:block; }
+    .flow-lk-src { position:sticky; top:0; padding:7px 10px; background:var(--surface); border-bottom:1px solid var(--border); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-muted); }
+    .flow-lk-opt { display:flex; align-items:center; gap:8px; width:100%; box-sizing:border-box; padding:7px 10px; border:0; background:none; font-family:inherit; text-align:left; cursor:pointer; }
+    .flow-lk-opt:hover, .flow-lk-opt.hl { background:var(--bg); }
+    .flow-lk-av { flex:0 0 auto; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--blue-soft); color:var(--blue); font-size:10px; font-weight:700; }
+    .flow-lk-t { font-size:12.5px; font-weight:600; color:var(--ink); }
+    .flow-lk-s { font-size:10.5px; color:var(--ink-muted); }
+    .flow-lk-none { padding:10px; font-size:12px; color:var(--ink-muted); }
     .conf-span { grid-column:1 / -1; }
     .conf-status { display:inline-flex; align-items:center; gap:6px; margin-top:3px; font-size:11.5px; font-weight:700; border-radius:20px; padding:4px 11px; }
     .conf-status .material-symbols-outlined { font-size:15px; }
@@ -1939,6 +1958,7 @@
       if (icEl){ icEl.querySelector('.material-symbols-outlined').textContent = icon || 'warning'; icEl.classList.toggle('neutral', !!neutral); }
       var okEl = document.getElementById('confirmOkBtn');
       okEl.classList.toggle('danger', !neutral); okEl.classList.toggle('primary', !!neutral);
+      okEl.classList.remove('locked');
       confirmCb = cb;
       document.getElementById('confirmOverlay').classList.add('show');
       document.getElementById('confirmModal').classList.add('open');
@@ -4583,34 +4603,109 @@
     // Generate quotation — who the quotation is billed to follows the proposal's
     // financing option: cash bills the lead, financing / DP Assist bills the bank.
     var PAY_LABEL = { cash:'Cash', financing:'Financing', dpassist:'DP Assist' };
+    // Bill-to is picked from a lookup (D365 style) rather than typed: financing lists the
+    // approved finance partners, cash lists the lead and the accounts it can be billed to.
+    var QUOTE_BANKS = [
+      { n:'Emirates NBD', s:'Auto Finance · 6651' },
+      { n:'First Abu Dhabi Bank', s:'Auto Finance · 6612' },
+      { n:'Abu Dhabi Commercial Bank', s:'Auto Finance · 6624' },
+      { n:'Abu Dhabi Islamic Bank', s:'Islamic Auto Finance · 6638' },
+      { n:'Dubai Islamic Bank', s:'Islamic Auto Finance · 6647' },
+      { n:'Mashreq Bank', s:'Auto Finance · 6659' },
+      { n:'Emirates Islamic', s:'Islamic Auto Finance · 6663' },
+      { n:'Commercial Bank of Dubai', s:'Auto Finance · 6671' },
+      { n:'RAKBANK', s:'Auto Finance · 6685' },
+      { n:'Sharjah Islamic Bank', s:'Islamic Auto Finance · 6692' }
+    ];
+    var quoteLk = { opts:[], view:[], sel:null, hl:-1, must:false };
+    function quoteLkInit(opts, sel, src, ph, must){
+      quoteLk = { opts:opts, view:opts.slice(), sel:sel || null, hl:-1, must:!!must };
+      return '<div class="flow-lk" id="quoteLk">' +
+        '<div class="flow-lk-field" onclick="quoteLkFocus()">' +
+          '<span id="quoteLkChip"></span>' +
+          '<input id="quoteLkInp" class="flow-lk-inp" type="text" autocomplete="off" placeholder="' + ph + '"' +
+            ' oninput="quoteLkOpen()" onfocus="quoteLkOpen()" onkeydown="quoteLkKey(event)">' +
+          '<span class="material-symbols-outlined flow-lk-ic">search</span>' +
+        '</div>' +
+        '<div class="flow-lk-panel"><div class="flow-lk-src">Results from: ' + src + '</div><div id="quoteLkList"></div></div>' +
+      '</div>';
+    }
+    function quoteLkEl(){ return document.getElementById('quoteLk'); }
+    function quoteLkInitials(n){ return n.split(/\s+/).slice(0,2).map(function(w){ return w.charAt(0); }).join('').toUpperCase(); }
+    // Chip when a value is chosen, search box when it is not — plus the Generate lock.
+    function quoteLkSync(){
+      var box = quoteLkEl(); if (!box) return;
+      var chip = document.getElementById('quoteLkChip'), inp = document.getElementById('quoteLkInp');
+      var o = quoteLk.sel;
+      chip.innerHTML = o
+        ? '<span class="flow-lk-chip"><span class="t">' + o.n + '</span>' +
+          '<button type="button" title="Clear" onclick="event.stopPropagation();quoteLkClear()"><span class="material-symbols-outlined">close</span></button></span>'
+        : '';
+      inp.style.display = o ? 'none' : '';
+      if (o) { inp.value = ''; box.classList.remove('open'); }
+      var ok = document.getElementById('confirmOkBtn');
+      if (ok) ok.classList.toggle('locked', quoteLk.must && !o);
+    }
+    function quoteLkFocus(){ var i = document.getElementById('quoteLkInp'); if (i && i.style.display !== 'none') i.focus(); }
+    function quoteLkOpen(){
+      var box = quoteLkEl(); if (!box) return;
+      var q = (document.getElementById('quoteLkInp').value || '').trim().toLowerCase();
+      quoteLk.view = quoteLk.opts.filter(function(o){ return !q || (o.n + ' ' + o.s).toLowerCase().indexOf(q) > -1; });
+      if (quoteLk.hl >= quoteLk.view.length) quoteLk.hl = -1;
+      document.getElementById('quoteLkList').innerHTML = quoteLk.view.length
+        ? quoteLk.view.map(function(o, i){
+            return '<button type="button" class="flow-lk-opt' + (i === quoteLk.hl ? ' hl' : '') + '" onclick="quoteLkPick(' + i + ')">' +
+              '<span class="flow-lk-av">' + quoteLkInitials(o.n) + '</span>' +
+              '<span><span class="flow-lk-t">' + o.n + '</span><br><span class="flow-lk-s">' + o.s + '</span></span></button>';
+          }).join('')
+        : '<div class="flow-lk-none">No matching records</div>';
+      box.classList.add('open');
+    }
+    function quoteLkPick(i){ var o = quoteLk.view[i]; if (!o) return; quoteLk.sel = o; quoteLkSync(); }
+    function quoteLkClear(){ quoteLk.sel = null; quoteLkSync(); quoteLkFocus(); quoteLkOpen(); }
+    function quoteLkKey(e){
+      var box = quoteLkEl(); if (!box) return;
+      if (e.key === 'Escape') { box.classList.remove('open'); return; }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!box.classList.contains('open')) { quoteLkOpen(); return; }
+        var n = quoteLk.view.length; if (!n) return;
+        quoteLk.hl = (quoteLk.hl + (e.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
+        quoteLkOpen();
+        var hl = box.querySelector('.flow-lk-opt.hl'); if (hl) hl.scrollIntoView({ block:'nearest' });
+        return;
+      }
+      if (e.key === 'Enter') { e.preventDefault(); if (quoteLk.hl > -1) quoteLkPick(quoteLk.hl); }
+    }
+    document.addEventListener('mousedown', function(e){
+      var box = quoteLkEl();
+      if (box && box.classList.contains('open') && !box.contains(e.target)) box.classList.remove('open');
+    });
     function generateQuotationFlow(){
       var p = acceptedProp() || {};
       var pay = p.payType || 'cash';
       var financed = (pay === 'financing' || pay === 'dpassist');
       var l = leads[selectedIdx] || {};
       var signNote = '<div class="flow-note"><span class="material-symbols-outlined">draw</span> Requires manager signature before it is issued to the customer.</div>';
+      var lead = { n: l.name || 'This lead', s: 'Lead · ' + (l.id || '—') };
+      var field = financed
+        ? quoteLkInit(QUOTE_BANKS, null, 'Finance partners', 'Search bank', true)
+        : quoteLkInit([lead, { n:'AGM Sales', s:'Account · 6651' }, { n:'Exeed Abu Dhabi Corniche', s:'Account · 6612' }], lead, 'Contacts and accounts', 'Search customer', true);
       var html = '<div style="text-align:left">' +
-        '<label class="flow-lbl">Bill to customer</label>' +
+        '<label class="flow-lbl">Bill to customer</label>' + field +
         (financed
-          ? '<input id="quoteBank" type="text" placeholder="e.g. Emirates NBD" class="flow-inp" autocomplete="off">' +
-            '<div class="flow-note"><span class="material-symbols-outlined">account_balance</span> ' + PAY_LABEL[pay] +
-              ' — the quotation is billed to the financing bank, not the lead. Enter the bank name exactly as it appears on the finance approval.</div>'
-          : '<div class="flow-ro"><span class="flow-ro-v">' + (l.name || 'This lead') + '</span><span class="flow-ro-tag">Lead</span></div>' +
-            '<div class="flow-note"><span class="material-symbols-outlined">person</span> Cash — the quotation is billed directly to the lead. No bank is involved.</div>') +
+          ? '<div class="flow-note"><span class="material-symbols-outlined">account_balance</span> ' + PAY_LABEL[pay] +
+              ' — the quotation is billed to the financing bank, not the lead. Pick the bank named on the finance approval.</div>'
+          : '<div class="flow-note"><span class="material-symbols-outlined">person</span> Cash — the quotation is billed directly to the lead. No bank is involved.</div>') +
         signNote +
       '</div>';
       openConfirm('Generate quotation', html, 'Generate', function(){
-        var billedTo;
-        if (financed) {
-          var el = document.getElementById('quoteBank');
-          billedTo = (el && el.value.trim()) ? el.value.trim() : 'the financing bank';
-        } else {
-          billedTo = l.name || 'the lead';
-        }
+        var billedTo = (quoteLk.sel && quoteLk.sel.n) || (financed ? 'the financing bank' : (l.name || 'the lead'));
         p.quoteGenerated = true;
         renderDetail(selectedIdx, currentStep);
         showToast('Quotation generated for ' + billedTo + ' — sent to manager to sign');
       }, 'Cancel', 'request_quote', true);
+      quoteLkSync();
     }
     // Purchase agreement — confirmation before sending to the customer via DocuSign.
     function generatePurchaseAgreementFlow(){
