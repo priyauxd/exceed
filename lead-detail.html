@@ -1216,6 +1216,15 @@
     .conf-cta.locked .material-symbols-outlined { color:var(--ink-muted); }
     .conf-lock-note { display:flex; align-items:flex-start; gap:6px; margin-top:9px; font-size:11.5px; color:var(--ink-secondary); line-height:1.4; }
     .conf-lock-note .material-symbols-outlined { font-size:16px; color:var(--amber); }
+    .conf-order { margin-top:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); overflow:hidden; }
+    .conf-order-head { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:11px 13px; border:none; background:none; font-family:inherit; text-align:left; cursor:pointer; }
+    .conf-order-head:hover { background:var(--bg); }
+    .conf-order-t { font-size:12.5px; font-weight:700; color:var(--ink); }
+    .conf-order-sub { font-size:11.5px; color:var(--ink-secondary); margin-top:2px; }
+    .conf-order-caret { font-size:20px; color:var(--ink-muted); flex-shrink:0; }
+    .conf-order-body { display:grid; grid-template-columns:repeat(2,1fr); gap:12px 24px; padding:2px 13px 13px; }
+    .conf-order-body .conf-val { font-size:13px; font-weight:600; }
+    @media (max-width:640px){ .conf-order-body { grid-template-columns:1fr; } }
     .prop-body { padding: 14px; }
     .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
     .prop-build-img { width: 96px; height: 62px; object-fit: cover; border-radius: 8px; background: #eef1f5; flex-shrink: 0; }
@@ -4563,7 +4572,44 @@
         '</div>' +
         (canQuote ? '' :
           '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span> Advance payment is not in cash — <strong>Generate quotation</strong> unlocks once the payment is received in FO. Send a payment link, or switch the toggle to Yes if it was taken in cash.</div>') +
+        confOrderBlock(l, p) +
       '</div>';
+    }
+    // Sales-order fulfilment fields — collapsible so the card stays compact.
+    var confOrderOpen = true;
+    function confOrderFields(l, p){
+      var site = p.shipSite || l.showroom || 'EXEED Dubai';
+      var wh = p.shipWarehouse || p.allocLocation || 'DIP Warehouse';
+      return [
+        ['Sales order pool', p.orderPool || 'Retail · Showroom'],
+        ['Shipping site', site],
+        ['Shipping warehouse', wh],
+        ['Location', p.binLocation || 'DIP-A-12'],
+        ['Sales taker', p.salesTaker || l.owner || 'Unassigned'],
+        ['Sales responsible', p.salesResp || l.owner || 'Unassigned']
+      ];
+    }
+    function confOrderBlock(l, p){
+      var rows = confOrderFields(l, p).map(function(f){
+        return '<div><div class="conf-lbl">' + f[0] + '</div><div class="conf-val">' + f[1] + '</div></div>';
+      }).join('');
+      return '<div class="conf-order">' +
+        '<button type="button" class="conf-order-head" id="confOrderHead" aria-expanded="' + (confOrderOpen ? 'true' : 'false') + '" aria-controls="confOrderBody" onclick="toggleConfOrder()">' +
+          '<span><span class="conf-order-t">Sales order details</span>' +
+            '<span class="conf-order-sub" style="display:block">Pool, shipping and ownership carried into the sales order.</span></span>' +
+          '<span class="material-symbols-outlined conf-order-caret" id="confOrderCaret">' + (confOrderOpen ? 'expand_less' : 'expand_more') + '</span>' +
+        '</button>' +
+        '<div class="conf-order-body" id="confOrderBody"' + (confOrderOpen ? '' : ' style="display:none"') + '>' + rows + '</div>' +
+      '</div>';
+    }
+    function toggleConfOrder(){
+      confOrderOpen = !confOrderOpen;
+      var body = document.getElementById('confOrderBody'),
+          caret = document.getElementById('confOrderCaret'),
+          head = document.getElementById('confOrderHead');
+      if (body) body.style.display = confOrderOpen ? 'grid' : 'none';
+      if (caret) caret.textContent = confOrderOpen ? 'expand_less' : 'expand_more';
+      if (head) head.setAttribute('aria-expanded', confOrderOpen ? 'true' : 'false');
     }
     // Proposal status shown on the confirmed panel.
     function propStatusOf(p){
