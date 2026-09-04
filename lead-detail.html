@@ -1226,16 +1226,16 @@
     .conf-order-body .conf-val { font-size:13px; font-weight:600; }
     @media (max-width:640px){ .conf-order-body { grid-template-columns:1fr; } }
     .ord-lk { position:relative; min-width:0; }
-    .ord-lk-view { display:flex; align-items:center; gap:4px; min-height:26px; margin-top:1px; }
-    .ord-lk-link { max-width:100%; padding:0; border:0; background:none; font-family:inherit; font-size:13px; font-weight:600; color:var(--blue); text-align:left; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .ord-lk-link:hover { text-decoration:underline; }
-    .ord-lk-empty { padding:0; border:0; background:none; font-family:inherit; font-size:13px; font-weight:600; color:var(--ink-muted); cursor:pointer; }
-    .ord-lk-btn { display:flex; padding:2px; border:0; border-radius:4px; background:none; color:var(--ink-muted); cursor:pointer; opacity:.5; transition:opacity .12s; }
-    .ord-lk-btn .material-symbols-outlined { font-size:15px; }
-    .ord-lk:hover .ord-lk-btn, .ord-lk-btn:focus-visible { opacity:1; }
-    .ord-lk-btn:hover { background:var(--bg); color:var(--ink); }
-    .ord-lk-edit { margin-top:2px; }
-    .ord-lk-edit .flow-lk-field { min-height:28px; padding:3px 26px 3px 8px; }
+    /* Fluent field shell: filled box, accessible bottom stroke, search affordance on the right. */
+    .ord-fld { display:flex; align-items:center; gap:8px; width:100%; box-sizing:border-box; min-height:32px; margin-top:4px; padding:6px 10px; border:0; border-bottom:1px solid var(--colorNeutralStrokeAccessible); border-radius:4px 4px 0 0; background:var(--colorNeutralBackground3); font-family:inherit; font-size:13px; color:var(--ink); text-align:left; cursor:pointer; }
+    .ord-fld:hover { background:var(--colorNeutralBackground3Hover, #ebebeb); }
+    .ord-fld:focus-visible { outline:none; border-bottom:2px solid var(--blue); padding-bottom:5px; }
+    .ord-fld-v { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .ord-fld-v.empty { color:var(--ink-muted); }
+    .ord-fld .material-symbols-outlined { flex-shrink:0; font-size:17px; color:var(--ink-secondary); }
+    .ord-lk-edit { margin-top:4px; }
+    .ord-lk-edit .flow-lk-field { min-height:32px; padding:6px 28px 6px 10px; border:0; border-bottom:2px solid var(--blue); border-radius:4px 4px 0 0; background:var(--colorNeutralBackground3); }
+    .ord-lk-edit .flow-lk-ic { color:var(--ink-secondary); }
     .ord-lk-edit .flow-lk-av .material-symbols-outlined { font-size:13px; }
     .prop-body { padding: 14px; }
     .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
@@ -4677,12 +4677,10 @@
         return '<div class="ord-lk" id="ordLk-' + f.k + '">' +
           '<div class="conf-lbl">' + f.label + '</div>' +
           (ordOpenKey === f.k ? ordLkEditHtml(f, ord) :
-            '<div class="ord-lk-view">' +
-              (v ? '<button type="button" class="ord-lk-link" title="' + v.s + '" onclick="ordLkEdit(\'' + f.k + '\')">' + v.n + '</button>'
-                 : '<button type="button" class="ord-lk-empty" onclick="ordLkEdit(\'' + f.k + '\')">Select a record</button>') +
-              '<button type="button" class="ord-lk-btn" title="Look up records" onclick="ordLkEdit(\'' + f.k + '\')">' +
-                '<span class="material-symbols-outlined">search</span></button>' +
-            '</div>') +
+            '<button type="button" class="ord-fld" title="' + (v ? v.n + ' — ' + v.s : 'Look up records') + '" onclick="ordLkEdit(\'' + f.k + '\')">' +
+              '<span class="ord-fld-v' + (v ? '' : ' empty') + '">' + (v ? v.n : 'Select a record') + '</span>' +
+              '<span class="material-symbols-outlined">search</span>' +
+            '</button>') +
         '</div>';
       }).join('');
       return '<div class="conf-order">' +
