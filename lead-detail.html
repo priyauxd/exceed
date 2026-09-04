@@ -1225,6 +1225,18 @@
     .conf-order-body { display:grid; grid-template-columns:repeat(2,1fr); gap:12px 24px; padding:2px 13px 13px; }
     .conf-order-body .conf-val { font-size:13px; font-weight:600; }
     @media (max-width:640px){ .conf-order-body { grid-template-columns:1fr; } }
+    .ord-lk { position:relative; min-width:0; }
+    .ord-lk-view { display:flex; align-items:center; gap:4px; min-height:26px; margin-top:1px; }
+    .ord-lk-link { max-width:100%; padding:0; border:0; background:none; font-family:inherit; font-size:13px; font-weight:600; color:var(--blue); text-align:left; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .ord-lk-link:hover { text-decoration:underline; }
+    .ord-lk-empty { padding:0; border:0; background:none; font-family:inherit; font-size:13px; font-weight:600; color:var(--ink-muted); cursor:pointer; }
+    .ord-lk-btn { display:flex; padding:2px; border:0; border-radius:4px; background:none; color:var(--ink-muted); cursor:pointer; opacity:.5; transition:opacity .12s; }
+    .ord-lk-btn .material-symbols-outlined { font-size:15px; }
+    .ord-lk:hover .ord-lk-btn, .ord-lk-btn:focus-visible { opacity:1; }
+    .ord-lk-btn:hover { background:var(--bg); color:var(--ink); }
+    .ord-lk-edit { margin-top:2px; }
+    .ord-lk-edit .flow-lk-field { min-height:28px; padding:3px 26px 3px 8px; }
+    .ord-lk-edit .flow-lk-av .material-symbols-outlined { font-size:13px; }
     .prop-body { padding: 14px; }
     .prop-build { display: flex; gap: 12px; align-items: center; padding: 10px; margin-bottom: 14px; background: linear-gradient(135deg, var(--bg), var(--surface)); border: 1px solid var(--border-soft); border-radius: 12px; }
     .prop-build-img { width: 96px; height: 62px; object-fit: cover; border-radius: 8px; background: #eef1f5; flex-shrink: 0; }
@@ -4576,22 +4588,102 @@
       '</div>';
     }
     // Sales-order fulfilment fields — collapsible so the card stays compact.
+    // Every field is a D365 lookup, not a typed value: the record reads as a link,
+    // the search icon opens type-ahead against the reference table behind it.
     var confOrderOpen = true;
-    function confOrderFields(l, p){
-      var site = p.shipSite || l.showroom || 'EXEED Dubai';
-      var wh = p.shipWarehouse || p.allocLocation || 'DIP Warehouse';
-      return [
-        ['Sales order pool', p.orderPool || 'Retail · Showroom'],
-        ['Shipping site', site],
-        ['Shipping warehouse', wh],
-        ['Location', p.binLocation || 'DIP-A-12'],
-        ['Sales taker', p.salesTaker || l.owner || 'Unassigned'],
-        ['Sales responsible', p.salesResp || l.owner || 'Unassigned']
-      ];
+    var ORD_TABLES = {
+      pool: { src:'Sales order pools', ph:'Search pool', rows:[
+        { n:'Exeed-Sales',  s:'Retail · Showroom orders' },
+        { n:'Exeed-Fleet',  s:'Corporate · Fleet orders' },
+        { n:'Exeed-Demo',   s:'Demo and test-drive units' },
+        { n:'Exeed-Used',   s:'Certified pre-owned' },
+        { n:'Exeed-Export', s:'Export · GCC' }
+      ]},
+      site: { src:'Sites', ph:'Search site', rows:[
+        { n:'6651', s:'EXEED Dubai · Sheikh Zayed Road', city:'Dubai' },
+        { n:'6612', s:'EXEED Abu Dhabi · Corniche', city:'Abu Dhabi' },
+        { n:'6624', s:'EXEED Sharjah · Al Wahda', city:'Sharjah' },
+        { n:'6638', s:'EXEED Al Ain · Zayed Road', city:'Al Ain' },
+        { n:'6647', s:'EXEED Ras Al Khaimah', city:'Ras Al Khaimah' }
+      ]},
+      warehouse: { src:'Warehouses', ph:'Search warehouse', rows:[
+        { n:'6651-DIP',  s:'Dubai Investments Park · Main stock', p:'6651' },
+        { n:'6651-ABDB', s:'Al Quoz bonded · Transit stock', p:'6651' },
+        { n:'6612-MUS',  s:'Mussafah M-17 · Main stock', p:'6612' },
+        { n:'6612-ICAD', s:'ICAD III · Transit stock', p:'6612' },
+        { n:'6624-SAJ',  s:'Saja’a industrial · Main stock', p:'6624' },
+        { n:'6638-ALN',  s:'Al Ain Sanaiya · Main stock', p:'6638' },
+        { n:'6647-RAK',  s:'RAK Al Jazeera · Main stock', p:'6647' }
+      ]},
+      location: { src:'Locations', ph:'Search location', rows:[
+        { n:'DIP-A-12',  s:'Bay A · Ready for delivery', p:'6651-DIP' },
+        { n:'DIP-A-13',  s:'Bay A · Ready for delivery', p:'6651-DIP' },
+        { n:'DIP-B-04',  s:'Bay B · PDI in progress', p:'6651-DIP' },
+        { n:'ABDB-C-07', s:'Bonded yard C · Awaiting clearance', p:'6651-ABDB' },
+        { n:'MUS-A-01',  s:'Bay A · Ready for delivery', p:'6612-MUS' },
+        { n:'MUS-B-06',  s:'Bay B · PDI in progress', p:'6612-MUS' },
+        { n:'ICAD-D-02', s:'Yard D · Transit stock', p:'6612-ICAD' },
+        { n:'SAJ-A-03',  s:'Bay A · Ready for delivery', p:'6624-SAJ' },
+        { n:'ALN-A-02',  s:'Bay A · Ready for delivery', p:'6638-ALN' },
+        { n:'RAK-A-01',  s:'Bay A · Ready for delivery', p:'6647-RAK' }
+      ]},
+      user: { src:'Users', ph:'Search user', rows:[
+        { n:'Mariam Saeed',   s:'AUTO_000048 · Sales executive' },
+        { n:'Priyamvada K.',  s:'AUTO_000051 · Sales executive' },
+        { n:'Nadia A.',       s:'AUTO_000054 · Sales executive' },
+        { n:'Mariam K.',      s:'AUTO_000057 · Sales executive' },
+        { n:'Rashid Al Naqbi',s:'AUTO_000062 · Showroom manager' },
+        { n:'Yousef Haddad',  s:'AUTO_000066 · Fleet sales' }
+      ]}
+    };
+    var ORD_FIELDS = [
+      { k:'pool',      label:'Sales order pool',  t:'pool' },
+      { k:'site',      label:'Shipping site',     t:'site' },
+      { k:'warehouse', label:'Shipping warehouse',t:'warehouse', parent:'site' },
+      { k:'location',  label:'Location',          t:'location',  parent:'warehouse' },
+      { k:'taker',     label:'Sales taker',       t:'user' },
+      { k:'resp',      label:'Sales responsible', t:'user' }
+    ];
+    // A child lookup only lists records under the record chosen above it —
+    // warehouses within the site, locations within the warehouse.
+    function ordRows(f, ord){
+      var rows = ORD_TABLES[f.t].rows;
+      if (!f.parent) return rows;
+      var par = ord[f.parent];
+      return rows.filter(function(r){ return !par || r.p === par.n; });
     }
+    function ordSrc(f, ord){
+      var t = ORD_TABLES[f.t];
+      return f.parent && ord[f.parent] ? t.src + ' · ' + ord[f.parent].n : t.src;
+    }
+    function ordFind(t, n){ var r = null; ORD_TABLES[t].rows.forEach(function(x){ if (x.n === n) r = x; }); return r; }
+    function ordData(l, p){
+      if (!p.ord) {
+        var site = null;
+        ORD_TABLES.site.rows.forEach(function(r){ if (!site && (l.showroom || '').indexOf(r.city) > -1) site = r; });
+        site = site || ORD_TABLES.site.rows[0];
+        var wh = ORD_TABLES.warehouse.rows.filter(function(r){ return r.p === site.n; })[0];
+        var loc = ORD_TABLES.location.rows.filter(function(r){ return wh && r.p === wh.n; })[0];
+        var user = ordFind('user', l.owner) || ORD_TABLES.user.rows[0];
+        p.ord = { pool:ORD_TABLES.pool.rows[0], site:site, warehouse:wh, location:loc, taker:user, resp:user };
+      }
+      return p.ord;
+    }
+    var ordOpenKey = null, ordView = [], ordHl = -1;
     function confOrderBlock(l, p){
-      var rows = confOrderFields(l, p).map(function(f){
-        return '<div><div class="conf-lbl">' + f[0] + '</div><div class="conf-val">' + f[1] + '</div></div>';
+      var ord = ordData(l, p);
+      var rows = ORD_FIELDS.map(function(f){
+        var v = ord[f.k];
+        return '<div class="ord-lk" id="ordLk-' + f.k + '">' +
+          '<div class="conf-lbl">' + f.label + '</div>' +
+          (ordOpenKey === f.k ? ordLkEditHtml(f, ord) :
+            '<div class="ord-lk-view">' +
+              (v ? '<button type="button" class="ord-lk-link" title="' + v.s + '" onclick="ordLkEdit(\'' + f.k + '\')">' + v.n + '</button>'
+                 : '<button type="button" class="ord-lk-empty" onclick="ordLkEdit(\'' + f.k + '\')">Select a record</button>') +
+              '<button type="button" class="ord-lk-btn" title="Look up records" onclick="ordLkEdit(\'' + f.k + '\')">' +
+                '<span class="material-symbols-outlined">search</span></button>' +
+            '</div>') +
+        '</div>';
       }).join('');
       return '<div class="conf-order">' +
         '<button type="button" class="conf-order-head" id="confOrderHead" aria-expanded="' + (confOrderOpen ? 'true' : 'false') + '" aria-controls="confOrderBody" onclick="toggleConfOrder()">' +
@@ -4602,6 +4694,77 @@
         '<div class="conf-order-body" id="confOrderBody"' + (confOrderOpen ? '' : ' style="display:none"') + '>' + rows + '</div>' +
       '</div>';
     }
+    function ordLkEditHtml(f, ord){
+      return '<div class="flow-lk ord-lk-edit open">' +
+        '<div class="flow-lk-field" onclick="ordLkFocus()">' +
+          '<input id="ordLkInp" class="flow-lk-inp" type="text" autocomplete="off" placeholder="' + ORD_TABLES[f.t].ph + '"' +
+            ' oninput="ordLkFilter()" onkeydown="ordLkKey(event)">' +
+          '<span class="material-symbols-outlined flow-lk-ic">search</span>' +
+        '</div>' +
+        '<div class="flow-lk-panel"><div class="flow-lk-src">Results from: ' + ordSrc(f, ord) + '</div><div id="ordLkList"></div></div>' +
+      '</div>';
+    }
+    function ordField(k){ var f = null; ORD_FIELDS.forEach(function(x){ if (x.k === k) f = x; }); return f; }
+    function ordLkEdit(k){
+      ordOpenKey = k; ordHl = -1;
+      renderDetail(selectedIdx, currentStep);
+      ordLkFilter();
+      ordLkFocus();
+    }
+    function ordLkFocus(){ var i = document.getElementById('ordLkInp'); if (i) i.focus(); }
+    function ordLkClose(){ if (ordOpenKey === null) return; ordOpenKey = null; renderDetail(selectedIdx, currentStep); }
+    function ordLkFilter(){
+      var f = ordField(ordOpenKey), list = document.getElementById('ordLkList');
+      if (!f || !list) return;
+      var l = leads[selectedIdx], p = acceptedProp(); if (!p) return;
+      var inp = document.getElementById('ordLkInp');
+      var q = ((inp && inp.value) || '').trim().toLowerCase();
+      ordView = ordRows(f, ordData(l, p)).filter(function(r){ return !q || (r.n + ' ' + r.s).toLowerCase().indexOf(q) > -1; });
+      if (ordHl >= ordView.length) ordHl = -1;
+      list.innerHTML = ordView.length
+        ? ordView.map(function(r, i){
+            return '<button type="button" class="flow-lk-opt' + (i === ordHl ? ' hl' : '') + '" onclick="ordLkPick(' + i + ')">' +
+              '<span class="flow-lk-av">' + (f.t === 'user' ? quoteLkInitials(r.n) : '<span class="material-symbols-outlined">' + (f.t === 'pool' ? 'inventory_2' : f.t === 'site' ? 'store' : f.t === 'warehouse' ? 'warehouse' : 'pin_drop') + '</span>') + '</span>' +
+              '<span><span class="flow-lk-t">' + r.n + '</span><br><span class="flow-lk-s">' + r.s + '</span></span></button>';
+          }).join('')
+        : '<div class="flow-lk-none">No matching records</div>';
+    }
+    // Picking a parent record invalidates what sits under it — the sales order can't
+    // ship from a warehouse that belongs to another site.
+    function ordLkPick(i){
+      var r = ordView[i]; if (!r) return;
+      var l = leads[selectedIdx], p = acceptedProp(); if (!p) return;
+      var f = ordField(ordOpenKey), ord = ordData(l, p);
+      ord[f.k] = r;
+      ORD_FIELDS.forEach(function(c){
+        if (c.parent && ord[c.k]) { var ok = ordRows(c, ord).some(function(x){ return x.n === ord[c.k].n; }); if (!ok) ord[c.k] = ordRows(c, ord)[0] || null; }
+      });
+      ordOpenKey = null;
+      renderDetail(selectedIdx, currentStep);
+      showToast(f.label + ' set to ' + r.n);
+    }
+    function ordLkKey(e){
+      if (e.key === 'Escape') { e.preventDefault(); ordLkClose(); return; }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var n = ordView.length; if (!n) return;
+        ordHl = (ordHl + (e.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
+        ordLkFilter();
+        var hl = document.querySelector('.ord-lk-edit .flow-lk-opt.hl'); if (hl) hl.scrollIntoView({ block:'nearest' });
+        return;
+      }
+      if (e.key === 'Enter') { e.preventDefault(); if (ordHl > -1) ordLkPick(ordHl); }
+    }
+    // Clicking straight from one lookup into the next moves the open field across,
+    // rather than closing and making the user click twice.
+    document.addEventListener('mousedown', function(e){
+      if (ordOpenKey === null) return;
+      var box = document.getElementById('ordLk-' + ordOpenKey);
+      if (box && box.contains(e.target)) return;
+      var other = e.target.closest ? e.target.closest('.ord-lk') : null;
+      if (other && other.id.indexOf('ordLk-') === 0) { e.preventDefault(); ordLkEdit(other.id.slice(6)); return; }
+      ordLkClose();
+    });
     function toggleConfOrder(){
       confOrderOpen = !confOrderOpen;
       var body = document.getElementById('confOrderBody'),
