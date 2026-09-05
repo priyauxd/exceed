@@ -209,6 +209,10 @@
   .vas-lk-s{display:block; font-size:11.5px; color:var(--ink2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .vas-lk-t b{font-weight:800; color:var(--ink); background:rgba(246,196,83,.34); border-radius:2px;}
   .vas-lk-p{font-size:12px; font-weight:700; color:var(--ink2); white-space:nowrap; flex-shrink:0;}
+  .vas-lk-box{display:flex; align-items:center; justify-content:center; width:15px; height:15px; flex-shrink:0; border:1.5px solid var(--muted); border-radius:4px; background:var(--panel); color:transparent;}
+  .vas-lk-box .mi{font-size:12px;}
+  .vas-lk-box.on{background:#3d9b63; border-color:#3d9b63; color:#fff;}
+  .vas-lk-chip + .vas-lk-chip{margin-top:-3px;}
   .vas-lk-chip{display:flex; align-items:center; gap:10px; padding:8px 10px; background:rgba(92,185,127,.10); border:1px solid rgba(92,185,127,.42); border-radius:8px;}
   .vas-lk-chip > .mi{color:#3d9b63;}
   .vas-lk-opt.sel{background:rgba(92,185,127,.10);}
@@ -533,7 +537,7 @@
   // delta is a campaign, so it belongs in CAMPAIGNS, not here.
   var YEARS = [2027, 2026, 2025];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499 }, vasProd:{ smc:'SC - 100K-120K' }, vasLk:{ q:'', hl:-1 }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499 }, vasProd:{ smc:['SC - 100K-120K'] }, vasLk:{ q:'', hl:-1, open:false }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -546,13 +550,14 @@
   function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
   function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
   function emi(loan,y){ return Math.round(loan*(1+RATE*y)/(y*12)); }
-  function vasProd(c){
-    var code = state.vasProd[c.id]; if (!code) return null;
-    return (c.products || []).filter(function(p){ return p.code === code; })[0] || null;
+  // Contracts picked from the lookup, kept in catalogue order however they were added.
+  function vasProds(c){
+    var codes = state.vasProd[c.id] || [];
+    return (c.products || []).filter(function(p){ return codes.indexOf(p.code) > -1; });
   }
   function catCustomer(c){
     if (c.type === 'number') return state.vasVal[c.id] || 0;
-    if (c.type === 'lookup'){ var p = vasProd(c); return p ? p.price : 0; }
+    if (c.type === 'lookup'){ var s2 = 0; vasProds(c).forEach(function(p){ s2 += p.price; }); return s2; }
     var s = 0, sel = state.vasSel[c.id] || {};
     (c.options||[]).forEach(function(o){ if (sel[o.id]) s += o.price; });
     return s;
@@ -581,11 +586,12 @@
           '<span class="pc-v vas-cc"><span class="vas-cur">'+DH+'</span><input type="number" min="0" step="100" class="vas-ccinput" value="'+(cust||'')+'" placeholder="0" onchange="setVasNum(\''+c.id+'\', this.value)"></span>' +
         '</div>';
       } else if (c.type === 'lookup'){
-        var lopen = !!state.vasOpen[c.id], lp = vasProd(c);
+        var lopen = !!state.vasOpen[c.id], lps = vasProds(c);
+        var tag = lps.length ? '<span class="vas-lk-tag">'+esc(lps[0].code)+(lps.length > 1 ? ' +'+(lps.length-1) : '')+'</span>' : '';
         rows += '<div class="pc-row vas-cat'+(lopen?' open':'')+'" onclick="toggleVasGroup(\''+c.id+'\')">' +
-          '<span class="pc-i"><span class="mi vas-cat-chev">'+(lopen?'expand_less':'expand_more')+'</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span>'+(lp?'<span class="vas-lk-tag">'+lp.code+'</span>':'')+'</span>' +
+          '<span class="pc-i"><span class="mi vas-cat-chev">'+(lopen?'expand_less':'expand_more')+'</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span>'+tag+'</span>' +
           '<span class="pc-v">'+dh(c.rec)+'</span><span class="pc-v">'+dh(cust)+'</span></div>';
-        if (lopen) rows += vasLkHtml(c, lp);
+        if (lopen) rows += vasLkHtml(c, lps);
       } else {
         var open = !!state.vasOpen[c.id];
         rows += '<div class="pc-row vas-cat'+(open?' open':'')+'" onclick="toggleVasGroup(\''+c.id+'\')">' +
@@ -643,69 +649,85 @@
     if (q) rows.sort(function(a, b){ return (a.span - b.span) || (a.first - b.first); });
     return rows;
   }
-  // Nothing is listed until the SE searches — the catalogue is not browsed, it is queried.
+  // The list is a dropdown: it opens when the SE clicks into the search box, not when
+  // the group expands, and stays open while contracts are ticked off — SMC is multi-select.
   function vasLkResHtml(c){
-    if (!(state.vasLk.q || '').trim()) return '';
+    if (!state.vasLk.open) return '';
     return '<div class="vas-lk-panel"><div class="vas-lk-hd">Products</div>' +
       '<div class="vas-lk-list" id="vasLkList">'+vasLkListHtml(c)+'</div></div>';
   }
   function vasLkListHtml(c){
     var view = vasLkView(c);
     if (!view.length) return '<div class="vas-lk-none">No products match &ldquo;'+esc((state.vasLk.q||'').trim())+'&rdquo;</div>';
-    var cur = state.vasProd[c.id];
+    var codes = state.vasProd[c.id] || [];
     return view.map(function(r, i){
-      var on = r.p.code === cur;
-      return '<button type="button" class="vas-lk-opt'+(i===state.vasLk.hl?' hl':'')+(on?' sel':'')+'" onclick="pickVasProd(\''+c.id+'\',\''+r.p.code+'\')">' +
-        '<span class="mi">'+(on?'check_circle':'inventory_2')+'</span>' +
+      var on = codes.indexOf(r.p.code) > -1;
+      return '<button type="button" class="vas-lk-opt'+(i===state.vasLk.hl?' hl':'')+(on?' sel':'')+'" onclick="toggleVasProd(\''+c.id+'\',\''+r.p.code+'\')">' +
+        '<span class="vas-lk-box'+(on?' on':'')+'"><span class="mi">check</span></span>' +
+        '<span class="mi">inventory_2</span>' +
         '<span class="vas-lk-txt"><span class="vas-lk-t">'+fuzzyMark(r.p.name, r.hits)+'</span><span class="vas-lk-s">'+esc(r.p.code)+'</span></span>' +
         (r.p.rec ? '<span class="vas-rec">Recommended</span>' : '') +
         '<span class="vas-lk-p">'+dh(r.p.price)+'</span></button>';
     }).join('');
   }
-  // Expanded SMC group: search always on top so the SE can retype straight away, the
-  // picked contract held beneath it, then the catalogue — the D365 Products lookup.
-  function vasLkHtml(c, p){
-    var picked = p
-      ? '<div class="vas-lk-chip"><span class="mi">check_circle</span>' +
-          '<span class="vas-lk-txt"><span class="vas-lk-t">'+esc(p.name)+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
-          '<span class="vas-lk-p">'+dh(p.price)+'</span>' +
-          '<button type="button" class="vas-lk-x" title="Remove contract" onclick="clearVasProd(\''+c.id+'\')"><span class="mi">close</span></button></div>'
-      : '<div class="vas-lk-hint"><span class="mi">search</span>Search by product number or name, e.g. 100K-120K</div>';
+  // Expanded SMC group: the search box, the contracts already on the deal, and the
+  // dropdown when it is open — the D365 Products lookup.
+  function vasLkHtml(c, ps){
+    var picked = ps.length
+      ? ps.map(function(p){
+          return '<div class="vas-lk-chip"><span class="mi">check_circle</span>' +
+            '<span class="vas-lk-txt"><span class="vas-lk-t">'+esc(p.name)+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
+            '<span class="vas-lk-p">'+dh(p.price)+'</span>' +
+            '<button type="button" class="vas-lk-x" title="Remove contract" onclick="toggleVasProd(\''+c.id+'\',\''+p.code+'\')"><span class="mi">close</span></button></div>';
+        }).join('')
+      : '<div class="vas-lk-hint"><span class="mi">search</span>Click the search box to list contracts, or type a product number</div>';
     return '<div class="vas-opts vas-lk" onclick="event.stopPropagation()">' +
-      '<div class="vas-lk-field"><span class="mi vas-lk-ic">search</span>' +
-        '<input id="vasLkInp" class="vas-lk-inp" type="text" autocomplete="off" placeholder="Search service contracts" value="'+esc(state.vasLk.q)+'" oninput="vasLkQuery(this.value)" onkeydown="vasLkKey(event)"></div>' +
+      '<div class="vas-lk-field" onclick="openVasLk()"><span class="mi vas-lk-ic">search</span>' +
+        '<input id="vasLkInp" class="vas-lk-inp" type="text" autocomplete="off" placeholder="Search service contracts" value="'+esc(state.vasLk.q)+'" oninput="vasLkQuery(this.value)" onkeydown="vasLkKey(event)">' +
+        '<span class="mi vas-lk-ic">'+(state.vasLk.open?'expand_less':'expand_more')+'</span></div>' +
       picked +
       '<div id="vasLkRes">'+vasLkResHtml(c)+'</div>' +
     '</div>';
   }
   function lookupCat(){ return VAS_CATS.filter(function(c){ return c.type === 'lookup'; })[0]; }
-  function vasLkQuery(v){
-    state.vasLk.q = v; state.vasLk.hl = -1;
-    paintVasLkRes();
-  }
   function paintVasLkRes(){
     var el = document.getElementById('vasLkRes'); if (el) el.innerHTML = vasLkResHtml(lookupCat());
   }
+  function openVasLk(){ if (!state.vasLk.open){ state.vasLk.open = true; paintVasLkRes(); } focusVasLk(); }
+  function closeVasLk(){ if (state.vasLk.open){ state.vasLk.open = false; state.vasLk.hl = -1; paintVasLkRes(); } }
+  function vasLkQuery(v){ state.vasLk.q = v; state.vasLk.hl = -1; state.vasLk.open = true; paintVasLkRes(); }
   function vasLkKey(e){
-    var c = lookupCat(), q = (state.vasLk.q || '').trim(), n = q ? vasLkView(c).length : 0;
-    if (e.key === 'Escape'){ toggleVasGroup(c.id); return; }
+    var c = lookupCat();
+    if (e.key === 'Escape'){ if (state.vasLk.open) closeVasLk(); else toggleVasGroup(c.id); return; }
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
-      e.preventDefault(); if (!n) return;
+      e.preventDefault();
+      if (!state.vasLk.open){ openVasLk(); return; }
+      var n = vasLkView(c).length; if (!n) return;
       state.vasLk.hl = (state.vasLk.hl + (e.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
       paintVasLkRes();
       var hl = document.querySelector('.vas-lk-opt.hl'); if (hl && hl.scrollIntoView) hl.scrollIntoView({ block:'nearest' });
       return;
     }
     if (e.key === 'Enter'){
-      e.preventDefault(); if (!n) return;
+      e.preventDefault();
+      if (!state.vasLk.open) { openVasLk(); return; }
       var r = vasLkView(c)[state.vasLk.hl > -1 ? state.vasLk.hl : 0];
-      if (r) pickVasProd(c.id, r.p.code);
+      if (r) toggleVasProd(c.id, r.p.code);
     }
   }
-  function pickVasProd(cid, code){ state.vasProd[cid] = (state.vasProd[cid] === code) ? null : code; state.vasLk = { q:'', hl:-1 }; renderVasChooser(); renderSummary(); focusVasLk(); }
-  function clearVasProd(cid){ state.vasProd[cid] = null; state.vasLk = { q:'', hl:-1 }; renderVasChooser(); renderSummary(); focusVasLk(); }
+  // Ticking a contract leaves the dropdown open — the SE usually adds more than one.
+  function toggleVasProd(cid, code){
+    var codes = (state.vasProd[cid] || []).slice(), at = codes.indexOf(code);
+    if (at > -1) codes.splice(at, 1); else codes.push(code);
+    state.vasProd[cid] = codes;
+    renderVasChooser(); renderSummary(); focusVasLk();
+  }
   function focusVasLk(){ var i = document.getElementById('vasLkInp'); if (i) i.focus(); }
-  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; renderVasChooser(); if (state.vasOpen[id]) focusVasLk(); }
+  document.addEventListener('mousedown', function(e){
+    var box = document.querySelector('.vas-lk');
+    if (state.vasLk.open && box && !box.contains(e.target)) closeVasLk();
+  });
+  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; state.vasLk = { q:'', hl:-1, open:false }; renderVasChooser(); if (state.vasOpen[id]) focusVasLk(); }
   function toggleVasOpt(cid, oid){ if (!state.vasSel[cid]) state.vasSel[cid] = {}; state.vasSel[cid][oid] = !state.vasSel[cid][oid]; renderVasChooser(); renderSummary(); }
   function setVasNum(id, v){ state.vasVal[id] = Math.max(0, parseInt(v,10)||0); updateVasTotal(); renderSummary(); }
 
