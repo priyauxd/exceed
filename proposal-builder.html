@@ -643,6 +643,12 @@
     if (q) rows.sort(function(a, b){ return (a.span - b.span) || (a.first - b.first); });
     return rows;
   }
+  // Nothing is listed until the SE searches — the catalogue is not browsed, it is queried.
+  function vasLkResHtml(c){
+    if (!(state.vasLk.q || '').trim()) return '';
+    return '<div class="vas-lk-panel"><div class="vas-lk-hd">Products</div>' +
+      '<div class="vas-lk-list" id="vasLkList">'+vasLkListHtml(c)+'</div></div>';
+  }
   function vasLkListHtml(c){
     var view = vasLkView(c);
     if (!view.length) return '<div class="vas-lk-none">No products match &ldquo;'+esc((state.vasLk.q||'').trim())+'&rdquo;</div>';
@@ -664,32 +670,34 @@
           '<span class="vas-lk-txt"><span class="vas-lk-t">'+esc(p.name)+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
           '<span class="vas-lk-p">'+dh(p.price)+'</span>' +
           '<button type="button" class="vas-lk-x" title="Remove contract" onclick="clearVasProd(\''+c.id+'\')"><span class="mi">close</span></button></div>'
-      : '';
+      : '<div class="vas-lk-hint"><span class="mi">search</span>Search by product number or name, e.g. 100K-120K</div>';
     return '<div class="vas-opts vas-lk" onclick="event.stopPropagation()">' +
       '<div class="vas-lk-field"><span class="mi vas-lk-ic">search</span>' +
         '<input id="vasLkInp" class="vas-lk-inp" type="text" autocomplete="off" placeholder="Search service contracts" value="'+esc(state.vasLk.q)+'" oninput="vasLkQuery(this.value)" onkeydown="vasLkKey(event)"></div>' +
       picked +
-      '<div class="vas-lk-panel"><div class="vas-lk-hd">Products</div>' +
-        '<div class="vas-lk-list" id="vasLkList">'+vasLkListHtml(c)+'</div></div>' +
+      '<div id="vasLkRes">'+vasLkResHtml(c)+'</div>' +
     '</div>';
   }
   function lookupCat(){ return VAS_CATS.filter(function(c){ return c.type === 'lookup'; })[0]; }
   function vasLkQuery(v){
     state.vasLk.q = v; state.vasLk.hl = -1;
-    var el = document.getElementById('vasLkList'); if (el) el.innerHTML = vasLkListHtml(lookupCat());
+    paintVasLkRes();
+  }
+  function paintVasLkRes(){
+    var el = document.getElementById('vasLkRes'); if (el) el.innerHTML = vasLkResHtml(lookupCat());
   }
   function vasLkKey(e){
-    var c = lookupCat(), n = vasLkView(c).length;
+    var c = lookupCat(), q = (state.vasLk.q || '').trim(), n = q ? vasLkView(c).length : 0;
     if (e.key === 'Escape'){ toggleVasGroup(c.id); return; }
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
       e.preventDefault(); if (!n) return;
       state.vasLk.hl = (state.vasLk.hl + (e.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
-      var el = document.getElementById('vasLkList'); if (el) el.innerHTML = vasLkListHtml(c);
+      paintVasLkRes();
       var hl = document.querySelector('.vas-lk-opt.hl'); if (hl && hl.scrollIntoView) hl.scrollIntoView({ block:'nearest' });
       return;
     }
     if (e.key === 'Enter'){
-      e.preventDefault();
+      e.preventDefault(); if (!n) return;
       var r = vasLkView(c)[state.vasLk.hl > -1 ? state.vasLk.hl : 0];
       if (r) pickVasProd(c.id, r.p.code);
     }
