@@ -523,8 +523,6 @@
     { id:'gap',   name:'GAP RTI',                       icon:'security',         type:'number', rec:2499 },
     { id:'smc',   name:'Service Maintenance Contract',  icon:'build',            type:'lookup', rec:4000, products:SMC_PRODUCTS,
       ph:'Search service contracts', words:'smc service maintenance contract', search:'code' },
-    { id:'misc',  name:'Misc',                          icon:'category',         type:'lookup', rec:0, multi:true, products:MISC_PRODUCTS,
-      ph:'Search products by name', words:'misc miscellaneous parts products accessories', search:'name', showAmt:true },
     { id:'ppf',   name:'Paint Protection Ceramic / PPF',icon:'shield',           type:'multi', rec:6000, options:[
       { id:'ppf-cer',  label:'Ceramic — Exterior + Interior', price:2000 },
       { id:'ppf-sf',   label:'PPF — Sedan · Full front', price:6000, rec:true },
@@ -556,7 +554,9 @@
       { id:'acc-boot',   label:'Rear Boot Tray', price:350 },
       { id:'acc-screen', label:'Rear Entertainment Screen', price:5100 },
       { id:'acc-batt',   label:'Battery Booster', price:1100 }
-    ]}
+    ]},
+    { id:'misc',  name:'Misc',                          icon:'category',         type:'lookup', rec:0, multi:true, products:MISC_PRODUCTS,
+      ph:'Search products by name', words:'misc miscellaneous parts products accessories', search:'name', showAmt:true }
   ];
   // price = entry trim, priceTo = top trim. ES matches the TRIMS range exactly.
   var MODELS = [
