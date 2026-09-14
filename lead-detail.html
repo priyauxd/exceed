@@ -5735,6 +5735,20 @@
     .sc-cchip.on{background:var(--sc-accent);border-color:var(--sc-accent);color:#fff;}
     .sc-cchip.add{display:inline-flex;align-items:center;gap:4px;color:var(--sc-accent);border-style:dashed;}
     .sc-cchip.add .material-symbols-outlined{font-size:16px;}
+    /* offer & warranty — commercial terms, quoted per deal, so they read as their own block */
+    .sc-ow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .sc-ow-tile{background:#fff;border:1px solid #f0f0f0;border-radius:10px;padding:10px 11px;min-width:0;}
+    .sc-ow-k{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#8b93a1;font-weight:700;margin-bottom:8px;}
+    .sc-ow-row+.sc-ow-row{margin-top:9px;padding-top:9px;border-top:1px dashed #f0f0f0;}
+    .sc-ow-side{font-size:10.5px;font-weight:600;color:#8b93a1;margin-bottom:3px;line-height:1.3;
+      overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .sc-ow-v{font-size:13px;font-weight:700;color:#242b38;line-height:1.35;}
+    .sc-ow-row.them .sc-ow-v{font-size:12.5px;font-weight:500;color:#5b6472;}
+    .sc-ow-tag{margin-left:auto;display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:#8b93a1;}
+    .sc-ow-tag .material-symbols-outlined{font-size:14px;color:var(--sc-accent);}
+    .sc-ow-sk{height:13px;border-radius:5px;background:linear-gradient(100deg,#eceef3 0%,#eceef3 34%,#f8f9fb 50%,#eceef3 66%,#eceef3 100%);
+      background-size:260% 100%;animation:scShimmer 1.5s linear infinite;}
+    .sc-ow-sk.w1{width:74%;} .sc-ow-sk.w2{width:56%;}
     .sc-tblwrap{overflow-x:auto;}
     .sc-tbl{width:100%;border-collapse:collapse;font-size:11.5px;border:1px solid #ececec;}
     .sc-tbl th,.sc-tbl td{text-align:left;padding:7px 9px;border-bottom:1px solid #f0f0f0;vertical-align:top;}
@@ -6387,6 +6401,48 @@
     function scRow(label, ours, theirs){
       return '<tr><th scope="row">' + label + '</th><td class="us">' + ours + '</td><td>' + theirs + '</td></tr>';
     }
+
+    // Offer and warranty are commercial terms, not spec — they are quoted per deal, so they sit in
+    // their own block and are fetched once the two cars are set rather than shipped with the table.
+    var SC_OW_DONE = {}, SC_OW_T = null;
+    function scOwKey(v, c){ return scOursLabel(v) + ' | ' + (c ? scCompLabel(c) : (SC_ACTIVE || 'none')); }
+    function scOwTile(label, ready, ourName, ourVal, theirName, theirVal){
+      return '<div class="sc-ow-tile"><div class="sc-ow-k">' + label + '</div>' +
+        '<div class="sc-ow-row"><div class="sc-ow-side">' + scEsc(ourName) + '</div>' +
+          (ready ? '<div class="sc-ow-v">' + ourVal + '</div>' : '<div class="sc-ow-sk w1"></div>') + '</div>' +
+        '<div class="sc-ow-row them"><div class="sc-ow-side">' + scEsc(theirName) + '</div>' +
+          (ready ? '<div class="sc-ow-v">' + theirVal + '</div>' : '<div class="sc-ow-sk w2"></div>') + '</div>' +
+      '</div>';
+    }
+    function scOwInner(v, c, ready){
+      var them = c ? scCompLabel(c) : (SC_ACTIVE || 'No rival picked yet');
+      return '<div class="sc-card-h">Offer &amp; warranty' +
+          (ready
+            ? '<span class="sc-ow-tag"><span class="material-symbols-outlined">bolt</span>Live terms &middot; UAE Q3 2026</span>'
+            : '<span class="sc-ow-tag"><span class="sc-think-txt">Checking live terms&hellip;</span></span>') +
+        '</div>' +
+        '<div class="sc-ow">' +
+          scOwTile('Existing offer', ready, scOursLabel(v), scEsc(v.offer), them, c ? scEsc(c.offer) : '&mdash;') +
+          scOwTile('Warranty', ready, scOursLabel(v), scEsc(v.warranty), them, c ? scEsc(c.warranty) : '&mdash;') +
+        '</div>';
+    }
+    function scOwCard(v, c){
+      var key = scOwKey(v, c);
+      return '<div class="sc-card sc-ow-card" id="scOwCard" data-k="' + scEsc(key) + '">' +
+        scOwInner(v, c, !!SC_OW_DONE[key]) + '</div>';
+    }
+    // Two seconds of visible fetching, then the terms drop in — once per pair, so flipping back to a
+    // car already looked up doesn't make the rep wait again.
+    function scOwArm(v, c){
+      var card = document.getElementById('scOwCard'); if (!card) return;
+      var key = card.getAttribute('data-k'); if (SC_OW_DONE[key]) return;
+      clearTimeout(SC_OW_T);
+      SC_OW_T = setTimeout(function(){
+        SC_OW_DONE[key] = true;
+        var el = document.getElementById('scOwCard');
+        if (el && el.getAttribute('data-k') === key) el.innerHTML = scOwInner(v, c, true);
+      }, 2000);
+    }
     // Model + trim picker for our own column. Sits above the rival chips so the two sides of the
     // comparison are edited in the same place.
     function scOursBar(v, l){
@@ -6482,8 +6538,6 @@
           scRow('Trim', scEsc(scTrim(v)[0]), '&mdash;') +
           scRow('Model year', scOursYear(v), '&mdash;') +
           scRow('Starting price', scMoney(scTrimPrice(v)), '&mdash;') +
-          scRow('Existing offer', scEsc(v.offer), '&mdash;') +
-          scRow('Warranty', scEsc(v.warranty), '&mdash;') +
           scRow('L-W-H (mm)', scEsc(v.dims), '&mdash;') +
           scRow('Engine', scEsc(v.eng), '&mdash;') +
           scRow('0-100 km/h', scEsc(v.accel), '&mdash;') +
@@ -6500,7 +6554,8 @@
             '<button class="sc-btn" onclick="scCompAddToggle()"><span class="material-symbols-outlined">add</span>Add a car</button>' +
             '<button class="sc-btn" onclick="scTab(\'vehicles\')"><span class="material-symbols-outlined">directions_car</span>Our line-up</button>' +
           '</div></div>';
-        host.innerHTML = html; if (focusSearch) scCompFocus(); return;
+        html += scOwCard(v, null);
+        host.innerHTML = html; scOwArm(v, null); if (focusSearch) scCompFocus(); return;
       }
 
       var c = scCompFind(SC_ACTIVE);
@@ -6513,8 +6568,6 @@
           scRow('Trim', scEsc(scTrim(v)[0]), '&mdash;') +
           scRow('Model year', scOursYear(v), '&mdash;') +
           scRow('Starting price', scMoney(scTrimPrice(v)), '&mdash;') +
-          scRow('Existing offer', scEsc(v.offer), '&mdash;') +
-          scRow('Warranty', scEsc(v.warranty), '&mdash;') +
           scRow('L-W-H (mm)', scEsc(v.dims), '&mdash;') +
           scRow('Engine', scEsc(v.eng), '&mdash;') +
           scRow('0-100 km/h', scEsc(v.accel), '&mdash;') +
@@ -6531,7 +6584,8 @@
           '<div class="sc-actions">' +
             '<button class="sc-btn" onclick="scAct(\'Battlecard requested from marketing\')"><span class="material-symbols-outlined">flag</span>Request battlecard</button>' +
           '</div></div>';
-        host.innerHTML = html; if (focusSearch) scCompFocus(); return;
+        html += scOwCard(v, null);
+        host.innerHTML = html; scOwArm(v, null); if (focusSearch) scCompFocus(); return;
       }
 
       var ourPrice = scTrimPrice(v), theirSel = scCompSel(c), theirPrice = scCompPrice(c);
@@ -6548,8 +6602,6 @@
           scRow('Trim', scEsc(scTrim(v)[0]), scEsc(theirSel.trim)) +
           scRow('Model year', ourYear, theirSel.year) +
           scRow('Starting price', scMoney(ourPrice), scMoney(theirPrice)) +
-          scRow('Existing offer', scEsc(v.offer), scEsc(c.offer)) +
-          scRow('Warranty', scEsc(v.warranty), scEsc(c.warranty)) +
           scRow('L-W-H (mm)', scEsc(v.dims), scEsc(c.dims)) +
           scRow('Engine', scEsc(v.eng), scEsc(c.eng)) +
           scRow('0-100 km/h', scEsc(v.accel), scEsc(c.accel)) +
@@ -6560,6 +6612,8 @@
           scRow('Range', v.range + ' km', c.range + ' km') +
           scRow('Fuel consumption (L/100km)', scEsc(v.fuel), scEsc(c.fuel)) +
         '</tbody></table></div></div>';
+
+      html += scOwCard(v, c);
 
       // talking points are derived from the same numbers as the table, so they can't drift apart
       var pts = [], ourY = scYears(v.warranty), theirY = scYears(c.warranty);
@@ -6589,6 +6643,7 @@
         '</div></div>';
 
       host.innerHTML = html;
+      scOwArm(v, c);
       if (focusSearch) scCompFocus();
     }
     function scCompFocus(){
