@@ -212,6 +212,22 @@
   .vas-lk-box{display:flex; align-items:center; justify-content:center; width:15px; height:15px; flex-shrink:0; border:1.5px solid var(--muted); border-radius:4px; background:var(--panel); color:transparent;}
   .vas-lk-box .mi{font-size:12px;}
   .vas-lk-box.on{background:#3d9b63; border-color:#3d9b63; color:#fff;}
+  /* single-select lookup (SMC) — one contract per deal, so the list picks like a radio group */
+  .vas-lk-radio{display:flex; align-items:center; justify-content:center; width:15px; height:15px; flex-shrink:0; border:1.5px solid var(--muted); border-radius:50%; background:var(--panel);}
+  .vas-lk-radio i{width:7px; height:7px; border-radius:50%; background:transparent;}
+  .vas-lk-radio.on{border-color:#3d9b63;}
+  .vas-lk-radio.on i{background:#3d9b63;}
+  .vas-lk-amt{font-weight:700; color:var(--ink2);}
+  .vas-lk-opt.sel .vas-lk-amt, .vas-lk-chip .vas-lk-amt{color:var(--ink);}
+  .vas-free-tag{flex-shrink:0; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--ink2); background:var(--panel2); border:1px solid var(--line); border-radius:20px; padding:1px 7px; white-space:nowrap;}
+  /* campaign giveaways can be taken off the deal from their own row */
+  .vas-free-x{display:flex; align-items:center; justify-content:center; width:18px; height:18px; flex-shrink:0; border:1px solid var(--line); border-radius:5px; background:var(--panel); color:var(--ink2); cursor:pointer; padding:0;}
+  .vas-free-x:hover{border-color:#b8434d; color:#b8434d; background:rgba(184,67,77,.10);}
+  .vas-free-x .mi{font-size:14px;}
+  .vas-free-undo{font-size:11.5px; color:var(--muted);}
+  .vas-free-undo .pc-i{gap:8px;}
+  .vas-free-undo-b{display:inline-flex; align-items:center; gap:3px; margin-left:2px; border:none; background:none; padding:0; font-family:inherit; font-size:11.5px; font-weight:700; color:var(--cta-bg); cursor:pointer;}
+  .vas-free-undo-b .mi{font-size:14px;}
   .vas-lk-chip + .vas-lk-chip{margin-top:-3px;}
   .vas-lk-chip{display:flex; align-items:center; gap:10px; padding:8px 10px; background:rgba(92,185,127,.10); border:1px solid rgba(92,185,127,.42); border-radius:8px;}
   .vas-lk-chip > .mi{color:#3d9b63;}
@@ -472,10 +488,43 @@
     { code:'SC - EV-60K',    name:'SC - EV 60K Service',    price:2200 },
     { code:'SC - EV-100K',   name:'SC - EV 100K Service',   price:3400 }
   ];
+  // Misc — the released-products list from F&O. Priced and zero-price (free) items both
+  // sit here; price is the F&O amount rounded to the dirham, as the SE quotes it.
+  var MISC_PRODUCTS = [
+    { code:'151000148AA', name:'Air Filter Element',          price:55 },
+    { code:'151000150AA', name:'Air Filter',                  price:167 },
+    { code:'151000151AA', name:'Air Filter Element',          price:200 },
+    { code:'151000152AA', name:'Dirty Air Duct ASM',          price:254 },
+    { code:'151000153AA', name:'Air Intake Hose',             price:559 },
+    { code:'151000167AA', name:'Dirty Air Duct ASM',          price:0 },
+    { code:'151000168AB', name:'Air Intake Hose',             price:0 },
+    { code:'151000176AA', name:'Engine Cover ASM',            price:148 },
+    { code:'151000187AA', name:'Air Filter Element',          price:200 },
+    { code:'151000189AA', name:'Tappet',                      price:13 },
+    { code:'151000198AA', name:'Sound Insulation Cover-Engine',price:254 },
+    { code:'151000202AA', name:'Air Filter',                  price:167 },
+    { code:'151000216AA', name:'Air Intake Hose',             price:346 },
+    { code:'151000220AA', name:'Air Intake Hose',             price:253 },
+    { code:'151000223AA', name:'Engine Cover ASM',            price:406 },
+    { code:'151000228AA', name:'Intake Hose Bracket',         price:30 },
+    { code:'151000247AA', name:'Air Cleaner On The Housing',  price:0 },
+    { code:'151000251AB', name:'Air Filter ASSY',             price:0 },
+    { code:'151000252AA', name:'Dirty Air Duct ASM',          price:0 },
+    { code:'151000253AA', name:'Hose Air Intake ASSY',        price:0 },
+    { code:'151000254AA', name:'Air Intake Hose',             price:253 },
+    { code:'151000256AA', name:'Air Filter Element',          price:230 },
+    { code:'151000300AA', name:'AirInletAssy',                price:240 },
+    { code:'SC - FREE-INS',  name:'SC - Free Insurance',      price:0 },
+    { code:'SC - FREE-REG',  name:'SC - Free Registration',   price:0 },
+    { code:'SC - FREE-TINT', name:'SC - Free Tinting',        price:0 }
+  ];
   var VAS_CATS = [
     { id:'cmi',   name:'Comprehensive Motor Insurance', icon:'verified_user',    type:'number', rec:5000 },
     { id:'gap',   name:'GAP RTI',                       icon:'security',         type:'number', rec:2499 },
-    { id:'smc',   name:'Service Maintenance Contract',  icon:'build',            type:'lookup', rec:4000, products:SMC_PRODUCTS },
+    { id:'smc',   name:'Service Maintenance Contract',  icon:'build',            type:'lookup', rec:4000, products:SMC_PRODUCTS,
+      ph:'Search service contracts', words:'smc service maintenance contract', search:'code' },
+    { id:'misc',  name:'Misc',                          icon:'category',         type:'lookup', rec:0, multi:true, products:MISC_PRODUCTS,
+      ph:'Search products by name', words:'misc miscellaneous parts products accessories', search:'name', showAmt:true },
     { id:'ppf',   name:'Paint Protection Ceramic / PPF',icon:'shield',           type:'multi', rec:6000, options:[
       { id:'ppf-cer',  label:'Ceramic — Exterior + Interior', price:2000 },
       { id:'ppf-sf',   label:'PPF — Sedan · Full front', price:6000, rec:true },
@@ -537,7 +586,7 @@
   // delta is a campaign, so it belongs in CAMPAIGNS, not here.
   var YEARS = [2027, 2026, 2025];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499 }, vasProd:{ smc:['SC - 100K-120K'] }, vasLk:{ q:'', hl:-1, open:false }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499 }, vasProd:{ smc:['SC - 100K-120K'], misc:[] }, vasLk:{}, giftOff:{}, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -545,7 +594,12 @@
   function dh(n){ return DH + fmt(n); }
   function model(){ return MODELS.filter(function(m){return m.id===state.model;})[0] || MODELS[4]; }
   function campaign(){ return CAMPAIGNS.filter(function(c){return c.id===state.campaign;})[0] || CAMPAIGNS[0]; }
-  function gifts(){ return campaign().gifts || []; }
+  // A campaign giveaway can be taken off the deal with the minus on its row; dropping one
+  // is per-campaign, so switching campaign brings the full set back.
+  function gifts(){ return (campaign().gifts || []).filter(function(g){ return !state.giftOff[g]; }); }
+  function giftsDropped(){ return (campaign().gifts || []).filter(function(g){ return !!state.giftOff[g]; }); }
+  function dropGift(g){ state.giftOff[g] = true; renderVasChooser(); renderSummary(); }
+  function restoreGifts(){ state.giftOff = {}; renderVasChooser(); renderSummary(); }
   function trim(){ return TRIMS.filter(function(t){return t.id===state.trim;})[0]; }
   function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
   function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
@@ -571,11 +625,18 @@
     // as part of the deal without loading either total.
     var freeRows = gifts().map(function(g){
       return '<div class="pc-row vas-catrow is-free">' +
-        '<span class="pc-i"><span class="mi vas-cat-chev" style="visibility:hidden">expand_more</span><span class="mi vas-cat-ic">redeem</span><span class="vas-cat-name">'+g+'</span></span>' +
+        '<span class="pc-i"><button type="button" class="vas-free-x" title="Remove '+esc(g)+' from the deal" onclick="dropGift(&quot;'+esc(g)+'&quot;)"><span class="mi">remove</span></button>' +
+          '<span class="mi vas-cat-ic">redeem</span><span class="vas-cat-name">'+g+'</span></span>' +
         '<span class="pc-v">'+dh(0)+'</span>' +
         '<span class="pc-v">'+dh(0)+'</span>' +
       '</div>';
     }).join('');
+    var dropped = giftsDropped();
+    if (dropped.length) freeRows += '<div class="pc-row vas-catrow vas-free-undo"><span class="pc-i">' +
+      '<span class="mi vas-cat-chev" style="visibility:hidden">expand_more</span>' +
+      '<span>'+dropped.length+' campaign item'+(dropped.length>1?'s':'')+' removed &middot; '+esc(dropped.join(', '))+'</span>' +
+      '<button type="button" class="vas-free-undo-b" onclick="restoreGifts()"><span class="mi">undo</span>Restore</button>' +
+      '</span><span class="pc-v"></span><span class="pc-v"></span></div>';
     VAS_CATS.forEach(function(c){
       var cust = catCustomer(c);
       totalRec += c.rec; totalCust += cust;
@@ -630,18 +691,24 @@
     var on = {}; (hits || []).forEach(function(i){ on[i] = 1; });
     return text.split('').map(function(ch, i){ return on[i] ? '<b>'+esc(ch)+'</b>' : esc(ch); }).join('');
   }
-  // Fuzzy on the product number first (the part that distinguishes contracts), then a
-  // plain contains on the name, then the category's own words so "smc" lists them all.
-  var SMC_WORDS = 'smc service maintenance contract';
+  // SMC is searched on the product number (what tells contracts apart); Misc is searched on
+  // the product name, the way the F&O released-products list is. The other field is a
+  // plain contains fallback, and the category's own words list everything.
+  function lkState(cid){
+    if (!state.vasLk[cid]) state.vasLk[cid] = { q:'', hl:-1, open:false };
+    return state.vasLk[cid];
+  }
+  function catById(cid){ return VAS_CATS.filter(function(c){ return c.id === cid; })[0]; }
   function vasLkView(c){
-    var q = (state.vasLk.q || '').trim().toLowerCase();
+    var q = (lkState(c.id).q || '').trim().toLowerCase(), byName = c.search === 'name';
     var rows = [];
     (c.products || []).forEach(function(p){
-      var hits = q ? fuzzyHits(p.code, q) : [];
+      var key = byName ? p.name : p.code, alt = byName ? p.code : p.name;
+      var hits = q ? fuzzyHits(key, q) : [];
       if (hits === null){
-        var at = p.name.toLowerCase().indexOf(q);
-        if (at > -1){ hits = []; for (var k = 0; k < q.length; k++) hits.push(at + k); }
-        else if (SMC_WORDS.indexOf(q) > -1) hits = [];
+        var at = alt.toLowerCase().indexOf(q);
+        if (at > -1) hits = [];
+        else if ((c.words || '').indexOf(q) > -1) hits = [];
         else return;
       }
       rows.push({ p:p, hits:hits, span:hits.length ? hits[hits.length-1] - hits[0] : 0, first:hits.length ? hits[0] : 0 });
@@ -649,85 +716,111 @@
     if (q) rows.sort(function(a, b){ return (a.span - b.span) || (a.first - b.first); });
     return rows;
   }
-  // The list is a dropdown: it opens when the SE clicks into the search box, not when
-  // the group expands, and stays open while contracts are ticked off — SMC is multi-select.
+  // Product names read as F&O writes them on a quote — "Air Filter – 167 AED".
+  function prodTitle(c, p, hits){
+    var nm = (c.search === 'name') ? fuzzyMark(p.name, hits) : esc(p.name);
+    return c.showAmt ? nm + '<span class="vas-lk-amt"> &ndash; ' + fmt(p.price) + ' AED</span>' : nm;
+  }
+  function prodSub(c, p, hits){
+    return (c.search === 'name') ? esc(p.code) : fuzzyMark(p.code, hits);
+  }
+  // The list is a dropdown: it opens when the SE clicks into the search box, not when the
+  // group expands. SMC takes one contract only, so it picks like a radio group and closes;
+  // Misc takes as many parts as the deal needs and stays open.
   function vasLkResHtml(c){
-    if (!state.vasLk.open) return '';
+    if (!lkState(c.id).open) return '';
     return '<div class="vas-lk-panel"><div class="vas-lk-hd">Products</div>' +
-      '<div class="vas-lk-list" id="vasLkList">'+vasLkListHtml(c)+'</div></div>';
+      '<div class="vas-lk-list" id="vasLkList-'+c.id+'">'+vasLkListHtml(c)+'</div></div>';
   }
   function vasLkListHtml(c){
-    var view = vasLkView(c);
-    if (!view.length) return '<div class="vas-lk-none">No products match &ldquo;'+esc((state.vasLk.q||'').trim())+'&rdquo;</div>';
-    var codes = state.vasProd[c.id] || [];
+    var view = vasLkView(c), lk = lkState(c.id);
+    if (!view.length) return '<div class="vas-lk-none">No products match &ldquo;'+esc((lk.q||'').trim())+'&rdquo;</div>';
+    var codes = state.vasProd[c.id] || [], multi = !!c.multi;
     return view.map(function(r, i){
       var on = codes.indexOf(r.p.code) > -1;
-      return '<button type="button" class="vas-lk-opt'+(i===state.vasLk.hl?' hl':'')+(on?' sel':'')+'" onclick="toggleVasProd(\''+c.id+'\',\''+r.p.code+'\')">' +
-        '<span class="vas-lk-box'+(on?' on':'')+'"><span class="mi">check</span></span>' +
+      var mark = multi
+        ? '<span class="vas-lk-box'+(on?' on':'')+'"><span class="mi">check</span></span>'
+        : '<span class="vas-lk-radio'+(on?' on':'')+'" role="radio" aria-checked="'+on+'"><i></i></span>';
+      return '<button type="button" class="vas-lk-opt'+(i===lk.hl?' hl':'')+(on?' sel':'')+'" onclick="toggleVasProd(\''+c.id+'\',\''+r.p.code+'\')">' +
+        mark +
         '<span class="mi">inventory_2</span>' +
-        '<span class="vas-lk-txt"><span class="vas-lk-t">'+fuzzyMark(r.p.name, r.hits)+'</span><span class="vas-lk-s">'+esc(r.p.code)+'</span></span>' +
+        '<span class="vas-lk-txt"><span class="vas-lk-t">'+prodTitle(c, r.p, r.hits)+'</span><span class="vas-lk-s">'+prodSub(c, r.p, r.hits)+'</span></span>' +
         (r.p.rec ? '<span class="vas-rec">Recommended</span>' : '') +
-        '<span class="vas-lk-p">'+dh(r.p.price)+'</span></button>';
+        (!r.p.price ? '<span class="vas-free-tag">Free</span>' : '') +
+        (c.showAmt ? '' : '<span class="vas-lk-p">'+dh(r.p.price)+'</span>') +
+        '</button>';
     }).join('');
   }
-  // Expanded SMC group: the search box, the contracts already on the deal, and the
-  // dropdown when it is open — the D365 Products lookup.
+  // Expanded group: the search box, what is already on the deal, and the dropdown when it
+  // is open — the D365 Products lookup. Every picked line can be taken off, free ones included.
   function vasLkHtml(c, ps){
+    var lk = lkState(c.id);
     var picked = ps.length
       ? ps.map(function(p){
           return '<div class="vas-lk-chip"><span class="mi">check_circle</span>' +
-            '<span class="vas-lk-txt"><span class="vas-lk-t">'+esc(p.name)+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
-            '<span class="vas-lk-p">'+dh(p.price)+'</span>' +
-            '<button type="button" class="vas-lk-x" title="Remove contract" onclick="toggleVasProd(\''+c.id+'\',\''+p.code+'\')"><span class="mi">close</span></button></div>';
+            '<span class="vas-lk-txt"><span class="vas-lk-t">'+prodTitle(c, p, [])+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
+            (!p.price ? '<span class="vas-free-tag">Free</span>' : '') +
+            (c.showAmt ? '' : '<span class="vas-lk-p">'+dh(p.price)+'</span>') +
+            '<button type="button" class="vas-lk-x" title="Remove '+esc(p.name)+'" onclick="toggleVasProd(\''+c.id+'\',\''+p.code+'\')"><span class="mi">close</span></button></div>';
         }).join('')
-      : '<div class="vas-lk-hint"><span class="mi">search</span>Click the search box to list contracts, or type a product number</div>';
-    return '<div class="vas-opts vas-lk" onclick="event.stopPropagation()">' +
-      '<div class="vas-lk-field" onclick="openVasLk()"><span class="mi vas-lk-ic">search</span>' +
-        '<input id="vasLkInp" class="vas-lk-inp" type="text" autocomplete="off" placeholder="Search service contracts" value="'+esc(state.vasLk.q)+'" oninput="vasLkQuery(this.value)" onkeydown="vasLkKey(event)">' +
-        '<span class="mi vas-lk-ic">'+(state.vasLk.open?'expand_less':'expand_more')+'</span></div>' +
+      : '<div class="vas-lk-hint"><span class="mi">search</span>'+(c.search === 'name'
+          ? 'Click the search box to list products, or type a product name'
+          : 'Click the search box to list contracts, or type a product number')+'</div>';
+    return '<div class="vas-opts vas-lk" data-cid="'+c.id+'" onclick="event.stopPropagation()">' +
+      '<div class="vas-lk-field" onclick="openVasLk(\''+c.id+'\')"><span class="mi vas-lk-ic">search</span>' +
+        '<input id="vasLkInp-'+c.id+'" class="vas-lk-inp" type="text" autocomplete="off" placeholder="'+esc(c.ph || 'Search products')+'" value="'+esc(lk.q)+'" oninput="vasLkQuery(\''+c.id+'\', this.value)" onkeydown="vasLkKey(event, \''+c.id+'\')">' +
+        '<span class="mi vas-lk-ic">'+(lk.open?'expand_less':'expand_more')+'</span></div>' +
       picked +
-      '<div id="vasLkRes">'+vasLkResHtml(c)+'</div>' +
+      '<div id="vasLkRes-'+c.id+'">'+vasLkResHtml(c)+'</div>' +
     '</div>';
   }
-  function lookupCat(){ return VAS_CATS.filter(function(c){ return c.type === 'lookup'; })[0]; }
-  function paintVasLkRes(){
-    var el = document.getElementById('vasLkRes'); if (el) el.innerHTML = vasLkResHtml(lookupCat());
+  function paintVasLkRes(cid){
+    var el = document.getElementById('vasLkRes-'+cid); if (el) el.innerHTML = vasLkResHtml(catById(cid));
   }
-  function openVasLk(){ if (!state.vasLk.open){ state.vasLk.open = true; paintVasLkRes(); } focusVasLk(); }
-  function closeVasLk(){ if (state.vasLk.open){ state.vasLk.open = false; state.vasLk.hl = -1; paintVasLkRes(); } }
-  function vasLkQuery(v){ state.vasLk.q = v; state.vasLk.hl = -1; state.vasLk.open = true; paintVasLkRes(); }
-  function vasLkKey(e){
-    var c = lookupCat();
-    if (e.key === 'Escape'){ if (state.vasLk.open) closeVasLk(); else toggleVasGroup(c.id); return; }
+  function openVasLk(cid){ var lk = lkState(cid); if (!lk.open){ lk.open = true; paintVasLkRes(cid); } focusVasLk(cid); }
+  function closeVasLk(cid){ var lk = lkState(cid); if (lk.open){ lk.open = false; lk.hl = -1; paintVasLkRes(cid); } }
+  function vasLkQuery(cid, v){ var lk = lkState(cid); lk.q = v; lk.hl = -1; lk.open = true; paintVasLkRes(cid); }
+  function vasLkKey(e, cid){
+    var c = catById(cid), lk = lkState(cid);
+    if (e.key === 'Escape'){ if (lk.open) closeVasLk(cid); else toggleVasGroup(cid); return; }
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
       e.preventDefault();
-      if (!state.vasLk.open){ openVasLk(); return; }
+      if (!lk.open){ openVasLk(cid); return; }
       var n = vasLkView(c).length; if (!n) return;
-      state.vasLk.hl = (state.vasLk.hl + (e.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
-      paintVasLkRes();
-      var hl = document.querySelector('.vas-lk-opt.hl'); if (hl && hl.scrollIntoView) hl.scrollIntoView({ block:'nearest' });
+      lk.hl = (lk.hl + (e.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
+      paintVasLkRes(cid);
+      var hl = document.querySelector('.vas-lk[data-cid="'+cid+'"] .vas-lk-opt.hl'); if (hl && hl.scrollIntoView) hl.scrollIntoView({ block:'nearest' });
       return;
     }
     if (e.key === 'Enter'){
       e.preventDefault();
-      if (!state.vasLk.open) { openVasLk(); return; }
-      var r = vasLkView(c)[state.vasLk.hl > -1 ? state.vasLk.hl : 0];
-      if (r) toggleVasProd(c.id, r.p.code);
+      if (!lk.open) { openVasLk(cid); return; }
+      var r = vasLkView(c)[lk.hl > -1 ? lk.hl : 0];
+      if (r) toggleVasProd(cid, r.p.code);
     }
   }
-  // Ticking a contract leaves the dropdown open — the SE usually adds more than one.
+  // One contract per deal on SMC — picking swaps the selection and closes the list. Misc is
+  // additive, so the dropdown stays open while parts are ticked off.
   function toggleVasProd(cid, code){
-    var codes = (state.vasProd[cid] || []).slice(), at = codes.indexOf(code);
-    if (at > -1) codes.splice(at, 1); else codes.push(code);
-    state.vasProd[cid] = codes;
-    renderVasChooser(); renderSummary(); focusVasLk();
+    var c = catById(cid), codes = (state.vasProd[cid] || []).slice(), at = codes.indexOf(code);
+    if (c && !c.multi){
+      state.vasProd[cid] = (at > -1) ? [] : [code];
+      if (at === -1) lkState(cid).open = false;
+    } else {
+      if (at > -1) codes.splice(at, 1); else codes.push(code);
+      state.vasProd[cid] = codes;
+    }
+    renderVasChooser(); renderSummary(); focusVasLk(cid);
   }
-  function focusVasLk(){ var i = document.getElementById('vasLkInp'); if (i) i.focus(); }
+  function focusVasLk(cid){ var i = document.getElementById('vasLkInp-'+cid); if (i) i.focus(); }
   document.addEventListener('mousedown', function(e){
-    var box = document.querySelector('.vas-lk');
-    if (state.vasLk.open && box && !box.contains(e.target)) closeVasLk();
+    VAS_CATS.forEach(function(c){
+      if (c.type !== 'lookup' || !lkState(c.id).open) return;
+      var box = document.querySelector('.vas-lk[data-cid="'+c.id+'"]');
+      if (box && !box.contains(e.target)) closeVasLk(c.id);
+    });
   });
-  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; state.vasLk = { q:'', hl:-1, open:false }; renderVasChooser(); if (state.vasOpen[id]) focusVasLk(); }
+  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; state.vasLk[id] = { q:'', hl:-1, open:false }; renderVasChooser(); if (state.vasOpen[id]) focusVasLk(id); }
   function toggleVasOpt(cid, oid){ if (!state.vasSel[cid]) state.vasSel[cid] = {}; state.vasSel[cid][oid] = !state.vasSel[cid][oid]; renderVasChooser(); renderSummary(); }
   function setVasNum(id, v){ state.vasVal[id] = Math.max(0, parseInt(v,10)||0); updateVasTotal(); renderSummary(); }
 
@@ -898,7 +991,7 @@
     if (disc){ if (t === 'dpassist'){ disc.readOnly = true; disc.value = 0; disc.classList.add('dp-ro-input'); } else { disc.readOnly = false; disc.value = state.discount; disc.classList.remove('dp-ro-input'); } }
     renderSummary();
   }
-  function setCampaign(v){ state.campaign = v; renderVasChooser(); renderSummary(); }
+  function setCampaign(v){ state.campaign = v; state.giftOff = {}; renderVasChooser(); renderSummary(); }
   function setYear(v){ state.year = parseInt(v, 10) || state.year; renderYear(); renderSummary(); }
   function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
   function goTo(i){ state.step=i; renderAll(); }
