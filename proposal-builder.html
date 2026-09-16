@@ -217,8 +217,6 @@
   .vas-lk-radio i{width:7px; height:7px; border-radius:50%; background:transparent;}
   .vas-lk-radio.on{border-color:#3d9b63;}
   .vas-lk-radio.on i{background:#3d9b63;}
-  .vas-lk-amt{font-weight:700; color:var(--ink2);}
-  .vas-lk-opt.sel .vas-lk-amt, .vas-lk-chip .vas-lk-amt{color:var(--ink);}
   .vas-free-tag{flex-shrink:0; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--ink2); background:var(--panel2); border:1px solid var(--line); border-radius:20px; padding:1px 7px; white-space:nowrap;}
   /* campaign giveaways can be taken off the deal from their own row */
   .vas-free-x{display:flex; align-items:center; justify-content:center; width:18px; height:18px; flex-shrink:0; border:1px solid var(--line); border-radius:5px; background:var(--panel); color:var(--ink2); cursor:pointer; padding:0;}
@@ -555,8 +553,8 @@
       { id:'acc-screen', label:'Rear Entertainment Screen', price:5100 },
       { id:'acc-batt',   label:'Battery Booster', price:1100 }
     ]},
-    { id:'misc',  name:'Misc',                          icon:'category',         type:'lookup', rec:0, multi:true, products:MISC_PRODUCTS,
-      ph:'Search products by name', words:'misc miscellaneous parts products accessories', search:'name', showAmt:true }
+    { id:'misc',  name:'Misc',                          icon:'category',         type:'lookup', rec:0, products:MISC_PRODUCTS,
+      ph:'Search products by name', words:'misc miscellaneous parts products accessories', search:'name', editPrice:true }
   ];
   // price = entry trim, priceTo = top trim. ES matches the TRIMS range exactly.
   var MODELS = [
@@ -611,6 +609,7 @@
   }
   function catCustomer(c){
     if (c.type === 'number') return state.vasVal[c.id] || 0;
+    if (c.type === 'lookup' && c.editPrice) return vasProds(c).length ? (state.vasVal[c.id] || 0) : 0;
     if (c.type === 'lookup'){ var s2 = 0; vasProds(c).forEach(function(p){ s2 += p.price; }); return s2; }
     var s = 0, sel = state.vasSel[c.id] || {};
     (c.options||[]).forEach(function(o){ if (sel[o.id]) s += o.price; });
@@ -648,10 +647,14 @@
         '</div>';
       } else if (c.type === 'lookup'){
         var lopen = !!state.vasOpen[c.id], lps = vasProds(c);
+        // Misc carries the part's F&O price into Customer choice, where the SE can quote it differently.
+        var lcust = (c.editPrice && lps.length)
+          ? '<span class="pc-v vas-cc" onclick="event.stopPropagation()"><span class="vas-cur">'+DH+'</span><input type="number" min="0" step="1" class="vas-ccinput" value="'+cust+'" placeholder="0" onchange="setVasNum(\''+c.id+'\', this.value)"></span>'
+          : '<span class="pc-v">'+dh(cust)+'</span>';
         var tag = lps.length ? '<span class="vas-lk-tag">'+esc(lps[0].code)+(lps.length > 1 ? ' +'+(lps.length-1) : '')+'</span>' : '';
         rows += '<div class="pc-row vas-cat'+(lopen?' open':'')+'" onclick="toggleVasGroup(\''+c.id+'\')">' +
           '<span class="pc-i"><span class="mi vas-cat-chev">'+(lopen?'expand_less':'expand_more')+'</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span>'+tag+'</span>' +
-          '<span class="pc-v">'+dh(c.rec)+'</span><span class="pc-v">'+dh(cust)+'</span></div>';
+          '<span class="pc-v">'+dh(c.rec)+'</span>'+lcust+'</div>';
         if (lopen) rows += vasLkHtml(c, lps);
       } else {
         var open = !!state.vasOpen[c.id];
@@ -716,17 +719,14 @@
     if (q) rows.sort(function(a, b){ return (a.span - b.span) || (a.first - b.first); });
     return rows;
   }
-  // Product names read as F&O writes them on a quote — "Air Filter – 167 AED".
   function prodTitle(c, p, hits){
-    var nm = (c.search === 'name') ? fuzzyMark(p.name, hits) : esc(p.name);
-    return c.showAmt ? nm + '<span class="vas-lk-amt"> &ndash; ' + fmt(p.price) + ' AED</span>' : nm;
+    return (c.search === 'name') ? fuzzyMark(p.name, hits) : esc(p.name);
   }
   function prodSub(c, p, hits){
     return (c.search === 'name') ? esc(p.code) : fuzzyMark(p.code, hits);
   }
   // The list is a dropdown: it opens when the SE clicks into the search box, not when the
-  // group expands. SMC takes one contract only, so it picks like a radio group and closes;
-  // Misc takes as many parts as the deal needs and stays open.
+  // group expands. SMC and Misc take one product each, so they pick like a radio group and close.
   function vasLkResHtml(c){
     if (!lkState(c.id).open) return '';
     return '<div class="vas-lk-panel"><div class="vas-lk-hd">Products</div>' +
@@ -735,7 +735,7 @@
   function vasLkListHtml(c){
     var view = vasLkView(c), lk = lkState(c.id);
     if (!view.length) return '<div class="vas-lk-none">No products match &ldquo;'+esc((lk.q||'').trim())+'&rdquo;</div>';
-    var codes = state.vasProd[c.id] || [], multi = !!c.multi;
+    var codes = state.vasProd[c.id] || [], multi = !!c.multi, price = !c.editPrice;
     return view.map(function(r, i){
       var on = codes.indexOf(r.p.code) > -1;
       var mark = multi
@@ -746,8 +746,8 @@
         '<span class="mi">inventory_2</span>' +
         '<span class="vas-lk-txt"><span class="vas-lk-t">'+prodTitle(c, r.p, r.hits)+'</span><span class="vas-lk-s">'+prodSub(c, r.p, r.hits)+'</span></span>' +
         (r.p.rec ? '<span class="vas-rec">Recommended</span>' : '') +
-        (!r.p.price ? '<span class="vas-free-tag">Free</span>' : '') +
-        (c.showAmt ? '' : '<span class="vas-lk-p">'+dh(r.p.price)+'</span>') +
+        (price && !r.p.price ? '<span class="vas-free-tag">Free</span>' : '') +
+        (price ? '<span class="vas-lk-p">'+dh(r.p.price)+'</span>' : '') +
         '</button>';
     }).join('');
   }
@@ -759,8 +759,8 @@
       ? ps.map(function(p){
           return '<div class="vas-lk-chip"><span class="mi">check_circle</span>' +
             '<span class="vas-lk-txt"><span class="vas-lk-t">'+prodTitle(c, p, [])+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
-            (!p.price ? '<span class="vas-free-tag">Free</span>' : '') +
-            (c.showAmt ? '' : '<span class="vas-lk-p">'+dh(p.price)+'</span>') +
+            (!c.editPrice && !p.price ? '<span class="vas-free-tag">Free</span>' : '') +
+            (c.editPrice ? '' : '<span class="vas-lk-p">'+dh(p.price)+'</span>') +
             '<button type="button" class="vas-lk-x" title="Remove '+esc(p.name)+'" onclick="toggleVasProd(\''+c.id+'\',\''+p.code+'\')"><span class="mi">close</span></button></div>';
         }).join('')
       : '<div class="vas-lk-hint"><span class="mi">search</span>'+(c.search === 'name'
@@ -799,13 +799,14 @@
       if (r) toggleVasProd(cid, r.p.code);
     }
   }
-  // One contract per deal on SMC — picking swaps the selection and closes the list. Misc is
-  // additive, so the dropdown stays open while parts are ticked off.
+  // One product per deal on single-select lookups — picking swaps the selection and closes the
+  // list. An editable-price lookup starts Customer choice at the picked product's price.
   function toggleVasProd(cid, code){
     var c = catById(cid), codes = (state.vasProd[cid] || []).slice(), at = codes.indexOf(code);
     if (c && !c.multi){
       state.vasProd[cid] = (at > -1) ? [] : [code];
       if (at === -1) lkState(cid).open = false;
+      if (c.editPrice) state.vasVal[cid] = (at > -1) ? 0 : (c.products.filter(function(p){ return p.code === code; })[0] || {}).price || 0;
     } else {
       if (at > -1) codes.splice(at, 1); else codes.push(code);
       state.vasProd[cid] = codes;
