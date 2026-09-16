@@ -179,6 +179,7 @@
   .dh{height:0.72em; width:auto; display:inline-block; vertical-align:-0.02em; margin-right:3px;}
   .vas-ccinput{width:96px; box-sizing:border-box; text-align:left; font-weight:700; font-size:12.5px; font-family:inherit; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:7px 9px; outline:none;}
   .vas-ccinput:focus{border-color:var(--cta-bg);}
+  .vas-lk-pe{margin-left:auto; padding:0 !important;}
   .vas-opts{background:var(--panel2); border-bottom:1px solid var(--line);}
   .vas-opt{cursor:pointer; border-bottom:1px solid var(--line);}
   .vas-opt:last-child{border-bottom:none;}
@@ -553,7 +554,7 @@
       { id:'acc-screen', label:'Rear Entertainment Screen', price:5100 },
       { id:'acc-batt',   label:'Battery Booster', price:1100 }
     ]},
-    { id:'misc',  name:'Misc',                          icon:'category',         type:'lookup', rec:0, products:MISC_PRODUCTS,
+    { id:'misc',  name:'Misc',                          icon:'category',         type:'lookup', rec:0, multi:true, products:MISC_PRODUCTS,
       ph:'Search products by name', words:'misc miscellaneous parts products accessories', search:'name', editPrice:true }
   ];
   // price = entry trim, priceTo = top trim. ES matches the TRIMS range exactly.
@@ -584,7 +585,7 @@
   // delta is a campaign, so it belongs in CAMPAIGNS, not here.
   var YEARS = [2027, 2026, 2025];
 
-  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499 }, vasProd:{ smc:['SC - 100K-120K'], misc:[] }, vasLk:{}, giftOff:{}, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499 }, vasProd:{ smc:['SC - 100K-120K'], misc:[] }, vasPrice:{ misc:{} }, vasLk:{}, giftOff:{}, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
   function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
 
   function fmt(n){ return (n||0).toLocaleString('en-US'); }
@@ -609,7 +610,7 @@
   }
   function catCustomer(c){
     if (c.type === 'number') return state.vasVal[c.id] || 0;
-    if (c.type === 'lookup' && c.editPrice) return vasProds(c).length ? (state.vasVal[c.id] || 0) : 0;
+    if (c.type === 'lookup' && c.editPrice){ var pr = state.vasPrice[c.id] || {}, s3 = 0; vasProds(c).forEach(function(p){ s3 += pr[p.code] || 0; }); return s3; }
     if (c.type === 'lookup'){ var s2 = 0; vasProds(c).forEach(function(p){ s2 += p.price; }); return s2; }
     var s = 0, sel = state.vasSel[c.id] || {};
     (c.options||[]).forEach(function(o){ if (sel[o.id]) s += o.price; });
@@ -647,14 +648,10 @@
         '</div>';
       } else if (c.type === 'lookup'){
         var lopen = !!state.vasOpen[c.id], lps = vasProds(c);
-        // Misc carries the part's F&O price into Customer choice, where the SE can quote it differently.
-        var lcust = (c.editPrice && lps.length)
-          ? '<span class="pc-v vas-cc" onclick="event.stopPropagation()"><span class="vas-cur">'+DH+'</span><input type="number" min="0" step="1" class="vas-ccinput" value="'+cust+'" placeholder="0" onchange="setVasNum(\''+c.id+'\', this.value)"></span>'
-          : '<span class="pc-v">'+dh(cust)+'</span>';
         var tag = lps.length ? '<span class="vas-lk-tag">'+esc(lps[0].code)+(lps.length > 1 ? ' +'+(lps.length-1) : '')+'</span>' : '';
         rows += '<div class="pc-row vas-cat'+(lopen?' open':'')+'" onclick="toggleVasGroup(\''+c.id+'\')">' +
           '<span class="pc-i"><span class="mi vas-cat-chev">'+(lopen?'expand_less':'expand_more')+'</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span>'+tag+'</span>' +
-          '<span class="pc-v">'+dh(c.rec)+'</span>'+lcust+'</div>';
+          '<span class="pc-v">'+dh(c.rec)+'</span><span class="pc-v" id="vasCust-'+c.id+'">'+dh(cust)+'</span></div>';
         if (lopen) rows += vasLkHtml(c, lps);
       } else {
         var open = !!state.vasOpen[c.id];
@@ -726,7 +723,8 @@
     return (c.search === 'name') ? esc(p.code) : fuzzyMark(p.code, hits);
   }
   // The list is a dropdown: it opens when the SE clicks into the search box, not when the
-  // group expands. SMC and Misc take one product each, so they pick like a radio group and close.
+  // group expands. SMC takes one contract only, so it picks like a radio group and closes;
+  // Misc takes as many parts as the deal needs and stays open.
   function vasLkResHtml(c){
     if (!lkState(c.id).open) return '';
     return '<div class="vas-lk-panel"><div class="vas-lk-hd">Products</div>' +
@@ -760,7 +758,9 @@
           return '<div class="vas-lk-chip"><span class="mi">check_circle</span>' +
             '<span class="vas-lk-txt"><span class="vas-lk-t">'+prodTitle(c, p, [])+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
             (!c.editPrice && !p.price ? '<span class="vas-free-tag">Free</span>' : '') +
-            (c.editPrice ? '' : '<span class="vas-lk-p">'+dh(p.price)+'</span>') +
+            (c.editPrice
+              ? '<span class="vas-cc vas-lk-pe"><span class="vas-cur">'+DH+'</span><input type="number" min="0" step="1" class="vas-ccinput" value="'+((state.vasPrice[c.id] || {})[p.code] || 0)+'" onchange="setVasProdPrice(\''+c.id+'\',\''+p.code+'\', this.value)"></span>'
+              : '<span class="vas-lk-p">'+dh(p.price)+'</span>') +
             '<button type="button" class="vas-lk-x" title="Remove '+esc(p.name)+'" onclick="toggleVasProd(\''+c.id+'\',\''+p.code+'\')"><span class="mi">close</span></button></div>';
         }).join('')
       : '<div class="vas-lk-hint"><span class="mi">search</span>'+(c.search === 'name'
@@ -799,17 +799,21 @@
       if (r) toggleVasProd(cid, r.p.code);
     }
   }
-  // One product per deal on single-select lookups — picking swaps the selection and closes the
-  // list. An editable-price lookup starts Customer choice at the picked product's price.
+  // One contract per deal on SMC — picking swaps the selection and closes the list. Misc is
+  // additive, so the dropdown stays open while parts are ticked off. Each Misc part starts at
+  // its F&O price, which the SE can then quote differently on the picked line.
   function toggleVasProd(cid, code){
     var c = catById(cid), codes = (state.vasProd[cid] || []).slice(), at = codes.indexOf(code);
     if (c && !c.multi){
       state.vasProd[cid] = (at > -1) ? [] : [code];
       if (at === -1) lkState(cid).open = false;
-      if (c.editPrice) state.vasVal[cid] = (at > -1) ? 0 : (c.products.filter(function(p){ return p.code === code; })[0] || {}).price || 0;
     } else {
       if (at > -1) codes.splice(at, 1); else codes.push(code);
       state.vasProd[cid] = codes;
+    }
+    if (c && c.editPrice){
+      var pr = state.vasPrice[cid] = state.vasPrice[cid] || {};
+      if (at > -1) delete pr[code]; else pr[code] = (c.products.filter(function(p){ return p.code === code; })[0] || {}).price || 0;
     }
     renderVasChooser(); renderSummary(); focusVasLk(cid);
   }
@@ -823,6 +827,11 @@
   });
   function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; state.vasLk[id] = { q:'', hl:-1, open:false }; renderVasChooser(); if (state.vasOpen[id]) focusVasLk(id); }
   function toggleVasOpt(cid, oid){ if (!state.vasSel[cid]) state.vasSel[cid] = {}; state.vasSel[cid][oid] = !state.vasSel[cid][oid]; renderVasChooser(); renderSummary(); }
+  function setVasProdPrice(cid, code, v){
+    (state.vasPrice[cid] = state.vasPrice[cid] || {})[code] = Math.max(0, parseInt(v,10)||0);
+    var el = document.getElementById('vasCust-'+cid); if (el) el.innerHTML = dh(catCustomer(catById(cid)));
+    updateVasTotal(); renderSummary();
+  }
   function setVasNum(id, v){ state.vasVal[id] = Math.max(0, parseInt(v,10)||0); updateVasTotal(); renderSummary(); }
 
   function leadTarget(){ var m=location.search.match(/lead=(\d+)/); return m?parseInt(m[1],10):null; }
