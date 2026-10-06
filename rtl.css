@@ -1,0 +1,47 @@
+/* Language switch + Arabic/RTL adjustments that logical properties can't express.
+   Layout direction itself comes from logical properties in each page's CSS. */
+
+.lang-switch { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; line-height: 1; color: inherit; }
+.lang-switch span { opacity: .45; }
+.lang-switch button {
+  background: none; border: 0; color: inherit; font: inherit; padding: 4px 6px; border-radius: 4px; cursor: pointer; opacity: .75;
+}
+.lang-switch button[lang="ar"] { font-family: 'Segoe UI', 'Noto Sans Arabic', Tahoma, sans-serif; font-size: 13px; }
+.lang-switch button:hover { opacity: 1; background: rgba(255,255,255,.12); }
+.lang-switch button[aria-pressed="true"] { opacity: 1; font-weight: 600; box-shadow: inset 0 -2px 0 currentColor; border-radius: 0; }
+.lang-switch button:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+.page-header { position: relative; }
+.page-header > .lang-switch { position: absolute; top: 0; inset-inline-end: 0; color: var(--colorNeutralForeground2, #424242); }
+.page-header > .lang-switch button:hover { background: var(--colorNeutralBackground1Hover, #f5f5f5); }
+
+/* Arabic typography: Segoe UI carries Arabic glyphs on Windows (as in Dynamics 365);
+   Noto Sans Arabic is the closest humanist match elsewhere. Latin keeps Segoe UI / Inter. */
+:root[lang|="ar"] {
+  --fontFamilyBase: 'Segoe UI', 'Inter', 'Noto Sans Arabic', Tahoma, system-ui, sans-serif;
+  --fontFamilyNumeric: 'Segoe UI', 'Inter', 'Noto Sans Arabic', sans-serif;
+}
+:root[lang|="ar"] body { font-family: var(--fontFamilyBase); }
+/* Arabic script has no case and tall ascenders/descenders: no forced uppercase or tracking, a touch more leading. */
+:root[lang|="ar"] body * { text-transform: none !important; letter-spacing: normal !important; }
+:root[lang|="ar"] body { line-height: 1.5; }
+
+/* The Material Symbols stylesheet forces `direction: ltr` on icons, which would resolve their own
+   logical insets (inset-inline-end) to the physical right. Ligature glyphs render the same either way. */
+[dir="rtl"] .material-symbols-outlined, [dir="rtl"] .material-icons { direction: rtl; }
+/* Directional icons only (class set by i18n.js). `scale` composes with any existing rotate transform. */
+[dir="rtl"] .i18n-flip { scale: -1 1; }
+
+/* Values that must read left-to-right inside RTL forms keep their visual alignment at the form's start. */
+[dir="rtl"] input[dir="ltr"] { text-align: right; }
+
+/* Off-canvas panes open from the inline end (the left in RTL), so their hidden state slides the other way. */
+[dir="rtl"] .call-panel:not(.open), [dir="rtl"] .create-panel:not(.open), [dir="rtl"] .sc-panel:not(.open),
+[dir="rtl"] .cw-panel:not(.open), [dir="rtl"] .mdr:not(.open) { transform: translateX(-100%); }
+[dir="rtl"] .call-panel.open, [dir="rtl"] .create-panel.open, [dir="rtl"] .sc-panel.open, [dir="rtl"] .cw-panel.open, [dir="rtl"] .mdr.open { box-shadow: 8px 0 32px rgba(20,24,34,.12); }
+/* Markers centred on an inline-start offset. */
+[dir="rtl"] .slaw-thumb, [dir="rtl"] .slaw-target { transform: translate(50%, -50%); }
+/* Custom select chevrons drawn as a background image sit at the inline end. */
+[dir="rtl"] .sc-pick { background-position: left 10px center; }
+/* "Open" links: text first at the right, the open-in-new arrow after it on the left. */
+[dir="rtl"] .open-lead-link, [dir="rtl"] .dp-if-action.dp-if-link { flex-direction: row-reverse; }
+[dir="rtl"] .dp-if-action.dp-if-link { justify-content: flex-end; }
