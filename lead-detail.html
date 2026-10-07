@@ -10,9 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
-  <link href="rtl.css?v=8" rel="stylesheet" />
-  <script src="i18n-ar.js?v=8"></script>
-  <script src="i18n.js?v=8"></script>
+  <link href="rtl.css?v=9" rel="stylesheet" />
+  <script src="i18n-ar.js?v=9"></script>
+  <script src="i18n.js?v=9"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -1975,7 +1975,7 @@
     function openConfirm(title, text, okLabel, cb, cancelLabel, icon, neutral){
       document.getElementById('confirmTitle').textContent = title;
       var txtEl = document.getElementById('confirmText');
-      txtEl.innerHTML = text || '';
+      txtEl.innerHTML = I18N.t(text || '');
       txtEl.style.display = text ? '' : 'none';
       document.getElementById('confirmOkBtn').textContent = okLabel || 'Confirm';
       document.getElementById('confirmCancelBtn').textContent = cancelLabel || 'Keep';
