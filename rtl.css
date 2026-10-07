@@ -6,7 +6,7 @@
 .lang-switch button {
   background: none; border: 0; color: inherit; font: inherit; padding: 4px 6px; border-radius: 4px; cursor: pointer; opacity: .75;
 }
-.lang-switch button[lang="ar"] { font-family: 'Almarai', 'Segoe UI', Tahoma, sans-serif; font-size: 13px; }
+.lang-switch button[lang="ar"] { font-family: 'Almarai', 'Segoe UI', sans-serif; font-size: 13px; }
 .lang-switch button:hover { opacity: 1; background: rgba(255,255,255,.12); }
 .lang-switch button[aria-pressed="true"] { opacity: 1; font-weight: 600; box-shadow: inset 0 -2px 0 currentColor; border-radius: 0; }
 .lang-switch button:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
@@ -14,13 +14,29 @@
 .page-header > .lang-switch { position: absolute; top: 0; inset-inline-end: 0; color: var(--colorNeutralForeground2, #424242); }
 .page-header > .lang-switch button:hover { background: var(--colorNeutralBackground1Hover, #f5f5f5); }
 
-/* Arabic typography: Almarai for Arabic script. Inter comes first and has no Arabic glyphs,
-   so Latin data (names, IDs, emails, numbers) stays in Inter and each Arabic character falls
-   through to Almarai. Almarai ships 300/400/700/800, so 600 renders as 700 and 500 as 400. */
+/* Arabic typography — Almarai (SIL OFL, assets/fonts/OFL.txt), self-hosted Arabic subset.
+   The unicode-range limits Almarai to Arabic script, so it can lead the stack: Arabic letters
+   render in Almarai, while Latin text, digits, IDs, acronyms (SLA, VIN, AED) and model names fall
+   through to the same Segoe UI / Inter stack the English UI uses.
+   Almarai ships 300/400/700/800; each face claims a weight range so the English hierarchy maps
+   without faux bolding: 400–500 → Regular, 600–700 → Bold, 800–900 → ExtraBold. */
+@font-face { font-family: 'Almarai'; font-style: normal; font-weight: 100 300; font-display: swap;
+  src: url('assets/fonts/Almarai-Light-arabic.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC; }
+@font-face { font-family: 'Almarai'; font-style: normal; font-weight: 400 500; font-display: swap;
+  src: url('assets/fonts/Almarai-Regular-arabic.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC; }
+@font-face { font-family: 'Almarai'; font-style: normal; font-weight: 600 700; font-display: swap;
+  src: url('assets/fonts/Almarai-Bold-arabic.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC; }
+@font-face { font-family: 'Almarai'; font-style: normal; font-weight: 800 900; font-display: swap;
+  src: url('assets/fonts/Almarai-ExtraBold-arabic.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC; }
 :root[lang|="ar"] {
-  --fontFamilyBase: 'Inter', 'Almarai', 'Segoe UI', Tahoma, system-ui, sans-serif;
-  --fontFamilyNumeric: 'Inter', 'Almarai', 'Segoe UI', sans-serif;
+  --fontFamilyBase: 'Almarai', 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+  --fontFamilyNumeric: 'Almarai', 'Segoe UI', 'Inter', sans-serif;
 }
+:root[lang|="ar"] :is(button, input, select, textarea) { font-family: inherit; }
 :root[lang|="ar"] body { font-family: var(--fontFamilyBase); }
 /* Arabic script has no case and tall ascenders/descenders: no forced uppercase or tracking, a touch more leading. */
 :root[lang|="ar"] body * { text-transform: none !important; letter-spacing: normal !important; }
@@ -37,8 +53,9 @@
 
 /* Off-canvas panes open from the inline end (the left in RTL), so their hidden state slides the other way. */
 [dir="rtl"] .call-panel:not(.open), [dir="rtl"] .create-panel:not(.open), [dir="rtl"] .sc-panel:not(.open),
-[dir="rtl"] .cw-panel:not(.open), [dir="rtl"] .mdr:not(.open) { transform: translateX(-100%); }
-[dir="rtl"] .call-panel.open, [dir="rtl"] .create-panel.open, [dir="rtl"] .sc-panel.open, [dir="rtl"] .cw-panel.open, [dir="rtl"] .mdr.open { box-shadow: 8px 0 32px rgba(20,24,34,.12); }
+[dir="rtl"] .cw-panel:not(.open), [dir="rtl"] .mdr:not(.open), [dir="rtl"] .copilot-dd:not(.open),
+[dir="rtl"] .tc-panel:not(.open), [dir="rtl"] .dd-panel:not(.open) { transform: translateX(-100%); }
+[dir="rtl"] .call-panel.open, [dir="rtl"] .create-panel.open, [dir="rtl"] .sc-panel.open, [dir="rtl"] .cw-panel.open, [dir="rtl"] .mdr.open, [dir="rtl"] .copilot-dd.open, [dir="rtl"] .tc-panel.open, [dir="rtl"] .dd-panel.open { box-shadow: 8px 0 32px rgba(20,24,34,.12); }
 /* Markers centred on an inline-start offset. */
 [dir="rtl"] .slaw-thumb, [dir="rtl"] .slaw-target { transform: translate(50%, -50%); }
 /* Custom select chevrons drawn as a background image sit at the inline end. */
@@ -46,3 +63,8 @@
 /* "Open" links: text first at the right, the open-in-new arrow after it on the left. */
 [dir="rtl"] .open-lead-link, [dir="rtl"] .dp-if-action.dp-if-link { flex-direction: row-reverse; }
 [dir="rtl"] .dp-if-action.dp-if-link { justify-content: flex-end; }
+
+/* Arabic labels run longer than English. Short UI labels and IDs/phones stay on one line;
+   the funnel KPI captions, which truncate in English too, may wrap to a second line instead. */
+:root[lang|="ar"] :is(.leads-table th, .sla-tag, .st-badge, .dp-lead-tag, .id-cell .id-text) { white-space: nowrap; }
+:root[lang|="ar"] .cfun-lbl { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.35; }

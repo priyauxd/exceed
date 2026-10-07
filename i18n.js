@@ -40,7 +40,10 @@
       var m = key.match(patterns[i][0]);
       if (m) {
         var to = patterns[i][1];
-        var r = typeof to === 'function' ? to.apply(null, m.concat([tr])) : key.replace(patterns[i][0], to);
+        // In string replacements, captured text is translated too ("Abu Dhabi · 7 deals").
+        var r = typeof to === 'function' ? to.apply(null, m.concat([tr])) : to.replace(/\$(\d)/g, function (_, g) {
+          var v = m[+g] || ''; if (v === key || !/[A-Za-z]/.test(v)) return v; var t = tr(v); return t == null ? v : t;
+        });
         if (r != null) return r;
       }
     }
@@ -53,7 +56,7 @@
     if (!key || !/[A-Za-z]/.test(key)) return null;
     var hit = lookup(key);
     if (hit != null) return hit;
-    var lead = key.match(/^([·•—–(|]\s*)(.+)$/), tail = key.match(/^(.+?)(\s*[›→…:)]+)$/);
+    var lead = key.match(/^([·•—–|]\s*)(.+)$/), tail = key.match(/^(.+?)(\s*[›→…:·.]+)$/);
     if (lead) { var t1 = tr(lead[2]); if (t1 != null) return lead[1] + t1; }
     // ‹ › are Bidi_Mirrored and flip on their own in RTL; → is not.
     if (tail) { var t2 = tr(tail[1]); if (t2 != null) return t2 + tail[2].replace('→', '←'); }
@@ -161,12 +164,6 @@
     var html = document.documentElement;
     html.setAttribute('lang', lang === 'ar' ? 'ar-AE' : 'en');
     html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-    if (!document.getElementById('i18nArFont')) {   // also styles the العربية label in English mode
-      var l = document.createElement('link');
-      l.id = 'i18nArFont'; l.rel = 'stylesheet';
-      l.href = 'https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap';
-      document.head.appendChild(l);
-    }
     var sw = document.querySelectorAll('.lang-switch button');
     for (var i = 0; i < sw.length; i++) sw[i].setAttribute('aria-pressed', sw[i].getAttribute('data-lang') === lang ? 'true' : 'false');
   }
@@ -213,4 +210,9 @@
   mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTRS });
   function ready() { load(); injectSwitch(); busy = true; try { walk(document.body); } finally { mo.takeRecords(); busy = false; } }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready); else ready();
+  // A page restored from the back/forward cache (or open in another tab) keeps the language it
+  // was left in; re-read the saved choice whenever it is shown again.
+  function sync() { var saved = 'en'; try { saved = localStorage.getItem(KEY) === 'ar' ? 'ar' : 'en'; } catch (e) {} if (saved !== lang) set(saved); }
+  window.addEventListener('pageshow', function (e) { if (e.persisted) sync(); });
+  window.addEventListener('storage', function (e) { if (e.key === KEY) sync(); });
 })();

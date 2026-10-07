@@ -7,6 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
+  <link href="rtl.css" rel="stylesheet" />
+  <script src="i18n-ar.js"></script>
+  <script src="i18n.js"></script>
   <style>
     :root {
       --bg: #f5f5f5;
@@ -47,7 +50,7 @@
       color: #fff;
       display: flex; align-items: center;
       padding: 0 18px; gap: 12px;
-      position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+      position: fixed; top: 0; inset-inline-start: 0; inset-inline-end: 0; z-index: 20;
       font-size: 13px;
     }
     .topbar .waffle { font-size: 16px; opacity: .7; cursor: pointer; }
@@ -57,7 +60,7 @@
     .topbar .search {
       flex: 1; max-width: 360px; margin: 0 auto;
       background: rgba(255,255,255,.15); border: none; border-radius: 8px;
-      padding: 6px 14px 6px 30px; color: #fff; font-size: 12px;
+      padding-block: 6px; padding-inline: 30px 14px; color: #fff; font-size: 12px;
       font-family: inherit; outline: none;
     }
     .topbar .search::placeholder { color: rgba(255,255,255,.6); }
@@ -82,7 +85,7 @@
     .notif-bell:hover { background: rgba(255,255,255,.15); }
     .notif-bell .material-symbols-outlined { font-size: 18px; }
     .notif-bell .bell-badge {
-      position: absolute; top: 1px; right: 0;
+      position: absolute; top: 1px; inset-inline-end: 0;
       font-size: 9px; font-weight: 700; color: #fff;
       background: var(--red); min-width: 16px; height: 16px;
       border-radius: 8px; display: flex; align-items: center;
@@ -91,11 +94,11 @@
     }
 
     .notif-overlay {
-      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 29;
+      display: none; position: fixed; top: 0; inset-inline-start: 0; inset-inline-end: 0; bottom: 0; z-index: 29;
     }
     .notif-dropdown {
       display: none; position: fixed;
-      top: var(--topbar-h); right: 80px;
+      top: var(--topbar-h); inset-inline-end: 80px;
       width: 400px; max-height: 480px;
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 0 0 var(--radius) var(--radius);
@@ -169,8 +172,8 @@
     .shell { display: flex; min-height: 100vh; }
     .sidebar {
       width: var(--sidebar-w); background: var(--surface);
-      border-right: 1px solid var(--border);
-      position: fixed; top: var(--topbar-h); left: 0; bottom: 0;
+      border-inline-end: 1px solid var(--border);
+      position: fixed; top: var(--topbar-h); inset-inline-start: 0; bottom: 0;
       overflow-y: auto; z-index: 10;
     }
     .sidebar::-webkit-scrollbar { width: 3px; }
@@ -197,17 +200,17 @@
       padding: 7px 10px; border-radius: 8px;
       color: var(--ink-secondary); text-decoration: none;
       font-size: 12.5px; transition: all .12s;
-      border-left: 2px solid transparent;
+      border-inline-start: 2px solid transparent;
     }
     .sb-item:hover { background: var(--blue-soft); color: var(--blue); }
     .sb-item.active {
       background: var(--blue-soft); color: var(--blue);
-      font-weight: 600; border-left-color: var(--blue);
+      font-weight: 600; border-inline-start-color: var(--blue);
     }
     .sb-item .material-symbols-outlined { font-size: 18px; }
 
     .main {
-      margin-left: var(--sidebar-w); margin-top: var(--topbar-h);
+      margin-inline-start: var(--sidebar-w); margin-top: var(--topbar-h);
       flex: 1; display: flex; flex-direction: column; min-width: 0;
     }
 
@@ -291,7 +294,7 @@
       display: flex; align-items: center; gap: 5px;
       margin-bottom: 14px;
     }
-    .q-filters .material-symbols-outlined { font-size: 15px; color: var(--ink-muted); margin-right: 2px; }
+    .q-filters .material-symbols-outlined { font-size: 15px; color: var(--ink-muted); margin-inline-end: 2px; }
     .qt {
       padding: 4px 12px; border-radius: 14px;
       font-size: 11px; font-weight: 500;
@@ -321,7 +324,7 @@
     }
     .qt-table { width: 100%; border-collapse: collapse; }
     .qt-table th {
-      text-align: left; padding: 9px 14px;
+      text-align: start; padding: 9px 14px;
       font-size: 10px; font-weight: 600;
       text-transform: uppercase; letter-spacing: .07em;
       color: var(--ink-muted); background: #fafbfd;
@@ -419,16 +422,16 @@
     }
 
     /* ── Collapsible icon-rail sidebar ── */
-    .sidebar, .main { transition: width .25s ease, margin-left .25s ease; }
+    .sidebar, .main { transition: width .25s ease, margin-inline-start .25s ease; }
     .topbar .waffle { cursor: pointer; }
     .sb-toggle { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0;
-      margin: 2px 2px 10px auto; border: 1px solid var(--border); background: var(--surface); color: var(--blue);
+      margin-block: 2px 10px; margin-inline: auto 2px; border: 1px solid var(--border); background: var(--surface); color: var(--blue);
       border-radius: 50%; cursor: pointer; font-family: inherit; box-shadow: 0 1px 4px rgba(20,24,34,.08);
       transition: background .15s ease, box-shadow .15s ease, color .15s ease; }
     .sb-toggle:hover { background: var(--blue-soft); color: var(--blue); box-shadow: 0 2px 10px rgba(20,24,34,.14); }
     .sb-toggle .material-symbols-outlined { font-size: 20px; transition: transform .25s ease; }
     body.sb-rail .sidebar { width: 60px; }
-    body.sb-rail .main { margin-left: 60px; }
+    body.sb-rail .main { margin-inline-start: 60px; }
     body.sb-rail .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
     body.sb-rail .sb-item .material-symbols-outlined { font-size: 18px; }
     body.sb-rail .sb-group { display: none; }
@@ -446,7 +449,7 @@
     .cp-pro { display:flex; align-items:flex-start; gap:10px; background:#f4f3ff; border:1px solid #e0ddf7; border-radius:8px; padding:10px 12px; margin-bottom:12px; }
     .cp-pro > .material-symbols-outlined { color:#5b54d6; font-size:19px; flex-shrink:0; margin-top:1px; }
     .cp-pro-body { flex:1; font-size:12.5px; color:var(--ink); line-height:1.55; }
-    .cp-pro-tag { font-size:9px; font-weight:700; letter-spacing:.05em; color:#5b54d6; background:#fff; border:1px solid #e0ddf7; border-radius:4px; padding:1px 6px; margin-right:6px; text-transform:uppercase; }
+    .cp-pro-tag { font-size:9px; font-weight:700; letter-spacing:.05em; color:#5b54d6; background:#fff; border:1px solid #e0ddf7; border-radius:4px; padding:1px 6px; margin-inline-end:6px; text-transform:uppercase; }
     .cp-pro-action { flex-shrink:0; font-size:11.5px; font-weight:600; background:#5b54d6; color:#fff; border:none; border-radius:6px; padding:7px 13px; cursor:pointer; font-family:inherit; white-space:nowrap; text-decoration:none; display:inline-block; }
     .cp-pro-action:hover { background:#4a43c4; }
     .copilot-input-row { display:flex; gap:8px; align-items:center; }
@@ -470,9 +473,9 @@
     /* ── Copilot dropdown ── */
     .copilot-dd-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.28); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 45; }
     .copilot-dd-overlay.open { opacity: 1; visibility: visible; }
-    .copilot-dd { position: fixed !important; top: var(--topbar-h, 46px); right: 0; bottom: 0; width: 440px; max-width: 92vw; overflow-y: auto; background: #fff !important; border: none; border-left: 1px solid #e4e6f2; border-radius: 0 !important; box-shadow: -8px 0 32px rgba(20,24,34,.10); margin: 0 !important; z-index: 46; display: block; transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
+    .copilot-dd { position: fixed !important; top: var(--topbar-h, 46px); inset-inline-end: 0; bottom: 0; width: 440px; max-width: 92vw; overflow-y: auto; background: #fff !important; border: none; border-inline-start: 1px solid #e4e6f2; border-radius: 0 !important; box-shadow: -8px 0 32px rgba(20,24,34,.10); margin: 0 !important; z-index: 46; display: block; transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); }
     .copilot-dd.open { transform: translateX(0); }
-    .copilot-dd-close { margin-left: auto; border: none; background: none; font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 0 2px; }
+    .copilot-dd-close { margin-inline-start: auto; border: none; background: none; font-size: 20px; line-height: 1; color: var(--ink-muted); cursor: pointer; padding: 0 2px; }
     .copilot-dd-close:hover { color: var(--ink); }
     .topbar .copilot { cursor: pointer; }
   
@@ -480,7 +483,7 @@
     @keyframes wave-hand { 0%{transform:rotate(0)} 10%{transform:rotate(14deg)} 20%{transform:rotate(-8deg)} 30%{transform:rotate(14deg)} 40%{transform:rotate(-4deg)} 50%{transform:rotate(10deg)} 60%{transform:rotate(0)} }
     .greeting-sub .date { font-weight: 600; color: var(--ink); }
     </style>
-  <style>/* kpi-center */ .metric-card{ text-align:center; } .metric-card .mc-tag{ text-align:left; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card{ border:none; }</style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card{ border:none; }</style>
 </head>
 <body>
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
@@ -611,7 +614,7 @@
         <button class="cb"><span class="material-symbols-outlined">bookmark</span> Follow</button>
         <button class="cb"><span class="material-symbols-outlined">bolt</span> Flow</button>
         <button class="cb"><span class="material-symbols-outlined">more_horiz</span></button>
-        <button class="cb" style="margin-left:auto"><span class="material-symbols-outlined">ios_share</span> Share</button>
+        <button class="cb" style="margin-inline-start:auto"><span class="material-symbols-outlined">ios_share</span> Share</button>
       </div>
 
       <div class="page">

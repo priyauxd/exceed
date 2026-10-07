@@ -2,14 +2,21 @@
 
 The lead-to-sale journey runs in English or Arabic from a switch in the top bar (**English | العربية**). Arabic sets `<html lang="ar-AE" dir="rtl">`, mirrors the layout and translates the UI in place. The open lead, BPF stage, tab, filters, dialogs and Copilot state are untouched when switching. The choice persists across pages (`localStorage: exeed-lang`).
 
-**Localized pages:** `lead-detail.html` (lead list → lead form → Qualify … Close, activities, trade-in, test drive, proposals and quotations, Sales Co-Pilot), `sales-executive.html` (SE dashboard and drill-down drawers) and `index.html` (home).
-**Not yet localized:** call-center, showroom, head-of-sales, brand-host, delivery and the `lead-detail-v2` pages. They load in English and LTR.
+**Localized pages:**
+- `lead-detail.html`: lead list → lead form → Qualify … Close, activities, trade-in, test drive, proposals and quotations, Sales Co-Pilot
+- `index.html`: home
+- Every role dashboard: `sales-executive`, `call-center-agent`, `call-center-manager`, `brand-host`, `showroom-manager`, `head-of-sales` and `delivery-consultant`, including their drill-down drawers, notifications and modals
+
+`lead-detail-v2.html` (the "Leads · Option 2" prototype) is the only page still English-only.
+
+Pages restored from the browser's back/forward cache re-read the saved language. Returning from Leads to a dashboard keeps Arabic.
 
 | File | Role |
 |---|---|
 | `i18n.js` | Engine. It translates text nodes and `placeholder`/`title`/`aria-label` as they enter the DOM (MutationObserver), so the page's render code stays in English. It also mirrors directional icons and isolates LTR runs. |
-| `i18n-ar.js` | Dictionary of about 1,040 strings, plus patterns for counts, dates and dynamic messages. |
-| `rtl.css` | Language switch, Arabic font stack, and the few RTL overrides that logical CSS can't express (slide-in panes, centred markers). |
+| `i18n-ar.js` | Dictionary of about 1,750 strings and about 200 patterns for counts, dates and dynamic messages. Text captured by a pattern is translated too. |
+| `rtl.css` | Language switch, the Almarai `@font-face` and font stack, and the few RTL overrides that logical CSS can't express (slide-in panes, centred markers, label wrapping). |
+| `assets/fonts/` | Almarai Arabic subset (Light/Regular/Bold/ExtraBold, woff2) and its SIL OFL licence |
 | Page CSS | All `left`/`right` margins, paddings, borders, insets, radii and text-align were converted to logical properties (`margin-inline-start`, `inset-inline-end`, `text-align: start` …). LTR rendering was verified pixel-identical before and after the conversion. |
 
 Rules for page code:
@@ -58,7 +65,7 @@ Microsoft does not publish Arabic screenshots of model-driven apps. The evidence
 | Mixed content | Phones, date-time stamps, emails and URLs are wrapped in LRI…PDI. Untranslated Latin-only text (names, models, VINs) is isolated whole, so trailing punctuation stays with it ("Mariam K."). | BIDI, MIR |
 | Record data | Not translated: names, notes, timeline text, showroom records, product names and trims, competitor specs, Copilot drafts (which follow the customer's preferred language). Option-set values (Rating, Stage, Source, Status, discovery answers) are translated. | D365 behaviour: UI and metadata labels are localized, data is not |
 | Brand names | Dynamics 365, Copilot, WhatsApp, UAE Pass, DocuSign, EXEED, F&O stay in Latin, placed after the Arabic noun (`Copilot المبيعات`, `أوامر JAFZA`) | SG §4.1.4/§4.1.8, LB |
-| Typography | **Almarai** for Arabic script, with `'Inter', 'Almarai', 'Segoe UI', Tahoma`. Inter has no Arabic glyphs, so Latin data stays in Inter and Arabic falls through to Almarai. Almarai has 300/400/700/800 weights (600 renders as 700). Forced uppercase and letter-spacing are removed for Arabic; body line-height is 1.5. | Product decision (replaces the Segoe UI Arabic default) |
+| Typography | **Almarai** for all Arabic UI text, self-hosted and limited by `unicode-range` to Arabic script. It leads the stack (`'Almarai', 'Segoe UI', 'Inter', …`), so Arabic letters render in Almarai. Latin text, digits, IDs, phone numbers, acronyms (SLA, KPI, VIN, AED) and model names fall through to the same font English uses.<br>Weight mapping: 400–500 → Regular, 600–700 → Bold, 800–900 → ExtraBold, so there is no faux bolding.<br>Forced uppercase and letter-spacing are removed for Arabic; body line-height is 1.5.<br>Pills, badges, table headers, IDs and phones don't wrap. Long KPI captions wrap to a second line instead of truncating. | Product decision |
 | Voice | Commands as verbal nouns (حفظ، تحرير، إلغاء الأمر); confirmations as second-person questions (هل تريد حذف العميل المتوقع؟); polite requests with يُرجى | SG |
 
 ## Terminology
