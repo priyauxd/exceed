@@ -161,10 +161,10 @@
     var html = document.documentElement;
     html.setAttribute('lang', lang === 'ar' ? 'ar-AE' : 'en');
     html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-    if (lang === 'ar' && !document.getElementById('i18nArFont')) {
+    if (!document.getElementById('i18nArFont')) {   // also styles the العربية label in English mode
       var l = document.createElement('link');
       l.id = 'i18nArFont'; l.rel = 'stylesheet';
-      l.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap';
+      l.href = 'https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap';
       document.head.appendChild(l);
     }
     var sw = document.querySelectorAll('.lang-switch button');

@@ -58,7 +58,7 @@ Microsoft does not publish Arabic screenshots of model-driven apps. The evidence
 | Mixed content | Phones, date-time stamps, emails and URLs are wrapped in LRI…PDI. Untranslated Latin-only text (names, models, VINs) is isolated whole, so trailing punctuation stays with it ("Mariam K."). | BIDI, MIR |
 | Record data | Not translated: names, notes, timeline text, showroom records, product names and trims, competitor specs, Copilot drafts (which follow the customer's preferred language). Option-set values (Rating, Stage, Source, Status, discovery answers) are translated. | D365 behaviour: UI and metadata labels are localized, data is not |
 | Brand names | Dynamics 365, Copilot, WhatsApp, UAE Pass, DocuSign, EXEED, F&O stay in Latin, placed after the Arabic noun (`Copilot المبيعات`, `أوامر JAFZA`) | SG §4.1.4/§4.1.8, LB |
-| Typography | `'Segoe UI', 'Inter', 'Noto Sans Arabic', Tahoma`. Segoe UI renders Arabic on Windows as in D365; Noto Sans Arabic is the closest humanist fallback elsewhere. Forced uppercase and letter-spacing are removed for Arabic; body line-height is 1.5. | MIR, FL |
+| Typography | **Almarai** for Arabic script, with `'Inter', 'Almarai', 'Segoe UI', Tahoma`. Inter has no Arabic glyphs, so Latin data stays in Inter and Arabic falls through to Almarai. Almarai has 300/400/700/800 weights (600 renders as 700). Forced uppercase and letter-spacing are removed for Arabic; body line-height is 1.5. | Product decision (replaces the Segoe UI Arabic default) |
 | Voice | Commands as verbal nouns (حفظ، تحرير، إلغاء الأمر); confirmations as second-person questions (هل تريد حذف العميل المتوقع؟); polite requests with يُرجى | SG |
 
 ## Terminology

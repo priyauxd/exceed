@@ -1612,7 +1612,7 @@
 
     <div class="main">
       <div class="cmdbar">
-        <button class="cb" onclick="history.back()"><span class="material-symbols-outlined">arrow_back</span></button>
+        <button class="cb" onclick="goBack()" title="Back" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button>
         <div class="cmd-sep"></div>
         <button class="cb" onclick="openCreateLead()"><span class="material-symbols-outlined">add</span> New Lead</button>
         <button class="cb"><span class="material-symbols-outlined">upload</span> Import</button>
@@ -5092,6 +5092,14 @@
       document.body.classList.remove('lead-open');
       toggleSalesCopilot(false);           // the panel is grounded on the record that just closed
       document.querySelectorAll('.leads-table tbody tr').forEach(function(tr){tr.classList.remove('selected');});
+    }
+
+    // Command-bar Back: an open lead returns to the list; the list returns to the previous page, or Home.
+    function goBack() {
+      if (document.getElementById('detailPanel').classList.contains('open')) { closePanel(); return; }
+      var ref = document.referrer;
+      if (ref && ref.indexOf(location.origin) === 0 && ref.split('?')[0] !== location.href.split('?')[0]) history.back();
+      else location.href = 'index.html';
     }
 
     function toggleExpand() {
