@@ -10,9 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
-  <link href="rtl.css" rel="stylesheet" />
-  <script src="i18n-ar.js"></script>
-  <script src="i18n.js"></script>
+  <link href="rtl.css?v=8" rel="stylesheet" />
+  <script src="i18n-ar.js?v=8"></script>
+  <script src="i18n.js?v=8"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -6230,6 +6230,7 @@
       scRenderChips();
     }
     function scReply(kind){
+      if (I18N.lang === 'ar') return scReplyAr(kind);
       var l = scLead(), v = scOurs();
       if (kind === 'recap'){
         if (!l) return 'No lead is open right now. Open a lead record and I\'ll recap it from the CRM.';
@@ -6266,12 +6267,50 @@
       }
       return 'Checking that against the current CRM record and live inventory &mdash; I\'ll confirm before anything is saved.';
     }
+    // Arabic replies are written whole, so the grammar holds around the live record values.
+    function scReplyAr(kind){
+      var l = scLead(), v = scOurs(), t = function(x){ return scEsc(I18N.t(String(x == null ? '' : x))); };
+      if (kind === 'recap'){
+        if (!l) return 'لا يوجد عميل متوقع مفتوح حاليًا. افتح سجل عميل متوقع وسألخّصه لك من CRM.';
+        return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + t(l.stage) + ' &middot; درجة العميل المتوقع ' + l.score + '، واحتمال التحويل %' + l.convertProb + '.<br>' +
+          'مهتم بـ ' + scEsc(l.model) + '، وصل عبر ' + t(l.source) + '، ويفضّل ' + t(l.preferred) + ' باللغة ' + t(l.lang) + '.<br>' +
+          'SLA: ' + t(l.slaTime) + '. اكتمل الاستكشاف بنسبة %' + l.discovery + ' &mdash; ما زالت الموازنة وشروط التمويل غير محددة.';
+      }
+      if (kind === 'recommend'){
+        var rv = scCompFind(SC_ACTIVE);
+        return 'ثلاثة أمور تميّز العلامة التجارية، بهذا الترتيب:<br>' +
+          '<strong>1. تكلفة الملكية.</strong> ضمان ' + t(v.warranty) + ' وباقة خدمة ' + t(v.service) +
+          (rv ? '، مقابل ' + t(rv.warranty) + ' وباقة ' + t(rv.service) + ' لدى ' + scEsc(rv.name) : '') + '.<br>' +
+          '<strong>2. التجهيزات مقابل السعر.</strong> ' + scEsc(v.adas) + ' وكاميرا 540&deg; ومقصورة الشاشتين تأتي في فئة سعرية أدنى مما تضعها فيه العلامات اليابانية.<br>' +
+          '<strong>3. إنها فئة فاخرة وليست اقتصادية.</strong> تتفوق EXEED على Chery في المواد والعزل الصوتي، ولها صالات خدمة خاصة بها.<br>' +
+          'لهذا العميل، الخيار هو <strong>' + scEsc(v.name + ' ' + scTopTrim(v)) + '</strong> &mdash; ' + scMoney(v.price) + '، ' + scMoney(v.mo) + ' شهريًا، المتوفر: ' + v.stock + '. التفاصيل في تبويب <em>المركبات</em>.';
+      }
+      if (kind === 'compare'){
+        var c = scCompFind(SC_ACTIVE);
+        if (!c) return 'أضف منافسًا في تبويب <em>المقارنة</em> وسأُعدّ المقارنة.';
+        return '<strong>' + scEsc(v.name) + ' مقابل ' + scEsc(c.name) + '</strong> &mdash; ' +
+          (c.price > v.price ? 'سعرنا أقل منهم بـ ' + scMoney(c.price - v.price) + ' حسب قائمة الأسعار' : 'سعرهم المعلن أقل منا، لذا ركّز على التكلفة الإجمالية') +
+          '، مع ضماننا ' + t(v.warranty) + ' مقابل ضمانهم ' + t(c.warranty) + '. الجدول الكامل في تبويب <em>المقارنة</em>.';
+      }
+      if (kind === 'resale'){
+        var rc = scCompFind(SC_ACTIVE);
+        return 'مخاوف منطقية &mdash; وهي النقطة الوحيدة التي يتفوق فيها ' + (rc ? scEsc(rc.name) : 'العلامات اليابانية') + ' علينا فعلًا. لا تجادل فيها؛ بل أعد صياغة الحديث حول ما يدفعه العميل فعليًا.<br>' +
+          'على مدى خمس سنوات يحصل العميل على ضمان ' + t(v.warranty) + ' وباقة خدمة ' + t(v.service) + '، مقابل ' +
+          (rc ? t(rc.warranty) + ' وباقة ' + t(rc.service) : 'ضمان أقصر وخدمة مدفوعة') +
+          (rc && rc.price > v.price ? '، على سيارة يقل سعر شرائها بـ ' + scMoney(rc.price - v.price) : '') + '.<br>' +
+          'ثم أزل هذا القلق: اعرض تقييمًا للاستبدال الآن ليرى رقمًا حقيقيًا بدلًا من التخوّف. هل تريد أن أصيغ ذلك في تبويب <em>المراسلات</em>؟';
+      }
+      if (kind === 'draft'){
+        return 'أعددت ثلاث مسودات في تبويب <em>المراسلات</em> &mdash; رسالة متابعة، وبريد إلكتروني بالمواصفات والعرض، ودعوة لتجربة القيادة. لن يُرسل أي شيء حتى تضغط على إرسال.';
+      }
+      return 'جارٍ التحقق من ذلك مقابل سجل CRM الحالي والمخزون المباشر &mdash; سأؤكد قبل حفظ أي شيء.';
+    }
     function scSend(){
       var i = document.getElementById('scInput'); if (!i || !i.value.trim()) return;
       var q = i.value.trim(); i.value = ''; scPush(scEsc(q), true);
-      var k = /recap|summar/i.test(q) ? 'recap' : /compare|vs |patrol|santa|highlander|pathfinder|monjaro|jetour|lexus/i.test(q) ? 'compare'
-            : /resale|deprecia|resell|value hold/i.test(q) ? 'resale'
-            : /recommend|best fit|suggest/i.test(q) ? 'recommend' : /draft|message|whatsapp|email/i.test(q) ? 'draft' : '';
+      var k = /recap|summar|ملخص|لخّص|لخص/i.test(q) ? 'recap' : /compare|vs |patrol|santa|highlander|pathfinder|monjaro|jetour|lexus|قارن|مقارنة|مقابل/i.test(q) ? 'compare'
+            : /resale|deprecia|resell|value hold|إعادة البيع|الاستهلاك/i.test(q) ? 'resale'
+            : /recommend|best fit|suggest|لماذا|أنسب|اقترح|توصية/i.test(q) ? 'recommend' : /draft|message|whatsapp|email|مسودة|رسالة|بريد/i.test(q) ? 'draft' : '';
       scThink(scReply(k));
     }
 

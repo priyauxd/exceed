@@ -56,7 +56,7 @@
     if (!key || !/[A-Za-z]/.test(key)) return null;
     var hit = lookup(key);
     if (hit != null) return hit;
-    var lead = key.match(/^([·•—–|]\s*)(.+)$/), tail = key.match(/^(.+?)(\s*[›→…:·.]+)$/);
+    var lead = key.match(/^([·•—–|✓✗]\s*)(.+)$/), tail = key.match(/^(.+?)(\s*[›→…:·.—]+)$/);
     if (lead) { var t1 = tr(lead[2]); if (t1 != null) return lead[1] + t1; }
     // ‹ › are Bidi_Mirrored and flip on their own in RTL; → is not.
     if (tail) { var t2 = tr(tail[1]); if (t2 != null) return t2 + tail[2].replace('→', '←'); }
