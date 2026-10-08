@@ -14,20 +14,22 @@
   var FLIP = /^(arrow_back|arrow_forward|arrow_right_alt|chevron_left|chevron_right|navigate_next|navigate_before|keyboard_arrow_left|keyboard_arrow_right|first_page|last_page|send|reply|forward_to_inbox|undo|redo|sort|list_alt|checklist|edit_note|open_in_new|splitscreen_right|view_sidebar|menu_open|login|logout|phone_forwarded)$/;
   var ICON = '.material-symbols-outlined,.material-icons';
   function markIcon(el) { el.classList.toggle('i18n-flip', FLIP.test((el.textContent || '').trim())); }
-  // Runs that must read left-to-right: phone numbers, date+time stamps, emails, URLs.
+  // Runs that must read left-to-right: percentages (after Arabic letters digits turn into
+  // Arabic numbers and the % would jump to the left), phone numbers, date+time stamps, emails, URLs.
   // Inside an RTL paragraph the spaces between digit groups resolve RTL and reorder
   // the groups ("+971 50 123 4567" → "4567 123 50 +971"), so each run gets an LTR isolate.
-  var LTR_RUN = /(\+?\d[\d.,:\/-]*(?:[ \u00a0]+\+?\d[\d.,:\/-]*)+(?:[ \u00a0]?[AaPp][Mm]\b)?|[\w.+-]+@[\w-]+(?:\.[\w-]+)+|https?:\/\/\S+)/g;
+  var LTR_RUN = /([−+-]?\d+(?:[.,]\d+)?%|\+?\d[\d.,:\/-]*(?:[ \u00a0]+\+?\d[\d.,:\/-]*)+(?:[ \u00a0]?[AaPp][Mm]\b)?|[\w.+-]+@[\w-]+(?:\.[\w-]+)+|https?:\/\/\S+)/g;
   var LTR_VALUE = /^\s*(\+\d[\d ()\u00a0-]*|\d[\d ()\u00a0-]{6,}|[\w.+-]+@[\w-]+(\.[\w-]+)+|https?:\/\/\S+)\s*$/;
 
   var lang = 'en';
   try { lang = localStorage.getItem(KEY) === 'ar' ? 'ar' : 'en'; } catch (e) {}
 
-  var dict = null, patterns = [], contexts = [];
+  var dict = null, patterns = [], contexts = [], post = null;
   function load() {
     if (dict) return;
     var src = window.I18N_AR || { strings: {}, patterns: [] };
     contexts = src.contexts || [];
+    post = src.post || null;
     dict = Object.create(null);
     Object.keys(src.strings).forEach(function (k) { dict[norm(k)] = src.strings[k]; });
     patterns = src.patterns || [];
@@ -70,13 +72,12 @@
     }
     return null;
   }
-  // Arabic style guide: the percent sign precedes the number ("%50"), no space.
   // Untranslated Latin-only text (names, models) is isolated whole, so trailing
-  // punctuation stays with it ("Mariam K." not ".Mariam K").
+  // punctuation stays with it ("Mariam K." not ".Mariam K"); list separators (·, —, |)
+  // stay outside the isolate so they keep their place in the RTL reading order.
   function isolate(s) {
-    s = s.replace(/(\d+(?:[.,]\d+)?)\s?%/g, '%$1');
     if (/[A-Za-z]/.test(s) && !/[\u0600-\u06ff]/.test(s)) {
-      var m = s.match(/^(\s*)([\s\S]*?)(\s*)$/);
+      var m = s.match(/^(\s*(?:[·•—–|]\s*)?)([\s\S]*?)((?:\s*[·•—–|])?\s*)$/);
       return m[2] ? m[1] + LRI + m[2] + PDI + m[3] : s;
     }
     return s.replace(LTR_RUN, function (m) { return LRI + m + PDI; });
@@ -100,6 +101,7 @@
       var m = src.match(/^(\s*)[\s\S]*?(\s*)$/);
       out = m[1] + t + m[2];
     } else out = src;
+    if (post) out = post(out);
     out = isolate(out);
     if (out === src) return;
     n.__en = src; n.__ar = out; n.data = out;

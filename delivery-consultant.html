@@ -7,9 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
-  <link href="rtl.css?v=9" rel="stylesheet" />
-  <script src="i18n-ar.js?v=9"></script>
-  <script src="i18n.js?v=9"></script>
+  <link href="rtl.css?v=12" rel="stylesheet" />
+  <script src="i18n-ar.js?v=12"></script>
+  <script src="i18n.js?v=12"></script>
   <style>
     :root {
       --bg: #f5f5f5;
@@ -1008,7 +1008,7 @@
     var copilotLabels = {"today": "What's my delivery schedule today?", "blockers": "What's blocking deliveries?", "next": "What should I do next?"};
     var copilotAnswers = {"today": {"body": "Today&rsquo;s deliveries: <strong>Fatima Al Suwaidi</strong> 14:00 (in progress), <strong>Linda George</strong> 16:00 (ready), <strong>Karim Saleh</strong> 19:30 home delivery (depart 18:45). Two are on track; Linda needs the signed delivery note.", "cite": "Based on: Delivery schedule \u00b7 status", "actions": ["Open schedule"]}, "blockers": {"body": "<strong>Blocking deliveries:</strong> Rashid Al Amri (Emirates ID copy), Omar Bilal (PDI pending), Aisha Khalifa (payment pending), Maya Hassan (awaiting confirmation). Chase Rashid &amp; Aisha first &mdash; both due tomorrow.", "cite": "Based on: Readiness blockers \u00b7 document/payment status", "actions": ["View blockers"]}, "next": {"body": "Next action: <strong>start Linda George&rsquo;s handover</strong> (16:00, vehicle ready, note unsigned). Then confirm Maya Hassan&rsquo;s home-delivery slot and chase Omar Bilal&rsquo;s PDI.", "cite": "Based on: Delivery schedule \u00b7 next-action column", "actions": ["Start handover", "Confirm slot"]}};
     // The Arabic UI gets Copilot replies written in Arabic rather than stitched from translated fragments.
-    var copilotAnswersAr = {"today": {"body": "عمليات التسليم اليوم: <strong>Fatima Al Suwaidi</strong> 14:00 (قيد التقدم)، و<strong>Linda George</strong> 16:00 (جاهز)، و<strong>Karim Saleh</strong> 19:30 تسليم منزلي (المغادرة 18:45). اثنتان على المسار الصحيح؛ تحتاج Linda إلى إشعار تسليم موقّع.", "cite": "استنادًا إلى: جدول التسليم · الحالة", "actions": ["فتح الجدول"]}, "blockers": {"body": "<strong>عوائق التسليم:</strong> Rashid Al Amri (نسخة الهوية الإماراتية)، وOmar Bilal (PDI معلّق)، وAisha Khalifa (الدفع معلّق)، وMaya Hassan (بانتظار التأكيد). تابع Rashid وAisha أولًا &mdash; كلاهما مستحق غدًا.", "cite": "استنادًا إلى: عوائق الجاهزية · حالة المستندات/الدفع", "actions": ["عرض العوائق"]}, "next": {"body": "الإجراء التالي: <strong>بدء تسليم Linda George</strong> (16:00، المركبة جاهزة، الإشعار غير موقّع). ثم أكّد موعد التسليم المنزلي لـ Maya Hassan وتابع PDI الخاص بـ Omar Bilal.", "cite": "استنادًا إلى: جدول التسليم · عمود الإجراء التالي", "actions": ["بدء التسليم", "تأكيد الموعد"]}};
+    var copilotAnswersAr = {"today": {"body": "عمليات التسليم اليوم: <strong>Fatima Al Suwaidi</strong> 14:00 (قيد التقدم)، و<strong>Linda George</strong> 16:00 (جاهز)، و<strong>Karim Saleh</strong> 19:30 تسليم منزلي (المغادرة 18:45). اثنتان في الموعد؛ تحتاج Linda إلى إشعار تسليم موقّع.", "cite": "استنادًا إلى: جدول التسليم · الحالة", "actions": ["فتح الجدول"]}, "blockers": {"body": "<strong>عوائق التسليم:</strong> Rashid Al Amri (نسخة الهوية الإماراتية)، وOmar Bilal (PDI معلّق)، وAisha Khalifa (الدفع معلّق)، وMaya Hassan (بانتظار التأكيد). تابع Rashid وAisha أولًا &mdash; كلاهما مستحق غدًا.", "cite": "استنادًا إلى: عوائق الجاهزية · حالة المستندات/الدفع", "actions": ["عرض العوائق"]}, "next": {"body": "الإجراء التالي: <strong>بدء تسليم Linda George</strong> (16:00، المركبة جاهزة، الإشعار غير موقّع). ثم أكّد موعد التسليم المنزلي لـ Maya Hassan وتابع PDI الخاص بـ Omar Bilal.", "cite": "استنادًا إلى: جدول التسليم · عمود الإجراء التالي", "actions": ["بدء التسليم", "تأكيد الموعد"]}};
     function copilotMatch(q){ q=(q||'').toLowerCase(); if(/block|pending|stuck|عائق|عوائق|معلّق|معلق/.test(q)) return 'blockers'; if(/next|first|do|التالي|أولًا|أولا/.test(q)) return 'next'; return 'today'; }
 
     function toggleCopilot(){ var dd=document.getElementById('copilotDD'),ov=document.getElementById('copilotOverlay'); var o=dd.classList.toggle('open'); if(ov)ov.classList.toggle('open',o); }
@@ -1027,6 +1027,6 @@
       copilotRender(intent);
     }
   </script>
-  <script src="copilot-widget.js?v=10" defer></script>
+  <script src="copilot-widget.js?v=12" defer></script>
 </body>
 </html>

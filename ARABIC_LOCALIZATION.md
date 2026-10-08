@@ -70,60 +70,54 @@ Microsoft does not publish Arabic screenshots of model-driven apps. The evidence
 
 ## Terminology
 
-**Confirmed against Microsoft sources (T, QL, ACT, CL, CO, QT, MOS):**
-- العميل المتوقع: lead
-- العملاء المتوقعون: leads
+**Business review (8 Oct 2026): these decisions override the Microsoft terms where they differ.**
+
+| English | Arabic in the product | Note |
+|---|---|---|
+| Lead / Leads | عميل محتمل / العملاء المحتملون | Microsoft uses عميل متوقع; replaced at business request |
+| Hot / Warm / Cold | عالي / متوسط / منخفض الاهتمام | قوي means "strong" |
+| SLA breached / Breached | تجاوز مهلة الخدمة / تجاوز المهلة | |
+| SLA met / On track | ضمن المهلة / في الموعد | |
+| Blocked / Stalled | متعثّر / بلا تقدّم | معطّل means "broken" |
+| Nurture | قيد المتابعة | |
+| Returned / Return rate | مُعاد من المبيعات / معدل الإعادة | |
+| Sales Executive | مستشار المبيعات | |
+| Brand Host | مضيف صالة العرض | |
+| My Queue / On shift | قائمتي / في الوردية | |
+| AHT / GP | متوسط وقت المعالجة / إجمالي الربح | AHT uses the Call Center Manager wording |
+| 800 Number / Toll-free | رقم 800 | |
+| Cancel | إلغاء | |
+| Surveys | استبيانات | |
+| Offer (pipeline stage) | عرض السعر | |
+| Propose / Accepted / Close (journey) | تقديم العرض / تم القبول / الإغلاق | |
+| Close — Won / Lost | الإغلاق — تم البيع / لم يتم البيع | مربحة means "profitable" |
+| Red-carpet handover | التسليم المميز (السجادة الحمراء) | |
+| Branch codes SZR / DEI / AUH / SHJ / AAN | شارع الشيخ زايد / ديرة / أبوظبي / الشارقة / العين | |
+
+**Microsoft terms still in use:**
 - الفرصة: opportunity
 - الحساب: account
 - جهة الاتصال: contact
 - المالك: owner
 - الحالة: status
 - التصنيف: rating
-  - قوي / متوسط / ضعيف: Hot / Warm / Cold
 - تأهيل / إلغاء تأهيل: Qualify / Disqualify
-- مؤهل: Qualified
 - الأنشطة: activities
-- مكالمة هاتفية: phone call
-- مهمة: task
-- موعد: appointment
-- ملاحظات: notes
-- البريد الإلكتروني: email
-- الاسم الأول / الاسم الأخير: first / last name
 - عرض أسعار: quote
 - المخطط الزمني: timeline
-- تفاصيل: details
-- مرتبطة / السجلات المرتبطة: related
 - لوحة المعلومات: dashboard
 - الرئيسية: home
-- حفظ / حفظ وإغلاق / جديد / تحرير / حذف / بحث / تصفية / فرز / تحديث / مشاركة / تعيين: Save / Save & Close / New / Edit / Delete / Search / Filter / Sort / Refresh / Share / Assign
-- إلغاء الأمر: Cancel
-- تحديد الكل: select all
-- الإطار الزمني للشراء: purchase timeframe
-- الاقتراح / الإغلاق: Propose / Close stages
-- متخذ القرار: decision maker
-- منافس: competitor
 - تدفق المبيعات: pipeline
 
-**Needs business validation.** There is no Microsoft Arabic string for these, or the evidence was weak:
-
-| English | Used | Note |
-|---|---|---|
-| My Active Leads | عملائي المتوقعون النشطون | Follows the SG possessive rule |
-| Test drive | تجربة قيادة | Microsoft's only term (إصدار تجريبي) means a software trial |
-| Trade-in | الاستبدال | GCC dealers also use مقايضة |
-| Walk-in | زيارة مباشرة | |
-| Showroom | صالة العرض | معرض is also common in the UAE |
-| Proposal (vs Quote) | مقترح (vs عرض أسعار) | Kept distinct because the journey has both |
-| Lead Temperature | تصنيف العميل المتوقع | Mapped to D365 Rating, with Hot/Warm/Cold = قوي/متوسط/ضعيف |
-| Close — Won / Lost | الإغلاق — مربحة / خاسرة | Microsoft prose varies (مربحة/فائزة/رابحة) |
-| Discovery | الاستكشاف | |
-| Sales Executive | مسؤول المبيعات | SG prefers inclusive wording over مندوب |
-| Mobile | المحمول | Microsoft uses both المحمول and الجوال; UAE usage favours المحمول |
-| Recent / Pinned / Back | الأخيرة / المثبتة / رجوع | |
-| Created / Assigned (SLA tiles) | تاريخ الإنشاء / تاريخ التعيين | |
-| SLA, CSI, NPS, VIN, F&O | kept in Latin | SG allows acronyms in Latin where space is short; spell out in help text if needed |
-| AED | kept in Latin | Alternative: د.إ placed after the number |
-| Sales Co-Pilot | Copilot المبيعات | Product naming decision |
+**Style decisions from the review:**
+- **Buttons and CTAs use the imperative**, e.g. ابدأ المكالمة، اتصل بالعميل، سلّم إلى المبيعات، صحّح وأعد الإرسال، عيّن، أعد الجدولة، احفظ. These stay as nouns:
+  - journey checklist items
+  - field labels, dropdown options and placeholders
+  - "Cancel" (إلغاء)
+- **Numbers follow Arabic agreement and use full unit words:** 8 دقائق, 15 دقيقة, منذ يومين, منذ 4 أيام, ساعة واحدة و20 دقيقة, لم يرد (3 مرات). Comparisons read أقل من / أكثر من.
+- **Percentages always display as 92%.** They're isolated as LTR runs, because after Arabic letters the bidi algorithm would otherwise show %92.
+- **Currency is shown in dirhams:** 159,900 درهم, 185 ألف درهم, 1.05 مليون درهم, 2,150 درهم شهريًا.
+- **Arab names show in Arabic script** in Arabic mode, e.g. مايا حسن. Other names (Hiren Patel, Linda George) stay as entered, and record values themselves aren't changed.
 
 ## Validation (Chrome, 1440×900, automated and visual)
 

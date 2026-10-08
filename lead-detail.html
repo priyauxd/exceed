@@ -10,9 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
-  <link href="rtl.css?v=9" rel="stylesheet" />
-  <script src="i18n-ar.js?v=9"></script>
-  <script src="i18n.js?v=9"></script>
+  <link href="rtl.css?v=12" rel="stylesheet" />
+  <script src="i18n-ar.js?v=12"></script>
+  <script src="i18n.js?v=12"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -2573,6 +2573,8 @@
       var upcoming = [];
       for (var k = currentStep + 1; k < journeySteps.length && upcoming.length < 2; k++) upcoming.push(journeySteps[k].name);
       while (upcoming.length < 2) upcoming.push(journeySteps[Math.min(currentStep, journeySteps.length - 1)].name);
+      // Arabic review: near the end of the journey read the current stage first, then the next
+      if (I18N.lang === 'ar' && upcoming[0] !== upcoming[1] && journeySteps.map(function(j){ return j.name; }).indexOf(upcoming[1]) < journeySteps.map(function(j){ return j.name; }).indexOf(upcoming[0])) upcoming.reverse();
       var createdDT = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time : '—';
       var assignedDT = (l.owner && l.owner !== 'Unassigned') ? (createdDT + ' · ' + l.owner) : 'Pending assignment';
 
@@ -3473,11 +3475,22 @@
       });
       return vis;
     }
+    // English counts answer fields; the Arabic review asked for questions (a question with follow-ups is done once all its fields are answered).
     function dqProgress(l, defs, set){
-      var qs = defs.filter(function(f){ return f.set === set && !f.note; });
+      if (I18N.lang !== 'ar'){
+        var qs = defs.filter(function(f){ return f.set === set && !f.note; });
+        var dn = 0, sk = 0;
+        qs.forEach(function(f){ if (dqHas(l, f.k)){ dn++; if (dqSkipped(l, f.k)) sk++; } });
+        return { total: qs.length, done: dn, skip: sk };
+      }
+      var groups = {}, order = [];
+      defs.forEach(function(f){ if (f.set !== set || f.note) return; if (!groups[f.grp]){ groups[f.grp] = []; order.push(f.grp); } groups[f.grp].push(f); });
       var done = 0, skip = 0;
-      qs.forEach(function(f){ if (dqHas(l, f.k)){ done++; if (dqSkipped(l, f.k)) skip++; } });
-      return { total: qs.length, done: done, skip: skip };
+      order.forEach(function(g){
+        var fs = groups[g];
+        if (fs.every(function(f){ return dqHas(l, f.k); })){ done++; if (dqSkipped(l, fs[0].k)) skip++; }
+      });
+      return { total: order.length, done: done, skip: skip };
     }
 
     // Which menu is open and where focus goes after the pane re-renders.
@@ -6271,8 +6284,8 @@
     function scReplyAr(kind){
       var l = scLead(), v = scOurs(), t = function(x){ return scEsc(I18N.t(String(x == null ? '' : x))); };
       if (kind === 'recap'){
-        if (!l) return 'لا يوجد عميل متوقع مفتوح حاليًا. افتح سجل عميل متوقع وسألخّصه لك من CRM.';
-        return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + t(l.stage) + ' &middot; درجة العميل المتوقع ' + l.score + '، واحتمال التحويل %' + l.convertProb + '.<br>' +
+        if (!l) return 'لا يوجد عميل محتمل مفتوح حاليًا. افتح سجل عميل محتمل وسألخّصه لك من CRM.';
+        return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + t(l.stage) + ' &middot; درجة العميل المحتمل ' + l.score + '، واحتمال التحويل %' + l.convertProb + '.<br>' +
           'مهتم بـ ' + scEsc(l.model) + '، وصل عبر ' + t(l.source) + '، ويفضّل ' + t(l.preferred) + ' باللغة ' + t(l.lang) + '.<br>' +
           'SLA: ' + t(l.slaTime) + '. اكتمل الاستكشاف بنسبة %' + l.discovery + ' &mdash; ما زالت الموازنة وشروط التمويل غير محددة.';
       }
@@ -7168,6 +7181,6 @@
       scAct('Test drive booked for ' + l.name + ' — ' + tdFmtDate(booking.date) + ' at ' + booking.time);
     }
   </script>
-  <script src="copilot-widget.js?v=10" defer></script>
+  <script src="copilot-widget.js?v=12" defer></script>
 </body>
 </html>

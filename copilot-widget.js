@@ -95,6 +95,30 @@
   ];
   var PERSONA_DEFAULT = 'call-center-agent.html';
 
+  // Proactive card (Arabic): one message per dashboard, written whole so the grammar holds.
+  var PROACTIVE = {
+    'call-center-agent.html': ['<strong>Maya Hassan</strong> breached the first-contact SLA and is still not actioned — a hot lead on EXEED TXL. Contact her first.',
+      '<strong>Maya Hassan</strong> تجاوزت مهلة التواصل الأول ولم يُتخذ أي إجراء بعد — عميلة محتملة عالية الاهتمام على EXEED TXL. تواصل معها أولًا.'],
+    'call-center-manager.html': ['<strong>Lina Osman</strong> has 25 assigned leads and 4 SLA breaches. Rebalance 5 leads to Farhan Aslam or Ivan Petrov.',
+      'لدى <strong>Lina Osman</strong> 25 عميلًا محتملًا و4 حالات تجاوز لمهلة الخدمة. أعد توزيع 5 عملاء محتملين على Farhan Aslam أو Ivan Petrov.'],
+    'brand-host.html': ['<strong>2 hot walk-in leads</strong> are waiting for an executive. Assign them now to keep first-contact SLA on time.',
+      '<strong>عميلان محتملان عاليا الاهتمام</strong> وصلا مباشرة وينتظران مستشار مبيعات. عيّنهما الآن للالتزام بمهلة التواصل الأول.'],
+    'showroom-manager.html': ['<strong>AED 1,049k</strong> of deals is at risk, and Karim Mostafa’s queue is stalled with 4 overdue commitments.',
+      '<strong>AED 1,049k</strong> من الصفقات معرّضة للخطر، وقائمة Karim Mostafa بلا تقدّم مع 4 التزامات متأخرة.'],
+    'head-of-sales.html': ['Approve the <strong>LX finance promo</strong> to counter BYD’s lower monthly payments — 12 active leads are at risk.',
+      'اعتمد <strong>عرض تمويل LX</strong> لمواجهة أقساط BYD الشهرية الأقل — 12 عميلًا محتملًا نشطًا معرّضون للخطر.'],
+    'sales-executive.html': ['<strong>Sara Khalid</strong> breached the first-contact SLA — a hot WhatsApp lead on EXEED TXL. Call her first.',
+      '<strong>Sara Khalid</strong> تجاوزت مهلة التواصل الأول — عميلة محتملة عالية الاهتمام عبر WhatsApp على EXEED TXL. اتصل بها أولًا.'],
+    'delivery-consultant.html': ['<strong>Linda George</strong>’s 16:00 handover is vehicle-ready, but the delivery note is still unsigned.',
+      'تسليم <strong>Linda George</strong> في 16:00 جاهز من ناحية المركبة، لكن إشعار التسليم لم يُوقَّع بعد.']
+  };
+  function proactiveHtml() {
+    var page = (location.pathname.split('/').pop() || '').toLowerCase();
+    var m = PROACTIVE[page] || PROACTIVE[PERSONA_DEFAULT];
+    // English keeps the original message on every page; Arabic gets the per-dashboard one.
+    return window.I18N && I18N.lang === 'ar' ? m[1] : PROACTIVE[PERSONA_DEFAULT][0];
+  }
+
   // Define global toggles up-front so they exist even if injection is skipped/fails.
   if (!window.toggleCopilot) {
     window.toggleCopilot = function () {
@@ -144,11 +168,12 @@
         '<div class="cw-phead"><span class="cw-t"><span class="material-symbols-outlined">auto_awesome</span>COPILOT</span>' +
         '<span class="cw-sub">Grounded on your data</span><button class="cw-close" onclick="toggleCopilot()">&times;</button></div>' +
         '<div class="cw-pbody">' +
-          '<div class="cw-card"><span class="cw-tag">Proactive</span><p><strong>Maya Hassan</strong> breached the first-contact SLA and is still not actioned — a hot lead on EXEED TXL. Contact her first.</p></div>' +
+          '<div class="cw-card"><span class="cw-tag">Proactive</span><p id="cwProactive">' + proactiveHtml() + '</p></div>' +
           '<div class="cw-inrow"><input class="cw-input" placeholder="Ask about your leads…"><button class="cw-send">Ask</button></div>' +
           '<div class="cw-chips">' + CHIPS.map(function (c) { return '<span class="cw-chip">' + c + '</span>'; }).join('') + '</div>' +
         '</div>';
       document.body.appendChild(ov); document.body.appendChild(panel);
+      document.addEventListener('i18n:change', function () { var el = document.getElementById('cwProactive'); if (el) el.innerHTML = proactiveHtml(); });
     }
 
     // ---- Notifications ----
