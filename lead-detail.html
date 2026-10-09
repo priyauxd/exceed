@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <link href="rtl.css?v=12" rel="stylesheet" />
-  <script src="i18n-ar.js?v=17"></script>
+  <script src="i18n-ar.js?v=19"></script>
   <script src="i18n.js?v=13"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -6285,7 +6285,7 @@
     function scReplyAr(kind){
       var l = scLead(), v = scOurs(), t = function(x){ return scEsc(I18N.t(String(x == null ? '' : x))); };
       if (kind === 'recap'){
-        if (!l) return 'لا يوجد عميل محتمل مفتوح حاليًا. افتح سجل عميل محتمل وسألخّصه لك من CRM.';
+        if (!l) return 'لم يتم فتح أي عميل محتمل حاليًا. افتح سجل عميل محتمل وسألخّصه لك من CRM.';
         return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + t(l.stage) + ' &middot; درجة العميل المحتمل ' + l.score + '، واحتمال التحويل %' + l.convertProb + '.<br>' +
           'مهتم بـ ' + scEsc(l.model) + '، وصل عبر ' + t(l.source) + '، ويفضّل ' + t(l.preferred) + ' باللغة ' + t(l.lang) + '.<br>' +
           'SLA: ' + t(l.slaTime) + '. اكتمل الاستكشاف بنسبة %' + l.discovery + ' &mdash; ما زالت الموازنة وشروط التمويل غير محددة.';
