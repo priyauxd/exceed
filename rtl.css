@@ -72,3 +72,15 @@
 /* Dashboard KPI cards: the corner tag (LIVE, etc.) would sit on top of the longer Arabic
    title, so in Arabic it joins the card's centred column above the title instead. */
 :root[lang|="ar"] .metric-card > .mc-tag { position: static; margin-bottom: 6px; }
+
+/* Native dropdowns in Arabic: the browser's own arrow sits flush against the start edge with no room,
+   so every plain <select> gets a drawn chevron at the inline end (left) with padding to clear it.
+   Selects that already draw their own arrow (.sc-pick, the builder's year/campaign pickers) are skipped. */
+:root[lang|="ar"] select:not([multiple]):not([size]):not(.sc-pick):not(.year-pick select) {
+  -webkit-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23616161' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: left 10px center !important;
+  background-size: 10px 6px !important;
+  padding-inline-end: 28px !important;
+}
