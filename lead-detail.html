@@ -10,8 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
-  <link href="rtl.css?v=12" rel="stylesheet" />
-  <script src="i18n-ar.js?v=19"></script>
+  <link href="rtl.css?v=13" rel="stylesheet" />
+  <script src="i18n-ar.js?v=23"></script>
   <script src="i18n.js?v=13"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -5486,6 +5486,20 @@
     .sc-send{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;border:none;background:#182338;color:#fff;}
     .sc-send:hover{background:var(--sc-accent-hover);}
     .sc-send .material-symbols-outlined{font-size:19px;}
+    /* On-screen Arabic keyboard (standard Arabic 101 layout) for machines without an Arabic input source */
+    .sc-kbd-btn{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;border:1px solid #e3e7ee;background:#fff;color:#2b3444;}
+    .sc-kbd-btn:hover,.sc-kbd-btn[aria-expanded="true"]{border-color:var(--sc-accent);color:var(--sc-accent);}
+    .sc-kbd-btn .material-symbols-outlined{font-size:20px;}
+    :root:not([lang|="ar"]) .sc-kbd-btn{display:none;}
+    .sc-kbd{margin-top:10px;display:grid;gap:5px;font-family:'Almarai','Segoe UI',sans-serif;}
+    .sc-kbd[hidden]{display:none;}
+    .sc-kbd-row{display:flex;gap:4px;justify-content:center;}
+    .sc-kbd button{flex:1 1 0;min-width:0;height:34px;border:1px solid #e3e7ee;border-radius:7px;background:#f7f8fa;color:#242b38;font-family:inherit;font-size:15px;cursor:pointer;padding:0;}
+    .sc-kbd button:hover{background:#eceff4;}
+    .sc-kbd button:active{background:#e1e5ec;}
+    .sc-kbd button.wide{flex:2.4 1 0;font-size:12px;}
+    .sc-kbd button.fn{background:#eef0f4;font-size:12px;}
+    .sc-kbd button .material-symbols-outlined{font-size:17px;vertical-align:middle;}
 
     /* ── shared card furniture ── */
     .sc-card{background:#fafafa;border:1px solid #f5f5f5;border-radius:12px;padding:14px 15px;margin-bottom:12px;}
@@ -5887,9 +5901,11 @@
         <div class="sc-foot">
           <div class="sc-chips" id="scChips"></div>
           <div class="sc-inrow">
-            <input class="sc-input" id="scInput" placeholder="Ask the co-pilot..." aria-label="Ask the co-pilot" onkeydown="if(event.key==='Enter')scSend()" />
+            <input class="sc-input" id="scInput" dir="auto" placeholder="Ask the co-pilot..." aria-label="Ask the co-pilot" onkeydown="if(event.key==='Enter')scSend()" />
+            <button class="sc-kbd-btn" id="scKbdBtn" type="button" onclick="scKbdToggle()" aria-label="Arabic keyboard" title="Arabic keyboard" aria-expanded="false"><span class="material-symbols-outlined">keyboard</span></button>
             <button class="sc-send" onclick="scSend()" aria-label="Send"><span class="material-symbols-outlined">send</span></button>
           </div>
+          <div class="sc-kbd" id="scKbd" hidden data-i18n-skip dir="rtl" lang="ar"></div>
         </div>
       </section>
 
@@ -6286,17 +6302,17 @@
       var l = scLead(), v = scOurs(), t = function(x){ return scEsc(I18N.t(String(x == null ? '' : x))); };
       if (kind === 'recap'){
         if (!l) return 'لم يتم فتح أي عميل محتمل حاليًا. افتح سجل عميل محتمل وسألخّصه لك من CRM.';
-        return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + t(l.stage) + ' &middot; درجة العميل المحتمل ' + l.score + '، واحتمال التحويل %' + l.convertProb + '.<br>' +
+        return '<strong>' + scEsc(l.name) + '</strong> &middot; ' + t(l.stage) + ' &middot; درجة العميل المحتمل ' + l.score + '، واحتمال التحويل ' + l.convertProb + '%.<br>' +
           'مهتم بـ ' + scEsc(l.model) + '، وصل عبر ' + t(l.source) + '، ويفضّل ' + t(l.preferred) + ' باللغة ' + t(l.lang) + '.<br>' +
-          'SLA: ' + t(l.slaTime) + '. اكتمل الاستكشاف بنسبة %' + l.discovery + ' &mdash; ما زالت الموازنة وشروط التمويل غير محددة.';
+          'المهلة: ' + t(l.slaTime) + '. اكتمل تحديد الاحتياج بنسبة ' + l.discovery + '% &mdash; ما زالت الميزانية وشروط التمويل غير محددة.';
       }
       if (kind === 'recommend'){
         var rv = scCompFind(SC_ACTIVE);
         return 'ثلاثة أمور تميّز العلامة التجارية، بهذا الترتيب:<br>' +
           '<strong>1. تكلفة الملكية.</strong> ضمان ' + t(v.warranty) + ' وباقة خدمة ' + t(v.service) +
           (rv ? '، مقابل ' + t(rv.warranty) + ' وباقة ' + t(rv.service) + ' لدى ' + scEsc(rv.name) : '') + '.<br>' +
-          '<strong>2. التجهيزات مقابل السعر.</strong> ' + scEsc(v.adas) + ' وكاميرا 540&deg; ومقصورة الشاشتين تأتي في فئة سعرية أدنى مما تضعها فيه العلامات اليابانية.<br>' +
-          '<strong>3. إنها فئة فاخرة وليست اقتصادية.</strong> تتفوق EXEED على Chery في المواد والعزل الصوتي، ولها صالات خدمة خاصة بها.<br>' +
+          '<strong>2. التجهيزات مقابل السعر.</strong> أنظمة ADAS ' + t(v.adas) + ' وكاميرا 540&deg; ومقصورة الشاشتين تأتي في فئة سعرية أدنى مما تضعها فيه العلامات اليابانية.<br>' +
+          '<strong>3. إنها فئة فاخرة وليست اقتصادية.</strong> تتفوق EXEED على Chery في المواد والعزل الصوتي، ولها مراكز خدمة خاصة بها.<br>' +
           'لهذا العميل، الخيار هو <strong>' + scEsc(v.name + ' ' + scTopTrim(v)) + '</strong> &mdash; ' + scMoney(v.price) + '، ' + scMoney(v.mo) + ' شهريًا، المتوفر: ' + v.stock + '. التفاصيل في تبويب <em>المركبات</em>.';
       }
       if (kind === 'compare'){
@@ -6319,14 +6335,62 @@
       }
       return 'جارٍ التحقق من ذلك مقابل سجل CRM الحالي والمخزون المباشر &mdash; سأؤكد قبل حفظ أي شيء.';
     }
+    // Arabic questions are matched on a normalised form: no diacritics or tatweel, one alef, ى→ي, ة→ه,
+    // so "إعادة البيع", "اعاده البيع" and "إعادةُ البيع" all land on the same intent.
+    function scNormAr(q){ return q.replace(/[\u064B-\u0652\u0640]/g, '').replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه'); }
+    function scIntent(q){
+      var a = scNormAr(q);
+      if (/recap|summar/i.test(q) || /ملخص|لخص|نبذه|وضع العميل|حاله العميل|معلومات العميل|عن العميل/.test(a)) return 'recap';
+      if (/compare|vs |patrol|santa|highlander|pathfinder|monjaro|jetour|lexus|byd/i.test(q) || /قارن|مقارنه|مقابل|منافس|باترول|نيسان|تويوتا|لكزس|جيتور|مونجارو|سانتا|بي واي دي|هايلاندر/.test(a)) return 'compare';
+      if (/resale|deprecia|resell|value hold/i.test(q) || /اعاده البيع|اعاده بيع|الاستهلاك|استهلاك|قيمه السياره|تنزل قيمتها|يخسر|خساره القيمه/.test(a)) return 'resale';
+      if (/recommend|best fit|suggest|why exeed/i.test(q) || /لماذا|ليش|انسب|افضل|اقترح|توصيه|ترشح|تنصح/.test(a)) return 'recommend';
+      if (/draft|message|whatsapp|email/i.test(q) || /مسوده|رساله|بريد|ايميل|واتساب|واتس|اكتب|صغ|صياغه/.test(a)) return 'draft';
+      return '';
+    }
     function scSend(){
       var i = document.getElementById('scInput'); if (!i || !i.value.trim()) return;
       var q = i.value.trim(); i.value = ''; scPush(scEsc(q), true);
-      var k = /recap|summar|ملخص|لخّص|لخص/i.test(q) ? 'recap' : /compare|vs |patrol|santa|highlander|pathfinder|monjaro|jetour|lexus|قارن|مقارنة|مقابل/i.test(q) ? 'compare'
-            : /resale|deprecia|resell|value hold|إعادة البيع|الاستهلاك/i.test(q) ? 'resale'
-            : /recommend|best fit|suggest|لماذا|أنسب|اقترح|توصية/i.test(q) ? 'recommend' : /draft|message|whatsapp|email|مسودة|رسالة|بريد/i.test(q) ? 'draft' : '';
-      scThink(scReply(k));
+      scThink(scReply(scIntent(q)));
     }
+    var SC_KBD_ROWS = [
+      ['ض','ص','ث','ق','ف','غ','ع','ه','خ','ح','ج','د'],
+      ['ش','س','ي','ب','ل','ا','ت','ن','م','ك','ط'],
+      ['ئ','ء','ؤ','ر','لا','ى','ة','و','ز','ظ','ذ'],
+      ['أ','إ','آ','،','؟','.','0','1','2','3','4','5','6','7','8','9']
+    ];
+    function scKbdRender(){
+      var k = document.getElementById('scKbd'); if (!k || k.childNodes.length) return;
+      k.innerHTML = SC_KBD_ROWS.map(function(r){
+        return '<div class="sc-kbd-row">' + r.map(function(ch){ return '<button type="button" data-k="' + ch + '">' + ch + '</button>'; }).join('') + '</div>';
+      }).join('') +
+        '<div class="sc-kbd-row">' +
+          '<button type="button" class="fn" data-k="BS" aria-label="حذف"><span class="material-symbols-outlined">backspace</span></button>' +
+          '<button type="button" class="wide" data-k=" ">مسافة</button>' +
+          '<button type="button" class="fn" data-k="EN">إرسال</button>' +
+        '</div>';
+      // mousedown keeps focus (and the caret) in the input while a key is pressed
+      k.addEventListener('mousedown', function(e){ if (e.target.closest('button')) e.preventDefault(); });
+      k.addEventListener('click', function(e){ var b = e.target.closest('button'); if (b) scKbdKey(b.getAttribute('data-k')); });
+    }
+    function scKbdToggle(){
+      var k = document.getElementById('scKbd'), b = document.getElementById('scKbdBtn'); if (!k) return;
+      scKbdRender();
+      k.hidden = !k.hidden;
+      if (b) b.setAttribute('aria-expanded', k.hidden ? 'false' : 'true');
+      var i = document.getElementById('scInput'); if (i) i.focus();
+    }
+    function scKbdKey(key){
+      var i = document.getElementById('scInput'); if (!i) return;
+      if (key === 'EN') { scSend(); i.focus(); return; }
+      var s = i.selectionStart == null ? i.value.length : i.selectionStart, e = i.selectionEnd == null ? s : i.selectionEnd;
+      if (key === 'BS') { if (s === e && s > 0) s--; i.value = i.value.slice(0, s) + i.value.slice(e); i.setSelectionRange(s, s); }
+      else { i.value = i.value.slice(0, s) + key + i.value.slice(e); s += key.length; i.setSelectionRange(s, s); }
+      i.focus();
+    }
+    // The keyboard is an Arabic-mode aid; switching to English closes it.
+    document.addEventListener('i18n:change', function(e){
+      if (e.detail && e.detail.lang !== 'ar') { var k = document.getElementById('scKbd'), b = document.getElementById('scKbdBtn'); if (k) k.hidden = true; if (b) b.setAttribute('aria-expanded', 'false'); }
+    });
 
     /* ── vehicles (best fit first, then the line-up) ──────────────────── */
     var SC_VEH_OPEN = null;   // code of the expanded row

@@ -68,3 +68,7 @@
    the funnel KPI captions, which truncate in English too, may wrap to a second line instead. */
 :root[lang|="ar"] :is(.leads-table th, .sla-tag, .st-badge, .dp-lead-tag, .id-cell .id-text) { white-space: nowrap; }
 :root[lang|="ar"] .cfun-lbl { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.35; }
+
+/* Dashboard KPI cards: the corner tag (LIVE, etc.) would sit on top of the longer Arabic
+   title, so in Arabic it joins the card's centred column above the title instead. */
+:root[lang|="ar"] .metric-card > .mc-tag { position: static; margin-bottom: 6px; }
