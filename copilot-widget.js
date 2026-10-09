@@ -290,3 +290,97 @@
    } catch (e) { console.warn('copilot-widget injection skipped:', e); }
   });
 })();
+
+/* Arabic on-screen keyboard for every dashboard Copilot box (the shared widget and the native
+   call-centre / delivery boxes), plus Ask/Enter/chips on the shared widget, which had no handler.
+   The lead page's Sales Co-Pilot ships its own keyboard (#scKbdBtn), so it is left alone. */
+(function () {
+  var ROWS = [
+    ['ض','ص','ث','ق','ف','غ','ع','ه','خ','ح','ج','د'],
+    ['ش','س','ي','ب','ل','ا','ت','ن','م','ك','ط'],
+    ['ئ','ء','ؤ','ر','لا','ى','ة','و','ز','ظ','ذ'],
+    ['أ','إ','آ','،','؟','.','0','1','2','3','4','5','6','7','8','9']
+  ];
+  var CSS =
+    '.cwk-btn{flex-shrink:0;width:36px;border-radius:6px;border:1px solid #eceef4;background:#fff;color:#424242;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}' +
+    '.cwk-btn:hover,.cwk-btn[aria-expanded="true"]{border-color:#5b54d6;color:#5b54d6;}' +
+    '.cwk-btn .material-symbols-outlined{font-size:19px;}' +
+    ':root:not([lang|="ar"]) .cwk-btn{display:none;}' +
+    '.cwk{display:grid;gap:4px;margin:2px 0 12px;font-family:"Almarai","Segoe UI",sans-serif;}' +
+    '.cwk[hidden]{display:none;}' +
+    '.cwk-row{display:flex;gap:3px;}' +
+    '.cwk button{flex:1 1 0;min-width:0;height:30px;border:1px solid #eceef4;border-radius:6px;background:#f7f8fa;color:#242424;font-family:inherit;font-size:14px;cursor:pointer;padding:0;}' +
+    '.cwk button:hover{background:#eceff4;}' +
+    '.cwk button.wide{flex:2.4 1 0;font-size:12px;}' +
+    '.cwk button.fn{background:#eef0f4;font-size:12px;}' +
+    '.cwk button .material-symbols-outlined{font-size:16px;vertical-align:middle;}' +
+    '.cw-ans{margin-top:12px;display:grid;gap:8px;}' +
+    '.cw-ans[hidden]{display:none;}' +
+    '.cw-ans .q{justify-self:end;background:#5b54d6;color:#fff;border-radius:10px;padding:7px 11px;font-size:12.5px;max-width:85%;}' +
+    '.cw-ans .a{background:#f5f5f8;border:1px solid #eceef4;border-radius:10px;padding:9px 11px;font-size:12.5px;color:#242424;line-height:1.55;}';
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function attach(input, send) {
+    if (!input || input.__cwk) return; input.__cwk = true;
+    input.setAttribute('dir', 'auto');
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'cwk-btn'; btn.title = 'Arabic keyboard';
+    btn.setAttribute('aria-label', 'Arabic keyboard'); btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span class="material-symbols-outlined">keyboard</span>';
+    input.parentNode.insertBefore(btn, input.nextSibling);
+    var kb = document.createElement('div');
+    kb.className = 'cwk'; kb.hidden = true; kb.setAttribute('dir', 'rtl'); kb.setAttribute('lang', 'ar'); kb.setAttribute('data-i18n-skip', '');
+    kb.innerHTML = ROWS.map(function (r) {
+      return '<div class="cwk-row">' + r.map(function (ch) { return '<button type="button" data-k="' + ch + '">' + ch + '</button>'; }).join('') + '</div>';
+    }).join('') +
+      '<div class="cwk-row"><button type="button" class="fn" data-k="BS" aria-label="حذف"><span class="material-symbols-outlined">backspace</span></button>' +
+      '<button type="button" class="wide" data-k=" ">مسافة</button><button type="button" class="fn" data-k="EN">إرسال</button></div>';
+    var row = input.parentNode;
+    row.parentNode.insertBefore(kb, row.nextSibling);
+    btn.addEventListener('click', function () { kb.hidden = !kb.hidden; btn.setAttribute('aria-expanded', kb.hidden ? 'false' : 'true'); input.focus(); });
+    // mousedown keeps focus (and the caret) in the input while a key is pressed
+    kb.addEventListener('mousedown', function (e) { if (e.target.closest('button')) e.preventDefault(); });
+    kb.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      var k = b.getAttribute('data-k');
+      if (k === 'EN') { send(); input.focus(); return; }
+      var s = input.selectionStart == null ? input.value.length : input.selectionStart, en = input.selectionEnd == null ? s : input.selectionEnd;
+      if (k === 'BS') { if (s === en && s > 0) s--; input.value = input.value.slice(0, s) + input.value.slice(en); }
+      else { input.value = input.value.slice(0, s) + k + input.value.slice(en); s += k.length; }
+      input.setSelectionRange(s, s); input.focus();
+    });
+    document.addEventListener('i18n:change', function (e) {
+      if (e.detail && e.detail.lang !== 'ar') { kb.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+    });
+  }
+
+  // Shared widget: Ask, Enter and the suggestion chips answer in the panel.
+  function wireWidget(panel) {
+    var input = panel.querySelector('.cw-input'); if (!input || input.__cwAsk) return; input.__cwAsk = true;
+    var ans = document.createElement('div'); ans.className = 'cw-ans'; ans.hidden = true;
+    var chips = panel.querySelector('.cw-chips');
+    (chips || input.parentNode).parentNode.insertBefore(ans, chips ? chips.nextSibling : input.parentNode.nextSibling);
+    function ask(text) {
+      var q = (text != null ? text : input.value).trim(); if (!q) return;
+      input.value = '';
+      var ar = window.I18N && I18N.lang === 'ar';
+      var reply = ar ? 'جارٍ التحقق من ذلك مقابل بيانات لوحة التحكم الحالية — سأؤكد قبل أي تغيير.'
+                     : 'Checking that against your live dashboard data — I\'ll confirm before anything changes.';
+      ans.innerHTML = '<div class="q">' + esc(q) + '</div><div class="a">' + reply + '</div>';
+      ans.hidden = false;
+    }
+    var send = panel.querySelector('.cw-send'); if (send) send.addEventListener('click', function () { ask(); });
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') ask(); });
+    if (chips) chips.addEventListener('click', function (e) { var c = e.target.closest('.cw-chip'); if (c) ask(c.textContent); });
+    attach(input, function () { ask(); });
+  }
+
+  function run() {
+    if (!document.getElementById('cwkStyle')) { var st = document.createElement('style'); st.id = 'cwkStyle'; st.textContent = CSS; document.head.appendChild(st); }
+    var panel = document.getElementById('cwCopilot'); if (panel) wireWidget(panel);
+    var native = document.getElementById('copilotInput');
+    if (native && typeof window.askCopilot === 'function') attach(native, function () { window.askCopilot(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+})();

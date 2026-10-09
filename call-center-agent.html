@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <link href="rtl.css?v=13" rel="stylesheet" />
-  <script src="i18n-ar.js?v=23"></script>
+  <script src="i18n-ar.js?v=24"></script>
   <script src="i18n.js?v=13"></script>
   <style>
     :root {
@@ -2228,7 +2228,7 @@
     var copilotAnswers = {"priority": {"body": "Work your <strong>7 not-actioned leads</strong> first. Highest priority: <strong>Maya Hassan</strong> (SLA breached), then <strong>Karim Saleh</strong> (1h 20m left). Two follow-ups are due at 14:30 (Aisha Khalifa) and 15:15 (Linda George).", "cite": "Based on: Not Actioned (7), Today\u2019s lead queue, Follow-ups due", "actions": ["Open Maya Hassan", "View queue"]}, "sla": {"body": "<strong>1 breached</strong> (Maya Hassan) and <strong>2 approaching</strong> &mdash; Aisha Khalifa (14:30) and Linda George (15:15). Action the breach now to limit exposure and protect first-contact SLA.", "cite": "Based on: SLA tags in Today\u2019s lead queue", "actions": ["Open Maya Hassan", "Snooze"]}, "handover": {"body": "<strong>3 qualified leads ready:</strong> Omar Nasser (EXEED TXL), Fatima Al Ali (EXEED VX), Yousef Rahman (EXEED LX). All have complete discovery &mdash; hand to Sales now to keep the SLA clock green.", "cite": "Based on: Ready to hand over (3)", "actions": ["Hand over all", "Review"]}, "draft": {"body": "Suggested <strong>WhatsApp (EN)</strong> to Aisha Khalifa: &ldquo;Hi Aisha, following up on your EXEED RX enquiry &mdash; I can hold a test-drive slot this weekend at SZR. Which day works for you?&rdquo; Review before sending.", "cite": "Based on: Follow-up due 14:30 \u00b7 preferred channel WhatsApp", "actions": ["Send via WhatsApp", "Edit draft"]}};
     // The Arabic UI gets Copilot replies written in Arabic rather than stitched from translated fragments.
     var copilotAnswersAr = {"priority": {"body": "ابدأ بـ <strong>7 عملاء محتملين بلا إجراء</strong>. الأولوية القصوى: <strong>Maya Hassan</strong> (تجاوز مهلة الخدمة)، ثم <strong>Karim Saleh</strong> (متبقٍ 1 س 20 د). مستحق متابعتان في 14:30 (Aisha Khalifa) و15:15 (Linda George).", "cite": "استنادًا إلى: بلا إجراء (7)، قائمة انتظار العملاء المحتملين اليوم، المتابعات المستحقة", "actions": ["فتح Maya Hassan", "عرض قائمة الانتظار"]}, "sla": {"body": "<strong>تجاوز المهلة: 1</strong> (Maya Hassan) و<strong>يقترب: 2</strong> &mdash; Aisha Khalifa (14:30) وLinda George (15:15). عالج حالة الإخلال الآن للحد من التأثير وحماية SLA التواصل الأول.", "cite": "استنادًا إلى: علامات SLA في قائمة انتظار العملاء المحتملين اليوم", "actions": ["فتح Maya Hassan", "تأجيل"]}, "handover": {"body": "<strong>3 عملاء محتملين مؤهلين جاهزون:</strong> Omar Nasser (EXEED TXL)، وFatima Al Ali (EXEED VX)، وYousef Rahman (EXEED LX). أكمل جميعهم الاستكشاف &mdash; سلّمهم إلى المبيعات الآن للحفاظ على مؤقت SLA في الوضع الأخضر.", "cite": "استنادًا إلى: جاهز للتسليم (3)", "actions": ["تسليم الكل", "مراجعة"]}, "draft": {"body": "رسالة <strong>WhatsApp (الإنجليزية)</strong> مقترحة إلى Aisha Khalifa: &ldquo;Hi Aisha, following up on your EXEED RX enquiry &mdash; I can hold a test-drive slot this weekend at SZR. Which day works for you?&rdquo; راجعها قبل الإرسال.", "cite": "استنادًا إلى: متابعة مستحقة 14:30 · القناة المفضلة WhatsApp", "actions": ["إرسال عبر WhatsApp", "تحرير المسودة"]}};
-    function copilotMatch(q){ q=(q||'').toLowerCase(); if(/sla|breach|overdue|due|إخلال|متأخر|مستحق/.test(q)) return 'sla'; if(/hand|qualif|تسليم|مؤهل/.test(q)) return 'handover'; if(/draft|message|follow|whatsapp|email|مسودة|رسالة|متابعة/.test(q)) return 'draft'; return 'priority'; }
+    function copilotMatch(q){ q=(q||'').toLowerCase(); var a=q.replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه'); if(/sla|breach|overdue|due/.test(q)||/مهله|تجاوز|متاخر|مستحق|اخلال|خطر/.test(a)) return 'sla'; if(/hand|qualif/.test(q)||/تسليم|مؤهل|تحويل|احاله|جاهز/.test(a)) return 'handover'; if(/draft|message|follow|whatsapp|email/.test(q)||/مسوده|رساله|متابعه|واتساب|واتس|بريد|ايميل|اكتب|صغ/.test(a)) return 'draft'; return 'priority'; }
 
     function toggleCopilot(){ var dd=document.getElementById('copilotDD'),ov=document.getElementById('copilotOverlay'); var o=dd.classList.toggle('open'); if(ov)ov.classList.toggle('open',o); }
 
@@ -2513,6 +2513,6 @@
       if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',run); else run();
     })();
   </script>
-  <script src="copilot-widget.js?v=12" defer></script>
+  <script src="copilot-widget.js?v=13" defer></script>
 </body>
 </html>
