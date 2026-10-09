@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <link href="rtl.css?v=12" rel="stylesheet" />
-  <script src="i18n-ar.js?v=14"></script>
+  <script src="i18n-ar.js?v=16"></script>
   <script src="i18n.js?v=12"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -4949,7 +4949,7 @@
       var draft = 'Draft ' + ('0' + (i + 1)).slice(-2);
       // Proposal status: Draft → Quote Created, or Cancelled.
       var stat = p.cancelled ? { t:'Cancelled', c:'cancelled' }
-               : p.isQuote   ? { t:'Quote Created', c:'quote' }
+               : p.isQuote   ? (p.mgrApproved ? { t:'Approved quote', c:'quote' } : { t:'Pending approval', c:'quote' })
                              : { t:'Draft', c:'draft' };
       var chips = propAddOns.filter(function(a){ return p.addOns && p.addOns[a.k]; }).slice(0,3)
         .map(function(a){ return '<span class="qc-chip">' + a.label + '</span>'; }).join('');
