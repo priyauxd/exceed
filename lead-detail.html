@@ -11,8 +11,8 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <link href="rtl.css?v=12" rel="stylesheet" />
-  <script src="i18n-ar.js?v=16"></script>
-  <script src="i18n.js?v=12"></script>
+  <script src="i18n-ar.js?v=17"></script>
+  <script src="i18n.js?v=13"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -4385,11 +4385,11 @@
 
     // "New proposal" opens the EXEED configurator in a separate browser window; built proposals flow back here.
     function addProposal(){
-      window.open('proposal-builder.html?lead=' + selectedIdx, 'exeedProposalBuilder', 'width=1280,height=860');
+      window.open('proposal-builder.html?lead=' + selectedIdx + '&lang=' + I18N.lang, 'exeedProposalBuilder', 'width=1280,height=860');
     }
     // "Edit" reopens the configurator for an existing proposal.
     function editProposal(i){
-      window.open('proposal-builder.html?lead=' + selectedIdx + '&edit=' + i, 'exeedProposalBuilder', 'width=1280,height=860');
+      window.open('proposal-builder.html?lead=' + selectedIdx + '&edit=' + i + '&lang=' + I18N.lang, 'exeedProposalBuilder', 'width=1280,height=860');
     }
     // Pull any proposals built in the configurator window into their target leads.
     function importProposalQueue(){

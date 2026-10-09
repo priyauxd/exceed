@@ -7,12 +7,12 @@
 (function () {
   var KEY = 'exeed-lang';
   var ATTRS = ['placeholder', 'title', 'aria-label', 'data-title', 'data-tip'];
-  var SKIP = 'script,style,textarea,code,.material-symbols-outlined,.material-icons,[contenteditable="true"],[data-i18n-skip]';
+  var SKIP = 'script,style,textarea,code,.material-symbols-outlined,.material-icons,.mi,[contenteditable="true"],[data-i18n-skip]';
   var LRI = '\u2066', PDI = '\u2069';
   // Directional glyphs mirror in RTL (Fluent/Material bidi guidance); objects, clocks,
   // media, phones, search, charts and checkmarks keep their orientation.
   var FLIP = /^(arrow_back|arrow_forward|arrow_right_alt|chevron_left|chevron_right|navigate_next|navigate_before|keyboard_arrow_left|keyboard_arrow_right|first_page|last_page|send|reply|forward_to_inbox|undo|redo|sort|list_alt|checklist|edit_note|open_in_new|splitscreen_right|view_sidebar|menu_open|login|logout|phone_forwarded)$/;
-  var ICON = '.material-symbols-outlined,.material-icons';
+  var ICON = '.material-symbols-outlined,.material-icons,.mi';
   function markIcon(el) { el.classList.toggle('i18n-flip', FLIP.test((el.textContent || '').trim())); }
   // Runs that must read left-to-right: percentages (after Arabic letters digits turn into
   // Arabic numbers and the % would jump to the left), phone numbers, date+time stamps, emails, URLs.
@@ -23,6 +23,9 @@
 
   var lang = 'en';
   try { lang = localStorage.getItem(KEY) === 'ar' ? 'ar' : 'en'; } catch (e) {}
+  // A shared link can carry the language (?lang=ar / ?lang=en); it wins over the saved choice and becomes it.
+  var qs = /[?&]lang=(ar|en)\b/.exec(location.search);
+  if (qs) { lang = qs[1]; try { localStorage.setItem(KEY, lang); } catch (e) {} }
 
   var dict = null, patterns = [], contexts = [], post = null;
   function load() {
@@ -191,7 +194,7 @@
 
   function injectSwitch() {
     if (document.querySelector('.lang-switch')) return;
-    var host = document.querySelector('.topbar .actions') || document.querySelector('.topbar') || document.querySelector('.page-header');
+    var host = document.querySelector('.topbar .actions') || document.querySelector('.topbar-right') || document.querySelector('.topbar') || document.querySelector('.page-header');
     if (!host) return;
     var box = document.createElement('div');
     box.className = 'lang-switch'; box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Language / اللغة');
