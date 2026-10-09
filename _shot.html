@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build a Proposal — EXEED ES</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14171c; --ink2:#5b626c; --muted:#9aa1ac; --line:#e7eaee; --bg:#f4f6f8;
+    --panel:#ffffff; --panel2:#ffffff; --summary-bg:#fbfcfd;
+    --stage1:#ffffff; --stage2:#e6eaef;
+    --topbar-bg:rgba(255,255,255,.86); --dock-bg:rgba(255,255,255,.58); --glass-line:rgba(255,255,255,.7);
+    --btn-text:#ffffff; --card-shadow:rgba(20,24,34,.12);
+    --swatch-inset:rgba(0,0,0,.08); --swatch-gap:#ffffff;
+    --emi-th:#20242c; --accent2:#c0122e; --card-hover:#c8ccd2; --sel-border:#14171c;
+    --cta-bg:#14171c; --cta-text:#ffffff;
+    --addon-bg:#e9edf2; --addon-text:#14171c; --radius:16px;
+    --gold:#b08334; --gold-2:#8a6522; --gold-soft:#f6efdd; --hero1:#1b1f27; --hero2:#0c0f14;
+  }
+  body.dark{
+    --ink:#d5dae2; --ink2:#98a0ac; --muted:#6b727d; --line:#252b34; --bg:#12151b;
+    --panel:#171b22; --panel2:#22272f; --summary-bg:#1c212a;
+    --stage1:#20252e; --stage2:#0e1116;
+    --topbar-bg:rgba(18,21,27,.82); --dock-bg:rgba(23,27,34,.5); --glass-line:rgba(255,255,255,.08);
+    --btn-text:#11141a; --card-shadow:rgba(0,0,0,.45);
+    --swatch-inset:rgba(255,255,255,.14); --swatch-gap:#0e1116;
+    --emi-th:#2c333d; --accent2:#e0233f; --card-hover:#3a424e; --sel-border:#4b5563;
+    --cta-bg:#eaedf2; --cta-text:#14171c;
+    --addon-bg:#2c333d; --addon-text:#d5dae2;
+    --gold:#d9b25f; --gold-2:#c79a44; --gold-soft:rgba(217,178,95,.13); --hero1:#232a34; --hero2:#0e1218;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; transition:background .25s, color .25s; color-scheme:light;}
+  body.dark{color-scheme:dark;}
+  .mi{font-family:'Material Icons Outlined'; font-style:normal; line-height:1; vertical-align:middle;}
+
+  /* Top bar */
+  .topbar{position:sticky; top:0; z-index:20; display:flex; align-items:center; gap:24px; height:60px; padding:0 24px; background:var(--topbar-bg); backdrop-filter:blur(14px); border-bottom:1px solid var(--line);}
+  .theme-toggle{width:38px; height:38px; border-radius:11px; border:1px solid var(--line); background:var(--panel); color:var(--ink2); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:.15s;}
+  .theme-toggle:hover{color:var(--ink); border-color:var(--ink2);}
+  .theme-toggle .mi{font-size:19px;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.14em; font-size:15px;}
+  .brand small{font-weight:600; letter-spacing:.02em; font-size:11px; color:var(--ink2);}
+  .steps{display:flex; align-items:center; gap:4px; margin:0 auto;}
+  .step{display:flex; align-items:center; gap:7px; padding:7px 14px; border-radius:30px; font-size:12.5px; font-weight:600; color:var(--muted); cursor:pointer; white-space:nowrap; transition:.15s;}
+  .step .n{width:19px; height:19px; border-radius:50%; background:var(--panel2); color:var(--ink2); font-size:10.5px; font-weight:800; display:flex; align-items:center; justify-content:center;}
+  .step:hover{color:var(--ink);}
+  .step.active{background:var(--ink); color:var(--btn-text);}
+  .step.active .n{background:var(--btn-text); color:var(--ink);}
+  .step.done{color:var(--ink);}
+  .step.done .n{background:#1f9e5a; color:#fff;}
+  .topbar-right{display:flex; align-items:center; gap:14px;}
+  .price-chip{text-align:right;}
+  .price-chip .l{font-size:9px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:700;}
+  .price-chip .v{font-size:21px; font-weight:800; letter-spacing:-.02em; line-height:1.1;}
+
+  /* Layout */
+  .wrap{display:grid; grid-template-columns:1fr 448px; height:calc(100vh - 60px); overflow:hidden;}
+  @media(max-width:1024px){ .wrap{grid-template-columns:1fr; height:auto; overflow:visible;} .stage,.summary{height:auto !important; overflow:visible !important;} .steps{display:none;} }
+
+  /* Stage */
+  .stage{position:relative; display:flex; flex-direction:column; height:100%; overflow:hidden; background:radial-gradient(120% 85% at 50% 2%, var(--stage1), var(--stage2) 72%); transition:background .25s;}
+  .stage-badge{position:absolute; top:18px; left:26px; display:flex; flex-direction:column; gap:2px; z-index:2;}
+  .stage-badge .m{font-size:13px; font-weight:800; letter-spacing:.06em; text-transform:uppercase;}
+  .stage-badge .t{font-size:12px; color:var(--ink2);}
+  /* Model year sits in the dock header, paired with SELECT MODEL — year and
+     model are the one decision, and the header already reads as the label for
+     what the row below is asking. */
+  .dock-year{display:flex; align-items:center; gap:8px;}
+  .dock-year .dy-l{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:var(--muted);}
+  .year-pick{position:relative; display:inline-flex; align-items:center;}
+  .year-pick select{appearance:none; -webkit-appearance:none; font-family:inherit; font-size:10.5px; font-weight:800;
+    letter-spacing:.05em; color:var(--ink); background:var(--panel2); border:1px solid var(--line); border-radius:999px;
+    padding:2px 21px 2px 9px; cursor:pointer; outline:none; transition:border-color .12s, background .12s;}
+  .year-pick select:hover{border-color:var(--ink2);}
+  .year-pick select:focus-visible{border-color:var(--ink);}
+  .year-pick .yc{position:absolute; right:4px; font-size:13px; color:var(--ink2); pointer-events:none;}
+  .stage-img-wrap{flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:clamp(10px,2.5vh,24px) 34px 0;}
+  .stage-img{max-width:86%; max-height:92%; object-fit:contain; filter:drop-shadow(0 36px 48px rgba(20,24,34,.26)); transition:opacity .35s ease, transform .5s ease;}
+  .stage-img.swap{opacity:0; transform:translateY(8px) scale(.99);}
+  .stage-caption{display:none;}
+  .stage-caption .big{font-size:22px; font-weight:800; letter-spacing:-.02em;}
+  .stage-caption .sub{font-size:12.5px; color:var(--ink2); margin-top:3px;}
+
+  /* Selector dock */
+  .dock{position:relative; z-index:3; flex-shrink:0; margin:clamp(-64px,-6vh,-40px) 26px clamp(12px,2.2vh,22px); padding:clamp(12px,1.8vh,18px) 26px; border:1px solid var(--glass-line); border-radius:22px; background:var(--dock-bg); backdrop-filter:blur(24px) saturate(1.35); -webkit-backdrop-filter:blur(24px) saturate(1.35); box-shadow:0 18px 52px rgba(8,10,14,.18);}
+  .dock-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:clamp(9px,1.6vh,15px);}
+  .dock-h .t{font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2);}
+  .swatches{display:flex; gap:14px; flex-wrap:wrap;}
+  .swatch{display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; width:74px;}
+  .swatch .dot{width:44px; height:44px; border-radius:50%; box-shadow:inset 0 0 0 1px var(--swatch-inset), 0 3px 10px rgba(0,0,0,.28); position:relative; transition:.15s;}
+  .swatch.on .dot{box-shadow:inset 0 0 0 1px var(--swatch-inset), 0 0 0 2px var(--swatch-gap), 0 0 0 4px var(--sel-border);}
+  .swatch .nm{font-size:11px; font-weight:600; color:var(--ink2); text-align:center; line-height:1.25;}
+  .swatch.on .nm{color:var(--ink);}
+
+  .cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px;}
+  /* Compact model grid — all EXEED models visible without scrolling */
+  .cards.models{grid-template-columns:repeat(3,1fr); gap:10px;}
+  @media(min-width:1480px){ .cards.models{grid-template-columns:repeat(6,1fr);} }
+  .card.mcard{padding:12px 13px; display:flex; flex-direction:column;}
+  .card.mcard .cn{font-size:14px;}
+  .card.mcard .cs{font-size:11px; margin-top:2px;}
+  .card.mcard .specs{gap:8px; margin-top:8px;}
+  .card.mcard .cp{font-size:11.5px; margin-top:auto; padding-top:8px; white-space:nowrap;}
+  .card.mcard .check{top:10px; right:10px; width:18px; height:18px;}
+  .card{border:1.5px solid var(--line); border-radius:14px; padding:15px; cursor:pointer; background:var(--panel); transition:.15s; position:relative;}
+  .card:hover{border-color:var(--card-hover);}
+  .card.on{border-color:var(--sel-border); box-shadow:0 8px 24px var(--card-shadow);}
+  .card .cn{font-size:15px; font-weight:800;}
+  .card .cs{font-size:12px; color:var(--ink2); margin-top:3px;}
+  .card .cp{font-size:12px; font-weight:600; margin-top:10px;}
+  .card .specs{display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;}
+  .card .specs span{font-size:11px; color:var(--ink2); display:inline-flex; align-items:center; gap:4px;}
+  .card .check{position:absolute; top:12px; right:12px; width:20px; height:20px; border-radius:50%; background:var(--ink); color:var(--btn-text); display:none; align-items:center; justify-content:center;}
+  .card.on .check{display:flex;}
+  .card .check .mi{font-size:14px;}
+
+  .dock-nav{display:flex; justify-content:space-between; align-items:center; margin-top:clamp(10px,1.8vh,18px);}
+  .btn{display:inline-flex; align-items:center; gap:7px; font-family:inherit; font-size:13.5px; font-weight:700; padding:11px 20px; border-radius:11px; border:none; cursor:pointer; transition:.15s;}
+  .btn.ghost{background:none; color:var(--ink2); padding-left:6px;}
+  .btn.ghost:hover{color:var(--ink);}
+  .btn.dark{background:var(--ink); color:var(--btn-text);}
+  .btn.dark:hover{opacity:.88;}
+  .btn.dark .mi{font-size:18px;}
+
+  /* Finance step: shrink car to a thumbnail, calculations move into the dock on the left */
+  body.step-interior .stage-img{max-width:60%; max-height:64%;}
+  body.step-finance .stage-img-wrap{display:none;}
+  body.step-finance .stage-badge{display:none;}
+  body.step-finance .dock{margin:clamp(8px,1.4vh,12px) 26px 18px; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; overflow:hidden;}
+  body.step-finance .dock-h{flex-shrink:0;}
+  body.step-finance .dock-h .t{font-size:15px; text-transform:none; letter-spacing:-.01em; color:var(--ink);}
+  body.step-finance #dockBody{flex:1 1 auto; min-height:0; overflow-y:auto;}
+  body.step-finance .dock-nav{flex-shrink:0; margin-top:0; padding-top:12px; border-top:1px solid var(--line);}
+  .dock-model{display:block; font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink); text-transform:none;}
+  .dock-model-sub{display:block; font-size:12px; font-weight:600; color:var(--ink2); text-transform:none; letter-spacing:0; margin-bottom:9px;}
+  .dock-vas-label{display:block; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted);}
+  #finDock .sec-h:first-child{margin-top:0;}
+
+  /* Summary panel */
+  .summary{--sum-m:clamp(8px,1.4vh,12px); margin:var(--sum-m); border:1px solid var(--line); border-radius:18px; background:var(--summary-bg); padding:clamp(10px,1.6vh,14px) 15px; display:flex; flex-direction:column; height:calc(100% - var(--sum-m)*2); overflow:hidden; box-shadow:0 10px 34px rgba(8,10,14,.10);}
+  .sum-title{font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:var(--ink2); margin-bottom:5px;}
+  #finCalcHome{display:none;}
+  body.step-finance #finCalcHome{display:block;}
+  .vas-sub{font-size:12px; color:var(--ink2); margin-bottom:12px; line-height:1.5;}
+  .vas-layout{display:grid; grid-template-columns:1.25fr 1fr; gap:18px; align-items:start;}
+  .vas-right{position:sticky; top:0;}
+  .vas-right .pc{margin-top:0;}
+  @media(max-width:900px){ .vas-layout{grid-template-columns:1fr;} }
+  .vas-group{border:1px solid var(--line); border-radius:11px; margin-bottom:8px; overflow:hidden; background:var(--panel);}
+  .vas-g-head{width:100%; display:flex; align-items:center; gap:10px; padding:11px 13px; background:none; border:none; cursor:pointer; font-family:inherit; text-align:left;}
+  .vas-g-head:hover{background:var(--panel2);}
+  .vas-g-ic{width:30px; height:30px; border-radius:8px; background:var(--panel2); display:flex; align-items:center; justify-content:center; color:var(--ink2); flex-shrink:0;}
+  .vas-g-ic .mi{font-size:17px;}
+  .vas-g-name{flex:1; font-size:13px; font-weight:700; color:var(--ink);}
+  .vas-g-badge{background:var(--cta-bg); color:var(--cta-text); font-size:11px; font-weight:800; border-radius:20px; padding:1px 8px;}
+  .vas-g-chev{color:var(--ink2); font-size:20px;}
+  .vas-g-body{border-top:1px solid var(--line); padding:2px 13px 6px;}
+  .vas-item{display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:12.5px; color:var(--ink); cursor:pointer;}
+  .vas-item:last-child{border-bottom:none;}
+  .vas-item input{accent-color:var(--cta-bg); width:15px; height:15px; flex-shrink:0;}
+  .vas-item-n{flex:1;}
+  .vas-item-p{font-weight:700; color:var(--ink2); white-space:nowrap;}
+  .vas-item.on .vas-item-p{color:var(--ink);}
+  .vas-rec{display:inline-flex; align-items:center; margin-left:8px; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:#3d9b63; background:rgba(92,185,127,.16); border:1px solid rgba(92,185,127,.4); border-radius:20px; padding:1px 7px; vertical-align:middle; white-space:nowrap;}
+  /* Campaign-covered services lead the table at zero on both sides. */
+  .vas-catrow.is-free .pc-v{color:var(--ink2);}
+  .vas-cat{cursor:pointer;}
+  .vas-cat:hover{background:var(--panel2);}
+  .vas-cat .pc-i, .vas-catrow .pc-i{display:flex; align-items:center; gap:10px;}
+  .vas-cat-ic{font-size:17px; color:var(--ink2);}
+  .vas-cat-name{font-weight:700;}
+  .vas-cat-chev{color:var(--ink2); font-size:18px;}
+  .vas-cc{display:flex; align-items:center; justify-content:flex-start; gap:6px; padding:5px 16px !important;}
+  .vas-cur{font-size:11px; font-weight:700; color:var(--ink2); flex-shrink:0;}
+  .dh{height:0.72em; width:auto; display:inline-block; vertical-align:-0.02em; margin-right:3px;}
+  .vas-ccinput{width:96px; box-sizing:border-box; text-align:left; font-weight:700; font-size:12.5px; font-family:inherit; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:7px 9px; outline:none;}
+  .vas-ccinput:focus{border-color:var(--cta-bg);}
+  .vas-opts{background:var(--panel2); border-bottom:1px solid var(--line);}
+  .vas-opt{cursor:pointer; border-bottom:1px solid var(--line);}
+  .vas-opt:last-child{border-bottom:none;}
+  .vas-opt:hover{background:rgba(0,0,0,.03);}
+  .vas-opt-lbl{display:flex; align-items:center; gap:10px;}
+  .vas-opt-lbl input{accent-color:var(--cta-bg); width:14px; height:14px; flex-shrink:0;}
+  .vas-opt-n{display:flex; align-items:center; font-size:11.5px; color:var(--ink2); font-weight:500;}
+  .vas-opt-p{font-size:11.5px; font-weight:500; color:var(--ink2);}
+  .vas-opt.on .vas-opt-n, .vas-opt.on .vas-opt-p{font-weight:700; color:var(--ink);}
+  .vas-cat-name{font-size:12.5px; font-weight:700;}
+
+  /* SMC product lookup — D365 "Products" search inside the expanded group */
+  .vas-lk{padding:11px 16px 13px; display:flex; flex-direction:column; gap:9px;}
+  .vas-lk-field{display:flex; align-items:center; gap:8px; height:34px; padding:0 10px; background:var(--panel); border:1px solid var(--line); border-radius:8px;}
+  .vas-lk-field:focus-within{border-color:var(--cta-bg);}
+  .vas-lk-ic{font-size:17px; color:var(--ink2); flex-shrink:0;}
+  .vas-lk-inp{flex:1; min-width:0; border:none; outline:none; background:none; padding:0; font-family:inherit; font-size:12.5px; color:var(--ink);}
+  .vas-lk-inp::placeholder{color:var(--muted);}
+  .vas-lk-panel{border:1px solid var(--line); border-radius:8px; overflow:hidden; background:var(--panel);}
+  .vas-lk-hd{padding:7px 12px; background:var(--panel2); border-bottom:1px solid var(--line); font-size:12px; font-weight:600; color:var(--ink2);}
+  .vas-lk-list{max-height:232px; overflow-y:auto;}
+  .vas-lk-opt{display:flex; align-items:center; gap:10px; width:100%; padding:8px 12px; background:none; border:none; border-bottom:1px solid var(--line); cursor:pointer; font-family:inherit; text-align:left;}
+  .vas-lk-opt:last-child{border-bottom:none;}
+  .vas-lk-opt:hover, .vas-lk-opt.hl{background:var(--panel2);}
+  .vas-lk-opt > .mi, .vas-lk-chip > .mi{font-size:19px; color:var(--ink2); flex-shrink:0;}
+  .vas-lk-txt{flex:1; min-width:0;}
+  .vas-lk-t{display:block; font-size:12.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .vas-lk-s{display:block; font-size:11.5px; color:var(--ink2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .vas-lk-t b{font-weight:800; color:var(--ink); background:rgba(246,196,83,.34); border-radius:2px;}
+  .vas-lk-p{font-size:12px; font-weight:700; color:var(--ink2); white-space:nowrap; flex-shrink:0;}
+  .vas-lk-box{display:flex; align-items:center; justify-content:center; width:15px; height:15px; flex-shrink:0; border:1.5px solid var(--muted); border-radius:4px; background:var(--panel); color:transparent;}
+  .vas-lk-box .mi{font-size:12px;}
+  .vas-lk-box.on{background:#3d9b63; border-color:#3d9b63; color:#fff;}
+  .vas-lk-chip + .vas-lk-chip{margin-top:-3px;}
+  .vas-lk-chip{display:flex; align-items:center; gap:10px; padding:8px 10px; background:rgba(92,185,127,.10); border:1px solid rgba(92,185,127,.42); border-radius:8px;}
+  .vas-lk-chip > .mi{color:#3d9b63;}
+  .vas-lk-opt.sel{background:rgba(92,185,127,.10);}
+  .vas-lk-opt.sel > .mi{color:#3d9b63;}
+  .vas-lk-opt.sel .vas-lk-t{font-weight:700;}
+  .vas-lk-chip .vas-lk-p{color:var(--ink);}
+  .vas-lk-x{display:flex; align-items:center; justify-content:center; width:24px; height:24px; flex-shrink:0; border:none; border-radius:6px; background:none; color:var(--ink2); cursor:pointer;}
+  .vas-lk-x:hover{background:var(--panel2); color:var(--ink);}
+  .vas-lk-x .mi{font-size:16px;}
+  .vas-lk-none{padding:14px 12px; font-size:12px; color:var(--ink2);}
+  .vas-lk-tag{margin-left:8px; padding:1px 7px; border:1px solid var(--line); border-radius:20px; font-size:10.5px; font-weight:700; color:var(--ink2); white-space:nowrap;}
+  .vas-lk-hint{display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted);}
+  .vas-lk-hint .mi{font-size:14px;}
+  .sum-head{font-size:16px; font-weight:800; letter-spacing:-.01em; color:var(--ink);}
+  .sum-subhead{font-size:12px; color:var(--ink2); margin:1px 0 13px;}
+  .pc{margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; font-size:11px;}
+  .pc-title{background:var(--cta-bg); color:var(--cta-text); font-weight:800; padding:9px 12px; font-size:12.5px;}
+  .pc-row{display:grid; grid-template-columns:1.55fr 1fr 1fr; align-items:center; border-bottom:1px solid var(--line);}
+  .pc-row:last-of-type{border-bottom:none;}
+  .pc-i{padding:12px 16px; color:var(--ink); text-align:left; font-size:12.5px;}
+  .pc-v{padding:12px 16px; text-align:left; color:var(--ink); font-weight:600; font-size:12.5px;}
+  .pc-head{background:var(--panel2);}
+  .pc-head .pc-i, .pc-head .pc-v{font-weight:800; color:var(--ink2); font-size:10px; text-transform:uppercase; letter-spacing:.03em;}
+  .pc-head .pc-i{text-align:left;}
+  .pc-head .pc-v{text-align:left;}
+  .pc-total{background:var(--panel2);}
+  .vas-emi-info{margin-top:14px;}
+  .vas-emirow{background:rgba(37,99,235,.07); border:1px solid rgba(37,99,235,.22); border-radius:10px; overflow:hidden;}
+  .vas-emirow .pc-i, .vas-emirow .pc-v{padding-top:13px; padding-bottom:13px;}
+  .vas-emirow .pc-v{color:#2563eb; font-weight:800;}
+  .vas-emi-note{display:flex; align-items:center; gap:6px; color:#2563eb; font-size:10.5px; font-style:italic; font-weight:600;}
+  .vas-emi-note .mi{font-size:16px; font-style:normal; flex-shrink:0;}
+  .pc-total .pc-i, .pc-total .pc-v{font-weight:800;}
+  .pc-band .pc-i{background:var(--cta-bg); color:var(--cta-text); font-weight:700;}
+  .pc-fin{background:var(--panel2);}
+  .pc-fin .pc-i, .pc-fin .pc-v{font-weight:800;}
+  .pc-monthly{background:var(--cta-bg);}
+  .pc-monthly .pc-i, .pc-monthly .pc-v{color:var(--cta-text); font-weight:800;}
+  .pc-foot{padding:8px 12px; font-size:9.5px; font-style:italic; color:var(--ink2); border-top:1px solid var(--line);}
+  .fin-out{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-top:8px;}
+  .fin-out-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin-bottom:6px;}
+  .fo-row{display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:12.5px; color:var(--ink2); border-bottom:1px solid var(--line);}
+  .fo-row .fo-v{font-weight:700; color:var(--ink);}
+  .fo-total{display:flex; justify-content:space-between; align-items:baseline; margin-top:11px; padding-top:11px; border-top:2px solid var(--line);}
+  .fo-total .fo-l{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);}
+  .fo-total .fo-big{font-size:23px; font-weight:800; letter-spacing:-.02em; color:var(--ink);}
+  .fo-total .fo-big small{font-size:12px; font-weight:600; color:var(--ink2);}
+  .sec-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:clamp(6px,1.2vh,11px) 2px 6px;}
+  .sum-rows{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:2px 0 clamp(6px,1.2vh,10px);}
+  .sum-row{display:flex; flex-direction:column; gap:4px; min-width:0; background:var(--panel2); border:1px solid var(--line); border-radius:11px; padding:11px 13px;}
+  .sum-row .k{display:flex; align-items:center; gap:4px; font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+  .sum-k-ic{font-size:13px; line-height:1; color:var(--ink2); text-transform:none; letter-spacing:0;}
+  .sum-row .v{font-size:13px; font-weight:700; display:flex; align-items:center; gap:6px; color:var(--ink);}
+  .sum-row .v .sum-empty{color:var(--muted); font-weight:600;}
+  .sum-row.off{background:transparent; border-style:dashed;}
+  .sum-row.off .k, .sum-row.off .v{opacity:.6;}
+  .sum-row .v .cdot{width:12px; height:12px; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(0,0,0,.12); flex-shrink:0;}
+
+  .pay-toggle{display:flex; gap:6px; margin-bottom:8px;}
+  .pay-btn{flex:1; padding:8px 6px; border:1px solid var(--line); border-radius:9px; background:var(--panel); color:var(--ink2); font-family:inherit; font-size:12px; font-weight:700; cursor:pointer; transition:.12s;}
+  .pay-btn:hover{border-color:var(--card-hover);}
+  .pay-btn.on{background:var(--cta-bg); color:var(--cta-text); border-color:var(--cta-bg);}
+  .dp-ro-input{background:var(--line) !important; color:var(--muted) !important; cursor:not-allowed;}
+  .fin{background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:clamp(7px,1.2vh,10px) 12px; margin-bottom:4px;}
+  .fin-l{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;}
+  .fin-l .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700;}
+  .fin-l .v{font-size:12.5px; font-weight:800;}
+  .fin-range{-webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:6px; background:var(--line); outline:none; cursor:pointer; margin:9px 0 6px;}
+  .fin-range::-webkit-slider-runnable-track{height:6px; border-radius:6px; background:transparent;}
+  .fin-range::-webkit-slider-thumb{-webkit-appearance:none; width:30px; height:22px; margin-top:-8px; border-radius:8px; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%2314171c'%3E%3Crect x='2' y='6.5' width='3' height='3.5' rx='1'/%3E%3Crect x='19' y='6.5' width='3' height='3.5' rx='1'/%3E%3Crect x='2' y='14' width='3' height='3.5' rx='1'/%3E%3Crect x='19' y='14' width='3' height='3.5' rx='1'/%3E%3Crect x='6' y='2.5' width='12' height='19' rx='5'/%3E%3Crect x='8.4' y='7' width='7.2' height='4' rx='1.6' fill='%23ffffff'/%3E%3Crect x='8.4' y='12.6' width='7.2' height='3.2' rx='1.4' fill='%23ffffff'/%3E%3C/svg%3E") center/17px no-repeat; border:1px solid #cdd3db; box-shadow:0 3px 9px rgba(8,10,14,.32); cursor:grab;}
+  .fin-range::-webkit-slider-thumb:active{cursor:grabbing;}
+  .fin-range::-moz-range-track{height:6px; border-radius:6px; background:var(--line);}
+  .fin-range::-moz-range-progress{height:6px; border-radius:6px; background:var(--cta-bg);}
+  .fin-range::-moz-range-thumb{width:30px; height:22px; border-radius:8px; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%2314171c'%3E%3Crect x='2' y='6.5' width='3' height='3.5' rx='1'/%3E%3Crect x='19' y='6.5' width='3' height='3.5' rx='1'/%3E%3Crect x='2' y='14' width='3' height='3.5' rx='1'/%3E%3Crect x='19' y='14' width='3' height='3.5' rx='1'/%3E%3Crect x='6' y='2.5' width='12' height='19' rx='5'/%3E%3Crect x='8.4' y='7' width='7.2' height='4' rx='1.6' fill='%23ffffff'/%3E%3Crect x='8.4' y='12.6' width='7.2' height='3.2' rx='1.4' fill='%23ffffff'/%3E%3C/svg%3E") center/17px no-repeat; border:1px solid #cdd3db; box-shadow:0 3px 9px rgba(8,10,14,.32); cursor:grab;}
+  .fin-check{display:flex; align-items:center; gap:9px; margin:8px 0 4px; font-size:12px; font-weight:600; cursor:pointer;}
+  .fin-check input{accent-color:var(--cta-bg); width:15px; height:15px;}
+  .fin-badge{margin-left:auto; font-size:10px; font-weight:800; color:var(--ink2); background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:2px 8px;}
+  .fin-field{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:clamp(3px,0.7vh,5px) 0; border-bottom:1px solid var(--line); font-size:12px;}
+  .fin-field .k{color:var(--ink2);}
+  .fin-sub{font-size:10px; font-weight:700; color:var(--muted); text-transform:none; letter-spacing:0; margin-left:4px;}
+  .fin-field .fin-v{font-weight:800; display:inline-flex; align-items:center; gap:6px;}
+  .fin-cur{font-size:12px; font-weight:700; color:var(--ink2);}
+  .yn{display:inline-flex; gap:4px;}
+  .yn-btn{padding:3px 12px; border:1px solid var(--line); border-radius:7px; background:var(--panel); color:var(--ink2); font-family:inherit; font-size:11.5px; font-weight:700; cursor:pointer; transition:.12s;}
+  .yn-btn:hover{border-color:var(--card-hover);}
+  .yn-btn.on{background:var(--cta-bg); color:var(--cta-text); border-color:var(--cta-bg);}
+  .vas-info{position:relative; display:inline-flex; align-items:center; margin-left:4px; color:var(--ink2); cursor:help; vertical-align:middle;}
+  .vas-info .mi{font-size:14px;}
+  .vas-tip{position:absolute; bottom:calc(100% + 8px); left:0; min-width:210px; max-width:250px; background:var(--panel); border:1px solid var(--line); border-radius:10px; box-shadow:0 12px 30px rgba(8,10,14,.35); padding:9px 11px; display:none; z-index:30; white-space:normal; text-transform:none; letter-spacing:0; font-weight:400;}
+  .vas-info:hover .vas-tip{display:block;}
+  .vas-tip-h{font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:6px;}
+  .vas-tip-row{display:flex; justify-content:space-between; gap:12px; font-size:11.5px; color:var(--ink); padding:3px 0;}
+  .vas-tip-row span:last-child{font-weight:700; color:var(--ink2); white-space:nowrap;}
+  .vas-tip-empty{font-size:11.5px; color:var(--ink2);}
+  .fin-num{display:inline-block; width:70px; padding-right:8px; text-align:right;}
+  .fin-inp{font-weight:700; display:inline-flex; align-items:center; gap:6px;}
+  .fin-inp input{width:78px; box-sizing:border-box; text-align:right; font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:4px 7px;}
+  .fin-sel{font-family:inherit; font-size:12px; font-weight:700; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:5px 8px; cursor:pointer;}
+  .addon .ap.free{color:#1a9d5a;}
+  .emi-table{width:100%; border-collapse:collapse; font-size:11px; margin-top:clamp(4px,0.9vh,7px);}
+  .emi-table th{background:var(--emi-th); color:#fff; font-weight:700; padding:9px 10px; font-size:10px;}
+  .emi-table th:first-child{background:transparent; color:var(--muted); text-align:left; text-transform:uppercase; font-size:9px; letter-spacing:.04em;}
+  .emi-table td{padding:9px 10px; text-align:center; border-bottom:1px solid var(--line); font-weight:700;}
+  .emi-table td:first-child{text-align:left; color:var(--ink2); font-weight:600;}
+  .bundle-h{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); margin:clamp(6px,1.2vh,11px) 2px 6px;}
+  .bundle-tiers{display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:clamp(5px,1.1vh,9px);}
+  .bundle-tier{display:flex; flex-direction:column; gap:1px; align-items:flex-start; text-align:left; padding:clamp(6px,1.1vh,9px) 9px; border:1.5px solid var(--line); border-radius:11px; background:var(--panel); cursor:pointer; font-family:inherit; transition:.15s;}
+  .bundle-tier:hover{border-color:var(--card-hover);}
+  .bundle-tier.on{border-color:var(--sel-border); background:var(--panel2); box-shadow:0 4px 12px var(--card-shadow);}
+  .bt-name{font-size:12.5px; font-weight:800; color:var(--ink);}
+  .bt-desc{font-size:10px; color:var(--muted);}
+  .bt-price{font-size:11px; font-weight:700; color:var(--ink2); margin-top:3px;}
+  .addons{display:flex; flex-direction:column; gap:1px; margin-bottom:clamp(5px,1.1vh,9px);}
+  .addon{display:flex; align-items:center; gap:10px; padding:clamp(3px,0.7vh,5px) 2px; font-size:12px; border-bottom:1px solid var(--line); cursor:pointer;}
+  .addon input{accent-color:var(--cta-bg); width:15px; height:15px;}
+  .addon .ap{margin-left:auto; font-weight:700; color:var(--ink2);}
+  .addon-total{display:flex; justify-content:space-between; align-items:center; background:linear-gradient(150deg, var(--hero1), var(--hero2)); color:#fff; padding:clamp(7px,1.3vh,10px) 14px; border-radius:11px; font-size:12.5px; font-weight:700; margin-bottom:clamp(4px,0.9vh,10px); box-shadow:0 8px 20px rgba(8,10,14,.22);}
+  .addon-total span:last-child{font-size:14px; font-weight:800; color:#eaedf2;}
+
+  .sum-scroll{flex:1; min-height:0; overflow-y:auto; padding-right:3px; margin-right:-3px;}
+  .save-btn{width:100%; justify-content:center; background:var(--cta-bg); color:var(--cta-text); font-size:13.5px; padding:clamp(9px,1.5vh,12px); border-radius:11px; letter-spacing:.01em; margin-top:clamp(8px,1.4vh,12px); flex-shrink:0;}
+  .save-btn:hover{opacity:.9;}
+  .save-hint{text-align:center; font-size:10.5px; color:var(--muted); margin-top:clamp(4px,0.9vh,7px);}
+
+  /* Saved toast overlay */
+  .saved-ov{position:fixed; inset:0; background:rgba(15,18,24,.5); backdrop-filter:blur(3px); display:none; align-items:center; justify-content:center; z-index:60;}
+  .saved-ov.show{display:flex;}
+  .saved-card{background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:34px 32px; max-width:400px; text-align:center; box-shadow:0 30px 80px rgba(0,0,0,.6);}
+  .saved-card .ic{width:64px; height:64px; border-radius:50%; background:rgba(31,158,90,.16); color:#3ddc84; display:flex; align-items:center; justify-content:center; margin:0 auto 16px;}
+  .saved-card .ic .mi{font-size:34px;}
+  .saved-card h3{font-size:20px; font-weight:800;}
+  .saved-card p{font-size:13.5px; color:var(--ink2); margin:8px 0 22px; line-height:1.5;}
+  .saved-actions{display:flex; gap:10px; justify-content:center;}
+</style>
+</head>
+<body class="dark">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="dhSym" viewBox="0 0 1000 870"><path fill="currentColor" d="m88.3 1c0.4 0.6 2.6 3.3 4.7 5.9 15.3 18.2 26.8 47.8 33 85.1 4.1 24.5 4.3 32.2 4.3 125.6v87h-41.8c-38.2 0-42.6-0.2-50.1-1.7-11.8-2.5-24-9.2-32.2-17.8-6.5-6.9-6.3-7.3-5.9 13.6 0.5 17.3 0.7 19.2 3.2 28.6 4 14.9 9.5 26 17.8 35.9 11.3 13.6 22.8 21.2 39.2 26.3 3.5 1 10.9 1.4 37.1 1.6l32.7 0.5v43.3 43.4l-46.1-0.3-46.3-0.3-8-3.2c-9.5-3.8-13.8-6.6-23.1-14.9l-6.8-6.1 0.4 19.1c0.5 17.7 0.6 19.7 3.1 28.7 8.7 31.8 29.7 54.5 57.4 61.9 6.9 1.9 9.6 2 38.5 2.4l30.9 0.4v89.6c0 54.1-0.3 94-0.8 100.8-0.5 6.2-2.1 17.8-3.5 25.9-6.5 37.3-18.2 65.4-35 83.6l-3.4 3.7h169.1c101.1 0 176.7-0.4 187.8-0.9 19.5-1 63-5.3 72.8-7.4 3.1-0.6 8.9-1.5 12.7-2.1 8.1-1.2 21.5-4 40.8-8.9 27.2-6.8 52-15.3 76.3-26.1 7.6-3.4 29.4-14.5 35.2-18 3.1-1.8 6.8-4 8.2-4.7 3.9-2.1 10.4-6.3 19.9-13.1 4.7-3.4 9.4-6.7 10.4-7.4 4.2-2.8 18.7-14.9 25.3-21 25.1-23.1 46.1-48.8 62.4-76.3 2.3-4 5.3-9 6.6-11.1 3.3-5.6 16.9-33.6 18.2-37.8 0.6-1.9 1.4-3.9 1.8-4.3 2.6-3.4 17.6-50.6 19.4-60.9 0.6-3.3 0.9-3.8 3.4-4.3 1.6-0.3 24.9-0.3 51.8-0.1 53.8 0.4 53.8 0.4 65.7 5.9 6.7 3.1 8.7 4.5 16.1 11.2 9.7 8.7 8.8 10.1 8.2-11.7-0.4-12.8-0.9-20.7-1.8-23.9-3.4-12.3-4.2-14.9-7.2-21.1-9.8-21.4-26.2-36.7-47.2-44l-8.2-3-33.4-0.4-33.3-0.5 0.4-11.7c0.4-15.4 0.4-45.9-0.1-61.6l-0.4-12.6 44.6-0.2c38.2-0.2 45.3 0 49.5 1.1 12.6 3.5 21.1 8.3 31.5 17.8l5.8 5.4v-14.8c0-17.6-0.9-25.4-4.5-37-7.1-23.5-21.1-41-41.1-51.8-13-7-13.8-7.2-58.5-7.5-26.2-0.2-39.9-0.6-40.6-1.2-0.6-0.6-1.1-1.6-1.1-2.4 0-0.8-1.5-7.1-3.5-13.9-23.4-82.7-67.1-148.4-131-197.1-8.7-6.7-30-20.8-38.6-25.6-3.3-1.9-6.9-3.9-7.8-4.5-4.2-2.3-28.3-14.1-34.3-16.6-3.6-1.6-8.3-3.6-10.4-4.4-35.3-15.3-94.5-29.8-139.7-34.3-7.4-0.7-17.2-1.8-21.7-2.2-20.4-2.3-48.7-2.6-209.4-2.6-135.8 0-169.9 0.3-169.4 1zm330.7 43.3c33.8 2 54.6 4.6 78.9 10.5 74.2 17.6 126.4 54.8 164.3 117 3.5 5.8 18.3 36 20.5 42.1 10.5 28.3 15.6 45.1 20.1 67.3 1.1 5.4 2.6 12.6 3.3 16 0.7 3.3 1 6.4 0.7 6.7-0.5 0.4-100.9 0.6-223.3 0.5l-222.5-0.2-0.3-128.5c-0.1-70.6 0-129.3 0.3-130.4l0.4-1.9h71.1c39 0 78 0.4 86.5 0.9zm297.5 350.3c0.7 4.3 0.7 77.3 0 80.9l-0.6 2.7-227.5-0.2-227.4-0.3-0.2-42.4c-0.2-23.3 0-42.7 0.2-43.1 0.3-0.5 97.2-0.8 227.7-0.8h227.2zm-10.2 171.7c0.5 1.5-1.9 13.8-6.8 33.8-5.6 22.5-13.2 45.2-20.9 62-3.8 8.6-13.3 27.2-15.6 30.7-1.1 1.6-4.3 6.7-7.1 11.2-18 28.2-43.7 53.9-73 72.9-10.7 6.8-32.7 18.4-38.6 20.2-1.2 0.3-2.5 0.9-3 1.3-0.7 0.6-9.8 4-20.4 7.8-19.5 6.9-56.6 14.4-86.4 17.5-19.3 1.9-22.4 2-96.7 2h-76.9v-129.7-129.8l220.9-0.4c121.5-0.2 221.6-0.5 222.4-0.7 0.9-0.1 1.8 0.5 2.1 1.2z"/></symbol></svg>
+  <div class="topbar">
+    <div class="brand">EXEED</div>
+    <div class="steps" id="steps"></div>
+    <div class="topbar-right">
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle theme"><span class="mi" id="themeIcon">dark_mode</span></button>
+      <div class="price-chip"><div class="v" id="topPrice">AED 0</div></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- Stage + dock -->
+    <div class="stage">
+      <div class="stage-badge"><span class="m" id="badgeModel">EXEED ES</span><span class="t" id="badgeCls">Fully electric SUV</span></div>
+      <div class="stage-img-wrap"><img class="stage-img" id="stageImg" src="assets/es/ext-white.png" alt="EXEED ES"></div>
+      <div class="stage-caption"><div class="big" id="stageBig">EXEED ES</div><div class="sub" id="stageSub">Choose your configuration</div></div>
+      <div class="dock">
+        <div class="dock-h"><span class="t" id="dockTitle">Select</span>
+          <span class="dock-year" id="dockYear"><span class="dy-l">Model year</span>
+            <span class="year-pick"><select id="yearSel" aria-label="Model year" onchange="setYear(this.value)"></select><span class="mi yc">expand_more</span></span>
+          </span>
+          <span class="dock-year" id="dockCamp"><span class="dy-l">Campaign</span>
+            <span class="year-pick"><select id="campSel" aria-label="Campaign" onchange="setCampaign(this.value)"></select><span class="mi yc">expand_more</span></span>
+          </span>
+        </div>
+        <div id="dockBody"></div>
+        <div class="dock-nav">
+          <button class="btn ghost" id="backBtn" onclick="go(-1)"><span class="mi">chevron_left</span> Back</button>
+          <button class="btn dark" id="nextBtn" onclick="go(1)">Continue <span class="mi">chevron_right</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <aside class="summary">
+      <div class="sum-scroll">
+      <div class="sum-head" id="sumHead">Your build</div>
+      <div class="sum-subhead" id="sumSubhead"></div>
+      <div class="sum-rows" id="sumRows"></div>
+      <div id="finCalcHome"><div id="finCalc">
+      <div class="sec-h" id="finHeading">Financing</div>
+      <div class="pay-toggle" id="payToggle">
+        <button type="button" class="pay-btn on" data-pay="cash" onclick="setPayType('cash')">Cash</button>
+        <button type="button" class="pay-btn" data-pay="financing" onclick="setPayType('financing')">Financing</button>
+        <button type="button" class="pay-btn" data-pay="dpassist" onclick="setPayType('dpassist')">DP Assist</button>
+      </div>
+      <div class="fin">
+        <div class="fin-field"><span class="k">List price</span><span class="fin-v" id="finList">AED 0</span></div>
+        <div class="fin-field"><span class="k">Trade-in amount</span><span class="fin-v" id="finTrade">AED 0</span></div>
+        <div class="fin-field"><span class="k">Is trade-in accepted</span><span class="yn">
+          <button type="button" class="yn-btn" data-yn="yes" onclick="setTradeAccepted(true)">Yes</button>
+          <button type="button" class="yn-btn" data-yn="no" onclick="setTradeAccepted(false)">No</button>
+        </span></div>
+        <div class="fin-field" id="rowDiscount"><span class="k">Discount amount<span class="fin-sub" id="discHint"></span></span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="discountAmt" type="number" min="0" step="500" value="0" oninput="setDiscount(this.value)"></span></div>
+        <div class="fin-field" id="rowDpSupport"><span class="k">DP support</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="dpSupportAmt" type="number" min="0" step="500" value="20000" oninput="setDpSupport(this.value)"></span></div>
+        <div class="fin-field"><span class="k">Value added services<span class="vas-info"><span class="mi">info</span><span class="vas-tip" id="vasTip"></span></span></span><span class="fin-v" id="finVas">AED 0</span></div>
+        <div class="fin-field"><span class="k">Net amount</span><span class="fin-v" id="finNet">AED 0</span></div>
+        <div class="fin-field" id="rowDownpay"><span class="k">Downpayment amount</span><span class="fin-inp"><span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><input id="downAmt" type="number" min="0" step="500" value="0" oninput="setDownpayment(this.value)"></span></div>
+        <table class="emi-table" id="emiTable"><thead><tr><th>EMI @ 3.5%</th><th>Our recommendation</th><th>Customer choice</th></tr></thead><tbody id="emiBody"></tbody></table>
+      </div>
+      </div></div>
+      <div id="finOutput"></div>
+      </div>
+      <button class="btn save-btn" onclick="saveProposal()"><span class="mi">save</span> Save</button>
+      <div class="save-hint">Adds to the lead's proposal list in the CRM</div>
+    </aside>
+  </div>
+
+  <div class="saved-ov" id="savedOv">
+    <div class="saved-card">
+      <div class="ic"><span class="mi">check_circle</span></div>
+      <h3>Proposal added</h3>
+      <p id="savedText">The proposal has been sent to the CRM and will appear in the lead's Proposals list.</p>
+      <div class="saved-actions">
+        <button class="btn dark" onclick="buildAnother()">Build another</button>
+        <button class="btn ghost" onclick="window.close()">Close window</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  var RATE = 0.035;
+  var TRIMS = [
+    { id:'std', name:'Standard Range', engine:'2T', range:'520 km', power:'204 hp', price:159900, priceTo:169900 },
+    { id:'lr',  name:'Long Range',     engine:'2T', range:'620 km', power:'279 hp', price:179900, priceTo:194900 },
+    { id:'awd', name:'AWD Performance',engine:'2T', range:'580 km', power:'517 hp', price:209900, priceTo:229900 }
+  ];
+  var EXT = [
+    { id:'white',  name:'Pearl White',     hex:'#eceff2', img:'assets/es/ext-white.png' },
+    { id:'silver', name:'Titanium Silver', hex:'#c3c8ce', img:'assets/es/ext-silver.png' },
+    { id:'gray',   name:'Matte Gray',      hex:'#6d737a', img:'assets/es/ext-matte-gray.png' },
+    { id:'red',    name:'Passion Red',     hex:'#9d1f28', img:'assets/es/ext-red.png' },
+    { id:'green',  name:'Forest Green',    hex:'#2f4638', img:'assets/es/ext-green.png' }
+  ];
+  var INT = [
+    { id:'blackgray', name:'Black & Gray', hex:'#2c2c30', img:'assets/es/int-black-gray.png' },
+    { id:'red',       name:'Red',          hex:'#9d1f28', img:'assets/es/int-red.jpeg' }
+  ];
+  var ADDONS = [
+    { k:'insurance', label:'Insurance', price:4800 },
+    { k:'service',   label:'Service Contract', price:3500 },
+    { k:'tinting',   label:'Tinting', price:1200 },
+    { k:'ceramic',   label:'Ceramic Coating', price:2559 }
+  ];
+  // Value Added Services — grouped accessories (EXEED VAS annex, excl. VAT).
+  // VAS main categories. type 'number' = free-text amount; type 'dropdown' = pick an option (sets the amount). rec = Lepas recommended amount.
+  // Service Maintenance Contracts — the catalogue the SE fuzzy-searches in the SMC
+  // group. code is the D365 product number, name the product's display name.
+  var SMC_PRODUCTS = [
+    { code:'SC - 20K-40K',   name:'SC - 20K-40K Service',   price:1600 },
+    { code:'SC - 20K-60K',   name:'SC - 20K-60K Service',   price:2400 },
+    { code:'SC - 40K-80K',   name:'SC - 40K-80K Service',   price:2900 },
+    { code:'SC - 60K-100K',  name:'SC - 60K-100K Service',  price:3300 },
+    { code:'SC - 80K-120K',  name:'SC - 80K-120K Service',  price:3600 },
+    { code:'SC - 100K-120K', name:'SC - 100K-120K Service', price:4000, rec:true },
+    { code:'SC - 100K-130K', name:'SC - 100K-130K Service', price:4400 },
+    { code:'SC - 100K-140K', name:'SC - 100K-140K Service', price:4800 },
+    { code:'SC - 100K-150K', name:'SC - 100K-150K Service', price:5200 },
+    { code:'SC - 120K-150K', name:'SC - 120K-150K Service', price:4600 },
+    { code:'SC - 150K-200K', name:'SC - 150K-200K Service', price:6400 },
+    { code:'SC - EV-60K',    name:'SC - EV 60K Service',    price:2200 },
+    { code:'SC - EV-100K',   name:'SC - EV 100K Service',   price:3400 }
+  ];
+  var VAS_CATS = [
+    { id:'cmi',   name:'Comprehensive Motor Insurance', icon:'verified_user',    type:'number', rec:5000 },
+    { id:'gap',   name:'GAP RTI',                       icon:'security',         type:'number', rec:2499 },
+    { id:'smc',   name:'Service Maintenance Contract',  icon:'build',            type:'lookup', rec:4000, products:SMC_PRODUCTS },
+    { id:'ppf',   name:'Paint Protection Ceramic / PPF',icon:'shield',           type:'multi', rec:6000, options:[
+      { id:'ppf-cer',  label:'Ceramic — Exterior + Interior', price:2000 },
+      { id:'ppf-sf',   label:'PPF — Sedan · Full front', price:6000, rec:true },
+      { id:'ppf-scar', label:'PPF — Sedan · Full car', price:14000 },
+      { id:'ppf-uf',   label:'PPF — SUV · Full front', price:7000 },
+      { id:'ppf-ucar', label:'PPF — SUV · Full car', price:17000 }
+    ]},
+    { id:'smart', name:'SMART Care Plan',               icon:'health_and_safety',type:'multi', rec:1703, options:[
+      { id:'smart-1', label:'SMART — 1 year', price:1703, rec:true },
+      { id:'smart-2', label:'SMART — 2 years', price:2900 },
+      { id:'smart-3', label:'SMART — 3 years', price:3900 }
+    ]},
+    { id:'tinting', name:'Tinting',                     icon:'gradient',         type:'multi', rec:3500, options:[
+      { id:'tint-1', label:'Signature · Windows 30/40/50%', price:1200 },
+      { id:'tint-2', label:'Signature · Windows 70%', price:1500 },
+      { id:'tint-3', label:'Premium · Windows 30–70%', price:3500, rec:true }
+    ]},
+    { id:'iloe',  name:'ILOE',                          icon:'work',             type:'multi', rec:900, options:[
+      { id:'iloe-1', label:'ILOE — 1 year', price:900, rec:true },
+      { id:'iloe-2', label:'ILOE — 2 years', price:1600 }
+    ]},
+    { id:'tyre',  name:'Tyre Replacement',              icon:'tire_repair',      type:'multi', rec:1500, options:[
+      { id:'tyre-1', label:'Basic tyre cover', price:1500, rec:true },
+      { id:'tyre-2', label:'Premium tyre cover', price:2800 }
+    ]},
+    { id:'accessories', name:'Accessories',            icon:'auto_awesome_motion', type:'multi', rec:1100, options:[
+      { id:'acc-mat',    label:'Floor Mats', price:750, rec:true },
+      { id:'acc-side',   label:'Side Step Switch', price:350, rec:true },
+      { id:'acc-boot',   label:'Rear Boot Tray', price:350 },
+      { id:'acc-screen', label:'Rear Entertainment Screen', price:5100 },
+      { id:'acc-batt',   label:'Battery Booster', price:1100 }
+    ]}
+  ];
+  // price = entry trim, priceTo = top trim. ES matches the TRIMS range exactly.
+  var MODELS = [
+    { id:'vx', body:'SUV',  name:'EXEED VX',  cls:'Flagship 7-seat SUV', s1:'2.0T · 261 hp',  s2:'6/7 seats', price:189900, priceTo:239900 },
+    { id:'txl', body:'SUV', name:'EXEED TXL', cls:'Premium SUV',         s1:'1.6T · 197 hp',  s2:'5 seats',   price:129900, priceTo:159900 },
+    { id:'lx', body:'SUV/Sedan', name:'EXEED LX',  cls:'Compact SUV',         s1:'1.5T · 156 hp',  s2:'5 seats',   price:99900,  priceTo:124900 },
+    { id:'rx', body:'SUV',  name:'EXEED RX',  cls:'Coupe SUV',           s1:'2.0T · 261 hp',  s2:'Sport',     price:169900, priceTo:199900 },
+    { id:'es', body:'SUV/Sedan',name:'EXEED ES',  cls:'Fully electric sedan',  s1:'Up to 620 km',   s2:'517 hp',    price:159900, priceTo:209900 },
+    { id:'et', body:'SUV',  name:'EXEED ET',  cls:'Electric REEV SUV',   s1:'Up to 1400 km',  s2:'Hybrid EV', price:199900, priceTo:249900 }
+  ];
+  // gifts[] are the campaign's giveaways — they head the VAS table at zero once
+  // the campaign is picked, and cost the customer nothing either way.
+  var CAMPAIGNS = [
+    { id:'none',    name:'No campaign',           gifts:[] },
+    { id:'evperf',  name:'EV - Performance 2025', gifts:['Free Registration','Free Tinting','Free Charger'] },
+    { id:'ramadan', name:'Ramadan Offer',         gifts:['Free Registration','Free Tinting'] },
+    { id:'launch',  name:'EXEED Launch Bundle',   gifts:['Free Registration','Free Tinting','Free Charger','Free Ceramic Coating'] }
+  ];
+  // Add-on bundles — 2 curated packages + custom (per business direction).
+  var BUNDLES = [
+    { id:'platinum', name:'Platinum', desc:'Full protection', items:['insurance','service','tinting','ceramic'] },
+    { id:'gold',     name:'Gold',     desc:'Essentials',      items:['insurance','service','tinting'] },
+    { id:'custom',   name:'Custom',   desc:'Pick your own',   items:null }
+  ];
+  var STEPS = ['Model','Trim','Exterior','Interior','Finance'];
+  // Model years quotable today. Descriptive only — a run-out or pre-order price
+  // delta is a campaign, so it belongs in CAMPAIGNS, not here.
+  var YEARS = [2027, 2026, 2025];
+
+  var state = { step:0, model:'es', trim:'lr', ext:'white', int:'blackgray', year:2026, payType:'cash', discount:0, tradeIn:0, tradeAccepted:true, downAmt:0, dpSupportAmt:20000, campaign:'none', vasVal:{ cmi:5000, gap:2499 }, vasProd:{ smc:['SC - 100K-120K'] }, vasLk:{ q:'', hl:-1, open:false }, vasSel:{ ppf:{'ppf-sf':true}, smart:{'smart-1':true}, tinting:{'tint-3':true}, iloe:{'iloe-1':true}, tyre:{'tyre-1':true}, accessories:{'acc-mat':true} }, vasOpen:{} };
+  function maxDiscount(){ return Math.round(trim().price*0.05/500)*500; }
+
+  function fmt(n){ return (n||0).toLocaleString('en-US'); }
+  var DH = '<svg class="dh" viewBox="0 0 1000 870" role="img" aria-label="dirham"><use href="#dhSym"/></svg>';
+  function dh(n){ return DH + fmt(n); }
+  function model(){ return MODELS.filter(function(m){return m.id===state.model;})[0] || MODELS[4]; }
+  function campaign(){ return CAMPAIGNS.filter(function(c){return c.id===state.campaign;})[0] || CAMPAIGNS[0]; }
+  function gifts(){ return campaign().gifts || []; }
+  function trim(){ return TRIMS.filter(function(t){return t.id===state.trim;})[0]; }
+  function ext(){ return EXT.filter(function(c){return c.id===state.ext;})[0]; }
+  function intr(){ return INT.filter(function(c){return c.id===state.int;})[0]; }
+  function emi(loan,y){ return Math.round(loan*(1+RATE*y)/(y*12)); }
+  // Contracts picked from the lookup, kept in catalogue order however they were added.
+  function vasProds(c){
+    var codes = state.vasProd[c.id] || [];
+    return (c.products || []).filter(function(p){ return codes.indexOf(p.code) > -1; });
+  }
+  function catCustomer(c){
+    if (c.type === 'number') return state.vasVal[c.id] || 0;
+    if (c.type === 'lookup'){ var s2 = 0; vasProds(c).forEach(function(p){ s2 += p.price; }); return s2; }
+    var s = 0, sel = state.vasSel[c.id] || {};
+    (c.options||[]).forEach(function(o){ if (sel[o.id]) s += o.price; });
+    return s;
+  }
+  function addTotal(){ var s=0; VAS_CATS.forEach(function(c){ s += catCustomer(c); }); return s; }
+  function recVasTotal(){ var s=0; VAS_CATS.forEach(function(c){ s += c.rec; }); return s; }
+  function renderVasChooser(){
+    var host = document.getElementById('vasTable'); if (!host) return;
+    var totalRec = 0, totalCust = 0, rows = '';
+    // The campaign's giveaways head the table at zero on both sides, so they read
+    // as part of the deal without loading either total.
+    var freeRows = gifts().map(function(g){
+      return '<div class="pc-row vas-catrow is-free">' +
+        '<span class="pc-i"><span class="mi vas-cat-chev" style="visibility:hidden">expand_more</span><span class="mi vas-cat-ic">redeem</span><span class="vas-cat-name">'+g+'</span></span>' +
+        '<span class="pc-v">'+dh(0)+'</span>' +
+        '<span class="pc-v">'+dh(0)+'</span>' +
+      '</div>';
+    }).join('');
+    VAS_CATS.forEach(function(c){
+      var cust = catCustomer(c);
+      totalRec += c.rec; totalCust += cust;
+      if (c.type === 'number'){
+        rows += '<div class="pc-row vas-catrow">' +
+          '<span class="pc-i"><span class="mi vas-cat-chev" style="visibility:hidden">expand_more</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span></span>' +
+          '<span class="pc-v">'+dh(c.rec)+'</span>' +
+          '<span class="pc-v vas-cc"><span class="vas-cur">'+DH+'</span><input type="number" min="0" step="100" class="vas-ccinput" value="'+(cust||'')+'" placeholder="0" onchange="setVasNum(\''+c.id+'\', this.value)"></span>' +
+        '</div>';
+      } else if (c.type === 'lookup'){
+        var lopen = !!state.vasOpen[c.id], lps = vasProds(c);
+        var tag = lps.length ? '<span class="vas-lk-tag">'+esc(lps[0].code)+(lps.length > 1 ? ' +'+(lps.length-1) : '')+'</span>' : '';
+        rows += '<div class="pc-row vas-cat'+(lopen?' open':'')+'" onclick="toggleVasGroup(\''+c.id+'\')">' +
+          '<span class="pc-i"><span class="mi vas-cat-chev">'+(lopen?'expand_less':'expand_more')+'</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span>'+tag+'</span>' +
+          '<span class="pc-v">'+dh(c.rec)+'</span><span class="pc-v">'+dh(cust)+'</span></div>';
+        if (lopen) rows += vasLkHtml(c, lps);
+      } else {
+        var open = !!state.vasOpen[c.id];
+        rows += '<div class="pc-row vas-cat'+(open?' open':'')+'" onclick="toggleVasGroup(\''+c.id+'\')">' +
+          '<span class="pc-i"><span class="mi vas-cat-chev">'+(open?'expand_less':'expand_more')+'</span><span class="mi vas-cat-ic">'+c.icon+'</span><span class="vas-cat-name">'+c.name+'</span></span>' +
+          '<span class="pc-v">'+dh(c.rec)+'</span><span class="pc-v">'+dh(cust)+'</span></div>';
+        if (open){
+          rows += '<div class="vas-opts" onclick="event.stopPropagation()">' + c.options.map(function(o){
+            var on = state.vasSel[c.id] && state.vasSel[c.id][o.id];
+            var recb = o.rec ? '<span class="vas-rec">Recommended</span>' : '';
+            return '<label class="pc-row vas-opt'+(on?' on':'')+'"><span class="pc-i vas-opt-lbl"><span class="mi vas-cat-chev" style="visibility:hidden">expand_more</span><input type="checkbox"'+(on?' checked':'')+' onchange="toggleVasOpt(\''+c.id+'\',\''+o.id+'\')"><span class="vas-opt-n">'+o.label+recb+'</span></span><span class="pc-v"></span><span class="pc-v vas-opt-p">'+dh(o.price)+'</span></label>';
+          }).join('') + '</div>';
+        }
+      }
+    });
+    rows += '<div class="pc-row pc-total"><span class="pc-i">Total VAS</span><span class="pc-v">'+dh(totalRec)+'</span><span class="pc-v" id="vasTotalCust">'+dh(totalCust)+'</span></div>';
+    var emiInfo = '<div class="vas-emi-info"><div class="pc-row vas-emirow"><span class="pc-i vas-emi-note"><span class="mi">info</span>Based on 3.5% interest &middot; 5-yr installment &middot; est. added EMI</span><span class="pc-v">+ '+dh(Math.round(totalRec/60))+' /mo</span><span class="pc-v" id="vasEmiCust">+ '+dh(Math.round(totalCust/60))+' /mo</span></div></div>';
+    host.innerHTML = '<div class="pc">' +
+      '<div class="pc-row pc-head"><span class="pc-i">Service</span><span class="pc-v">Recommended</span><span class="pc-v">Customer choice</span></div>' +
+      freeRows + rows +
+    '</div>' + emiInfo;
+  }
+  function updateVasTotal(){ var t = addTotal(); var el = document.getElementById('vasTotalCust'); if (el) el.innerHTML = dh(t); var em = document.getElementById('vasEmiCust'); if (em) em.innerHTML = '+ ' + dh(Math.round(t/60)) + ' /mo'; }
+  function esc(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  // Fuzzy match: every query character in order, gaps allowed, so "1014" and "sc140"
+  // both find "SC - 100K-140K Service". Returns the matched indexes, or null for no match.
+  function fuzzyHits(text, q){
+    var t = text.toLowerCase(), hits = [], from = 0;
+    for (var k = 0; k < q.length; k++){
+      var ch = q.charAt(k); if (ch === ' ') continue;
+      var at = t.indexOf(ch, from); if (at < 0) return null;
+      hits.push(at); from = at + 1;
+    }
+    return hits;
+  }
+  function fuzzyMark(text, hits){
+    var on = {}; (hits || []).forEach(function(i){ on[i] = 1; });
+    return text.split('').map(function(ch, i){ return on[i] ? '<b>'+esc(ch)+'</b>' : esc(ch); }).join('');
+  }
+  // Fuzzy on the product number first (the part that distinguishes contracts), then a
+  // plain contains on the name, then the category's own words so "smc" lists them all.
+  var SMC_WORDS = 'smc service maintenance contract';
+  function vasLkView(c){
+    var q = (state.vasLk.q || '').trim().toLowerCase();
+    var rows = [];
+    (c.products || []).forEach(function(p){
+      var hits = q ? fuzzyHits(p.code, q) : [];
+      if (hits === null){
+        var at = p.name.toLowerCase().indexOf(q);
+        if (at > -1){ hits = []; for (var k = 0; k < q.length; k++) hits.push(at + k); }
+        else if (SMC_WORDS.indexOf(q) > -1) hits = [];
+        else return;
+      }
+      rows.push({ p:p, hits:hits, span:hits.length ? hits[hits.length-1] - hits[0] : 0, first:hits.length ? hits[0] : 0 });
+    });
+    if (q) rows.sort(function(a, b){ return (a.span - b.span) || (a.first - b.first); });
+    return rows;
+  }
+  // The list is a dropdown: it opens when the SE clicks into the search box, not when
+  // the group expands, and stays open while contracts are ticked off — SMC is multi-select.
+  function vasLkResHtml(c){
+    if (!state.vasLk.open) return '';
+    return '<div class="vas-lk-panel"><div class="vas-lk-hd">Products</div>' +
+      '<div class="vas-lk-list" id="vasLkList">'+vasLkListHtml(c)+'</div></div>';
+  }
+  function vasLkListHtml(c){
+    var view = vasLkView(c);
+    if (!view.length) return '<div class="vas-lk-none">No products match &ldquo;'+esc((state.vasLk.q||'').trim())+'&rdquo;</div>';
+    var codes = state.vasProd[c.id] || [];
+    return view.map(function(r, i){
+      var on = codes.indexOf(r.p.code) > -1;
+      return '<button type="button" class="vas-lk-opt'+(i===state.vasLk.hl?' hl':'')+(on?' sel':'')+'" onclick="toggleVasProd(\''+c.id+'\',\''+r.p.code+'\')">' +
+        '<span class="vas-lk-box'+(on?' on':'')+'"><span class="mi">check</span></span>' +
+        '<span class="mi">inventory_2</span>' +
+        '<span class="vas-lk-txt"><span class="vas-lk-t">'+fuzzyMark(r.p.name, r.hits)+'</span><span class="vas-lk-s">'+esc(r.p.code)+'</span></span>' +
+        (r.p.rec ? '<span class="vas-rec">Recommended</span>' : '') +
+        '<span class="vas-lk-p">'+dh(r.p.price)+'</span></button>';
+    }).join('');
+  }
+  // Expanded SMC group: the search box, the contracts already on the deal, and the
+  // dropdown when it is open — the D365 Products lookup.
+  function vasLkHtml(c, ps){
+    var picked = ps.length
+      ? ps.map(function(p){
+          return '<div class="vas-lk-chip"><span class="mi">check_circle</span>' +
+            '<span class="vas-lk-txt"><span class="vas-lk-t">'+esc(p.name)+'</span><span class="vas-lk-s">'+esc(p.code)+'</span></span>' +
+            '<span class="vas-lk-p">'+dh(p.price)+'</span>' +
+            '<button type="button" class="vas-lk-x" title="Remove contract" onclick="toggleVasProd(\''+c.id+'\',\''+p.code+'\')"><span class="mi">close</span></button></div>';
+        }).join('')
+      : '<div class="vas-lk-hint"><span class="mi">search</span>Click the search box to list contracts, or type a product number</div>';
+    return '<div class="vas-opts vas-lk" onclick="event.stopPropagation()">' +
+      '<div class="vas-lk-field" onclick="openVasLk()"><span class="mi vas-lk-ic">search</span>' +
+        '<input id="vasLkInp" class="vas-lk-inp" type="text" autocomplete="off" placeholder="Search service contracts" value="'+esc(state.vasLk.q)+'" oninput="vasLkQuery(this.value)" onkeydown="vasLkKey(event)">' +
+        '<span class="mi vas-lk-ic">'+(state.vasLk.open?'expand_less':'expand_more')+'</span></div>' +
+      picked +
+      '<div id="vasLkRes">'+vasLkResHtml(c)+'</div>' +
+    '</div>';
+  }
+  function lookupCat(){ return VAS_CATS.filter(function(c){ return c.type === 'lookup'; })[0]; }
+  function paintVasLkRes(){
+    var el = document.getElementById('vasLkRes'); if (el) el.innerHTML = vasLkResHtml(lookupCat());
+  }
+  function openVasLk(){ if (!state.vasLk.open){ state.vasLk.open = true; paintVasLkRes(); } focusVasLk(); }
+  function closeVasLk(){ if (state.vasLk.open){ state.vasLk.open = false; state.vasLk.hl = -1; paintVasLkRes(); } }
+  function vasLkQuery(v){ state.vasLk.q = v; state.vasLk.hl = -1; state.vasLk.open = true; paintVasLkRes(); }
+  function vasLkKey(e){
+    var c = lookupCat();
+    if (e.key === 'Escape'){ if (state.vasLk.open) closeVasLk(); else toggleVasGroup(c.id); return; }
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){
+      e.preventDefault();
+      if (!state.vasLk.open){ openVasLk(); return; }
+      var n = vasLkView(c).length; if (!n) return;
+      state.vasLk.hl = (state.vasLk.hl + (e.key === 'ArrowDown' ? 1 : n - 1) + n) % n;
+      paintVasLkRes();
+      var hl = document.querySelector('.vas-lk-opt.hl'); if (hl && hl.scrollIntoView) hl.scrollIntoView({ block:'nearest' });
+      return;
+    }
+    if (e.key === 'Enter'){
+      e.preventDefault();
+      if (!state.vasLk.open) { openVasLk(); return; }
+      var r = vasLkView(c)[state.vasLk.hl > -1 ? state.vasLk.hl : 0];
+      if (r) toggleVasProd(c.id, r.p.code);
+    }
+  }
+  // Ticking a contract leaves the dropdown open — the SE usually adds more than one.
+  function toggleVasProd(cid, code){
+    var codes = (state.vasProd[cid] || []).slice(), at = codes.indexOf(code);
+    if (at > -1) codes.splice(at, 1); else codes.push(code);
+    state.vasProd[cid] = codes;
+    renderVasChooser(); renderSummary(); focusVasLk();
+  }
+  function focusVasLk(){ var i = document.getElementById('vasLkInp'); if (i) i.focus(); }
+  document.addEventListener('mousedown', function(e){
+    var box = document.querySelector('.vas-lk');
+    if (state.vasLk.open && box && !box.contains(e.target)) closeVasLk();
+  });
+  function toggleVasGroup(id){ state.vasOpen[id] = !state.vasOpen[id]; state.vasLk = { q:'', hl:-1, open:false }; renderVasChooser(); if (state.vasOpen[id]) focusVasLk(); }
+  function toggleVasOpt(cid, oid){ if (!state.vasSel[cid]) state.vasSel[cid] = {}; state.vasSel[cid][oid] = !state.vasSel[cid][oid]; renderVasChooser(); renderSummary(); }
+  function setVasNum(id, v){ state.vasVal[id] = Math.max(0, parseInt(v,10)||0); updateVasTotal(); renderSummary(); }
+
+  function leadTarget(){ var m=location.search.match(/lead=(\d+)/); return m?parseInt(m[1],10):null; }
+
+  function renderSteps(){
+    document.getElementById('steps').innerHTML = STEPS.map(function(s,i){
+      var cls = i===state.step?'active':(i<state.step?'done':'');
+      return '<div class="step '+cls+'" onclick="goTo('+i+')"><span class="n">'+(i<state.step?'<span class=\'mi\' style=\'font-size:12px\'>check</span>':(i+1))+'</span>'+s+'</div>';
+    }).join('');
+  }
+
+  function setStageImg(src){
+    var img = document.getElementById('stageImg');
+    if (img.getAttribute('src') === src) return;
+    img.classList.add('swap');
+    setTimeout(function(){ img.setAttribute('src', src); img.classList.remove('swap'); }, 180);
+  }
+
+  function renderDock(){
+    var body = document.getElementById('dockBody');
+    var title = document.getElementById('dockTitle');
+    document.body.classList.toggle('step-finance', state.step === 4);
+    document.body.classList.toggle('step-interior', state.step === 3);
+    if (state.step === 0){ // Model
+      title.textContent = 'Select model';
+      body.innerHTML = '<div class="cards models">' + MODELS.map(function(m){
+        return '<div class="card mcard'+(state.model===m.id?' on':'')+'" onclick="pick(\'model\',\''+m.id+'\')"><span class="check"><span class="mi">check</span></span>' +
+          '<div class="cn">'+m.name+'</div><div class="cs">'+m.body+'</div>' +
+          '<div class="cp">'+DH+fmt(m.price)+'<span class="cpto"> – '+fmt(m.priceTo)+'</span></div></div>';
+      }).join('') + '</div>';
+    } else if (state.step === 1){ // Trim
+      title.textContent = 'Select trim';
+      body.innerHTML = '<div class="cards">' + TRIMS.map(function(t){
+        return '<div class="card'+(state.trim===t.id?' on':'')+'" onclick="pick(\'trim\',\''+t.id+'\')"><span class="check"><span class="mi">check</span></span>' +
+          '<div class="cn">'+t.name+'</div><div class="cs">'+model().name+'</div>' +
+          '<div class="specs"><span><span class="mi" style="font-size:14px">settings</span>'+t.engine+'</span><span><span class="mi" style="font-size:14px">speed</span>'+t.power+'</span><span><span class="mi" style="font-size:14px">bolt</span>'+t.range+'</span></div>' +
+          '<div class="cp">'+DH+fmt(t.price)+'<span class="cpto"> – '+fmt(t.priceTo)+'</span></div></div>';
+      }).join('') + '</div>';
+    } else if (state.step === 2){ // Exterior
+      title.textContent = 'Exterior colour';
+      body.innerHTML = '<div class="swatches">' + EXT.map(function(c){
+        return '<div class="swatch'+(state.ext===c.id?' on':'')+'" onclick="pick(\'ext\',\''+c.id+'\')"><span class="dot" style="background:'+c.hex+'"></span><span class="nm">'+c.name+'</span></div>';
+      }).join('') + '</div>';
+    } else if (state.step === 3){ // Interior
+      title.textContent = 'Interior';
+      body.innerHTML = '<div class="swatches">' + INT.map(function(c){
+        return '<div class="swatch'+(state.int===c.id?' on':'')+'" onclick="pick(\'int\',\''+c.id+'\')"><span class="dot" style="background:'+c.hex+'"></span><span class="nm">'+c.name+'</span></div>';
+      }).join('') + '</div>';
+    } else { // Finance — Value Added Services (accessories) chooser on the left
+      title.textContent = 'Value Added Services';
+      body.innerHTML = '<div class="vas-sub">Pick accessories &amp; services. The total feeds into the financing on the right.</div><div id="vasTable"></div>';
+      renderVasChooser();
+    }
+    renderYear();
+    document.getElementById('nextBtn').style.visibility = state.step === STEPS.length-1 ? 'hidden' : 'visible';
+    document.getElementById('backBtn').style.visibility = state.step === 0 ? 'hidden' : 'visible';
+  }
+
+  function renderStage(){
+    var t = trim(), c = ext(), ic = intr();
+    if (state.step === 3){ setStageImg(ic.img); document.getElementById('stageBig').textContent = ic.name; document.getElementById('stageSub').textContent = 'Interior'; }
+    else { setStageImg(c.img); document.getElementById('stageBig').textContent = model().name + ' · ' + t.name; document.getElementById('stageSub').textContent = c.name + ' · ' + ic.name; }
+    var bm = document.getElementById('badgeModel'); if (bm) bm.textContent = model().name;
+    // the badge line was hardcoded to the ES, so every other model read as a
+    // "Fully Electric SUV" — it follows the picked model now
+    var bc = document.getElementById('badgeCls'); if (bc) bc.textContent = model().cls;
+  }
+
+  // Only on the model step: past it the dock is asking about trim and colour,
+  // and a year sitting in that header would be captioning the wrong question.
+  // The summary keeps it on screen for the rest of the flow.
+  function renderYear(){
+    var ys = document.getElementById('yearSel');
+    if (ys){
+      if (!ys.options.length) ys.innerHTML = YEARS.map(function(y){
+        return '<option value="'+y+'">'+y+'</option>';
+      }).join('');
+      ys.value = String(state.year);
+    }
+    var dy = document.getElementById('dockYear'); if (dy) dy.style.display = (state.step === 0) ? '' : 'none';
+    var cs = document.getElementById('campSel');
+    if (cs){
+      if (!cs.options.length) cs.innerHTML = CAMPAIGNS.map(function(c){
+        return '<option value="'+c.id+'">'+c.name+'</option>';
+      }).join('');
+      cs.value = state.campaign;
+    }
+    var dc = document.getElementById('dockCamp'); if (dc) dc.style.display = (state.step === 4) ? '' : 'none';
+  }
+
+  function renderSummary(){
+    var t = trim(), c = ext(), ic = intr();
+    var pay = state.payType;
+    var list = t.price;
+    var tradeIn = state.tradeIn || 0;
+    var discount = (pay === 'dpassist') ? 0 : state.discount;
+    var dpSupport = (pay === 'dpassist') ? (state.dpSupportAmt || 0) : 0;
+    var downpay = (pay === 'cash') ? 0 : (state.downAmt || 0);
+    var baseNet = Math.max(0, list - discount - tradeIn);
+    var at = addTotal(), vas = at;
+    var netPrice = baseNet + vas;
+    var loanW = (pay === 'cash') ? 0 : Math.max(0, netPrice - downpay - dpSupport);
+    // All four blocks are on screen from the first step so the shape of the
+    // proposal is visible, but each holds a dash until its own step is behind
+    // the customer — the card never reports a choice they haven't made.
+    var em = '<span class="sum-empty">&ndash;</span>';
+    var hasTrim = state.step >= 1, hasExt = state.step >= 2, hasInt = state.step >= 3;
+    var hasCamp = state.campaign !== 'none';
+    var parts = [state.year];
+    if (hasTrim) parts.push(t.name);
+    if (hasExt) parts.push(c.name);
+    if (hasInt) parts.push(ic.name);
+    var sum =
+      row('Trim', hasTrim ? t.name : em, 'tune') +
+      (hasExt ? rowColor('Exterior', c.name, c.hex, 'palette') : row('Exterior', em, 'palette')) +
+      (hasInt ? rowColor('Interior', ic.name, ic.hex, 'weekend') : row('Interior', em, 'weekend')) +
+      // Campaign only joins the card on the finance step, where its picker lives.
+      // It sits there disabled until one is chosen.
+      (state.step >= 4
+        ? row('Campaign', hasCamp ? campaign().name : em, 'campaign', hasCamp ? '' : 'off')
+        : '');
+    document.getElementById('sumHead').textContent = model().name;
+    document.getElementById('sumSubhead').textContent = parts.join(' · ');
+    document.getElementById('sumRows').innerHTML = sum;
+    // Financing output card — only revealed on the Finance step (calculated at the end).
+    var fo = document.getElementById('finOutput');
+    fo.innerHTML = '';
+    var onFinance = state.step === 4;
+    var saveBtn = document.querySelector('.save-btn'); if (saveBtn) saveBtn.style.display = onFinance ? '' : 'none';
+    var saveHint = document.querySelector('.save-hint'); if (saveHint) saveHint.style.display = onFinance ? '' : 'none';
+    document.getElementById('topPrice').innerHTML = DH + fmt(state.step === 4 ? (netPrice + vas) : list);
+    var finV = function(n){ return '<span class="fin-cur"><svg class="dh" viewBox="0 0 1000 870"><use href="#dhSym"/></svg></span><span class="fin-num">' + fmt(n) + '</span>'; };
+    document.getElementById('finList').innerHTML = finV(list);
+    document.getElementById('finTrade').innerHTML = finV(tradeIn);
+    Array.prototype.forEach.call(document.querySelectorAll('.yn-btn'), function(b){
+      b.classList.toggle('on', (b.getAttribute('data-yn') === 'yes') === !!state.tradeAccepted);
+    });
+    document.getElementById('finNet').innerHTML = finV(netPrice);
+    document.getElementById('finVas').innerHTML = finV(vas);
+    var vasSel = VAS_CATS.filter(function(c){ return catCustomer(c) > 0; });
+    document.getElementById('vasTip').innerHTML = vasSel.length
+      ? '<div class="vas-tip-h">Added services</div>' + vasSel.map(function(c){ return '<div class="vas-tip-row"><span>'+c.name+'</span><span>'+DH+fmt(catCustomer(c))+'</span></div>'; }).join('')
+      : '<div class="vas-tip-empty">No services added yet.</div>';
+    document.getElementById('discHint').textContent = (pay === 'dpassist') ? 'fixed' : '';
+    document.getElementById('rowDpSupport').style.display = (pay === 'dpassist') ? '' : 'none';
+    document.getElementById('rowDownpay').style.display = (pay === 'cash') ? 'none' : '';
+    var loanRec = (pay === 'cash') ? 0 : Math.max(0, (baseNet + recVasTotal()) - downpay - dpSupport);
+    document.getElementById('emiTable').style.display = (pay === 'cash') ? 'none' : '';
+    document.getElementById('emiBody').innerHTML = [5,4,3,2].map(function(y){
+      return '<tr><td>'+y+' yrs</td><td>'+fmt(emi(loanRec,y))+'</td><td>'+fmt(emi(loanW,y))+'</td></tr>';
+    }).join('');
+  }
+  function row(k,v,ic,cls){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row'+(cls?' '+cls:'')+'"><span class="k">'+i+k+'</span><span class="v">'+v+'</span></div>'; }
+  function rowColor(k,v,hex,ic){ var i = ic?'<span class="mi sum-k-ic">'+ic+'</span>':''; return '<div class="sum-row"><span class="k">'+i+k+'</span><span class="v"><span class="cdot" style="background:'+hex+'"></span>'+v+'</span></div>'; }
+
+  function renderAll(){ renderSteps(); renderDock(); renderStage(); renderSummary(); }
+  function pick(kind,val){ state[kind]=val; renderAll(); }
+  function setDiscount(v){ state.discount = Math.max(0, parseInt(v,10)||0); renderSummary(); }
+  function setTradeAccepted(v){ state.tradeAccepted = v; renderSummary(); }
+  function setDownpayment(v){ state.downAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
+  function setDpSupport(v){ state.dpSupportAmt = Math.max(0, parseInt(v,10)||0); renderSummary(); }
+  function setPayType(t){
+    state.payType = t;
+    var tg = document.getElementById('payToggle');
+    if (tg) Array.prototype.forEach.call(tg.querySelectorAll('.pay-btn'), function(b){ b.classList.toggle('on', b.getAttribute('data-pay') === t); });
+    var disc = document.getElementById('discountAmt');
+    if (disc){ if (t === 'dpassist'){ disc.readOnly = true; disc.value = 0; disc.classList.add('dp-ro-input'); } else { disc.readOnly = false; disc.value = state.discount; disc.classList.remove('dp-ro-input'); } }
+    renderSummary();
+  }
+  function setCampaign(v){ state.campaign = v; renderVasChooser(); renderSummary(); }
+  function setYear(v){ state.year = parseInt(v, 10) || state.year; renderYear(); renderSummary(); }
+  function go(d){ var n=state.step+d; if(n<0||n>=STEPS.length) return; state.step=n; renderAll(); window.scrollTo(0,0); }
+  function goTo(i){ state.step=i; renderAll(); }
+
+  function saveProposal(){
+    var t = trim(), c = ext(), ic = intr();
+    var proposal = {
+      model:model().name+' · '+t.name, trim:t.name, year:String(state.year),
+      extColor:c.name, extHex:c.hex, image:c.img,
+      intColor:ic.name, intHex:ic.hex,
+      range:t.range, power:t.power,
+      nsp:t.price, payType:state.payType, downPct:Math.round((state.downAmt||0)/t.price*100), discount:(state.payType==='dpassist'?0:state.discount), tradeIn:state.tradeIn, tradeAccepted:state.tradeAccepted, downAmt:state.downAmt, dpSupport:(state.payType==='dpassist'?state.dpSupportAmt:0), pdi:0,
+      addOns:{ insurance:(state.vasVal.cmi||0)>0, service:catCustomer(VAS_CATS.filter(function(c){return c.id==='smc';})[0])>0, tinting:catCustomer(VAS_CATS.filter(function(c){return c.id==='tinting';})[0])>0, ceramic:catCustomer(VAS_CATS.filter(function(c){return c.id==='ppf';})[0])>0 },
+      vasTotal:addTotal(),
+      isQuote:false
+    };
+    try {
+      var q = JSON.parse(localStorage.getItem('exeedProposalQueue')||'[]');
+      q.push({ lead: leadTarget(), proposal: proposal, ts: Date.now() });
+      localStorage.setItem('exeedProposalQueue', JSON.stringify(q));
+    } catch(e){}
+    try { if (window.opener && !window.opener.closed && window.opener.importProposalQueue) window.opener.importProposalQueue(); } catch(e){}
+    document.getElementById('savedText').textContent = t.name + ' · ' + c.name + ' proposal sent to the CRM.';
+    document.getElementById('savedOv').classList.add('show');
+  }
+  function buildAnother(){ document.getElementById('savedOv').classList.remove('show'); state.step=1; renderAll(); }
+
+  function toggleTheme(){
+    var dark = document.body.classList.toggle('dark');
+    document.getElementById('themeIcon').textContent = dark ? 'light_mode' : 'dark_mode';
+    try { localStorage.setItem('exeedBuilderTheme', dark ? 'dark' : 'light'); } catch(e){}
+  }
+  (function(){
+    var saved; try { saved = localStorage.getItem('exeedBuilderTheme'); } catch(e){}
+    var dark = saved !== 'light'; // default dark
+    document.body.classList.toggle('dark', dark);
+    document.getElementById('themeIcon').textContent = dark ? 'light_mode' : 'dark_mode';
+  })();
+
+  renderAll();
+</script>
+<script>window.addEventListener('load',function(){setTimeout(function(){
+ if(/light/.test(location.search))toggleTheme();
+ goTo(4);
+ function fire(el){['mousedown','mouseup','click'].forEach(function(t){el.dispatchEvent(new MouseEvent(t,{bubbles:true,cancelable:true,view:window}));});}
+ var hdr=[].slice.call(document.querySelectorAll('.vas-cat')).filter(function(r){return /Service Maintenance/.test(r.textContent);})[0];
+ fire(hdr);
+ setTimeout(function(){
+   var inp=document.getElementById('vasLkInp');
+   fire(inp);
+   document.title='panel='+!!document.querySelector('.vas-lk-panel');
+ },150);
+},250);});</script>
+</body>
+</html>
