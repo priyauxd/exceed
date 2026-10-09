@@ -1975,7 +1975,8 @@
     function openConfirm(title, text, okLabel, cb, cancelLabel, icon, neutral){
       document.getElementById('confirmTitle').textContent = title;
       var txtEl = document.getElementById('confirmText');
-      txtEl.innerHTML = I18N.t(text || '');
+      // Markup bodies are translated node by node as they enter the DOM; plain sentences go through the pattern table.
+      txtEl.innerHTML = /^\s*</.test(text || '') ? text : I18N.t(text || '');
       txtEl.style.display = text ? '' : 'none';
       document.getElementById('confirmOkBtn').textContent = okLabel || 'Confirm';
       document.getElementById('confirmCancelBtn').textContent = cancelLabel || 'Keep';
