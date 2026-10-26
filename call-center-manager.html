@@ -469,6 +469,28 @@
     .pct-g { color:#3d8a5b; font-weight:700; }
     .pct-a { color:#8a6420; font-weight:700; }
     .pct-r { color: var(--red); font-weight:700; }
+    .score-link{border:0;background:transparent;padding:0;font:inherit;cursor:pointer;color:inherit;}
+    .score-link:hover span{text-decoration:underline;}
+    .qs-note{display:block;margin-top:3px;font-size:11.5px;font-weight:500;color:var(--ink-muted);white-space:normal;max-width:320px;line-height:1.4;}
+    .qs-calls{max-height:220px;overflow:auto;border:1px solid var(--border-soft);border-radius:8px;}
+    .qs-calls thead th{position:sticky;top:0;z-index:1;}
+    .qs-na{color:var(--ink-muted);font-style:italic;font-weight:600;}
+    .qs-rev{display:flex;align-items:center;gap:3px;margin-top:3px;font-size:10.5px;font-weight:700;color:#8a6420;line-height:1.2;}
+    .qs-rev .material-symbols-outlined{font-size:14px;}
+    .qs-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 8px;}
+    .qs-chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:5px 12px;font:inherit;font-size:12px;font-weight:600;color:var(--ink-secondary);cursor:pointer;}
+    .qs-chip.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+    .qs-total{margin-inline-start:auto;font-size:12px;font-weight:700;color:var(--ink-secondary);}
+    .qs-id{font-family:'SF Mono','Cascadia Code',Consolas,monospace;font-size:11.5px;color:var(--ink);}
+    .qs-detail{margin-top:10px;border:1px solid var(--border-soft);border-radius:8px;background:#fafbfc;overflow:hidden;}
+    .qs-summary-block{padding:12px 14px 10px;border-bottom:1px solid var(--border-soft);}
+    .qs-summary-block .ra-sec-lbl{margin:0 0 6px;}
+    .qs-detail .ra-sec-lbl{margin:12px 14px 4px;}
+    .qs-summary{font-size:13px;font-weight:500;color:var(--ink);line-height:1.45;}
+    .qs-detail .mdr-leads th{background:transparent;}
+    .qs-detail-foot{display:flex;justify-content:flex-end;padding:12px 14px;border-top:1px solid var(--border-soft);background:#fff;}
+    .qs-empty{padding:16px;color:var(--ink-muted);font-style:italic;}
+    .tbl-btn:disabled{opacity:.55;cursor:default;filter:none;}
 
     .row-link { color: var(--blue); font-weight: 600; text-decoration: none; white-space: nowrap; font-size: 12px; }
     .row-link:hover { text-decoration: underline; }
@@ -803,6 +825,7 @@
     .rl-sub{ font-size:12.5px; color:var(--ink-secondary); margin-top:3px; }
     .rl-btn{ flex-shrink:0; white-space:nowrap; }
     .ra-sec-lbl{ font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-secondary); margin:16px 0 8px; }
+    .mdr-leads td.qs-gap{ white-space:normal; max-width:148px; line-height:1.35; }
     .ra-recv tr.sel td{ background:#eef4fd; }
     .ra-recv .num{ text-align:end; }
     .ra-check, .ra-radio, .ra-lead-check{ accent-color:var(--blue); width:16px; height:16px; cursor:pointer; }
@@ -1131,7 +1154,7 @@
               <tr class="urg">
                 <td><div class="c-name">Rahul Krishnan</div><div class="c-shift">08:00&ndash;17:00</div></td>
                 <td class="num">22</td><td class="num red">7</td><td class="num">3</td><td class="num">4</td><td class="num">2</td><td class="num red">3</td><td class="num">4m 42s</td>
-                <td><span class="pct-a">72</span></td>
+                <td><button type="button" class="score-link" data-agent="Rahul Krishnan" title="Review agent scores" onclick="openQuality('Rahul Krishnan')"><span class="pct-a">72</span></button></td>
                 <td><span class="st-badge brch">SLA Breached</span></td>
                 <td><a href="#" class="row-link" onclick="openReassign('Rahul Krishnan');return false">Reassign 3 leads + coach</a><a href="#" class="why">Why?</a></td>
                 <td style="text-align:end"><button class="tbl-btn red" onclick="openReassign('Rahul Krishnan')">Reassign + coach</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1139,7 +1162,7 @@
               <tr class="urg">
                 <td><div class="c-name">Lina Osman</div><div class="c-shift">10:00&ndash;19:00</div></td>
                 <td class="num">25</td><td class="num red">8</td><td class="num">4</td><td class="num">2</td><td class="num">1</td><td class="num red">4</td><td class="num">5m 30s</td>
-                <td><span class="pct-a">78</span></td>
+                <td><button type="button" class="score-link" data-agent="Lina Osman" title="Review agent scores" onclick="openQuality('Lina Osman')"><span class="pct-a">78</span></button></td>
                 <td><span class="st-badge blk">Blocked</span></td>
                 <td><a href="#" class="row-link" onclick="openReassign('Lina Osman');return false">Reassign 5 leads</a><a href="#" class="why">Why?</a></td>
                 <td style="text-align:end"><button class="tbl-btn" onclick="openReassign('Lina Osman')">Reassign 5</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1147,7 +1170,7 @@
               <tr>
                 <td><div class="c-name">Mohammed Zaid</div><div class="c-shift">09:00&ndash;18:00</div></td>
                 <td class="num">19</td><td class="num">3</td><td class="num">2</td><td class="num">3</td><td class="num">4</td><td class="num">1</td><td class="num">3m 12s</td>
-                <td><span class="pct-r">65</span></td>
+                <td><button type="button" class="score-link" data-agent="Mohammed Zaid" title="Review agent scores" onclick="openQuality('Mohammed Zaid')"><span class="pct-r">65</span></button></td>
                 <td><span class="st-badge ret">Returned</span></td>
                 <td><a href="#" class="row-link" onclick="openQuality('Mohammed Zaid');return false">Quality review</a><a href="#" class="why">Why?</a></td>
                 <td style="text-align:end"><button class="tbl-btn" onclick="openQuality('Mohammed Zaid')">Review quality</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1155,7 +1178,7 @@
               <tr>
                 <td><div class="c-name">Aisha Hussein</div><div class="c-shift">11:00&ndash;20:00</div></td>
                 <td class="num">17</td><td class="num red">5</td><td class="num">2</td><td class="num">2</td><td class="num">2</td><td class="num red">2</td><td class="num">5m 55s</td>
-                <td><span class="pct-a">70</span></td>
+                <td><button type="button" class="score-link" data-agent="Aisha Hussein" title="Review agent scores" onclick="openQuality('Aisha Hussein')"><span class="pct-a">70</span></button></td>
                 <td><span class="st-badge wrn">Due Soon</span></td>
                 <td><a href="#" class="row-link" onclick="openCoaching('Aisha Hussein');return false">1:1 coaching</a><a href="#" class="why">Why?</a></td>
                 <td style="text-align:end"><button class="tbl-btn ghost" onclick="openCoaching('Aisha Hussein')">Add coaching note</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1163,7 +1186,7 @@
               <tr>
                 <td><div class="c-name">Nadia Al Suwaidi</div><div class="c-shift">08:00&ndash;17:00</div></td>
                 <td class="num">18</td><td class="num">1</td><td class="num">2</td><td class="num">6</td><td class="num">0</td><td class="num">0</td><td class="num">4m 05s</td>
-                <td><span class="pct-g">92</span></td>
+                <td><button type="button" class="score-link" data-agent="Nadia Al Suwaidi" title="Review agent scores" onclick="openQuality('Nadia Al Suwaidi')"><span class="pct-g">92</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
                 <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1171,7 +1194,7 @@
               <tr>
                 <td><div class="c-name">Priya Nair</div><div class="c-shift">09:00&ndash;18:00</div></td>
                 <td class="num">16</td><td class="num">2</td><td class="num">3</td><td class="num">5</td><td class="num">1</td><td class="num">0</td><td class="num">3m 58s</td>
-                <td><span class="pct-g">88</span></td>
+                <td><button type="button" class="score-link" data-agent="Priya Nair" title="Review agent scores" onclick="openQuality('Priya Nair')"><span class="pct-g">88</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
                 <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1179,7 +1202,7 @@
               <tr>
                 <td><div class="c-name">Farhan Aslam</div><div class="c-shift">10:00&ndash;19:00</div></td>
                 <td class="num">14</td><td class="num">1</td><td class="num">1</td><td class="num">5</td><td class="num">0</td><td class="num">0</td><td class="num">4m 20s</td>
-                <td><span class="pct-g">90</span></td>
+                <td><button type="button" class="score-link" data-agent="Farhan Aslam" title="Review agent scores" onclick="openQuality('Farhan Aslam')"><span class="pct-g">90</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
                 <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1187,7 +1210,7 @@
               <tr>
                 <td><div class="c-name">Ivan Petrov</div><div class="c-shift">13:00&ndash;22:00</div></td>
                 <td class="num">13</td><td class="num">2</td><td class="num">2</td><td class="num">4</td><td class="num">1</td><td class="num">0</td><td class="num">4m 12s</td>
-                <td><span class="pct-g">85</span></td>
+                <td><button type="button" class="score-link" data-agent="Ivan Petrov" title="Review agent scores" onclick="openQuality('Ivan Petrov')"><span class="pct-g">85</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
                 <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
@@ -1738,8 +1761,271 @@
     function frmSelect(label, opts){ return frmField(label, '<select class="frm-ctrl">'+opts.map(function(o){return '<option>'+o+'</option>';}).join('')+'</select>'); }
     function frmTextarea(label, ph){ return frmField(label, '<textarea class="frm-ctrl" placeholder="'+(ph||'')+'"></textarea>'); }
 
-    var QUALITY={ 'Mohammed Zaid': { qscore:65, aht:'3m 12s', returned:4, lastLead:{ name:'Sara Ali', id:'L-2026-06101', by:'Ahmad Nasr',
-      fields:[['Customer name',true],['Mobile',true],['Model interest',true],['Preferred showroom',false],['Enquiry reason',false]], returnReason:'Missing preferred showroom' } } };
+    var QS_THRESHOLD=70;
+    var QS_CRITERIA=[
+      {key:'communication', label:'Communication', weight:15},
+      {key:'conversion', label:'Conversion', weight:30},
+      {key:'discovery_questions', label:'Discovery questions', weight:20},
+      {key:'objection_handling', label:'Objection handling', weight:30},
+      {key:'response_time', label:'Response time', weight:5}
+    ];
+    function qsMark(score, rationale){ return {score:score, rationale:rationale}; }
+    var QS_SHIFT={
+      'Rahul Krishnan':'08:00–17:00',
+      'Lina Osman':'10:00–19:00',
+      'Mohammed Zaid':'09:00–18:00',
+      'Aisha Hussein':'11:00–20:00',
+      'Nadia Al Suwaidi':'08:00–17:00',
+      'Priya Nair':'09:00–18:00',
+      'Farhan Aslam':'10:00–19:00',
+      'Ivan Petrov':'13:00–22:00'
+    };
+    var QS_CALLS={
+      'Rahul Krishnan':[
+        {conversationId:'conv-2026-06041', communicationId:'comm-44102', startedAt:'30 Jun 2026 · 09:12', criteria:{
+          communication:qsMark(74,'Clear and polite, with a few hesitant phrases while switching to Arabic.'),
+          conversion:qsMark(64,'A showroom visit was offered, but no day was agreed.'),
+          discovery_questions:qsMark(70,'Budget, model and usage were answered. Timeline was not.'),
+          objection_handling:qsMark(72,'The price objection was acknowledged. The competitor comparison stayed vague.'),
+          response_time:qsMark(80,'Replies stayed inside the fast-to-slow range.')
+        }},
+        {conversationId:'conv-2026-06044', communicationId:'comm-44118', startedAt:'30 Jun 2026 · 11:05', criteria:{
+          communication:qsMark(80,'Professional tone, and the language matched the customer.'),
+          conversion:qsMark(70,'The customer agreed to a callback, not a visit.'),
+          discovery_questions:qsMark(null,'A test drive was already booked before this call, so discovery does not apply.'),
+          objection_handling:qsMark(75,'Warranty questions were answered from the vehicle facts.'),
+          response_time:qsMark(88,'Median reply time was close to the fast limit.')
+        }}
+      ],
+      'Lina Osman':[
+        {conversationId:'conv-2026-06052', communicationId:'comm-45021', startedAt:'30 Jun 2026 · 10:24', criteria:{
+          communication:qsMark(82,'Confident delivery in a mix of Arabic and English.'),
+          conversion:qsMark(76,'A Saturday test drive was proposed and the customer leaned toward it.'),
+          discovery_questions:qsMark(74,'Most catalogue questions were answered. Preferred showroom was thin.'),
+          objection_handling:qsMark(78,'The feature objection was handled with an accurate specification.'),
+          response_time:qsMark(70,'Some pauses sat in the middle of the scoring range.')
+        }},
+        {conversationId:'conv-2026-06055', communicationId:'comm-45033', startedAt:'30 Jun 2026 · 14:10', criteria:{
+          communication:qsMark(84,'Polite and easy to follow throughout.'),
+          conversion:qsMark(80,'The customer agreed to visit Deira this week.'),
+          discovery_questions:qsMark(72,'Budget and timeline were captured. Usage was only partly answered.'),
+          objection_handling:qsMark(null,'The customer raised no objection about the car.'),
+          response_time:qsMark(75,'Reply pace was acceptable, not fast.')
+        }}
+      ],
+      'Mohammed Zaid':[
+        {conversationId:'conv-2026-06106', communicationId:'comm-46106', startedAt:'30 Jun 2026 · 16:48', criteria:{
+          communication:qsMark(74,'Clear enough, with a couple of hesitant phrases near the close.'),
+          conversion:qsMark(62,'A visit was offered. The customer said they would decide later.'),
+          discovery_questions:qsMark(64,'Model and budget were answered. Timeline stayed vague.'),
+          objection_handling:qsMark(66,'The price objection was heard, then answered only in general terms.'),
+          response_time:qsMark(82,'Replies were steady, inside the scoring range.')
+        }},
+        {conversationId:'conv-2026-06104', communicationId:'comm-46104', startedAt:'30 Jun 2026 · 15:05', criteria:{
+          communication:qsMark(75,'Polite and easy to follow.'),
+          conversion:qsMark(66,'A weekend test drive was proposed and left open.'),
+          discovery_questions:qsMark(70,'Budget, usage and model were answered.'),
+          objection_handling:qsMark(68,'A feature question was answered, with one spec left vague.'),
+          response_time:qsMark(85,'Median reply time sat inside the scoring range.')
+        }},
+        {conversationId:'conv-2026-06102', communicationId:'comm-46102', startedAt:'30 Jun 2026 · 13:15', criteria:{
+          communication:qsMark(78,'Polite and clear in the customer’s language.'),
+          conversion:qsMark(72,'The customer agreed to visit, but the slot was not pinned down.'),
+          discovery_questions:qsMark(60,'Usage and budget were captured. Preferred contact time was not.'),
+          objection_handling:qsMark(null,'The customer raised no objection about the car.'),
+          response_time:qsMark(85,'Median reply time sat inside the scoring range.')
+        }},
+        {conversationId:'conv-2026-06105', communicationId:'comm-46105', startedAt:'30 Jun 2026 · 11:50', criteria:{
+          communication:qsMark(72,'Understandable, and the language matched the customer.'),
+          conversion:qsMark(60,'The customer already had a visit booked, and this call did not move it forward.'),
+          discovery_questions:qsMark(null,'The visit was already booked before this call, so discovery does not apply.'),
+          objection_handling:qsMark(62,'A competitor comparison was acknowledged but not answered from the vehicle facts.'),
+          response_time:qsMark(88,'Replies were prompt.')
+        }},
+        {conversationId:'conv-2026-06103', communicationId:'comm-46103', startedAt:'30 Jun 2026 · 10:22', criteria:{
+          communication:qsMark(68,'Hesitant in places, though the customer could follow.'),
+          conversion:qsMark(55,'No test drive or showroom visit was secured.'),
+          discovery_questions:qsMark(58,'Budget was captured. Showroom and timeline were missed.'),
+          objection_handling:qsMark(64,'The warranty concern was heard and only partly answered.'),
+          response_time:qsMark(80,'Reply pace was acceptable.')
+        }},
+        {conversationId:'conv-2026-06101', communicationId:'comm-46101', startedAt:'30 Jun 2026 · 09:40', criteria:{
+          communication:qsMark(70,'Understandable, but several phrases were hesitant.'),
+          conversion:qsMark(55,'A test drive was mentioned late and no day or showroom was agreed.'),
+          discovery_questions:qsMark(45,'Only budget and model were answered. Showroom and timeline were missed.'),
+          objection_handling:qsMark(62,'The price objection was acknowledged. The comparison was not accurate enough.'),
+          response_time:qsMark(90,'Replies came quickly, well under the slow limit.')
+        }}
+      ],
+      'Aisha Hussein':[
+        {conversationId:'conv-2026-06071', communicationId:'comm-47011', startedAt:'30 Jun 2026 · 11:20', criteria:{
+          communication:qsMark(76,'Polite, with long pauses that made the delivery less confident.'),
+          conversion:qsMark(64,'A visit was suggested after the customer had already started to close the call.'),
+          discovery_questions:qsMark(68,'Model, budget and usage were answered.'),
+          objection_handling:qsMark(70,'The quality concern was heard, then answered only in general terms.'),
+          response_time:qsMark(60,'Silences before replies were often near the slow limit.')
+        }},
+        {conversationId:'conv-2026-06074', communicationId:'comm-47019', startedAt:'30 Jun 2026 · 16:02', criteria:{
+          communication:qsMark(78,'Clear wording once the customer switched to English.'),
+          conversion:qsMark(72,'A weekend test drive was offered and left as a maybe.'),
+          discovery_questions:qsMark(66,'Timeline and showroom were captured. Budget was approximate.'),
+          objection_handling:qsMark(74,'The competitor point was acknowledged and redirected to warranty.'),
+          response_time:qsMark(65,'Reply pace improved on the second half of the call.')
+        }}
+      ],
+      'Nadia Al Suwaidi':[
+        {conversationId:'conv-2026-06006', communicationId:'comm-48006', startedAt:'30 Jun 2026 · 08:35', criteria:{
+          communication:qsMark(94,'Clear, confident and professional in the customer’s language.'),
+          conversion:qsMark(92,'A Saturday 10:00 test drive at SZR was agreed on the call.'),
+          discovery_questions:qsMark(90,'The catalogue questions that applied were answered.'),
+          objection_handling:qsMark(93,'Price and warranty objections were answered from the vehicle facts.'),
+          response_time:qsMark(96,'Replies were at or under the fast limit.')
+        }},
+        {conversationId:'conv-2026-06009', communicationId:'comm-48009', startedAt:'30 Jun 2026 · 12:18', criteria:{
+          communication:qsMark(95,'Warm tone, correct wording, no language mismatch.'),
+          conversion:qsMark(90,'The customer confirmed a showroom visit for this week.'),
+          discovery_questions:qsMark(null,'The visit was already booked before this call, so discovery does not apply.'),
+          objection_handling:qsMark(91,'A feature question was answered accurately.'),
+          response_time:qsMark(94,'Median reply time stayed near the fast limit.')
+        }}
+      ],
+      'Priya Nair':[
+        {conversationId:'conv-2026-06014', communicationId:'comm-49014', startedAt:'30 Jun 2026 · 09:28', criteria:{
+          communication:qsMark(90,'Clear and professional throughout.'),
+          conversion:qsMark(86,'A test drive was proposed at the right moment and a day was shortlisted.'),
+          discovery_questions:qsMark(88,'Budget, usage, model and timeline were answered.'),
+          objection_handling:qsMark(87,'The resale objection was acknowledged and answered without over-claiming.'),
+          response_time:qsMark(92,'Replies were prompt.')
+        }},
+        {conversationId:'conv-2026-06016', communicationId:'comm-49016', startedAt:'30 Jun 2026 · 15:40', criteria:{
+          communication:qsMark(91,'Matched the customer’s English and stayed polite.'),
+          conversion:qsMark(89,'The customer agreed to visit Sharjah on Sunday.'),
+          discovery_questions:qsMark(84,'Showroom and contact time were captured. One usage question was skipped.'),
+          objection_handling:qsMark(null,'The customer raised no objection about the car.'),
+          response_time:qsMark(90,'Reply time stayed comfortably inside the range.')
+        }}
+      ],
+      'Farhan Aslam':[
+        {conversationId:'conv-2026-06002', communicationId:'comm-50002', startedAt:'30 Jun 2026 · 10:08', criteria:{
+          communication:qsMark(92,'Confident, grammatically clean, and easy to follow.'),
+          conversion:qsMark(88,'Moved from interest to a booked Saturday test drive.'),
+          discovery_questions:qsMark(90,'The applicable discovery questions were answered.'),
+          objection_handling:qsMark(91,'Compared the car with the competitor using accurate warranty and spec points.'),
+          response_time:qsMark(94,'Fast replies, near the full-marks limit.')
+        }},
+        {conversationId:'conv-2026-06018', communicationId:'comm-50018', startedAt:'30 Jun 2026 · 16:22', criteria:{
+          communication:qsMark(93,'Professional tone from the greeting through the close.'),
+          conversion:qsMark(90,'The customer committed to a showroom visit tomorrow.'),
+          discovery_questions:qsMark(86,'Model, budget and showroom were captured.'),
+          objection_handling:qsMark(89,'A price objection was resolved without quoting an unconfirmed figure.'),
+          response_time:qsMark(95,'Median silence before each reply was very short.')
+        }}
+      ],
+      'Ivan Petrov':[
+        {conversationId:'conv-2026-06011', communicationId:'comm-51011', startedAt:'30 Jun 2026 · 13:12', criteria:{
+          communication:qsMark(88,'Clear and polite, with a steady pace.'),
+          conversion:qsMark(82,'A test drive was offered. The customer asked to confirm tomorrow.'),
+          discovery_questions:qsMark(84,'Budget, model and timeline were answered.'),
+          objection_handling:qsMark(86,'The feature question was answered from the lineup, with one detail left vague.'),
+          response_time:qsMark(90,'Replies were prompt.')
+        }},
+        {conversationId:'conv-2026-06019', communicationId:'comm-51019', startedAt:'30 Jun 2026 · 18:05', criteria:{
+          communication:qsMark(86,'Professional, and switched language to match the customer.'),
+          conversion:qsMark(88,'A Sunday showroom visit was agreed.'),
+          discovery_questions:qsMark(80,'Usage and showroom were captured. Budget was a range only.'),
+          objection_handling:qsMark(null,'The customer raised no objection about the car.'),
+          response_time:qsMark(88,'Reply time stayed inside the scoring range.')
+        }}
+      ]
+    };
+    var QS_META={
+      'conv-2026-06041':{agentScoreId:'as-06041',leadId:'L-2026-18441',callSummary:'Asked how the RX compares on price and left the showroom visit open.',isReviewed:false},
+      'conv-2026-06044':{agentScoreId:'as-06044',leadId:'L-2026-18444',callSummary:'Warranty questions on an existing test drive. Agreed a callback, not a new visit.',isReviewed:true},
+      'conv-2026-06052':{agentScoreId:'as-06052',leadId:'L-2026-18452',callSummary:'Leaned toward a Saturday test drive. Preferred showroom was still thin.',isReviewed:false},
+      'conv-2026-06055':{agentScoreId:'as-06055',leadId:'L-2026-18455',callSummary:'Agreed to visit Deira this week. No objection about the car came up.',isReviewed:false},
+      'conv-2026-06106':{agentScoreId:'as-06106',leadId:'L-2026-18506',callSummary:'A visit was offered. The customer said they would decide later.',isReviewed:false},
+      'conv-2026-06104':{agentScoreId:'as-06104',leadId:'L-2026-18504',callSummary:'A weekend test drive was proposed and left open.',isReviewed:false},
+      'conv-2026-06102':{agentScoreId:'as-06102',leadId:'L-2026-18502',callSummary:'Agreed to visit, but the slot and preferred contact time were not pinned down.',isReviewed:false},
+      'conv-2026-06105':{agentScoreId:'as-06105',leadId:'L-2026-18505',callSummary:'The visit was already booked. A competitor comparison was not answered from the vehicle facts.',isReviewed:false},
+      'conv-2026-06103':{agentScoreId:'as-06103',leadId:'L-2026-18503',callSummary:'No test drive or showroom visit was secured. The warranty concern was only partly answered.',isReviewed:true},
+      'conv-2026-06101':{agentScoreId:'as-06101',leadId:'L-2026-18501',callSummary:'A test drive was mentioned late. The price comparison was not accurate enough.',isReviewed:true},
+      'conv-2026-06071':{agentScoreId:'as-06071',leadId:'L-2026-18471',callSummary:'A visit was suggested late, after the customer had started to close the call.',isReviewed:false},
+      'conv-2026-06074':{agentScoreId:'as-06074',leadId:'L-2026-18474',callSummary:'A weekend test drive was offered and left as a maybe after switching to English.',isReviewed:true},
+      'conv-2026-06006':{agentScoreId:'as-06006',leadId:'L-2026-18406',callSummary:'Saturday 10:00 test drive at SZR was agreed. Price and warranty were answered from the facts.',isReviewed:true},
+      'conv-2026-06009':{agentScoreId:'as-06009',leadId:'L-2026-18409',callSummary:'Confirmed a showroom visit already in motion for this week.',isReviewed:true},
+      'conv-2026-06014':{agentScoreId:'as-06014',leadId:'L-2026-18414',callSummary:'A test-drive day was shortlisted after a resale question.',isReviewed:false},
+      'conv-2026-06016':{agentScoreId:'as-06016',leadId:'L-2026-18416',callSummary:'Agreed to visit Sharjah on Sunday. No objection about the car came up.',isReviewed:true},
+      'conv-2026-06002':{agentScoreId:'as-06002',leadId:'L-2026-18402',callSummary:'Moved from interest to a booked Saturday test drive, with an accurate competitor comparison.',isReviewed:true},
+      'conv-2026-06018':{agentScoreId:'as-06018',leadId:'L-2026-18418',callSummary:'Committed to a showroom visit tomorrow. The price objection was resolved without an unconfirmed figure.',isReviewed:true},
+      'conv-2026-06011':{agentScoreId:'as-06011',leadId:'L-2026-18411',callSummary:'A test drive was offered. The customer asked to confirm tomorrow.',isReviewed:false},
+      'conv-2026-06019':{agentScoreId:'as-06019',leadId:'L-2026-18419',callSummary:'A Sunday showroom visit was agreed. The customer raised no objection about the car.',isReviewed:true}
+    };
+    function callWeighted(criteria){
+      var n=0, d=0;
+      QS_CRITERIA.forEach(function(c){
+        var item=criteria[c.key];
+        if(!item || item.score==null) return;
+        n += item.score * c.weight;
+        d += c.weight;
+      });
+      return d ? Math.round(n / d * 10) / 10 : null;
+    }
+    function fmtScore(n){
+      if(n==null) return null;
+      var r=Math.round(n * 10) / 10;
+      return (r % 1 === 0) ? String(r.toFixed(0)) : String(r);
+    }
+    function scoreCls(n){ return n==null ? '' : (n>=85?' g':(n<60?' r':'')); }
+    function scorePack(agent){
+      var calls=(QS_CALLS[agent]||QS_CALLS['Mohammed Zaid']).map(function(call){
+        var meta=QS_META[call.conversationId]||{};
+        return {
+          source:meta,
+          agentScoreId:meta.agentScoreId||call.conversationId,
+          conversationId:call.conversationId,
+          communicationId:call.communicationId,
+          leadId:meta.leadId||'—',
+          callSummary:meta.callSummary||'',
+          startedAt:call.startedAt,
+          isReviewed:!!meta.isReviewed,
+          criteria:call.criteria,
+          weightedScore:callWeighted(call.criteria)
+        };
+      });
+      var sum=calls.reduce(function(acc, call){ return acc + (call.weightedScore||0); }, 0);
+      var average=calls.length ? Math.round(sum / calls.length) : null;
+      var reviewed=calls.filter(function(call){ return call.isReviewed; }).length;
+      return {
+        shift:QS_SHIFT[agent]||'',
+        averageScore:average,
+        isCoachingNeeded:average!=null && average<QS_THRESHOLD,
+        reviewedCount:reviewed,
+        notReviewedCount:calls.length-reviewed,
+        calls:calls
+      };
+    }
+    function paintReviewCounts(){
+      document.querySelectorAll('.score-link[data-agent]').forEach(function(btn){
+        var q=scorePack(btn.getAttribute('data-agent'));
+        var el=btn.parentNode.querySelector('.qs-rev');
+        if(!el){
+          el=document.createElement('div');
+          el.className='qs-rev';
+          btn.parentNode.appendChild(el);
+        }
+        if(!q.notReviewedCount){ el.hidden=true; return; }
+        el.hidden=false;
+        el.innerHTML='<span class="material-symbols-outlined">warning</span>'+q.notReviewedCount+' to review';
+      });
+    }
+    function criteriaRows(call){
+      return QS_CRITERIA.map(function(c){
+        var item=call.criteria[c.key]||{score:null, rationale:''};
+        var scoreCell=item.score==null ? '<td class="num qs-na">—</td>' : '<td class="num ml-qual'+scoreCls(item.score)+'">'+item.score+'</td>';
+        return '<tr><td><div style="font-weight:700;color:var(--ink)">'+c.label+'</div><span class="qs-note">'+item.rationale+'</span></td>'+
+          '<td class="num">'+c.weight+'%</td>'+scoreCell+'</tr>';
+      }).join('');
+    }
     var REASSIGN={
       'Rahul Krishnan': { shift:'08:00–17:00', assigned:22, notact:7, sla:3, status:'SLA Breached', statusCls:'brch', note:'3 SLA breaches today and 7 leads not actioned.',
         leads:[{lead:'Ali Kassem',id:'L-2026-06001',source:'Call Center Inbound',temp:'Warm',sla:'12m over',slaC:'red',qual:'40%',next:'Start call — SLA breached'},
@@ -1786,22 +2072,86 @@
         '</div>';
       openMdr();
     };
+    var qsOpen=null;
+    function qsFiltered(){
+      if(!qsOpen) return [];
+      return qsOpen.pack.calls.filter(function(call){ return !call.isReviewed; });
+    }
+    function qsCallRow(call, i){
+      return '<tr class="'+(i===qsOpen.index?'sel':'')+'" onclick="qsSelectCall('+i+')">'+
+        '<td><input type="radio" name="qsCall" class="ra-radio"'+(i===qsOpen.index?' checked':'')+'></td>'+
+        '<td><div class="qs-id">'+call.agentScoreId+'</div><div class="ml-id">'+call.conversationId+'</div></td>'+
+        '<td><div class="qs-id">'+call.leadId+'</div></td>'+
+        '<td>'+call.startedAt+'</td>'+
+        '<td class="num ml-qual'+scoreCls(call.weightedScore)+'">'+(fmtScore(call.weightedScore)||'—')+'</td></tr>';
+    }
+    function qsPaint(){
+      if(!qsOpen) return;
+      var shown=qsFiltered();
+      var counts=document.getElementById('qsCounts');
+      if(counts){
+        counts.textContent=qsOpen.pack.shift+' · Average score '+qsOpen.pack.averageScore+
+          ' · '+qsOpen.pack.calls.length+' scored calls';
+      }
+      var tbody=document.querySelector('#qsCalls tbody');
+      var summary=document.getElementById('qsSummary');
+      var criteria=document.getElementById('qsCriteria');
+      var btn=document.getElementById('qsMarkBtn');
+      if(!shown.length){
+        if(tbody) tbody.innerHTML='<tr><td colspan="5" class="qs-empty">No calls left to review.</td></tr>';
+        if(summary) summary.textContent='';
+        if(criteria) criteria.innerHTML='';
+        if(btn) btn.disabled=true;
+        return;
+      }
+      if(qsOpen.index>=shown.length) qsOpen.index=0;
+      if(tbody) tbody.innerHTML=shown.map(qsCallRow).join('');
+      if(summary) summary.textContent=shown[qsOpen.index].callSummary||'';
+      if(criteria) criteria.innerHTML=criteriaRows(shown[qsOpen.index]);
+      if(btn) btn.disabled=false;
+    }
+    window.qsSelectCall=function(i){
+      if(!qsOpen) return;
+      qsOpen.index=i;
+      qsPaint();
+    };
+    window.qsMarkReviewed=function(i){
+      if(!qsOpen) return;
+      if(typeof i==='number') qsOpen.index=i;
+      var call=qsFiltered()[qsOpen.index];
+      if(!call || call.isReviewed || !call.source) return;
+      call.source.isReviewed=true;
+      qsOpen.pack=scorePack(qsOpen.agent);
+      if(qsOpen.index>=qsFiltered().length) qsOpen.index=0;
+      qsPaint();
+      paintReviewCounts();
+      if(window.ccToast) ccToast('Call marked as reviewed');
+    };
     window.openQuality=function(agent){
-      var q=QUALITY[agent]||QUALITY['Mohammed Zaid'];
-      var flds=q.lastLead.fields.map(function(f){ return '<div class="'+(f[1]?'qr-ok':'qr-bad')+'">'+(f[1]?'&#10003;':'&#10007;')+' '+f[0]+'</div>'; }).join('');
-      document.getElementById('mdrContent').innerHTML = HD('Call Quality Review','Review recent handovers and mandatory qualification fields.') +
+      var q=scorePack(agent);
+      qsOpen={agent:agent, pack:q, index:0};
+      var badge=q.isCoachingNeeded
+        ? '<span class="ra-badge brch">Coaching needed</span>'
+        : '<span class="ra-badge ok">On target</span>';
+      document.getElementById('mdrContent').innerHTML = HD('Agent Scores Review','Average score and the scored calls behind it. Coaching is flagged under 70.') +
         '<div class="mdr-body">'+
-          '<div class="frm-card"><h4>'+agent+'</h4><div class="fc-meta">Quality score '+q.qscore+' &middot; AHT '+q.aht+' &middot; Returned '+q.returned+'</div></div>'+
-          '<div class="frm-card"><div class="fc-eyebrow">Last returned lead</div>'+
-            '<div style="font-size:14px;font-weight:700;color:var(--ink)">'+q.lastLead.name+' &middot; '+q.lastLead.id+'</div>'+
-            '<div class="fc-meta" style="margin-bottom:12px">Returned by sales exec '+q.lastLead.by+'</div>'+
-            '<div class="fc-eyebrow">Mandatory fields</div><div class="qr-fields">'+flds+'</div>'+
-            '<div class="fc-meta" style="margin-top:12px;color:var(--ink-secondary)">Return reason: <strong style="color:var(--ink)">'+q.lastLead.returnReason+'</strong></div>'+
-            '<div style="margin-top:6px"><a href="#" class="frm-link" onclick="return false">Open transcript &rarr;</a></div>'+
+          '<div class="frm-card"><div class="fc-eyebrow">Current agent</div>'+
+            '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px"><div><div style="font-size:16px;font-weight:700;color:var(--ink)">'+agent+'</div>'+
+            '<div class="fc-meta" id="qsCounts"></div></div>'+
+            badge+'</div>'+
+            '<div class="fc-meta" style="font-style:italic;margin-top:8px">'+(q.isCoachingNeeded
+              ? 'Average of '+q.calls.length+' calls is under 70, so coaching is flagged. One stronger call does not clear it.'
+              : 'Average of '+q.calls.length+' calls is 70 or above, so coaching is not flagged.')+'</div></div>'+
+          '<div class="ra-sec-lbl">Scored calls &middot; '+q.calls.length+' &middot; newest first</div>'+
+          '<div class="mdr-leadswrap qs-calls"><table class="mdr-leads ra-recv" id="qsCalls"><thead><tr><th></th><th>Agent score</th><th>Lead</th><th>Started</th><th class="num">Score</th></tr></thead><tbody></tbody></table></div>'+
+          '<div class="qs-detail">'+
+            '<div class="qs-summary-block"><div class="ra-sec-lbl">Call summary</div><div class="qs-summary" id="qsSummary"></div></div>'+
+            '<div class="ra-sec-lbl">Criteria on the selected call</div>'+
+            '<div class="mdr-leadswrap"><table class="mdr-leads"><thead><tr><th>Criterion</th><th class="num">Weight</th><th class="num">Score</th></tr></thead><tbody id="qsCriteria"></tbody></table></div>'+
+            '<div class="qs-detail-foot"><button type="button" class="tbl-btn" id="qsMarkBtn" onclick="qsMarkReviewed()">Mark Reviewed</button></div>'+
           '</div>'+
-          '<div class="frm-field"><textarea class="frm-ctrl" placeholder="Coaching note…"></textarea></div>'+
-          '<div class="frm-foot"><button class="frm-cancel" onclick="closeMetric()">Cancel</button><button class="frm-save" onclick="ccToast(\'Quality review saved\');closeMetric()">Save Quality Review</button></div>'+
         '</div>';
+      qsPaint();
       openMdr();
     };
     function raCount(){ var n=document.querySelectorAll('.ra-lead-check:checked').length; var el=document.getElementById('raSelCount'); if(el) el.textContent=n; }
@@ -1919,6 +2269,7 @@
         '<div class="mdr-body">'+cards+notes+'</div>';
       openMdr();
     };
+    paintReviewCounts();
   })();
   </script>
   <!-- Ported Training Coach modal (from call-center-agent) -->
