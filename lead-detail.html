@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <link href="rtl.css?v=14" rel="stylesheet" />
-  <script src="i18n-ar.js?v=24"></script>
+  <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -53,6 +53,7 @@
     .sb-item:hover { background: var(--blue-soft); color: var(--blue); }
     .sb-item.active { background: var(--blue-soft); color: var(--blue); font-weight: 600; border-inline-start-color: var(--blue); }
     .sb-item .material-symbols-outlined { font-size: 18px; }
+    .sb-item .sb-fi { width: 18px; height: 18px; flex-shrink: 0; }
 
     /* ── Main ── */
     .main { margin-inline-start: var(--sidebar-w); margin-top: var(--topbar-h); flex: 1; display: flex; flex-direction: column; min-width: 0; height: calc(100vh - var(--topbar-h)); overflow: hidden; }
@@ -1217,6 +1218,10 @@
     .conf-cta.locked { cursor:not-allowed; color:var(--ink-muted); background:var(--bg); border-style:dashed; }
     .conf-cta.locked:hover { border-color:var(--border); color:var(--ink-muted); background:var(--bg); }
     .conf-cta.locked .material-symbols-outlined { color:var(--ink-muted); }
+    .pa-block { display:flex; flex-direction:column; gap:8px; margin-top:14px; }
+    .pa-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .pa-head .conf-lbl { margin:0; }
+    .pa-head .qc-status { padding:5px 10px; white-space:normal; }
     .conf-lock-note { display:flex; align-items:flex-start; gap:6px; margin-top:9px; font-size:11.5px; color:var(--ink-secondary); line-height:1.4; }
     .conf-lock-note .material-symbols-outlined { font-size:16px; color:var(--amber); }
     .conf-order { margin-top:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); overflow:hidden; }
@@ -1358,6 +1363,11 @@
     .dp-check-item.done { color: var(--ink-muted); text-decoration: line-through; }
     .dp-check-item.done .material-symbols-outlined { color: var(--green); }
     .dp-check-item.pending .material-symbols-outlined { color: var(--border); }
+    .dp-check-item:has(.dp-check-note), .dp-check-item:has(.dp-check-ref) { align-items: flex-start; }
+    .dp-check-txt { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .dp-check-ref { font-size: 11px; color: var(--ink-secondary); }
+    .dp-check-refv { font-family: 'SF Mono','Cascadia Code',Consolas,monospace; font-weight: 600; color: var(--ink); }
+    .dp-check-note { font-size: 11px; color: var(--ink-muted); line-height: 1.4; }
 
     /* Recent activity */
     .dp-activity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 8px; }
@@ -1468,6 +1478,9 @@
     .la-chip { font-family: inherit; font-size: 12.5px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--borderRadiusCircular); background: var(--surface); color: var(--ink-secondary); cursor: pointer; transition: all .12s; }
     .la-chip:hover { border-color: var(--blue); color: var(--blue); }
     .la-chip.on { background: var(--green-soft); border-color: #46a56b; color: #2f7a4f; }
+    .la-chip.locked { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-muted); background: var(--bg); border-style: dashed; cursor: not-allowed; }
+    .la-chip.locked:hover { border-color: var(--border); color: var(--ink-muted); }
+    .la-chip.locked .material-symbols-outlined { font-size: 14px; }
     /* segmented control, deliberately unlike the outcome chips above it */
     .la-subchips{display:inline-flex;gap:3px;margin:9px 0 2px;padding:3px;background:#eef0f4;border-radius:9px;}
     .la-subchip{border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:600;color:#5b6472;
@@ -1575,6 +1588,11 @@
         <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="material-symbols-outlined">chevron_left</span></button>
         <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
         <a href="call-center-agent.html" class="sb-item enabled"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+        <div class="sb-group">Dashboard</div>
+        <a href="call-center-agent.html" class="sb-item enabled" title="Call Center Agent"><svg class="sb-fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></svg>CCA Dashboard</a>
+        <a href="call-center-manager.html" class="sb-item enabled" title="Call Center Manager"><svg class="sb-fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.925 3.047a9 9 0 017.616 6.11"/><path d="M13 22a2 2 0 012-2h4a2 2 0 012 2"/><path d="M3 12a2 2 0 012-2h4a2 2 0 012 2"/><path d="M3.889 15.9a9 9 0 005.247 4.632"/><circle cx="17" cy="14" r="2"/><circle cx="7" cy="4" r="2"/></svg>CCM Dashboard</a>
+        <a href="showroom-manager.html" class="sb-item enabled" title="Showroom Manager"><svg class="sb-fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-5a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v5"/><path d="M17.774 10.31a1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.451 0 1.12 1.12 0 0 0-1.548 0 2.5 2.5 0 0 1-3.452 0 1.12 1.12 0 0 0-1.549 0 2.5 2.5 0 0 1-3.77-3.248l2.889-4.184A2 2 0 0 1 7 2h10a2 2 0 0 1 1.653.873l2.895 4.192a2.5 2.5 0 0 1-3.774 3.244"/><path d="M4 10.95V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8.05"/></svg>SM Dashboard</a>
+        <a href="sales-executive.html" class="sb-item enabled" title="Sales Executive"><svg class="sb-fi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17V7"/><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"/><path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z"/></svg>SE Dashboard</a>
         <div class="sb-group">Call Center</div>
         <a href="call-center-agent.html" class="sb-item"><span class="material-symbols-outlined">monitoring</span>Call Center Dashb&hellip;</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">person_add</span>Today's Leads</a>
@@ -1886,10 +1904,10 @@
       {title:'Lead Qualification', fields:['customer','mobile','email','preferred','channel','lang'], checklist:['Log activities on attempts to reach out to customers','Share brochures and video recording with customers','Record Trade-in Interests','Book a visit appointment or test drive with the customer'], aiTitle:'Schedule a showroom visit', aiDesc:'Customer has responded positively. <strong>AI suggests</strong> booking a showroom appointment for this weekend based on their availability.', aiBtns:['Book Appointment','Send Invite'], aiNote:'First contact must be logged with outcome.'},
       {title:'Showroom Visit', fields:['customer','showroom','model','temp'], checklist:['Complete customer profile with E-ID / UAE Pass','Complete trade-in evaluation (If applicable)','Complete customer discovery questions (10 Qns)','Initiate test drive with customer','Verify stock availability and create proposals','Automated - Post Visit & Test Drive Surveys'], aiTitle:'Prepare for customer arrival', aiDesc:'Customer is expected at the showroom. Ensure the <strong>requested model</strong> is ready for viewing and test drive.', aiBtns:['Mark Arrived','Reschedule'], aiNote:'Log arrival time for analytics.'},
       {title:'Proposal & Quotation', fields:['customer','model','temp','existing','channel','preferred'], checklist:['Convert selected proposal into quotation and get manager&rsquo;s approval','F&O - Automated booking payment link sent','F&O - Booking payment fully received','F&O - Automated replication of quotation'], aiTitle:'Complete the discovery', aiDesc:'Customer is in discovery phase. <strong>AI suggests</strong> confirming the test drive and presenting finance options based on their budget preference.', aiBtns:['Complete Discovery','Schedule Follow-up'], aiNote:'All mandatory discovery fields must be filled.'},
-      {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['F&O - VIN tagging completed','Purchase agreement generated and shared to customer via Docusign','Document received and signed by customer for accepted'], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
-      {title:'Preparation for Delivery', fields:['customer','model','showroom'], checklist:['F&O - Sales quotation approval','F&O - Sales order approval','F&O - Downpayment amount fully received for preparation for delivery stage'], aiTitle:'Hand off to back office', aiDesc:'The deal is booked. <strong>Back office</strong> completes VIN assignment, RTA registration and the pre-delivery inspection before the car is ready.', aiBtns:['Notify Back Office','View Checklist'], aiNote:'All back-office tasks must be completed before the car is ready for delivery.'},
-      {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:['F&O - Pre-delivery inspection','Schedule a delivery with customer','Sales Admin - Trade in vehicle receiving (If applicable)','F&O - Generate invoice','F&O - Generate a delivery note ready for delivery'], aiTitle:'Confirm the booking', aiDesc:'Vehicle is prepared. <strong>Schedule the delivery</strong> appointment with the customer.', aiBtns:['Schedule Delivery','Hold Order'], aiNote:'A delivery appointment must be scheduled to proceed.'},
-      {title:'Close — Won / Lost', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:['Demo vehicle features & handover checklist','Automated - Post Delivery Surveys for closed state'], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
+      {title:'Offer Accepted', fields:['customer','model','source','showroom'], checklist:['F&O - VIN tagging completed','Purchase agreement generated and shared to customer via Zoho Sign','Document received and signed by customer for accepted',{t:'F&O - Sales order approval', note:'Moves to Prep for delivery once the sales order is fully approved in FO.'}], aiTitle:'Send the offer', aiDesc:'Discovery is complete. <strong>AI recommends</strong> generating a formal quote with the discussed finance terms.', aiBtns:['Generate Quote','Adjust Terms'], aiNote:'Quote must be approved before sharing.'},
+      {title:'Preparation for Delivery', fields:['customer','model','showroom'], checklist:[{t:'F&O - VAS item (if applicable)', ref:['Work order #','WO-VAS-00231']},{t:'F&O - Pre-delivery inspection', ref:['Work order #','WO-PDI-00418'], note:'Ticked when the PDI work order (WO group = PDI) is closed. The lead then moves to Ready for delivery.'}], aiTitle:'Hand off to back office', aiDesc:'The deal is booked. <strong>Back office</strong> closes any VAS work order and the pre-delivery inspection before the car is ready.', aiBtns:['Notify Back Office','View Checklist'], aiNote:'All back-office tasks must be completed before the car is ready for delivery.'},
+      {title:'Ready for Delivery', fields:['customer','model','showroom'], checklist:[{t:'Schedule a delivery with customer', note:'Completed in CE: Log Activity › Schedule delivery.'},'Sales Admin - Trade in vehicle receiving (If applicable)',{t:'F&O - Generate a delivery note ready for delivery', ref:['Delivery note #','DN-2026-00872']},{t:'F&O - Generate invoice', ref:['Invoice #','INV-2026-01544'], survey:true, note:'The Qualtrics survey is sent to the customer as soon as the invoice is generated.'}], aiTitle:'Confirm the booking', aiDesc:'Vehicle is prepared. <strong>Schedule the delivery</strong> appointment with the customer.', aiBtns:['Schedule Delivery','Hold Order'], aiNote:'A delivery appointment must be scheduled to proceed.'},
+      {title:'Close — Won / Lost', sla:{label:'3-DAY POST-DELIVERY SLA', value:'Not started', detail:'Target TBD', cls:''}, infoFields:[['Delivery date / time','<span class="link">Sat 04 Jul, 16:00</span>'],['Delivery location','SZR Showroom — Delivery Bay'],['Vehicle readiness','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#e7f4ec;color:#3d8a5b;font-size:11px;font-weight:600">Ready</span>'],['Customer arrival','Expected'],['Delivery note','<span style="display:inline-block;padding:1px 9px;border-radius:20px;background:#fbf1dd;color:#8a6420;font-size:11px;font-weight:600">Awaiting signature</span>'],['Feature orientation','Not started'],['NPS / survey','Scheduled +7d'],['Open issues','None'],['Follow-up tasks','5 scheduled']], fields:['customer','model','showroom'], checklist:[{t:'Automated - Post Delivery Surveys for closed state', note:'Ticked once the survey is sent. The opportunity then closes as Won.'}], aiTitle:'Complete the red-carpet handover checklist', aiDesc:'Vehicle is prepped and the customer arrives at 4pm. Walk through orientation, sign the delivery note and trigger the loyalty loop.', aiBtns:['Complete Handover','Log Issue'], aiNote:'<strong>To complete this step:</strong> Delivery note signed, feature orientation completed, and follow-up tasks created.'}
     ];
 
     // Per-stage SLA (indexed to journeySteps). show = date/time fields to surface, items = list of SLA activities, note = advisory.
@@ -1912,7 +1930,7 @@
       {title:'Log the showroom visit', desc:'Record arrival, the vehicle walkthrough and whether a test drive was taken.'},
       {title:'Log the discovery outcome', desc:'Capture needs, budget and finance discussion from this session.'},
       {title:'Log the negotiation', desc:'Record the offer shared and the customer’s response.'},
-      {title:'Log delivery preparation', desc:'Record back-office VIN assignment, RTA registration and pre-delivery inspection progress.'},
+      {title:'Log delivery preparation', desc:'Record VAS and pre-delivery inspection work order progress.'},
       {title:'Log the booking activity', desc:'Record deposit collection and order confirmation.'},
       {title:'Log the handover', desc:'Record delivery, feature orientation and the follow-ups scheduled.'}
     ];
@@ -2401,8 +2419,45 @@
       l.checks[key] = done;
       el.classList.toggle('done', done); el.classList.toggle('pending', !done);
       var ic = el.querySelector('.material-symbols-outlined'); if (ic) ic.textContent = done ? 'check_box' : 'check_box_outline_blank';
+      var item = stepDetails[currentStep].checklist[ci];
       updateStepGate();
+      l.activities = l.activities || [];
+      // Generating the invoice sends the Qualtrics survey straight away.
+      if (done && item.survey) {
+        l.activities.unshift({ type: 'email', text: 'Qualtrics survey sent to the customer', time: '2026-07-07 12:00' });
+        showToast('Invoice generated — Qualtrics survey sent to the customer');
+      }
+      // The back-office stages are driven by FO: once every item is closed, the lead moves on by itself.
+      var auto = STAGE_AUTO_ADVANCE[journeySteps[currentStep].name];
+      var p = stepProgress(l, currentStep);
+      // Close: once the post-delivery survey is sent, the opportunity closes as Won.
+      if (journeySteps[currentStep].name === 'Close' && done && p.done >= p.total && !l.won) {
+        l.won = true; l.bpfStage = journeySteps.length;
+        l.stage = 'Won'; l.stageNum = 'Won'; l.stageClass = 'qualified';
+        l.activities.unshift({ type: 'note', text: 'Post-delivery survey sent · opportunity closed as Won', time: '2026-07-07 12:00' });
+        renderDetail(selectedIdx, currentStep);
+        renderLeads('all');
+        showToast('Post-delivery survey sent — opportunity closed as Won');
+      }
+      if (auto && done && p.done >= p.total) {
+        var at = currentStep;
+        setTimeout(function(){
+          if (leads[selectedIdx] !== l || currentStep !== at) return;
+          var next = journeySteps[at + 1].name;
+          l.bpfStage = Math.max(l.bpfStage, at + 2);
+          l.stage = next; l.stageNum = next; l.stageClass = 'qualified';
+          l.activities.unshift({ type: 'note', text: auto + ' · moved to ' + next, time: '2026-07-07 12:00' });
+          currentStep = at + 1;
+          renderDetail(selectedIdx, currentStep);
+          renderLeads('all');
+          showToast(auto + ' — moved to ' + next);
+        }, 700);
+      }
     }
+    var STAGE_AUTO_ADVANCE = {
+      'Prep for delivery': 'PDI work order closed',
+      'Ready for delivery': 'Delivery note and invoice generated'
+    };
 
     // ── Sales pipeline (from Miro: Lead → Opportunity → Deal → Post-deal) ──
     var pipeGroups = [
@@ -2923,9 +2978,14 @@
         var key = stepIdx + '-' + ci;
         var isDone = (l.checks && key in l.checks) ? l.checks[key] : (stepIdx < l.bpfStage-1);
         if (isDone) doneCount++;
+        var it = typeof item === 'string' ? { t: item } : item;
         itemsHtml += '<div class="dp-check-item '+(isDone?'done':'pending')+'" style="cursor:pointer" onclick="toggleCheck('+ci+', this)">' +
           '<span class="material-symbols-outlined">'+(isDone?'check_box':'check_box_outline_blank')+'</span>' +
-          '<span>'+item+'</span></div>';
+          '<span class="dp-check-txt"><span>'+it.t+'</span>' +
+            (it.ref ? '<span class="dp-check-ref"><span>'+it.ref[0]+'</span> <span class="dp-check-refv">'+it.ref[1]+'</span>' +
+              '</span>' : '') +
+            (it.note ? '<span class="dp-check-note">'+it.note+'</span>' : '') +
+          '</span></div>';
       });
       var clTotal = sd.checklist.length, clPct = clTotal ? Math.round(doneCount/clTotal*100) : 0;
       html += '<div class="dp-checklist">' +
@@ -3338,7 +3398,11 @@
       yes:   { Internal: ['Transfer ownership'], External: ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'] }
     };
     // Flat list of "action" (non-stage-routing) outcomes for submit/validation.
-    var laSalesOutcomes = ['Follow up', 'Return to call center', 'Transfer ownership', 'WhatsApp', 'Email', 'Call', 'Disqualify', 'Meet customer', 'Schedule delivery'];
+    var LA_MOVE_PREP = 'Move to Prep for delivery';
+    var laSalesOutcomes = ['Follow up', 'Return to call center', 'Transfer ownership', 'WhatsApp', 'Email', 'Call', 'Disqualify', 'Meet customer', 'Schedule delivery', LA_MOVE_PREP];
+    // Manual stage moves are manager-only; the persona switcher in the top bar decides who is looking.
+    var LA_MANAGER_PERSONAS = ['showroom-manager.html', 'head-of-sales.html'];
+    function laIsManager(){ var v = ''; try { v = localStorage.getItem('exceed_persona') || ''; } catch (e) {} return LA_MANAGER_PERSONAS.indexOf(v) > -1; }
     var LA_UPDATE_CHANNELS = ['WhatsApp', 'Email', 'Call'];
     var laReturnReasons = ['Wrong assignment', 'Not sales-ready', 'Customer request', 'Duplicate lead', 'Other'];
     var laAgents = ['Mariam Saeed', 'Nadia Al Amiri', 'Mariam Khalil', 'Priyamvada K.', 'Saravanakumar Subramani', 'Basel Talalini'];
@@ -3353,6 +3417,13 @@
       }
       if (stepName === 'Ready for delivery') {
         groups = { Internal: groups.Internal, External: ['Schedule delivery'].concat(groups.External) };
+      }
+      if (stepName === 'Accepted') {
+        groups = { Internal: groups.Internal.concat([LA_MOVE_PREP]), External: groups.External };
+      }
+      // A closing deal is won or lost on the opportunity, not disqualified as a lead.
+      if (stepName === 'Close') {
+        groups = { Internal: groups.Internal, External: groups.External.filter(function(o){ return o !== 'Disqualify'; }) };
       }
       // WhatsApp and calls are how you reached them, not what happened: collapse them behind
       // a single Channel chip on every sales stage.
@@ -3369,6 +3440,9 @@
       host.innerHTML = ['Internal','External'].map(function(g){
         var outs = groups[g] || []; if (!outs.length) return '';
         var chips = outs.map(function(o){
+          if (o === LA_MOVE_PREP && !laIsManager()) {
+            return '<button class="la-chip locked" disabled title="Manager only"><span class="material-symbols-outlined">lock</span>' + o + '</button>';
+          }
           var on = (o === 'Update') ? channelOn : (laOutcome === o);
           return '<button class="la-chip'+(on?' on':'')+'" data-out="'+o+'" onclick="setLaOutcome(this)">'+o+'</button>';
         }).join('');
@@ -3377,8 +3451,10 @@
               return '<button class="la-subchip'+(laOutcome===c?' on':'')+'" data-out="'+c+'" onclick="setLaOutcome(this)">'+c+'</button>';
             }).join('') + '</div>'
           : '';
+        var lockNote = (g === 'Internal' && outs.indexOf(LA_MOVE_PREP) > -1 && !laIsManager())
+          ? '<div class="la-hint2">Only a manager can move this lead to Prep for delivery manually.</div>' : '';
         return '<div class="la-outgroup"><div class="la-outgroup-h">'+groupLabels[g]+'</div>' +
-          '<div class="la-chips-row">' + chips + '</div>' + sub + '</div>';
+          '<div class="la-chips-row">' + chips + '</div>' + sub + lockNote + '</div>';
       }).join('');
     }
 
@@ -3909,6 +3985,9 @@
         } else if (laOutcome === 'Schedule delivery') {
           html += laDateTime('Delivery date & time');
           html += laNotesField();
+        } else if (laOutcome === LA_MOVE_PREP) {
+          html += '<div class="cp-field"><label class="cp-label">Signed document <span class="req">*</span></label><div id="docUp-move">' + docUploadHtml('move') + '</div></div>';
+          html += laNotesField();
         } else if (laOutcome === 'Follow up') {
           html += '<div class="cp-field"><label class="cp-label">Follow-up note <span class="req">*</span></label><textarea class="cp-textarea" id="laNoteText" placeholder="This note will appear as an alert to the agent…"></textarea></div>';
         } else if (laOutcome === 'Transfer ownership') {
@@ -3937,7 +4016,7 @@
       if (selectedIdx < 0) return;
       var lp = logPrompts[currentStep] || logPrompts[0];
       document.getElementById('logSub').innerHTML = lp.title;
-      laAnswer = null; laOutcome = null; laNoReason = 'Invalid number'; laReasonSel = ''; laReasonComment = '';
+      laAnswer = null; laOutcome = null; laNoReason = 'Invalid number'; laReasonSel = ''; laReasonComment = ''; docUp.move = null;
       document.getElementById('laYes').classList.remove('on');
       document.getElementById('laNo').classList.remove('on','no');
       document.getElementById('laChips').innerHTML = '';
@@ -3974,6 +4053,7 @@
         if (laOutcome === 'Meet customer') { h.textContent = 'Saving will log the customer meeting.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         if (laOutcome === 'Follow up') { h.textContent = 'Saving will raise a follow-up note for the agent.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         if (laOutcome === 'Transfer ownership') { h.textContent = 'Saving will transfer ownership of this lead.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
+        if (laOutcome === LA_MOVE_PREP) { h.textContent = 'Saving will move the lead to Prep for delivery.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         h.textContent = 'Saving will log the outreach and schedule a follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
       }
       if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
@@ -4070,8 +4150,16 @@
           currentStep = 0;
           l.activities.unshift({ type: 'call', text: ['Returned to call center', f.returnReason, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast('Returned to call center' + (f.returnReason ? ' — ' + f.returnReason : ''));
+        } else if (laOutcome === LA_MOVE_PREP) {
+          if (!laIsManager()) { e.textContent = 'Only a manager can move this lead manually.'; e.style.display = 'block'; return; }
+          if (!docUp.move) { e.textContent = 'Please upload the signed document (max 5 MB).'; e.style.display = 'block'; return; }
+          l.bpfStage = 7; l.stage = 'Prep for delivery'; l.stageNum = 'Prep for delivery'; l.stageClass = 'qualified';
+          currentStep = 6;
+          l.activities.unshift({ type: 'note', text: ['Moved to Prep for delivery by manager', docUp.move.name, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast('Moved to Prep for delivery');
         } else if (laOutcome === 'Schedule delivery') {
           l.deliveryBooking = { date: f.date, time: f.time, note: notes };
+          l.checks = l.checks || {}; l.checks[currentStep + '-0'] = true;
           l.activities.unshift({ type: 'visit', text: ['Delivery scheduled', when || '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast('Delivery scheduled' + (when ? ' · ' + when : ''));
         }
@@ -4598,10 +4686,10 @@
           (canQuote
             ? '<button class="conf-cta" onclick="generateQuotationFlow()"><span class="material-symbols-outlined">request_quote</span>Generate quotation</button>'
             : '<button class="conf-cta locked" disabled aria-disabled="true"><span class="material-symbols-outlined">lock</span>Generate quotation</button>') +
-          '<button class="conf-cta conf-span" onclick="generatePurchaseAgreementFlow()"><span class="material-symbols-outlined">description</span>Generate purchase agreement</button>' +
         '</div>' +
         (canQuote ? '' :
           '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span> Advance payment is not in cash — <strong>Generate quotation</strong> unlocks once the payment is received in FO. Send a payment link, or switch the toggle to Yes if it was taken in cash.</div>') +
+        paBlockHtml(l) +
         confOrderBlock(l, p) +
       '</div>';
     }
@@ -4932,12 +5020,123 @@
       }, 'Cancel', 'request_quote', true);
       quoteLkSync();
     }
-    // Purchase agreement — confirmation before sending to the customer via DocuSign.
+    // Purchase agreement: generated → manager approves in CE → Zoho Sign or manual signing → signed copy to download.
+    // l.pa.status: pending | approved | sent | signed. Sharing and signing tick the matching Accepted-stage checklist items.
+    var PA_STEP = 5, PA_CHECK_SHARED = 1, PA_CHECK_SIGNED = 2;
+    function paTick(l, ci){ l.checks = l.checks || {}; l.checks[PA_STEP + '-' + ci] = true; }
+    function paBlockHtml(l){
+      var pa = l.pa || {}, btn = function(fn, ic, label){
+        return '<button class="conf-cta" onclick="' + fn + '()"><span class="material-symbols-outlined">' + ic + '</span>' + label + '</button>';
+      };
+      var status = '', ctas = '';
+      if (!pa.status) {
+        ctas = '<button class="conf-cta conf-span" onclick="generatePurchaseAgreementFlow()"><span class="material-symbols-outlined">description</span>Generate purchase agreement</button>';
+      } else if (pa.status === 'pending') {
+        status = '<span class="qc-status wait"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval in CE</span>';
+        ctas = '<button class="conf-cta conf-span" onclick="approvePurchaseAgreement()"><span class="material-symbols-outlined">check_circle</span>Approve purchase agreement</button>';
+      } else if (pa.status === 'approved') {
+        status = '<span class="qc-status ok"><span class="material-symbols-outlined">verified_user</span> Approved by manager</span>';
+        ctas = btn('sendPurchaseAgreementZoho', 'draw', 'Send via Zoho Sign') + btn('signPurchaseAgreementManually', 'upload_file', 'Customer signs manually');
+      } else if (pa.status === 'sent') {
+        status = '<span class="qc-status wait"><span class="material-symbols-outlined">schedule_send</span> Sent via Zoho Sign · awaiting customer signature</span>';
+        ctas = btn('markPurchaseAgreementSigned', 'task_alt', 'Mark signed by customer') + btn('signPurchaseAgreementManually', 'upload_file', 'Customer signs manually');
+      } else {
+        status = '<span class="qc-status ok"><span class="material-symbols-outlined">task_alt</span> ' + (pa.method === 'manual' ? 'Signed manually by customer' : 'Signed by customer via Zoho Sign') + '</span>';
+        ctas = '<button class="conf-cta conf-span" onclick="downloadSignedPurchaseAgreement()"><span class="material-symbols-outlined">download</span>Download signed purchase agreement</button>';
+      }
+      return '<div class="pa-block">' +
+        '<div class="pa-head"><span class="conf-lbl">Purchase agreement</span>' + status + '</div>' +
+        '<div class="conf-ctas">' + ctas + '</div>' +
+      '</div>';
+    }
     function generatePurchaseAgreementFlow(){
-      openConfirm('Generate purchase agreement', 'The purchase agreement will be shared with the customer via <strong>DocuSign</strong> for electronic signature.', 'Send via DocuSign', function(){
-        showToast('Purchase agreement sent to the customer via DocuSign');
+      var l = leads[selectedIdx];
+      openConfirm('Generate purchase agreement', 'The purchase agreement goes to your manager for approval in CE. <strong>Zoho Sign</strong> becomes available once it is approved.', 'Generate', function(){
+        l.pa = { status: 'pending' };
+        renderDetail(selectedIdx, currentStep);
+        showToast('Purchase agreement generated and sent to manager for approval');
       }, 'Cancel', 'description', true);
     }
+    function approvePurchaseAgreement(){
+      var l = leads[selectedIdx]; if (!l.pa || l.pa.status !== 'pending') return;
+      l.pa.status = 'approved';
+      renderDetail(selectedIdx, currentStep);
+      showToast('Purchase agreement approved by manager');
+    }
+    function sendPurchaseAgreementZoho(){
+      var l = leads[selectedIdx];
+      openConfirm('Send via Zoho Sign', 'The approved purchase agreement will be shared with the customer via <strong>Zoho Sign</strong> for electronic signature.', 'Send via Zoho Sign', function(){
+        l.pa.status = 'sent'; l.pa.method = 'zoho';
+        paTick(l, PA_CHECK_SHARED);
+        renderDetail(selectedIdx, currentStep);
+        showToast('Purchase agreement sent to the customer via Zoho Sign');
+      }, 'Cancel', 'draw', true);
+    }
+    function markPurchaseAgreementSigned(){
+      var l = leads[selectedIdx]; if (!l.pa) return;
+      l.pa.status = 'signed';
+      paTick(l, PA_CHECK_SIGNED);
+      renderDetail(selectedIdx, currentStep);
+      showToast('Purchase agreement signed by the customer');
+    }
+    function signPurchaseAgreementManually(){
+      var l = leads[selectedIdx];
+      docUp.pa = null;
+      openConfirm('Customer signs manually', '<div>Upload the purchase agreement the customer signed on paper.</div><div id="docUp-pa" style="margin-top:12px">' + docUploadHtml('pa') + '</div>', 'Save signed copy', function(){
+        if (!docUp.pa) return;
+        l.pa = { status: 'signed', method: 'manual', file: docUp.pa.name };
+        paTick(l, PA_CHECK_SHARED); paTick(l, PA_CHECK_SIGNED);
+        renderDetail(selectedIdx, currentStep);
+        showToast('Signed purchase agreement uploaded');
+      }, 'Cancel', 'upload_file', true);
+      document.getElementById('confirmOkBtn').classList.add('locked');
+    }
+    function downloadSignedPurchaseAgreement(){
+      var l = leads[selectedIdx], p = acceptedProp() || {};
+      var lines = [
+        'EXEED — PURCHASE AGREEMENT (SIGNED)',
+        'AGM Sales · ' + l.name + ' (' + l.id + ')',
+        '----------------------------------------',
+        'Quotation:        ' + (p.id || '—'),
+        'Model:            ' + (p.model || l.model),
+        (p.chassis ? 'VIN:              ' + p.chassis : ''),
+        (p.nsp ? 'Vehicle price:    AED ' + propFmt(p.nsp) : ''),
+        'Signed:           ' + (l.pa && l.pa.method === 'manual' ? 'Manually — ' + l.pa.file : 'Zoho Sign')
+      ].filter(Boolean).join('\n');
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([lines], { type:'text/plain' }));
+      a.download = 'Purchase-Agreement-' + l.id + '.txt';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      showToast('Signed purchase agreement downloaded');
+    }
+
+    // Signed-document upload shared by manual PA signing and the manager's manual stage move.
+    var DOC_MAX_BYTES = 5 * 1024 * 1024, docUp = {};
+    function docUploadHtml(k){
+      var f = docUp[k];
+      if (f) return '<div class="wv-uploaded">' +
+          '<div class="wv-up-thumb"><span class="material-symbols-outlined">' + (/\.pdf$/i.test(f.name) ? 'picture_as_pdf' : 'image') + '</span></div>' +
+          '<div class="wv-up-info"><span class="wv-up-name">' + dpEsc(f.name) + '</span><span class="wv-up-meta"><span class="material-symbols-outlined">check_circle</span>Uploaded</span></div>' +
+          '<button class="wv-up-remove" onclick="docUpRemove(\'' + k + '\')" title="Remove"><span class="material-symbols-outlined">close</span></button>' +
+        '</div>';
+      return '<label class="wv-upload" style="height:110px">' +
+          '<input type="file" accept=".pdf,image/*" onchange="docUpPick(this,\'' + k + '\')" style="display:none">' +
+          '<span class="material-symbols-outlined">upload_file</span>' +
+          '<span class="wv-upload-t">Upload signed document</span>' +
+          '<span class="wv-upload-s">PDF, JPG or PNG · max 5 MB</span>' +
+        '</label>';
+    }
+    function docUpPaint(k){
+      var host = document.getElementById('docUp-' + k); if (host) host.innerHTML = docUploadHtml(k);
+      if (k === 'pa') document.getElementById('confirmOkBtn').classList.toggle('locked', !docUp.pa);
+    }
+    function docUpPick(input, k){
+      var f = input.files && input.files[0]; if (!f) return;
+      if (f.size > DOC_MAX_BYTES) { input.value = ''; showToast('File is larger than 5 MB'); return; }
+      docUp[k] = { name: f.name };
+      docUpPaint(k);
+    }
+    function docUpRemove(k){ docUp[k] = null; docUpPaint(k); }
 
     function renderProposalCard(p, i, arr){
       var hasQuote = (arr || []).some(function(x){ return x.isQuote; });
