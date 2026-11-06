@@ -84,3 +84,5 @@
   background-size: 10px 6px !important;
   padding-inline-end: 28px !important;
 }
+/* "Send Proposal to customer": text at the right, the send arrow after it on the left. */
+[dir="rtl"] .qc-cta.send { display: flex; flex-direction: row-reverse; align-items: center; justify-content: center; gap: 6px; }
