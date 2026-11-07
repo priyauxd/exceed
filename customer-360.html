@@ -11,7 +11,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="customer-data.js?v=2"></script>
+  <script src="customer-data.js?v=3"></script>
   <style>
     /* Shell — identical to the Leads page (lead-detail.html) */
     :root { --exeed-navy: #00203f; --exeed-cyan: #00b7bb; --exeed-azure: #2a6797; --sidebar-w: 228px; --topbar-h: 42px; }
@@ -398,6 +398,35 @@
     .tl-hl-b { margin: 6px 14px 0; font-size: 11.5px; line-height: 1.5; color: #6b5ba0; background: linear-gradient(135deg, #f3f1fe, #f9f0fd); border: 1px solid #ddd5f5; border-radius: 6px; padding: 8px 10px; }
     .tl-hl-b strong { color: #4c3a96; }
     .cb-share { border: 1px solid var(--border); padding: 3px 8px; }
+    /* Search results — D365 content */
+    .rt-ic { font-size: 18px; color: var(--ink-muted); }
+    .sr-sec { margin-bottom: 18px; }
+    .sr .tbl th, .sr .tbl td { padding-inline: 8px 6px; }
+    .sr .tbl th:first-child, .sr .tbl td:first-child { padding-inline-start: 14px; }
+    .sr .tbl td .lnk { white-space: nowrap; }
+    .sr .tbl td .mono { font-family: inherit; font-size: 12px; letter-spacing: 0; color: var(--ink-secondary); white-space: nowrap; }
+    .mt { font-size: 10.5px; color: var(--ink-muted); margin-top: 2px; white-space: nowrap; }
+    .sr-sec .tbl td:first-child, .sr-sec .tbl th:first-child, .card > div > .tbl td:first-child { width: 34px; padding-inline-end: 0; }
+    .show-more { display: block; width: 100%; text-align: start; border: none; border-top: 1px solid var(--border-soft); background: none; padding: 10px 16px; font: 600 12px/1 var(--fontFamilyBase); color: var(--blue); cursor: pointer; }
+    .show-more:hover { background: var(--blue-soft); }
+    .show-more.muted { color: var(--ink-muted); font-weight: 400; cursor: default; background: none; }
+    .lnk-btn { border: none; background: none; padding: 0; font: inherit; color: var(--blue); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+    .tbl-pop { position: relative; display: inline-block; }
+    .tbl-list { display: none; position: absolute; top: calc(100% + 6px); inset-inline-start: 0; z-index: 30; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow16); padding: 6px; min-width: 220px; }
+    .tbl-pop.open .tbl-list { display: block; }
+    .tbl-list span { display: block; padding: 6px 10px; font-size: 12px; color: var(--ink); border-radius: 4px; }
+    .tbl-list span:hover { background: var(--bg); }
+    .filters h4 { justify-content: space-between; font-size: 15px; }
+    .f-toggle { width: 28px; height: 28px; border: none; background: none; border-radius: 4px; cursor: pointer; color: var(--ink-secondary); display: grid; place-items: center; }
+    .f-toggle:hover { background: var(--bg); }
+    .clear-all { display: inline-flex; align-items: center; gap: 5px; border: none; background: none; padding: 4px 0 8px; font: 400 12.5px var(--fontFamilyBase); color: var(--blue); cursor: pointer; }
+    .clear-all .material-symbols-outlined { font-size: 16px; }
+    .own-av { width: 20px; height: 20px; border-radius: 50%; color: #fff; font-size: 8.5px; font-weight: 700; display: grid; place-items: center; flex-shrink: 0; }
+    .fg label .c { margin-inline-start: 0; }
+    .f-row { display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12.5px; color: var(--ink-secondary); }
+    .f-dd { font: 400 12.5px var(--fontFamilyBase); color: var(--ink); background: var(--colorNeutralBackground3); border: 1px solid transparent; border-bottom-color: var(--colorNeutralStrokeAccessible); border-radius: 4px; padding: 5px 8px; cursor: pointer; }
+    .filters.closed { width: 44px; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .f-vert { writing-mode: vertical-rl; font-size: 15px; font-weight: 700; color: var(--ink); }
     @media (max-width: 1100px) { .filters { display: none; } .best-r { display: none; } .hero-cols { grid-template-columns: 1fr; } .dp-formhead { display: none; } }
   </style>
 </head>
@@ -461,7 +490,7 @@
     function nav(q) { var u = new URL(location.href); u.search = ''; Object.keys(q).forEach(function (k) { if (q[k]) u.searchParams.set(k, q[k]); }); history.pushState(null, '', u); state.q = q.q || null; state.id = q.id || null; state.view = q.view || null; state.from = q.from || null; state.tab = q.tab || 'summary'; render(); document.getElementById('content').scrollTop = 0; }
     window.addEventListener('popstate', function () { var p = new URLSearchParams(location.search); state.q = p.get('q'); state.id = p.get('id'); state.view = p.get('view'); state.from = p.get('from'); state.tab = p.get('tab') || 'summary'; render(); });
     function openCustomer(id) { S.addViewed(id); nav({ id: id, from: (state.view === 'accounts' || state.from === 'accounts') ? 'accounts' : null }); }
-    function runSearch(q) { q = String(q || '').trim(); if (!q) return; S.addRecent(q); state.rtab = 'top'; state.f = { type: {}, city: {} }; nav({ q: q }); }
+    function runSearch(q) { q = String(q || '').trim(); if (!q) return; S.addRecent(q); state.rtab = 'top'; resetFilters(); nav({ q: q }); }
 
     function pill(s) {
       var t = String(s || '—'), c = 'n';
@@ -541,70 +570,120 @@
       return o;
     }
     function custLink(c) { return '<div class="cust-cell"><div class="cust-av" style="background:' + c.av + '">' + c.initials + '</div><div><a class="lnk" onclick="openCustomer(\'' + c.id + '\')">' + esc(c.name) + '</a><div class="sub">' + c.type + ' · ' + c.id + '</div></div></div>'; }
+    /* Results: D365 search content (table tabs with counts, "Showing x of y from n tables", per-table
+       sections with Show more, Owner / Modified On / Created On filters, collapsible pane) merged with
+       our additions (intent hint, Copilot filters, best-match customer card, extra record tabs). */
+    var TABLES = ['Accounts', 'Contacts', 'Devices', 'Leads', 'Opportunities', 'Proposals', 'Quotes', 'Sales orders', 'Service appointments', 'Service & rental contracts'];
+    var YEARS = ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'];
+    var NOW = new Date('2026-11-07');
+    function created(c) { return new Date(c.since + '-01-15'); }
+    function modified(c) {
+      var t = (c.timeline[0] || {}).time || '';
+      if (/Today/.test(t)) return NOW; if (/Yesterday/.test(t)) return new Date(NOW - 864e5);
+      var d = new Date(t); return isNaN(d) ? created(c) : d;
+    }
+    function fmtD(d) { return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+    function inRange(d, f, t) { return (f === 'Oldest' || d >= new Date(f + '-01-01')) && (t === 'Latest' || d <= new Date(t + '-12-31T23:59:59')); }
+    function ownerAv(n) { var h = 0; for (var k = 0; k < n.length; k++) h = (h * 31 + n.charCodeAt(k)) % 360; return 'hsl(' + h + ',45%,38%)'; }
+    function rtIcon(icon) { return '<span class="rt-ic material-symbols-outlined" aria-hidden="true">' + icon + '</span>'; }
+    function resetFilters() { state.f = { type: {}, city: {}, owner: {}, mFrom: 'Oldest', mTo: 'Latest', cFrom: 'Oldest', cTo: 'Latest' }; }
+
     function renderResults() {
       cmdbar('search');
-      var q = state.q, r = S.search(q), it = r.intent;
-      var all = r.results.filter(function (x) {
-        var t = Object.keys(state.f.type).filter(function (k) { return state.f.type[k]; }), ci = Object.keys(state.f.city).filter(function (k) { return state.f.city[k]; });
-        return (!t.length || t.indexOf(x.c.type) > -1) && (!ci.length || ci.indexOf(x.c.city) > -1);
+      if (!state.f.owner) resetFilters();
+      var q = state.q, r = S.search(q), it = r.intent, F = state.f, lq = q.toLowerCase();
+      var on = function (o) { return Object.keys(o).filter(function (k) { return o[k]; }); };
+      var pass = function (c) {
+        var t = on(F.type), ci = on(F.city), ow = on(F.owner);
+        return (!t.length || t.indexOf(c.type) > -1) && (!ci.length || ci.indexOf(c.city) > -1) && (!ow.length || ow.indexOf(c.owner) > -1) &&
+          inRange(modified(c), F.mFrom, F.mTo) && inRange(created(c), F.cFrom, F.cTo);
+      };
+      var accts = r.results.filter(function (x) { return pass(x.c); });
+      // Contacts: every contact person whose name / email / phone matches (or who belongs to a Copilot-matched account).
+      var contacts = [];
+      S.customers.forEach(function (c) {
+        if (!pass(c)) return;
+        S.crm(c).contacts.forEach(function (p) {
+          var hit = it && it.key === 'nl' ? accts.some(function (x) { return x.c === c; }) :
+            [p.name, p.email, p.phone].some(function (v) { var lv = String(v).toLowerCase(); return lv.split(/[\s.@-]+/).some(function (w) { return w.indexOf(lq) === 0; }) || (lq.length >= 3 && lv.indexOf(lq) > -1) || (lq.replace(/\D/g, '').length >= 4 && String(v).replace(/\D/g, '').replace(/^971/, '0').indexOf(lq.replace(/\D/g, '').replace(/^971/, '0')) > -1); });
+          if (hit) contacts.push({ p: p, c: c });
+        });
       });
-      var fl = flat(all);
-      var tabs = [['top', 'Top results', null], ['cust', 'Customers', all.length], ['leads', 'Leads & opportunities', fl.leads.length], ['veh', 'Vehicles', fl.vehicles.length], ['sales', 'Quotes & orders', fl.sales.length], ['svc', 'Service', fl.service.length]];
+      var devices = [];
+      S.customers.forEach(function (c) {
+        if (!pass(c)) return;
+        c.vehicles.forEach(function (v) {
+          var hit = it && it.key === 'nl' ? accts.some(function (x) { return x.c === c; }) : [v.vin, v.plate, v.model + ' ' + v.variant].some(function (z) { var lz = z.toLowerCase(); return (lq.length >= 3 && lz.indexOf(lq) > -1) || lz.split(/[\s-]+/).some(function (w) { return w.indexOf(lq) === 0; }); });
+          if (hit) devices.push({ v: v, c: c });
+        });
+      });
+      var fl = flat(accts);
+      var total = accts.length + contacts.length + devices.length;
+      var shown = Math.min(accts.length, 5) + Math.min(contacts.length, 5) + Math.min(devices.length, 5);
+      var tabs = [['top', 'Top results', null], ['acc', 'Accounts', accts.length], ['con', 'Contacts', contacts.length], ['dev', 'Devices', devices.length], ['leads', 'Leads & opportunities', fl.leads.length], ['sales', 'Quotes & orders', fl.sales.length], ['svc', 'Service', fl.service.length]];
       var h = '<div class="sr-main"><div class="sr-head"><button class="sr-back" onclick="nav({})" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button><h1>Search results</h1></div>' + searchBox(q);
       if (it && it.key === 'nl') h += '<div class="sr-intent ai"><span class="material-symbols-outlined">auto_awesome</span>Copilot turned your question into filters: ' + (r.nl.length ? r.nl.map(function (f) { return '<span class="fchip">' + esc(f) + '</span>'; }).join(' ') : '<b>none recognised</b> — try a city, “service due”, “finance”, “fleet” or “rental”') + '</div><br>';
-      else if (it && it.key !== 'name') h += '<div class="sr-intent"><span class="material-symbols-outlined">' + it.icon + '</span>Looks like a <b>&nbsp;' + it.label.toLowerCase() + '&nbsp;</b> — matched against contacts, accounts, vehicles, quotes and orders</div><br>';
-      h += '<div class="sr-sum">Showing <b>' + all.length + ' customer' + (all.length === 1 ? '' : 's') + '</b> for <b>' + esc(q) + '</b> from 10 tables in Auto Sales — every match is grouped under the customer it belongs to.</div>';
-      h += '<div class="dp-tabs sr-tabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.rtab === t[0] ? ' active' : '') + '" onclick="state.rtab=\'' + t[0] + '\';render()">' + t[1] + (t[2] != null ? ' <span class="cnt">' + t[2] + '</span>' : '') + '</button>'; }).join('') + '</div>';
+      else if (it && it.key !== 'name') h += '<div class="sr-intent"><span class="material-symbols-outlined">' + it.icon + '</span>Looks like a <b>&nbsp;' + it.label.toLowerCase() + '&nbsp;</b> — matched against accounts, contacts, devices, quotes and orders</div><br>';
+      h += '<div class="dp-tabs sr-tabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.rtab === t[0] ? ' active' : '') + '" onclick="state.rtab=\'' + t[0] + '\';render()">' + t[1] + (t[2] != null ? ' (' + t[2] + ')' : '') + '</button>'; }).join('') + '</div>';
+      h += '<div class="sr-sum">Showing ' + (state.rtab === 'top' ? shown : (tabs.filter(function (t) { return t[0] === state.rtab; })[0] || [0, 0, total])[2]) + ' of ' + total + ' results for <b>' + esc(q) + '</b> from ' +
+        '<span class="tbl-pop"><button class="lnk-btn" onclick="this.parentNode.classList.toggle(\'open\');event.stopPropagation()">' + TABLES.length + ' tables in Auto Sales.</button><span class="tbl-list">' + TABLES.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</span></span></div>';
 
-      if (!all.length) h += card('search_off', 'No customers found', null, '<div class="empty" style="padding:18px 16px">Nothing matched “' + esc(q) + '”. Check the spelling, try the last 7 digits of the mobile, or search by VIN, plate or quote number.</div>');
+      var accCols = [['', function (x) { return rtIcon('business'); }], ['Account Name', function (x) { var m = x.hits[0]; return '<a class="lnk" onclick="openCustomer(\'' + x.c.id + '\')">' + S.mark(x.c.name, q) + '</a><div class="mt">' + (m.field === 'Copilot' ? '<span class="pill p">Copilot match</span>' : 'Matched in ' + esc(m.field)) + '</div>'; }], ['Customer ID', function (x) { return '<span class="mono">' + S.mark(x.c.id, q) + '</span>'; }], ['Primary Contact', function (x) { return esc(S.crm(x.c).contacts[0].name); }], ['Address 1: City', function (x) { return esc(x.c.city); }], ['Main Phone', function (x) { return '<span class="mono">' + S.mark(x.c.mobile, q) + '</span>'; }], ['Email', function (x) { return S.mark(x.c.email, q); }], ['', function (x) { return rowActs(x.c); }]];
+      var conCols = [['', function () { return rtIcon('person'); }], ['Full Name', function (x) { return '<a class="lnk" onclick="openCustomer(\'' + x.c.id + '\')">' + S.mark(x.p.name, q) + '</a>'; }], ['Company Name', function (x) { return x.c.type === 'Company' ? '<a class="lnk" onclick="openCustomer(\'' + x.c.id + '\')">' + esc(x.c.name) + '</a>' : '<span class="sub">—</span>'; }], ['Address 1: City', function (x) { return esc(x.c.city); }], ['Mobile Phone', function (x) { return '<span class="mono">' + S.mark(x.p.phone, q) + '</span>'; }], ['Business Phone', function (x) { return '<span class="mono">' + esc(x.c.type === 'Company' ? x.c.phone2 : '—') + '</span>'; }], ['Email', function (x) { return S.mark(x.p.email, q); }], ['', function (x) { return '<div class="row-acts"><a class="ia" href="tel:' + x.p.phone.replace(/\s/g, '') + '" title="Call" aria-label="Call"><span class="material-symbols-outlined">call</span></a></div>'; }]];
+      var devCols = [['', function () { return rtIcon('directions_car'); }], ['Name', function (x) { return '<a class="lnk" onclick="openCustomer(\'' + x.c.id + '\')">' + S.mark(x.v.model + ' ' + x.v.variant, q) + '</a>'; }], ['VIN', function (x) { return '<span class="mono">' + S.mark(x.v.vin, q) + '</span>'; }], ['Device Licence', function (x) { return S.mark(x.v.plate, q); }], ['Account', function (x) { return '<a class="lnk" onclick="openCustomer(\'' + x.c.id + '\')">' + esc(x.c.name) + '</a>'; }], ['Next service', function (x) { return esc(x.v.nextService); }], ['Status', function (x) { return pill(x.v.status); }]];
+      var sec = function (title, key, cols, rows) {
+        if (!rows.length) return '';
+        return '<div class="sec-t">' + title + '</div><div class="card sr-sec">' + table(cols, rows.slice(0, 5)) + (rows.length > 5 ? '<button class="show-more" onclick="state.rtab=\'' + key + '\';render()">Show more</button>' : '<div class="show-more muted">Showing all ' + rows.length + '</div>') + '</div>';
+      };
+
+      if (!total) h += card('search_off', 'No results', null, '<div class="empty" style="padding:18px 16px">Nothing matched “' + esc(q) + '”' + (on(F.owner).length || on(F.type).length || on(F.city).length || F.mFrom !== 'Oldest' || F.mTo !== 'Latest' || F.cFrom !== 'Oldest' || F.cTo !== 'Latest' ? ' with these filters. <button class="lnk-btn" onclick="resetFilters();render()">Clear all filters</button>' : '. Check the spelling, try the last 7 digits of the mobile, or search by VIN, plate or quote number.') + '</div>');
       else if (state.rtab === 'top') {
-        var b = all[0], c = b.c, n = S.counts(c);
-        h += '<div class="card best"><div class="best-l"><div class="best-tag"><span class="material-symbols-outlined">verified</span>Best match</div>' +
-          '<div class="best-who"><div class="dp-av" style="background:' + c.av + '">' + c.initials + '</div><div><div class="dp-name-row"><span class="dp-name" onclick="openCustomer(\'' + c.id + '\')">' + S.mark(c.name, q) + '</span><span class="dp-lead-tag' + (c.type === 'Company' ? ' co' : '') + '"><span class="material-symbols-outlined">' + (c.type === 'Company' ? 'business' : 'person') + '</span>' + c.type + '</span></div>' +
-          '<div class="dp-meta-row" style="margin-top:4px"><span class="mono">' + c.id + '</span><span>' + esc(c.mobile) + '</span><span>' + esc(c.email) + '</span><span>' + esc(c.city) + '</span></div></div></div>' +
-          '<div class="hits">' + b.hits.slice(0, 5).map(function (x) { return '<span class="hit"><b>' + esc(x.field) + '</b>' + (x.field === 'Copilot' ? esc(x.value) : S.mark(x.value, q)) + '</span>'; }).join('') + '</div>' +
-          '<div class="best-acts"><button class="btn primary" onclick="openCustomer(\'' + c.id + '\')"><span class="material-symbols-outlined">person_search</span>Open Customer 360</button>' +
-          '<a class="btn" href="tel:' + c.mobile.replace(/\s/g, '') + '"><span class="material-symbols-outlined">call</span>Call</a>' +
-          '<button class="btn" onclick="toast(\'Opens WhatsApp with ' + esc(c.name) + '\')"><span class="material-symbols-outlined">chat</span>WhatsApp</button>' +
-          '<button class="btn subtle" onclick="toast(\'Opens a new lead pre-filled with this customer\')"><span class="material-symbols-outlined">person_add</span>New lead</button>' +
-          '<button class="btn subtle" onclick="toast(\'Opens a service booking\')"><span class="material-symbols-outlined">build</span>Book service</button></div></div>' +
-          '<div class="best-r"><div><div class="k"><span class="material-symbols-outlined">payments</span>Lifetime value</div><div class="v">' + esc(c.ltv) + '</div></div>' +
-          '<div><div class="k"><span class="material-symbols-outlined">directions_car</span>Vehicles</div><div class="v">' + n.vehicles + '</div></div>' +
-          '<div><div class="k"><span class="material-symbols-outlined">trending_up</span>Open sales</div><div class="v">' + n.openSales + '</div></div>' +
-          '<div><div class="k"><span class="material-symbols-outlined">build</span>Next service</div><div class="v" style="font-size:12px">' + esc(n.nextService) + '</div></div>' +
-          '<div class="wide"><div class="k"><span class="material-symbols-outlined">schedule</span>Last activity</div><div class="v" style="font-size:12px">' + esc(c.lastActivity) + '</div></div>' +
-          '<div class="wide"><div class="k"><span class="material-symbols-outlined">badge</span>Owner</div><div class="v" style="font-size:12px">' + esc(c.owner) + ' · ' + esc(c.showroom) + '</div></div></div></div>';
-        if (all.length > 1) h += '<div class="sec-t">Other customers <span class="n">' + (all.length - 1) + '</span></div><div class="card">' + custTable(all.slice(1), q) + '</div>';
+        if (accts.length) {
+          var b = accts[0], c = b.c, n = S.counts(c);
+          h += '<div class="card best"><div class="best-l"><div class="best-tag"><span class="material-symbols-outlined">verified</span>Best match</div>' +
+            '<div class="best-who"><div class="dp-av" style="background:' + c.av + '">' + c.initials + '</div><div><div class="dp-name-row"><span class="dp-name" onclick="openCustomer(\'' + c.id + '\')">' + S.mark(c.name, q) + '</span><span class="dp-lead-tag' + (c.type === 'Company' ? ' co' : '') + '"><span class="material-symbols-outlined">business</span>Account · ' + c.type + '</span></div>' +
+            '<div class="dp-meta-row" style="margin-top:4px"><span class="mono">' + c.id + '</span><span>' + esc(c.mobile) + '</span><span>' + esc(c.email) + '</span><span>' + esc(c.city) + '</span></div></div></div>' +
+            '<div class="hits">' + b.hits.slice(0, 5).map(function (x) { return '<span class="hit"><b>' + esc(x.field) + '</b>' + (x.field === 'Copilot' ? esc(x.value) : S.mark(x.value, q)) + '</span>'; }).join('') + '</div>' +
+            '<div class="best-acts"><button class="btn primary" onclick="openCustomer(\'' + c.id + '\')"><span class="material-symbols-outlined">person_search</span>Open account</button>' +
+            '<a class="btn" href="tel:' + c.mobile.replace(/\s/g, '') + '"><span class="material-symbols-outlined">call</span>Call</a>' +
+            '<button class="btn" onclick="toast(\'Opens WhatsApp with ' + esc(c.name) + '\')"><span class="material-symbols-outlined">chat</span>WhatsApp</button>' +
+            '<button class="btn subtle" onclick="toast(\'Opens a new lead pre-filled with this customer\')"><span class="material-symbols-outlined">person_add</span>New lead</button>' +
+            '<button class="btn subtle" onclick="toast(\'Opens a service booking\')"><span class="material-symbols-outlined">build</span>Book service</button></div></div>' +
+            '<div class="best-r"><div><div class="k"><span class="material-symbols-outlined">payments</span>Lifetime value</div><div class="v">' + esc(c.ltv) + '</div></div>' +
+            '<div><div class="k"><span class="material-symbols-outlined">directions_car</span>Vehicles</div><div class="v">' + n.vehicles + '</div></div>' +
+            '<div><div class="k"><span class="material-symbols-outlined">trending_up</span>Open sales</div><div class="v">' + n.openSales + '</div></div>' +
+            '<div><div class="k"><span class="material-symbols-outlined">build</span>Next service</div><div class="v" style="font-size:12px">' + esc(n.nextService) + '</div></div>' +
+            '<div class="wide"><div class="k"><span class="material-symbols-outlined">schedule</span>Last activity</div><div class="v" style="font-size:12px">' + esc(c.lastActivity) + '</div></div>' +
+            '<div class="wide"><div class="k"><span class="material-symbols-outlined">badge</span>Owner</div><div class="v" style="font-size:12px">' + esc(c.owner) + ' · ' + esc(c.showroom) + '</div></div></div></div>';
+        }
+        h += sec('Accounts', 'acc', accCols, accts) + sec('Contacts', 'con', conCols, contacts) + sec('Devices', 'dev', devCols, devices);
       }
-      else if (state.rtab === 'cust') h += '<div class="card">' + custTable(all, q) + '</div>';
-      else if (state.rtab === 'leads') h += '<div class="card">' + table([['Record', function (r) { return '<span class="lnk">' + esc(r.x.id) + '</span><div class="sub">' + r.kind + '</div>'; }], ['Topic', function (r) { return esc(r.x.topic); }], ['Customer', function (r) { return custLink(r.c); }], ['Rating / value', function (r) { return /AED/.test(r.x.rating) ? esc(r.x.rating) : pill(r.x.rating); }], ['Status', function (r) { return pill(r.x.status); }], ['Owner', function (r) { return esc(r.x.owner); }]], fl.leads, 'No leads or opportunities for these customers') + '</div>';
-      else if (state.rtab === 'veh') h += '<div class="card">' + table([['Vehicle', function (r) { return '<b>' + esc(r.x.model) + '</b> ' + esc(r.x.variant) + '<div class="sub">' + r.x.year + ' · ' + esc(r.x.color) + '</div>'; }], ['VIN', function (r) { return '<span class="mono">' + S.mark(r.x.vin, q) + '</span>'; }], ['Plate', function (r) { return S.mark(r.x.plate, q); }], ['Customer', function (r) { return custLink(r.c); }], ['Odometer', function (r) { return esc(r.x.odo); }], ['Next service', function (r) { return esc(r.x.nextService); }], ['Status', function (r) { return pill(r.x.status); }]], fl.vehicles, 'No vehicles for these customers') + '</div>';
-      else if (state.rtab === 'sales') h += '<div class="card">' + table([['Record', function (r) { return '<span class="lnk">' + S.mark(r.id, q) + '</span><div class="sub">' + r.kind + '</div>'; }], ['Vehicle', function (r) { return esc(r.what); }], ['Customer', function (r) { return custLink(r.c); }], ['Amount', function (r) { return '<b>' + esc(r.amt) + '</b>'; }], ['Details', function (r) { return '<span class="sub">' + esc(r.extra) + '</span>'; }], ['Status', function (r) { return pill(r.st); }]], fl.sales, 'No proposals, quotations or orders for these customers') + '</div>';
-      else if (state.rtab === 'svc') h += '<div class="card">' + table([['Record', function (r) { return '<span class="lnk">' + S.mark(r.id, q) + '</span><div class="sub">' + r.kind + '</div>'; }], ['What', function (r) { return esc(r.what); }], ['Customer', function (r) { return custLink(r.c); }], ['When', function (r) { return esc(r.when); }], ['Vehicle / rate', function (r) { return '<span class="sub">' + esc(r.extra) + '</span>'; }], ['Status', function (r) { return pill(r.st); }]], fl.service, 'No service records for these customers') + '</div>';
+      else if (state.rtab === 'acc') h += '<div class="card">' + table(accCols, accts, 'No accounts match') + '</div>';
+      else if (state.rtab === 'con') h += '<div class="card">' + table(conCols, contacts, 'No contacts match') + '</div>';
+      else if (state.rtab === 'dev') h += '<div class="card">' + table(devCols, devices, 'No devices match') + '</div>';
+      else if (state.rtab === 'leads') h += '<div class="card">' + table([['Record', function (x) { return '<span class="lnk">' + esc(x.x.id) + '</span><div class="sub">' + x.kind + '</div>'; }], ['Topic', function (x) { return esc(x.x.topic); }], ['Account', function (x) { return custLink(x.c); }], ['Rating / value', function (x) { return /AED/.test(x.x.rating) ? esc(x.x.rating) : pill(x.x.rating); }], ['Status', function (x) { return pill(x.x.status); }], ['Owner', function (x) { return esc(x.x.owner); }]], fl.leads, 'No leads or opportunities for these accounts') + '</div>';
+      else if (state.rtab === 'sales') h += '<div class="card">' + table([['Record', function (x) { return '<span class="lnk">' + S.mark(x.id, q) + '</span><div class="sub">' + x.kind + '</div>'; }], ['Vehicle', function (x) { return esc(x.what); }], ['Account', function (x) { return custLink(x.c); }], ['Amount', function (x) { return '<b>' + esc(x.amt) + '</b>'; }], ['Details', function (x) { return '<span class="sub">' + esc(x.extra) + '</span>'; }], ['Status', function (x) { return pill(x.st); }]], fl.sales, 'No proposals, quotations or orders for these accounts') + '</div>';
+      else if (state.rtab === 'svc') h += '<div class="card">' + table([['Record', function (x) { return '<span class="lnk">' + S.mark(x.id, q) + '</span><div class="sub">' + x.kind + '</div>'; }], ['What', function (x) { return esc(x.what); }], ['Account', function (x) { return custLink(x.c); }], ['When', function (x) { return esc(x.when); }], ['Vehicle / rate', function (x) { return '<span class="sub">' + esc(x.extra) + '</span>'; }], ['Status', function (x) { return pill(x.st); }]], fl.service, 'No service records for these accounts') + '</div>';
       h += '</div>';
 
-      // Filters pane (D365 search filter pane)
-      var types = {}, cities = {};
-      r.results.forEach(function (x) { types[x.c.type] = (types[x.c.type] || 0) + 1; cities[x.c.city] = (cities[x.c.city] || 0) + 1; });
-      var grp = function (title, key, obj) { return '<div class="fg"><div class="fg-t">' + title + '</div>' + Object.keys(obj).map(function (k) { return '<label><input type="checkbox" ' + (state.f[key][k] ? 'checked' : '') + ' onchange="state.f.' + key + '[\'' + k + '\']=this.checked;render()">' + esc(k) + '<span class="c">' + obj[k] + '</span></label>'; }).join('') + '</div>'; };
-      var f = '<aside class="filters"><h4><span class="material-symbols-outlined">filter_list</span>Filters<button class="clear" onclick="state.f={type:{},city:{}};render()">Clear</button></h4>' +
-        grp('Customer type', 'type', types) + grp('City', 'city', cities) +
-        '<div class="fg"><div class="fg-t">Search in</div>' + ['Contacts', 'Accounts', 'Leads', 'Opportunities', 'Vehicles (devices)', 'Quotes & sales orders', 'Service & rental'].map(function (t) { return '<label><input type="checkbox" checked disabled>' + t + '</label>'; }).join('') + '</div>' +
-        '<div class="tip"><b>Tip:</b> type a mobile, Emirates ID, VIN, plate or order number and search detects it. Or ask in plain words — <i>“customers in Sharjah with service due”</i>. Press <b>/</b> anywhere to search.</div></aside>';
+      // Filters pane — D365 facets (Owner, Modified On, Created On) + ours (Customer type, City, Search in, tip)
+      var all = r.results, cnt = function (fn) { var o = {}; all.forEach(function (x) { var k = fn(x.c); o[k] = (o[k] || 0) + 1; }); return o; };
+      var owners = cnt(function (c) { return c.owner; }), types = cnt(function (c) { return c.type; }), cities = cnt(function (c) { return c.city; });
+      var grp = function (title, key, obj, av) { return '<div class="fg"><div class="fg-t">' + title + '</div>' + Object.keys(obj).sort().map(function (k) { return '<label><input type="checkbox" ' + (F[key][k] ? 'checked' : '') + ' onchange="state.f.' + key + '[\'' + k.replace(/'/g, "\\'") + '\']=this.checked;render()">' + (av ? '<span class="own-av" style="background:' + ownerAv(k) + '">' + k.split(' ').map(function (w) { return w[0]; }).join('') + '</span>' : '') + esc(k) + ' <span class="c">(' + obj[k] + ')</span></label>'; }).join('') + '</div>'; };
+      var dd = function (key, val, first) { return '<select class="f-dd" onchange="state.f.' + key + '=this.value;render()">' + [first].concat(YEARS).map(function (y) { return '<option' + (y === val ? ' selected' : '') + '>' + y + '</option>'; }).join('') + '</select>'; };
+      var range = function (title, fk, tk) { return '<div class="fg"><div class="fg-t">' + title + '</div><div class="f-row"><span>From</span>' + dd(fk, F[fk], 'Oldest') + '</div><div class="f-row"><span>To</span>' + dd(tk, F[tk], 'Latest') + '</div></div>'; };
+      var f = state.fpane === 'closed'
+        ? '<aside class="filters closed"><button class="f-toggle" onclick="state.fpane=\'open\';render()" aria-label="Show filters"><span class="material-symbols-outlined">chevron_left</span></button><span class="f-vert">Filters</span></aside>'
+        : '<aside class="filters"><h4>Filters<button class="f-toggle" onclick="state.fpane=\'closed\';render()" aria-label="Hide filters"><span class="material-symbols-outlined">chevron_right</span></button></h4>' +
+          '<button class="clear-all" onclick="resetFilters();render()"><span class="material-symbols-outlined">filter_alt_off</span>Clear all</button>' +
+          grp('Owner', 'owner', owners, true) + range('Modified On', 'mFrom', 'mTo') + range('Created On', 'cFrom', 'cTo') +
+          grp('Customer type', 'type', types) + grp('City', 'city', cities) +
+          '<div class="fg"><div class="fg-t">Search in</div>' + TABLES.map(function (t) { return '<label><input type="checkbox" checked disabled>' + t + '</label>'; }).join('') + '</div>' +
+          '<div class="tip"><b>Tip:</b> type a mobile, Emirates ID, VIN, plate or order number and search detects it. Or ask in plain words — <i>“customers in Sharjah with service due”</i>. Press <b>/</b> anywhere to search.</div></aside>';
       document.getElementById('content').innerHTML = '<div class="sr">' + h + f + '</div>';
     }
-    function custTable(list, q) {
-      return table([
-        ['Customer', function (x) { return custLink(x.c).replace(esc(x.c.name), S.mark(x.c.name, q)); }],
-        ['Matched in', function (x) { var h = x.hits[0]; return h.field === 'Copilot' ? '<span class="pill p">' + esc(x.hits.map(function (y) { return y.value; }).join(' · ')) + '</span>' : '<span class="sub">' + esc(h.field) + '</span><div>' + S.mark(h.value, q) + '</div>'; }],
-        ['City', function (x) { return esc(x.c.city); }],
-        ['Mobile', function (x) { return '<span class="mono">' + esc(x.c.mobile) + '</span>'; }],
-        ['Vehicles', function (x) { return S.counts(x.c).vehicles; }],
-        ['Open sales', function (x) { return S.counts(x.c).openSales; }],
-        ['Next service', function (x) { return esc(S.counts(x.c).nextService); }],
-        ['', function (x) { return '<div class="row-acts"><a class="ia" href="tel:' + x.c.mobile.replace(/\s/g, '') + '" title="Call" aria-label="Call"><span class="material-symbols-outlined">call</span></a><button class="ia" onclick="openCustomer(\'' + x.c.id + '\')" title="Open Customer 360" aria-label="Open Customer 360"><span class="material-symbols-outlined">open_in_new</span></button></div>'; }]
-      ], list);
-    }
+    function rowActs(c) { return '<div class="row-acts"><a class="ia" href="tel:' + c.mobile.replace(/\s/g, '') + '" title="Call" aria-label="Call"><span class="material-symbols-outlined">call</span></a><button class="ia" onclick="openCustomer(\'' + c.id + '\')" title="Open account" aria-label="Open account"><span class="material-symbols-outlined">open_in_new</span></button></div>'; }
+    document.addEventListener('click', function () { var t = document.querySelector('.tbl-pop.open'); if (t) t.classList.remove('open'); });
 
     /* ── Account form (D365 Account › Auto Sales structure, our visual style) ── */
     var REL = [['Activities', 'summary', 'secTimeline'], ['Contacts', 'summary', 'secContacts'], ['Opportunities', 'sales', 'secOpp'], ['Leads', 'lead', 'secLead'], ['Deals', 'sales', 'secDeal'], ['Test drives', 'sales', 'secTD'], ['Trade-ins', 'sales', 'secTI'],

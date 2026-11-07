@@ -222,6 +222,40 @@
     }
   ];
 
+  // Lighter sample accounts so search and the Accounts list have realistic volume.
+  var OWN = ['Mariam Khalil', 'Karim Mostafa', 'Nadia Farouk', 'Mariam Saeed'];
+  var GR = ['linear-gradient(135deg,#2a6797,#00203f)', 'linear-gradient(135deg,#0f6c6c,#0a3d3d)', 'linear-gradient(135deg,#8a6420,#4a3410)', 'linear-gradient(135deg,#5c2e91,#2e1650)', 'linear-gradient(135deg,#c2557a,#7a1f45)', 'linear-gradient(135deg,#5b8def,#2a4f9e)'];
+  [['C059611', 'Ahmad Hassan Trading', 'Company', 'Dubai', '+971 4 228 9011', 'info@ahmadhassan.ae', '2022', 'EXEED VX'],
+   ['C071544', 'Ahammed Faseel Hamza', 'Individual', 'Sharjah', '+971 52 310 7745', 'faseel.h@email.ae', '2025', 'EXEED LX'],
+   ['C041217', 'Saad Abdulrahman Al Hadi', 'Individual', 'Abu Dhabi', '+971 50 664 2210', 'saad.alhadi@email.ae', '2023', 'EXEED TXL'],
+   ['C034682', 'Soha Ahmed Edaqil', 'Individual', 'Dubai', '+971 55 801 3307', 'soha.edaqil@email.ae', '2021', null],
+   ['C076825', 'Hamad Abdalla Al Ahbabi', 'Individual', 'Al Ain', '+971 50 911 4682', 'hamad.ahbabi@email.ae', '2026', 'EXEED RX'],
+   ['C062001', 'Shahid Ahmed Qureshi', 'Individual', 'Dubai', '+971 56 402 9981', 'shahid.q@email.ae', '2024', 'EXEED LX'],
+   ['C064410', 'Farah Al Shehhi', 'Individual', 'Ras Al Khaimah', '+971 50 233 6670', 'farah.shehhi@email.ae', '2025', null],
+   ['C058802', 'Al Ahram Logistics LLC', 'Company', 'Dubai', '+971 4 887 2100', 'fleet@alahram.ae', '2020', 'EXEED TXL'],
+   ['C070315', 'Mubarak Ahmed Al Ali', 'Individual', 'Sharjah', '+971 52 778 1043', 'mubarak.alali@email.ae', '2026', null],
+   ['C066190', 'Abdullah Ahmed Alshehhi', 'Individual', 'Fujairah', '+971 50 345 9120', 'abdullah.a@email.ae', '2024', 'EXEED VX'],
+   ['C052733', 'Kamaluddin Ahamed Basheer', 'Individual', 'Abu Dhabi', '+971 55 612 0098', 'k.basheer@email.ae', '2022', 'EXEED LX'],
+   ['C073388', 'Sharaf Auto Parts LLC', 'Company', 'Sharjah', '+971 6 543 2200', 'purchasing@sharafparts.ae', '2023', null]
+  ].forEach(function (r, k) {
+    var co = r[2] === 'Company', ini = r[1].replace(/\b(Al|LLC)\b/g, '').trim().split(/\s+/), owner = OWN[k % OWN.length];
+    var veh = r[7] ? [{ model: r[7], variant: 'Premium', year: +r[6], vin: 'LVX-' + r[6] + '-0' + (40100 + k * 37), plate: r[3] + ' ' + String.fromCharCode(65 + k) + ' ' + (21000 + k * 713), reg: '01 Mar ' + r[6], warranty: 'Mar ' + (+r[6] + 5), odo: (8000 + k * 6100).toLocaleString('en-US') + ' km', lastService: '—', nextService: 'Mar 2027', status: 'Active', color: 'Pearl White', img: 'assets/es/ext-white.png' }] : [];
+    C.push({
+      id: r[0], type: r[2], name: r[1], initials: (ini[0][0] + (ini[1] || ini[0])[0]).toUpperCase(), av: GR[k % GR.length],
+      mobile: r[4], phone2: co ? r[4] : '—', email: r[5], emiratesId: co ? '—' : '784-19' + (70 + k) + '-' + (3300000 + k * 1111) + '-1', city: r[3], nationality: '—', language: 'English',
+      since: r[6], owner: owner, showroom: r[3] === 'Abu Dhabi' || r[3] === 'Al Ain' ? 'Abu Dhabi Corniche' : r[3] === 'Sharjah' ? 'Sharjah Showroom' : 'SZR Showroom — Dubai',
+      ltv: veh.length ? 'AED ' + (139 + k * 7) + ',900' : 'AED 0', lastActivity: veh.length ? 'Service reminder · this month' : 'Enquiry · this month', segment: co ? 'Corporate' : veh.length ? 'Owner' : 'Prospect',
+      primaryContact: co ? r[1].split(' ')[0] + ' — Fleet desk' : undefined,
+      vehicles: veh, leads: veh.length ? [] : [{ id: 'L-2026-0' + (6100 + k), topic: 'EXEED ' + ['LX', 'VX', 'RX'][k % 3] + ' enquiry', source: ['Website', 'Walk-in', 'WhatsApp'][k % 3], created: '0' + (1 + k % 9) + ' Oct 2026', rating: ['Hot', 'Warm', 'Cold'][k % 3], status: 'Contacted', owner: owner }],
+      opportunities: [], testDrives: [], tradeIns: [], proposals: [], quotations: [], salesOrders: [], deals: [], serviceUpcoming: [], servicePast: [], serviceContracts: [], rentals: [],
+      profile: co ? { type: 'Company', industry: 'Trading', employees: String(40 + k * 15), fleet: (k + 3) + ' vehicles' } : { type: 'Individual', occupation: '—', employer: '—', income: '—', household: '—', dob: '—' },
+      marketing: { consentEmail: true, consentSms: k % 2 === 0, consentWhatsapp: true, consentCalls: true, segments: [co ? 'Corporate' : 'Retail'], lastCampaign: 'EXEED Autumn offers', preferredChannel: ['WhatsApp', 'Email', 'Phone'][k % 3], nps: '—' },
+      billing: { address: r[3], trn: '—', currency: 'AED', terms: co ? 'Net 30' : 'Pay on invoice', method: co ? 'Bank transfer' : 'Card', credit: 'No outstanding' },
+      timeline: [{ icon: veh.length ? 'notifications' : 'chat', kind: veh.length ? 'service' : 'sales', text: veh.length ? 'Service reminder sent' : 'Enquiry received', time: (10 + k) + ' Oct 2026' }],
+      nba: { title: veh.length ? 'Book the next service' : 'Follow up the enquiry', desc: veh.length ? 'Service is due in March — <strong>book it early</strong> and offer the winter check.' : 'New enquiry — <strong>call within the SLA</strong> and offer a test drive.', btns: veh.length ? ['Book service', 'Send WhatsApp'] : ['Call now', 'Book test drive'] }
+    });
+  });
+
   // ── CRM account form fields (Account › Summary in D365: Account information, Address,
   //    Preferred business, Customer identifiers, Customer segmentation, Contacts, Recent cases) ──
   var CRM = {
