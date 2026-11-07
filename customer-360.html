@@ -427,6 +427,20 @@
     .f-dd { font: 400 12.5px var(--fontFamilyBase); color: var(--ink); background: var(--colorNeutralBackground3); border: 1px solid transparent; border-bottom-color: var(--colorNeutralStrokeAccessible); border-radius: 4px; padding: 5px 8px; cursor: pointer; }
     .filters.closed { width: 44px; padding: 10px 8px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
     .f-vert { writing-mode: vertical-rl; font-size: 15px; font-weight: 700; color: var(--ink); }
+    /* Customer 360 merged tab */
+    .c360-nav { display: flex; align-items: center; gap: 6px; padding: 8px 0 10px; background: var(--bg); }
+    .c360-t { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--ink); margin-inline-end: 6px; }
+    .c360-nav button { display: inline-flex; align-items: center; gap: 5px; font: 600 12px/1 var(--fontFamilyBase); color: var(--ink-secondary); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+    .c360-nav button:hover { color: var(--blue); border-color: var(--blue-muted); background: var(--blue-soft); }
+    .c360-nav .material-symbols-outlined { font-size: 15px; }
+    .grp-h { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; margin: 6px 0 12px; scroll-margin-top: 200px; }
+    .grp-h.svc { margin-top: 28px; }
+    .grp-h .ico { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); }
+    .grp-h.svc .ico { background: var(--teal-soft); color: var(--teal); }
+    .grp-h .ico .material-symbols-outlined { font-size: 17px; }
+    .grp-h .sub { font-size: 11.5px; font-weight: 400; color: var(--ink-muted); }
+    .stack > .card, .stack > .sg { scroll-margin-top: 200px; }
+    .stack .tbl td:first-child { min-width: 170px; }
     @media (max-width: 1100px) { .filters { display: none; } .best-r { display: none; } .hero-cols { grid-template-columns: 1fr; } .dp-formhead { display: none; } }
   </style>
 </head>
@@ -747,7 +761,7 @@
     function renderRecord(c) {
       cmdbar('record');
       var A = acct(c), own = c.owner.split(' ').map(function (w) { return w[0]; }).join('');
-      var tabs = [['summary', 'Summary'], ['sales', 'Sales 360°'], ['service', 'Service 360°'], ['details', 'Details'], ['lead', 'Lead']];
+      var tabs = [['summary', 'Summary'], ['c360', 'Customer 360'], ['details', 'Details'], ['lead', 'Lead']];
       var head = (state.from === 'accounts' ? '<div class="crumb"><a onclick="nav({view:\'accounts\'})">Accounts</a><span class="material-symbols-outlined">chevron_right</span>' + esc(c.name) + '</div>' : '') +
         '<div class="dp-idcard"><div class="dp-lead-head"><div class="dp-av" style="background:' + c.av + '">' + c.initials + '</div>' +
         '<div class="dp-head-info"><div class="dp-name-row"><span class="dp-name">' + esc(c.name) + '</span><span class="save-st" id="saveSt">- Saved</span></div>' +
@@ -755,11 +769,11 @@
         '<div class="dp-formhead"><div class="dp-fh-field"><div class="dp-fh-val">' + esc(c.ltv) + '</div><div class="dp-fh-label">Lifetime value</div></div><div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.annualRevenue) + '</div><div class="dp-fh-label">Annual Revenue</div></div>' +
         '<div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.employees) + '</div><div class="dp-fh-label">Number of Employees</div></div>' +
         '<div class="dp-fh-owner"><div class="dp-fh-av">' + own + '<span class="dp-fh-dot"></span></div><div><div class="dp-fh-val" style="color:var(--blue)">' + esc(c.owner) + '</div><div class="dp-fh-label">Owner</div></div></div></div></div>' +
-        '<div class="dp-tabs dp-idtabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.tab === t[0] ? ' active' : '') + '" onclick="setTab(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') +
+        '<div class="dp-tabs dp-idtabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.tab === t[0] || (t[0] === 'c360' && /^(sales|service)$/.test(state.tab)) ? ' active' : '') + '" onclick="setTab(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') +
         '<div class="rel-wrap"><button class="dp-tab" id="relBtn" onclick="toggleRel(event)" aria-haspopup="menu" aria-expanded="false">Related <span class="material-symbols-outlined" style="font-size:18px">expand_more</span></button>' +
         '<div class="rel-menu" id="relMenu" role="menu">' + REL.map(function (r) { return '<button role="menuitem" onclick="goRel(\'' + r[1] + '\',\'' + r[2] + '\')">' + r[0] + '</button>'; }).join('') + '</div></div>' +
         '<span class="grow"></span><button class="form-assist" onclick="window.toggleCopilot ? toggleCopilot() : toast(\'Form assist — Copilot fills fields from emails and notes\')"><span class="material-symbols-outlined">auto_awesome</span>Form assist</button></div></div>';
-      var body = state.tab === 'sales' ? salesTab(c, A) : state.tab === 'service' ? serviceTab(c, A) : state.tab === 'details' ? detailsTab(c, A) : state.tab === 'lead' ? leadTab(c, A) : summaryTab(c, A);
+      var body = /^(c360|sales|service)$/.test(state.tab) ? c360Tab(c, A) : state.tab === 'details' ? detailsTab(c, A) : state.tab === 'lead' ? leadTab(c, A) : summaryTab(c, A);
       document.getElementById('content').innerHTML = '<div class="dp-page">' + head + body + '</div>';
       fitColumns();
       var page = document.querySelector('.dp-page');
@@ -779,7 +793,13 @@
     function toggleRel(e) { e.stopPropagation(); var m = document.getElementById('relMenu'), b = document.getElementById('relBtn'); var on = !m.classList.contains('open'); m.classList.toggle('open', on); b.setAttribute('aria-expanded', on); }
     document.addEventListener('click', function () { var m = document.getElementById('relMenu'); if (m) m.classList.remove('open'); });
     function goRel(tab, id) { setTab(tab); setTimeout(function () { var el = document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1400); } }, 60); }
-    function setTab(t) { state.tab = t; var u = new URL(location.href); u.searchParams.set('tab', t); history.replaceState(null, '', u); render(); }
+    function setTab(t) {
+      var part = t === 'sales' ? 'grpSales' : t === 'service' ? 'grpService' : null;
+      if (part) t = 'c360';
+      state.tab = t; var u = new URL(location.href); u.searchParams.set('tab', t); history.replaceState(null, '', u); render();
+      if (part) jumpTo(part, true);
+    }
+    function jumpTo(id, instant) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: instant ? 'auto' : 'smooth', block: 'start' }); }
 
     /* ── Our additions, merged into the D365 tabs ─────────────────── */
     function kv(rows) { return rows.map(function (r) { return '<div class="k">' + esc(r[0]) + '</div><div class="v">' + (/^<span class="pill/.test(r[1]) ? r[1] : esc(r[1] == null ? '—' : r[1])) + '</div>'; }).join(''); }
@@ -879,6 +899,12 @@
         subgrid('secRC', 'Rental Contracts for a Customer', 'New Rental Contract', [['Name', function (r) { return L(r.name); }], ['Description', function (r) { return T(r.desc); }], ['Rental Contract Type', function (r) { return T(r.type); }], ['Start Date', function (r) { return T(r.start); }], ['End Date', function (r) { return T(r.end); }], ['Status', function (r) { return pill(r.status); }]], A.rentals, o('car_rental')) +
         subgrid('secSaC', 'Customer’s Sales Contracts', 'New Sales Contract', [['Name', function (r) { return L(r.name); }], ['Description', function (r) { return T(r.desc); }], ['Sales Contract Type', function (r) { return T(r.type); }], ['End Date', function (r) { return T(r.end); }], ['Start Date', function (r) { return T(r.start); }]], A.salesContracts, o('contract')) +
         subgrid('secSvcCases', 'Cases', 'New Case', [['Case', function (r) { return L(r.id); }], ['Title', function (r) { return T(r.title); }], ['Type', function (r) { return T(r.type); }], ['Priority', function (r) { return r.priority === 'High' ? '<span class="pill r">High</span>' : T(r.priority); }], ['Created', function (r) { return T(r.created); }], ['Status', function (r) { return pill(r.status === 'In progress' ? 'Pending — in progress' : r.status); }]], A.x.cases, { icon: 'support_agent', svc: true }) + '</div>';
+    }
+    /* Customer 360 — Sales 360° and Service 360° on one tab */
+    function c360Tab(c, A) {
+      var nav = '<div class="c360-nav"><span class="c360-t">Customer 360</span><button onclick="jumpTo(\'grpSales\')"><span class="material-symbols-outlined">trending_up</span>Sales</button><button onclick="jumpTo(\'grpService\')"><span class="material-symbols-outlined">build</span>Service</button></div>';
+      return nav + '<div class="grp-h" id="grpSales"><span class="ico"><span class="material-symbols-outlined">trending_up</span></span>Sales<span class="sub">Leads, opportunities, deals, test drives, trade-ins, proposals, quotations and orders</span></div>' + salesTab(c, A) +
+        '<div class="grp-h svc" id="grpService"><span class="ico"><span class="material-symbols-outlined">build</span></span>Service<span class="sub">Vehicles, appointments, contracts and cases</span></div>' + serviceTab(c, A);
     }
     /* Details — Company profile · Marketing · Description · Contact preferences · Billing · Shipping · Child accounts */
     function detailsTab(c, A) {
