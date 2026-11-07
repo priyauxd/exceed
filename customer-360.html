@@ -700,7 +700,7 @@
     document.addEventListener('click', function () { var t = document.querySelector('.tbl-pop.open'); if (t) t.classList.remove('open'); });
 
     /* ── Account form (D365 Account › Auto Sales structure, our visual style) ── */
-    var REL = [['Activities', 'summary', 'secTimeline'], ['Contacts', 'summary', 'secContacts'], ['Opportunities', 'sales', 'secOpp'], ['Leads', 'lead', 'secLead'], ['Deals', 'sales', 'secDeal'], ['Test drives', 'sales', 'secTD'], ['Trade-ins', 'sales', 'secTI'],
+    var REL = [['Activities', 'summary', 'secTimeline'], ['Contacts', 'summary', 'secContacts'], ['Opportunities', 'sales', 'secOpp'], ['Leads', 'sales', 'secLead'], ['Deals', 'sales', 'secDeal'], ['Test drives', 'sales', 'secTD'], ['Trade-ins', 'sales', 'secTI'],
       ['Devices / fleet', 'service', 'secDev'], ['Service appointments', 'service', 'secUp'], ['Service contracts', 'service', 'secSC'], ['Rental contracts', 'service', 'secRC'], ['Sales contracts', 'service', 'secSaC'], ['Cases', 'summary', 'secCases'], ['Entitlements', 'summary', 'secEnt'], ['Child accounts', 'details', 'secChild'], ['Proposals', 'sales', 'secProp'], ['Quotations', 'sales', 'secQuote'], ['Sales orders', 'sales', 'secSO'], ['Vehicles owned', 'service', 'secVeh']];
     function first(n) { return String(n).split(' ')[0]; }
     function last(n) { var p = String(n).split(' '); return p.slice(1).join(' ') || '—'; }
@@ -761,7 +761,7 @@
     function renderRecord(c) {
       cmdbar('record');
       var A = acct(c), own = c.owner.split(' ').map(function (w) { return w[0]; }).join('');
-      var tabs = [['summary', 'Summary'], ['c360', 'Customer 360'], ['details', 'Details'], ['lead', 'Lead']];
+      var tabs = [['summary', 'Summary'], ['c360', 'Customer 360'], ['details', 'Details']];
       var head = (state.from === 'accounts' ? '<div class="crumb"><a onclick="nav({view:\'accounts\'})">Accounts</a><span class="material-symbols-outlined">chevron_right</span>' + esc(c.name) + '</div>' : '') +
         '<div class="dp-idcard"><div class="dp-lead-head"><div class="dp-av" style="background:' + c.av + '">' + c.initials + '</div>' +
         '<div class="dp-head-info"><div class="dp-name-row"><span class="dp-name">' + esc(c.name) + '</span><span class="save-st" id="saveSt">- Saved</span></div>' +
@@ -769,11 +769,11 @@
         '<div class="dp-formhead"><div class="dp-fh-field"><div class="dp-fh-val">' + esc(c.ltv) + '</div><div class="dp-fh-label">Lifetime value</div></div><div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.annualRevenue) + '</div><div class="dp-fh-label">Annual Revenue</div></div>' +
         '<div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.employees) + '</div><div class="dp-fh-label">Number of Employees</div></div>' +
         '<div class="dp-fh-owner"><div class="dp-fh-av">' + own + '<span class="dp-fh-dot"></span></div><div><div class="dp-fh-val" style="color:var(--blue)">' + esc(c.owner) + '</div><div class="dp-fh-label">Owner</div></div></div></div></div>' +
-        '<div class="dp-tabs dp-idtabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.tab === t[0] || (t[0] === 'c360' && /^(sales|service)$/.test(state.tab)) ? ' active' : '') + '" onclick="setTab(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') +
+        '<div class="dp-tabs dp-idtabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.tab === t[0] || (t[0] === 'c360' && /^(sales|service|lead)$/.test(state.tab)) ? ' active' : '') + '" onclick="setTab(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') +
         '<div class="rel-wrap"><button class="dp-tab" id="relBtn" onclick="toggleRel(event)" aria-haspopup="menu" aria-expanded="false">Related <span class="material-symbols-outlined" style="font-size:18px">expand_more</span></button>' +
         '<div class="rel-menu" id="relMenu" role="menu">' + REL.map(function (r) { return '<button role="menuitem" onclick="goRel(\'' + r[1] + '\',\'' + r[2] + '\')">' + r[0] + '</button>'; }).join('') + '</div></div>' +
         '<span class="grow"></span><button class="form-assist" onclick="window.toggleCopilot ? toggleCopilot() : toast(\'Form assist — Copilot fills fields from emails and notes\')"><span class="material-symbols-outlined">auto_awesome</span>Form assist</button></div></div>';
-      var body = /^(c360|sales|service)$/.test(state.tab) ? c360Tab(c, A) : state.tab === 'details' ? detailsTab(c, A) : state.tab === 'lead' ? leadTab(c, A) : summaryTab(c, A);
+      var body = /^(c360|sales|service|lead)$/.test(state.tab) ? c360Tab(c, A) : state.tab === 'details' ? detailsTab(c, A) : summaryTab(c, A);
       document.getElementById('content').innerHTML = '<div class="dp-page">' + head + body + '</div>';
       fitColumns();
       var page = document.querySelector('.dp-page');
@@ -794,7 +794,7 @@
     document.addEventListener('click', function () { var m = document.getElementById('relMenu'); if (m) m.classList.remove('open'); });
     function goRel(tab, id) { setTab(tab); setTimeout(function () { var el = document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1400); } }, 60); }
     function setTab(t) {
-      var part = t === 'sales' ? 'grpSales' : t === 'service' ? 'grpService' : null;
+      var part = t === 'sales' ? 'grpSales' : t === 'service' ? 'grpService' : t === 'lead' ? 'secLead' : null;
       if (part) t = 'c360';
       state.tab = t; var u = new URL(location.href); u.searchParams.set('tab', t); history.replaceState(null, '', u); render();
       if (part) jumpTo(part, true);
@@ -961,6 +961,7 @@
       var top = document.querySelector('.topbar .search'); if (top && document.activeElement !== top) top.value = state.q || '';
     }
     render();
+    if (state.id && /^(sales|service|lead)$/.test(state.tab)) setTab(state.tab);
   </script>
   <script src="global-search.js?v=1" defer></script>
   <script src="copilot-widget.js?v=14" defer></script>
