@@ -1487,14 +1487,10 @@
         <a href="#" class="sb-item"><span class="material-symbols-outlined">schedule</span>Callbacks</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">supervisor_account</span>Call Center Manager</a>
         <div class="sb-group">Sales</div>
-        <a href="lead-detail.html" class="sb-item enabled"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
-        <a href="lead-detail-v2.html" class="sb-item active"><span class="material-symbols-outlined">splitscreen_right</span>Leads &middot; Option 2</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">handshake</span>Deals</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">request_quote</span>Quotes</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Test Drives</a>
-        <div class="sb-group">Customers</div>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">business</span>Accounts</a>
-        <a href="#" class="sb-item"><span class="material-symbols-outlined">contacts</span>Contacts</a>
+        <a href="lead-detail.html" class="sb-item enabled active"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="customer-360.html?view=accounts" class="sb-item enabled" id="navAccounts"><span class="material-symbols-outlined">business</span>Accounts</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">person</span>Contacts</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Devices</a>
         <div class="sb-group">Operations</div>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">admin_panel_settings</span>Sales Admin</a>
         <a href="#" class="sb-item"><span class="material-symbols-outlined">payments</span>Payments</a>
@@ -4718,6 +4714,7 @@
     function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
     function closeSidebar(){ document.body.classList.remove('sb-rail'); }
   </script>
-  <script src="copilot-widget.js?v=12" defer></script>
+  <script src="global-search.js?v=1" defer></script>
+  <script src="copilot-widget.js?v=14" defer></script>
 </body>
 </html>

@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer 360 — AGM Sales EXEED CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="fluent-tokens.css?v=3" rel="stylesheet" />
+  <link href="rtl.css?v=15" rel="stylesheet" />
+  <script src="i18n-ar.js?v=25"></script>
+  <script src="i18n.js?v=13"></script>
+  <script src="customer-data.js?v=2"></script>
+  <style>
+    /* Shell — identical to the Leads page (lead-detail.html) */
+    :root { --exeed-navy: #00203f; --exeed-cyan: #00b7bb; --exeed-azure: #2a6797; --sidebar-w: 228px; --topbar-h: 42px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: var(--fontFamilyBase); background: var(--bg); color: var(--ink); font-size: var(--fontSizeBase200); line-height: 1.45; -webkit-font-smoothing: antialiased; overflow: hidden; height: 100vh; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+    .topbar { height: var(--topbar-h); background: linear-gradient(135deg, #0a0e14, #16293c); color: #fff; display: flex; align-items: center; padding: 0 18px; gap: 12px; position: fixed; top: 0; inset-inline: 0; z-index: 100; font-size: 13px; }
+    .topbar .waffle { font-size: 16px; opacity: .7; cursor: pointer; }
+    .topbar .app-name { font-weight: 600; opacity: .95; }
+    .topbar .sep { width: 1px; height: 18px; background: rgba(255,255,255,.25); }
+    .topbar .org { opacity: .85; font-size: 12px; }
+    .topbar .search { flex: 1; max-width: 360px; margin: 0 auto; background: rgba(255,255,255,.15); border: none; border-radius: 8px; padding-block: 6px; padding-inline: 30px 14px; color: #fff; font-size: 12px; font-family: inherit; }
+    .topbar .search::placeholder { color: rgba(255,255,255,.6); }
+    .topbar .spacer { flex: 1; }
+    .topbar .actions { display: flex; align-items: center; gap: 12px; }
+    .topbar .copilot { display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,.13); padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+    .topbar .avatar { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center; font-size: 10px; font-weight: 600; }
+    .shell { display: flex; height: 100vh; }
+    .sidebar { width: var(--sidebar-w); background: var(--surface); border-inline-end: 1px solid var(--border); position: fixed; top: var(--topbar-h); inset-inline-start: 0; bottom: 0; overflow-y: auto; z-index: 10; }
+    .sidebar::-webkit-scrollbar { width: 3px; } .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .sb-brand { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+    .sb-logo { width: 30px; height: 30px; border-radius: 8px; background: linear-gradient(135deg, #4a6fa5, #5b8def); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+    .sb-name { font-weight: 600; font-size: 13px; line-height: 1.2; } .sb-sub { font-size: 10px; color: var(--ink-muted); }
+    .sb-nav { padding: 8px; }
+    .sb-group { font-size: 10px; font-weight: 600; color: var(--ink-muted); padding: 14px 10px 4px; letter-spacing: .07em; text-transform: uppercase; }
+    .sb-item { display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 8px; color: var(--ink-secondary); text-decoration: none; font-size: 12.5px; transition: all .12s; border-inline-start: 2px solid transparent; }
+    .sb-item:hover { background: var(--blue-soft); color: var(--blue); }
+    .sb-item.active { background: var(--blue-soft); color: var(--blue); font-weight: 600; border-inline-start-color: var(--blue); }
+    .sb-item .material-symbols-outlined { font-size: 18px; }
+    .sb-toggle { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; margin-block: 2px 10px; margin-inline: auto 2px; border: 1px solid var(--border); background: var(--surface); color: var(--blue); border-radius: 50%; cursor: pointer; font-family: inherit; box-shadow: 0 1px 4px rgba(20,24,34,.08); }
+    .sb-toggle .material-symbols-outlined { font-size: 20px; transition: transform .25s ease; }
+    body.sb-rail .sidebar { width: 60px; } body.sb-rail .main { margin-inline-start: 60px; }
+    body.sb-rail .sb-item { font-size: 0; gap: 0; justify-content: center; padding: 9px 0; }
+    body.sb-rail .sb-group, body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
+    body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; } body.sb-rail .sb-toggle { margin: 2px auto 10px; }
+    body.sb-rail .sb-toggle .material-symbols-outlined { transform: rotate(180deg); }
+    .main { margin-inline-start: var(--sidebar-w); margin-top: var(--topbar-h); flex: 1; display: flex; flex-direction: column; min-width: 0; height: calc(100vh - var(--topbar-h)); overflow: hidden; }
+    .cmdbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 16px; height: 34px; display: flex; align-items: center; gap: 3px; font-size: 11px; color: var(--ink-muted); overflow-x: auto; flex-shrink: 0; }
+    .cmd-sep { width: 1px; height: 14px; background: var(--border); margin: 0 3px; }
+    .cb { display: flex; align-items: center; gap: 3px; padding: 3px 6px; border: none; background: none; color: var(--ink-muted); font-size: 11px; cursor: pointer; border-radius: 4px; white-space: nowrap; font-family: inherit; text-decoration: none; }
+    .cb:hover { background: var(--bg); color: var(--ink-secondary); }
+    .cb .material-symbols-outlined { font-size: 13px; }
+    .content { flex: 1; overflow-y: auto; }
+    .content::-webkit-scrollbar { width: 6px; } .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* Lead-page building blocks reused here */
+    .dp-page { padding: 20px; max-width: 1480px; }
+    .dp-idcard { position: sticky; top: 0; z-index: 20; border: 1px solid var(--border-soft); border-radius: var(--radius-md); padding: 16px 18px 18px; margin-bottom: 16px; background: var(--surface); box-shadow: var(--shadow2); overflow: hidden; }
+    .dp-lead-head { display: flex; align-items: center; gap: 14px; }
+    .dp-av { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; color: #fff; flex-shrink: 0; }
+    .dp-head-info { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+    .dp-name-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .dp-name { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+    .dp-meta-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--ink-secondary); }
+    .dp-meta-row .mono { font-family: 'SF Mono','Consolas',monospace; font-size: 11.5px; }
+    .dp-lead-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--blue); background: var(--blue-soft); border-radius: var(--borderRadiusCircular); padding-block: 3px; padding-inline: 9px 11px; }
+    .dp-lead-tag.co { color: var(--teal); background: var(--teal-soft); }
+    .dp-lead-tag .material-symbols-outlined { font-size: 14px; }
+    .dp-call { display: inline-flex; align-items: center; gap: 5px; font-family: var(--fontFamilyBase); font-size: 11.5px; font-weight: 600; color: var(--blue); background: var(--blue-soft); border: 1px solid transparent; border-radius: var(--borderRadiusCircular); padding-block: 3px; padding-inline: 9px 11px; cursor: pointer; text-decoration: none; }
+    .dp-call:hover { background: #dde5ec; } .dp-call .material-symbols-outlined { font-size: 15px; }
+    .dp-formhead { display: flex; align-items: center; margin-inline-start: auto; align-self: flex-start; flex-shrink: 0; }
+    .dp-fh-field, .dp-fh-owner { padding: 0 20px; border-inline-start: 1px solid var(--border); }
+    .dp-fh-field:first-child { border-inline-start: none; }
+    .dp-fh-owner { display: flex; align-items: center; gap: 10px; }
+    .dp-fh-val { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; white-space: nowrap; }
+    .dp-fh-label { font-size: 11px; color: var(--ink-secondary); margin-top: 1px; white-space: nowrap; }
+    .dp-fh-av { position: relative; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; background: #e4e4e6; color: #616161; flex-shrink: 0; }
+    .dp-fh-dot { position: absolute; inset-inline-end: -1px; bottom: -1px; width: 11px; height: 11px; border-radius: 50%; background: var(--green); border: 2px solid var(--surface); }
+    .dp-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .dp-tab { appearance: none; background: none; border: none; font-family: inherit; font-size: 12.5px; font-weight: 600; color: var(--ink-secondary); padding: 8px 14px 10px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .12s, border-color .12s; display: inline-flex; align-items: center; gap: 6px; }
+    .dp-tab:hover { color: var(--blue); } .dp-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .dp-tab .cnt { font-size: 10.5px; font-weight: 700; color: var(--ink-muted); background: var(--bg); border-radius: 999px; padding: 1px 7px; }
+    .dp-tab.active .cnt { color: var(--blue); background: var(--blue-soft); }
+    .dp-idtabs { margin: 14px -18px -18px; padding: 2px 18px 0; border-top: 1px solid var(--border-soft); border-bottom: none; gap: 0; overflow-x: auto; flex-wrap: nowrap; }
+    .dp-idtabs .dp-tab { padding: 10px 14px 12px; }
+    .dp-layout { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+    .dp-main { flex: 2.8 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+    .dp-side { flex: 1 1 280px; min-width: 260px; display: flex; flex-direction: column; gap: 14px; position: sticky; top: 150px; }
+    .dp-ai-card { background: linear-gradient(135deg, #f3f1fe, #f9f0fd); border: 1px solid #ddd5f5; border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow2); }
+    .dp-ai-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #7c6dd8; display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
+    .dp-ai-label .material-symbols-outlined { font-size: 14px; }
+    .dp-ai-title { font-size: 15px; font-weight: 700; color: #4c3a96; margin-bottom: 6px; }
+    .dp-ai-desc { font-size: 11.5px; color: #6b5ba0; line-height: 1.5; margin-bottom: 12px; }
+    .dp-ai-desc strong { color: #4c3a96; }
+    .dp-ai-btn { display: block; width: 100%; padding: 9px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; text-align: center; margin-bottom: 6px; }
+    .dp-ai-btn.primary { background: linear-gradient(135deg, #7c6dd8, #a78bfa); color: #fff; }
+    .dp-ai-btn.secondary { background: #fff; color: #7c6dd8; border: 1px solid #c5b8e8; margin-bottom: 0; }
+
+    /* Cards, tables, pills — design-system recipes */
+    .card { background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-md); box-shadow: var(--shadow2); }
+    .card-h { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border-soft); }
+    .card-h h3 { font-size: 13px; font-weight: 700; }
+    .card-h .ico { width: 26px; height: 26px; border-radius: 6px; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); }
+    .card-h .ico.svc { background: var(--teal-soft); color: var(--teal); }
+    .card-h .ico .material-symbols-outlined { font-size: 16px; }
+    .card-h .n { font-size: 10.5px; font-weight: 700; color: var(--ink-muted); background: var(--bg); border-radius: 999px; padding: 1px 8px; }
+    .card-h .grow { flex: 1; }
+    .card-h .link { font-size: 11.5px; font-weight: 600; color: var(--blue); background: none; border: none; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 3px; border-radius: 4px; padding: 4px 6px; }
+    .card-h .link:hover { background: var(--blue-soft); }
+    .card-h .link .material-symbols-outlined { font-size: 15px; }
+    .card-b { padding: 12px 16px; }
+    .tbl { width: 100%; border-collapse: collapse; }
+    .tbl th { text-align: start; padding: 8px 16px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); border-bottom: 1px solid var(--border); background: var(--colorNeutralBackground2); white-space: nowrap; }
+    .tbl td { padding: 10px 16px; font-size: 12.5px; border-bottom: 1px solid var(--border-soft); vertical-align: middle; }
+    .tbl tr:last-child td { border-bottom: none; }
+    .tbl tbody tr:hover { background: #f5f7fd; }
+    .tbl .mono { white-space: nowrap; }
+    .tbl .mono, .mono { font-family: 'SF Mono','Consolas',monospace; font-size: 11.5px; color: var(--ink-secondary); }
+    .tbl .lnk { color: var(--blue); font-weight: 600; cursor: pointer; text-decoration: none; }
+    .tbl .lnk:hover { text-decoration: underline; }
+    .tbl .sub { font-size: 11px; color: var(--ink-muted); }
+    .empty { padding: 16px; font-size: 12px; color: var(--ink-muted); display: flex; align-items: center; gap: 8px; }
+    .empty .material-symbols-outlined { font-size: 18px; opacity: .6; }
+    .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; border-radius: var(--borderRadiusMedium); padding: 2px 8px; white-space: nowrap; background: var(--blue-soft); color: var(--blue); }
+    .pill.g { background: var(--green-soft); color: var(--colorPaletteGreenForeground1, #0e700e); }
+    .pill.a { background: var(--amber-soft); color: var(--amber); }
+    .pill.r { background: var(--red-soft); color: var(--colorPaletteRedForeground1, #b10e1c); }
+    .pill.n { background: var(--bg); color: var(--ink-secondary); }
+    .pill.p { background: var(--purple-soft); color: #5c2e91; }
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .kv { display: grid; grid-template-columns: minmax(130px, 40%) 1fr; gap: 0; }
+    .kv > div { padding: 8px 0; border-bottom: 1px solid var(--border-soft); font-size: 12.5px; }
+    .kv > div:nth-last-child(-n+2) { border-bottom: none; }
+    .kv .k { font-size: 11px; color: var(--ink-muted); font-weight: 600; }
+    .kv .v { font-weight: 600; color: var(--ink); }
+    mark { background: none; color: var(--blue); font-weight: 700; text-decoration: underline; text-decoration-color: var(--exeed-cyan); text-underline-offset: 2px; }
+
+    /* Customer 360 — summary */
+    /* KPI strip — same recipe as the role dashboards (.kpi-section / .metric-card) */
+    .kpi-section { background: #fafafa; border-radius: 14px; padding: 14px; }
+    .kpi-sec-head { display: flex; align-items: center; gap: 7px; margin-bottom: 14px; }
+    .kpi-sec-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
+    .kpi-sec-sub { font-size: 11px; color: var(--ink-muted); }
+    .tiles { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+    @media (max-width: 1320px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .tile { min-width: 0; background: var(--surface); border: 1px solid #f5f5f5; border-radius: var(--radius); padding: 15px 12px; min-height: 94px; cursor: pointer; font-family: inherit; color: inherit; transition: box-shadow .2s; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .tile:hover { box-shadow: 0 1px 5px rgba(20,24,34,.045); }
+    .tile:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .tile .l { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); margin-bottom: 9px; }
+    .tile .v { font-size: 20px; font-weight: 700; line-height: 1; letter-spacing: -.02em; white-space: nowrap; }
+    .tile .v.amber { color: #8a6420; } .tile .v.red { color: var(--red); } .tile .v.green { color: var(--green); }
+    .tile .s { font-size: 10px; color: var(--ink-muted); margin-top: 9px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .attn { display: flex; align-items: flex-start; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border-soft); }
+    .attn:last-child { border-bottom: none; }
+    .attn .dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+    .attn .dot .material-symbols-outlined { font-size: 16px; }
+    .attn .dot.r { background: var(--red-soft); color: var(--red); } .attn .dot.a { background: var(--amber-soft); color: var(--amber); } .attn .dot.b { background: var(--blue-soft); color: var(--blue); }
+    .attn .t { font-size: 12.5px; font-weight: 600; } .attn .d { font-size: 11.5px; color: var(--ink-muted); }
+    .attn button { margin-inline-start: auto; }
+    .btn { display: inline-flex; align-items: center; gap: 5px; font-family: inherit; font-size: 12px; font-weight: 600; border-radius: var(--borderRadiusMedium); padding: 5px 12px; cursor: pointer; border: 1px solid var(--colorNeutralStroke1); background: var(--surface); color: var(--ink); white-space: nowrap; text-decoration: none; }
+    .btn:hover { background: var(--colorNeutralBackground1Hover); }
+    .btn.primary { background: var(--colorBrandBackground); border-color: var(--colorBrandBackground); color: #fff; }
+    .btn.primary:hover { background: var(--colorBrandBackgroundHover); }
+    .btn.subtle { border-color: transparent; background: transparent; color: var(--ink-secondary); }
+    .btn.subtle:hover { background: var(--bg); }
+    .btn .material-symbols-outlined { font-size: 16px; }
+    .vehs { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; padding: 12px 16px 16px; }
+    .veh { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); }
+    .veh-img { height: 92px; background: repeating-linear-gradient(135deg, #f4f6f9 0 10px, #eef1f5 10px 20px); display: grid; place-items: center; position: relative; }
+    .veh-img img { max-height: 84px; max-width: 88%; object-fit: contain; }
+    .veh-img .pill { position: absolute; top: 8px; inset-inline-start: 8px; }
+    .veh-b { padding: 10px 12px; }
+    .veh-t { font-size: 13px; font-weight: 700; } .veh-s { font-size: 11.5px; color: var(--ink-muted); }
+    .veh-r { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; padding-top: 6px; margin-top: 6px; border-top: 1px solid var(--border-soft); }
+    .veh-r span:first-child { color: var(--ink-muted); }
+    .veh-r span:last-child { font-weight: 600; text-align: end; }
+    .journey { display: flex; align-items: stretch; padding: 14px 16px; gap: 0; overflow-x: auto; }
+    .js { flex: 1; min-width: 104px; position: relative; padding: 8px 10px; text-align: center; cursor: pointer; border-radius: 6px; }
+    .js:hover { background: var(--blue-soft); }
+    .js + .js::before { content: ''; position: absolute; top: 22px; inset-inline-start: -18%; width: 36%; height: 2px; background: var(--border); }
+    .js .c { width: 30px; height: 30px; border-radius: 50%; margin: 0 auto 6px; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: var(--bg); color: var(--ink-muted); border: 2px solid var(--border); position: relative; z-index: 1; }
+    .js.on .c { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .js .lb { font-size: 11px; font-weight: 600; color: var(--ink-secondary); }
+    .so { border: 1px solid var(--border); border-radius: var(--radius-md); margin: 12px 16px; overflow: hidden; }
+    .so-h { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--colorNeutralBackground2); border-bottom: 1px solid var(--border-soft); flex-wrap: wrap; }
+    .so-h b { font-size: 13px; }
+    .so-amt { margin-inline-start: auto; font-size: 15px; font-weight: 700; }
+    .so-g { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+    .so-g > div { padding: 10px 14px; border-inline-end: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); }
+    .so-g .k { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .so-g .v { font-size: 12.5px; font-weight: 600; margin-top: 2px; }
+    .fin { display: flex; align-items: center; gap: 16px; padding: 12px 14px; background: linear-gradient(90deg, var(--blue-soft), transparent); flex-wrap: wrap; }
+    .fin .material-symbols-outlined { font-size: 22px; color: var(--blue); }
+    .fin .k { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .fin .v { font-size: 13px; font-weight: 700; }
+    .consent { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; margin-inline-end: 12px; }
+    .consent .material-symbols-outlined { font-size: 16px; }
+    .consent.on { color: var(--colorPaletteGreenForeground1, #0e700e); } .consent.off { color: var(--ink-muted); }
+    .tl-f { display: flex; gap: 4px; padding: 10px 14px 0; }
+    .tl-f button { font: 600 11px/1 var(--fontFamilyBase); border: 1px solid var(--border); background: var(--surface); color: var(--ink-secondary); border-radius: 999px; padding: 5px 10px; cursor: pointer; }
+    .tl-f button.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .tl { padding: 6px 14px 12px; }
+    .tl-i { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border-soft); }
+    .tl-i:last-child { border-bottom: none; }
+    .tl-i .ic { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: var(--blue-soft); color: var(--blue); }
+    .tl-i.service .ic { background: var(--teal-soft); color: var(--teal); }
+    .tl-i .ic .material-symbols-outlined { font-size: 15px; }
+    .tl-i .tx { font-size: 12px; line-height: 1.4; } .tl-i .tm { font-size: 10.5px; color: var(--ink-muted); margin-top: 2px; }
+
+    /* Search — landing + results */
+    .sr { display: flex; height: 100%; }
+    .sr-main { flex: 1; min-width: 0; overflow-y: auto; padding: 20px 24px 40px; }
+    .sr-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .sr-head h1 { font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
+    .sr-back { width: 30px; height: 30px; border: none; background: none; border-radius: 4px; cursor: pointer; color: var(--ink-secondary); display: grid; place-items: center; }
+    .sr-back:hover { background: var(--surface); }
+    .sr-q { display: flex; align-items: center; gap: 8px; margin: 12px 0 14px; max-width: 760px; background: var(--surface); border: 1px solid var(--border); border-bottom: 2px solid var(--colorNeutralStrokeAccessible); border-radius: var(--borderRadiusMedium); padding: 0 10px; box-shadow: var(--shadow2); }
+    .sr-q:focus-within { border-bottom-color: var(--colorBrandStroke1, #17293d); box-shadow: 0 0 0 3px rgba(0,183,187,.18); }
+    .sr-q input { flex: 1; border: none; outline: none; font: 400 14px/1 var(--fontFamilyBase); padding: 11px 0; background: none; color: var(--ink); }
+    .sr-q .material-symbols-outlined { color: var(--ink-muted); font-size: 20px; }
+    .sr-q .clr { border: none; background: none; cursor: pointer; color: var(--ink-muted); display: grid; place-items: center; }
+    .sr-intent { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-secondary); background: var(--blue-soft); border-radius: 6px; padding: 7px 12px; margin-bottom: 12px; }
+    .sr-intent .material-symbols-outlined { font-size: 17px; color: var(--blue); }
+    .sr-intent.ai { background: var(--purple-soft); color: #5c2e91; } .sr-intent.ai .material-symbols-outlined { color: #7c6dd8; }
+    .sr-intent .fchip { font-weight: 700; background: #fff; border: 1px solid #ddd5f5; border-radius: 999px; padding: 2px 8px; font-size: 11px; }
+    .sr-sum { font-size: 12.5px; color: var(--ink-secondary); margin: 2px 0 14px; }
+    .sr-sum b { color: var(--ink); }
+    .sr-tabs { margin-bottom: 16px; }
+    .best { display: flex; gap: 0; overflow: hidden; margin-bottom: 18px; }
+    .best-l { flex: 1 1 auto; padding: 16px 18px; min-width: 0; }
+    .best-tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--exeed-azure); display: flex; align-items: center; gap: 5px; margin-bottom: 10px; }
+    .best-tag .material-symbols-outlined { font-size: 14px; color: var(--exeed-cyan); }
+    .best-who { display: flex; align-items: center; gap: 12px; }
+    .best-who .dp-name { cursor: pointer; } .best-who .dp-name:hover { color: var(--blue); text-decoration: underline; }
+    .hits { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .hit { font-size: 11.5px; border: 1px solid var(--border); border-radius: 999px; padding: 3px 10px; background: var(--colorNeutralBackground2); color: var(--ink-secondary); }
+    .hit b { color: var(--ink-muted); font-weight: 600; margin-inline-end: 4px; }
+    .best-acts { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .best-r { flex: 0 0 340px; border-inline-start: 1px solid var(--border-soft); background: var(--colorNeutralBackground2); padding: 14px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px; align-content: start; }
+    .best-r .k { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); display: flex; align-items: center; gap: 4px; }
+    .best-r .k .material-symbols-outlined { font-size: 13px; }
+    .best-r .v { font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .best-r .wide { grid-column: 1 / -1; }
+    .sec-t { font-size: 13px; font-weight: 700; margin: 6px 0 10px; display: flex; align-items: center; gap: 8px; }
+    .sec-t .n { font-size: 10.5px; font-weight: 700; color: var(--ink-muted); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; }
+    .cust-cell { display: flex; align-items: center; gap: 10px; }
+    .cust-av { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+    .row-acts { display: flex; gap: 4px; justify-content: flex-end; opacity: .5; }
+    tr:hover .row-acts { opacity: 1; }
+    .ia { width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface); color: var(--blue); display: grid; place-items: center; cursor: pointer; text-decoration: none; }
+    .ia:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .ia .material-symbols-outlined { font-size: 16px; }
+    .filters { width: 256px; flex-shrink: 0; background: var(--surface); border-inline-start: 1px solid var(--border); overflow-y: auto; padding: 16px; }
+    .filters h4 { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .filters h4 .material-symbols-outlined { font-size: 18px; }
+    .filters .clear { font-size: 11.5px; color: var(--blue); background: none; border: none; cursor: pointer; font-family: inherit; font-weight: 600; margin-inline-start: auto; }
+    .fg { padding: 12px 0; border-bottom: 1px solid var(--border-soft); }
+    .fg-t { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); margin-bottom: 6px; }
+    .fg label { display: flex; align-items: center; gap: 8px; font-size: 12.5px; padding: 4px 0; cursor: pointer; }
+    .fg label .c { margin-inline-start: auto; font-size: 11px; color: var(--ink-muted); }
+    .fg input { accent-color: var(--blue); width: 15px; height: 15px; }
+    .tip { margin-top: 14px; font-size: 11.5px; color: var(--ink-muted); background: var(--bg); border-radius: 6px; padding: 10px 12px; line-height: 1.5; }
+    .tip b { color: var(--ink-secondary); }
+    .hero { max-width: 860px; margin: 40px auto 0; text-align: center; }
+    .hero h1 { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+    .hero p { font-size: 13px; color: var(--ink-muted); margin-top: 6px; }
+    .hero .sr-q { margin: 18px auto 12px; }
+    .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .chip { display: inline-flex; align-items: center; gap: 5px; font: 600 12px/1 var(--fontFamilyBase); color: var(--ink-secondary); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; cursor: pointer; }
+    .chip:hover { border-color: var(--blue-muted); color: var(--blue); background: var(--blue-soft); }
+    .chip .material-symbols-outlined { font-size: 16px; }
+    .chip.ai { color: #5c2e91; background: #f2eaf8; border-color: #ddd5f5; }
+    .hero-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; text-align: start; }
+    .mini { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--border-soft); cursor: pointer; }
+    .mini:hover { background: #f5f7fd; } .mini:last-child { border-bottom: none; }
+    .mini .t { font-size: 12.5px; font-weight: 600; } .mini .d { font-size: 11px; color: var(--ink-muted); }
+    .toast { position: fixed; bottom: 24px; inset-inline-start: 50%; transform: translateX(-50%); background: #1b2633; color: #fff; padding: 10px 16px; border-radius: 8px; font-size: 12.5px; box-shadow: var(--shadow16); z-index: 500; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .toast.on { opacity: 1; }
+    /* Accounts list — same recipe as the Leads list */
+    .acc { padding: 18px 24px 30px; }
+    .list-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .list-title-row h1 { font-size: 20px; font-weight: 700; letter-spacing: -.02em; }
+    .lead-count { font-size: 12px; color: var(--ink-muted); font-weight: 400; background: var(--surface); border: 1px solid var(--border); padding: 3px 10px; border-radius: 10px; margin-inline-start: 10px; }
+    .list-filters { display: flex; align-items: center; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+    .filter-chip { padding: 5px 14px; border-radius: 16px; font-size: 11.5px; font-weight: 500; border: 1px solid transparent; background: transparent; color: var(--ink-muted); cursor: pointer; font-family: inherit; }
+    .filter-chip:hover { background: var(--blue-soft); color: var(--blue); }
+    .filter-chip.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .filter-search { margin-inline-start: auto; padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-family: inherit; color: var(--ink); outline: none; width: 220px; background: var(--surface); }
+    .filter-search:focus { border-color: var(--blue); }
+    .list-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-size: 11.5px; color: var(--ink-secondary); cursor: pointer; font-family: inherit; }
+    .list-btn.primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .list-btn.primary:hover { background: #0f1d2c; }
+    .list-btn .material-symbols-outlined { font-size: 15px; }
+    .acc-card { overflow-x: auto; }
+    .acc-tbl th { padding-inline: 16px 10px; letter-spacing: .07em; background: #fafbfd; }
+    .acc-tbl td { padding-block: 12px; padding-inline: 16px 10px; }
+    .acc-tbl tbody tr { cursor: pointer; }
+    .acc-tbl td:first-child { min-width: 210px; }
+    .acc-tbl td:first-child .lnk, .acc-tbl td:first-child .sub { white-space: nowrap; }
+    .open-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--ink-muted); padding: 3px 9px; border-radius: 6px; white-space: nowrap; }
+    .open-link .material-symbols-outlined { font-size: 15px; }
+    .acc-tbl tbody tr:hover .open-link { color: var(--blue); background: var(--blue-soft); }
+    .acc-foot { font-size: 11.5px; color: var(--ink-muted); padding: 10px 4px; }
+    .crumb { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--ink-muted); margin: -4px 0 10px; }
+    .crumb a { color: var(--blue); font-weight: 600; cursor: pointer; }
+    .crumb a:hover { text-decoration: underline; }
+    .crumb .material-symbols-outlined { font-size: 16px; }
+    /* Form fields — same recipe as the lead page (dp-if) */
+    .form-b { padding: 14px 16px 6px; }
+    .dp-if-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 28px; }
+    .dp-if-fields .dp-if-wide { grid-column: 1 / -1; }
+    .dp-if { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; min-width: 0; }
+    .dp-if-label { font-size: 11.5px; color: var(--ink-secondary); font-weight: 500; display: flex; align-items: center; }
+    .dp-if-req { color: var(--red); margin-inline-start: 2px; font-weight: 700; }
+    .dp-if-lock { font-size: 12px; color: var(--ink-muted); margin-inline-start: 4px; }
+    .dp-if-input { width: 100%; padding: 5px 9px; font-family: inherit; font-size: 12.5px; color: var(--ink); background: var(--colorNeutralBackground3); border: 1px solid transparent; border-bottom-color: var(--colorNeutralStrokeAccessible); border-radius: var(--borderRadiusMedium); outline: none; }
+    .dp-if-input:hover { background: var(--colorNeutralBackground4); }
+    .dp-if-input:focus { background: var(--surface); border-color: var(--border); border-bottom: 2px solid var(--colorCompoundBrandStroke, #2a6797); padding-bottom: 4px; }
+    .dp-if-input::placeholder { color: var(--ink-muted); }
+    .dp-if-ro { background: #f0f2f5; color: var(--ink-muted); cursor: not-allowed; }
+    .dp-if-lookup { position: relative; display: block; width: 100%; }
+    .dp-if-lookup .dp-if-input { padding-inline-end: 28px; }
+    .dp-if-lk { position: absolute; inset-inline-end: 8px; top: 50%; transform: translateY(-50%); font-size: 15px; color: var(--ink-muted); pointer-events: none; }
+    .dp-if-linkv { color: var(--blue); font-weight: 600; cursor: pointer; }
+    .addr { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(240px, 1fr); gap: 20px; align-items: start; }
+    .map { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 10px; }
+    .map-canvas { height: 190px; position: relative; background: linear-gradient(0deg, rgba(42,103,151,.06), rgba(42,103,151,.06)), repeating-linear-gradient(90deg, #eef2f6 0 38px, #e7ecf2 38px 39px), repeating-linear-gradient(0deg, #eef2f6 0 38px, #e7ecf2 38px 39px); }
+    .map-road { position: absolute; background: #fff; box-shadow: 0 0 0 1px #d9e1ea; border-radius: 4px; }
+    .map-road.r1 { height: 10px; inset-inline: -10px; top: 58%; transform: rotate(-8deg); }
+    .map-road.r2 { width: 9px; top: -10px; bottom: -10px; inset-inline-start: 40%; transform: rotate(12deg); }
+    .map-road.r3 { height: 6px; inset-inline: 20% -10px; top: 26%; transform: rotate(4deg); }
+    .map-pin { position: absolute; inset-inline-start: 46%; top: 30%; color: var(--red); filter: drop-shadow(0 2px 3px rgba(0,0,0,.25)); }
+    .map-pin .material-symbols-outlined { font-size: 34px; font-variation-settings: 'FILL' 1; }
+    .map-lbl { position: absolute; inset-inline-start: calc(46% + 30px); top: 36%; font-size: 11px; font-weight: 700; background: #fff; border-radius: 4px; padding: 2px 7px; box-shadow: var(--shadow4); }
+    .map-foot { display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; font-size: 11.5px; color: var(--ink-secondary); border-top: 1px solid var(--border-soft); }
+    .map-foot span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ct { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); }
+    .ct:last-child { border-bottom: none; }
+    .ct-m { flex: 1; min-width: 0; } .ct .t { font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .ct .d { font-size: 11px; color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    @media (max-width: 1200px) { .addr { grid-template-columns: 1fr; } }
+    /* Account form layout */
+    .save-st { font-size: 13px; color: var(--ink-muted); font-weight: 400; }
+    .save-st.dirty { color: var(--amber); font-weight: 600; }
+    .rel-wrap { position: relative; display: flex; }
+    .rel-menu { position: absolute; top: calc(100% + 2px); inset-inline-start: 0; z-index: 60; min-width: 220px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow16); padding: 4px; display: none; max-height: 360px; overflow-y: auto; }
+    .rel-menu.open { display: block; }
+    .rel-menu button { display: block; width: 100%; text-align: start; border: none; background: none; font: 400 12.5px/1.2 var(--fontFamilyBase); color: var(--ink); padding: 8px 10px; border-radius: 4px; cursor: pointer; }
+    .rel-menu button:hover { background: var(--blue-soft); color: var(--blue); }
+    .dp-idtabs .grow { flex: 1; }
+    .form-assist { align-self: center; display: inline-flex; align-items: center; gap: 5px; font: 600 12px/1 var(--fontFamilyBase); color: #5c2e91; background: #f2eaf8; border: 1px solid #ddd5f5; border-radius: 4px; padding: 6px 10px; cursor: pointer; margin-bottom: 6px; white-space: nowrap; }
+    .form-assist .material-symbols-outlined { font-size: 15px; }
+    .sum3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 1.1fr); gap: 16px; align-items: stretch; }
+    /* Each Summary column scrolls on its own inside the space under the account header. */
+    .sum3.scrolling .col { overflow-y: auto; padding: 2px 6px 16px 2px; margin: -2px -6px 0 -2px; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+    .sum3.scrolling .col::-webkit-scrollbar { width: 5px; } .sum3.scrolling .col::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .sum3 .sg .sub { white-space: nowrap; }
+    .sum3 .sg .tbl th, .sum3 .sg .tbl td { padding-inline: 10px 8px; }
+    .sum3 .sg .tbl th:first-child, .sum3 .sg .tbl td:first-child { padding-inline-start: 14px; }
+    .sum3 .col, .det2 .col, .stack { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .det2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; align-items: start; margin-bottom: 16px; }
+    @media (max-width: 1180px) { .sum3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .sum3 .col:nth-child(3) { grid-column: 1 / -1; } }
+    .fsec { padding: 14px 16px 6px; }
+    .fsec.wide { margin-bottom: 16px; }
+    .fsec-t { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); margin-bottom: 12px; }
+    .inline-form .dp-if-inline { display: grid; grid-template-columns: 200px minmax(0, 1fr); align-items: center; gap: 12px; }
+    .dp-if-select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-inline-end: 28px; }
+    .dp-if-area { min-height: 72px; resize: vertical; line-height: 1.45; }
+    .dp-if-chipbox { display: flex; align-items: center; min-height: 29px; }
+    .lk-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--blue); background: var(--blue-soft); border-radius: 4px; padding: 1px 6px; text-decoration: underline; text-underline-offset: 2px; }
+    .lk-chip .material-symbols-outlined { font-size: 14px; text-decoration: none; }
+    .lk-chip .x { font-size: 13px; color: var(--ink-muted); cursor: pointer; }
+    .sg .card-h { padding: 10px 14px; }
+    .sg-view { font-size: 18px; color: var(--ink-muted); margin-inline-start: -4px; }
+    .sg-more { width: 28px; height: 28px; border: none; background: none; border-radius: 4px; color: var(--ink-muted); cursor: pointer; display: grid; place-items: center; }
+    .sg-more:hover { background: var(--bg); color: var(--ink); }
+    .sg-more .material-symbols-outlined { font-size: 17px; }
+    .sg-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 22px 16px; font-size: 12px; color: var(--ink-muted); }
+    .sg-empty .material-symbols-outlined { font-size: 30px; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); color: #b5bcc6; }
+    .sg-foot { font-size: 11px; color: var(--ink-muted); padding: 8px 16px; border-top: 1px solid var(--border-soft); }
+    .card.flash { box-shadow: 0 0 0 2px var(--exeed-cyan), var(--shadow4); transition: box-shadow .3s; }
+    .map { overflow: hidden; }
+    .map-top { display: flex; justify-content: flex-end; padding: 10px 14px; border-bottom: 1px solid var(--border-soft); }
+    .map-top .lnk { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--blue); font-weight: 600; text-decoration: none; }
+    .map-top .material-symbols-outlined { font-size: 16px; }
+    .tl-tools { padding: 10px 14px 0; display: flex; flex-direction: column; gap: 8px; }
+    .tl-search, .tl-note { display: flex; align-items: center; gap: 8px; background: var(--colorNeutralBackground3); border-radius: 4px; padding: 6px 10px; color: var(--ink-muted); }
+    .tl-note { background: none; border-bottom: 1px solid var(--border); border-radius: 0; padding-inline: 2px; }
+    .tl-search input, .tl-note input { flex: 1; border: none; background: none; outline: none; font: 400 12.5px var(--fontFamilyBase); color: var(--ink); }
+    .tl-search .material-symbols-outlined, .tl-note .material-symbols-outlined { font-size: 17px; }
+    .tl-hl { display: flex; align-items: center; gap: 6px; margin: 12px 14px 0; font-size: 12.5px; color: #4c3a96; }
+    .tl-hl .material-symbols-outlined { font-size: 17px; color: #7c6dd8; }
+    .tl-hl .sub { font-size: 10.5px; color: var(--ink-muted); }
+    .tl-hl-b { margin: 6px 14px 0; font-size: 11.5px; line-height: 1.5; color: #6b5ba0; background: linear-gradient(135deg, #f3f1fe, #f9f0fd); border: 1px solid #ddd5f5; border-radius: 6px; padding: 8px 10px; }
+    .tl-hl-b strong { color: #4c3a96; }
+    .cb-share { border: 1px solid var(--border); padding: 3px 8px; }
+    @media (max-width: 1100px) { .filters { display: none; } .best-r { display: none; } .hero-cols { grid-template-columns: 1fr; } .dp-formhead { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="waffle" onclick="toggleSidebar()">&#9783;</span>
+    <span class="app-name">Dynamics 365</span>
+    <span class="sep"></span>
+    <span class="org">AGM Sales</span>
+    <input class="search" type="text" placeholder="&#128269; Search..." />
+    <span class="spacer"></span>
+    <div class="actions">
+      <div class="copilot" onclick="window.toggleCopilot && toggleCopilot()">&#10024; Copilot</div>
+      <span style="opacity:.7;font-size:14px">&#9881;</span>
+      <span style="opacity:.7;font-size:14px">&#128276;</span>
+      <span style="opacity:.7;font-size:14px">&#10067;</span>
+      <div class="avatar">PK</div>
+    </div>
+  </div>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sb-brand"><div class="sb-logo">A</div><div><span class="sb-name">AGM Sales</span><br><span class="sb-sub">EXEED CRM</span></div></div>
+      <nav class="sb-nav">
+        <button class="sb-toggle" onclick="toggleSidebar()" aria-label="Collapse sidebar" title="Collapse sidebar"><span class="material-symbols-outlined">chevron_left</span></button>
+        <a href="index.html" class="sb-item enabled"><span class="material-symbols-outlined">home</span>Home</a>
+        <a href="call-center-agent.html" class="sb-item enabled"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+        <div class="sb-group">Dashboard</div>
+        <a href="call-center-agent.html" class="sb-item enabled"><span class="material-symbols-outlined">headset_mic</span>CCA Dashboard</a>
+        <a href="call-center-manager.html" class="sb-item enabled"><span class="material-symbols-outlined">support_agent</span>CCM Dashboard</a>
+        <a href="showroom-manager.html" class="sb-item enabled"><span class="material-symbols-outlined">storefront</span>SM Dashboard</a>
+        <a href="sales-executive.html" class="sb-item enabled"><span class="material-symbols-outlined">request_quote</span>SE Dashboard</a>
+        <div class="sb-group">Sales</div>
+        <a href="lead-detail.html" class="sb-item enabled"><span class="material-symbols-outlined">leaderboard</span>Leads</a>
+        <a href="customer-360.html?view=accounts" class="sb-item enabled" id="navAccounts"><span class="material-symbols-outlined">business</span>Accounts</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">person</span>Contacts</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">directions_car</span>Devices</a>
+        <div class="sb-group">Operations</div>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">admin_panel_settings</span>Sales Admin</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">payments</span>Payments</a>
+        <a href="#" class="sb-item"><span class="material-symbols-outlined">description</span>Documents</a>
+        <div class="sb-group">Deliveries</div>
+        <a href="delivery-consultant.html" class="sb-item"><span class="material-symbols-outlined">local_shipping</span>Delivery Dashboard</a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <div class="cmdbar" id="cmdbar"></div>
+      <div class="content" id="content"></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    var S = window.C360;
+    var params = new URLSearchParams(location.search);
+    var state = { q: params.get('q'), id: params.get('id'), view: params.get('view'), from: params.get('from'), atype: 'all', af: '', tab: params.get('tab') || 'summary', rtab: 'top', tl: 'all', f: { type: {}, city: {} } };
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+    function toggleSidebar() { document.body.classList.toggle('sb-rail'); }
+    function toast(t) { var el = document.getElementById('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(function () { el.classList.remove('on'); }, 2200); }
+    function nav(q) { var u = new URL(location.href); u.search = ''; Object.keys(q).forEach(function (k) { if (q[k]) u.searchParams.set(k, q[k]); }); history.pushState(null, '', u); state.q = q.q || null; state.id = q.id || null; state.view = q.view || null; state.from = q.from || null; state.tab = q.tab || 'summary'; render(); document.getElementById('content').scrollTop = 0; }
+    window.addEventListener('popstate', function () { var p = new URLSearchParams(location.search); state.q = p.get('q'); state.id = p.get('id'); state.view = p.get('view'); state.from = p.get('from'); state.tab = p.get('tab') || 'summary'; render(); });
+    function openCustomer(id) { S.addViewed(id); nav({ id: id, from: (state.view === 'accounts' || state.from === 'accounts') ? 'accounts' : null }); }
+    function runSearch(q) { q = String(q || '').trim(); if (!q) return; S.addRecent(q); state.rtab = 'top'; state.f = { type: {}, city: {} }; nav({ q: q }); }
+
+    function pill(s) {
+      var t = String(s || '—'), c = 'n';
+      if (/Won|Delivered|Closed|Completed|Active|Paid|Invoiced|Accepted|Disbursed|Returned|Approved|Booked|Converted/i.test(t)) c = 'g';
+      if (/Pending|Scheduled|Propose|Draft|appraisal|Contacted|Reminder|Photos|Sent|Discovery|confirmation|Expiring/i.test(t)) c = 'a';
+      if (/Overdue|Disqualified|Lost|Breach/i.test(t)) c = 'r';
+      if (/Qualified/i.test(t) && c === 'n') c = 'n';
+      if (/^Hot$/.test(t)) c = 'r'; if (/^Warm$/.test(t)) c = 'a'; if (/^Cold$/.test(t)) c = 'n';
+      return '<span class="pill ' + c + '">' + esc(t) + '</span>';
+    }
+    function table(cols, rows, empty) {
+      if (!rows.length) return '<div class="empty"><span class="material-symbols-outlined">inbox</span>' + esc(empty || 'Nothing here yet') + '</div>';
+      return '<div style="overflow-x:auto"><table class="tbl"><thead><tr>' + cols.map(function (c) { return '<th>' + c[0] + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        rows.map(function (r) { return '<tr>' + cols.map(function (c) { return '<td>' + c[1](r) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+    }
+    function card(icon, title, count, body, opts) {
+      opts = opts || {};
+      return '<div class="card"' + (opts.id ? ' id="' + opts.id + '"' : '') + '><div class="card-h"><span class="ico' + (opts.svc ? ' svc' : '') + '"><span class="material-symbols-outlined">' + icon + '</span></span><h3>' + title + '</h3>' +
+        (count != null ? '<span class="n">' + count + '</span>' : '') + '<span class="grow"></span>' + (opts.action || '') + '</div>' + body + '</div>';
+    }
+    var newBtn = function (label) { return '<button class="link" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span>' + label + '</button>'; };
+
+    /* ── Command bar ─────────────────────────────────────────────── */
+    function cmdbar(kind) {
+      var b = '<a class="cb" href="javascript:history.back()" title="Back" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></a><div class="cmd-sep"></div>';
+      if (kind === 'record') b += '<button class="cb" onclick="saveRecord()"><span class="material-symbols-outlined">save</span> Save</button>' +
+        '<button class="cb" onclick="saveRecord(true)"><span class="material-symbols-outlined">save_as</span> Save &amp; Close</button>' +
+        '<button class="cb" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span> New</button>' +
+        '<button class="cb" onclick="toast(\'Opens the org chart for this account\')"><span class="material-symbols-outlined">account_tree</span> Open org chart</button>' +
+        '<button class="cb" onclick="toast(\'Account would be deactivated\')"><span class="material-symbols-outlined">block</span> Deactivate</button>' +
+        '<button class="cb" aria-label="More commands"><span class="material-symbols-outlined">more_vert</span></button>' +
+        '<span style="flex:1"></span><button class="cb cb-share"><span class="material-symbols-outlined">share</span> Share <span class="material-symbols-outlined">expand_more</span></button>';
+      else b += '<button class="cb" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span> New</button>' +
+        '<button class="cb" onclick="toast(\'Exported to Excel\')"><span class="material-symbols-outlined">table_view</span> Export to Excel</button>' +
+        '<button class="cb" onclick="toast(\'Search saved as a personal view\')"><span class="material-symbols-outlined">bookmark_add</span> Save search as view</button>' +
+        '<div class="cmd-sep"></div><button class="cb" onclick="render()"><span class="material-symbols-outlined">refresh</span> Refresh</button>';
+      document.getElementById('cmdbar').innerHTML = b;
+    }
+
+    /* ── Landing: no query yet ───────────────────────────────────── */
+    function renderLanding() {
+      cmdbar('search');
+      var h = '<div class="sr-main"><div class="hero"><h1>Find any customer</h1><p>One search across contacts, accounts, leads, vehicles, quotes, orders and service — results grouped by customer.</p>' +
+        searchBox('') + '<div class="hero-chips">' +
+        [['call', 'Mobile', '050 123 4567'], ['badge', 'Emirates ID', '784-1985'], ['directions_car', 'VIN', 'LVX-2025'], ['pin', 'Plate', 'Dubai A 48211'], ['receipt_long', 'Order no.', 'SO-2026'], ['business', 'Company', 'Al Noor'], ['person', 'Name', 'cha']]
+          .map(function (x) { return '<button class="chip" onclick="runSearch(\'' + x[2] + '\')"><span class="material-symbols-outlined">' + x[0] + '</span>' + x[1] + ' <span class="mono" style="font-size:11px">' + x[2] + '</span></button>'; }).join('') +
+        '<button class="chip ai" onclick="runSearch(\'Customers in Sharjah with service due\')"><span class="material-symbols-outlined">auto_awesome</span>Customers in Sharjah with service due</button>' +
+        '<button class="chip ai" onclick="runSearch(\'Fleet customers with rental contracts\')"><span class="material-symbols-outlined">auto_awesome</span>Fleet customers with rental contracts</button></div>' +
+        '<div class="hero-cols">' +
+        card('history', 'Recent searches', null, S.recent().map(function (r) { return '<div class="mini" onclick="runSearch(\'' + esc(r).replace(/'/g, "\\'") + '\')"><span class="material-symbols-outlined" style="color:var(--ink-muted)">search</span><div class="t">' + esc(r) + '</div></div>'; }).join('')) +
+        card('visibility', 'Recently viewed customers', null, S.viewed().map(function (c) { var n = S.counts(c); return '<div class="mini" onclick="openCustomer(\'' + c.id + '\')"><div class="cust-av" style="background:' + c.av + '">' + c.initials + '</div><div><div class="t">' + esc(c.name) + '</div><div class="d">' + c.type + ' · ' + n.vehicles + ' vehicles · ' + esc(c.lastActivity) + '</div></div></div>'; }).join('')) +
+        '</div></div></div>';
+      document.getElementById('content').innerHTML = '<div class="sr">' + h + '</div>';
+    }
+    function searchBox(q) {
+      return '<form class="sr-q" onsubmit="event.preventDefault();runSearch(this.q.value)"><span class="material-symbols-outlined">search</span>' +
+        '<input name="q" value="' + esc(q) + '" placeholder="Name, mobile, Emirates ID, VIN, plate, quote or order no. — or ask a question" autocomplete="off" />' +
+        (q ? '<button type="button" class="clr" onclick="nav({})" aria-label="Clear"><span class="material-symbols-outlined">close</span></button>' : '') +
+        '<button class="btn primary" type="submit">Search</button></form>';
+    }
+
+    /* ── Results ─────────────────────────────────────────────────── */
+    function flat(results) {
+      var o = { leads: [], vehicles: [], sales: [], service: [] };
+      results.forEach(function (r) {
+        var c = r.c;
+        c.leads.forEach(function (x) { o.leads.push({ c: c, kind: 'Lead', x: x }); });
+        c.opportunities.forEach(function (x) { o.leads.push({ c: c, kind: 'Opportunity', x: { id: x.id, topic: x.topic, rating: x.value, status: x.stage, owner: x.owner, created: x.close } }); });
+        c.vehicles.forEach(function (v) { o.vehicles.push({ c: c, x: v }); });
+        c.quotations.forEach(function (x) { o.sales.push({ c: c, kind: 'Quotation', id: x.id, what: x.model, amt: x.amount, st: x.status, extra: 'Valid to ' + x.valid }); });
+        c.salesOrders.forEach(function (x) { o.sales.push({ c: c, kind: 'Sales order', id: x.id, what: x.model, amt: x.amount, st: x.status, extra: x.paymentMode }); });
+        c.proposals.forEach(function (x) { o.sales.push({ c: c, kind: 'Proposal', id: x.id, what: x.model, amt: x.price, st: x.status, extra: x.date }); });
+        c.serviceUpcoming.concat(c.servicePast).forEach(function (x) { o.service.push({ c: c, kind: 'Appointment', id: x.id, what: x.type, when: x.date, st: x.status, extra: x.vehicle }); });
+        c.serviceContracts.forEach(function (x) { o.service.push({ c: c, kind: 'Service contract', id: x.id, what: x.plan, when: x.start + ' – ' + x.end, st: x.status, extra: x.vehicle }); });
+        c.rentals.forEach(function (x) { o.service.push({ c: c, kind: 'Rental contract', id: x.id, what: x.vehicle, when: x.period, st: x.status, extra: x.rate }); });
+      });
+      return o;
+    }
+    function custLink(c) { return '<div class="cust-cell"><div class="cust-av" style="background:' + c.av + '">' + c.initials + '</div><div><a class="lnk" onclick="openCustomer(\'' + c.id + '\')">' + esc(c.name) + '</a><div class="sub">' + c.type + ' · ' + c.id + '</div></div></div>'; }
+    function renderResults() {
+      cmdbar('search');
+      var q = state.q, r = S.search(q), it = r.intent;
+      var all = r.results.filter(function (x) {
+        var t = Object.keys(state.f.type).filter(function (k) { return state.f.type[k]; }), ci = Object.keys(state.f.city).filter(function (k) { return state.f.city[k]; });
+        return (!t.length || t.indexOf(x.c.type) > -1) && (!ci.length || ci.indexOf(x.c.city) > -1);
+      });
+      var fl = flat(all);
+      var tabs = [['top', 'Top results', null], ['cust', 'Customers', all.length], ['leads', 'Leads & opportunities', fl.leads.length], ['veh', 'Vehicles', fl.vehicles.length], ['sales', 'Quotes & orders', fl.sales.length], ['svc', 'Service', fl.service.length]];
+      var h = '<div class="sr-main"><div class="sr-head"><button class="sr-back" onclick="nav({})" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></button><h1>Search results</h1></div>' + searchBox(q);
+      if (it && it.key === 'nl') h += '<div class="sr-intent ai"><span class="material-symbols-outlined">auto_awesome</span>Copilot turned your question into filters: ' + (r.nl.length ? r.nl.map(function (f) { return '<span class="fchip">' + esc(f) + '</span>'; }).join(' ') : '<b>none recognised</b> — try a city, “service due”, “finance”, “fleet” or “rental”') + '</div><br>';
+      else if (it && it.key !== 'name') h += '<div class="sr-intent"><span class="material-symbols-outlined">' + it.icon + '</span>Looks like a <b>&nbsp;' + it.label.toLowerCase() + '&nbsp;</b> — matched against contacts, accounts, vehicles, quotes and orders</div><br>';
+      h += '<div class="sr-sum">Showing <b>' + all.length + ' customer' + (all.length === 1 ? '' : 's') + '</b> for <b>' + esc(q) + '</b> from 10 tables in Auto Sales — every match is grouped under the customer it belongs to.</div>';
+      h += '<div class="dp-tabs sr-tabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.rtab === t[0] ? ' active' : '') + '" onclick="state.rtab=\'' + t[0] + '\';render()">' + t[1] + (t[2] != null ? ' <span class="cnt">' + t[2] + '</span>' : '') + '</button>'; }).join('') + '</div>';
+
+      if (!all.length) h += card('search_off', 'No customers found', null, '<div class="empty" style="padding:18px 16px">Nothing matched “' + esc(q) + '”. Check the spelling, try the last 7 digits of the mobile, or search by VIN, plate or quote number.</div>');
+      else if (state.rtab === 'top') {
+        var b = all[0], c = b.c, n = S.counts(c);
+        h += '<div class="card best"><div class="best-l"><div class="best-tag"><span class="material-symbols-outlined">verified</span>Best match</div>' +
+          '<div class="best-who"><div class="dp-av" style="background:' + c.av + '">' + c.initials + '</div><div><div class="dp-name-row"><span class="dp-name" onclick="openCustomer(\'' + c.id + '\')">' + S.mark(c.name, q) + '</span><span class="dp-lead-tag' + (c.type === 'Company' ? ' co' : '') + '"><span class="material-symbols-outlined">' + (c.type === 'Company' ? 'business' : 'person') + '</span>' + c.type + '</span></div>' +
+          '<div class="dp-meta-row" style="margin-top:4px"><span class="mono">' + c.id + '</span><span>' + esc(c.mobile) + '</span><span>' + esc(c.email) + '</span><span>' + esc(c.city) + '</span></div></div></div>' +
+          '<div class="hits">' + b.hits.slice(0, 5).map(function (x) { return '<span class="hit"><b>' + esc(x.field) + '</b>' + (x.field === 'Copilot' ? esc(x.value) : S.mark(x.value, q)) + '</span>'; }).join('') + '</div>' +
+          '<div class="best-acts"><button class="btn primary" onclick="openCustomer(\'' + c.id + '\')"><span class="material-symbols-outlined">person_search</span>Open Customer 360</button>' +
+          '<a class="btn" href="tel:' + c.mobile.replace(/\s/g, '') + '"><span class="material-symbols-outlined">call</span>Call</a>' +
+          '<button class="btn" onclick="toast(\'Opens WhatsApp with ' + esc(c.name) + '\')"><span class="material-symbols-outlined">chat</span>WhatsApp</button>' +
+          '<button class="btn subtle" onclick="toast(\'Opens a new lead pre-filled with this customer\')"><span class="material-symbols-outlined">person_add</span>New lead</button>' +
+          '<button class="btn subtle" onclick="toast(\'Opens a service booking\')"><span class="material-symbols-outlined">build</span>Book service</button></div></div>' +
+          '<div class="best-r"><div><div class="k"><span class="material-symbols-outlined">payments</span>Lifetime value</div><div class="v">' + esc(c.ltv) + '</div></div>' +
+          '<div><div class="k"><span class="material-symbols-outlined">directions_car</span>Vehicles</div><div class="v">' + n.vehicles + '</div></div>' +
+          '<div><div class="k"><span class="material-symbols-outlined">trending_up</span>Open sales</div><div class="v">' + n.openSales + '</div></div>' +
+          '<div><div class="k"><span class="material-symbols-outlined">build</span>Next service</div><div class="v" style="font-size:12px">' + esc(n.nextService) + '</div></div>' +
+          '<div class="wide"><div class="k"><span class="material-symbols-outlined">schedule</span>Last activity</div><div class="v" style="font-size:12px">' + esc(c.lastActivity) + '</div></div>' +
+          '<div class="wide"><div class="k"><span class="material-symbols-outlined">badge</span>Owner</div><div class="v" style="font-size:12px">' + esc(c.owner) + ' · ' + esc(c.showroom) + '</div></div></div></div>';
+        if (all.length > 1) h += '<div class="sec-t">Other customers <span class="n">' + (all.length - 1) + '</span></div><div class="card">' + custTable(all.slice(1), q) + '</div>';
+      }
+      else if (state.rtab === 'cust') h += '<div class="card">' + custTable(all, q) + '</div>';
+      else if (state.rtab === 'leads') h += '<div class="card">' + table([['Record', function (r) { return '<span class="lnk">' + esc(r.x.id) + '</span><div class="sub">' + r.kind + '</div>'; }], ['Topic', function (r) { return esc(r.x.topic); }], ['Customer', function (r) { return custLink(r.c); }], ['Rating / value', function (r) { return /AED/.test(r.x.rating) ? esc(r.x.rating) : pill(r.x.rating); }], ['Status', function (r) { return pill(r.x.status); }], ['Owner', function (r) { return esc(r.x.owner); }]], fl.leads, 'No leads or opportunities for these customers') + '</div>';
+      else if (state.rtab === 'veh') h += '<div class="card">' + table([['Vehicle', function (r) { return '<b>' + esc(r.x.model) + '</b> ' + esc(r.x.variant) + '<div class="sub">' + r.x.year + ' · ' + esc(r.x.color) + '</div>'; }], ['VIN', function (r) { return '<span class="mono">' + S.mark(r.x.vin, q) + '</span>'; }], ['Plate', function (r) { return S.mark(r.x.plate, q); }], ['Customer', function (r) { return custLink(r.c); }], ['Odometer', function (r) { return esc(r.x.odo); }], ['Next service', function (r) { return esc(r.x.nextService); }], ['Status', function (r) { return pill(r.x.status); }]], fl.vehicles, 'No vehicles for these customers') + '</div>';
+      else if (state.rtab === 'sales') h += '<div class="card">' + table([['Record', function (r) { return '<span class="lnk">' + S.mark(r.id, q) + '</span><div class="sub">' + r.kind + '</div>'; }], ['Vehicle', function (r) { return esc(r.what); }], ['Customer', function (r) { return custLink(r.c); }], ['Amount', function (r) { return '<b>' + esc(r.amt) + '</b>'; }], ['Details', function (r) { return '<span class="sub">' + esc(r.extra) + '</span>'; }], ['Status', function (r) { return pill(r.st); }]], fl.sales, 'No proposals, quotations or orders for these customers') + '</div>';
+      else if (state.rtab === 'svc') h += '<div class="card">' + table([['Record', function (r) { return '<span class="lnk">' + S.mark(r.id, q) + '</span><div class="sub">' + r.kind + '</div>'; }], ['What', function (r) { return esc(r.what); }], ['Customer', function (r) { return custLink(r.c); }], ['When', function (r) { return esc(r.when); }], ['Vehicle / rate', function (r) { return '<span class="sub">' + esc(r.extra) + '</span>'; }], ['Status', function (r) { return pill(r.st); }]], fl.service, 'No service records for these customers') + '</div>';
+      h += '</div>';
+
+      // Filters pane (D365 search filter pane)
+      var types = {}, cities = {};
+      r.results.forEach(function (x) { types[x.c.type] = (types[x.c.type] || 0) + 1; cities[x.c.city] = (cities[x.c.city] || 0) + 1; });
+      var grp = function (title, key, obj) { return '<div class="fg"><div class="fg-t">' + title + '</div>' + Object.keys(obj).map(function (k) { return '<label><input type="checkbox" ' + (state.f[key][k] ? 'checked' : '') + ' onchange="state.f.' + key + '[\'' + k + '\']=this.checked;render()">' + esc(k) + '<span class="c">' + obj[k] + '</span></label>'; }).join('') + '</div>'; };
+      var f = '<aside class="filters"><h4><span class="material-symbols-outlined">filter_list</span>Filters<button class="clear" onclick="state.f={type:{},city:{}};render()">Clear</button></h4>' +
+        grp('Customer type', 'type', types) + grp('City', 'city', cities) +
+        '<div class="fg"><div class="fg-t">Search in</div>' + ['Contacts', 'Accounts', 'Leads', 'Opportunities', 'Vehicles (devices)', 'Quotes & sales orders', 'Service & rental'].map(function (t) { return '<label><input type="checkbox" checked disabled>' + t + '</label>'; }).join('') + '</div>' +
+        '<div class="tip"><b>Tip:</b> type a mobile, Emirates ID, VIN, plate or order number and search detects it. Or ask in plain words — <i>“customers in Sharjah with service due”</i>. Press <b>/</b> anywhere to search.</div></aside>';
+      document.getElementById('content').innerHTML = '<div class="sr">' + h + f + '</div>';
+    }
+    function custTable(list, q) {
+      return table([
+        ['Customer', function (x) { return custLink(x.c).replace(esc(x.c.name), S.mark(x.c.name, q)); }],
+        ['Matched in', function (x) { var h = x.hits[0]; return h.field === 'Copilot' ? '<span class="pill p">' + esc(x.hits.map(function (y) { return y.value; }).join(' · ')) + '</span>' : '<span class="sub">' + esc(h.field) + '</span><div>' + S.mark(h.value, q) + '</div>'; }],
+        ['City', function (x) { return esc(x.c.city); }],
+        ['Mobile', function (x) { return '<span class="mono">' + esc(x.c.mobile) + '</span>'; }],
+        ['Vehicles', function (x) { return S.counts(x.c).vehicles; }],
+        ['Open sales', function (x) { return S.counts(x.c).openSales; }],
+        ['Next service', function (x) { return esc(S.counts(x.c).nextService); }],
+        ['', function (x) { return '<div class="row-acts"><a class="ia" href="tel:' + x.c.mobile.replace(/\s/g, '') + '" title="Call" aria-label="Call"><span class="material-symbols-outlined">call</span></a><button class="ia" onclick="openCustomer(\'' + x.c.id + '\')" title="Open Customer 360" aria-label="Open Customer 360"><span class="material-symbols-outlined">open_in_new</span></button></div>'; }]
+      ], list);
+    }
+
+    /* ── Account form (D365 Account › Auto Sales structure, our visual style) ── */
+    var REL = [['Activities', 'summary', 'secTimeline'], ['Contacts', 'summary', 'secContacts'], ['Opportunities', 'sales', 'secOpp'], ['Leads', 'lead', 'secLead'], ['Deals', 'sales', 'secDeal'], ['Test drives', 'sales', 'secTD'], ['Trade-ins', 'sales', 'secTI'],
+      ['Devices / fleet', 'service', 'secDev'], ['Service appointments', 'service', 'secUp'], ['Service contracts', 'service', 'secSC'], ['Rental contracts', 'service', 'secRC'], ['Sales contracts', 'service', 'secSaC'], ['Cases', 'summary', 'secCases'], ['Entitlements', 'summary', 'secEnt'], ['Child accounts', 'details', 'secChild'], ['Proposals', 'sales', 'secProp'], ['Quotations', 'sales', 'secQuote'], ['Sales orders', 'sales', 'secSO'], ['Vehicles owned', 'service', 'secVeh']];
+    function first(n) { return String(n).split(' ')[0]; }
+    function last(n) { var p = String(n).split(' '); return p.slice(1).join(' ') || '—'; }
+    // Everything the D365 account form shows, derived from the sample customer.
+    function acct(c) {
+      var x = S.crm(c), co = c.type === 'Company', ac = x.contacts[0];
+      var dev = c.vehicles.map(function (v, k) { return { name: v.model + ' ' + v.variant + ' — ' + v.plate, device: v.vin, licence: v.plate, role: co ? 'Fleet vehicle' : (k ? 'Second vehicle' : 'Owner'), from: v.reg, to: '—', model: v.model, year: v.year }; });
+      var devOf = function (str) { var d = dev.filter(function (v) { return str && str.indexOf(v.licence.split(' ').pop()) > -1; })[0]; return d ? d.device : (dev[0] || {}).device || '—'; };
+      return {
+        x: x,
+        annualRevenue: co ? 'AED 184,000,000' : '—', employees: co ? (c.profile.employees || '—') : '—',
+        industry: co ? (c.profile.industry || 'Trading') : 'Consumer — individual', sic: co ? '5012' : '—', ownership: co ? 'Private' : '—',
+        originatingLead: (c.leads[c.leads.length - 1] || {}).id || '—', lastCampaignDate: c.marketing.lastCampaign ? (co ? '12 Oct 2026' : '20 Oct 2026') : '—', materials: 'Send',
+        description: co ? 'Corporate fleet customer. ' + (c.profile.fleet || '') + '. Fleet decisions through ' + (c.primaryContact || ac.name) + '.' : 'Individual customer since ' + c.since + '. ' + c.segment + '.',
+        prefs: { method: c.marketing.preferredChannel === 'Email' ? 'Email' : c.marketing.preferredChannel === 'Phone' ? 'Phone' : 'Any', email: c.marketing.consentEmail, follow: true, bulk: c.marketing.consentEmail, phone: c.marketing.consentCalls, fax: false, mail: true },
+        currency: 'UAE Dirham (AED)', creditLimit: co ? 'AED 500,000' : '—', creditHold: 'No', paymentTerms: c.billing.terms && c.billing.terms !== '—' ? c.billing.terms : '—',
+        shipping: co ? 'Delivery to customer' : 'Showroom pickup', freight: co ? 'FOB' : '—',
+        children: co ? [{ name: 'Al Noor Logistics LLC', company: c.name, type: 'Subsidiary', phone: '+971 2 644 1200', city: 'Abu Dhabi', primary: 'Rashid Al Amri' }] : [],
+        leads: c.leads.map(function (l) { return { id: l.id, topic: l.topic, first: first(co ? ac.name : c.name), last: last(co ? ac.name : c.name), mobile: co ? ac.phone : c.mobile, email: co ? ac.email : c.email, channel: l.source, status: l.status }; }),
+        opps: c.opportunities.map(function (o) { return { topic: o.topic, customer: c.name, lead: (c.leads[0] || {}).id || '—', account: c.name, interest: o.topic.replace(/^.*?(EXEED \w+).*$/, '$1'), rating: o.stage === 'Won' ? 'Hot' : (c.leads[0] || {}).rating || 'Warm', revenue: o.value, close: o.close, status: o.stage === 'Won' ? 'Won' : 'Open', contact: ac.name }; }),
+        deals: c.deals.map(function (d) { return { name: d.id + ' — ' + d.vehicle, created: d.delivered }; }),
+        tds: c.testDrives.map(function (t) { return { appt: t.date, name: t.id, device: t.model + ' demo', year: 2026, brand: 'EXEED', model: t.model.replace('EXEED ', ''), status: t.status }; }),
+        tis: c.tradeIns.map(function (t) { return { name: t.id + ' — ' + t.vehicle, created: t.id.indexOf('2026') > -1 ? '2026' : '—', status: t.status, appraisal: t.appraisal }; }),
+        devices: dev,
+        upcoming: c.serviceUpcoming.map(function (a) { return { number: a.id, name: a.type, customer: c.name, device: devOf(a.vehicle), start: a.date, end: /\d/.test(a.date) ? a.date.replace(/(\d{2}):(\d{2})$/, function (m, h, mm) { return String(+h + 3).padStart(2, '0') + ':' + mm; }) : '—', status: a.status }; }),
+        past: c.servicePast.map(function (a) { return { name: a.type, type: /km service/.test(a.type) ? 'Periodic maintenance' : 'Repair', customer: c.name, device: devOf(a.vehicle), start: a.date + ' · 08:00', end: a.date + ' · 13:30', bu: a.workshop }; }),
+        serviceContracts: c.serviceContracts.map(function (k) { return { name: k.id, desc: k.plan + ' — ' + k.vehicle, type: /Fleet/.test(k.plan) ? 'Fleet maintenance' : /warranty/i.test(k.plan) ? 'Extended warranty' : 'Service plan', start: k.start, end: k.end, status: k.status }; }),
+        rentals: c.rentals.map(function (r) { return { name: r.id, desc: r.vehicle + ' — ' + r.reason, type: /Complimentary/.test(r.rate) ? 'Courtesy' : /month/.test(r.rate) ? 'Long-term' : 'Short-term', start: r.period.split(/\s[–-]\s/)[0], end: r.period.split(/\s[–-]\s/)[1] || '—', status: r.status }; }),
+        salesContracts: c.salesOrders.map(function (o) { return { name: o.id.replace('SO', 'SC'), desc: o.model + ' — ' + o.paymentTerms, type: o.finance.amount !== '—' ? 'Financed purchase' : 'Cash purchase', end: o.finance.tenure !== '—' ? 'Finance ' + o.finance.tenure : o.date, start: o.date }; }),
+        entitlements: c.serviceContracts.filter(function (k) { return k.status !== 'Expired'; }).map(function (k) { var m = /(\d+) of (\d+)/.exec(k.usage); return { name: k.plan, remaining: m ? (m[2] - m[1]) + ' visits' : 'Unlimited claims', status: 'Active' }; })
+      };
+    }
+    function subgrid(id, title, newLabel, cols, rows, opts) {
+      opts = opts || {};
+      var body = rows.length ? '<div style="overflow-x:auto"><table class="tbl"><thead><tr>' + cols.map(function (k) { return '<th>' + k[0] + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        rows.map(function (r) { return '<tr>' + cols.map(function (k) { return '<td>' + k[1](r) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>'
+        : '<div class="sg-empty"><span class="material-symbols-outlined">grid_view</span>We didn’t find anything to show here</div>';
+      return '<div class="card sg" id="' + id + '"><div class="card-h">' + (opts.icon ? '<span class="ico' + (opts.svc ? ' svc' : '') + '"><span class="material-symbols-outlined">' + opts.icon + '</span></span>' : '') + '<h3>' + title + '</h3>' + (opts.view ? '<span class="material-symbols-outlined sg-view">expand_more</span>' : '') +
+        '<span class="grow"></span>' + (newLabel ? '<button class="link" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span>' + newLabel + '</button>' : '') + (opts.refresh ? '<button class="link" onclick="render()"><span class="material-symbols-outlined">refresh</span>Refresh</button>' : '') +
+        '<button class="sg-more" aria-label="More options"><span class="material-symbols-outlined">more_vert</span></button></div>' + body + '<div class="sg-foot">Rows: ' + rows.length + '</div></div>';
+    }
+    var L = function (v) { return '<span class="lnk">' + esc(v) + '</span>'; }, T = function (v) { return esc(v == null ? '—' : v); };
+    function field(label, val, o) {
+      o = o || {};
+      var v = val == null || val === '—' ? '' : val, ro = o.ro ? ' readonly' : '';
+      var input;
+      if (o.select) input = '<span class="dp-if-lookup"><select class="dp-if-input dp-if-select">' + (v ? '' : '<option>---</option>') + o.select.map(function (opt) { return '<option' + (opt === v ? ' selected' : '') + '>' + esc(opt) + '</option>'; }).join('') + '</select><span class="material-symbols-outlined dp-if-lk">expand_more</span></span>';
+      else if (o.area) input = '<textarea class="dp-if-input dp-if-area" placeholder="---">' + esc(v) + '</textarea>';
+      else if (o.chip && v) input = '<span class="dp-if-lookup"><span class="dp-if-input dp-if-chipbox"><span class="lk-chip"><span class="material-symbols-outlined">' + o.chip + '</span>' + esc(v) + '<span class="material-symbols-outlined x">close</span></span></span><span class="material-symbols-outlined dp-if-lk">search</span></span>';
+      else {
+        input = '<input class="dp-if-input' + (o.ro ? ' dp-if-ro' : '') + (o.link && v ? ' dp-if-linkv' : '') + '" value="' + esc(v) + '" placeholder="---"' + ro + ' />';
+        if (o.lookup || (o.link && v)) input = '<span class="dp-if-lookup">' + input + '<span class="material-symbols-outlined dp-if-lk">' + (o.lookup ? 'search' : o.link) + '</span></span>';
+      }
+      return '<div class="dp-if' + (o.wide ? ' dp-if-wide' : '') + (o.inline ? ' dp-if-inline' : '') + '"><label class="dp-if-label">' + esc(label) + (o.ro ? '<span class="material-symbols-outlined dp-if-lock">lock</span>' : '') + (o.req ? '<span class="dp-if-req">*</span>' : '') + '</label>' + input + '</div>';
+    }
+    function section(id, title, inner, cls) { return '<div class="card fsec' + (cls ? ' ' + cls : '') + '" id="' + id + '"><div class="fsec-t">' + title + '</div>' + inner + '</div>'; }
+
+    function renderRecord(c) {
+      cmdbar('record');
+      var A = acct(c), own = c.owner.split(' ').map(function (w) { return w[0]; }).join('');
+      var tabs = [['summary', 'Summary'], ['sales', 'Sales 360°'], ['service', 'Service 360°'], ['details', 'Details'], ['lead', 'Lead']];
+      var head = (state.from === 'accounts' ? '<div class="crumb"><a onclick="nav({view:\'accounts\'})">Accounts</a><span class="material-symbols-outlined">chevron_right</span>' + esc(c.name) + '</div>' : '') +
+        '<div class="dp-idcard"><div class="dp-lead-head"><div class="dp-av" style="background:' + c.av + '">' + c.initials + '</div>' +
+        '<div class="dp-head-info"><div class="dp-name-row"><span class="dp-name">' + esc(c.name) + '</span><span class="save-st" id="saveSt">- Saved</span></div>' +
+        '<div class="dp-meta-row"><span class="dp-lead-tag' + (c.type === 'Company' ? ' co' : '') + '"><span class="material-symbols-outlined">business</span>Account</span><span class="mono">' + A.x.accountNumber + '</span><a class="dp-call" href="tel:' + c.mobile.replace(/\s/g, '') + '"><span class="material-symbols-outlined">call</span>' + esc(c.mobile) + '</a><span>' + esc(c.email) + '</span><span class="pill n">' + esc(c.segment) + '</span></div></div>' +
+        '<div class="dp-formhead"><div class="dp-fh-field"><div class="dp-fh-val">' + esc(c.ltv) + '</div><div class="dp-fh-label">Lifetime value</div></div><div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.annualRevenue) + '</div><div class="dp-fh-label">Annual Revenue</div></div>' +
+        '<div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.employees) + '</div><div class="dp-fh-label">Number of Employees</div></div>' +
+        '<div class="dp-fh-owner"><div class="dp-fh-av">' + own + '<span class="dp-fh-dot"></span></div><div><div class="dp-fh-val" style="color:var(--blue)">' + esc(c.owner) + '</div><div class="dp-fh-label">Owner</div></div></div></div></div>' +
+        '<div class="dp-tabs dp-idtabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.tab === t[0] ? ' active' : '') + '" onclick="setTab(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') +
+        '<div class="rel-wrap"><button class="dp-tab" id="relBtn" onclick="toggleRel(event)" aria-haspopup="menu" aria-expanded="false">Related <span class="material-symbols-outlined" style="font-size:18px">expand_more</span></button>' +
+        '<div class="rel-menu" id="relMenu" role="menu">' + REL.map(function (r) { return '<button role="menuitem" onclick="goRel(\'' + r[1] + '\',\'' + r[2] + '\')">' + r[0] + '</button>'; }).join('') + '</div></div>' +
+        '<span class="grow"></span><button class="form-assist" onclick="window.toggleCopilot ? toggleCopilot() : toast(\'Form assist — Copilot fills fields from emails and notes\')"><span class="material-symbols-outlined">auto_awesome</span>Form assist</button></div></div>';
+      var body = state.tab === 'sales' ? salesTab(c, A) : state.tab === 'service' ? serviceTab(c, A) : state.tab === 'details' ? detailsTab(c, A) : state.tab === 'lead' ? leadTab(c, A) : summaryTab(c, A);
+      document.getElementById('content').innerHTML = '<div class="dp-page">' + head + body + '</div>';
+      fitColumns();
+      var page = document.querySelector('.dp-page');
+      page.addEventListener('input', function () { document.getElementById('saveSt').textContent = '- Unsaved'; document.getElementById('saveSt').classList.add('dirty'); });
+      page.addEventListener('change', function () { document.getElementById('saveSt').textContent = '- Unsaved'; document.getElementById('saveSt').classList.add('dirty'); });
+    }
+    // Summary columns fill the viewport under the sticky account header and scroll independently.
+    function fitColumns() {
+      var g = document.querySelector('.sum3'); if (!g) return;
+      if (window.innerWidth <= 1180) { g.classList.remove('scrolling'); g.style.height = ''; return; }
+      var content = document.getElementById('content'), id = document.querySelector('.dp-idcard');
+      g.classList.add('scrolling');
+      g.style.height = Math.max(420, content.clientHeight - id.offsetHeight - 36) + 'px';
+    }
+    window.addEventListener('resize', fitColumns);
+    function saveRecord(close) { var st = document.getElementById('saveSt'); if (st) { st.textContent = '- Saved'; st.classList.remove('dirty'); } toast('Saved'); if (close) setTimeout(function () { nav({ view: 'accounts' }); }, 400); }
+    function toggleRel(e) { e.stopPropagation(); var m = document.getElementById('relMenu'), b = document.getElementById('relBtn'); var on = !m.classList.contains('open'); m.classList.toggle('open', on); b.setAttribute('aria-expanded', on); }
+    document.addEventListener('click', function () { var m = document.getElementById('relMenu'); if (m) m.classList.remove('open'); });
+    function goRel(tab, id) { setTab(tab); setTimeout(function () { var el = document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1400); } }, 60); }
+    function setTab(t) { state.tab = t; var u = new URL(location.href); u.searchParams.set('tab', t); history.replaceState(null, '', u); render(); }
+
+    /* ── Our additions, merged into the D365 tabs ─────────────────── */
+    function kv(rows) { return rows.map(function (r) { return '<div class="k">' + esc(r[0]) + '</div><div class="v">' + (/^<span class="pill/.test(r[1]) ? r[1] : esc(r[1] == null ? '—' : r[1])) + '</div>'; }).join(''); }
+    function tile(tab, l, v, sub, tone) { return '<button class="tile" onclick="setTab(\'' + tab + '\')"><div class="l">' + esc(l) + '</div><div class="v' + (tone ? ' ' + tone : '') + '">' + esc(v) + '</div><div class="s" title="' + esc(sub) + '">' + esc(sub) + '</div></button>'; }
+    function glance(c) {
+      var n = S.counts(c), fin = c.salesOrders.filter(function (o) { return /Active|Disbursed/.test(o.finance.status); });
+      var openLeads = c.leads.filter(function (l) { return !/Disqualified/.test(l.status); }).length, openOpp = c.opportunities.filter(function (o) { return o.stage !== 'Won'; }).length;
+      var up = c.serviceUpcoming[0], due = c.vehicles.some(function (v) { return /Overdue/.test(v.nextService); }) ? 'red' : c.vehicles.some(function (v) { return v.status === 'Service due'; }) ? 'amber' : '';
+      return '<div class="kpi-section"><div class="kpi-sec-head"><span class="kpi-sec-title">At a glance</span><span class="kpi-sec-sub">&middot; Sales and after-sales for this account</span></div><div class="tiles">' +
+        tile('sales', 'Open Leads', openLeads, openLeads ? (c.leads[0] || {}).topic : 'No open leads') +
+        tile('sales', 'Opportunities', openOpp, c.opportunities.length + ' total · ' + c.opportunities.filter(function (o) { return o.stage === 'Won'; }).length + ' won') +
+        tile('sales', 'Monthly EMI', fin.length ? fin[0].finance.emi.replace(' / month', '') : '—', fin.length ? fin[0].finance.bank : 'No active finance') +
+        tile('service', 'Vehicles', n.vehicles, c.vehicles.map(function (v) { return v.model.replace('EXEED ', ''); }).join(' · ') || 'None yet') +
+        tile('service', 'Next Service', up && /\d/.test(up.date) ? up.date.split(' · ')[0].replace(/ \d{4}$/, '') : (up ? 'To book' : '—'), up ? up.type : 'Nothing booked', due) +
+        tile('service', 'Contracts', c.serviceContracts.length + c.rentals.length, c.serviceContracts.length + ' service · ' + c.rentals.length + ' rental') + '</div></div>';
+    }
+    function attention(c) {
+      var a = [];
+      c.vehicles.forEach(function (v) { if (/Overdue/.test(v.nextService)) a.push(['r', 'build', 'Service overdue — ' + v.model + ' ' + v.plate, v.nextService, 'Book service']); else if (v.status === 'Service due') a.push(['a', 'build', 'Service due — ' + v.model + ' ' + v.plate, v.nextService, 'Book service']); });
+      c.quotations.forEach(function (q) { if (/Pending/.test(q.status)) a.push(['a', 'request_quote', 'Quotation ' + q.id + ' pending manager approval', q.amount + ' · valid to ' + q.valid, 'Remind approver']); });
+      c.serviceContracts.forEach(function (k) { if (/Expiring/.test(k.status)) a.push(['a', 'event_busy', k.plan + ' expiring', 'Ends ' + k.end + ' · ' + k.vehicle, 'Offer renewal']); });
+      c.testDrives.forEach(function (t) { if (t.status === 'Scheduled') a.push(['b', 'directions_car', 'Test drive scheduled — ' + t.model, t.date + ' · ' + t.showroom, 'Prepare car']); });
+      c.serviceUpcoming.forEach(function (k) { if (/Pending/.test(k.status)) a.push(['a', 'event', 'Service appointment pending confirmation', k.date + ' · ' + k.workshop, 'Confirm']); });
+      c.tradeIns.forEach(function (t) { if (/appraisal|Photos/i.test(t.status)) a.push(['b', 'swap_horiz', 'Trade-in awaiting appraisal — ' + t.vehicle, t.status, 'Request appraisal']); });
+      S.crm(c).cases.forEach(function (k) { if (k.status !== 'Resolved') a.push([k.priority === 'High' ? 'r' : 'a', 'support_agent', 'Open case — ' + k.title, k.id + ' · ' + k.priority + ' priority', 'View case']); });
+      return card('priority_high', 'Needs attention', a.length, a.length ? a.map(function (x) { return '<div class="attn"><span class="dot ' + x[0] + '"><span class="material-symbols-outlined">' + x[1] + '</span></span><div><div class="t">' + esc(x[2]) + '</div><div class="d">' + esc(x[3]) + '</div></div><button class="btn" onclick="toast(\'' + esc(x[4]) + '\')">' + esc(x[4]) + '</button></div>'; }).join('') : '<div class="empty"><span class="material-symbols-outlined">check_circle</span>All clear — nothing waiting on this account.</div>', { id: 'secAttn' });
+    }
+    function journey(c) {
+      var st = [['Leads', c.leads.length, 'secLead'], ['Test drives', c.testDrives.length, 'secTD'], ['Trade-ins', c.tradeIns.length, 'secTI'], ['Proposals', c.proposals.length, 'secProp'], ['Quotations', c.quotations.length, 'secQuote'], ['Sales orders', c.salesOrders.length, 'secSO'], ['Delivered', c.deals.length, 'secDeal']];
+      return card('route', 'Sales journey', null, '<div class="journey">' + st.map(function (x) { return '<div class="js' + (x[1] ? ' on' : '') + '" onclick="goRel(\'sales\',\'' + x[2] + '\')"><div class="c">' + x[1] + '</div><div class="lb">' + x[0] + '</div></div>'; }).join('') + '</div>');
+    }
+    function vehicleCards(c) {
+      if (!c.vehicles.length) return '<div class="empty"><span class="material-symbols-outlined">directions_car</span>No vehicles yet — this customer hasn’t bought from us.</div>';
+      return '<div class="vehs">' + c.vehicles.map(function (v) {
+        return '<div class="veh"><div class="veh-img">' + pill(v.status) + '<img src="' + v.img + '" alt="" onerror="this.style.display=\'none\'"></div><div class="veh-b"><div class="veh-t">' + esc(v.model) + ' ' + esc(v.variant) + '</div><div class="veh-s">' + v.year + ' · ' + esc(v.color) + ' · ' + esc(v.plate) + '</div>' +
+          '<div class="veh-r"><span>VIN</span><span class="mono">' + esc(v.vin) + '</span></div><div class="veh-r"><span>Odometer</span><span>' + esc(v.odo) + '</span></div><div class="veh-r"><span>Next service</span><span>' + esc(v.nextService) + '</span></div><div class="veh-r"><span>Warranty to</span><span>' + esc(v.warranty) + '</span></div></div></div>';
+      }).join('') + '</div>';
+    }
+    function soBlock(o) {
+      return '<div class="so"><div class="so-h"><b>' + esc(o.id) + '</b>' + pill(o.status) + '<span style="font-size:11.5px;color:var(--ink-muted)">' + esc(o.model) + ' · ' + esc(o.date) + '</span><span class="so-amt">' + esc(o.amount) + '</span></div>' +
+        '<div class="so-g"><div><div class="k">Payment terms</div><div class="v">' + esc(o.paymentTerms) + '</div></div><div><div class="k">Payment mode</div><div class="v">' + esc(o.paymentMode) + '</div></div><div><div class="k">Advance</div><div class="v">' + esc(o.advance) + '</div></div><div><div class="k">Trade-in</div><div class="v">' + esc(o.tradeIn) + '</div></div><div><div class="k">Invoice</div><div class="v mono">' + esc(o.invoice) + '</div></div></div>' +
+        '<div class="fin"><span class="material-symbols-outlined">account_balance</span><div><div class="k">Finance amount</div><div class="v">' + esc(o.finance.amount) + '</div></div><div><div class="k">Bank</div><div class="v">' + esc(o.finance.bank) + '</div></div><div><div class="k">Tenure · rate</div><div class="v">' + esc(o.finance.tenure) + ' · ' + esc(o.finance.rate) + '</div></div><div><div class="k">EMI</div><div class="v">' + esc(o.finance.emi) + '</div></div><div style="margin-inline-start:auto">' + pill(o.finance.status) + '</div></div></div>';
+    }
+
+    /* Summary — Account information · Address · map · Preferred business · Customer identifiers ·
+       Customer segmentation | Timeline | Assistant · Primary contact · Contacts · Recent opportunities ·
+       Recent cases · Active entitlements */
+    function summaryTab(c, A) {
+      var x = A.x, a = x.address;
+      var left = section('secInfo', 'Account information', field('Account Name', c.name, { req: true }) + field('Account Number', x.accountNumber, { ro: true }) + field('Wholesale Category', x.wholesaleCategory, { lookup: true }) +
+          field('Phone', x.phone, { link: 'call' }) + field('Fax', x.fax) + field('Website', x.website, { link: 'language' }) + field('Parent Account', x.parentAccount, { lookup: true }) + field('Ticker Symbol', x.ticker) + field('Commercial Registration Number', x.crNumber)) +
+        section('secAddr', 'Address', field('Address 1: Street 1', a.street1) + field('Address 1: Street 2', a.street2) + field('Address 1: Street 3', a.street3) + field('Address 1: City', a.city) + field('Address 1: State/Province', a.state) + field('Address 1: ZIP/Postal Code', a.zip) + field('Address 1: Country/Region', a.country)) +
+        '<div class="card map" id="secMap"><div class="map-top"><a class="lnk" target="_blank" rel="noopener" href="https://www.google.com/maps/search/' + encodeURIComponent([a.street1, a.street2, a.city, a.country].filter(function (z) { return z && z !== '—'; }).join(', ')) + '"><span class="material-symbols-outlined">directions</span>Get Directions</a></div>' +
+        '<div class="map-canvas"><span class="map-road r1"></span><span class="map-road r2"></span><span class="map-road r3"></span><span class="map-pin"><span class="material-symbols-outlined">location_on</span></span><span class="map-lbl">' + esc(a.street2 !== '—' ? a.street2 : a.city) + '</span></div></div>' +
+        subgrid('secPB', 'Preferred Business', null, [['Business line', function (r) { return '<b>' + T(r.line) + '</b>'; }], ['Showroom / centre', function (r) { return T(r.showroom); }], ['Since', function (r) { return T(r.since); }]], x.preferredBusiness) +
+        subgrid('secCI', 'Customer Identifiers', null, [['Type', function (r) { return '<b>' + T(r.type) + '</b>'; }], ['Number', function (r) { return '<span class="mono">' + T(r.number) + '</span>'; }], ['Expiry', function (r) { return T(r.expiry); }]], x.identifiers) +
+        subgrid('secCS', 'Customer Segmentation', null, [['Segment', function (r) { return '<span class="pill">' + T(r.segment) + '</span>'; }], ['Category', function (r) { return T(r.category); }], ['Source', function (r) { return '<span class="sub">' + T(r.source) + '</span>'; }]], x.segmentation);
+      var mid = '<div class="card" id="secTimeline"><div class="card-h"><h3>Timeline</h3><span class="grow"></span>' + ['add', 'bookmark', 'filter_alt', 'sort', 'refresh', 'more_vert'].map(function (ic) { return '<button class="sg-more" aria-label="' + ic + '"><span class="material-symbols-outlined">' + ic + '</span></button>'; }).join('') + '</div>' +
+        '<div class="tl-tools"><label class="tl-search"><span class="material-symbols-outlined">search</span><input placeholder="Search timeline" /></label><label class="tl-note"><span class="material-symbols-outlined">edit</span><input placeholder="Enter a note…" /><span class="material-symbols-outlined">attach_file</span></label></div>' +
+        '<div class="tl-hl"><span class="material-symbols-outlined">auto_awesome</span><b>Highlights</b><span class="grow"></span><span class="sub">Copilot summary</span></div><div class="tl-hl-b">' + c.nba.desc + '</div>' +
+        '<div class="tl-f">' + [['all', 'All'], ['sales', 'Sales'], ['service', 'Service']].map(function (z) { return '<button class="' + (state.tl === z[0] ? 'on' : '') + '" onclick="state.tl=\'' + z[0] + '\';render()">' + z[1] + '</button>'; }).join('') + '</div>' +
+        '<div class="tl">' + c.timeline.filter(function (t) { return state.tl === 'all' || t.kind === state.tl; }).map(function (t) { return '<div class="tl-i ' + t.kind + '"><span class="ic"><span class="material-symbols-outlined">' + t.icon + '</span></span><div><div class="tx">' + esc(t.text) + '</div><div class="tm">' + (t.kind === 'service' ? 'Service' : 'Sales') + ' · ' + esc(t.time) + '</div></div></div>'; }).join('') +
+        '<div class="tl-i"><span class="ic"><span class="material-symbols-outlined">smart_toy</span></span><div><div class="tx">Auto-post on Account ' + esc(c.name) + ': Account created by ' + esc(c.owner) + '</div><div class="tm">System · ' + esc(c.since) + '</div></div></div></div></div>';
+      var right = '<div class="dp-ai-card" id="secAssist"><div class="dp-ai-label"><span class="material-symbols-outlined">auto_awesome</span>Assistant · Next best action</div><div class="dp-ai-title">' + esc(c.nba.title) + '</div><div class="dp-ai-desc">' + c.nba.desc + '</div>' +
+          '<button class="dp-ai-btn primary" onclick="toast(\'' + esc(c.nba.btns[0]) + '\')">' + esc(c.nba.btns[0]) + '</button><button class="dp-ai-btn secondary" onclick="toast(\'' + esc(c.nba.btns[1]) + '\')">' + esc(c.nba.btns[1]) + '</button></div>' +
+        attention(c) +
+        section('secPC', 'Primary Contact', field('Primary Contact', x.contacts[0].name, { chip: 'person', inline: true })) +
+        subgrid('secContacts', 'Contacts', 'New Contact', [['Full Name', function (r) { return L(r.name) + '<div class="sub">' + T(r.role) + '</div>'; }], ['Email', function (r) { return '<a class="lnk" href="mailto:' + esc(r.email) + '">' + T(r.email) + '</a>'; }], ['', function (r) { return '<a class="ia" href="tel:' + r.phone.replace(/\s/g, '') + '" title="Call ' + esc(r.phone) + '" aria-label="Call"><span class="material-symbols-outlined">call</span></a>'; }]], x.contacts) +
+        subgrid('secROpp', 'Recent Opportunities', 'New Opportunity', [['Topic', function (r) { return L(r.topic); }], ['Est. revenue', function (r) { return '<b>' + T(r.revenue) + '</b>'; }], ['Est. close', function (r) { return T(r.close); }], ['Status', function (r) { return pill(r.status); }]], A.opps) +
+        subgrid('secCases', 'Recent Cases', 'New Case', [['Case', function (r) { return L(r.title) + '<div class="sub">' + T(r.id) + '</div>'; }], ['Status', function (r) { return pill(r.status === 'In progress' ? 'Pending — in progress' : r.status); }]], x.cases, { refresh: true }) +
+        subgrid('secEnt', 'Active Entitlements', 'New Entitlement', [['Entitlement Name', function (r) { return L(r.name); }], ['Remaining Terms', function (r) { return T(r.remaining); }], ['Status', function (r) { return pill(r.status); }]], A.entitlements);
+      return glance(c) + '<div class="sum3" style="margin-top:16px"><div class="col">' + left + '</div><div class="col">' + mid + '</div><div class="col">' + right + '</div></div>';
+    }
+    /* Sales 360° — Lead · Opportunity · Deal · Test Drive · Trade In */
+    function leadGrid(A, id) {
+      return subgrid(id, 'Lead', 'New Lead', [['Lead ID', function (r) { return '<a class="lnk" href="lead-detail.html">' + T(r.id) + '</a>'; }], ['Topic', function (r) { return T(r.topic); }], ['First Name', function (r) { return T(r.first); }], ['Last Name', function (r) { return T(r.last); }], ['Mobile Phone', function (r) { return '<span class="mono">' + T(r.mobile) + '</span>'; }], ['Email', function (r) { return T(r.email); }], ['Channel', function (r) { return T(r.channel); }], ['Status', function (r) { return pill(r.status); }]], A.leads, { icon: 'leaderboard' });
+    }
+    function salesTab(c, A) {
+      return '<div class="stack">' + journey(c) + leadGrid(A, 'secLead') +
+        subgrid('secOpp', 'Opportunity', 'New Opportunity', [['Topic', function (r) { return L(r.topic); }], ['Customer', function (r) { return T(r.customer); }], ['Originating Lead', function (r) { return T(r.lead); }], ['Account', function (r) { return T(r.account); }], ['Interest', function (r) { return T(r.interest); }], ['Rating', function (r) { return pill(r.rating); }]], A.opps, { icon: 'trending_up' }) +
+        subgrid('secDeal', 'Deal', 'New Deal', [['Name', function (r) { return L(r.name); }], ['Created On', function (r) { return T(r.created); }]], A.deals, { icon: 'handshake' }) +
+        subgrid('secTD', 'Test Drive', 'New Test Drive', [['Appointment', function (r) { return T(r.appt); }], ['Name', function (r) { return L(r.name); }], ['Device', function (r) { return T(r.device); }], ['Year', function (r) { return T(r.year); }], ['Brand', function (r) { return T(r.brand); }], ['Model', function (r) { return T(r.model); }], ['Status', function (r) { return pill(r.status); }]], A.tds, { icon: 'directions_car' }) +
+        subgrid('secTI', 'Trade In', 'New Trade In', [['Name', function (r) { return L(r.name); }], ['Appraisal', function (r) { return '<b>' + T(r.appraisal) + '</b>'; }], ['Status', function (r) { return pill(r.status); }], ['Created On', function (r) { return T(r.created); }]], A.tis, { icon: 'swap_horiz' }) +
+        subgrid('secProp', 'Proposals', 'New Proposal', [['Proposal', function (r) { return L(r.id); }], ['Vehicle', function (r) { return T(r.model) + '<div class="sub">' + T(r.color) + '</div>'; }], ['Price', function (r) { return '<b>' + T(r.price) + '</b>'; }], ['Add-ons', function (r) { return '<span class="sub">' + T(r.addOns) + '</span>'; }], ['Status', function (r) { return pill(r.status); }]], c.proposals, { icon: 'request_page' }) +
+        subgrid('secQuote', 'Quotations', null, [['Quotation', function (r) { return L(r.id); }], ['Vehicle', function (r) { return T(r.model); }], ['Amount', function (r) { return '<b>' + T(r.amount) + '</b>'; }], ['Valid to', function (r) { return T(r.valid); }], ['Status', function (r) { return pill(r.status); }]], c.quotations, { icon: 'request_quote' }) +
+        card('receipt_long', 'Sales orders — payment &amp; finance', c.salesOrders.length, c.salesOrders.length ? c.salesOrders.map(soBlock).join('') + '<div style="height:4px"></div>' : '<div class="sg-empty"><span class="material-symbols-outlined">grid_view</span>We didn’t find anything to show here</div>', { id: 'secSO' }) + '</div>';
+    }
+    /* Service 360° — Devices/Fleet · Upcoming appointments (30 days) · Past appointments ·
+       Service contracts · Rental contracts · Sales contracts */
+    function serviceTab(c, A) {
+      var o = function (icon) { return { icon: icon, svc: true, view: true }; };
+      return '<div class="stack">' + card('directions_car', 'Vehicles owned', c.vehicles.length, vehicleCards(c), { svc: true, id: 'secVeh' }) +
+        subgrid('secDev', 'Devices / Fleet', 'New Device Registration', [['Name', function (r) { return L(r.name); }], ['Device', function (r) { return '<span class="mono">' + T(r.device) + '</span>'; }], ['Device Licence', function (r) { return T(r.licence); }], ['Role', function (r) { return T(r.role); }], ['Valid From', function (r) { return T(r.from); }], ['Valid To', function (r) { return T(r.to); }]], A.devices, { icon: 'directions_car', svc: true }) +
+        subgrid('secUp', 'Upcoming Service Appointments — Next 30 Days', 'New Service Appointment', [['Appointment Number', function (r) { return L(r.number); }], ['Name', function (r) { return T(r.name); }], ['Customer', function (r) { return T(r.customer); }], ['Device', function (r) { return '<span class="mono">' + T(r.device) + '</span>'; }], ['Scheduled Start', function (r) { return T(r.start); }], ['Scheduled End', function (r) { return T(r.end); }], ['Status', function (r) { return pill(r.status); }]], A.upcoming, o('event_upcoming')) +
+        subgrid('secPast', 'Past Service Appointments', 'New Service Appointment', [['Name', function (r) { return L(r.name); }], ['Type', function (r) { return T(r.type); }], ['Customer', function (r) { return T(r.customer); }], ['Device', function (r) { return '<span class="mono">' + T(r.device) + '</span>'; }], ['Actual Start', function (r) { return T(r.start); }], ['Actual End', function (r) { return T(r.end); }], ['Business Unit', function (r) { return T(r.bu); }]], A.past, o('history')) +
+        subgrid('secSC', 'Customer’s Service Contracts', 'New Service Contract', [['Name', function (r) { return L(r.name); }], ['Description', function (r) { return T(r.desc); }], ['Type', function (r) { return T(r.type); }], ['Start Date', function (r) { return T(r.start); }], ['End Date', function (r) { return T(r.end); }], ['Status', function (r) { return pill(r.status); }]], A.serviceContracts, o('verified_user')) +
+        subgrid('secRC', 'Rental Contracts for a Customer', 'New Rental Contract', [['Name', function (r) { return L(r.name); }], ['Description', function (r) { return T(r.desc); }], ['Rental Contract Type', function (r) { return T(r.type); }], ['Start Date', function (r) { return T(r.start); }], ['End Date', function (r) { return T(r.end); }], ['Status', function (r) { return pill(r.status); }]], A.rentals, o('car_rental')) +
+        subgrid('secSaC', 'Customer’s Sales Contracts', 'New Sales Contract', [['Name', function (r) { return L(r.name); }], ['Description', function (r) { return T(r.desc); }], ['Sales Contract Type', function (r) { return T(r.type); }], ['End Date', function (r) { return T(r.end); }], ['Start Date', function (r) { return T(r.start); }]], A.salesContracts, o('contract')) +
+        subgrid('secSvcCases', 'Cases', 'New Case', [['Case', function (r) { return L(r.id); }], ['Title', function (r) { return T(r.title); }], ['Type', function (r) { return T(r.type); }], ['Priority', function (r) { return r.priority === 'High' ? '<span class="pill r">High</span>' : T(r.priority); }], ['Created', function (r) { return T(r.created); }], ['Status', function (r) { return pill(r.status === 'In progress' ? 'Pending — in progress' : r.status); }]], A.x.cases, { icon: 'support_agent', svc: true }) + '</div>';
+    }
+    /* Details — Company profile · Marketing · Description · Contact preferences · Billing · Shipping · Child accounts */
+    function detailsTab(c, A) {
+      var allow = function (b) { return b ? 'Allow' : 'Do Not Allow'; }, AD = ['Allow', 'Do Not Allow'], P = A.prefs;
+      var lcol = section('secCP', 'Company Profile', field('Industry', A.industry, { select: ['Consumer — individual', 'Trading & distribution', 'Trading', 'Automotive', 'Construction', 'Government', 'Hospitality', 'Logistics'] }) + field('SIC Code', A.sic) + field('Ownership', A.ownership, { select: ['Private', 'Public', 'Subsidiary', 'Government', 'Other'] })) +
+        section('secDesc', 'Description', field('Description', A.description, { area: true }));
+      var rcol = section('secMkt', 'Marketing', field('Originating Lead', A.originatingLead, { ro: true }) + field('Last Campaign Date', A.lastCampaignDate, { ro: true }) + field('Marketing Materials', A.materials, { select: ['Send', 'Do Not Send'] })) +
+        section('secPref', 'Contact Preferences', field('Contact Method', P.method, { select: ['Any', 'Email', 'Phone', 'Fax', 'Mail'] }) + field('Email', allow(P.email), { select: AD }) + field('Follow Email', allow(P.follow), { select: AD }) + field('Bulk Email', allow(P.bulk), { select: AD }) + field('Phone', allow(P.phone), { select: AD }) + field('Fax', allow(P.fax), { select: AD }) + field('Mail', allow(P.mail), { select: AD }));
+      return '<div class="det2"><div class="col">' + lcol + '</div><div class="col">' + rcol + '</div></div>' +
+        section('secBill', 'Billing', '<div class="inline-form">' + field('Currency', A.currency, { chip: 'payments', inline: true }) + field('Credit Limit', A.creditLimit, { inline: true }) + field('Credit Hold', A.creditHold, { select: ['No', 'Yes'], inline: true }) + field('Payment Terms', A.paymentTerms, { select: ['Net 30', 'Net 45', 'Net 60', 'Pay on invoice', 'Monthly in advance', '2% 10, Net 30'], inline: true }) + '</div>', 'wide') +
+        section('secShip', 'Shipping', '<div class="inline-form">' + field('Shipping Method', A.shipping, { select: ['Showroom pickup', 'Delivery to customer', 'Airborne', 'DHL', 'FedEx', 'Postal mail'], inline: true }) + field('Freight Terms', A.freight, { select: ['FOB', 'No charge'], inline: true }) + '</div>', 'wide') +
+        '<div class="stack" style="margin-top:16px">' + subgrid('secChild', 'Child Accounts', 'New Account', [['Account Name', function (r) { return L(r.name); }], ['Company Name', function (r) { return T(r.company); }], ['Customer Type', function (r) { return T(r.type); }], ['Main Phone', function (r) { return '<span class="mono">' + T(r.phone) + '</span>'; }], ['Address 1: City', function (r) { return T(r.city); }], ['Primary Contact', function (r) { return T(r.primary); }]], A.children, { icon: 'account_tree' }) + '</div>';
+    }
+    /* Lead — Lead subgrid */
+    function leadTab(c, A) { return '<div class="stack">' + leadGrid(A, 'secLead') + '</div>'; }
+
+    /* ── Accounts list (our Leads-list style) ───────────────────── */
+    function renderAccounts() {
+      document.getElementById('cmdbar').innerHTML = '<a class="cb" href="javascript:history.back()" title="Back" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></a><div class="cmd-sep"></div>' +
+        '<button class="cb" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span> New account</button>' +
+        '<button class="cb" onclick="toast(\'Exported to Excel\')"><span class="material-symbols-outlined">table_view</span> Export to Excel</button>' +
+        '<button class="cb"><span class="material-symbols-outlined">mail</span> Email a link</button>' +
+        '<div class="cmd-sep"></div><button class="cb" onclick="render()"><span class="material-symbols-outlined">refresh</span> Refresh</button><button class="cb"><span class="material-symbols-outlined">bolt</span> Flow</button>';
+      var all = S.customers, f = state.af.toLowerCase();
+      var cnt = function (fn) { return all.filter(fn).length; };
+      var chips = [['all', 'All', function () { return true; }], ['Individual', 'Individuals', function (c) { return c.type === 'Individual'; }], ['Company', 'Companies', function (c) { return c.type === 'Company'; }],
+        ['svc', 'Service due', function (c) { return c.vehicles.some(function (v) { return v.status === 'Service due'; }); }], ['open', 'Open sales', function (c) { return S.counts(c).openSales > 0; }]];
+      var active = chips.filter(function (x) { return x[0] === state.atype; })[0] || chips[0];
+      var rows = all.filter(active[2]).filter(function (c) { return !f || [c.name, c.id, c.mobile, c.email, c.city, c.primaryContact || ''].join(' ').toLowerCase().indexOf(f) > -1; });
+      var h = '<div class="acc"><div class="list-title-row"><h1>All Accounts <span class="lead-count">' + all.length + ' accounts</span></h1></div>' +
+        '<div class="list-filters">' + chips.map(function (x) { return '<button class="filter-chip' + (state.atype === x[0] ? ' on' : '') + '" onclick="state.atype=\'' + x[0] + '\';render()">' + x[1] + ' <span style="font-weight:400;opacity:.7;margin-inline-start:2px">' + cnt(x[2]) + '</span></button>'; }).join('') +
+        '<input class="filter-search" type="text" placeholder="Filter by keyword…" value="' + esc(state.af) + '" oninput="state.af=this.value;renderAccountsKeep(this)" />' +
+        '<button class="list-btn primary" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span> New account</button></div>' +
+        '<div class="card acc-card"><table class="tbl acc-tbl"><thead><tr><th>Account</th><th>Main phone</th><th>City</th><th>Primary contact</th><th>Vehicles</th><th>Open sales</th><th>Next service</th><th>Owner</th><th>Status</th><th></th></tr></thead><tbody>' +
+        (rows.length ? rows.map(function (c) {
+          var n = S.counts(c);
+          return '<tr onclick="openCustomer(\'' + c.id + '\')"><td>' + '<div class="cust-cell"><div class="cust-av" style="background:' + c.av + '">' + c.initials + '</div><div><span class="lnk">' + S.mark(c.name, state.af) + '</span><div class="sub">' + c.type + ' · <span class="mono" style="font-size:10.5px">' + c.id + '</span></div></div></div></td>' +
+            '<td class="mono">' + esc(c.mobile) + '</td><td>' + esc(c.city) + '</td><td>' + esc(c.primaryContact || c.name) + '<div class="sub">' + esc(c.email) + '</div></td>' +
+            '<td>' + n.vehicles + '</td><td>' + n.openSales + '</td><td>' + esc(n.nextService) + '</td><td>' + esc(c.owner) + '</td><td>' + pill('Active') + '</td>' +
+            '<td><span class="open-link">Open <span class="material-symbols-outlined">open_in_new</span></span></td></tr>';
+        }).join('') : '<tr><td colspan="10"><div class="empty"><span class="material-symbols-outlined">search_off</span>No accounts match this filter.</div></td></tr>') +
+        '</tbody></table></div><div class="acc-foot">Rows: ' + rows.length + '</div></div>';
+      document.getElementById('content').innerHTML = h;
+    }
+    // Re-render while typing in the keyword filter without losing focus.
+    function renderAccountsKeep(inp) { var pos = inp.selectionStart; renderAccounts(); var n = document.querySelector('.acc .filter-search'); n.focus(); n.setSelectionRange(pos, pos); }
+
+    function render() {
+      var c = state.id && S.get(state.id);
+      document.title = (c ? c.name + ' — Customer 360' : state.view === 'accounts' ? 'Accounts' : state.q ? 'Search: ' + state.q : 'Customer 360') + ' — AGM Sales EXEED CRM';
+      if (c) renderRecord(c); else if (state.view === 'accounts') renderAccounts(); else if (state.q) renderResults(); else renderLanding();
+      var acc = state.view === 'accounts' || (c && state.from === 'accounts');
+      document.getElementById('navAccounts').classList.toggle('active', !!acc);
+      var top = document.querySelector('.topbar .search'); if (top && document.activeElement !== top) top.value = state.q || '';
+    }
+    render();
+  </script>
+  <script src="global-search.js?v=1" defer></script>
+  <script src="copilot-widget.js?v=14" defer></script>
+</body>
+</html>

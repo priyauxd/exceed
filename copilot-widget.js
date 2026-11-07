@@ -282,6 +282,10 @@
         return { grp: g, list: l };
       }
       var rec = group('cwRecentGrp', 'Recent', 'schedule'); recList = rec.list;
+      // Recent starts collapsed; once the user opens or closes it, that choice is kept across pages.
+      var RKEY = 'cw-recent-open';
+      try { if (localStorage.getItem(RKEY) !== '1') rec.grp.classList.add('collapsed'); } catch (e) { rec.grp.classList.add('collapsed'); }
+      rec.grp.firstChild.addEventListener('click', function () { try { localStorage.setItem(RKEY, rec.grp.classList.contains('collapsed') ? '0' : '1'); } catch (e) {} });
       var pin = group('cwPinnedGrp', 'Pinned', 'push_pin'); pinList = pin.list;
       renderAll();
       dash.parentNode.insertBefore(rec.grp, dash.nextSibling);
