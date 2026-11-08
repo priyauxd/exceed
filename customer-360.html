@@ -642,6 +642,7 @@
     .kg { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; align-items: stretch; }
     .kg.wide { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
     .pair2 .kg { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+    .k-nil { font-size: 13px; font-weight: 500; color: #9ca3af; }
     .k-gauge2 { position: relative; width: 76px; height: 44px; flex-shrink: 0; display: block; }
     .k-gauge2 svg { width: 100%; height: 100%; overflow: visible; } .k-gauge2 path { fill: none; stroke-width: 7; stroke-linecap: round; }
     .k-gauge2 .tr { stroke: #e8ebf0; } .k-gauge2 .fg { stroke: #2f6fb3; transition: stroke-dasharray .4s cubic-bezier(.23,1,.32,1); } .k-gauge2.green .fg { stroke: #16a34a; }
@@ -1024,7 +1025,7 @@
     .bf { display: flex; flex-direction: column; gap: 16px; padding-bottom: 8px; }
     .bf .k-min { min-width: 0; flex: 1; }
     .bf-sum { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); background: #fff; border: 1px solid #e6e8ec; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 2px rgba(16,24,40,.04); margin-bottom: 16px; }
-    .bf-dark { background: #0d0d0e; color: #fff; padding: 20px; display: flex; flex-direction: column; }
+    .bf-dark { background: linear-gradient(135deg, #1f2430 0%, #0d0d0e 100%); color: #fff; padding: 20px; display: flex; flex-direction: column; }
     .bf-dark h2 { margin: 0; font-size: 12px; font-weight: 500; color: rgba(255,255,255,.6); }
     .bf-out { margin: 4px 0 0; font-size: 30px; font-weight: 650; letter-spacing: -.02em; font-variant-numeric: tabular-nums; } .bf-out small { font-size: 13px; font-weight: 500; color: rgba(255,255,255,.6); margin-inline-end: 6px; }
     .bf-dsub { margin: 4px 0 0; font-size: 12px; color: rgba(255,255,255,.7); } .bf-dark .grow { flex: 1; min-height: 24px; }
@@ -1768,7 +1769,7 @@
     /* Half-radial gauge (semi-circle), 0–100 */
     function gauge(pct, cls) {
       var p = Math.max(0, Math.min(100, pct || 0)), L = Math.PI * 30;
-      return '<span class="k-gauge2 ' + (cls || '') + '" role="img" aria-label="' + Math.round(p) + '% probability"><svg viewBox="0 0 72 40" aria-hidden="true"><path d="M6 36 A30 30 0 0 1 66 36" class="tr"/><path d="M6 36 A30 30 0 0 1 66 36" class="fg" stroke-dasharray="' + (L * p / 100).toFixed(1) + ' ' + L.toFixed(1) + '"/></svg><b>' + Math.round(p) + '%</b></span>';
+      return '<span class="k-gauge2 ' + (cls || '') + '" role="img" aria-label="' + Math.round(p) + '% probability"><svg viewBox="0 0 72 40" aria-hidden="true"><path d="M6 36 A30 30 0 0 1 66 36" class="tr"/>' + (p > 0 ? '<path d="M6 36 A30 30 0 0 1 66 36" class="fg" stroke-dasharray="' + (L * p / 100).toFixed(1) + ' ' + L.toFixed(1) + '"/>' : '') + '</svg><b>' + Math.round(p) + '%</b></span>';
     }
     var rtag = function (rt) { var k = rt === 'Hot' ? 'hot' : rt === 'Warm' ? 'warm' : 'cold'; return '<span class="rt ' + k + '"><i></i>' + esc(rt) + '</span>'; };
     var stag = function (v, ok) { return '<span class="sto' + (ok ? ' ok' : '') + '"><span class="material-symbols-outlined">' + (ok ? 'check_circle' : 'radio_button_checked') + '</span>' + esc(v) + '</span>'; };
@@ -1806,9 +1807,9 @@
         var won = o.stage === 'Won', d = pd(o.close), p = parseInt(o.probability, 10) || 0;
         var num = String(o.value).replace(/^AED\s?/, '');
         return '<article class="k-card k-opp2"><header><div class="k-hd"><div class="k-title k-t1" title="' + esc(o.topic) + '">' + esc((o.topic.match(/^(\d+ × )?EXEED \w+/) || [o.topic])[0]) + '</div>' + eyebrow(o.id) + '</div><span class="k-pill ' + (won ? 'won' : 'open') + '">' + esc(o.stage) + '</span></header>' +
-          '<div class="k-opp-row">' + gauge(won ? 100 : p, won ? 'green' : 'azure') + '<div class="k-min"><div class="k-fig2">' + (/^AED/.test(o.value) ? '<small>AED</small>' : '') + esc(num) + '</div><div class="k-sub" title="' + esc(o.topic) + '">' + esc(o.topic.replace(/^(\d+ × )?EXEED \w+\s*/, '') || o.topic) + '</div></div></div>' +
-          '<div class="k-meta">' + meta('flag', won ? 'Closed ' + esc(o.close) : 'Close ' + esc(o.close) + (d ? '<span class="k-due"> · ' + rel(d) + '</span>' : '')) + '</div>' +
-          '<footer>' + ownerChip(o.owner) + '<span class="k-ft">' + (won ? 'Closed won' : esc(o.probability) + ' likely') + '</span></footer></article>';
+          '<div class="k-opp-row">' + gauge(won ? 100 : p, won ? 'green' : 'azure') + '<div class="k-min"><div class="k-fig2">' + (/\d/.test(o.value) ? (/^AED/.test(o.value) ? '<small>AED</small>' : '') + esc(num) : '<span class="k-nil">Value not set</span>') + '</div><div class="k-sub" title="' + esc(o.topic) + '">' + esc(o.topic.replace(/^(\d+ × )?EXEED \w+\s*/, '')) + '</div></div></div>' +
+          '<div class="k-meta">' + meta('flag', won ? 'Closed ' + esc(o.close) : !/\d/.test(o.close) ? 'Close date not set' : 'Close ' + esc(o.close) + (d ? '<span class="k-due"> · ' + rel(d) + '</span>' : '')) + '</div>' +
+          '<footer>' + ownerChip(o.owner) + '<span class="k-ft">' + (won ? 'Closed won' : (/\d/.test(o.probability) ? esc(o.probability) + ' likely' : 'Not scored')) + '</span></footer></article>';
       }).join('') + '</div>'); else empty.push(['secOpp', 'New Opportunity']);
       if (pair) out += '<div class="pair2">' + pair + '</div>';
 
@@ -2003,7 +2004,7 @@
 
     function accSalesVisual(c, A) {
       var full = salesVisual(c, A), tmp = document.createElement('div'); tmp.innerHTML = full;
-      var take = function (id) { var el = tmp.querySelector('#' + id); return el ? el.outerHTML : ''; };
+      var take = function (id) { var el = tmp.querySelector('#' + id + '.vsec'); return el ? el.outerHTML : ''; };
       var out = accJourney(c), empty = [];
       // Leads + Opportunities — keep the light grey cards
       var lo = take('secLead') + take('secOpp'); if (lo) out += '<div class="pair2">' + lo + '</div>';
@@ -2073,7 +2074,7 @@
 
     function accServiceVisual(c, A) {
       var full = serviceVisual(c, A), tmp = document.createElement('div'); tmp.innerHTML = full;
-      var take = function (id) { var el = tmp.querySelector('#' + id); return el ? el.outerHTML : ''; };
+      var take = function (id) { var el = tmp.querySelector('#' + id + '.vsec'); return el ? el.outerHTML : ''; };
       var out = take('secVeh'), empty = [];
       if (!c.vehicles.length) empty.push(['secVeh', 'New Device Registration']);
       // Appointments — list with date block (2/3) + Cases (1/3)
