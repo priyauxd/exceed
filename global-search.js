@@ -10,7 +10,7 @@
     var input = document.querySelector('.topbar .search');
     if (!input || input.__gs) return;
     if (!window.C360) {
-      var s = document.createElement('script'); s.src = 'customer-data.js?v=3'; s.onload = boot; document.head.appendChild(s); return;
+      var s = document.createElement('script'); s.src = 'customer-data.js?v=8'; s.onload = boot; document.head.appendChild(s); return;
     }
     input.__gs = true;
     var S = window.C360;

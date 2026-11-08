@@ -245,7 +245,7 @@
       mobile: r[4], phone2: co ? r[4] : '—', email: r[5], emiratesId: co ? '—' : '784-19' + (70 + k) + '-' + (3300000 + k * 1111) + '-1', city: r[3], nationality: '—', language: 'English',
       since: r[6], owner: owner, showroom: r[3] === 'Abu Dhabi' || r[3] === 'Al Ain' ? 'Abu Dhabi Corniche' : r[3] === 'Sharjah' ? 'Sharjah Showroom' : 'SZR Showroom — Dubai',
       ltv: veh.length ? 'AED ' + (139 + k * 7) + ',900' : 'AED 0', lastActivity: veh.length ? 'Service reminder · this month' : 'Enquiry · this month', segment: co ? 'Corporate' : veh.length ? 'Owner' : 'Prospect',
-      primaryContact: co ? r[1].split(' ')[0] + ' — Fleet desk' : undefined,
+      primaryContact: co ? 'Fleet desk' : undefined,
       vehicles: veh, leads: veh.length ? [] : [{ id: 'L-2026-0' + (6100 + k), topic: 'EXEED ' + ['LX', 'VX', 'RX'][k % 3] + ' enquiry', source: ['Website', 'Walk-in', 'WhatsApp'][k % 3], created: '0' + (1 + k % 9) + ' Oct 2026', rating: ['Hot', 'Warm', 'Cold'][k % 3], status: 'Contacted', owner: owner }],
       opportunities: [], testDrives: [], tradeIns: [], proposals: [], quotations: [], salesOrders: [], deals: [], serviceUpcoming: [], servicePast: [], serviceContracts: [], rentals: [],
       profile: co ? { type: 'Company', industry: 'Trading', employees: String(40 + k * 15), fleet: (k + 3) + ' vehicles' } : { type: 'Individual', occupation: '—', employer: '—', income: '—', household: '—', dob: '—' },
@@ -278,18 +278,61 @@
       cases: [{ id: 'CAS-2026-1301', title: 'Fleet tracking unit offline — LX AD 12 77105', type: 'Technical', priority: 'High', status: 'In progress', created: '28 Oct 2026' }, { id: 'CAS-2026-0977', title: 'Invoice copy request — SO-2025-0102', type: 'Billing', priority: 'Low', status: 'Resolved', created: '12 Aug 2026' }]
     }
   };
+  // Accounts as they exist in the CRM (D365 › All Accounts). Most fields are empty there too.
+  [['C080101', 'ABB Inc.', '', '', '', ''], ['C080102', 'ABC', '', '', '', ''], ['C080103', 'AGI PT', '', '', '', ''],
+   ['C080104', 'Al Ghurair Foods', '', '', '', ''], ['C080105', 'AL-Ghurair', '', '', 'Testify1 VM1', 'Testify1VM@gamil.com'],
+   ['C080106', 'Al-Ghurair Foods', '', '', '', ''], ['C080107', 'ALGHURAIR FOODS LLC - OATS', '', '', '', ''],
+   ['C080108', 'Arabian Packaging co LLC', '', '', '', ''], ['C080109', 'Bismillah Motors', '', '', '', ''],
+   ['C080110', 'Bonjour Traders USA', '', '', '', ''], ['C080111', 'DCompany', '', '', '', ''], ['C080112', 'DLC company', '', '', '', ''],
+   ['C080113', 'Ford Motors', '', '', '', ''], ['C080114', 'Fourth Coffee', '415-555-0102', 'San Francisco', '', '']
+  ].forEach(function (r, k) {
+    var w = r[1].replace(/[^A-Za-z ]/g, ' ').trim().split(/\s+/);
+    C.push({
+      id: r[0], type: 'Company', name: r[1], initials: (w[0][0] + (w[1] ? w[1][0] : (w[0][1] || ''))).toUpperCase(), av: ['linear-gradient(135deg,#c9a227,#8a6c10)', 'linear-gradient(135deg,#4a6fa5,#2a4f9e)', 'linear-gradient(135deg,#0f6c6c,#0a3d3d)', 'linear-gradient(135deg,#8a4fa5,#4a2a6e)'][k % 4],
+      mobile: r[2], phone2: r[2] || '—', email: r[5], emiratesId: '—', city: r[3] || '—', nationality: '—', language: '—', since: '2026', owner: 'AGP InnovationCRM', showroom: '—',
+      ltv: 'AED 0', lastActivity: 'Account created', segment: 'Account', primaryContact: r[4] || undefined, crmOnly: true,
+      vehicles: [], leads: [], opportunities: r[1] === 'ABB Inc.' ? [{ id: 'OP-2026-0001', topic: 'ABB Inc.', stage: 'Qualify', value: '—', probability: '—', close: '—', owner: 'AGP InnovationCRM' }] : [],
+      testDrives: [], tradeIns: [], proposals: [], quotations: [], salesOrders: [], deals: [], serviceUpcoming: [], servicePast: [], serviceContracts: [], rentals: [],
+      profile: { type: 'Company', industry: '—', employees: '—', fleet: '—' },
+      marketing: { consentEmail: true, consentSms: true, consentWhatsapp: true, consentCalls: true, segments: [], lastCampaign: '', preferredChannel: 'Any', nps: '—' },
+      billing: { address: '—', trn: '—', currency: 'AED', terms: '—', method: '—', credit: '—' },
+      timeline: [{ icon: 'smart_toy', kind: 'sales', text: 'Account created', time: '12 Jan 2026' }],
+      nba: { title: 'Complete the account', desc: 'This account has <strong>no phone, address or contacts</strong> yet. Add a primary contact so sales and service can reach the customer.', btns: ['Add primary contact', 'Fill details with Form assist'] }
+    });
+  });
+  // Contact as it exists in the CRM (D365 › Contacts › Tina Simona)
+  C.push({
+    id: 'C208676', contactId: '013685', type: 'Individual', name: 'Tina Simona', initials: 'TS', av: 'linear-gradient(135deg,#c99a7a,#8a5a3c)',
+    mobile: '+971 50 827 4164', phone2: '—', email: 'Bareera080@gmail.com', emiratesId: '—', city: '—', nationality: 'UAE', language: '—', since: '2026',
+    owner: '6651 Dual Write', showroom: '—', ltv: 'AED 0', lastActivity: 'Ownership transferred · 05 Nov 2026', segment: '', crmOnly: true,
+    vehicles: [], leads: [], opportunities: [{ id: 'OP-2026-2214', topic: 'Tina Simona', stage: 'Qualify', value: '—', probability: '—', close: '—', owner: 'Sales SE' }],
+    testDrives: [], tradeIns: [], proposals: [], quotations: [], salesOrders: [], deals: [], serviceUpcoming: [], servicePast: [], serviceContracts: [], rentals: [],
+    profile: { type: 'Individual', gender: 'Female', marital: 'None', dob: '05/10/2009', occupation: '—', employer: '—', household: '—' },
+    marketing: { consentEmail: true, consentSms: true, consentWhatsapp: true, consentCalls: true, segments: [], lastCampaign: '', preferredChannel: 'Any', nps: '—' },
+    billing: { address: '—', trn: '—', currency: 'AED', terms: '—', method: '—', credit: '—' },
+    timeline: [
+      { icon: 'swap_horiz', kind: 'sales', text: 'Sales Activity Event (Closed) — Transferred ownership to Sales SE from Bareera Khan', time: '05 Nov 2026 · 07:16' },
+      { icon: 'event_available', kind: 'sales', text: 'Sales Activity Event (Active) — Lead Created By SE. Customer confirmed visit for Thursday', time: '05 Nov 2026 · 07:15' },
+      { icon: 'mail', kind: 'sales', text: 'Email from exeed.UAE@al-ghurair.com (Closed) — Proposal requested for Approval: Bareera Khan has submitted a proposal for approval', time: '05 Nov 2026 · 07:15' }
+    ],
+    nba: { title: 'Follow up the proposal approval', desc: 'A proposal for Tina was <strong>sent for approval</strong> and a showroom visit is confirmed for Thursday. Make sure the approved proposal is ready before she arrives.', btns: ['Check approval status', 'Prepare for visit'] }
+  });
+  CRM.C208676 = { contacts: [{ name: 'Tina Simona', role: 'Primary · self', email: 'Bareera080@gmail.com', phone: '+971 50 827 4164' }], address: { street1: '—', street2: '—', street3: '—', city: '—', state: '—', zip: '—', country: 'United Arab Emirates' } };
+  CRM.C080101 = { contacts: [{ name: 'Ahmed Shabeer', role: 'Contact', email: 'New291999@gmail.com', phone: '' }, { name: 'Ahmed Shabeer', role: 'Contact', email: 'New29191@gmail.com', phone: '' }, { name: 'Ahmed Shabeer', role: 'Contact', email: 'New21@gmail.com', phone: '' }] };
+  CRM.C080105 = { contacts: [{ name: 'Testify1 VM1', role: 'Primary contact', email: 'Testify1VM@gamil.com', phone: '' }] };
+
   // Customers without a hand-written form get sensible values from their own data.
   function crm(c) {
     var x = CRM[c.id] || {};
     var addr = (c.billing.address || '').split(',').map(function (t) { return t.trim(); });
     return {
-      accountNumber: x.accountNumber || 'ACC-' + c.id.slice(1), wholesaleCategory: x.wholesaleCategory || (c.type === 'Company' ? 'Corporate' : 'Retail — Individual'),
+      accountNumber: x.accountNumber || (c.crmOnly ? '' : 'ACC-' + c.id.slice(1)), wholesaleCategory: x.wholesaleCategory || (c.crmOnly ? '' : c.type === 'Company' ? 'Corporate' : 'Retail — Individual'),
       phone: c.mobile, fax: x.fax || '—', website: x.website || '—', parentAccount: x.parentAccount || '—', ticker: x.ticker || '—', crNumber: x.crNumber || '—',
       address: x.address || { street1: addr[0] || '—', street2: addr.length > 2 ? addr[1] : '—', street3: '—', city: c.city, state: c.city, zip: '—', country: 'United Arab Emirates' },
-      preferredBusiness: x.preferredBusiness || [{ line: c.vehicles.length ? 'New vehicle sales' : 'Prospect — new vehicle', brand: 'EXEED', showroom: c.showroom, since: c.since }],
+      preferredBusiness: x.preferredBusiness || (c.crmOnly ? [] : null) || [{ line: c.vehicles.length ? 'New vehicle sales' : 'Prospect — new vehicle', brand: 'EXEED', showroom: c.showroom, since: c.since }],
       identifiers: x.identifiers || (c.emiratesId && c.emiratesId !== '—' ? [{ type: 'Emirates ID', number: c.emiratesId, issuer: 'ICP', expiry: '—', verified: 'Pending' }] : []),
       segmentation: x.segmentation || (c.marketing.segments || []).map(function (sg) { return { segment: sg, category: 'Marketing', assigned: '—', source: 'Rule' }; }),
-      contacts: x.contacts || [{ name: c.name, role: 'Primary · self', email: c.email, phone: c.mobile }],
+      contacts: x.contacts || (c.crmOnly ? [] : [{ name: c.name, role: 'Primary · self', email: c.email, phone: c.mobile }]),
       cases: x.cases || []
     };
   }
@@ -297,6 +340,9 @@
   // ── Search ──────────────────────────────────────────────────────────────
   var digits = function (s) { return String(s || '').replace(/\D/g, ''); };
   var low = function (s) { return String(s || '').toLowerCase(); };
+  // Punctuation- and spacing-insensitive forms: "AL-Ghurair", "Al Ghurair" and "ALGHURAIR" all match.
+  var nrm = function (s) { return low(s).replace(/[^a-z0-9@\u0600-\u06ff]+/g, ' ').trim(); };
+  var sq = function (s) { return nrm(s).replace(/ /g, ''); };
 
   // What did the user type? Drives which fields are searched and the "Looks like…" hint.
   function intent(q) {
@@ -362,6 +408,7 @@
         else if (lv.indexOf(lt) === 0) { hit = true; s = 80; }
         else if (lv.split(/[\s—·-]+/).some(function (w) { return w.indexOf(lt) === 0; })) { hit = true; s = 70; }
         else if (lt.length >= 3 && lv.indexOf(lt) > -1) { hit = true; s = 50; }
+        else if (lt.length >= 3 && (nrm(v).indexOf(nrm(t)) > -1 || sq(v).indexOf(sq(t)) > -1)) { hit = true; s = 60; }
         else if (dt.length >= 4 && /Mobile|Phone|Emirates ID/.test(f[0]) && digits(v).replace(/^971/, '0').indexOf(dt.replace(/^971/, '0')) > -1) { hit = true; s = 90; }
         if (hit) { hits.push({ field: f[0], value: v, ctx: f[2] }); score = Math.max(score, s + (f[0] === 'Name' ? 5 : 0)); }
       });
