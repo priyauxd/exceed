@@ -86,7 +86,9 @@
     return s.replace(LTR_RUN, function (m) { return LRI + m + PDI; });
   }
 
-  function skipped(el) { return !el || (el.closest && el.closest(SKIP)); }
+  // The lead name in the record header is editable, but still reads in Arabic script until it is focused.
+  function nameOk(el) { return el && el.matches && el.matches('.dp-name') && document.activeElement !== el; }
+  function skipped(el) { return !el || (el.closest && el.closest(SKIP) && !nameOk(el)); }
 
   function doText(n) {
     var p = n.parentNode;
@@ -140,7 +142,7 @@
     }
     var w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
-        if (n.nodeType !== 1 || !n.matches(SKIP)) return NodeFilter.FILTER_ACCEPT;
+        if (n.nodeType !== 1 || !n.matches(SKIP) || nameOk(n)) return NodeFilter.FILTER_ACCEPT;
         if (n.matches(ICON)) markIcon(n);
         if (!n.matches('script,style,[data-i18n-skip]')) doAttrs(n);
         return NodeFilter.FILTER_REJECT;

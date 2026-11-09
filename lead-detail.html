@@ -2556,6 +2556,7 @@
       var l = leads[selectedIdx];
       if (el.dataset.prop) {
         var prop = el.dataset.prop, val = el.textContent.replace(/\s+/g, ' ').trim();
+        var tn = el.firstChild; if (tn && tn.__ar != null && tn.data === tn.__ar) val = String(tn.__en).replace(/\s+/g, ' ').trim(); // unedited Arabic display name → keep the English record value
         if (prop === 'name' && !val) { el.textContent = l.name; return; }
         l[prop] = val;
         if (prop === 'name') {

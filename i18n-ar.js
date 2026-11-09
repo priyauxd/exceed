@@ -592,7 +592,7 @@
     'Vehicle availability/color': 'توفر المركبة/اللون',
     'Warranty/service clarity': 'وضوح الضمان/الخدمة',
     'Safety proof/reviews': 'إثباتات السلامة/التقييمات',
-    'Product comparison': 'مقارنة الموديلات',
+    'Product comparison': 'مقارنة الطرازات',
     'Trade-in valuation': 'تقييم السيارة المراد استبدالها',
     'Family/decision-maker approval': 'موافقة العائلة/متخذ القرار',
     'Delivery timing': 'موعد التسليم',
@@ -734,7 +734,7 @@
     'Awaiting advance payment': 'بانتظار الدفعة المقدمة',
     'Taken in cash at the showroom — the quotation can be generated now.': 'تم استلام الدفعة المقدمة نقدًا في صالة العرض — يمكنك إنشاء عرض الأسعار الآن.',
     'Not taken in cash — the quotation unlocks once the payment is received in FO.': 'لم يتم الاستلام نقدًا — يُتاح عرض السعر بمجرد استلام الدفعة في FO.',
-    'unlocks once the payment is received in FO. Send a payment link, or switch the toggle to Yes if it was taken in cash.': 'يُتاح بمجرد استلام الدفعة في FO. أرسل رابط الدفع، أو اختر "نعم" إذا تم الاستلام نقدًا.',
+    'unlocks once the payment is received in FO. Send a payment link, or switch the toggle to Yes if it was taken in cash.': 'بمجرد استلام الدفعة في F&O. أرسل رابط الدفع، أو اختر "نعم" إذا تم الاستلام نقدًا.',
     'Advance payment marked as cash — quotation unlocked': 'تم تسجيل الدفعة المقدمة نقدًا — عرض الأسعار متاح الآن',
     'Advance payment not in cash — quotation waits for payment in FO': 'الدفعة المقدمة ليست نقدًا — عرض الأسعار بانتظار الدفع في F&O',
     'Financing': 'تمويل بنكي',
@@ -759,7 +759,7 @@
     'Search location': 'البحث عن موقع تخزين',
     'Users': 'المستخدمون',
     'Search user': 'البحث عن مستخدم',
-    'Sales order pool': 'مجموعة طلب المبيعات',
+    'Sales order pool': 'تصنيف طلب المبيعات',
     'Shipping site': 'موقع الشحن',
     'Shipping warehouse': 'مستودع الشحن',
     'Sales taker': 'مُدخل الطلب',
@@ -2166,7 +2166,7 @@
     'Odometer reading at start (km)': 'قراءة العداد عند البدء (كم)',
     'Send customer handover WhatsApp': 'أرسل رسالة WhatsApp للتسليم',
     'Test Drive Authorization Request': 'طلب تفويض تجربة القيادة',
-    'Advance payment is not in cash —': 'لم يتم سداد الدفعة المقدمة نقدًا —',
+    'Advance payment is not in cash —': 'لم يتم سداد الدفعة المقدمة نقدًا — يُتاح',
     'Add a note to the leadership log…': 'إضافة ملاحظة إلى سجل الإدارة…',
     'Pick a channel to log the update.': 'اختر قناة لتسجيل التحديث.',
     'USP · unique selling propositions': 'USP · نقاط البيع الفريدة',
@@ -2182,7 +2182,7 @@
     'Emirates ID & driving licence — front and back': 'الهوية الإماراتية ورخصة القيادة — الوجهان الأمامي والخلفي',
     'Not in the battlecard library — I won\'t invent its specs': 'غير موجودة في مكتبة بطاقات المقارنة — لن أختلق مواصفاتها',
     'Type a model name, or add one that isn\'t in the library.': 'اكتب اسم طراز، أو أضف طرازًا غير موجود في المكتبة.',
-    'Pool, shipping and ownership carried into the sales order.': 'يتم نقل بيانات المخزون والشحن والملكية إلى طلب المبيعات.',
+    'Pool, shipping and ownership carried into the sales order.': 'يتم نقل بيانات التصنيف والشحن والملكية إلى طلب المبيعات.',
     'Added from the conversation': 'أُضيفت من المحادثة',
     'not in the battlecard library': 'غير موجودة في مكتبة بطاقات المقارنة',
     'Capture the customer\'s trade-in interest, photos and appraisal.': 'سجّل رغبة العميل في استبدال سيارته الحالية، والصور، والتقييم.',
@@ -2776,6 +2776,7 @@
     t = t.replace(/(\d+)\s(د|س|ي)\s(\d+)\s(د|ث|س)(?![\u0600-\u06ff])/g, function (m, a, u1, b, u2) { return a + ' ' + u1 + ' و' + b + ' ' + u2; });
     return t.replace(/(^|[^\d.,:\/])(\d+)\s(دقيقة|دقائق|دقيقتان|دقيقتين|ساعة|ساعات|ساعتان|ساعتين|ثانية|ثوانٍ|ثوان|يومًا|يومان|يومين|يوم|أيام|أسبوعًا|أسبوع|أسابيع|شهرًا|شهر|أشهر|مرات|مرة|نقاط|نقطة|د|س|ث|ي)(?![\u0600-\u06ff])/g,
       function (m, pre, n, u, off, all) {
+        if (n.length > 1 && n.charAt(0) === '0') return m;
         for (var i = 0; i < UNITS.length; i++) if (UNITS[i][0].test(u)) return pre + counted(n, UNITS[i][1], all.slice(0, off) + pre);
         return m;
       }).replace(/و(\d+)/g, 'و$1');
