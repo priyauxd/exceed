@@ -980,7 +980,8 @@
     .pa-con { list-style: none; margin: 0; padding: 0; } .pa-con li { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) 140px; gap: 24px; align-items: center; padding: 14px 0; border-top: 1px solid #e6e8ec; } .pa-con li:first-child { border-top: 0; padding-top: 0; } .pa-con li:last-child { padding-bottom: 0; }
     .pa-con .pa-bar { margin: 6px 0 4px; background: #f0f1f4; } .pa-rem { margin: 0; font-size: 12px; font-weight: 600; color: #374151; } .pa-rem.warn { color: #b45309; } .pa-cst { text-align: end; }
     .pa-cl { min-width: 0; } .pa-cl > div { min-width: 0; flex: 1; }
-    .pa-bar2 { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; } .pa-bar2 .grow { flex: 1; }
+    .pa-bar2 { display: flex; align-items: center; gap: 12px; margin: -8px -20px 8px; padding: 8px 20px; position: sticky; top: var(--idh, 0px); z-index: 15; background: var(--bg); }
+    .pa-bar2.stuck { box-shadow: 0 6px 12px -10px rgba(16,24,40,.35); } .pa-bar2 .grow { flex: 1; }
     .pa-seg { display: inline-flex; gap: 2px; padding: 4px; background: #fff; border: 1px solid #e6e8ec; border-radius: 10px; }
     .pa-seg button { border: 0; background: none; border-radius: 7px; padding: 7px 13px; font: 500 12.5px var(--fontFamilyBase); color: #374151; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
     .pa-seg button:hover { background: #f5f6f8; } .pa-seg button.on { background: #0d0d0e; color: #fff; } .pa-seg button:focus-visible { outline: 2px solid #4a4a50; outline-offset: 1px; }
@@ -1092,6 +1093,54 @@
     .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     @media (max-width: 1200px) { .bf-grid { grid-template-columns: 1fr; } .bf-sec.span2, .bf-sec.span3 { grid-column: auto; } .bf-sum { grid-template-columns: 1fr; } }
     @media (max-width: 640px) { .bf-g2, .bf-ch { grid-template-columns: 1fr; } }
+    .pa-tw { overflow-x: auto; margin: -4px 0 0; }
+    .pa-tb { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    .pa-tb th { text-align: left; font-size: 11px; font-weight: 600; color: #667085; padding: 0 10px 8px; white-space: nowrap; border-bottom: 1px solid #e6e8ec; }
+    .pa-tb td { padding: 10px; border-bottom: 1px solid #eef0f3; vertical-align: middle; color: #344054; }
+    .pa-tb th:first-child, .pa-tb td:first-child { padding-left: 0; }
+    .pa-tb tbody tr { cursor: pointer; } .pa-tb tbody tr:hover td { background: #f9fafb; }
+    .pa-tb tr.dq { opacity: .6; }
+    .pa-tb .nw { white-space: nowrap; }
+    .pa-tb .k-mt { white-space: nowrap; }
+    .pa-tn { display: block; font-weight: 650; color: #0b1220; font-size: 13px; white-space: nowrap; }
+    .pa-ts { display: block; font-size: 11px; color: #667085; margin-top: 2px; white-space: nowrap; }
+    .pa-prob { display: inline-flex; align-items: center; gap: 8px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .pa-tpb { display: block; flex: 0 0 56px; height: 6px; border-radius: 999px; background: #e6e8ec; overflow: hidden; } .pa-tpb i { display: block; height: 100%; border-radius: 999px; background: #6d4ae8; } .pa-tpb.ok i { background: #12805c; }
+    .pa-pg .grow { flex: 1; }
+    .pa-pg { display: flex; align-items: center; gap: 6px; padding-top: 10px; font-size: 12px; color: #667085; margin-top: auto; }
+    .pa-pg button { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 1px solid #e6e8ec; border-radius: 6px; background: #fff; color: #344054; cursor: pointer; padding: 0; }
+    .pa-pg button:disabled { opacity: .4; cursor: default; }
+    .pa-pg button .material-symbols-outlined { font-size: 18px; }
+    .sx { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: start; }
+    .sx-sum { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; padding-right: 24px; border-right: 1px solid #eef0f3; }
+    .sx-list { list-style: none; margin: 0; padding: 0; }
+    .sx-list li { display: grid; grid-template-columns: 32px minmax(0, 1fr) 200px; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid #eef0f3; }
+    .sx-list li:first-child { border-top: 0; padding-top: 0; }
+    .sx-i { width: 32px; height: 32px; border-radius: 8px; background: #f2f4f7; display: inline-flex; align-items: center; justify-content: center; } .sx-i .material-symbols-outlined { font-size: 18px; color: #475467; }
+    .sx-sc { display: flex; align-items: center; gap: 10px; }
+    .sx-m { position: relative; flex: 1; height: 6px; border-radius: 999px; background: #eef0f3; }
+    .sx-m i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: #12805c; } .sx-m i.mid { background: #d97706; } .sx-m i.low { background: #d92d20; }
+    .sx-m em { position: absolute; top: -3px; width: 1.5px; height: 12px; background: #475467; }
+    .sx-sc b { width: 22px; text-align: right; font-variant-numeric: tabular-nums; color: #0b1220; } .sx-sc b.mid { color: #b45309; } .sx-sc b.low { color: #b42318; }
+    .sx-note { margin-top: 12px; }
+    @media (max-width: 900px) { .sx { grid-template-columns: 1fr; } .sx-sum { border-right: 0; padding-right: 0; } }
+    .pl { list-style: none; margin: 0; padding: 0; }
+    .pl-row { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) 110px 160px 250px; gap: 16px; align-items: center; padding: 10px 0; border-top: 1px solid #eef0f3; }
+    .pl-row:first-child { border-top: 0; padding-top: 0; }
+    .pl-img { width: 56px; height: 36px; object-fit: contain; border-radius: 6px; background: #f6f7f9; }
+    .pl-id { display: flex; flex-direction: column; font-size: 12.5px; color: #344054; min-width: 0; }
+    .pl-pr { font-size: 13px; color: #0b1220; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .pl-row .qc-st { justify-self: start; white-space: nowrap; }
+    .pl-best { margin-left: 8px; font-size: 10.5px; font-weight: 600; color: #6d4ae8; background: #f1edff; border-radius: 999px; padding: 2px 8px; vertical-align: 1px; }
+    .pl-act { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
+    .pl-btn { border: 1px solid #0b1220; background: #0b1220; color: #fff; border-radius: 6px; font: 600 12px var(--fontFamilyBase); padding: 6px 10px; cursor: pointer; white-space: nowrap; margin-right: 4px; }
+    .pl-ib { width: 30px; height: 30px; border: 1px solid #e6e8ec; background: #fff; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: #475467; padding: 0; }
+    .pl-ib:hover { background: #f6f7f9; } .pl-ib .material-symbols-outlined { font-size: 17px; }
+    .pa-tpb.blue i { background: #2563eb; } .pa-tpb.teal i { background: #0e9384; } .pa-tpb.red i { background: #d92d20; }
+    .vt-var { font-weight: 400; color: #667085; }
+    .vt-plate { display: inline-block; font: 600 11.5px ui-monospace, SFMono-Regular, Menlo, monospace; border: 1.5px solid #0b1220; border-radius: 4px; padding: 1px 6px; color: #0b1220; white-space: nowrap; }
+    .pa-ts.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; }
+    .vt-st.red { color: #b42318; font-weight: 650; }
     @media (max-width: 1100px) { .filters { display: none; } .best-r { display: none; } .hero-cols { grid-template-columns: 1fr; } .dp-formhead { display: none; } }
   </style>
 </head>
@@ -1744,10 +1793,10 @@
       var gs = '<div class="grp-h" id="grpSales"><span class="ico"><span class="material-symbols-outlined">trending_up</span></span>Sales 360°<span class="sub">Leads, opportunities, deals, test drives, trade-ins, proposals, quotations and orders</span></div>';
       var gv = '<div class="grp-h svc" id="grpService"><span class="ico"><span class="material-symbols-outlined">build</span></span>Service 360°<span class="sub">' + (KIND === 'contact' ? 'Device registrations' : 'Devices') + ', appointments, contracts and cases</span></div>';
       if (vis) {
-        var f = state.c360f || 'all', V = [['all', 'All'], ['cx', 'Overview &amp; CX'], ['sales', 'Sales 360°'], ['service', 'Service 360°']];
+        var f = state.c360f === 'cx' ? 'all' : state.c360f || 'all', V = [['all', 'All'], ['sales', 'Sales 360°'], ['service', 'Service 360°']];
         var bar = '<div class="pa-bar2"><div class="pa-seg" role="tablist" aria-label="Customer 360 view">' + V.map(function (v) { return '<button role="tab" aria-selected="' + (f === v[0]) + '" class="' + (f === v[0] ? 'on' : '') + '" onclick="state.c360f=\'' + v[0] + '\';render()">' + v[1] + '</button>'; }).join('') + '</div>' +
           '<span class="grow"></span><span class="pa-upd">Updated 2 min ago</span></div>';
-        return '<div class="pa">' + bar + '<div class="pa-v">' + (f === 'all' || f === 'cx' ? accInsights(c, A) : '') + (f === 'all' || f === 'sales' ? gs + accSalesVisual(c, A) : '') + (f === 'all' || f === 'service' ? gv + accServiceVisual(c, A) : '') + '</div></div>';
+        return '<div class="pa">' + bar + '<div class="pa-v">' + (f === 'all' || f === 'sales' ? gs + accSalesVisual(c, A) : '') + (f === 'all' || f === 'service' ? gv + accServiceVisual(c, A) : '') + '</div></div>';
       }
       return nav + gs + (vis ? salesVisual(c, A) : salesTab(c, A)) + gv + (vis ? serviceVisual(c, A) : serviceTab(c, A));
     }
@@ -1787,6 +1836,32 @@
     var rtag = function (rt) { var k = rt === 'Hot' ? 'hot' : rt === 'Warm' ? 'warm' : 'cold'; return '<span class="rt ' + k + '"><i></i>' + esc(rt) + '</span>'; };
     var stag = function (v, ok) { return '<span class="sto' + (ok ? ' ok' : '') + '"><span class="material-symbols-outlined">' + (ok ? 'check_circle' : 'radio_button_checked') + '</span>' + esc(v) + '</span>'; };
 
+    /* Customer 360 tab bar sticks just under the sticky record header */
+    document.addEventListener('scroll', function (e) {
+      var bar = document.querySelector('.pa-bar2'); if (!bar) return;
+      var id = document.querySelector('.dp-idcard'), h = id ? id.offsetHeight : 0;
+      document.documentElement.style.setProperty('--idh', h + 'px');
+      var sc = e.target.getBoundingClientRect ? e.target.getBoundingClientRect().top : 0;
+      bar.classList.toggle('stuck', Math.abs(bar.getBoundingClientRect().top - sc - h) < 2);
+    }, true);
+    /* Paginated table for the Customer 360 Leads / Opportunities widgets */
+    var PA_PAGE = 5;
+    function paTable(cols, rows) {
+      var n = rows.length, pages = Math.max(1, Math.ceil(n / PA_PAGE));
+      return '<div class="pa-tw"><table class="pa-tb"><thead><tr>' + cols.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        rows.map(function (r, k) { return k >= PA_PAGE ? r.replace('<tr', '<tr hidden') : r; }).join('') + '</tbody></table></div>' +
+        '<div class="pa-pg" data-p="0" data-n="' + n + '"><span class="pa-pgi">' + (n ? 1 : 0) + '–' + Math.min(n, PA_PAGE) + ' of ' + n + '</span><span class="grow"></span>' +
+        '<button aria-label="Previous page" disabled onclick="paPage(this,-1)"><span class="material-symbols-outlined">chevron_left</span></button><span class="pa-pgn">Page 1 of ' + pages + '</span>' +
+        '<button aria-label="Next page"' + (pages > 1 ? '' : ' disabled') + ' onclick="paPage(this,1)"><span class="material-symbols-outlined">chevron_right</span></button></div>';
+    }
+    function paPage(btn, dir) {
+      var pg = btn.closest('.pa-pg'), n = +pg.dataset.n, pages = Math.max(1, Math.ceil(n / PA_PAGE)), p = Math.max(0, Math.min(pages - 1, +pg.dataset.p + dir));
+      pg.dataset.p = p;
+      pg.parentNode.querySelectorAll('.pa-tb tbody tr').forEach(function (tr, k) { tr.hidden = k < p * PA_PAGE || k >= (p + 1) * PA_PAGE; });
+      pg.querySelector('.pa-pgi').textContent = (p * PA_PAGE + 1) + '–' + Math.min(n, (p + 1) * PA_PAGE) + ' of ' + n;
+      pg.querySelector('.pa-pgn').textContent = 'Page ' + (p + 1) + ' of ' + pages;
+      var b = pg.querySelectorAll('button'); b[0].disabled = p === 0; b[1].disabled = p >= pages - 1;
+    }
     function salesVisual(c, A) {
       var out = '', empty = [];
       // Journey line
@@ -1806,24 +1881,19 @@
 
       // Leads — rating-edged enquiry card
       var pair = '';
-      if (c.leads.length) pair += vcard('secLead', 'leaderboard', 'Leads', c.leads.length, 'New Lead', '<div class="kg">' + c.leads.map(function (l) {
+      if (c.leads.length) pair += vcard('secLead', 'leaderboard', 'Leads', c.leads.length, 'New Lead', paTable(['Lead', 'Source', 'Created', 'Rating', 'Owner'], c.leads.map(function (l) {
         var tone = l.rating === 'Hot' ? 'hot' : l.rating === 'Warm' ? 'warm' : 'cold', model = (l.topic.match(/EXEED \w+/) || ['Enquiry'])[0];
-        var short = l.topic.replace(/^EXEED \w+\s*[—-]\s*/, ''); short = short.charAt(0).toUpperCase() + short.slice(1);
         var src = /whatsapp/i.test(l.source) ? 'chat_bubble' : /web|config/i.test(l.source) ? 'language' : /walk/i.test(l.source) ? 'directions_walk' : /instagram|social/i.test(l.source) ? 'photo_camera' : /corporate/i.test(l.source) ? 'business_center' : 'input';
-        return '<article class="k-card k-lead2' + (/Disqualified/.test(l.status) ? ' dq' : '') + '"><header><div class="k-hd"><div class="k-title k-t1">' + esc(model) + '</div>' + eyebrow(l.id) + '</div><span class="k-pill ' + tone + '"><i></i>' + esc(l.rating) + '</span></header>' +
-          '<div class="k-sub" title="' + esc(l.topic) + '">' + esc(short) + '</div>' +
-          '<div class="k-meta">' + meta(src, esc(l.source)) + meta('calendar_today', esc(l.created)) + '<span class="k-stx">' + esc(l.status) + '</span></div>' +
-          '<footer>' + ownerChip(l.owner) + '<button class="k-act" onclick="toast(\'Opens the lead\')">Open lead<span class="material-symbols-outlined">open_in_new</span></button></footer></article>';
-      }).join('') + '</div>'); else empty.push(['secLead', 'New Lead']);
-      // Opportunities — value card with probability ring
-      if (c.opportunities.length) pair += vcard('secOpp', 'trending_up', 'Opportunities', c.opportunities.length, 'New Opportunity', '<div class="kg">' + c.opportunities.map(function (o) {
-        var won = o.stage === 'Won', d = pd(o.close), p = parseInt(o.probability, 10) || 0;
-        var num = String(o.value).replace(/^AED\s?/, '');
-        return '<article class="k-card k-opp2"><header><div class="k-hd"><div class="k-title k-t1" title="' + esc(o.topic) + '">' + esc((o.topic.match(/^(\d+ × )?EXEED \w+/) || [o.topic])[0]) + '</div>' + eyebrow(o.id) + '</div><span class="k-pill ' + (won ? 'won' : 'open') + '">' + esc(o.stage) + '</span></header>' +
-          '<div class="k-opp-row">' + gauge(won ? 100 : p, won ? 'green' : 'azure') + '<div class="k-min"><div class="k-fig2">' + (/\d/.test(o.value) ? (/^AED/.test(o.value) ? '<small>AED</small>' : '') + esc(num) : '<span class="k-nil">Value not set</span>') + '</div><div class="k-sub" title="' + esc(o.topic) + '">' + esc(/EXEED \w+/.test(o.topic) ? o.topic.replace(/^(\d+ × )?EXEED \w+\s*/, '') : '') + '</div></div></div>' +
-          '<div class="k-meta">' + meta('flag', won ? 'Closed ' + esc(o.close) : !/\d/.test(o.close) ? 'Close date not set' : 'Close ' + esc(o.close) + (d ? '<span class="k-due"> · ' + rel(d) + '</span>' : '')) + '</div>' +
-          '<footer>' + ownerChip(o.owner) + '<span class="k-ft">' + (won ? 'Closed won' : (/\d/.test(o.probability) ? esc(o.probability) + ' likely' : 'Not scored')) + '</span></footer></article>';
-      }).join('') + '</div>'); else empty.push(['secOpp', 'New Opportunity']);
+        return '<tr class="' + (/Disqualified/.test(l.status) ? 'dq' : '') + '" onclick="toast(\'Opens the lead\')" title="' + esc(l.topic) + '"><td><span class="pa-tn">' + esc(model) + '</span><span class="pa-ts">' + esc(l.id) + ' · ' + esc(l.status) + '</span></td>' +
+          '<td>' + meta(src, esc(l.source)) + '</td><td class="nw">' + esc(l.created) + '</td><td><span class="k-pill ' + tone + '"><i></i>' + esc(l.rating) + '</span></td><td>' + ownerChip(l.owner) + '</td></tr>';
+      }))); else empty.push(['secLead', 'New Lead']);
+      if (c.opportunities.length) pair += vcard('secOpp', 'trending_up', 'Opportunities', c.opportunities.length, 'New Opportunity', paTable(['Opportunity', 'Value', 'Probability', 'Close', 'Stage'], c.opportunities.map(function (o) {
+        var won = o.stage === 'Won', p = won ? 100 : parseInt(o.probability, 10) || 0, scored = won || /\d/.test(o.probability);
+        return '<tr onclick="toast(\'Opens the opportunity\')" title="' + esc(o.topic) + '"><td><span class="pa-tn">' + esc((o.topic.match(/^(\d+ × )?EXEED \w+/) || [o.topic])[0]) + '</span><span class="pa-ts">' + esc(o.id) + '</span></td>' +
+          '<td class="nw"><b>' + (/\d/.test(o.value) ? esc(o.value) : '<span class="k-nil">Not set</span>') + '</b></td>' +
+          '<td>' + (scored ? '<span class="pa-prob"><span class="pa-tpb' + (won ? ' ok' : '') + '"><i style="width:' + p + '%"></i></span>' + p + '%</span>' : '<span class="k-nil">Not scored</span>') + '</td>' +
+          '<td class="nw">' + (/\d/.test(o.close) ? esc(o.close) : '<span class="k-nil">Not set</span>') + '</td><td><span class="k-pill ' + (won ? 'won' : 'open') + '">' + esc(o.stage) + '</span></td></tr>';
+      }))); else empty.push(['secOpp', 'New Opportunity']);
       if (pair) out += '<div class="pair2">' + pair + '</div>';
 
       // Test drives — ticket with date stub; Trade-ins — valuation card
@@ -1884,16 +1954,18 @@
     function serviceVisual(c, A) {
       var out = '', empty = [];
       // Vehicles — garage card
-      if (c.vehicles.length) out += vcard('secVeh', 'directions_car', 'Vehicles &amp; fleet', c.vehicles.length, 'New Device Registration', '<span id="secDev" class="anchor"></span><div class="kg">' + c.vehicles.map(function (v, k) {
+      if (c.vehicles.length) out += vcard('secVeh', 'directions_car', 'Vehicles &amp; fleet', c.vehicles.length, 'New Device Registration', '<span id="secDev" class="anchor"></span><div class="pa-tw"><table class="pa-tb vt"><thead><tr><th>Vehicle</th><th>Plate · VIN</th><th>Odometer</th><th>Next service</th><th>Warranty</th><th>Status</th></tr></thead><tbody>' + c.vehicles.map(function (v, k) {
         var km = parseInt(String(v.odo).replace(/\D/g, ''), 10) || 0, toNext = 10000 - (km % 10000), svcPct = (km % 10000) / 100;
-        var reg = pd(v.reg), wEnd = pd('01 ' + v.warranty), wPct = reg && wEnd ? (NOW - reg) / (wEnd - reg) * 100 : 0;
-        var due = /Overdue/.test(v.nextService) ? 'red' : v.status === 'Service due' ? 'amber' : '';
-        return '<article class="k-garage"><div class="k-garage-img">' + pill(v.status) + '<span class="k-plate">' + esc(v.plate) + '</span><img src="' + v.img + '" alt="" onerror="this.style.display=\'none\'"></div>' +
-          '<div class="k-garage-b"><div class="k-title">' + esc(v.model) + ' <span class="k-light">' + esc(v.variant) + '</span></div>' + eyebrow(v.year + ' · ' + esc(v.color)) +
-          '<div class="k-gauges"><div class="k-gauge">' + ring(due === 'red' ? 100 : svcPct, due || 'blue', due === 'red' ? '!' : null) + '<div><span>Service</span><b class="' + due + '">' + (due === 'red' ? 'Overdue' : toNext.toLocaleString('en-US') + ' km') + '</b><em>' + esc(v.nextService.split(' · ')[0]) + '</em></div></div>' +
-          '<div class="k-gauge">' + ring(Math.max(0, 100 - wPct), 100 - wPct <= 15 ? 'red' : 'teal') + '<div><span>Warranty</span><b>' + esc(v.warranty) + '</b><em>' + Math.max(0, 100 - Math.round(wPct)) + '% left</em></div></div></div>' +
-          '<div class="k-rows sm"><div><span>VIN</span><b class="mono">' + esc(v.vin) + '</b></div><div><span>Odometer</span><b>' + esc(v.odo) + '</b></div><div><span>Role</span><b>' + esc((A.devices[k] || {}).role || '—') + '</b></div></div></div></article>';
-      }).join('') + '</div>', true); else empty.push(['secVeh', 'New Device Registration'], ['secDev', 'Register vehicle']);
+        var reg = pd(v.reg), wEnd = pd('01 ' + v.warranty), wPct = reg && wEnd ? (NOW - reg) / (wEnd - reg) * 100 : 0, wLeft = Math.max(0, 100 - Math.round(wPct));
+        var over = /Overdue/.test(v.nextService), role = (A.devices[k] || {}).role;
+        var mb = function (pct, cls) { return '<span class="pa-tpb ' + cls + '"><i style="width:' + Math.max(0, Math.min(100, pct)) + '%"></i></span>'; };
+        return '<tr onclick="toast(\'Opens the device registration\')"><td><span class="pa-tn">' + esc(v.model) + ' <span class="vt-var">' + esc(v.variant) + '</span></span><span class="pa-ts">' + esc(v.year + ' · ' + v.color + (role ? ' · ' + role : '')) + '</span></td>' +
+          '<td><span class="vt-plate">' + esc(v.plate) + '</span><span class="pa-ts mono">' + esc(v.vin) + '</span></td>' +
+          '<td class="nw">' + esc(v.odo) + '</td>' +
+          '<td>' + (over ? '<span class="vt-st red">Overdue</span>' : '<span class="pa-prob">' + mb(svcPct, 'blue') + toNext.toLocaleString('en-US') + ' km</span>') + '<span class="pa-ts">' + esc(over ? 'Book a visit' : v.nextService.split(' · ')[0]) + '</span></td>' +
+          '<td><span class="pa-prob">' + mb(wLeft, wLeft <= 15 ? 'red' : 'teal') + esc(v.warranty) + '</span><span class="pa-ts">' + wLeft + '% left</span></td>' +
+          '<td>' + pill(v.status) + '</td></tr>';
+      }).join('') + '</tbody></table></div>', true); else empty.push(['secVeh', 'New Device Registration'], ['secDev', 'Register vehicle']);
       // Appointments — timeline
       var appts = A.upcoming.map(function (a) { return { up: true, d: pd(a.start), title: a.name, sub: a.number + ' · ' + a.device, st: a.status, extra: (c.serviceUpcoming.filter(function (x) { return x.id === a.number; })[0] || {}).workshop, amt: '' }; })
         .concat(c.servicePast.map(function (a) { return { up: false, d: pd(a.date), title: a.type, sub: a.id + ' · ' + a.vehicle, st: a.status, extra: a.workshop + ' · CSAT ' + a.csat, amt: a.amount }; }));
@@ -2028,6 +2100,25 @@
       return vcard(id, icon, title, 0, newLabel, (anchors || '') + '<div class="pa-empty"><span class="pa-empty-i"><span class="material-symbols-outlined">' + icon + '</span></span><p class="pa-empty-t">' + msg + '</p><p class="pa-empty-s">' + sub + '</p>' +
         (newLabel ? '<button class="pa-empty-b" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span>' + newLabel + '</button>' : '') + '</div>', svc);
     }
+    /* Sales experience — feedback from handovers and test drives only */
+    function salesExperience(c) {
+      var fb = [];
+      c.deals.forEach(function (d) { var v = csatNum(d.csat); if (v != null) fb.push({ d: pd(d.delivered), s: v, what: d.vehicle, kind: 'Handover survey', icon: 'key' }); });
+      c.testDrives.forEach(function (t) { if (/very positive/i.test(t.outcome || '')) fb.push({ d: pd(t.date), s: 10, what: t.model, kind: 'Test drive feedback', icon: 'directions_car' }); });
+      fb.sort(function (a, b) { return (b.d || 0) - (a.d || 0); });
+      if (!fb.length) return paEmpty('secSX', 'sentiment_satisfied', 'Sales experience', '', 'No sales feedback yet', 'Scores arrive after test drives and vehicle handovers.');
+      var all = avg(fb.map(function (x) { return x.s; })), vs = all - DEALER_AVG, nps = (c.marketing || {}).nps || '';
+      var pct = function (v) { return Math.max(0, Math.min(100, v * 10)); };
+      var tone = function (v) { return v >= 9 ? 'ok' : v >= 7 ? 'mid' : 'low'; };
+      return vcard('secSX', 'sentiment_satisfied', 'Sales experience', fb.length, '',
+        '<div class="sx"><div class="sx-sum"><p class="pa-k">Average score</p><p class="pa-big">' + all.toFixed(1) + '<small class="r">/ 10</small></p>' +
+          '<p class="pa-s"><span class="' + (vs >= 0 ? 'pa-up' : 'pa-dn') + '">' + (vs >= 0 ? '+' : '−') + Math.abs(vs).toFixed(1) + '</span> vs dealer avg ' + DEALER_AVG + '</p>' +
+          (nps && nps !== '—' ? '<span class="pa-nps">NPS ' + esc(String(nps).replace(/\s*\((.*)\)/, ' · $1')) + '</span>' : '') + '</div>' +
+        '<ul class="sx-list">' + fb.map(function (x) {
+          return '<li><span class="sx-i"><span class="material-symbols-outlined">' + x.icon + '</span></span><div class="k-min"><span class="pa-tn">' + esc(x.what) + '</span><span class="pa-ts">' + x.kind + (x.d ? ' · ' + fmtD(x.d) : '') + '</span></div>' +
+            '<div class="sx-sc"><span class="sx-m"><i class="' + tone(x.s) + '" style="width:' + pct(x.s) + '%"></i><em style="left:' + pct(DEALER_AVG) + '%"></em></span><b class="' + tone(x.s) + '">' + x.s + '</b></div></li>';
+        }).join('') + '</ul></div><p class="pa-xs sx-note">Tick marks the dealer average · service and call-centre feedback is under Service 360°</p>');
+    }
     function accSalesVisual(c, A) {
       var full = salesVisual(c, A), tmp = document.createElement('div'); tmp.innerHTML = full;
       var take = function (id) { var el = tmp.querySelector('#' + id + '.vsec'); return el ? el.outerHTML : ''; };
@@ -2055,6 +2146,7 @@
       }).join('')); else pair += paEmpty('secTI', 'swap_horiz', 'Trade-ins', 'New Trade In', 'No trade-ins yet', 'Appraisals and offers for the customer’s current car.');
       out += '<div class="pair2">' + pair + '</div>';
       // Proposals & quotations — unchanged (our product cards)
+      out += salesExperience(c);
       // Proposals & quotations — lead-page proposal cards
       if (c.proposals.length || c.quotations.length) {
         var drafts = c.proposals.filter(function (x) { return /Draft/.test(x.status); });
@@ -2062,13 +2154,15 @@
         var split = function (m) { var mm = /^(EXEED \w+)\s*(.*)$/.exec(m || ''); return mm ? [mm[1], mm[2]] : [m, '']; };
         var acts = '<div class="qc-share"><button class="qc-sbtn" onclick="toast(\'Opens the proposal editor\')"><span class="material-symbols-outlined">edit</span>Edit</button><button class="qc-sbtn" onclick="toast(\'Proposal PDF downloaded\')"><span class="material-symbols-outlined">download</span>Download</button><button class="qc-sbtn" onclick="toast(\'Proposal emailed to the customer\')"><span class="material-symbols-outlined">mail</span>Email</button></div>';
         var qcard = function (o) {
-          return '<div class="qcard' + (o.quote ? ' isquote' : '') + (o.best ? ' best' : '') + '">' + (o.best ? '<span class="qc-best">Best fit</span>' : '') +
-            (o.quote ? '<span class="qc-badge"><span class="material-symbols-outlined">verified</span>Quotation</span><span class="qc-tick"><span class="material-symbols-outlined">check</span></span>' : '<label class="qc-check"><input type="checkbox" aria-label="Select ' + esc(o.id) + '"' + (o.done ? ' disabled' : '') + '></label>') +
-            '<div class="qc-photo"><img src="' + o.img + '" alt=""></div><div class="qc-body">' +
-            '<div class="qc-draft"><span class="qc-model">' + esc(o.m[0]) + '</span><span class="qc-st ' + o.stc + '">' + esc(o.st) + '</span></div>' +
-            '<div class="qc-sub">' + esc([o.m[1], o.color].filter(Boolean).join(' · ')) + '</div>' +
-            '<div class="qc-price">AED ' + esc(String(o.price).replace(/^AED\s?/, '')) + '</div><div class="qc-meta"><span class="qc-vin">' + esc(o.label) + ' · ' + esc(o.id) + ' · ' + esc(o.date) + '</span></div>' +
-            (o.chips.length ? '<div class="qc-chips">' + o.chips.map(function (a) { return '<span class="qc-chip">' + esc(a) + '</span>'; }).join('') + '</div>' : '') + acts + o.cta + '</div></div>';
+          var act = o.st === 'Draft' ? ['send', 'Submit for approval', 'Sent to the sales manager for approval'] : o.st === 'Approved quote' ? ['send', 'Send to customer', 'Proposal sent to the customer'] : null;
+          var ib = function (ic, lb, t) { return '<button class="pl-ib" aria-label="' + lb + '" title="' + lb + '" onclick="event.stopPropagation();toast(\'' + t + '\')"><span class="material-symbols-outlined">' + ic + '</span></button>'; };
+          return '<li class="pl-row' + (o.quote ? ' q' : '') + '">' +
+            '<div class="k-min"><span class="pa-tn">' + esc(o.m[0]) + (o.best ? '<span class="pl-best">Best fit</span>' : '') + '</span><span class="pa-ts">' + esc([o.m[1], o.color].filter(Boolean).join(' · ') || '—') + '</span></div>' +
+            '<div class="pl-id"><span>' + esc(o.label) + '</span><span class="pa-ts">' + esc(o.id) + ' · ' + esc(o.date) + '</span></div>' +
+            '<b class="pl-pr">AED ' + esc(String(o.price).replace(/^AED\s?/, '')) + '</b>' +
+            '<span class="qc-st ' + o.stc + '">' + esc(o.st) + '</span>' +
+            '<div class="pl-act">' + (act ? '<button class="pl-btn" onclick="toast(\'' + act[2] + '\')">' + act[1] + '</button>' : '') +
+              ib('edit', 'Edit', 'Opens the proposal editor') + ib('download', 'Download', 'Proposal PDF downloaded') + ib('mail', 'Email', 'Proposal emailed to the customer') + '</div></li>';
         };
         var cards = c.proposals.map(function (x) {
           var draft = /Draft/.test(x.status), conv = /quote/i.test(x.status);
@@ -2084,7 +2178,7 @@
               : ok ? '<span class="qc-status ok"><span class="material-symbols-outlined">verified_user</span> Approved by manager</span><button class="qc-cta send" onclick="toast(\'Proposal sent to the customer\')"><span class="material-symbols-outlined">send</span> Send Proposal to customer</button>'
               : '<span class="qc-status wait"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval</span>') + '</div>' });
         }));
-        out += vcard('secProp', 'request_page', 'Proposals &amp; quotations', c.proposals.length + c.quotations.length, 'New Proposal', '<span id="secQuote" class="anchor"></span><div class="pa-qg">' + cards.join('') + '</div>');
+        out += vcard('secProp', 'request_page', 'Proposals &amp; quotations', c.proposals.length + c.quotations.length, 'New Proposal', '<span id="secQuote" class="anchor"></span><ul class="pl">' + cards.join('') + '</ul>');
       } else out += paEmpty('secProp', 'request_page', 'Proposals &amp; quotations', 'New Proposal', 'No proposals yet', 'Vehicle proposals and approved quotations will show here.', false, '<span id="secQuote" class="anchor"></span>');
       // Sales order (2/3) + Deals delivered (1/3)
       var so = take('secSO'), dl = '';
