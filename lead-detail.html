@@ -1218,6 +1218,21 @@
     .conf-cta.locked { cursor:not-allowed; color:var(--ink-muted); background:var(--bg); border-style:dashed; }
     .conf-cta.locked:hover { border-color:var(--border); color:var(--ink-muted); background:var(--bg); }
     .conf-cta.locked .material-symbols-outlined { color:var(--ink-muted); }
+    .zs-tw { border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+    .zs-tb { width:100%; border-collapse:collapse; font-size:12px; }
+    .zs-tb th { text-align:start; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.03em; color:#667085; padding:8px 7px; line-height:1.25; border-bottom:1px solid var(--border); background:#fafbfc; }
+    .zs-tb th:first-child { border-top-left-radius:10px; } .zs-tb th:last-child { border-top-right-radius:10px; }
+    .zs-tb td { padding:9px 7px; border-bottom:1px solid #eef0f3; vertical-align:middle; color:#1f2937; }
+    .zs-tb tr:last-child td { border-bottom:0; }
+    .zs-tb .nw { white-space:nowrap; } .zs-tb .r { text-align:end; }
+    .zs-tn { display:block; font-weight:600; font-size:12.5px; white-space:nowrap; }
+    .zs-tb th:first-child, .zs-tb td:first-child { padding-inline-start:12px; } .zs-tb th:last-child, .zs-tb td:last-child { padding-inline-end:10px; }
+    .zs-retry { border:0; background:none; cursor:pointer; color:#a15c00; padding:0 0 0 4px; display:inline-flex; vertical-align:middle; } .zs-retry .material-symbols-outlined { font-size:16px; } .zs-ts { display:block; font-size:11px; color:#667085; margin-top:1px; }
+    .zs-yes { color:#0e7a3e; font-weight:600; } .zs-no { color:#667085; }
+    .zs-tb .zs-rt summary { padding:4px 4px; font-size:11.5px; gap:0; }
+    .zs-acts { display:inline-flex; align-items:center; gap:6px; justify-content:flex-end; white-space:nowrap; }
+    .zs-sign { display:inline-flex; align-items:center; gap:4px; border:1px solid #1f7a55; background:#fff; color:#1f7a55; border-radius:6px; padding:4px 7px; font:600 11.5px inherit; cursor:pointer; white-space:nowrap; } .zs-sign:hover { background:#e8f3ee; } .zs-sign .material-symbols-outlined { font-size:15px; }
+    .zs-tb .zs-link { margin-inline-start:6px; font-size:11.5px; }
     .zs-sec { margin-top:14px; display:flex; flex-direction:column; gap:8px; }
     .zs-sec .conf-lbl { margin:0; }
     .zs-doc { display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:inherit; text-decoration:none; cursor:pointer; }
@@ -1226,7 +1241,8 @@
     .zs-doc-ic .material-symbols-outlined { font-size:20px; }
     .zs-doc-t { display:flex; flex-direction:column; min-width:0; flex:1; } .zs-doc-t b { font-size:13px; } .zs-doc-t span { font-size:11.5px; color:var(--muted, #667085); }
     .zs-doc-dl { color:#475467; font-size:20px; }
-    .zs-h { display:flex; align-items:center; justify-content:space-between; } .zs-n { font-size:11.5px; color:#667085; }
+    .zs-h { display:flex; align-items:center; justify-content:space-between; gap:8px; } .zs-n { font-size:11.5px; color:#667085; text-transform:none; letter-spacing:0; font-weight:500; }
+    .zs-send { display:inline-flex; align-items:center; gap:5px; border:1px solid #1f7a55; background:#1f7a55; color:#fff; border-radius:6px; padding:5px 10px; font:600 12px inherit; cursor:pointer; } .zs-send:hover { background:#196847; } .zs-send .material-symbols-outlined { font-size:16px; }
     .zs-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
     .zs-row { border:1px solid var(--border); border-radius:10px; background:var(--surface); padding:10px 12px; display:flex; flex-direction:column; gap:8px; }
     .zs-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
@@ -4723,9 +4739,9 @@
         (canQuote ? '' :
           '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span> Advance payment is not in cash — <strong>Generate quotation</strong> unlocks once the payment is received in FO. Send a payment link, or switch the toggle to Yes if it was taken in cash.</div>') +
         paBlockHtml(l) +
-        confOrderBlock(l, p) +
         docBlockHtml() +
         zohoHistoryHtml(l) +
+        confOrderBlock(l, p) +
       '</div>';
     }
     // Sales-order fulfilment fields — collapsible so the card stays compact.
@@ -5086,7 +5102,7 @@
     }
 
     // Duty of care — a fixed document the customer receives; clicking the row downloads it.
-    var DOC_DUTY_URL = 'duty-of-care-report.pdf', DOC_DUTY_NAME = 'Duty Of Care Report.pdf';
+    var DOC_DUTY_URL = 'duty-of-care-report.pdf', DOC_DUTY_NAME = 'Duty Of Care Report - OutPut document.pdf';
     function docBlockHtml(){
       return '<div class="zs-sec">' +
         '<div class="conf-lbl">Duty of care</div>' +
@@ -5112,29 +5128,79 @@
     function zsToday(){ return new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }); }
     function zohoHistoryHtml(l){
       var docs = zsDocs(l);
+      var SY_SHORT = { synced:'Synced', pending:'Pending', failed:'Failed', na:'Not synced' };
       var rows = docs.map(function(d, i){
         var st = ZS_ST[d.st], sy = ZS_SYNC[d.sync];
-        return '<li class="zs-row">' +
-          '<div class="zs-top"><span class="zs-name"><span class="material-symbols-outlined">description</span>' + dpEsc(d.name) + '</span>' +
-            '<span class="zs-chip ' + st[1] + '"><span class="material-symbols-outlined">' + st[2] + '</span>' + st[0] + '</span></div>' +
-          '<div class="zs-grid">' +
-            '<div><span class="conf-lbl">Generated</span><b>' + d.gen + '</b></div>' +
-            '<div><span class="conf-lbl">Customer signed</span><b class="' + (d.signed ? 'ok' : '') + '">' + (d.signed ? 'Yes · ' + d.signed : 'No') + '</b></div>' +
-            '<div class="zs-span"><span class="conf-lbl">F&amp;O sync</span><span class="zs-sync ' + sy[1] + '"><span class="material-symbols-outlined">' + sy[2] + '</span>' + sy[0] + '</span>' +
-              (d.sync === 'failed' || d.sync === 'pending' ? '<button class="zs-link" onclick="zsSync(' + i + ')">Retry sync</button>' : '') + '</div>' +
-          '</div>' +
-          '<div class="zs-foot"><span class="zs-last">Last sent by ' + d.via + '</span>' +
-            '<details class="zs-rt"><summary><span class="material-symbols-outlined">forward_to_inbox</span>Re-send<span class="material-symbols-outlined">expand_more</span></summary>' +
-              '<div class="zs-menu">' + [['SMS','sms'],['WhatsApp','chat'],['Email','mail'],['All','all_inbox']].map(function(c){
-                return '<button onclick="zsResend(' + i + ',\'' + c[0] + '\')"><span class="material-symbols-outlined">' + c[1] + '</span>' + (c[0] === 'All' ? 'All channels' : c[0]) + '</button>';
-              }).join('') + '</div></details>' +
-          '</div>' +
-        '</li>';
+        return '<tr>' +
+          '<td><span class="zs-tn">' + dpEsc(d.name) + '</span><span class="zs-ts">Sent by ' + dpEsc(d.via) + '</span></td>' +
+          '<td class="nw">' + d.gen + '</td>' +
+          '<td class="nw">' + (d.signed ? '<span class="zs-yes">Yes</span><span class="zs-ts">' + d.signed + '</span>' : '<span class="zs-no">No</span>') + '</td>' +
+          '<td><span class="zs-chip ' + st[1] + '"><span class="material-symbols-outlined">' + st[2] + '</span>' + st[0] + '</span></td>' +
+          '<td class="nw"><span class="zs-sync ' + sy[1] + '" title="' + sy[0] + '"><span class="material-symbols-outlined">' + sy[2] + '</span>' + SY_SHORT[d.sync] + '</span>' +
+            (d.sync === 'failed' || d.sync === 'pending' ? '<button class="zs-retry" onclick="zsSync(' + i + ')" title="Retry sync to F&amp;O" aria-label="Retry sync to F&amp;O"><span class="material-symbols-outlined">refresh</span></button>' : '') + '</td>' +
+          '<td class="r"><div class="zs-acts">' + (d.st !== 'signed' ? '<button class="zs-sign" onclick="zsSignNow(' + i + ')" title="Customer is in the showroom — sign in person on this device"><span class="material-symbols-outlined">stylus_note</span>Sign now</button>' : '') +
+            '<details class="zs-rt"><summary title="Re-send by SMS, WhatsApp or Email" aria-label="Re-send ' + dpEsc(d.name) + '"><span class="material-symbols-outlined">forward_to_inbox</span><span class="material-symbols-outlined">expand_more</span></summary>' +
+            '<div class="zs-menu">' + [['SMS','sms'],['WhatsApp','chat'],['Email','mail'],['All','all_inbox']].map(function(c){
+              return '<button onclick="zsResend(' + i + ',\'' + c[0] + '\')"><span class="material-symbols-outlined">' + c[1] + '</span>' + (c[0] === 'All' ? 'All channels' : c[0]) + '</button>';
+            }).join('') + '</div></details></div></td>' +
+        '</tr>';
       }).join('');
       return '<div class="zs-sec">' +
-        '<div class="zs-h"><span class="conf-lbl">Zoho Sign history</span><span class="zs-n">' + docs.length + ' document' + (docs.length === 1 ? '' : 's') + '</span></div>' +
-        '<ul class="zs-list">' + rows + '</ul>' +
+        '<div class="zs-h"><span class="conf-lbl">Zoho Sign history <span class="zs-n">· ' + docs.length + ' document' + (docs.length === 1 ? '' : 's') + '</span></span>' +
+          '<button class="zs-send" onclick="zsOpen()"><span class="material-symbols-outlined">draw</span>Send for signature</button></div>' +
+        '<div class="zs-tw"><table class="zs-tb"><thead><tr><th>Document</th><th>Generated</th><th>Customer<br>signed</th><th>Status</th><th>F&amp;O sync</th><th class="r">Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
       '</div>';
+    }
+    // Zoho Sign — full send / in-person signing flow (zoho-sign.js). Results land in the history above.
+    // Customer in the showroom: open the signing session straight away on this device for an existing row.
+    function zsSignNow(i){ var d = zsDocs(leads[selectedIdx])[i]; if (d) zsOpen(d.name, [d.name.replace(/ \d+$/, '')], i); }
+    function zsOpen(name, docs, rowIdx){
+      var l = leads[selectedIdx], p = acceptedProp() || {}, ord = p.id ? ordData(l, p) : null;
+      var host = (ord && ord.taker && ord.taker.n) || (l.owner && l.owner !== 'Unassigned' ? l.owner : 'Mariam Saeed');
+      var ons = (typeof propAddOns !== 'undefined' ? propAddOns : []).filter(function(a){ return p.addOns && p.addOns[a.k]; }).map(function(a){ return a.label; });
+      var docName = name || 'Sales Quotation';
+      var opts = {
+        docs: docs || ['Sales Quotation', 'Purchase Agreement', 'Duty of care'], doc: docName.replace(/ \d+$/, ''),
+        lead: { name: l.name, email: l.email, phone: l.phone, id: l.id },
+        prop: { id: p.id, model: p.model, vin: p.chassis, color: p.extColor, addOns: ons, price: p.nsp ? 'AED ' + propFmt(p.nsp) : '', down: p.nsp ? 'AED ' + propFmt(Math.round(p.nsp * (p.downPct || 0) / 100)) : '', pay: (typeof PAY_LABEL !== 'undefined' && PAY_LABEL[p.payType]) || 'Cash' },
+        host: { name: host, email: host.toLowerCase().replace(/\s+/g, '.') + '@agm-sales.ae' },
+        direct: rowIdx != null, name: docName
+      };
+      // Zoho Sign opens in its own window, like the proposal builder; the result comes back through zsImportResult().
+      var req = { id: 'zs' + Date.now(), lead: selectedIdx, row: rowIdx != null ? rowIdx : null, docName: docName, opts: opts };
+      try { localStorage.setItem('exeedZohoReq', JSON.stringify(req)); } catch(e){}
+      var w = window.open('zoho-sign.html?req=' + req.id + '&lang=' + (window.I18N ? I18N.lang : 'en'), 'exeedZohoSign', 'width=1280,height=860');
+      if (!w) showToast('Allow pop-ups to open Zoho Sign');
+    }
+    function zsImportResult(){
+      var q; try { q = JSON.parse(localStorage.getItem('exeedZohoResult') || '[]'); } catch(e){ return; }
+      if (!q || !q.length) return;
+      localStorage.setItem('exeedZohoResult', '[]');
+      q.forEach(function(e){
+        var l = leads[e.lead]; if (!l || !e.res || e.res.mode === 'draft') return;
+        if (e.lead !== selectedIdx) { var keep = selectedIdx; selectedIdx = e.lead; zsRecordQuiet(l, e); selectedIdx = keep; return; }
+        zsRecord(l, e.docName, e.res, e.row);
+        showToast(e.res.mode === 'inperson' ? e.docName + ' signed in person — history updated' : e.res.mode === 'declined' ? e.docName + ' declined by the customer' : e.docName + ' sent for signature');
+      });
+    }
+    function zsRecordQuiet(l, e){ var rd = renderDetail; renderDetail = function(){}; try { zsRecord(l, e.docName, e.res, e.row); } finally { renderDetail = rd; } }
+    window.addEventListener('storage', function(e){ if (e.key === 'exeedZohoResult') zsImportResult(); });
+    function zsRecord(l, docName, res, rowIdx){
+      var name = res.doc || docName, isPA = /^Purchase Agreement/.test(name);
+      if (/^Purchase Agreement$/.test(name)) name += ' ' + (zsDocs(l).filter(function(d){ return /^Purchase Agreement/.test(d.name); }).length + 1);
+      var d = { name: name, gen: zsToday(), st: 'sent', signed: '', sync: 'na', via: res.via || 'Email' };
+      if (res.mode === 'inperson') { d.st = 'signed'; d.signed = res.signedAt || zsToday(); d.sync = 'pending'; d.via = 'In person'; }
+      else if (res.mode === 'declined') { d.st = 'declined'; d.via = 'In person'; }
+      else if (res.mode === 'inperson-later') { d.via = 'In person · not signed yet'; }
+      var old = rowIdx != null ? zsDocs(l)[rowIdx] : null;
+      if (old) { if (res.mode === 'inperson' || res.mode === 'declined') { old.st = d.st; old.signed = d.signed; old.sync = d.sync; old.via = d.via; } }
+      else zsDocs(l).push(d);
+      if (isPA && l.pa) {
+        l.pa.method = 'zoho';
+        if (res.mode === 'inperson') { l.pa.status = 'signed'; paTick(l, PA_CHECK_SHARED); paTick(l, PA_CHECK_SIGNED); }
+        else if (res.mode !== 'declined') { l.pa.status = 'sent'; paTick(l, PA_CHECK_SHARED); }
+      }
+      renderDetail(selectedIdx, currentStep);
     }
     // One re-send menu open at a time; clicking elsewhere closes it.
     document.addEventListener('click', function(e){
@@ -5177,13 +5243,8 @@
     }
     function sendPurchaseAgreementZoho(){
       var l = leads[selectedIdx];
-      openConfirm('Send via Zoho Sign', 'The approved purchase agreement will be shared with the customer via <strong>Zoho Sign</strong> for electronic signature.', 'Send via Zoho Sign', function(){
-        l.pa.status = 'sent'; l.pa.method = 'zoho';
-        zsLogPA(l);
-        paTick(l, PA_CHECK_SHARED);
-        renderDetail(selectedIdx, currentStep);
-        showToast('Purchase agreement sent to the customer via Zoho Sign');
-      }, 'Cancel', 'draw', true);
+      var n = zsDocs(l).filter(function(d){ return /^Purchase Agreement/.test(d.name); }).length + 1;
+      zsOpen('Purchase Agreement ' + n, ['Purchase Agreement']);
     }
     function markPurchaseAgreementSigned(){
       var l = leads[selectedIdx]; if (!l.pa) return;
