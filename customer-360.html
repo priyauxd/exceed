@@ -645,7 +645,8 @@
     .k-nil { font-size: 13px; font-weight: 500; color: #9ca3af; }
     .k-gauge2 { position: relative; width: 76px; height: 44px; flex-shrink: 0; display: block; }
     .k-gauge2 svg { width: 100%; height: 100%; overflow: visible; } .k-gauge2 path { fill: none; stroke-width: 7; stroke-linecap: round; }
-    .k-gauge2 .tr { stroke: #e8ebf0; } .k-gauge2 .fg { stroke: #2f6fb3; transition: stroke-dasharray .4s cubic-bezier(.23,1,.32,1); } .k-gauge2.green .fg { stroke: #16a34a; }
+    .k-gauge2 .tr { stroke: #e8ebf0; } .k-gauge2 .fg { stroke: #2f6fb3; transition: stroke-dasharray .4s cubic-bezier(.23,1,.32,1); } .k-gauge2.green .fg { stroke: #16a34a; } .k-gauge2.teal .fg { stroke: #0e9384; } .k-gauge2.blue .fg, .k-gauge2.azure .fg { stroke: #2f6fb3; } .k-gauge2.amber .fg { stroke: #f2b100; } .k-gauge2.red .fg { stroke: #dc2626; } .k-gauge2.grey .fg { stroke: #c7cfd9; }
+    .k-gauge .k-gauge2, .k-cover-row .k-gauge2 { width: 76px; height: 44px; } .k-gauge .k-gauge2 b { font-size: 12.5px; color: #0b1220; text-transform: none; letter-spacing: 0; }
     .k-gauge2 b { position: absolute; left: 0; right: 0; bottom: -1px; text-align: center; font-size: 12.5px; font-weight: 700; color: #0b1220; font-variant-numeric: tabular-nums; }
     .k-opp-row:has(.k-gauge2) { align-items: flex-end; }
     .k-hd { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 3px; } .k-hd .k-t1 { -webkit-line-clamp: 1; }
@@ -930,6 +931,15 @@
     .pa-ai .material-symbols-outlined { font-size: 14px; background: linear-gradient(135deg, #7c6dd8, #c084fc); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .pa-nba .pa-btn { background: linear-gradient(135deg, #6d4ae8, #9b7cf6); box-shadow: 0 4px 12px -4px rgba(109,74,232,.55); }
     .pa-nba .pa-imp { color: #5835cc; } .pa-nba .pa-more { color: #6d4ae8; } .pa-nba .pa-more:hover { color: #5835cc; }
+    .pa-big.muted { color: #c4c8cf; }
+    .pa-ghost { position: relative; margin-top: 10px; height: 48px; } .pa-ghost svg { position: absolute; inset: 0; width: 100%; height: 100%; } .pa-ghost path { fill: none; stroke: #d6dae1; stroke-width: 1.5; stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+    .pa-ghost span { position: absolute; left: 0; top: 0; font-size: 10.5px; color: #9ca3af; background: #fff; padding-inline-end: 6px; }
+    .pa-ie-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 10px; } .pa-ie-row .pa-t { margin: 0; } .pa-ie-row .pa-s { margin-top: 2px; }
+    .pa-ie-i { width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0; display: grid; place-items: center; background: #f5f6f8; color: #9ca3af; box-shadow: inset 0 0 0 1px #e6e8ec; } .pa-ie-i .material-symbols-outlined { font-size: 19px; }
+    .pa-ie-b { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; border: 1px solid #e6e8ec; background: #fff; border-radius: 8px; padding: 6px 11px; font: 600 12px var(--fontFamilyBase); color: #0b1220; cursor: pointer; } .pa-ie-b:hover { border-color: #0d0d0e; } .pa-ie-b .material-symbols-outlined { font-size: 15px; }
+    .pa-ie .pa-ie-b { margin-top: 14px; }
+    .pa-tp li.ghost .pa-row span { color: #9ca3af; } .pa-tp li.ghost i { opacity: .35; } .pa-tp li.ghost b { color: #c4c8cf; }
+    .pa-meter.ghost { background: repeating-linear-gradient(90deg, #eef0f3 0 6px, transparent 6px 10px); }
     .pa-btn { display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 8px; background: #0d0d0e; color: #fff; font: 600 12px var(--fontFamilyBase); padding: 7px 12px; cursor: pointer; white-space: nowrap; } .pa-btn:hover { opacity: .9; } .pa-btn .material-symbols-outlined { font-size: 15px; }
     .pa-lnk { white-space: nowrap; border: 0; background: none; font: 600 11.5px var(--fontFamilyBase); color: #6b7280; cursor: pointer; } .pa-lnk:hover { color: #0b1220; }
     .pa-j { background: #fff; border: 1px solid #e6e8ec; border-radius: 12px; box-shadow: 0 1px 2px rgba(16,24,40,.04); padding: 18px 20px 16px; }
@@ -988,11 +998,15 @@
     .kg, .pa-qg { grid-auto-rows: 1fr; }
     /* Vehicle gauges: stacked sub-cards with a roomier radial chart */
     .k-garage .k-gauges { grid-template-columns: 1fr; gap: 10px; margin: 10px 0 6px; }
-    .k-garage .k-gauge { grid-template-columns: 56px minmax(0,1fr); column-gap: 14px; padding: 12px 14px; border-radius: 12px; }
+    .k-garage .k-gauge { grid-template-columns: 76px minmax(0,1fr); column-gap: 14px; padding: 12px 14px; border-radius: 12px; }
     .k-garage .k-gauge .k-ring { width: 56px; height: 56px; } .k-garage .k-gauge .k-ring circle { stroke-width: 4.5; }
     .k-garage .k-gauge .k-ring b { font-size: 12px; font-weight: 700; color: var(--ink); text-transform: none; letter-spacing: 0; }
     .k-garage .k-gauge > div { gap: 2px; } .k-garage .k-gauge span { font-size: 10.5px; }
     .k-garage .k-gauge > div > b { font-size: 15px; } .k-garage .k-gauge em { font-size: 12px; }
+    .pa-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; min-height: 180px; border: 1.5px dashed #e3e6eb; border-radius: 12px; background: #fafbfc; padding: 24px 16px; }
+    .pa-empty-i { width: 40px; height: 40px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px #e6e8ec; color: #9ca3af; display: grid; place-items: center; margin-bottom: 6px; } .pa-empty-i .material-symbols-outlined { font-size: 20px; }
+    .pa-empty-t { margin: 0; font-size: 13.5px; font-weight: 600; color: #374151; } .pa-empty-s { margin: 0; font-size: 12px; color: #6b7280; max-width: 260px; }
+    .pa-empty-b { margin-top: 10px; display: inline-flex; align-items: center; gap: 4px; border: 1px solid #e6e8ec; background: #fff; border-radius: 8px; padding: 6px 12px; font: 600 12px var(--fontFamilyBase); color: #0b1220; cursor: pointer; } .pa-empty-b:hover { border-color: #0d0d0e; } .pa-empty-b .material-symbols-outlined { font-size: 15px; }
     .pa-qg { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; align-items: stretch; }
     .pa .qcard { position: relative; display: flex; flex-direction: column; border: 1.5px solid #e6e8ec; border-radius: 16px; background: #fff; overflow: hidden; box-shadow: 0 1px 2px rgba(16,24,40,.05); transition: border-color .15s, box-shadow .15s; }
     .pa .qcard:hover { box-shadow: 0 6px 22px rgba(24,44,86,.10); } .pa .qcard.best { border-color: #6c5ce7; box-shadow: 0 0 0 2px rgba(108,92,231,.14); }
@@ -1762,14 +1776,13 @@
     function eyebrow(t) { return '<div class="k-eb">' + t + '</div>'; }
     function meta(icon, t) { return '<span class="k-mt"><span class="material-symbols-outlined">' + icon + '</span>' + t + '</span>'; }
     function ownerChip(o) { return '<span class="k-own"><span class="own-av" style="background:' + ownerAv(o) + '">' + initials(o) + '</span>' + esc(String(o).split(' ')[0]) + '</span>'; }
-    function ring(pct, cls, label) {
-      var p = Math.max(0, Math.min(100, pct || 0)), r = 20, c2 = 2 * Math.PI * r;
-      return '<span class="k-ring ' + (cls || '') + '"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="' + r + '" class="tr"/><circle cx="24" cy="24" r="' + r + '" class="fg" stroke-dasharray="' + (c2 * p / 100).toFixed(1) + ' ' + c2.toFixed(1) + '"/></svg><b>' + (label != null ? label : Math.round(p) + '%') + '</b></span>';
-    }
+    /* Every progress chart is the half-radial gauge */
+    function ring(pct, cls, label) { return gauge(pct, cls, label); }
+
     /* Half-radial gauge (semi-circle), 0–100 */
-    function gauge(pct, cls) {
+    function gauge(pct, cls, label) {
       var p = Math.max(0, Math.min(100, pct || 0)), L = Math.PI * 30;
-      return '<span class="k-gauge2 ' + (cls || '') + '" role="img" aria-label="' + Math.round(p) + '% probability"><svg viewBox="0 0 72 40" aria-hidden="true"><path d="M6 36 A30 30 0 0 1 66 36" class="tr"/>' + (p > 0 ? '<path d="M6 36 A30 30 0 0 1 66 36" class="fg" stroke-dasharray="' + (L * p / 100).toFixed(1) + ' ' + L.toFixed(1) + '"/>' : '') + '</svg><b>' + Math.round(p) + '%</b></span>';
+      return '<span class="k-gauge2 ' + (cls || '') + '" role="img" aria-label="' + Math.round(p) + '%"><svg viewBox="0 0 72 40" aria-hidden="true"><path d="M6 36 A30 30 0 0 1 66 36" class="tr"/>' + (p > 0 ? '<path d="M6 36 A30 30 0 0 1 66 36" class="fg" stroke-dasharray="' + (L * p / 100).toFixed(1) + ' ' + L.toFixed(1) + '"/>' : '') + '</svg><b>' + (label != null ? label : Math.round(p) + '%') + '</b></span>';
     }
     var rtag = function (rt) { var k = rt === 'Hot' ? 'hot' : rt === 'Warm' ? 'warm' : 'cold'; return '<span class="rt ' + k + '"><i></i>' + esc(rt) + '</span>'; };
     var stag = function (v, ok) { return '<span class="sto' + (ok ? ' ok' : '') + '"><span class="material-symbols-outlined">' + (ok ? 'check_circle' : 'radio_button_checked') + '</span>' + esc(v) + '</span>'; };
@@ -1807,7 +1820,7 @@
         var won = o.stage === 'Won', d = pd(o.close), p = parseInt(o.probability, 10) || 0;
         var num = String(o.value).replace(/^AED\s?/, '');
         return '<article class="k-card k-opp2"><header><div class="k-hd"><div class="k-title k-t1" title="' + esc(o.topic) + '">' + esc((o.topic.match(/^(\d+ × )?EXEED \w+/) || [o.topic])[0]) + '</div>' + eyebrow(o.id) + '</div><span class="k-pill ' + (won ? 'won' : 'open') + '">' + esc(o.stage) + '</span></header>' +
-          '<div class="k-opp-row">' + gauge(won ? 100 : p, won ? 'green' : 'azure') + '<div class="k-min"><div class="k-fig2">' + (/\d/.test(o.value) ? (/^AED/.test(o.value) ? '<small>AED</small>' : '') + esc(num) : '<span class="k-nil">Value not set</span>') + '</div><div class="k-sub" title="' + esc(o.topic) + '">' + esc(o.topic.replace(/^(\d+ × )?EXEED \w+\s*/, '')) + '</div></div></div>' +
+          '<div class="k-opp-row">' + gauge(won ? 100 : p, won ? 'green' : 'azure') + '<div class="k-min"><div class="k-fig2">' + (/\d/.test(o.value) ? (/^AED/.test(o.value) ? '<small>AED</small>' : '') + esc(num) : '<span class="k-nil">Value not set</span>') + '</div><div class="k-sub" title="' + esc(o.topic) + '">' + esc(/EXEED \w+/.test(o.topic) ? o.topic.replace(/^(\d+ × )?EXEED \w+\s*/, '') : '') + '</div></div></div>' +
           '<div class="k-meta">' + meta('flag', won ? 'Closed ' + esc(o.close) : !/\d/.test(o.close) ? 'Close date not set' : 'Close ' + esc(o.close) + (d ? '<span class="k-due"> · ' + rel(d) + '</span>' : '')) + '</div>' +
           '<footer>' + ownerChip(o.owner) + '<span class="k-ft">' + (won ? 'Closed won' : (/\d/.test(o.probability) ? esc(o.probability) + ' likely' : 'Not scored')) + '</span></footer></article>';
       }).join('') + '</div>'); else empty.push(['secOpp', 'New Opportunity']);
@@ -1878,7 +1891,7 @@
         return '<article class="k-garage"><div class="k-garage-img">' + pill(v.status) + '<span class="k-plate">' + esc(v.plate) + '</span><img src="' + v.img + '" alt="" onerror="this.style.display=\'none\'"></div>' +
           '<div class="k-garage-b"><div class="k-title">' + esc(v.model) + ' <span class="k-light">' + esc(v.variant) + '</span></div>' + eyebrow(v.year + ' · ' + esc(v.color)) +
           '<div class="k-gauges"><div class="k-gauge">' + ring(due === 'red' ? 100 : svcPct, due || 'blue', due === 'red' ? '!' : null) + '<div><span>Service</span><b class="' + due + '">' + (due === 'red' ? 'Overdue' : toNext.toLocaleString('en-US') + ' km') + '</b><em>' + esc(v.nextService.split(' · ')[0]) + '</em></div></div>' +
-          '<div class="k-gauge">' + ring(wPct, 'teal') + '<div><span>Warranty</span><b>' + esc(v.warranty) + '</b><em>' + Math.max(0, 100 - Math.round(wPct)) + '% left</em></div></div></div>' +
+          '<div class="k-gauge">' + ring(Math.max(0, 100 - wPct), 100 - wPct <= 15 ? 'red' : 'teal') + '<div><span>Warranty</span><b>' + esc(v.warranty) + '</b><em>' + Math.max(0, 100 - Math.round(wPct)) + '% left</em></div></div></div>' +
           '<div class="k-rows sm"><div><span>VIN</span><b class="mono">' + esc(v.vin) + '</b></div><div><span>Odometer</span><b>' + esc(v.odo) + '</b></div><div><span>Role</span><b>' + esc((A.devices[k] || {}).role || '—') + '</b></div></div></div></article>';
       }).join('') + '</div>', true); else empty.push(['secVeh', 'New Device Registration'], ['secDev', 'Register vehicle']);
       // Appointments — timeline
@@ -1964,18 +1977,26 @@
       var openOpp = c.opportunities.filter(function (o) { return o.stage !== 'Won' && o.stage !== 'Lost' && amt(o.value) > 0; }).sort(function (a, b) { return amt(b.value) - amt(a.value); })[0];
       var reason = String(c.nba.desc).replace(/<[^>]+>/g, '').split(/(?<=\.)\s/)[0].replace(/\.$/, '');
       return '<section class="pa-ins" aria-label="Overview and customer experience">' +
-        '<div class="pa-ins-c"><p class="pa-k">Lifetime value</p><p class="pa-big"><small>AED</small>' + esc(ltvTxt) + '</p>' +
-          '<p class="pa-s">' + (thisYear ? '<span class="pa-up">+AED ' + thisYear.toLocaleString('en-US') + '</span> in ' + yr : esc(c.segment || '')) + '</p>' + (line.length > 2 ? spark(line, { label: 'Lifetime value trend' }) : '') + '</div>' +
-        '<div class="pa-ins-c"><div class="pa-row"><p class="pa-k">Satisfaction · 12 mo</p>' + (nps !== '—' ? '<span class="pa-nps">NPS ' + esc(nps.replace(/\s*\((.*)\)/, ' · $1')) + '</span>' : '') + '</div>' +
-          '<p class="pa-big">' + (all != null ? all.toFixed(1) : '—') + '<small class="r">/ 10</small></p>' +
-          '<p class="pa-s">' + (vsD != null ? '<span class="' + (vsD >= 0 ? 'pa-up' : 'pa-dn') + '">' + (vsD >= 0 ? '+' : '−') + Math.abs(vsD).toFixed(1) + '</span> vs dealer avg' : 'No surveys yet') + '</p>' +
-          (surveys.length > 1 ? spark(surveys.map(function (x) { return { v: x.s, c: TPC[x.t], tip: tipCard(mmyy(x.d), [[x.t, x.s + ' / 10', TPC[x.t]]], x.note) }; }), { min: 5, ref: DEALER_AVG, dots: true, label: surveys.length + ' satisfaction surveys over time' }) : '') + '</div>' +
-        '<div class="pa-ins-c"><p class="pa-k">CX by touchpoint</p><ul class="pa-tp">' + (tps.length ? tps.map(function (x) {
+        (ltv > 0 || line.length > 2
+          ? '<div class="pa-ins-c"><p class="pa-k">Lifetime value</p><p class="pa-big"><small>AED</small>' + esc(ltvTxt) + '</p>' +
+            '<p class="pa-s">' + (thisYear ? '<span class="pa-up">+AED ' + thisYear.toLocaleString('en-US') + '</span> in ' + yr : esc(c.segment || '')) + '</p>' + (line.length > 2 ? spark(line, { label: 'Lifetime value trend' }) : '') + '</div>'
+          : '<div class="pa-ins-c pa-ie"><p class="pa-k">Lifetime value</p><p class="pa-big muted"><small>AED</small>0</p><p class="pa-s">No purchases or service spend yet</p>' +
+            '<div class="pa-ghost" aria-hidden="true"><svg viewBox="0 0 220 44" preserveAspectRatio="none"><path d="M3 38 L60 36 L110 30 L160 22 L217 10" /></svg><span>Builds from orders and service visits</span></div></div>') +
+        (all != null
+          ? '<div class="pa-ins-c"><div class="pa-row"><p class="pa-k">Satisfaction · 12 mo</p>' + (nps !== '—' ? '<span class="pa-nps">NPS ' + esc(nps.replace(/\s*\((.*)\)/, ' · $1')) + '</span>' : '') + '</div>' +
+            '<p class="pa-big">' + all.toFixed(1) + '<small class="r">/ 10</small></p>' +
+            '<p class="pa-s"><span class="' + (vsD >= 0 ? 'pa-up' : 'pa-dn') + '">' + (vsD >= 0 ? '+' : '−') + Math.abs(vsD).toFixed(1) + '</span> vs dealer avg</p>' +
+            (surveys.length > 1 ? spark(surveys.map(function (x) { return { v: x.s, c: TPC[x.t], tip: tipCard(mmyy(x.d), [[x.t, x.s + ' / 10', TPC[x.t]]], x.note) }; }), { min: 5, ref: DEALER_AVG, dots: true, label: surveys.length + ' satisfaction surveys over time' }) : '<p class="pa-xs">1 survey so far · trend shows from the second</p>') + '</div>'
+          : '<div class="pa-ins-c pa-ie"><p class="pa-k">Satisfaction · 12 mo</p><div class="pa-ie-row"><span class="pa-ie-i"><span class="material-symbols-outlined">sentiment_satisfied</span></span><div><p class="pa-t">No surveys yet</p>' +
+            '<p class="pa-s">Sent after test drives, handovers and service visits.</p></div></div><button class="pa-ie-b" onclick="toast(\'Satisfaction survey sent by WhatsApp\')"><span class="material-symbols-outlined">send</span>Send a survey</button></div>') +
+        '<div class="pa-ins-c' + (tps.length ? '' : ' pa-ie') + '"><p class="pa-k">CX by touchpoint</p><ul class="pa-tp">' + (tps.length ? tps.map(function (x) {
             var below = x.v < DEALER_AVG;
             return '<li title="' + x.t + ' ' + x.v.toFixed(1) + ' · dealer ' + DEALER_AVG + ' · ' + x.n + ' survey' + (x.n === 1 ? '' : 's') + '"><div class="pa-row"><span><i style="background:' + TPC[x.t] + '"></i>' + x.t + '</span><b class="' + (below ? 'warn' : '') + '">' + x.v.toFixed(1) + '</b></div><div class="pa-meter"><span style="width:' + toPct(x.v) + '%;background:' + TPC[x.t] + '"></span><em style="left:' + toPct(DEALER_AVG) + '%"></em></div></li>';
-          }).join('') : '<li class="pa-s">No surveys yet</li>') + '</ul>' + (tps.length ? '<p class="pa-xs">Tick marks dealer benchmark</p>' : '') + '</div>' +
+          }).join('') : ['Sales', 'Service', 'Call centre'].map(function (t) {
+            return '<li class="ghost"><div class="pa-row"><span><i style="background:' + TPC[t] + '"></i>' + t + '</span><b>—</b></div><div class="pa-meter ghost"><em style="left:' + toPct(DEALER_AVG) + '%"></em></div></li>';
+          }).join('')) + '</ul><p class="pa-xs">' + (tps.length ? 'Tick marks dealer benchmark' : 'Scores appear after the first survey · tick is dealer avg ' + DEALER_AVG) + '</p></div>' +
         '<div class="pa-ins-c pa-nba"><p class="pa-ai"><span class="material-symbols-outlined">auto_awesome</span>Next best action</p><p class="pa-t">' + esc(c.nba.title) + '</p><p class="pa-s clamp">' + esc(reason) + '</p>' +
-          '<div class="pa-row end"><button class="pa-btn" onclick="toast(\'' + esc(c.nba.btns[0]) + '\')">Take action<span class="material-symbols-outlined">arrow_forward</span></button><b class="pa-imp">' + (openOpp ? esc(openOpp.value) : 'Retention') + '</b></div>' +
+          '<div class="pa-row end"><button class="pa-btn" onclick="toast(\'' + esc(c.nba.btns[0]) + '\')">Take action<span class="material-symbols-outlined">arrow_forward</span></button><b class="pa-imp">' + (openOpp ? esc(openOpp.value) : ltv > 0 ? 'Retention' : '') + '</b></div>' +
           '<button class="pa-more" onclick="toast(\'' + esc(c.nba.btns[1]) + '\')">+2 more recommendations</button></div></section>';
     }
 
@@ -2002,13 +2023,19 @@
       }).join('') + '</ol></div></section>';
     }
 
+    /* Empty state inside a section card — the widget always stays */
+    function paEmpty(id, icon, title, newLabel, msg, sub, svc, anchors) {
+      return vcard(id, icon, title, 0, newLabel, (anchors || '') + '<div class="pa-empty"><span class="pa-empty-i"><span class="material-symbols-outlined">' + icon + '</span></span><p class="pa-empty-t">' + msg + '</p><p class="pa-empty-s">' + sub + '</p>' +
+        (newLabel ? '<button class="pa-empty-b" onclick="toast(\'Opens the D365 quick-create form\')"><span class="material-symbols-outlined">add</span>' + newLabel + '</button>' : '') + '</div>', svc);
+    }
     function accSalesVisual(c, A) {
       var full = salesVisual(c, A), tmp = document.createElement('div'); tmp.innerHTML = full;
       var take = function (id) { var el = tmp.querySelector('#' + id + '.vsec'); return el ? el.outerHTML : ''; };
       var out = accJourney(c), empty = [];
       // Leads + Opportunities — keep the light grey cards
-      var lo = take('secLead') + take('secOpp'); if (lo) out += '<div class="pair2">' + lo + '</div>';
-      if (!c.leads.length) empty.push(['secLead', 'New Lead']); if (!c.opportunities.length) empty.push(['secOpp', 'New Opportunity']);
+      var emptyCard = paEmpty;
+      out += '<div class="pair2">' + (take('secLead') || emptyCard('secLead', 'leaderboard', 'Leads', 'New Lead', 'No leads yet', 'Enquiries from WhatsApp, web and walk-ins will show here.')) +
+        (take('secOpp') || emptyCard('secOpp', 'trending_up', 'Opportunities', 'New Opportunity', 'No opportunities yet', 'Qualify a lead to start tracking value and probability.')) + '</div>';
       // Test drives — list with date block
       var pair = '';
       if (c.testDrives.length) pair += vcard('secTD', 'directions_car', 'Test drives', c.testDrives.length, 'New Test Drive', '<ul class="pa-list">' + c.testDrives.map(function (t) {
@@ -2017,7 +2044,7 @@
           '<div class="pa-li"><span class="pa-t">' + esc(t.model) + '</span>' + eyebrow(t.id) +
           '<p class="pa-d' + (up ? ' up' : '') + '">' + (up ? (d ? rel(d).replace(/^in/, 'In') : 'Date to confirm') : 'Outcome · ' + esc(t.outcome !== '—' ? t.outcome : 'Not recorded')) + '</p>' +
           '<div class="k-meta">' + meta('location_on', esc(t.showroom)) + '</div></div>' + pill(t.status) + '</li>';
-      }).join('') + '</ul>'); else empty.push(['secTD', 'New Test Drive']);
+      }).join('') + '</ul>'); else pair += paEmpty('secTD', 'directions_car', 'Test drives', 'New Test Drive', 'No test drives yet', 'Booked and completed drives will show here.');
       // Trade-ins — offer vs appraisal
       if (c.tradeIns.length) pair += vcard('secTI', 'swap_horiz', 'Trade-ins', c.tradeIns.length, 'New Trade In', c.tradeIns.map(function (t) {
         var ap = amt(t.appraisal), of = amt(t.offered), ok = /Accepted/.test(t.status), r = ap && of ? Math.round(of / ap * 100) : 0;
@@ -2025,8 +2052,8 @@
           (ap ? '<div class="pa-box"><div class="pa-row bot"><div><p class="pa-k">' + (ok ? 'Offer accepted' : 'Offer') + '</p><p class="pa-mid">' + esc(t.offered !== '—' ? t.offered : 'Pending') + '</p></div><div class="r"><p class="pa-k">Appraisal</p><p class="pa-sm">' + esc(t.appraisal) + '</p></div></div>' +
             (of ? '<div class="pa-bar"><span style="width:' + Math.min(100, r) + '%"></span></div><p class="pa-s"><b>' + r + '% of appraisal</b> · AED ' + Math.abs(ap - of).toLocaleString('en-US') + (of <= ap ? ' below' : ' above') + '</p>' : '') + '</div>'
             : '<div class="k-wait"><span class="material-symbols-outlined">hourglass_top</span>Appraisal pending — photos received</div>') + '</article>';
-      }).join('')); else empty.push(['secTI', 'New Trade In']);
-      if (pair) out += '<div class="pair2">' + pair + '</div>';
+      }).join('')); else pair += paEmpty('secTI', 'swap_horiz', 'Trade-ins', 'New Trade In', 'No trade-ins yet', 'Appraisals and offers for the customer’s current car.');
+      out += '<div class="pair2">' + pair + '</div>';
       // Proposals & quotations — unchanged (our product cards)
       // Proposals & quotations — lead-page proposal cards
       if (c.proposals.length || c.quotations.length) {
@@ -2058,7 +2085,7 @@
               : '<span class="qc-status wait"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval</span>') + '</div>' });
         }));
         out += vcard('secProp', 'request_page', 'Proposals &amp; quotations', c.proposals.length + c.quotations.length, 'New Proposal', '<span id="secQuote" class="anchor"></span><div class="pa-qg">' + cards.join('') + '</div>');
-      } else empty.push(['secProp', 'New Proposal'], ['secQuote', 'New Quotation']);
+      } else out += paEmpty('secProp', 'request_page', 'Proposals &amp; quotations', 'New Proposal', 'No proposals yet', 'Vehicle proposals and approved quotations will show here.', false, '<span id="secQuote" class="anchor"></span>');
       // Sales order (2/3) + Deals delivered (1/3)
       var so = take('secSO'), dl = '';
       if (c.deals.length) dl = vcard('secDeal', 'handshake', 'Deals delivered', c.deals.length, 'New Deal', c.deals.map(function (d) {
@@ -2066,17 +2093,16 @@
         return '<article class="pa-dl"><div class="pa-row st0"><span class="pa-ic g"><span class="material-symbols-outlined">local_shipping</span></span><div class="k-min"><div class="pa-t">' + esc(d.vehicle) + '</div>' + eyebrow(d.id + ' · ' + esc(d.delivered)) + '</div></div>' +
           '<div class="pa-box"><p class="pa-k">Handover satisfaction</p><div class="pa-row base"><span class="pa-xl">' + cs + '</span><span class="pa-s">/ 10</span><span class="grow"></span><span class="pa-stars">' + [1, 2, 3, 4, 5].map(function (k) { return '<span class="' + (k <= stars ? 'on' : '') + '">★</span>'; }).join('') + '</span></div></div>' +
           '<div class="pa-vas"><div class="pa-row"><span class="pa-s">Value-added services</span><b>' + esc(d.vas) + '</b></div><div class="chips">' + String(d.addOns).split(' · ').map(function (a) { return '<span>' + esc(a) + '</span>'; }).join('') + '</div></div></article>';
-      }).join('')); else empty.push(['secDeal', 'New Deal']);
-      if (!c.salesOrders.length) empty.push(['secSO', 'New Sales Order']);
-      if (so || dl) out += '<div class="pa-g32' + (so && dl ? '' : ' one') + '">' + so + dl + '</div>';
+      }).join('')); else dl = paEmpty('secDeal', 'handshake', 'Deals delivered', 'New Deal', 'Nothing delivered yet', 'Handovers, satisfaction and add-ons appear after delivery.');
+      if (!so) so = paEmpty('secSO', 'receipt_long', 'Sales orders — payment &amp; finance', null, 'No sales orders yet', 'Payment split, invoice and bank finance show once an order is placed.');
+      out += '<div class="pa-g32">' + so + dl + '</div>';
       return '<div class="stack">' + out + nothingYet(empty) + '</div>';
     }
 
     function accServiceVisual(c, A) {
       var full = serviceVisual(c, A), tmp = document.createElement('div'); tmp.innerHTML = full;
       var take = function (id) { var el = tmp.querySelector('#' + id + '.vsec'); return el ? el.outerHTML : ''; };
-      var out = take('secVeh'), empty = [];
-      if (!c.vehicles.length) empty.push(['secVeh', 'New Device Registration']);
+      var out = take('secVeh') || paEmpty('secVeh', 'directions_car', 'Vehicles &amp; fleet', 'New Device Registration', 'No vehicles registered', 'Owned vehicles, service intervals and warranty will show here.', true, '<span id="secDev" class="anchor"></span>'), empty = [];
       // Appointments — list with date block (2/3) + Cases (1/3)
       var appts = A.upcoming.map(function (a) { return { up: true, d: pd(a.start), title: a.name, veh: a.device, st: a.status, ws: (c.serviceUpcoming.filter(function (x) { return x.id === a.number; })[0] || {}).workshop, csat: '', amt: '' }; })
         .concat(c.servicePast.map(function (a) { return { up: false, d: pd(a.date), title: a.type, veh: a.vehicle, st: a.status, ws: a.workshop, csat: a.csat, amt: a.amount }; }));
@@ -2085,14 +2111,14 @@
           '<div class="pa-li"><div class="pa-row st0"><span class="pa-t">' + esc(a.title) + '</span>' + (a.up && a.d ? '<span class="pa-d up">' + rel(a.d).replace(/^in/, 'In') + '</span>' : '') + '</div>' +
           '<div class="k-meta">' + meta('directions_car', esc(a.veh || '')) + (a.ws ? meta('location_on', esc(a.ws)) : '') + (a.csat ? meta('sentiment_satisfied', 'CSAT ' + esc(a.csat).replace(/\s/g, '')) : '') + (a.amt ? '<span class="k-mt"><b>' + esc(a.amt) + '</b></span>' : '') + '</div></div>' + pill(a.st) + '</li>';
       }).join('') + '</ol>', true) : '';
-      if (!appts.length) empty.push(['secUp', 'New Service Appointment']);
+      if (!ap) ap = paEmpty('secUp', 'event_upcoming', 'Service appointments', 'Book service', 'No service appointments', 'Upcoming bookings and past visits will show here.', true, '<span id="secPast" class="anchor"></span>');
       var cs = A.x.cases, open = cs.filter(function (k) { return k.status !== 'Resolved'; }).length;
       var ca = cs.length ? vcard('secSvcCases', 'support_agent', 'Cases', cs.length, 'New Case', '<div class="pa-banner' + (open ? ' warn' : '') + '"><span class="material-symbols-outlined">' + (open ? 'error' : 'check_circle') + '</span>' + (open ? open + ' open case' + (open > 1 ? 's' : '') : 'No open cases — all issues resolved') + '</div><ul class="pa-cases">' + cs.map(function (k) {
         return '<li><div class="pa-row st"><div class="k-min"><div class="pa-t">' + esc(k.title) + '</div>' + eyebrow(k.id) + '</div>' + pill(k.status) + '</div>' + (k.resolution ? '<p class="pa-s">' + esc(k.resolution) + '</p>' : '') +
           '<div class="k-meta">' + meta('build', esc(k.type)) + meta('calendar_today', esc(k.created)) + '<span class="k-mt">' + esc(k.priority) + ' priority</span></div></li>';
       }).join('') + '</ul>', true) : '';
-      if (!cs.length) empty.push(['secSvcCases', 'New Case']);
-      if (ap || ca) out += '<div class="pa-g32' + (ap && ca ? '' : ' one') + '">' + ap + ca + '</div>';
+      if (!ca) ca = paEmpty('secSvcCases', 'support_agent', 'Cases', 'New Case', 'No cases', 'Complaints and support requests will show here.', true);
+      out += '<div class="pa-g32">' + ap + ca + '</div>';
       // Contracts — rows with term bar
       var cons = A.serviceContracts.map(function (k, n) { return { kind: 'Service', icon: 'verified_user', id: k.name, desc: k.desc, s: pd(k.start), e: pd(k.end), st: k.status, usage: (c.serviceContracts[n] || {}).usage }; })
         .concat(A.rentals.map(function (k) { return { kind: 'Rental', icon: 'directions_car', id: k.name, desc: k.desc, s: pd(k.start), e: pd(k.end), st: k.status }; }))
@@ -2105,7 +2131,7 @@
         return '<li><div class="pa-row st0 pa-cl"><span class="pa-ic"><span class="material-symbols-outlined">' + k.icon + '</span></span><div class="k-min"><div class="pa-t one">' + esc(parts[0]) + '</div><p class="pa-s one">' + esc(parts.slice(1).join(' — ') || (k.usage || '')) + '</p><p class="pa-k">' + k.kind + ' contract · <span class="mono">' + esc(k.id) + '</span></p></div></div>' +
           '<div><div class="pa-row pa-xs"><span>' + (k.s ? fmtD(k.s) : '—') + '</span><span>' + (k.e ? fmtD(k.e) : '') + '</span></div><div class="pa-bar ' + tone + '"><span style="width:' + (pct == null ? 100 : pct) + '%"></span></div><p class="pa-rem ' + tone + '">' + rem + '</p></div>' +
           '<div class="pa-cst">' + pill(soon && k.st === 'Active' ? 'Expiring soon' : k.st) + '</div></li>';
-      }).join('') + '</ul>', true); else empty.push(['secSC', 'New Service Contract'], ['secRC', 'New Rental Contract'], ['secSaC', 'New Sales Contract']);
+      }).join('') + '</ul>', true); else out += paEmpty('secContracts', 'contract', 'Contracts', 'New Contract', 'No contracts', 'Service, rental and sales contracts will show here.', true, '<span id="secSC" class="anchor"></span><span id="secRC" class="anchor"></span><span id="secSaC" class="anchor"></span>');
       return '<div class="stack">' + out + nothingYet(empty) + '</div>';
     }
 
@@ -2127,7 +2153,7 @@
     /* ── Accounts list (our Leads-list style) ───────────────────── */
     /* Accounts & Contacts lists — D365 "All Accounts" / "All Contacts" columns, sortable, with our chips,
        keyword filter and a one-line 360 summary under each name. */
-    var LS = { accounts: { sort: 'name', dir: 1, chip: 'all', q: '', view: 'All Accounts' }, contacts: { sort: 'name', dir: 1, chip: 'all', q: '', view: 'All Contacts' } };
+    var LS = { accounts: { sort: 'rich', dir: 1, chip: 'all', q: '', view: 'All Accounts' }, contacts: { sort: 'rich', dir: 1, chip: 'all', q: '', view: 'All Contacts' } };
     function listCmd() {
       document.getElementById('cmdbar').innerHTML = '<a class="cb" href="javascript:history.back()" title="Back" aria-label="Back"><span class="material-symbols-outlined">arrow_back</span></a><div class="cmd-sep"></div>' +
         '<button class="cb" onclick="toast(\'Focused view\')"><span class="material-symbols-outlined">view_agenda</span> Focused view</button>' +
@@ -2150,6 +2176,13 @@
       if (n.nextService !== '—') bits.push('<span><span class="material-symbols-outlined">build</span>' + esc(n.nextService.split(' · ')[0]) + '</span>');
       return bits.length ? '<div class="l360">' + bits.join('') + '</div>' : '<div class="l360"><span>' + esc(c.type) + '</span></div>';
     }
+    /* How complete a record is: sections with data (sales + service) and filled contact fields */
+    function richness(c, r) {
+      var secs = ['leads', 'opportunities', 'testDrives', 'tradeIns', 'proposals', 'quotations', 'salesOrders', 'deals', 'vehicles', 'serviceUpcoming', 'servicePast', 'serviceContracts', 'rentals'];
+      var n = secs.filter(function (k) { return (c[k] || []).length; }).length * 10;
+      ['phone', 'email', 'city', 'company', 'primary'].forEach(function (k) { if (r[k]) n += 1; });
+      return n + (c.crmOnly ? 0 : 5);
+    }
     function renderList(kind) {
       listCmd();
       var L = LS[kind], acc = kind === 'accounts', f = L.q.toLowerCase();
@@ -2162,7 +2195,8 @@
         : [['all', 'All', function () { return true; }], ['co', 'At a company', function (r) { return r.type === 'Company'; }], ['ind', 'Individuals', function (r) { return r.type === 'Individual'; }], ['nophone', 'No phone', function (r) { return !r.phone; }]];
       var cnt = function (fn) { return rows.filter(fn).length; }, chip = chips.filter(function (x) { return x[0] === L.chip; })[0] || chips[0];
       var shown = rows.filter(chip[2]).filter(function (r) { return !f || [r.name, r.company, r.cid, r.phone, r.city, r.primary, r.email].join(' ').toLowerCase().indexOf(f) > -1; });
-      shown.sort(function (a, b) { var x = String(a[L.sort] || ''), y = String(b[L.sort] || ''); if (!x && y) return 1; if (x && !y) return -1; return x.localeCompare(y, 'en', { sensitivity: 'base' }) * L.dir; });
+      if (L.sort === 'rich') shown.sort(function (a, b) { return (richness(b.c, b) - richness(a.c, a)) || a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }); });
+      else shown.sort(function (a, b) { var x = String(a[L.sort] || ''), y = String(b[L.sort] || ''); if (!x && y) return 1; if (x && !y) return -1; return x.localeCompare(y, 'en', { sensitivity: 'base' }) * L.dir; });
       var cols = acc ? [['name', 'Account Name'], ['company', 'Company Name'], ['cid', 'Customer ID'], ['phone', 'Main Phone'], ['city', 'Address 1: City'], ['primary', 'Primary Contact'], ['email', 'Email (Primary Contact)'], ['status', 'Status']]
         : [['name', 'Full Name'], ['company', 'Company Name'], ['city', 'Address 1: City'], ['phone', 'Mobile Phone'], ['bphone', 'Business Phone'], ['email', 'Email'], ['status', 'Status']];
       var th = '<th class="ck"><input type="checkbox" aria-label="Select all" onclick="var on=this.checked;document.querySelectorAll(\'.acc-tbl tbody input\').forEach(function(i){i.checked=on})"></th>' +
