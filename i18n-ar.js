@@ -2739,8 +2739,8 @@
     // test-drive status pill; the row's "Complete" button stays imperative
     ['.td-badge', 'Complete', 'مكتملة'],
     ['.conf-lock-note strong', 'Generate quotation', 'زر "أنشئ عرض أسعار"'],
-    // final review: next stage on the checklist title, and "Back office" in the Prep for delivery AI note
-    ['#clTitle strong', 'Prep for delivery', 'مرحلة "التحضير للتسليم"'],
+    // final review: checklist title on Prep for delivery, and "Back office" in the Prep for delivery AI note
+    ['#clTitle strong', 'Ready for delivery', 'مرحلة "جاهز للتسليم"'],
     ['.ai-bo', 'Back office', 'المكتب الخلفي'],
     ['.train-chip', 'Complete your training', 'أكمل تدريبك'],
     ['.train-chip', 'due', ''],
