@@ -2166,6 +2166,7 @@
     'Odometer reading at start (km)': 'قراءة العداد عند البدء (كم)',
     'Send customer handover WhatsApp': 'أرسل رسالة WhatsApp للتسليم',
     'Test Drive Authorization Request': 'طلب تفويض تجربة القيادة',
+    'Documents unlock once the advance payment is received.': 'تُتاح المستندات بعد استلام الدفعة المقدمة.',
     'Advance payment is not in cash —': 'لم يتم سداد الدفعة المقدمة نقدًا — يُتاح',
     'Add a note to the leadership log…': 'إضافة ملاحظة إلى سجل الإدارة…',
     'Pick a channel to log the update.': 'اختر قناة لتسجيل التحديث.',

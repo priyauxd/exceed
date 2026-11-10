@@ -1262,6 +1262,176 @@
     .zs-menu { position:absolute; inset-inline-end:0; bottom:calc(100% + 4px); z-index:30; min-width:170px; background:#fff; border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 24px rgba(16,24,40,.14); padding:4px; display:flex; flex-direction:column; }
     .zs-menu button { display:flex; align-items:center; gap:8px; border:0; background:none; text-align:start; font:500 12.5px inherit; padding:7px 8px; border-radius:6px; cursor:pointer; color:#1f2937; }
     .zs-menu button:hover { background:#f2f4f7; } .zs-menu .material-symbols-outlined { font-size:17px; color:#475467; }
+    /* Documents & e-signature table */
+    .zs-order { font-size:11px; color:#667085; white-space:nowrap; }
+    .zs-dn { display:flex; align-items:flex-start; gap:4px; }
+    .zs-car { border:0; background:none; cursor:pointer; color:#475467; padding:0; margin-top:-1px; display:inline-flex; border-radius:4px; } .zs-car:hover { background:#f2f4f7; } .zs-car .material-symbols-outlined { font-size:20px; }
+    .zs-car-sp { width:20px; flex-shrink:0; }
+    .zs-tb tr.zs-open > td { border-bottom:0; background:#fafbfc; }
+    .zs-tb tr.zs-lock td { color:#667085; background:#fcfcfd; }
+    .zs-lk { display:inline-flex; align-items:center; gap:5px; font-size:12px; } .zs-lk .material-symbols-outlined { font-size:16px; color:#98a2b3; }
+    .zs-chip.na { background:#f2f4f7; color:#475467; }
+    .zs-tb td .zs-chip + .zs-ts { margin-top:3px; }
+    .zs-seq { display:inline-flex; align-items:center; }
+    .zs-seq-d { width:20px; height:20px; border-radius:50%; border:1.5px solid #d0d5dd; background:#fff; color:#667085; font-size:10.5px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .zs-seq-d.ok { background:#0e7a3e; border-color:#0e7a3e; color:#fff; } .zs-seq-d.ok .material-symbols-outlined { font-size:13px; font-weight:700; }
+    .zs-seq-d.now { border-color:#f79009; color:#a15c00; background:#fff4e0; }
+    .zs-seq-ln { width:9px; height:2px; background:#d0d5dd; display:inline-block; } .zs-seq-ln.ok { background:#0e7a3e; }
+    .zs-sign.pri { background:#1f7a55; color:#fff; } .zs-sign.pri:hover { background:#196847; }
+    .zs-tb .zs-rt summary.zs-sign { padding:4px 7px; font-size:11.5px; gap:4px; border-color:#1f7a55; }
+    .zs-tb .zs-rt summary.zs-more { border:0; background:none; padding:2px; color:#475467; border-radius:6px; } .zs-tb .zs-rt summary.zs-more:hover { background:#f2f4f7; }
+    .zs-menu { min-width:200px; }
+    .zs-repush { display:flex; align-items:center; gap:3px; border:0; background:none; cursor:pointer; color:#0f6cbd; font:600 11px inherit; padding:2px 0 0; } .zs-repush .material-symbols-outlined { font-size:14px; }
+    .zs-tb tr.zs-x > td { background:#fafbfc; padding:0 12px 12px 36px; }
+    .zs-det { border-top:1px dashed #e4e7ec; padding-top:4px; }
+    .zs-dh { font-size:10.5px; font-weight:700; letter-spacing:.03em; text-transform:uppercase; color:#475467; margin:10px 0 6px; display:flex; align-items:center; gap:8px; }
+    .zs-req, .zs-ro { text-transform:none; letter-spacing:0; font-weight:500; color:#667085; font-size:11px; display:inline-flex; align-items:center; gap:3px; } .zs-ro { margin-inline-start:auto; } .zs-ro .material-symbols-outlined { font-size:13px; }
+    .zs-vt { width:100%; border-collapse:collapse; font-size:11.5px; background:#fff; border:1px solid #eef0f3; border-radius:8px; }
+    .zs-vt th { text-align:start; font-size:10px; font-weight:600; color:#667085; text-transform:uppercase; padding:5px 8px; border-bottom:1px solid #eef0f3; } .zs-vt td { padding:6px 8px; border-bottom:1px solid #f2f4f7; } .zs-vt tr:last-child td { border-bottom:0; } .zs-vt .r { text-align:end; white-space:nowrap; }
+    .zs-vt .zs-link, .zs-att .zs-link { margin:0; font-size:11.5px; }
+    .zs-cur { font-size:10px; font-weight:600; color:#0e7a3e; background:#e7f6ec; border-radius:999px; padding:1px 6px; }
+    .zs-sgl { display:grid; grid-template-columns:repeat(auto-fit, minmax(0,1fr)); grid-auto-flow:column; gap:6px; }
+    .zs-sgl > div { background:#fff; border:1px solid #eef0f3; border-radius:8px; padding:6px 8px; display:flex; flex-direction:column; gap:1px; font-size:11.5px; min-width:0; } .zs-sgl span { color:#667085; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .zs-sgn { font-size:10.5px; }
+    .zs-att { display:flex; gap:14px; margin-top:8px; } .zs-att .zs-link { display:inline-flex; align-items:center; gap:4px; } .zs-att .material-symbols-outlined { font-size:16px; }
+    .zs-tl { list-style:none; margin:0; padding:6px 12px 4px; background:#fff; border:1px solid #eef0f3; border-radius:8px; max-height:260px; overflow:auto; }
+    .zs-tl-day { font-size:10.5px; font-weight:700; color:#667085; text-transform:uppercase; letter-spacing:.03em; padding:6px 0 4px; }
+    .zs-tl-i { position:relative; display:flex; gap:10px; padding:0 0 12px; }
+    .zs-tl-i::before { content:''; position:absolute; inset-inline-start:11px; top:24px; bottom:0; width:2px; background:#eaecf0; }
+    .zs-tl-i:last-child::before, .zs-tl-i:has(+ .zs-tl-day)::before { display:none; }
+    .zs-tl-dot { width:24px; height:24px; border-radius:50%; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; background:#f2f4f7; color:#475467; position:relative; z-index:1; }
+    .zs-tl-dot .material-symbols-outlined { font-size:14px; }
+    .zs-tl-dot.ok { background:#e7f6ec; color:#0e7a3e; } .zs-tl-dot.info { background:#e8f1fb; color:#0f6cbd; } .zs-tl-dot.sys { background:#eef4ff; color:#3538cd; }
+    .zs-tl-dot.bad { background:#fdecec; color:#b42318; } .zs-tl-dot.warn { background:#fff4e0; color:#a15c00; }
+    .zs-tl-c { flex:1; min-width:0; padding-top:3px; display:flex; flex-direction:column; gap:1px; }
+    .zs-tl-t { display:flex; align-items:baseline; gap:6px; font-size:12px; } .zs-tl-t b { font-weight:600; }
+    .zs-tl-v { font-size:10px; font-weight:600; color:#475467; background:#f2f4f7; border-radius:4px; padding:0 5px; }
+    .zs-tl-tm { margin-inline-start:auto; font-size:11px; color:#667085; white-space:nowrap; }
+    .zs-tl-m { font-size:11.5px; color:#667085; }
+    .zl { list-style:none; margin:0; padding:0; background:#fff; border:1px solid #eef0f3; border-radius:8px; }
+    .zl li { display:flex; align-items:center; gap:10px; padding:8px 10px; border-bottom:1px solid #f2f4f7; font-size:12px; } .zl li:last-child { border-bottom:0; }
+    .zl-v, .zl-n { width:26px; height:26px; border-radius:7px; background:#f2f4f7; color:#344054; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; } .zl-n { border-radius:50%; }
+    .zl-t { display:flex; flex-direction:column; min-width:0; flex:1; } .zl-t b { font-weight:600; font-size:12.5px; } .zl-t small { font-size:11px; color:#667085; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .zl-a { display:inline-flex; gap:4px; margin-inline-start:6px; }
+    .zl-ib { width:28px; height:28px; border:1px solid var(--border); background:var(--surface); border-radius:6px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; color:#475467; padding:0; } .zl-ib:hover { background:var(--blue-soft); border-color:var(--colorBrandBackground); color:var(--colorBrandBackground); } .zl-ib .material-symbols-outlined { font-size:17px; } .zl-ib.sp { visibility:hidden; }
+    .zl-s { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:600; color:#98a2b3; white-space:nowrap; } .zl-s .material-symbols-outlined { font-size:15px; } .zl-s.ok { color:#0e7a3e; } .zl-s.now { color:#a15c00; }
+    /* Documents table — formatting */
+    .zs-tb { table-layout:fixed; }
+    .zs-tb th { padding:10px 8px; } .zs-tb td { padding:12px 8px; height:62px; }
+    .zs-tb th:first-child, .zs-tb td:first-child { padding-inline-start:14px; } .zs-tb th:last-child, .zs-tb td:last-child { padding-inline-end:12px; }
+    .zs-tb .zs-tn { overflow:hidden; text-overflow:ellipsis; font-size:12.5px; }
+    .zs-tb th:first-child, .zs-tb td:first-child { padding-inline-start:10px; } .zs-tb .zs-dn { gap:2px; }
+    .zs-tb .zs-ts { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:3px; }
+    .zs-vv { display:inline-block; font-size:10px; font-weight:700; color:#475467; background:#f2f4f7; border-radius:4px; padding:0 5px; margin-inline-end:6px; }
+    .zs-dn > div { min-width:0; }
+    .zs-tb .zs-dn { align-items:center; } .zs-tb .zs-car { margin-top:0; }
+    .zs-tb .zs-lk { line-height:20px; } .zs-tb .zs-lk .material-symbols-outlined { line-height:20px; }
+    .zs-tb td.r .zs-link { line-height:20px; }
+    .zs-tb tr.zs-lock td { height:auto; padding-top:10px; padding-bottom:10px; }
+    .zs-tb tr.zs-lock .zs-tn { color:#667085; }
+    .zs-tb tbody tr:not(.zs-x):not(.zs-lock):hover > td { background:#fafbfc; }
+    .zs-tb .zs-acts { gap:4px; }
+    .zs-tb .zs-sign, .zs-tb .zs-rt summary.zs-sign { padding:5px 9px; font-size:11.5px; border-radius:6px; }
+    .zs-tb .zs-sync { font-size:12px; }
+    .zs-tb td .zs-chip { font-size:11px; padding:2px 7px; gap:3px; } .zs-tb td .zs-chip .material-symbols-outlined { font-size:13px; }
+    .zs-tb .zs-rt summary.zs-sign.ic { padding:5px 6px; }
+    .zs-more-sp { width:20px; flex-shrink:0; }
+    .zs-tb td.r { text-align:start; } .zs-tb td.r .zs-acts { display:flex; justify-content:flex-start; width:100%; } .zs-tb td.r .zs-acts > .zs-rt:last-child:has(.zs-more), .zs-tb td.r .zs-acts > .zs-more-sp { margin-inline-start:auto; }
+    .zs-tb .zs-ring { width:24px; height:24px; border-width:2px; }
+    .zs-tb .zs-ring.all { border:2px solid #0e7a3e; } .zs-tb .zs-ring.all .material-symbols-outlined { font-size:14px; }
+    .zs-tb .zs-ring.lk { border:2px solid #e4e7ec; }
+    .zs-tb .zs-ring.part { padding:2px; }
+    .zs-lk { gap:7px; } .zs-ring.lk { background:#f2f4f7; border:1px solid #e4e7ec; color:#667085; } .zs-tb .zs-ring.lk .material-symbols-outlined { font-size:14px; color:#667085; line-height:1; }
+    /* Signers: one ring + hover list */
+    .zs-sgw { position:relative; display:inline-flex; align-items:center; gap:6px; cursor:default; outline:none; }
+    .zs-ring { width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; box-sizing:border-box; }
+    .zs-ring.all { background:#0e7a3e; color:#fff; } .zs-ring.all .material-symbols-outlined { font-size:15px; font-weight:700; }
+    .zs-ring.part { border:2px dashed #f79009; background:conic-gradient(#f79009 0 var(--p), transparent var(--p) 100%); background-clip:content-box; padding:2px; }
+    .zs-ring.none { border:2px dashed #c0c6d0; }
+    .zs-sgt { display:flex; flex-direction:column; line-height:1.25; white-space:nowrap; min-width:0; } .zs-sgt b { font-size:12px; font-weight:600; color:#475467; } .zs-sgt small { font-size:11px; color:#667085; overflow:hidden; text-overflow:ellipsis; }
+    .zs-ring.all + .zs-sgt b { color:#0e7a3e; } .zs-ring.part + .zs-sgt b { color:#a15c00; }
+    .zs-ring { width:24px; height:24px; }
+    .zs-pop { position:absolute; top:calc(100% + 8px); inset-inline-start:-6px; z-index:40; width:290px; background:#fff; border:1px solid #e4e7ec; border-radius:10px; box-shadow:0 10px 28px rgba(16,24,40,.16); padding:10px; display:none; flex-direction:column; gap:6px; text-align:start; }
+    .zs-pop::before { content:''; position:absolute; top:-6px; inset-inline-start:14px; width:10px; height:10px; background:#fff; border-left:1px solid #e4e7ec; border-top:1px solid #e4e7ec; transform:rotate(45deg); }
+    .zs-sgw:hover .zs-pop, .zs-sgw:focus .zs-pop { display:flex; }
+    .zs-pop > b { font-size:12px; font-weight:600; color:#1f2937; }
+    .zs-pop-r { display:flex; align-items:center; gap:8px; font-size:12px; } .zs-pop-r > .material-symbols-outlined { font-size:17px; }
+    .zs-pop-n { display:flex; flex-direction:column; flex:1; min-width:0; color:#1f2937; } .zs-pop-n small { font-size:10.5px; color:#667085; }
+    .zs-pop-r em { font-style:normal; font-size:11px; font-weight:600; }
+    .zs-pop-r.ok > .material-symbols-outlined, .zs-pop-r.ok em { color:#0e7a3e; } .zs-pop-r.now > .material-symbols-outlined, .zs-pop-r.now em { color:#a15c00; } .zs-pop-r.no > .material-symbols-outlined, .zs-pop-r.no em { color:#98a2b3; }
+    .zs-hv { position:relative; display:inline-flex; flex-direction:column; align-items:flex-start; outline:none; cursor:default; }
+    .zs-hv:hover .zs-pop, .zs-hv:focus .zs-pop, .zs-hv:focus-within .zs-pop { display:flex; }
+    .zs-pop-d { font-size:11.5px; color:#475467; line-height:1.4; white-space:normal; }
+    .zs-pop-kv { display:grid; grid-template-columns:118px auto 1fr; align-items:baseline; column-gap:10px; font-size:11.5px; border-top:1px solid #f2f4f7; padding-top:5px; } .zs-pop-kv span { color:#667085; }
+    .zs-pop-kv b { font-weight:600; color:#1f2937; font-variant-numeric:tabular-nums; white-space:nowrap; } .zs-pop-kv i { font-style:normal; font-size:11px; color:#98a2b3; font-variant-numeric:tabular-nums; }
+    .zs-pop-r em small { display:block; font-size:10px; font-weight:500; color:#667085; text-align:end; }
+    .zs-tb td:nth-child(4) .zs-pop { inset-inline-start:auto; inset-inline-end:-120px; } .zs-tb td:nth-child(4) .zs-pop::before { inset-inline-start:auto; inset-inline-end:54px; }
+    /* Popover card (status / F&O) */
+    .zs-pop.zs-card { width:352px; padding:0; gap:0; border-color:#e5e7eb; border-radius:12px; box-shadow:0 12px 32px -8px rgba(15,23,42,.18), 0 2px 6px rgba(15,23,42,.06); --tc:#2f6f45; }
+    .zs-card.t-wait { --tc:#a15c00; } .zs-card.t-bad { --tc:#b42318; } .zs-card.t-na { --tc:#667085; }
+    .zs-ph { display:flex; align-items:center; gap:8px; padding:16px 20px 0; } .zs-ph .material-symbols-outlined { font-size:18px; color:var(--tc); }
+    .zs-ph b { font-size:15px; font-weight:600; color:#111827; } .zs-ph em { margin-inline-start:auto; font-style:normal; font-size:12px; color:#9ca3af; white-space:nowrap; }
+    .zs-pdesc { display:block; padding:8px 20px 16px; font-size:13px; line-height:1.6; color:#4b5563; white-space:normal; }
+    .zs-ptl { list-style:none; margin:0; padding:16px 20px; border-top:1px solid #e5e7eb; }
+    .zs-ptl li { position:relative; display:flex; align-items:flex-start; gap:12px; padding-bottom:14px; font-size:13px; } .zs-ptl li:last-child { padding-bottom:0; }
+    .zs-ptl li:not(:last-child)::before { content:''; position:absolute; left:4px; top:14px; height:calc(100% - 8px); width:1px; background:#e5e7eb; }
+    .zs-pd { margin-top:6px; width:9px; height:9px; border-radius:50%; flex-shrink:0; border:2px solid #cbd5e1; background:#fff; box-sizing:border-box; }
+    .zs-ptl li.last .zs-pd { border:0; background:var(--tc); }
+    .zs-pl { flex:1; color:#4b5563; } .zs-ptl li.last .zs-pl { color:#111827; font-weight:500; }
+    .zs-pdt { color:#111827; font-variant-numeric:tabular-nums; white-space:nowrap; } .zs-ptm { width:44px; text-align:end; color:#9ca3af; font-variant-numeric:tabular-nums; }
+    .zs-card::before { display:none; }
+    /* Signers popover card */
+    .zs-pop.zs-sgc { width:368px; }
+    .zs-sgh { display:flex; align-items:baseline; justify-content:space-between; padding:16px 20px 12px; } .zs-sgh b { font-size:15px; font-weight:600; color:#111827; }
+    .zs-sgh em { font-style:normal; font-size:12px; font-weight:500; font-variant-numeric:tabular-nums; color:#9ca3af; } .zs-sgh em.all { color:#2f6f45; } .zs-sgh em.part { color:#a15c00; }
+    .zs-sgl2 { list-style:none; margin:0; padding:0; border-top:1px solid #e5e7eb; }
+    .zs-sgl2 li { display:flex; align-items:center; gap:12px; padding:12px 20px; border-bottom:1px solid #e5e7eb; } .zs-sgl2 li:last-child { border-bottom:0; }
+    .zs-sgl2 li > .material-symbols-outlined { font-size:20px; flex-shrink:0; } .zs-sgl2 .ok { color:#2f6f45; } .zs-sgl2 .now { color:#a15c00; } .zs-sgl2 .no { color:#cbd5e1; }
+    .zs-sgn2 { flex:1; min-width:0; display:flex; flex-direction:column; } .zs-sgn2 b { font-size:13.5px; font-weight:500; color:#111827; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .zs-sgn2 small { font-size:12px; color:#9ca3af; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .zs-sgd { flex-shrink:0; display:flex; flex-direction:column; align-items:flex-end; font-variant-numeric:tabular-nums; } .zs-sgd b { font-size:13.5px; font-weight:400; color:#111827; white-space:nowrap; } .zs-sgd small { font-size:12px; color:#9ca3af; white-space:nowrap; }
+    .zs-sgd b.now { color:#a15c00; font-weight:500; } .zs-sgd b.no { color:#9ca3af; }
+    /* Expand toggle + signed files */
+    .zs-tb .zs-car { width:22px; height:22px; border:1px solid var(--border); border-radius:6px; background:var(--surface); color:#475467; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; margin-inline-end:4px; transition:background .12s, border-color .12s; }
+    .zs-tb .zs-car .material-symbols-outlined { font-size:18px; transition:transform .18s ease; }
+    .zs-tb .zs-car:hover { background:var(--blue-soft); border-color:var(--colorBrandBackground); color:var(--colorBrandBackground); }
+    .zs-tb .zs-car.on { background:var(--colorBrandBackground); border-color:var(--colorBrandBackground); color:#fff; } .zs-tb .zs-car.on .material-symbols-outlined { transform:rotate(90deg); }
+    [dir="rtl"] .zs-tb .zs-car:not(.on) .material-symbols-outlined { transform:rotate(180deg); }
+    .zs-tb .zs-car-sp { width:26px; flex-shrink:0; }
+    .zs-files { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .zs-file { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--border); border-radius:10px; background:#fff; cursor:pointer; text-align:start; font:inherit; color:inherit; }
+    .zs-file:hover { border-color:var(--colorBrandBackground); background:var(--blue-soft); }
+    .zs-fi { width:34px; height:34px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; } .zs-fi .material-symbols-outlined { font-size:19px; }
+    .zs-fi.pdf { background:#fdecec; color:#c4314b; } .zs-fi.cert { background:#e7f6ec; color:#0e7a3e; }
+    .zs-fn { flex:1; min-width:0; display:flex; flex-direction:column; } .zs-fn b { font-size:12.5px; font-weight:600; } .zs-fn small { font-size:11px; color:#667085; }
+    .zs-fd { font-size:19px; color:#475467; }
+    /* Sign options popup */
+.zso-o.off { opacity:.45; } .zso-err { display:flex; align-items:center; gap:5px; } .zso-err .material-symbols-outlined { font-size:15px; }
+    .zso-mv { display:inline-flex; gap:2px; margin-inline-start:auto; } .zso-mv button { border:1px solid #e4e7ec; background:#fff; border-radius:5px; width:24px; height:24px; padding:0; cursor:pointer; color:#475467; display:inline-flex; align-items:center; justify-content:center; } .zso-mv button:disabled { opacity:.35; cursor:default; } .zso-mv .material-symbols-outlined { font-size:15px; }
+    .zs-mh { font-size:10.5px; color:#667085; padding:4px 8px 2px; }
+    .zs-menu button.off { opacity:.45; }
+    .zs-exp { margin-inline-start:8px; display:inline-flex; align-items:center; gap:3px; border:1px solid #d0d5dd; background:#fff; border-radius:6px; padding:2px 7px; font:600 11px inherit; text-transform:none; letter-spacing:0; color:#344054; cursor:pointer; } .zs-exp .material-symbols-outlined { font-size:14px; }
+    .zs-dh .zs-ro + .zs-ro { margin-inline-start:8px; }
+        .confirm-modal:has(.zso) { width:480px; max-height:92vh; overflow:auto; }
+    .zso { text-align:start; display:flex; flex-direction:column; gap:6px; }
+    .zso-l { font-size:12px; font-weight:600; color:#344054; margin-top:8px; } .zso-l span { font-weight:400; color:#667085; }
+    .zso-seg { display:grid; gap:6px; } .zso-seg.two { grid-template-columns:1fr 1fr; } .zso-seg.four { grid-template-columns:repeat(4, 1fr); }
+    .zso-o { display:flex; align-items:center; gap:8px; border:1px solid #d0d5dd; background:#fff; border-radius:8px; padding:8px 10px; cursor:pointer; text-align:start; font:inherit; color:#1f2937; }
+    .zso-o b { display:block; font-size:12.5px; font-weight:600; } .zso-o small { display:block; font-size:11px; color:#667085; } .zso-o .material-symbols-outlined { font-size:19px; color:#475467; }
+    .zso-o.on { border-color:#1f7a55; background:#e8f3ee; box-shadow:0 0 0 1px #1f7a55 inset; } .zso-o.on .material-symbols-outlined { color:#1f7a55; }
+    .zso-seg.four .zso-o { justify-content:center; padding:7px 4px; } .zso-seg.four .zso-o b { font-size:12px; }
+    .zso-sg { list-style:none; margin:0; padding:0; border:1px solid #e4e7ec; border-radius:8px; }
+    .zso-sg li { display:flex; align-items:center; gap:10px; padding:8px 10px; border-bottom:1px solid #f2f4f7; } .zso-sg li:last-child { border-bottom:0; }
+    .zso-sg li > div { display:flex; flex-direction:column; min-width:0; font-size:12.5px; } .zso-sg small { font-size:10.5px; color:#667085; } .zso-sg li > div > span { font-size:11.5px; color:#667085; }
+    .zso-n { width:22px; height:22px; border-radius:50%; background:#1f7a55; color:#fff; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .zso-lk { margin-inline-start:auto; font-size:16px; color:#98a2b3; }
+    .zso-in { width:100%; border:1px solid #d0d5dd; border-radius:6px; padding:6px 8px; font:inherit; font-size:12.5px; background:#fff; margin-top:3px; }
+    .zso-two { display:grid; grid-template-columns:1fr 1.3fr; gap:6px; } .zso-err { color:#b42318; font-size:11.5px; min-height:0; }
+    /* Brand buttons for the documents table and Send for signature popup */
+    .zs-tb .zs-sign, .zs-tb .zs-rt summary.zs-sign { border-color:var(--border); color:var(--ink); background:var(--surface); }
+    .zs-tb .zs-sign:hover, .zs-tb .zs-rt summary.zs-sign:hover { background:var(--blue-soft); border-color:var(--colorBrandBackground); color:var(--colorBrandBackground); }
+    .zs-tb .zs-sign.pri, .zs-tb .zs-rt summary.zs-sign.pri { background:var(--colorBrandBackground); border-color:var(--colorBrandBackground); color:#fff; }
+    .zs-tb .zs-sign.pri:hover, .zs-tb .zs-rt summary.zs-sign.pri:hover { background:var(--colorBrandBackgroundHover); border-color:var(--colorBrandBackgroundHover); color:#fff; }
+    .zso-o.on { border-color:var(--colorBrandBackground); background:var(--blue-soft); box-shadow:0 0 0 1px var(--colorBrandBackground) inset; } .zso-o.on .material-symbols-outlined { color:var(--colorBrandBackground); }
+    .zso-n { background:var(--colorBrandBackground); }
     .pa-block { display:flex; flex-direction:column; gap:8px; margin-top:14px; }
     .pa-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
     .pa-head .conf-lbl { margin:0; }
@@ -4731,16 +4901,11 @@
           '</div>' +
         '</div>' +
         '<div class="conf-ctas">' +
-          '<button class="conf-cta" onclick="sendPaymentLinkFlow()"><span class="material-symbols-outlined">link</span>Send payment link</button>' +
-          (canQuote
-            ? '<button class="conf-cta" onclick="generateQuotationFlow()"><span class="material-symbols-outlined">request_quote</span>Generate quotation</button>'
-            : '<button class="conf-cta locked" disabled aria-disabled="true"><span class="material-symbols-outlined">lock</span>Generate quotation</button>') +
+          '<button class="conf-cta conf-span" onclick="sendPaymentLinkFlow()"><span class="material-symbols-outlined">link</span>Send payment link</button>' +
         '</div>' +
         (canQuote ? '' :
-          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span> Advance payment is not in cash — <strong>Generate quotation</strong> unlocks once the payment is received in FO. Send a payment link, or switch the toggle to Yes if it was taken in cash.</div>') +
-        paBlockHtml(l) +
-        docBlockHtml() +
-        zohoHistoryHtml(l) +
+          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Documents unlock once the advance payment is received.</span></div>') +
+        zohoDocsHtml(l) +
         confOrderBlock(l, p) +
       '</div>';
     }
@@ -5066,108 +5231,420 @@
       openConfirm('Generate quotation', html, 'Generate', function(){
         var billedTo = (quoteLk.sel && quoteLk.sel.n) || (financed ? 'the financing bank' : (l.name || 'the lead'));
         p.quoteGenerated = true;
+        if (zsAfterQuote) { var zf = zsAfterQuote; zsAfterQuote = null; zf(); return; }
         renderDetail(selectedIdx, currentStep);
         showToast('Quotation generated for ' + billedTo + ' — sent to manager to sign');
       }, 'Cancel', 'request_quote', true);
       quoteLkSync();
     }
-    // Purchase agreement: generated → manager approves in CE → Zoho Sign or manual signing → signed copy to download.
-    // l.pa.status: pending | approved | sent | signed. Sharing and signing tick the matching Accepted-stage checklist items.
+    // Purchase agreement checklist ticks on the Accepted stage (shared / signed).
     var PA_STEP = 5, PA_CHECK_SHARED = 1, PA_CHECK_SIGNED = 2;
     function paTick(l, ci){ l.checks = l.checks || {}; l.checks[PA_STEP + '-' + ci] = true; }
-    function paBlockHtml(l){
-      var pa = l.pa || {}, btn = function(fn, ic, label){
-        return '<button class="conf-cta" onclick="' + fn + '()"><span class="material-symbols-outlined">' + ic + '</span>' + label + '</button>';
-      };
-      var status = '', ctas = '';
-      if (!pa.status) {
-        ctas = '<button class="conf-cta conf-span" onclick="generatePurchaseAgreementFlow()"><span class="material-symbols-outlined">description</span>Generate purchase agreement</button>';
-      } else if (pa.status === 'pending') {
-        status = '<span class="qc-status wait"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval in CE</span>';
-        ctas = '<button class="conf-cta conf-span" onclick="approvePurchaseAgreement()"><span class="material-symbols-outlined">check_circle</span>Approve purchase agreement</button>';
-      } else if (pa.status === 'approved') {
-        status = '<span class="qc-status ok"><span class="material-symbols-outlined">verified_user</span> Approved by manager</span>';
-        ctas = btn('sendPurchaseAgreementZoho', 'draw', 'Send via Zoho Sign') + btn('signPurchaseAgreementManually', 'upload_file', 'Customer signs manually');
-      } else if (pa.status === 'sent') {
-        status = '<span class="qc-status wait"><span class="material-symbols-outlined">schedule_send</span> Sent via Zoho Sign · awaiting customer signature</span>';
-        ctas = btn('markPurchaseAgreementSigned', 'task_alt', 'Mark signed by customer') + btn('signPurchaseAgreementManually', 'upload_file', 'Customer signs manually');
-      } else {
-        status = '<span class="qc-status ok"><span class="material-symbols-outlined">task_alt</span> ' + (pa.method === 'manual' ? 'Signed manually by customer' : 'Signed by customer via Zoho Sign') + '</span>';
-        ctas = '<button class="conf-cta conf-span" onclick="downloadSignedPurchaseAgreement()"><span class="material-symbols-outlined">download</span>Download signed purchase agreement</button>';
-      }
-      return '<div class="pa-block">' +
-        '<div class="pa-head"><span class="conf-lbl">Purchase agreement</span>' + status + '</div>' +
-        '<div class="conf-ctas">' + ctas + '</div>' +
-      '</div>';
-    }
 
-    // Duty of care — a fixed document the customer receives; clicking the row downloads it.
-    var DOC_DUTY_URL = 'duty-of-care-report.pdf', DOC_DUTY_NAME = 'Duty Of Care Report - OutPut document.pdf';
-    function docBlockHtml(){
-      return '<div class="zs-sec">' +
-        '<div class="conf-lbl">Duty of care</div>' +
-        '<a class="zs-doc" href="' + DOC_DUTY_URL + '" download="' + DOC_DUTY_NAME + '" onclick="showToast(\'Duty of care document downloaded\')">' +
-          '<span class="zs-doc-ic"><span class="material-symbols-outlined">picture_as_pdf</span></span>' +
-          '<span class="zs-doc-t"><b>Duty of care</b><span>' + DOC_DUTY_NAME + ' · PDF</span></span>' +
-          '<span class="material-symbols-outlined zs-doc-dl">download</span>' +
-        '</a>' +
-      '</div>';
-    }
-    // Zoho Sign history — every document sent for e-signature, with re-send and F&O sync status.
-    // status: sent | viewed | signed | declined | expired · sync: synced | pending | failed | na
-    var ZS_ST = { sent:['Sent','wait','schedule_send'], viewed:['Viewed','wait','visibility'], signed:['Signed','ok','task_alt'], declined:['Declined','bad','block'], expired:['Expired','bad','timer_off'] };
-    var ZS_SYNC = { synced:['Synced to F&O','ok','cloud_done'], pending:['Sync pending','wait','cloud_sync'], failed:['Sync failed','bad','cloud_off'], na:['Not synced — awaiting signature','na','cloud'] };
-    function zsDocs(l){
-      if (!l.zoho) l.zoho = [
-        { name:'Sales Quotation', gen:'03 Nov 2026', st:'signed', signed:'04 Nov 2026', sync:'synced', via:'Email' },
-        { name:'Purchase Agreement 1', gen:'05 Nov 2026', st:'declined', signed:'', sync:'na', via:'WhatsApp' },
-        { name:'Duty of care', gen:'06 Nov 2026', st:'viewed', signed:'', sync:'na', via:'SMS' }
-      ];
-      return l.zoho;
-    }
+    /* ── Documents & e-signature (Zoho Sign) ─────────────────────────────────────────────
+       One table for every legal document on the accepted proposal. Each document:
+         • unlocks at its business milestone (advance payment, F&O sales-order approval);
+         • can be generated many times — every version is kept and can be downloaded or re-sent;
+         • is signed in a fixed order: Signer 1 Sales executive → Signer 2 Sales manager → Signer 3 Customer;
+         • is signed in person (signing page opens on this device) or remotely (Email / SMS / WhatsApp);
+         • carries Zoho status, F&O push status (with re-push) and a read-only audit log.
+       Templates, tags and field placement come from Zoho Sign — there is no setup screen in the CRM. */
+    var ZS_DEFS = [
+      { k:'sq',  name:'Sales Quotation' },
+      { k:'pa1', name:'Purchase Agreement 1' },
+      { k:'pa2', name:'Purchase Agreement 2' },
+      { k:'doc', name:'Duty of care', inperson:true }
+    ];
+    var ZS_ST = {
+      draft:   ['Ready to send', 'na', 'draft'],
+      sent:    ['Sent', 'wait', 'schedule_send'],
+      viewed:  ['Viewed', 'wait', 'visibility'],
+      partial: ['Partially signed', 'wait', 'pending'],
+      signed:  ['Signed', 'ok', 'task_alt'],
+      declined:['Declined', 'bad', 'block'],
+      expired: ['Expired', 'bad', 'timer_off'],
+      nosig:   ['No signature needed', 'na', 'do_not_disturb_on'],
+      old:     ['Superseded', 'na', 'history']
+    };
+    var ZS_SYNC = { synced:['Pushed', 'ok', 'cloud_done'], pending:['Pending', 'wait', 'cloud_sync'], failed:['Failed', 'bad', 'cloud_off'], na:['—', 'na', 'cloud'] };
+    var ZS_ROLES = ['Sales executive', 'Sales manager', 'Customer'];
+    var ZS_MANAGERS = [
+      { n:'Waheb Al Mansoori', e:'waheb.almansoori@agm-sales.ae', s:'Sales manager · default' },
+      { n:'Nurishma Rahman',   e:'nurishma.rahman@agm-sales.ae',  s:'Sales manager' },
+      { n:'Omar Haddad',       e:'omar.haddad@agm-sales.ae',      s:'Head of sales' }
+    ];
+    var ZS_DOMAIN = '@agm-sales.ae';
     function zsToday(){ return new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' }); }
-    function zohoHistoryHtml(l){
-      var docs = zsDocs(l);
-      var SY_SHORT = { synced:'Synced', pending:'Pending', failed:'Failed', na:'Not synced' };
-      var rows = docs.map(function(d, i){
-        var st = ZS_ST[d.st], sy = ZS_SYNC[d.sync];
-        return '<tr>' +
-          '<td><span class="zs-tn">' + dpEsc(d.name) + '</span><span class="zs-ts">Sent by ' + dpEsc(d.via) + '</span></td>' +
-          '<td class="nw">' + d.gen + '</td>' +
-          '<td class="nw">' + (d.signed ? '<span class="zs-yes">Yes</span><span class="zs-ts">' + d.signed + '</span>' : '<span class="zs-no">No</span>') + '</td>' +
-          '<td><span class="zs-chip ' + st[1] + '"><span class="material-symbols-outlined">' + st[2] + '</span>' + st[0] + '</span></td>' +
-          '<td class="nw"><span class="zs-sync ' + sy[1] + '" title="' + sy[0] + '"><span class="material-symbols-outlined">' + sy[2] + '</span>' + SY_SHORT[d.sync] + '</span>' +
-            (d.sync === 'failed' || d.sync === 'pending' ? '<button class="zs-retry" onclick="zsSync(' + i + ')" title="Retry sync to F&amp;O" aria-label="Retry sync to F&amp;O"><span class="material-symbols-outlined">refresh</span></button>' : '') + '</td>' +
-          '<td class="r"><div class="zs-acts">' + (d.st !== 'signed' ? '<button class="zs-sign" onclick="zsSignNow(' + i + ')" title="Customer is in the showroom — sign in person on this device"><span class="material-symbols-outlined">stylus_note</span>Sign now</button>' : '') +
-            '<details class="zs-rt"><summary title="Re-send by SMS, WhatsApp or Email" aria-label="Re-send ' + dpEsc(d.name) + '"><span class="material-symbols-outlined">forward_to_inbox</span><span class="material-symbols-outlined">expand_more</span></summary>' +
-            '<div class="zs-menu">' + [['SMS','sms'],['WhatsApp','chat'],['Email','mail'],['All','all_inbox']].map(function(c){
-              return '<button onclick="zsResend(' + i + ',\'' + c[0] + '\')"><span class="material-symbols-outlined">' + c[1] + '</span>' + (c[0] === 'All' ? 'All channels' : c[0]) + '</button>';
-            }).join('') + '</div></details></div></td>' +
-        '</tr>';
+    function zsNow(){ return zsToday() + ' ' + new Date().toTimeString().slice(0, 5); }
+    function zsReqId(){ return 'ZS-' + Math.random().toString(36).slice(2, 8).toUpperCase() + '-' + Date.now().toString().slice(-5); }
+    function zsHost(l){
+      var p = acceptedProp() || {}, ord = p.id ? ordData(l, p) : null;
+      var n = (ord && ord.taker && ord.taker.n) || (l.owner && l.owner !== 'Unassigned' ? l.owner : 'Mariam Saeed');
+      return { n:n, e:n.toLowerCase().replace(/\s+/g, '.') + ZS_DOMAIN };
+    }
+    // Signers are pre-populated; only Signer 2 can be swapped when the manager is away.
+    function zsSigners(l, mgr){
+      var h = zsHost(l), m = mgr || ZS_MANAGERS[0];
+      return [
+        { role:ZS_ROLES[0], n:h.n, e:h.e },
+        { role:ZS_ROLES[1], n:m.n, e:m.e },
+        { role:ZS_ROLES[2], n:l.name, e:l.email || '', ph:l.phone || '' }
+      ];
+    }
+    function zsAudit(ver, ev, by, extra){ (ver.audit = ver.audit || []).push({ ts: extra && extra.ts || zsNow(), ev: ev, by: by || '', det: extra && extra.det || '' }); }
+    function zsData(l){
+      if (l.zsd) return l.zsd;
+      var s = zsSigners(l), h = s[0].n, cust = s[2].n;
+      var sq1 = { v:1, gen:'01 Nov 2026', by:h, st:'old', opt:'remote', via:'Email', signers:s, done:0, sync:'na', req:'ZS-7Q2KD1-41870', audit:[] };
+      zsAudit(sq1, 'Generated', h, { ts:'01 Nov 2026 10:12' });
+      zsAudit(sq1, 'Sent for signature · Email', h, { ts:'01 Nov 2026 10:14', det:'Zoho request ZS-7Q2KD1-41870' });
+      zsAudit(sq1, 'Superseded by version 2', h, { ts:'03 Nov 2026 09:40', det:'Price updated' });
+      var sq2 = { v:2, gen:'03 Nov 2026', by:h, st:'signed', opt:'remote', via:'Email', signers:s, done:3, signedAt:'04 Nov 2026', sync:'synced', syncAt:'04 Nov 2026', req:'ZS-9M4TB8-52211', audit:[] };
+      zsAudit(sq2, 'Generated', h, { ts:'03 Nov 2026 09:40' });
+      zsAudit(sq2, 'Sent for signature · Email', h, { ts:'03 Nov 2026 09:42', det:'Zoho request ZS-9M4TB8-52211' });
+      zsAudit(sq2, 'Signed by Signer 1 · ' + s[0].role, s[0].n, { ts:'03 Nov 2026 09:45' });
+      zsAudit(sq2, 'Signed by Signer 2 · ' + s[1].role, s[1].n, { ts:'03 Nov 2026 11:02' });
+      zsAudit(sq2, 'Signed by Signer 3 · Customer', cust, { ts:'04 Nov 2026 18:20' });
+      zsAudit(sq2, 'Signed PDF and Zoho certificate attached · pushed to F&O', 'System', { ts:'04 Nov 2026 18:21' });
+      var pa1 = { v:1, gen:'05 Nov 2026', by:h, st:'partial', opt:'remote', via:'WhatsApp', signers:s, done:2, sync:'na', req:'ZS-3HX8PL-60432', audit:[] };
+      zsAudit(pa1, 'Generated after advance payment', h, { ts:'05 Nov 2026 12:05' });
+      zsAudit(pa1, 'Sent for signature · WhatsApp', h, { ts:'05 Nov 2026 12:07', det:'Zoho request ZS-3HX8PL-60432' });
+      zsAudit(pa1, 'Signed by Signer 1 · ' + s[0].role, s[0].n, { ts:'05 Nov 2026 12:09' });
+      zsAudit(pa1, 'Signed by Signer 2 · ' + s[1].role, s[1].n, { ts:'05 Nov 2026 15:30' });
+      zsAudit(pa1, 'Viewed by Signer 3 · Customer', cust, { ts:'06 Nov 2026 09:12' });
+      var dc1 = { v:1, gen:'06 Nov 2026', by:'System', st:'draft', opt:'inperson', via:'In person', signers:s, done:0, sync:'na', audit:[] };
+      zsAudit(dc1, 'Generated automatically after advance payment', 'System', { ts:'06 Nov 2026 08:30', det:'In person signing preselected' });
+      l.zsd = {
+        sq:  { vers:[sq1, sq2], act:1, sigReq:true },
+        pa1: { vers:[pa1], act:0 },
+        pa2: { vers:[], act:-1 },
+        doc: { vers:[dc1], act:0, file:'duty-of-care-report.pdf' }
+      };
+      return l.zsd;
+    }
+    function zsCur(d){ return d.act > -1 ? d.vers[d.act] : null; }
+    // When a document becomes available (business milestone) — null when unlocked.
+    function zsLock(l, k){
+      var p = acceptedProp() || {}, paid = !!p.advanceCash || (p.received || 0) > 0 || !!l._zsPaidSeed;
+      if (k === 'sq')  return paid ? null : 'Unlocks on advance payment';
+      if (k === 'pa1') return paid ? null : 'Unlocks on advance payment';
+      if (k === 'pa2') return l.soApproved ? null : 'Unlocks on F&O approval';
+      if (k === 'doc') return paid ? null : 'Auto-generated on advance payment';
+      return null;
+    }
+    function zsPending(ver){ return ver.signers[ver.done] || null; }
+    // Timestamp of the latest audit event matching re (for hover details).
+    function zsEv(ver, re){ var a = (ver.audit || []).filter(function(x){ return re.test(x.ev); }); return a.length ? a[a.length - 1].ts : ''; }
+    // Events since the latest send/repush — so a recalled request's views and signatures don't show.
+    function zsEvNow(ver, re){
+      var a = ver.audit || [], from = 0;
+      for (var i = a.length - 1; i >= 0; i--) if (/^(Released|Sent for signature|Repushed|In person signing started)/.test(a[i].ev)) { from = i; break; }
+      var m = a.slice(from).filter(function(x){ return re.test(x.ev); }); return m.length ? m[m.length - 1].ts : '';
+    }
+    function zsPopRow(label, val){ return val ? { l: label, v: val } : null; }
+    // Popover card: header (icon · title · note), description, then a dated timeline (last step highlighted).
+    function zsPopCard(tone, icon, title, note, desc, rows){
+      rows = rows.filter(Boolean).sort(function(a, b){ return (Date.parse(a.v) || 0) - (Date.parse(b.v) || 0); });
+      var tl = rows.map(function(r, i){
+        var m = String(r.v).match(/^(\d{2} \w{3} \d{4})(?: (\d{2}:\d{2}))?$/), last = i === rows.length - 1;
+        return '<li class="' + (last ? 'last' : '') + '"><span class="zs-pd"></span><span class="zs-pl">' + r.l + '</span>' +
+          '<span class="zs-pdt">' + (m ? m[1] : r.v) + '</span><span class="zs-ptm">' + (m && m[2] ? m[2] : '') + '</span></li>';
+      }).join('');
+      return '<span class="zs-pop zs-card t-' + tone + '" role="tooltip">' +
+        '<span class="zs-ph"><span class="material-symbols-outlined">' + icon + '</span><b>' + title + '</b>' + (note ? '<em>' + note + '</em>' : '') + '</span>' +
+        '<span class="zs-pdesc">' + desc + '</span>' + (tl ? '<ol class="zs-ptl">' + tl + '</ol>' : '') + '</span>';
+    }
+    function zsSignersHtml(ver){
+      if (!ver || ver.st === 'nosig') return '<span class="zs-ts">—</span>';
+      var n = ver.signers.length, done = Math.min(ver.done, n), live = ['sent','viewed','partial'].indexOf(ver.st) > -1;
+      var cls = done >= n ? 'all' : done ? 'part' : 'none', pct = Math.round(done / n * 100);
+      var ring = '<span class="zs-ring ' + cls + '" style="--p:' + pct + '%">' + (cls === 'all' ? '<span class="material-symbols-outlined">check</span>' : '') + '</span>';
+      var pop = '<span class="zs-pop zs-card zs-sgc" role="tooltip"><span class="zs-sgh"><b>' + (cls === 'all' ? 'Everyone has signed' : cls === 'part' ? (n - done) + ' still to sign' : 'No one has signed yet') + '</b>' +
+        '<em class="' + cls + '">' + done + ' of ' + n + '</em></span><ul class="zs-sgl2">' + ver.signers.map(function(s, i){
+        var st = i < done ? ['ok', 'check_circle'] : (i === done && live ? ['now', 'hourglass_top'] : ['no', 'radio_button_unchecked']);
+        var when = i < done ? zsEv(ver, new RegExp('^Signed by Signer ' + (i + 1) + '\\b')) : '';
+        var m = String(when).match(/^(\d{2} \w{3} \d{4})(?: (\d{2}:\d{2}))?$/);
+        var right = m ? '<b>' + m[1] + '</b><small>' + (m[2] || '') + '</small>'
+          : (function(){
+              if (st[0] !== 'now') return '<b class="no">Not sent yet</b><small>After signer ' + i + '</small>';
+              var vw = zsEvNow(ver, new RegExp('^Viewed by Signer ' + (i + 1) + '\\b'));
+              // Sent = when this signer was notified: the send itself for signer 1, otherwise when the previous signer signed.
+              var sent = i === 0 ? zsEvNow(ver, /^(Released|Sent for signature|Repushed|In person signing started)/) : zsEvNow(ver, new RegExp('^Signed by Signer ' + i + '\\b')) || zsEv(ver, new RegExp('^Signed by Signer ' + i + '\\b'));
+              var ts = vw || sent, mm = String(ts).match(/^(\d{2} \w{3} \d{4})(?: (\d{2}:\d{2}))?$/);
+              return '<b class="now">' + (vw ? 'Viewed' : 'Sent') + '</b><small>' + (mm ? mm[1] + (mm[2] ? ' · ' + mm[2] : '') : (ver.opt === 'inperson' ? 'In person' : 'Notified')) + '</small>';
+            })();
+        return '<li><span class="material-symbols-outlined ' + st[0] + '">' + st[1] + '</span><span class="zs-sgn2"><b>' + dpEsc(s.n) + '</b><small>' + (i + 1) + ' · ' + s.role + '</small></span><span class="zs-sgd">' + right + '</span></li>';
+      }).join('') + '</ul></span>';
+      return '<span class="zs-sgw" tabindex="0" aria-label="' + done + ' of ' + n + ' signed">' + ring +
+        '<span class="zs-sgt"><b>' + (cls === 'all' ? 'All signed' : done + ' of ' + n + ' signed') + '</b><small>' +
+          (cls === 'all' ? n + ' signers' : live && ver.signers[done] ? 'Next: ' + dpEsc(ver.signers[done].n.split(' ')[0]) : ver.st === 'draft' ? 'Not sent yet' : (ZS_ST[ver.st] || ['—'])[0]) + '</small></span>' + pop + '</span>';
+    }
+    function zsStatusHtml(ver){
+      var st = ZS_ST[ver.st] || ZS_ST.draft, pend = zsPending(ver), sub = '';
+      if ((ver.st === 'sent' || ver.st === 'viewed' || ver.st === 'partial') && pend) sub = 'Waiting for ' + pend.role.toLowerCase().replace('sales ', '');
+      else if (ver.st === 'signed') sub = ver.signedAt || '';
+      else if (ver.st === 'draft') sub = ver.opt === 'inperson' ? 'In person' : 'Remote link';
+      var how = ver.opt === 'inperson' ? 'in person' : ver.opt === 'manual' ? 'on paper' : 'by ' + ver.via;
+      var desc = {
+        draft: 'Generated and ready. Nothing has been sent — click Send for signature to start.',
+        sent: 'Signing request sent ' + how + '. ' + (pend ? pend.n + ' (' + pend.role + ') signs next.' : ''),
+        viewed: (pend ? pend.n : 'The signer') + ' opened the document but hasn’t signed yet.',
+        partial: ver.done + ' of ' + ver.signers.length + ' signed. ' + (pend ? 'Waiting for ' + pend.n + ' (' + pend.role + ') — they have been notified.' : '') + ' Nothing goes to F&O until everyone signs.',
+        signed: 'Everyone has signed. The signed PDF and Zoho Sign certificate are attached to the lead.',
+        declined: (pend ? pend.n : 'A signer') + ' declined to sign. Repush to send a new request.',
+        expired: 'The signing link expired before everyone signed. Repush to send a new request.',
+        nosig: 'Customer signature not required for this document.'
+      }[ver.st] || '';
+      var note = ver.st === 'signed' ? 'All parties · Zoho Sign' : ['sent','viewed','partial'].indexOf(ver.st) > -1 ? ver.done + ' of ' + ver.signers.length + ' signed' : ver.st === 'draft' ? 'Not sent' : 'Zoho Sign';
+      var pop = zsPopCard(st[1], st[2], st[0], note, dpEsc(desc), [
+        zsPopRow('Generated', zsEv(ver, /^Generated/) || ver.gen),
+        zsPopRow(ver.opt === 'inperson' ? 'Signing started' : 'Sent' + (ver.via && ver.st !== 'draft' ? ' (' + dpEsc(ver.via) + ')' : ''), ver.st !== 'draft' ? zsEv(ver, /^(Released|Sent for signature|Repushed|In person signing started)/) : ''),
+        zsPopRow('Viewed', zsEvNow(ver, /^Viewed/)),
+        zsPopRow('Last signature', ver.st !== 'signed' ? zsEvNow(ver, /^Signed by Signer/) : ''),
+        zsPopRow('Completed', ver.st === 'signed' ? (zsEv(ver, /^Completed|signed copy uploaded|Signed by Signer/i) || ver.signedAt) : '')
+      ]);
+      return '<span class="zs-hv" tabindex="0"><span class="zs-chip ' + st[1] + '"><span class="material-symbols-outlined">' + st[2] + '</span>' + st[0] + '</span>' + pop + '</span>';
+    }
+    function zsSyncHtml(k, ver){
+      if (!ver || ver.st !== 'signed') return '<span class="zs-hv" tabindex="0"><span class="zs-sync na">—</span>' + zsPopCard('na', 'cloud', 'Not in F&amp;O yet', 'Waiting', 'The signed PDF and audit log go to F&amp;O only once every signer has signed.', []) + '</span>';
+      var sy = ZS_SYNC[ver.sync] || ZS_SYNC.pending;
+      var desc = ver.sync === 'synced' ? 'Signed PDF and audit log stored in F&O against the sales quotation. Kept for 10 years.'
+        : ver.sync === 'failed' ? 'Push and automatic retry both failed. Technical Support and the sales executive were emailed. Click Re-push to try again.'
+        : 'Waiting in the staging table — retried automatically after the configured interval. Click Re-push to try now.';
+      var pop = zsPopCard(sy[1], sy[2], ver.sync === 'synced' ? 'Saved in F&amp;O' : ver.sync === 'failed' ? 'F&amp;O push failed' : 'F&amp;O push pending', ver.sync === 'synced' ? 'Kept 10 years' : 'Auto-retry on', dpEsc(desc), [
+        zsPopRow('Signed', ver.signedAt && zsEv(ver, /^Signed by Signer|signed copy uploaded/i) || ''),
+        zsPopRow('Queued', zsEv(ver, /Push to F&O queued|pushed to F&O/)),
+        zsPopRow('Pushed', ver.sync === 'synced' ? (zsEv(ver, /^Pushed to F&O|pushed to F&O/) || ver.syncAt || '') : '')
+      ]);
+      return '<span class="zs-hv" tabindex="0"><span class="zs-sync ' + sy[1] + '"><span class="material-symbols-outlined">' + sy[2] + '</span>' + sy[0] + '</span>' +
+        (ver.sync === 'synced' ? ''
+          : '<button class="zs-repush" onclick="zsRepush(\'' + k + '\')"><span class="material-symbols-outlined">refresh</span>Re-push</button>') + pop + '</span>';
+    }
+    var zsOpenRow = {};
+    function zohoDocsHtml(l){
+      var D = zsData(l);
+      var rows = ZS_DEFS.map(function(def){
+        var k = def.k, d = D[k], ver = zsCur(d), lock = zsLock(l, k), open = !!zsOpenRow[k] && d.vers.length;
+        var name = '<span class="zs-tn">' + def.name + '</span>' +
+          (ver ? '<span class="zs-ts"><span class="zs-vv">v' + ver.v + '</span>' + ver.gen + '</span>' : '<span class="zs-ts">Not generated</span>');
+        var caret = d.vers.length ? '<button class="zs-car' + (open ? ' on' : '') + '" aria-expanded="' + !!open + '" aria-label="' + (open ? 'Hide' : 'Show') + ' versions and history" title="' + (open ? 'Hide' : 'Show') + ' versions and history" onclick="zsToggle(\'' + k + '\')"><span class="material-symbols-outlined">chevron_right</span></button>' : '<span class="zs-car-sp"></span>';
+        if (!ver && lock) return '<tr class="zs-lock"><td><div class="zs-dn">' + caret + '<div>' + name + '</div></div></td>' +
+          '<td colspan="3"><span class="zs-lk"><span class="zs-ring lk"><span class="material-symbols-outlined">lock</span></span>' + lock + '</span></td>' +
+            '<td class="r">' + (k === 'pa2' ? '<div class="zs-acts"><button class="zs-sign" onclick="zsSimSO()" title="Demo: mark the sales order approved in F&amp;O"><span class="material-symbols-outlined">task_alt</span>Simulate approval</button><span class="zs-more-sp"></span></div>' : '') + '</td></tr>';
+        var acts = '';
+        if (!ver) acts = '<button class="zs-sign" onclick="zsGenerate(\'' + k + '\')"><span class="material-symbols-outlined">description</span>Generate</button>';
+        else if (ver.st === 'draft') acts = '<button class="zs-sign pri" onclick="zsSignOptions(\'' + k + '\')"><span class="material-symbols-outlined">draw</span>Send for signature</button>';
+        else if (ver.st === 'sent' || ver.st === 'viewed' || ver.st === 'partial' || ver.st === 'declined' || ver.st === 'expired') {
+          var rp = '<details class="zs-rt"><summary class="zs-sign' + (ver.st === 'declined' || ver.st === 'expired' ? ' pri' : '') + '" title="New request for the same document and signers — the earlier one is recalled"><span class="material-symbols-outlined">restart_alt</span>Repush<span class="material-symbols-outlined">expand_more</span></summary><div class="zs-menu">' +
+              '<div class="zs-mh">New request · earlier one recalled</div>' +
+              [['In person','stylus_note'],['Email','mail'],['SMS','sms'],['WhatsApp','chat'],['All','all_inbox']].map(function(c){
+                var miss = c[0] !== 'In person' && zsChanMissing(c[0]);
+                return '<button' + (miss ? ' class="off" title="' + miss + '"' : '') + ' onclick="zsRepushReq(\'' + k + '\',\'' + c[0] + '\')"><span class="material-symbols-outlined">' + c[1] + '</span>' + (c[0] === 'All' ? 'All channels' : c[0]) + '</button>';
+              }).join('') + '</div></details>';
+          var sn = ver.opt === 'inperson' && ['sent','viewed','partial'].indexOf(ver.st) > -1;
+          if (sn) rp = rp.replace('<span class="material-symbols-outlined">restart_alt</span>Repush<span class="material-symbols-outlined">expand_more</span>', '<span class="material-symbols-outlined">restart_alt</span>').replace('class="zs-sign"', 'class="zs-sign ic" aria-label="Repush"');
+          acts = (sn ? '<button class="zs-sign pri" onclick="zsSignNow(\'' + k + '\')"><span class="material-symbols-outlined">stylus_note</span>Sign now</button>' : '') + rp;
+        }
+        else if (ver.st === 'signed') acts = '<button class="zs-sign" onclick="zsDownload(\'' + k + '\',' + d.act + ',true)"><span class="material-symbols-outlined">download</span>Download</button>';
+        else if (ver.st === 'nosig') acts = '<button class="zs-sign" onclick="zsDownload(\'' + k + '\',' + d.act + ')"><span class="material-symbols-outlined">download</span>Download</button>';
+        var more = ver ? '<details class="zs-rt"><summary class="zs-more" aria-label="More actions for ' + def.name + '"><span class="material-symbols-outlined">more_vert</span></summary><div class="zs-menu">' +
+            '<button onclick="zsGenerate(\'' + k + '\')"><span class="material-symbols-outlined">restart_alt</span>Generate new version</button>' +
+            '<button onclick="zsDownload(\'' + k + '\',' + d.act + ')"><span class="material-symbols-outlined">download</span>Download v' + ver.v + '</button>' +
+            '<button onclick="zsToggle(\'' + k + '\',true)"><span class="material-symbols-outlined">history</span>Versions &amp; audit log</button>' +
+            (['sent','viewed','partial'].indexOf(ver.st) > -1 ? '<button onclick="zsSimulate(\'' + k + '\')"><span class="material-symbols-outlined">sync</span>Refresh Zoho status</button>' : '') +
+            (ver.st !== 'signed' && ver.st !== 'nosig' ? '<button onclick="zsManual(\'' + k + '\')"><span class="material-symbols-outlined">upload_file</span>Upload signed copy</button>' : '') +
+          '</div></details>' : '';
+        return '<tr' + (open ? ' class="zs-open"' : '') + '><td><div class="zs-dn">' + caret + '<div>' + name + '</div></div></td>' +
+          '<td>' + zsSignersHtml(ver) + '</td>' +
+          '<td>' + (ver ? zsStatusHtml(ver) : '<span class="zs-ts">—</span>') + '</td>' +
+          '<td class="nw">' + zsSyncHtml(k, ver) + '</td>' +
+          '<td class="r"><div class="zs-acts">' + acts + more + '</div></td></tr>' +
+          (open ? '<tr class="zs-x"><td colspan="5">' + zsDetailHtml(k, d) + '</td></tr>' : '');
       }).join('');
       return '<div class="zs-sec">' +
-        '<div class="zs-h"><span class="conf-lbl">Zoho Sign history <span class="zs-n">· ' + docs.length + ' document' + (docs.length === 1 ? '' : 's') + '</span></span>' +
-          '<button class="zs-send" onclick="zsOpen()"><span class="material-symbols-outlined">draw</span>Send for signature</button></div>' +
-        '<div class="zs-tw"><table class="zs-tb"><thead><tr><th>Document</th><th>Generated</th><th>Customer<br>signed</th><th>Status</th><th>F&amp;O sync</th><th class="r">Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+        '<div class="zs-h"><span class="conf-lbl">Documents &amp; e-signature</span></div>' +
+        '<div class="zs-tw"><table class="zs-tb"><colgroup><col style="width:27.5%"><col style="width:17.5%"><col style="width:17.5%"><col style="width:12%"><col></colgroup><thead><tr><th>Document</th><th>Signers</th><th>Status</th><th>F&amp;O push</th><th>Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
       '</div>';
     }
-    // Zoho Sign — full send / in-person signing flow (zoho-sign.js). Results land in the history above.
-    // Customer in the showroom: open the signing session straight away on this device for an existing row.
-    function zsSignNow(i){ var d = zsDocs(leads[selectedIdx])[i]; if (d) zsOpen(d.name, [d.name.replace(/ \d+$/, '')], i); }
-    function zsOpen(name, docs, rowIdx){
-      var l = leads[selectedIdx], p = acceptedProp() || {}, ord = p.id ? ordData(l, p) : null;
-      var host = (ord && ord.taker && ord.taker.n) || (l.owner && l.owner !== 'Unassigned' ? l.owner : 'Mariam Saeed');
+    function zsDetailHtml(k, d){
+      var cur = zsCur(d);
+      var vers = d.vers.slice().reverse().map(function(v){
+        var i = d.vers.indexOf(v), st = ZS_ST[v.st] || ZS_ST.draft, isCur = i === d.act;
+        return '<li><span class="zl-v">v' + v.v + '</span><span class="zl-t"><b>' + v.gen + '</b><small>Generated by ' + dpEsc(v.by) + '</small></span>' +
+          (isCur ? '<span class="zs-cur">Current</span>' : '') + '<span class="zs-chip ' + st[1] + '">' + st[0] + '</span>' +
+          '<span class="zl-a">' + (!isCur ? '<button class="zl-ib" title="Send this version for signature" aria-label="Send v' + v.v + ' for signature" onclick="zsUseVersion(\'' + k + '\',' + i + ')"><span class="material-symbols-outlined">send</span></button>' : '') +
+          '<button class="zl-ib" title="Download v' + v.v + '" aria-label="Download v' + v.v + '" onclick="zsDownload(\'' + k + '\',' + i + ',' + (v.st === 'signed') + ')"><span class="material-symbols-outlined">download</span></button></span></li>';
+      }).join('');
+      var log = [];
+      d.vers.forEach(function(v){ (v.audit || []).forEach(function(a){ log.push({ v:v.v, a:a, ver:v }); }); });
+      // Timeline: newest first, grouped by day; each event gets an icon and colour by type.
+      var lastDay = '', audit = log.reverse().sort(function(a, b){ return (Date.parse(b.a.ts) || 0) - (Date.parse(a.a.ts) || 0); }).map(function(x){
+        var ev = x.a.ev, day = x.a.ts.slice(0, 11), time = x.a.ts.slice(12) || '';
+        var t = /declin|expired/i.test(ev) ? ['block','bad'] : /repushed/i.test(ev) ? ['restart_alt','info'] : /recalled/i.test(ev) ? ['undo','warn'] : /not needed/i.test(ev) ? ['person_remove','warn'] : /pushed|F&O/i.test(ev) ? ['cloud_done','sys'] : /^Signed|signed copy|Completed/i.test(ev) ? ['draw','ok']
+          : /sent|released|link emailed|in person signing/i.test(ev) ? ['send','info'] : /viewed/i.test(ev) ? ['visibility','info'] : /superseded/i.test(ev) ? ['history','mute']
+          : /changed/i.test(ev) ? ['swap_horiz','warn'] : /generated|current/i.test(ev) ? ['description','mute'] : /no.*signature|not requiring/i.test(ev) ? ['do_not_disturb_on','mute'] : ['radio_button_checked','mute'];
+        var head = day !== lastDay ? '<li class="zs-tl-day">' + day + '</li>' : ''; lastDay = day;
+        return head + '<li class="zs-tl-i"><span class="zs-tl-dot ' + t[1] + '"><span class="material-symbols-outlined">' + t[0] + '</span></span>' +
+          '<div class="zs-tl-c"><div class="zs-tl-t"><b>' + dpEsc(ev) + '</b><span class="zs-tl-v">v' + x.v + '</span><span class="zs-tl-tm">' + time + '</span></div>' +
+          '<span class="zs-tl-m">' + [x.a.by ? dpEsc(x.a.by) : '', x.a.det ? dpEsc(x.a.det) : ''].filter(Boolean).join(' · ') + '</span></div></li>';
+      }).join('');
+      var signedLinks = cur && cur.st === 'signed'
+        ? '<div class="zs-dh">Signed documents</div><div class="zs-files">' +
+            '<button class="zs-file" onclick="zsDownload(\'' + k + '\',' + d.act + ',true)"><span class="zs-fi pdf"><span class="material-symbols-outlined">picture_as_pdf</span></span><span class="zs-fn"><b>Signed PDF</b><small>v' + cur.v + ' · ' + (cur.signedAt || '') + '</small></span><span class="material-symbols-outlined zs-fd">download</span></button>' +
+            '<button class="zs-file" onclick="zsCert(\'' + k + '\')"><span class="zs-fi cert"><span class="material-symbols-outlined">verified</span></span><span class="zs-fn"><b>Zoho Sign certificate</b><small>Completion certificate · PDF</small></span><span class="material-symbols-outlined zs-fd">download</span></button></div>' : '';
+      var sg = cur && cur.st !== 'nosig' ? '<ul class="zl">' + cur.signers.map(function(s, i){
+          var done = i < cur.done, now = !done && i === cur.done && ['sent','viewed','partial'].indexOf(cur.st) > -1;
+          return '<li><span class="zl-n">' + (i + 1) + '</span><span class="zl-t"><b>' + dpEsc(s.n) + '</b><small>' + s.role + ' · ' + dpEsc(s.e || s.ph || '') + '</small></span>' +
+            '<span class="zl-s ' + (done ? 'ok' : now ? 'now' : '') + '"><span class="material-symbols-outlined">' + (done ? 'check_circle' : now ? 'hourglass_top' : 'schedule') + '</span>' + (done ? 'Signed' : now ? 'Waiting to sign' : 'Not yet') + '</span></li>';
+        }).join('') + '</ul>' : '';
+      return '<div class="zs-det">' +
+        '<div class="zs-dh">Versions</div><ul class="zl">' + vers + '</ul>' +
+        (sg ? '<div class="zs-dh">Signers · v' + cur.v + (cur.req ? ' <span class="zs-req">Zoho request ' + cur.req + '</span>' : '') + (cur.st !== 'draft' ? '<span class="zs-ro"><span class="material-symbols-outlined">lock</span>Locked after sending</span>' : '') + '</div>' + sg : '') +
+        '<div class="zs-dh">Audit log <span class="zs-ro"><span class="material-symbols-outlined">lock</span>Read-only · kept 10 years</span><button class="zs-exp" onclick="zsExport(\'' + k + '\')"><span class="material-symbols-outlined">download</span>Export</button></div><ul class="zs-tl">' + audit + '</ul>' + signedLinks +
+      '</div>';
+    }
+    document.addEventListener('click', function(e){
+      document.querySelectorAll('.zs-rt[open]').forEach(function(d){ if (!d.contains(e.target)) d.removeAttribute('open'); });
+    });
+    function zsToggle(k, force){ zsOpenRow[k] = force ? true : !zsOpenRow[k]; renderDetail(selectedIdx, currentStep); }
+
+    // Generate (or regenerate) a document — every generation is a new, kept version.
+    function zsGenerate(k){
+      var l = leads[selectedIdx], D = zsData(l), d = D[k], def = ZS_DEFS.filter(function(x){ return x.k === k; })[0];
+      var add = function(){
+        var prev = zsCur(d), h = zsHost(l).n;
+        if (prev && ['signed','nosig'].indexOf(prev.st) < 0) { prev.st = 'old'; zsAudit(prev, 'Superseded by version ' + (d.vers.length + 1), h); }
+        var v = { v:d.vers.length + 1, gen:zsToday(), by:h, st:'draft', opt: def.inperson ? 'inperson' : 'remote', via: def.inperson ? 'In person' : 'Email', signers:zsSigners(l), done:0, sync:'na', audit:[] };
+        zsAudit(v, 'Generated', h);
+        d.vers.push(v); d.act = d.vers.length - 1;
+        renderDetail(selectedIdx, currentStep);
+        showToast(def.name + ' v' + v.v + ' generated');
+      };
+      if (k === 'sq') { zsAfterQuote = add; generateQuotationFlow(); return; }
+      if (d.vers.length) openConfirm('Generate new version', def.name + ' v' + (d.vers.length + 1) + ' will be generated from the latest data. Version ' + d.vers.length + ' stays in the history.', 'Generate', add, 'Cancel', 'restart_alt', true);
+      else add();
+    }
+    var zsAfterQuote = null;
+    function zsUseVersion(k, i){
+      var l = leads[selectedIdx], d = zsData(l)[k], v = d.vers[i]; if (!v) return;
+      d.act = i; if (['old','declined','expired'].indexOf(v.st) > -1) { v.st = 'draft'; v.done = 0; }
+      zsAudit(v, 'Made current version', zsHost(l).n);
+      renderDetail(selectedIdx, currentStep);
+      zsSignOptions(k);
+    }
+    function zsSimSO(){ var l = leads[selectedIdx]; l.soApproved = true; renderDetail(selectedIdx, currentStep); showToast('Sales order approved in F&O — Purchase Agreement 2 unlocked'); }
+
+    // Sign options — the only step before Zoho Sign: signature needed?, in person or remote, fixed signers.
+    var zsOpt = null;
+    function zsSignOptions(k){
+      var l = leads[selectedIdx], d = zsData(l)[k], ver = zsCur(d), def = ZS_DEFS.filter(function(x){ return x.k === k; })[0]; if (!ver) return;
+      var m = ver.signers.filter(function(s){ return s.role === ZS_ROLES[1]; })[0];
+      var mi = m ? ZS_MANAGERS.map(function(x){ return x.e; }).indexOf(m.e) : 0;
+      var order = ver.signers.map(function(s){ return ZS_ROLES.indexOf(s.role); });
+      if (!m) order.splice(1, 0, 1);   // manager was left out last time — offer it again in the default spot
+      zsOpt = { k:k, req: k === 'sq' ? d.sigReq !== false : true, opt: ver.opt === 'remote' || ver.opt === 'inperson' ? ver.opt : (def.inperson ? 'inperson' : 'remote'),
+        via: ver.opt === 'remote' && /^(Email|SMS|WhatsApp)$/.test(ver.via) ? ver.via : 'Email', mgrOn: !!m || ver.st === 'draft',
+        mgr: mi > -1 ? mi : 'other', other: mi > -1 || !m ? '' : m.e, otherN: mi > -1 || !m ? '' : m.n, order: order };
+      openConfirm(def.name + ' · v' + ver.v, '<div id="zsOptBody" class="zso">' + zsOptHtml() + '</div>', 'Send', zsOptGo, 'Cancel', 'draw', true);
+      zsOptSync();
+    }
+    // A channel needs the matching contact detail on the CRM record.
+    function zsChanMissing(via){
+      var l = leads[selectedIdx], ph = !!(l.phone || '').trim(), em = !!(l.email || '').trim();
+      if (via === 'Email') return em ? '' : 'No email on the customer record';
+      if (via === 'SMS' || via === 'WhatsApp') return ph ? '' : 'No mobile number on the customer record';
+      if (via === 'All') return ph && em ? '' : 'Mobile number or email missing on the customer record';
+      return '';
+    }
+    function zsOptHtml(){
+      var o = zsOpt, l = leads[selectedIdx], s = zsSigners(l);
+      var seg = function(key, val, ic, label, sub, off){
+        return '<button type="button" class="zso-o' + (o[key] === val ? ' on' : '') + (off ? ' off' : '') + '"' + (off ? ' title="' + off + '"' : '') + ' onclick="zsOptSet(\'' + key + '\',' + JSON.stringify(val).replace(/"/g, '&quot;') + ')">' +
+          (ic ? '<span class="material-symbols-outlined">' + ic + '</span>' : '') + '<span><b>' + label + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</span></button>';
+      };
+      var html = '';
+      if (o.k === 'sq') html += '<div class="zso-l">Customer signature required?</div><div class="zso-seg two">' + seg('req', true, '', 'Yes') + seg('req', false, '', 'No') + '</div>';
+      if (!o.req) return html + '<div class="flow-note"><span class="material-symbols-outlined">info</span> No signing request is created. The quotation is stored as v' + zsCur(zsData(l)[o.k]).v + ' and can be downloaded from the table.</div>';
+      html += '<div class="zso-l">Signing option</div><div class="zso-seg two">' +
+        seg('opt', 'inperson', 'stylus_note', 'In person', 'Signing page opens on this device') +
+        seg('opt', 'remote', 'send_to_mobile', 'Remote link', 'Signers get a secure link') + '</div>';
+      if (o.opt === 'remote') {
+        html += '<div class="zso-l">Send link by</div><div class="zso-seg four">' +
+          [['Email','mail'],['SMS','sms'],['WhatsApp','chat'],['All','all_inbox']].map(function(c){ return seg('via', c[0], c[1], c[0] === 'All' ? 'All channels' : c[0], '', zsChanMissing(c[0])); }).join('') + '</div>';
+        var miss = zsChanMissing(o.via);
+        if (miss) html += '<div class="zso-err"><span class="material-symbols-outlined">error</span>' + miss + ' — ' + o.via + ' can’t be used. Update the lead or pick another channel.</div>';
+      }
+      html += '<div class="zso-l">Manager signature needed?</div><div class="zso-seg two">' + seg('mgrOn', true, '', 'Yes') + seg('mgrOn', false, '', 'No') + '</div>';
+      var mgrSel = '<select class="zso-in" onchange="zsOptSet(\'mgr\', this.value === \'other\' ? \'other\' : +this.value)" aria-label="Sales manager">' +
+        ZS_MANAGERS.map(function(m, i){ return '<option value="' + i + '"' + (o.mgr === i ? ' selected' : '') + '>' + m.n + ' — ' + m.s + '</option>'; }).join('') +
+        '<option value="other"' + (o.mgr === 'other' ? ' selected' : '') + '>Someone else…</option></select>' +
+        (o.mgr === 'other' ? '<div class="zso-two"><input class="zso-in" id="zsoOtherN" placeholder="Name" value="' + dpEsc(o.otherN) + '" oninput="zsOpt.otherN=this.value;zsOptSync()"><input class="zso-in" id="zsoOther" type="email" placeholder="name' + ZS_DOMAIN + '" value="' + dpEsc(o.other) + '" oninput="zsOpt.other=this.value;zsOptSync()"></div><div class="zso-err" id="zsoErr"></div>' : '');
+      var ord = zsOrder(), cust = o.opt === 'remote' && (o.via === 'SMS' || o.via === 'WhatsApp') ? s[2].ph : s[2].e;
+      var rows = ord.map(function(r, pos){
+        var mv = '<span class="zso-mv"><button type="button" aria-label="Move up"' + (pos ? '' : ' disabled') + ' onclick="zsOptMove(' + r + ',-1)"><span class="material-symbols-outlined">arrow_upward</span></button>' +
+          '<button type="button" aria-label="Move down"' + (pos < ord.length - 1 ? '' : ' disabled') + ' onclick="zsOptMove(' + r + ',1)"><span class="material-symbols-outlined">arrow_downward</span></button></span>';
+        var body = r === 0 ? '<div><small>Sales executive</small><b>' + dpEsc(s[0].n) + '</b><span>' + s[0].e + '</span></div>'
+          : r === 1 ? '<div style="flex:1"><small>Sales manager · default from CRM settings</small>' + mgrSel + '</div>'
+          : '<div><small>Customer</small><b>' + dpEsc(s[2].n) + '</b><span>' + dpEsc(cust || '—') + '</span></div>';
+        return '<li><span class="zso-n">' + (pos + 1) + '</span>' + body + mv + '</li>';
+      }).join('');
+      html += '<div class="zso-l">Signers and order <span>· use the arrows to change who signs first</span></div><ol class="zso-sg">' + rows + '</ol>' +
+        '<div class="flow-note"><span class="material-symbols-outlined">lock</span> Signers and order can’t be changed once the document is sent.</div>';
+      return html;
+    }
+    function zsOrder(){ var o = zsOpt; return o.order.filter(function(r){ return r !== 1 || o.mgrOn; }); }
+    function zsOptMove(r, dir){
+      var vis = zsOrder(), i = vis.indexOf(r), j = i + dir; if (j < 0 || j >= vis.length) return;
+      var other = vis[j], a = zsOpt.order.indexOf(r), b = zsOpt.order.indexOf(other);
+      zsOpt.order[a] = other; zsOpt.order[b] = r;
+      zsOptSet('order', zsOpt.order);
+    }
+    function zsOptSet(key, val){ zsOpt[key] = val; document.getElementById('zsOptBody').innerHTML = zsOptHtml(); zsOptSync(); }
+    function zsOptValid(){
+      var o = zsOpt; if (!o.req) return '';
+      if (o.opt === 'remote' && zsChanMissing(o.via)) return zsChanMissing(o.via);
+      if (!o.mgrOn || o.mgr !== 'other') return '';
+      if (!String(o.otherN || '').trim()) return 'Add the manager’s name';
+      if (!new RegExp('^[^@\\s]+' + ZS_DOMAIN.replace(/\./g, '\\.') + '$', 'i').test(String(o.other || '').trim())) return 'Only Al Ghurair email addresses (' + ZS_DOMAIN + ') can be used';
+      return '';
+    }
+    function zsOptSync(){
+      var ok = document.getElementById('confirmOkBtn'), o = zsOpt, err = zsOptValid(), e = document.getElementById('zsoErr');
+      if (e) e.textContent = o.other || o.otherN ? err : '';
+      if (ok) { ok.textContent = !o.req ? 'Save' : o.opt === 'inperson' ? 'Start signing' : 'Send'; ok.classList.toggle('locked', !!err); }
+    }
+    function zsOptGo(){
+      var o = zsOpt, l = leads[selectedIdx], D = zsData(l), d = D[o.k], ver = zsCur(d), def = ZS_DEFS.filter(function(x){ return x.k === o.k; })[0], h = zsHost(l).n;
+      if (zsOptValid()) return;
+      if (o.k === 'sq') d.sigReq = o.req;
+      if (!o.req) { ver.st = 'nosig'; zsAudit(ver, 'Marked as not requiring customer signature', h); renderDetail(selectedIdx, currentStep); showToast(def.name + ' saved — no signature needed'); return; }
+      var mgr = o.mgr === 'other' ? { n:o.otherN.trim(), e:o.other.trim() } : ZS_MANAGERS[o.mgr];
+      var all = zsSigners(l, mgr);
+      ver.signers = zsOrder().map(function(r){ return all[r]; });
+      ver.opt = o.opt; ver.via = o.opt === 'inperson' ? 'In person' : (o.via === 'All' ? 'Email, SMS and WhatsApp' : o.via);
+      ver.done = 0; ver.req = zsReqId(); ver.st = 'sent';
+      if (!o.mgrOn) zsAudit(ver, 'Manager signature not needed for this document', h);
+      else if (o.mgr !== 0) zsAudit(ver, 'Manager changed to ' + mgr.n, h, { det: mgr.e });
+      zsAudit(ver, (o.opt === 'inperson' ? 'Released · in person signing' : 'Released · sent by ' + ver.via), h, { det:'Zoho request ' + ver.req + ' · order: ' + ver.signers.map(function(s){ return s.n; }).join(' → ') });
+      if (o.k === 'pa1') paTick(l, PA_CHECK_SHARED);
+      renderDetail(selectedIdx, currentStep);
+      if (o.opt === 'inperson') zsOpenWindow(o.k);
+      else showToast(def.name + ' sent by ' + ver.via + ' — ' + ver.signers[0].n + ' signs first');
+    }
+    function zsSignNow(k){ zsOpenWindow(k); }
+    // In person: Zoho Sign's signing page opens in its own window, like the proposal builder.
+    function zsOpenWindow(k){
+      var l = leads[selectedIdx], d = zsData(l)[k], ver = zsCur(d), def = ZS_DEFS.filter(function(x){ return x.k === k; })[0], p = acceptedProp() || {};
       var ons = (typeof propAddOns !== 'undefined' ? propAddOns : []).filter(function(a){ return p.addOns && p.addOns[a.k]; }).map(function(a){ return a.label; });
-      var docName = name || 'Sales Quotation';
+      var h = zsHost(l);
       var opts = {
-        docs: docs || ['Sales Quotation', 'Purchase Agreement', 'Duty of care'], doc: docName.replace(/ \d+$/, ''),
+        doc: def.name.replace(/ \d+$/, ''), name: def.name + ' · v' + ver.v,
         lead: { name: l.name, email: l.email, phone: l.phone, id: l.id },
         prop: { id: p.id, model: p.model, vin: p.chassis, color: p.extColor, addOns: ons, price: p.nsp ? 'AED ' + propFmt(p.nsp) : '', down: p.nsp ? 'AED ' + propFmt(Math.round(p.nsp * (p.downPct || 0) / 100)) : '', pay: (typeof PAY_LABEL !== 'undefined' && PAY_LABEL[p.payType]) || 'Cash' },
-        host: { name: host, email: host.toLowerCase().replace(/\s+/g, '.') + '@agm-sales.ae' },
-        direct: rowIdx != null, name: docName
+        host: { name: h.n, email: h.e },
+        seq: ver.signers.map(function(s){ return { name: s.n, email: s.e, role: s.role }; }), done: ver.done, reqId: ver.req
       };
-      // Zoho Sign opens in its own window, like the proposal builder; the result comes back through zsImportResult().
-      var req = { id: 'zs' + Date.now(), lead: selectedIdx, row: rowIdx != null ? rowIdx : null, docName: docName, opts: opts };
+      var req = { id: 'zs' + Date.now(), lead: selectedIdx, row: { k:k, v:d.act }, docName: def.name, opts: opts };
       try { localStorage.setItem('exeedZohoReq', JSON.stringify(req)); } catch(e){}
       var w = window.open('zoho-sign.html?req=' + req.id + '&lang=' + (window.I18N ? I18N.lang : 'en'), 'exeedZohoSign', 'width=1280,height=860');
       if (!w) showToast('Allow pop-ups to open Zoho Sign');
@@ -5177,92 +5654,107 @@
       if (!q || !q.length) return;
       localStorage.setItem('exeedZohoResult', '[]');
       q.forEach(function(e){
-        var l = leads[e.lead]; if (!l || !e.res || e.res.mode === 'draft') return;
-        if (e.lead !== selectedIdx) { var keep = selectedIdx; selectedIdx = e.lead; zsRecordQuiet(l, e); selectedIdx = keep; return; }
-        zsRecord(l, e.docName, e.res, e.row);
-        showToast(e.res.mode === 'inperson' ? e.docName + ' signed in person — history updated' : e.res.mode === 'declined' ? e.docName + ' declined by the customer' : e.docName + ' sent for signature');
+        var l = leads[e.lead]; if (!l || !e.res || !e.row || e.res.mode === 'draft') return;
+        var ver = zsData(l)[e.row.k].vers[e.row.v]; if (!ver) return;
+        zsApply(l, e.row.k, ver, e.res);
+        if (e.lead === selectedIdx) {
+          renderDetail(selectedIdx, currentStep);
+          var r = e.res;
+          showToast(r.mode === 'declined' ? e.docName + ' declined' : ver.st === 'signed' ? e.docName + ' signed by all signers' : e.docName + ' partially signed — pending signer ' + (ver.done + 1));
+        }
       });
     }
-    function zsRecordQuiet(l, e){ var rd = renderDetail; renderDetail = function(){}; try { zsRecord(l, e.docName, e.res, e.row); } finally { renderDetail = rd; } }
     window.addEventListener('storage', function(e){ if (e.key === 'exeedZohoResult') zsImportResult(); });
-    function zsRecord(l, docName, res, rowIdx){
-      var name = res.doc || docName, isPA = /^Purchase Agreement/.test(name);
-      if (/^Purchase Agreement$/.test(name)) name += ' ' + (zsDocs(l).filter(function(d){ return /^Purchase Agreement/.test(d.name); }).length + 1);
-      var d = { name: name, gen: zsToday(), st: 'sent', signed: '', sync: 'na', via: res.via || 'Email' };
-      if (res.mode === 'inperson') { d.st = 'signed'; d.signed = res.signedAt || zsToday(); d.sync = 'pending'; d.via = 'In person'; }
-      else if (res.mode === 'declined') { d.st = 'declined'; d.via = 'In person'; }
-      else if (res.mode === 'inperson-later') { d.via = 'In person · not signed yet'; }
-      var old = rowIdx != null ? zsDocs(l)[rowIdx] : null;
-      if (old) { if (res.mode === 'inperson' || res.mode === 'declined') { old.st = d.st; old.signed = d.signed; old.sync = d.sync; old.via = d.via; } }
-      else zsDocs(l).push(d);
-      if (isPA && l.pa) {
-        l.pa.method = 'zoho';
-        if (res.mode === 'inperson') { l.pa.status = 'signed'; paTick(l, PA_CHECK_SHARED); paTick(l, PA_CHECK_SIGNED); }
-        else if (res.mode !== 'declined') { l.pa.status = 'sent'; paTick(l, PA_CHECK_SHARED); }
+    function zsApply(l, k, ver, res){
+      (res.signed || []).forEach(function(s){
+        var i = s.i; if (i < ver.done) return;
+        ver.done = i + 1; zsAudit(ver, 'Signed by Signer ' + (i + 1) + ' · ' + ver.signers[i].role + ' · in person', ver.signers[i].n, { ts: s.at });
+      });
+      if (res.mode === 'declined') { ver.st = 'declined'; zsAudit(ver, 'Declined in person', ver.signers[ver.done] ? ver.signers[ver.done].n : ''); return; }
+      if (ver.done >= ver.signers.length) zsComplete(l, k, ver);
+      else {
+        ver.st = ver.done ? 'partial' : 'sent';
+        if (res.mode === 'handoff') { ver.opt = res.rest === 'inperson' ? 'inperson' : 'remote'; ver.via = 'Email'; zsAudit(ver, 'Signing link emailed to Signer ' + (ver.done + 1) + ' · ' + ver.signers[ver.done].role, zsHost(l).n, { det: ver.signers[ver.done].e }); }
+      }
+    }
+    function zsComplete(l, k, ver){
+      ver.st = 'signed'; ver.done = ver.signers.length; ver.signedAt = zsToday(); ver.sync = 'pending';
+      zsAudit(ver, 'Completed · signed PDF and Zoho certificate attached to the lead', 'System');
+      zsAudit(ver, 'Push to F&O queued', 'System');
+      if (k === 'pa1') { paTick(l, PA_CHECK_SHARED); paTick(l, PA_CHECK_SIGNED); }
+    }
+    // Demo stand-in for the Zoho webhook: moves a remote request one step forward.
+    function zsSimulate(k){
+      var l = leads[selectedIdx], d = zsData(l)[k], ver = zsCur(d), def = ZS_DEFS.filter(function(x){ return x.k === k; })[0]; if (!ver) return;
+      var s = ver.signers[ver.done]; if (!s) return;
+      if (ver.st !== 'viewed' && s.role === 'Customer') { ver.st = 'viewed'; zsAudit(ver, 'Viewed by Signer ' + (ver.done + 1) + ' · Customer', s.n); }
+      else {
+        ver.done++; zsAudit(ver, 'Signed by Signer ' + ver.done + ' · ' + s.role, s.n);
+        if (ver.done >= ver.signers.length) zsComplete(l, k, ver); else ver.st = 'partial';
       }
       renderDetail(selectedIdx, currentStep);
+      showToast(def.name + ' · ' + (ZS_ST[ver.st] || {})[0] + ' (from Zoho Sign)');
     }
-    // One re-send menu open at a time; clicking elsewhere closes it.
-    document.addEventListener('click', function(e){
-      document.querySelectorAll('.zs-rt[open]').forEach(function(d){ if (!d.contains(e.target)) d.removeAttribute('open'); });
-    });
-    function zsResend(i, via){
-      var l = leads[selectedIdx], d = zsDocs(l)[i]; if (!d) return;
-      d.via = via === 'All' ? 'SMS, WhatsApp and Email' : via;
-      if (d.st !== 'signed') { d.st = 'sent'; d.gen = zsToday(); }
+    // Repush: a new Zoho request for the same document and signers; the earlier one is recalled (kept in the log). No limit.
+    function zsRepushReq(k, via){
+      var l = leads[selectedIdx], d = zsData(l)[k], ver = zsCur(d), def = ZS_DEFS.filter(function(x){ return x.k === k; })[0]; if (!ver) return;
+      if (via && via !== 'In person' && zsChanMissing(via)) { showToast(zsChanMissing(via) + ' — pick another channel'); return; }
+      var h = zsHost(l).n, old = ver.req;
+      if (old) zsAudit(ver, 'Request recalled · ' + (ZS_ST[ver.st] || {})[0], h, { det:'Zoho request ' + old });
+      ver.req = zsReqId(); ver.done = 0; ver.st = 'sent';
+      if (via === 'In person') { ver.opt = 'inperson'; ver.via = 'In person'; }
+      else if (via) { ver.opt = 'remote'; ver.via = via === 'All' ? 'Email, SMS and WhatsApp' : via; }
+      zsAudit(ver, 'Repushed · new request · ' + ver.via, h, { det:'Zoho request ' + ver.req + ' · order: ' + ver.signers.map(function(s){ return s.n; }).join(' → ') });
       renderDetail(selectedIdx, currentStep);
-      showToast(d.name + ' re-sent via Zoho Sign by ' + (via === 'All' ? 'SMS, WhatsApp and Email' : via));
+      if (ver.opt === 'inperson') zsOpenWindow(k);
+      else showToast(def.name + ' repushed by ' + ver.via + ' — earlier request recalled');
     }
-    function zsSync(i){
-      var l = leads[selectedIdx], d = zsDocs(l)[i]; if (!d) return;
-      d.sync = 'synced'; renderDetail(selectedIdx, currentStep);
-      showToast(d.name + ' synced to F&O');
+    function zsExport(k){
+      var l = leads[selectedIdx], d = zsData(l)[k], def = ZS_DEFS.filter(function(x){ return x.k === k; })[0];
+      var q = function(v){ return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+      var rows = [['Document','Version','Date and time','Event','By','Detail','Signing option','Channel','Signers','Status','Zoho request'].map(q).join(',')];
+      d.vers.forEach(function(v){ (v.audit || []).forEach(function(a){
+        rows.push([def.name, 'v' + v.v, a.ts, a.ev, a.by, a.det, v.opt === 'inperson' ? 'In person' : v.opt === 'remote' ? 'Remote link' : v.opt || '', v.via, v.signers.map(function(s){ return s.n + ' (' + s.role + ')'; }).join(' > '), (ZS_ST[v.st] || {})[0], v.req || ''].map(q).join(','));
+      }); });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([rows.join('\n')], { type:'text/csv' }));
+      a.download = def.name.replace(/\s+/g, '-') + '-audit-log-' + l.id + '.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      showToast(def.name + ' audit log exported');
     }
-    // Purchase agreements sent from the block above are logged here as "Purchase Agreement N".
-    function zsLogPA(l){
-      var n = zsDocs(l).filter(function(d){ return /^Purchase Agreement/.test(d.name); }).length + 1;
-      l.zoho.push({ name:'Purchase Agreement ' + n, gen:zsToday(), st:'sent', signed:'', sync:'na', via:'Email' });
+    function zsRepush(k){
+      var l = leads[selectedIdx], d = zsData(l)[k], ver = zsCur(d), def = ZS_DEFS.filter(function(x){ return x.k === k; })[0]; if (!ver) return;
+      ver.sync = 'synced'; ver.syncAt = zsToday(); zsAudit(ver, 'Pushed to F&O (manual re-push)', zsHost(l).n);
+      renderDetail(selectedIdx, currentStep);
+      showToast(def.name + ' pushed to F&O');
     }
-    function zsSignPA(l){
-      var d = zsDocs(l).filter(function(d){ return /^Purchase Agreement/.test(d.name); }).pop();
-      if (d && d.st !== 'signed') { d.st = 'signed'; d.signed = zsToday(); d.sync = 'pending'; }
+    function zsDownload(k, i, signed){
+      var l = leads[selectedIdx], d = zsData(l)[k], v = d.vers[i], def = ZS_DEFS.filter(function(x){ return x.k === k; })[0]; if (!v) return;
+      var a = document.createElement('a');
+      if (k === 'doc' && !signed) { a.href = 'duty-of-care-report.pdf'; a.download = 'Duty Of Care Report - v' + v.v + '.pdf'; }
+      else {
+        var p = acceptedProp() || {};
+        var txt = ['EXEED — ' + def.name.toUpperCase() + ' · v' + v.v + (signed ? ' (SIGNED)' : ''), 'AGM Sales · ' + l.name + ' (' + l.id + ')', '----------------------------------------',
+          'Generated: ' + v.gen + ' by ' + v.by, 'Proposal:  ' + (p.id || '—'), 'Model:     ' + (p.model || l.model || '—'), p.chassis ? 'VIN:       ' + p.chassis : '',
+          signed ? 'Signed:    ' + v.signers.map(function(s, n){ return (n + 1) + '. ' + s.n + ' (' + s.role + ')'; }).join('  ') : '',
+          v.req ? 'Zoho request: ' + v.req : ''].filter(Boolean).join('\n');
+        a.href = URL.createObjectURL(new Blob([txt], { type:'text/plain' }));
+        a.download = def.name.replace(/\s+/g, '-') + '-v' + v.v + (signed ? '-signed' : '') + '.txt';
+      }
+      document.body.appendChild(a); a.click(); a.remove();
+      showToast(def.name + ' v' + v.v + (signed ? ' signed copy' : '') + ' downloaded');
     }
-    function generatePurchaseAgreementFlow(){
-      var l = leads[selectedIdx];
-      openConfirm('Generate purchase agreement', 'The purchase agreement goes to your manager for approval in CE. <strong>Zoho Sign</strong> becomes available once it is approved.', 'Generate', function(){
-        l.pa = { status: 'pending' };
+    function zsCert(k){ var def = ZS_DEFS.filter(function(x){ return x.k === k; })[0]; showToast('Zoho Sign completion certificate for ' + def.name + ' downloaded'); }
+    // Customer signed on paper — upload the scan; it is stored and pushed to F&O like a Zoho-signed copy.
+    function zsManual(k){
+      var l = leads[selectedIdx], d = zsData(l)[k], ver = zsCur(d), def = ZS_DEFS.filter(function(x){ return x.k === k; })[0]; if (!ver) return;
+      docUp.zs = null;
+      openConfirm('Upload signed copy', '<div>Upload the ' + def.name + ' signed on paper. It is stored on the lead and pushed to F&amp;O.</div><div id="docUp-zs" style="margin-top:12px">' + docUploadHtml('zs') + '</div>', 'Save signed copy', function(){
+        if (!docUp.zs) return;
+        zsAudit(ver, 'Signed copy uploaded · ' + docUp.zs.name, zsHost(l).n);
+        ver.opt = 'manual'; zsComplete(l, k, ver);
         renderDetail(selectedIdx, currentStep);
-        showToast('Purchase agreement generated and sent to manager for approval');
-      }, 'Cancel', 'description', true);
-    }
-    function approvePurchaseAgreement(){
-      var l = leads[selectedIdx]; if (!l.pa || l.pa.status !== 'pending') return;
-      l.pa.status = 'approved';
-      renderDetail(selectedIdx, currentStep);
-      showToast('Purchase agreement approved by manager');
-    }
-    function sendPurchaseAgreementZoho(){
-      var l = leads[selectedIdx];
-      var n = zsDocs(l).filter(function(d){ return /^Purchase Agreement/.test(d.name); }).length + 1;
-      zsOpen('Purchase Agreement ' + n, ['Purchase Agreement']);
-    }
-    function markPurchaseAgreementSigned(){
-      var l = leads[selectedIdx]; if (!l.pa) return;
-      l.pa.status = 'signed';
-      if (l.pa.method === 'zoho') zsSignPA(l);
-      paTick(l, PA_CHECK_SIGNED);
-      renderDetail(selectedIdx, currentStep);
-      showToast('Purchase agreement signed by the customer');
-    }
-    function signPurchaseAgreementManually(){
-      var l = leads[selectedIdx];
-      docUp.pa = null;
-      openConfirm('Customer signs manually', '<div>Upload the purchase agreement the customer signed on paper.</div><div id="docUp-pa" style="margin-top:12px">' + docUploadHtml('pa') + '</div>', 'Save signed copy', function(){
-        if (!docUp.pa) return;
-        l.pa = { status: 'signed', method: 'manual', file: docUp.pa.name };
-        paTick(l, PA_CHECK_SHARED); paTick(l, PA_CHECK_SIGNED);
-        renderDetail(selectedIdx, currentStep);
-        showToast('Signed purchase agreement uploaded');
+        showToast('Signed ' + def.name + ' uploaded');
       }, 'Cancel', 'upload_file', true);
       document.getElementById('confirmOkBtn').classList.add('locked');
     }
@@ -5693,6 +6185,22 @@
     })();
   </script>
 
+  <script>
+    // Deep link straight to the accepted-proposal page: ?lead=Sam%20Fadi&view=accepted
+    window.addEventListener('load', function(){
+      if (new URLSearchParams(location.search).get('view') !== 'accepted') return;
+      setTimeout(function(){
+        try {
+          var l = leads[selectedIdx]; if (!l) return;
+          var arr = proposalsPanel(l) && l.proposals; arr = l.proposals || [];
+          if (!arr.length) return;
+          arr[0].isQuote = true; l.propState = 'confirmed'; l._acceptedProp = 0; leadTab = 'proposals';
+          renderDetail(selectedIdx, currentStep);
+          var el = document.querySelector('.conf-quote'), box = el && el.closest('.dp-essential'); if (box) { box.style.scrollMarginTop = '150px'; box.scrollIntoView({ block:'start' }); }
+        } catch(e){}
+      }, 300);
+    });
+  </script>
   <script>
     function toggleSidebar(){ document.body.classList.toggle('sb-rail'); }
     function closeSidebar(){ document.body.classList.remove('sb-rail'); }
