@@ -13,13 +13,13 @@
   .zsf-ov { position:fixed; inset:0; z-index:9000; background:rgba(15,23,42,.45); display:flex; align-items:center; justify-content:center; padding:24px; }
   .zsf { width:min(1180px,100%); height:min(860px,100%); background:#fff; border-radius:12px; box-shadow:0 24px 64px rgba(15,23,42,.3); display:flex; flex-direction:column; overflow:hidden; font-size:13px; color:#1f2937; }
   .zsf-h { display:flex; align-items:center; gap:12px; padding:12px 18px; border-bottom:1px solid #e6e8ec; }
-  .zsf-logo { width:30px; height:30px; border-radius:8px; background:#e8f3ee; color:#1f7a55; display:inline-flex; align-items:center; justify-content:center; }
+  .zsf-logo { width:30px; height:30px; border-radius:8px; background:#eaeef3; color:#17293d; display:inline-flex; align-items:center; justify-content:center; }
   .zsf-logo .material-symbols-outlined { font-size:19px; }
   .zsf-ttl { font-weight:650; font-size:15px; } .zsf-ttl small { display:block; font-weight:400; font-size:11.5px; color:#667085; }
   .zsf-steps { display:flex; align-items:center; gap:6px; margin-inline-start:auto; font-size:12px; color:#667085; }
   .zsf-steps span.s { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:999px; }
   .zsf-steps span.s i { font-style:normal; width:18px; height:18px; border-radius:50%; background:#eef0f3; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; }
-  .zsf-steps span.s.on { color:#0b1220; font-weight:600; background:#f2f4f7; } .zsf-steps span.s.on i { background:#1f7a55; color:#fff; }
+  .zsf-steps span.s.on { color:#0b1220; font-weight:600; background:#f2f4f7; } .zsf-steps span.s.on i { background:#17293d; color:#fff; }
   .zsf-steps span.s.done i { background:#d1fadf; color:#0e7a3e; }
   .zsf-steps .sep { width:14px; height:1px; background:#d0d5dd; }
   .zsf-x { border:0; background:none; cursor:pointer; color:#475467; padding:4px; border-radius:6px; margin-inline-start:8px; } .zsf-x:hover { background:#f2f4f7; }
@@ -28,27 +28,27 @@
   .zsf-f .grow { flex:1; }
   .zsf-btn { display:inline-flex; align-items:center; gap:6px; border:1px solid #d0d5dd; background:#fff; color:#1f2937; border-radius:6px; padding:7px 14px; font:600 13px inherit; cursor:pointer; }
   .zsf-btn:hover { background:#f9fafb; } .zsf-btn .material-symbols-outlined { font-size:17px; }
-  .zsf-btn.pri { background:#1f7a55; border-color:#1f7a55; color:#fff; } .zsf-btn.pri:hover { background:#196847; }
+  .zsf-btn.pri { background:#17293d; border-color:#17293d; color:#fff; } .zsf-btn.pri:hover { background:#0f1d2c; }
   .zsf-btn:disabled { opacity:.45; cursor:default; }
   .zsf-pad { padding:20px 24px; max-width:1040px; }
   .zsf-sec { margin-bottom:22px; } .zsf-sec > h4 { margin:0 0 10px; font-size:13.5px; font-weight:650; }
   .zsf-docs { display:flex; gap:10px; flex-wrap:wrap; }
   .zsf-doc { width:150px; border:1.5px solid #e6e8ec; border-radius:10px; padding:10px; cursor:pointer; background:#fff; text-align:start; font:inherit; display:flex; flex-direction:column; gap:8px; }
-  .zsf-doc.on { border-color:#1f7a55; box-shadow:0 0 0 3px #e8f3ee; }
+  .zsf-doc.on { border-color:#17293d; box-shadow:0 0 0 3px #eaeef3; }
   .zsf-doc .pg { height:96px; border-radius:6px; background:#f6f7f9 repeating-linear-gradient(180deg, transparent 0 9px, #e4e7ec 9px 10px); background-clip:content-box; padding:12px 14px; border:1px solid #eef0f3; }
   .zsf-doc b { font-size:12px; } .zsf-doc span { font-size:11px; color:#667085; }
   .zsf-doc.up { align-items:center; justify-content:center; border-style:dashed; color:#475467; min-height:150px; }
-  .zsf-doc.up .material-symbols-outlined { font-size:26px; color:#1f7a55; }
+  .zsf-doc.up .material-symbols-outlined { font-size:26px; color:#17293d; }
   .zsf-row { display:grid; grid-template-columns:150px minmax(0,1fr); align-items:center; gap:12px; margin-bottom:10px; }
   .zsf-row > label { color:#475467; font-size:12.5px; }
   .zsf-in, .zsf-sel, .zsf-ta { width:100%; border:1px solid #d0d5dd; border-radius:6px; padding:7px 10px; font:inherit; background:#fff; color:#1f2937; }
-  .zsf-in:focus, .zsf-sel:focus, .zsf-ta:focus { outline:2px solid #1f7a5533; border-color:#1f7a55; }
+  .zsf-in:focus, .zsf-sel:focus, .zsf-ta:focus { outline:2px solid #17293d26; border-color:#17293d; }
   .zsf-in[readonly] { background:#f6f7f9; }
   .zsf-ta { min-height:64px; resize:vertical; }
   .zsf-tools { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
   .zsf-chk { display:inline-flex; align-items:center; gap:6px; border:1px solid #e6e8ec; border-radius:6px; padding:5px 10px; font-size:12.5px; cursor:pointer; background:#fff; }
-  .zsf-chk input { accent-color:#1f7a55; margin:0; }
-  .zsf-rc { border:1px solid #e6e8ec; border-inline-start:3px solid #1f7a55; border-radius:8px; padding:10px 12px; margin-bottom:10px; display:grid; grid-template-columns:28px minmax(0,1.2fr) minmax(0,1fr) 170px 150px 28px; gap:8px; align-items:center; }
+  .zsf-chk input { accent-color:#17293d; margin:0; }
+  .zsf-rc { border:1px solid #e6e8ec; border-inline-start:3px solid #17293d; border-radius:8px; padding:10px 12px; margin-bottom:10px; display:grid; grid-template-columns:28px minmax(0,1.2fr) minmax(0,1fr) 170px 150px 28px; gap:8px; align-items:center; }
   .zsf-rc .n { width:26px; height:26px; border:1px solid #d0d5dd; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; }
   .zsf-rc .lbl { font-size:11px; color:#667085; font-weight:600; text-transform:uppercase; letter-spacing:.02em; }
   .zsf-rc .host { grid-column:2 / -1; display:grid; grid-template-columns:62px minmax(0,1.2fr) minmax(0,1fr) minmax(0,1fr); gap:8px; align-items:center; padding-top:8px; border-top:1px dashed #e6e8ec; }
@@ -62,7 +62,7 @@
   .zsf-thumbs { border-inline-end:1px solid #e6e8ec; padding:12px; overflow:auto; background:#fafbfc; }
   .zsf-thumbs h5 { margin:0 0 4px; font-size:12.5px; } .zsf-thumbs small { color:#667085; font-size:11px; }
   .zsf-th { margin-top:10px; border:1.5px solid #e6e8ec; border-radius:6px; height:120px; background:#fff repeating-linear-gradient(180deg, transparent 0 7px, #eef0f3 7px 8px); background-clip:content-box; padding:10px 12px; position:relative; cursor:pointer; }
-  .zsf-th.on { border-color:#1f7a55; } .zsf-th em { position:absolute; bottom:4px; inset-inline-start:6px; font-style:normal; font-size:11px; color:#475467; background:#fff; padding:0 3px; }
+  .zsf-th.on { border-color:#17293d; } .zsf-th em { position:absolute; bottom:4px; inset-inline-start:6px; font-style:normal; font-size:11px; color:#475467; background:#fff; padding:0 3px; }
   .zsf-canvas { background:#e9ecf1; overflow:auto; padding:22px; }
   .zsf-page { width:min(760px,100%); margin:0 auto 18px; background:#fff; box-shadow:0 2px 10px rgba(15,23,42,.12); padding:28px 34px; font-family:Georgia, 'Times New Roman', serif; font-size:12px; color:#1f2937; position:relative; }
   .zsf-page .docid { font:11px ui-monospace, Menlo, monospace; color:#475467; margin-bottom:10px; }
@@ -77,12 +77,12 @@
   .zsf-page p { margin:0 0 6px; line-height:1.45; }
   .zsf-page .lines { height:180px; background:repeating-linear-gradient(180deg, transparent 0 13px, #eef0f3 13px 14px); }
   .zsf-sigline { display:flex; align-items:center; gap:6px; margin:6px 0 10px; }
-  .zsf-fld { min-width:170px; height:34px; border:1.5px dashed #1f7a55; background:#e8f3ee; border-radius:4px; display:inline-flex; align-items:center; gap:6px; padding:0 8px; font:600 12px 'Segoe UI', system-ui, sans-serif; color:#1f7a55; position:relative; }
-  .zsf-fld small { font-weight:500; color:#4b8f72; }
-  .zsf-fld .rm { border:0; background:none; cursor:pointer; color:#4b8f72; padding:0; margin-inline-start:auto; display:inline-flex; } .zsf-fld .rm .material-symbols-outlined { font-size:15px; }
+  .zsf-fld { min-width:170px; height:34px; border:1.5px dashed #17293d; background:#eaeef3; border-radius:4px; display:inline-flex; align-items:center; gap:6px; padding:0 8px; font:600 12px 'Segoe UI', system-ui, sans-serif; color:#17293d; position:relative; }
+  .zsf-fld small { font-weight:500; color:#5b6b7d; }
+  .zsf-fld .rm { border:0; background:none; cursor:pointer; color:#5b6b7d; padding:0; margin-inline-start:auto; display:inline-flex; } .zsf-fld .rm .material-symbols-outlined { font-size:15px; }
   .zsf-fld.todo { border-color:#f79009; background:#fffaeb; color:#b54708; cursor:pointer; animation:zsfPulse 1.6s infinite; }
   .zsf-fld.lock { opacity:.6; cursor:not-allowed; animation:none; }
-  .zsf-fld.done { border:1px solid #1f7a55; background:#fff; padding:0 10px; }
+  .zsf-fld.done { border:1px solid #17293d; background:#fff; padding:0 10px; }
   .zsf-fld.done .sig { font:26px/1 'Snell Roundhand','Apple Chancery','Brush Script MT','Segoe Script',cursive; color:#0b1220; }
   .zsf-fld.done img { height:30px; }
   @keyframes zsfPulse { 0%,100% { box-shadow:0 0 0 0 #f7900955; } 50% { box-shadow:0 0 0 5px #f7900911; } }
@@ -91,7 +91,7 @@
   .zsf-fld.free.todo, .zsf-fld.free.done { cursor:pointer; }
   .zsf-fld.auto { border:0; background:transparent; min-width:0; padding:0 4px; font:500 12px 'Segoe UI', system-ui, sans-serif; color:#0b1220; }
   .zsf-fld.auto.free { cursor:default; }
-  .zsf-page.drop { outline:2px dashed #1f7a55; outline-offset:4px; }
+  .zsf-page.drop { outline:2px dashed #17293d; outline-offset:4px; }
   .zsf-pal button { cursor:grab; } .zsf-pal button:active { cursor:grabbing; } .zsf-pal .grip { margin-inline-end:auto; display:inline-flex; } .zsf-pal .grip .material-symbols-outlined { color:#98a2b3; font-size:15px; }
   .zsf-pal button { justify-content:flex-start; gap:4px; white-space:nowrap; padding:6px 6px; } .zsf-pal button > .material-symbols-outlined:last-child { margin-inline-start:auto; }
   .zsf-sh { padding:10px 18px; } .zsf-sh .zsf-ttl { font-size:18px; font-weight:500; }
@@ -105,34 +105,34 @@
   .zsf-menu2 { position:absolute; inset-inline-end:0; top:calc(100% + 4px); z-index:10; background:#fff; border:1px solid #e6e8ec; border-radius:8px; box-shadow:0 8px 24px rgba(16,24,40,.14); padding:4px; min-width:190px; display:flex; flex-direction:column; }
   .zsf-menu2 button { display:flex; align-items:center; gap:8px; border:0; background:none; padding:8px; border-radius:6px; font:500 12.5px inherit; cursor:pointer; text-align:start; } .zsf-menu2 button:hover { background:#f2f4f7; } .zsf-menu2 .material-symbols-outlined { font-size:17px; color:#475467; }
   .zsf-fld .req { position:absolute; bottom:100%; inset-inline-end:-2px; margin-bottom:2px; font:500 10.5px 'Segoe UI', system-ui, sans-serif; color:#475467; background:#eef0f3; border:1px solid #d0d5dd; padding:1px 6px; white-space:nowrap; }
-  .zsf-fld.todo { border:1.5px solid #1f7a55; background:#e8f3ee; color:#1f7a55; animation:none; }
-  .zsf-fld.todo.cur { box-shadow:0 0 0 3px #1f7a5533; }
+  .zsf-fld.todo { border:1.5px solid #17293d; background:#eaeef3; color:#17293d; animation:none; }
+  .zsf-fld.todo.cur { box-shadow:0 0 0 3px #17293d26; }
   .zsf-tip, .zsf-fld .req { direction:ltr; }
   .zsf-tip { position:absolute; bottom:calc(100% + 26px); inset-inline-start:50%; transform:translateX(-50%); z-index:6; width:300px; background:#e8f6f1; border:1px solid #9fd3bf; box-shadow:0 8px 20px rgba(15,23,42,.18); padding:14px 16px 10px; font:400 14px 'Segoe UI', system-ui, sans-serif; color:#1f2937; cursor:default; text-align:start; }
   .zsf-tip .nav { display:flex; justify-content:flex-end; gap:22px; margin-top:16px; } .zsf-tip .nav a { text-decoration:underline; cursor:pointer; color:#344054; font-size:13.5px; }
-  .zsf-tip .tx { position:absolute; top:-11px; inset-inline-end:-11px; width:22px; height:22px; border:0; background:#1f7a55; color:#fff; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; padding:0; } .zsf-tip .tx .material-symbols-outlined { font-size:16px; }
+  .zsf-tip .tx { position:absolute; top:-11px; inset-inline-end:-11px; width:22px; height:22px; border:0; background:#17293d; color:#fff; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; padding:0; } .zsf-tip .tx .material-symbols-outlined { font-size:16px; }
   .zsf-dlg.notitle .zsf-dlg-h { display:none; } .zsf-dlg.notitle .zsf-sg-tabs { margin-top:-16px; background:#f6f7f9; }
   .zsf-sg-tabs button .material-symbols-outlined { font-size:22px; }
-  .zsf-plain { display:inline-flex; align-items:center; gap:8px; font-size:13px; color:#344054; margin-top:4px; } .zsf-plain input { accent-color:#1f7a55; width:15px; height:15px; }
+  .zsf-plain { display:inline-flex; align-items:center; gap:8px; font-size:13px; color:#344054; margin-top:4px; } .zsf-plain input { accent-color:#17293d; width:15px; height:15px; }
   .zsf-side h5 { margin:0; padding:12px 14px 8px; font-size:13px; }
   .zsf-rl { padding:0 8px 10px; border-bottom:1px solid #e6e8ec; }
   .zsf-rp { display:flex; align-items:center; gap:10px; padding:8px; border-radius:8px; cursor:pointer; }
-  .zsf-rp.on { background:#e8f3ee; box-shadow:inset 3px 0 0 #1f7a55; }
+  .zsf-rp.on { background:#eaeef3; box-shadow:inset 3px 0 0 #17293d; }
   .zsf-rp i { font-style:normal; width:30px; height:30px; border-radius:50%; background:#d1fadf; color:#0e7a3e; display:inline-flex; align-items:center; justify-content:center; font-weight:700; }
   .zsf-rp.p i { background:#eef0f3; color:#475467; }
   .zsf-rp b { display:block; font-size:12.5px; } .zsf-rp span { font-size:11.5px; color:#667085; }
   .zsf-pal { display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:12px; }
   .zsf-pal button { display:flex; align-items:center; justify-content:space-between; border:1px solid #d0d5dd; border-radius:6px; background:#fff; padding:6px 8px; font:500 12px inherit; cursor:pointer; color:#1f2937; }
-  .zsf-pal button:hover { border-color:#1f7a55; } .zsf-pal button .material-symbols-outlined { font-size:16px; color:#1f7a55; }
-  .zsf-tabs { display:flex; gap:2px; padding:0 12px; border-bottom:1px solid #e6e8ec; } .zsf-tabs span { padding:8px 10px; font-size:12.5px; font-weight:600; border-bottom:2px solid #1f7a55; }
+  .zsf-pal button:hover { border-color:#17293d; } .zsf-pal button .material-symbols-outlined { font-size:16px; color:#17293d; }
+  .zsf-tabs { display:flex; gap:2px; padding:0 12px; border-bottom:1px solid #e6e8ec; } .zsf-tabs span { padding:8px 10px; font-size:12.5px; font-weight:600; border-bottom:2px solid #17293d; }
   .zsf-banner { display:flex; align-items:center; gap:14px; padding:10px 16px; background:#f6faf8; border-bottom:1px solid #e6e8ec; }
   .zsf-banner p { margin:0; flex:1; } .zsf-banner a { color:#0b1220; font-weight:600; text-decoration:underline; cursor:pointer; }
   .zsf-banner.ok { background:#ecfdf3; }
   .zsf-signwrap { display:flex; flex-direction:column; height:100%; } .zsf-signwrap > .zsf-ws { flex:1; min-height:0; }
   .zsf-sqs { display:inline-flex; align-items:center; } .zsf-sq { width:22px; height:22px; border-radius:50%; border:1.5px solid #d0d5dd; background:#fff; color:#667085; font-size:11px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; }
-  .zsf-sq.ok { background:#1f7a55; border-color:#1f7a55; color:#fff; } .zsf-sq.ok .material-symbols-outlined { font-size:14px; } .zsf-sq.on { border-color:#1f7a55; color:#1f7a55; }
+  .zsf-sq.ok { background:#17293d; border-color:#17293d; color:#fff; } .zsf-sq.ok .material-symbols-outlined { font-size:14px; } .zsf-sq.on { border-color:#17293d; color:#17293d; }
   .zsf-sql { width:12px; height:2px; background:#d0d5dd; display:inline-block; }
-  .zsf-who { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:#1f7a55; background:#e8f3ee; padding:3px 10px; border-radius:999px; }
+  .zsf-who { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:#17293d; background:#eaeef3; padding:3px 10px; border-radius:999px; }
   /* dialogs */
   .zsf-dlg-ov { position:fixed; inset:0; z-index:9100; background:rgba(15,23,42,.35); display:flex; align-items:center; justify-content:center; padding:20px; }
   .zsf-dlg { width:min(560px,100%); background:#fff; border-radius:10px; box-shadow:0 18px 48px rgba(15,23,42,.3); overflow:hidden; }
@@ -143,11 +143,11 @@
   .zsf-tbl { width:100%; border-collapse:collapse; margin:10px 0 14px; } .zsf-tbl th { background:#f2f4f7; text-align:start; padding:8px 10px; font-size:12px; } .zsf-tbl td { padding:8px 10px; border-bottom:1px solid #eef0f3; } .zsf-tbl .r { text-align:end; }
   .zsf-sg-tabs { display:flex; gap:4px; border-bottom:1px solid #e6e8ec; margin:-16px -18px 14px; padding:0 18px; }
   .zsf-sg-tabs button { border:0; background:none; padding:10px 12px; font:600 12.5px inherit; color:#667085; cursor:pointer; display:inline-flex; flex-direction:column; align-items:center; gap:2px; border-bottom:2px solid transparent; }
-  .zsf-sg-tabs button.on { color:#1f7a55; border-color:#1f7a55; }
+  .zsf-sg-tabs button.on { color:#17293d; border-color:#17293d; }
   .zsf-sg-grid { display:grid; grid-template-columns:1fr 160px; gap:12px; margin-bottom:10px; } .zsf-sg-grid label { font-size:12px; color:#475467; display:block; margin-bottom:4px; }
   .zsf-styles { border:1px solid #eef0f3; border-radius:8px; overflow:hidden; margin-bottom:10px; }
   .zsf-style { display:grid; grid-template-columns:24px 1fr 90px; align-items:center; padding:8px 12px; cursor:pointer; border-top:1px solid #eef0f3; }
-  .zsf-style:first-child { border-top:0; } .zsf-style.on { background:#ecfdf3; } .zsf-style .ck { color:#1f7a55; visibility:hidden; } .zsf-style.on .ck { visibility:visible; }
+  .zsf-style:first-child { border-top:0; } .zsf-style.on { background:#eaeef3; } .zsf-style .ck { color:#17293d; visibility:hidden; } .zsf-style.on .ck { visibility:visible; }
   .zsf-style .s1, .zsf-style .s2, .zsf-style .s3 { font-size:24px; line-height:1.2; }
   .s1 { font-family:'Snell Roundhand','Apple Chancery','Segoe Script',cursive; } .s2 { font-family:'Brush Script MT','Bradley Hand','Segoe Script',cursive; } .s3 { font-family:'Bradley Hand','Chalkboard SE','Comic Sans MS',cursive; }
   .zsf-draw { border:1px dashed #98a2b3; border-radius:8px; background:#fcfcfd; width:100%; height:170px; touch-action:none; cursor:crosshair; display:block; }
@@ -157,28 +157,57 @@
   .zsf-valid { display:inline-flex; align-items:center; gap:6px; background:#ecfdf3; color:#0e7a3e; border:1px solid #abefc6; border-radius:999px; padding:4px 12px; font-weight:600; font-size:12.5px; }
   .zsf-dl { display:flex; gap:8px; margin-top:6px; }
   .zsf-audit { margin-top:10px; width:min(520px,100%); text-align:start; border:1px solid #e6e8ec; border-radius:8px; padding:10px 14px; font-size:12px; color:#475467; }
+  .zsf-cp { display:flex; gap:6px; align-items:flex-start; font-size:11.5px; color:#667085; margin:8px 0 0; } .zsf-cp .material-symbols-outlined { font-size:15px; }
+  .zsf-res { display:flex; gap:8px; align-items:flex-start; background:#fffaeb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:8px 10px; font-size:12.5px; margin:0 0 12px; } .zsf-res .material-symbols-outlined { font-size:18px; color:#b54708; }
+  .zsf-hl { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; font-size:13px; }
+  .zsf-hl li { display:flex; align-items:center; gap:8px; color:#667085; } .zsf-hl li .material-symbols-outlined { font-size:18px; color:#98a2b3; }
+  .zsf-hl li.ok .material-symbols-outlined { color:#17293d; } .zsf-hl li.now { color:#1f2937; } .zsf-hl li.now .material-symbols-outlined { color:#17293d; }
+  .zsf-audit .zsf-ah { font-weight:600; color:#1f2937; border-bottom:1px solid #eef0f3; margin-bottom:4px; } .zsf-audit small { color:#98a2b3; }
+  .zsf-chg { font-style:normal; font-size:10.5px; background:#fef0c7; color:#93370d; border-radius:4px; padding:1px 5px; margin-inline-start:4px; }
   .zsf-audit div { display:flex; justify-content:space-between; gap:12px; padding:3px 0; } .zsf-audit b { color:#1f2937; font-weight:600; }
+
+  .zsf-chev { font-size:18px !important; color:#475467; transition:transform .15s; } .zsf-ma[open] .zsf-chev { transform:rotate(180deg); }
+  .zsf-sel { appearance:none; -webkit-appearance:none; padding-inline-end:32px; cursor:pointer; font-weight:500;
+    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='%23475467' d='M12 15.4 6 9.4 7.4 8l4.6 4.6L16.6 8 18 9.4z'/%3E%3C/svg%3E") no-repeat right 8px center / 18px; }
+  [dir=rtl] .zsf-sel { background-position:left 8px center; }
+  .zsf-sel:hover { border-color:#98a6b6; }
+  input[type=date]::-webkit-calendar-picker-indicator { cursor:pointer; opacity:.6; }
+  .pe-wel h4 { margin:0 0 4px; font-size:17px; color:#17293d; } .pe-wel p { margin:0; font-size:13px; color:#475467; line-height:1.45; }
+  .pe-steps { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px; }
+  .pe-steps li { display:flex; align-items:center; gap:10px; font-size:13px; color:#475467; }
+  .pe-steps li i { font-style:normal; width:22px; height:22px; border-radius:50%; border:1.5px solid #d0d5dd; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#667085; flex-shrink:0; }
+  .pe-steps li.on { color:#17293d; font-weight:600; } .pe-steps li.on i { border-color:#17293d; background:#17293d; color:#fff; }
+  .pe-sum { border:1px solid #e6e8ec; border-radius:10px; overflow:hidden; }
+  .pe-sum h6 { margin:0; padding:9px 12px; background:#f6f7f9; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#667085; }
+  .pe-sum dl { margin:0; padding:8px 12px 10px; display:grid; grid-template-columns:auto 1fr; gap:6px 12px; font-size:12.5px; }
+  .pe-sum dt { color:#667085; } .pe-sum dd { margin:0; text-align:end; font-weight:600; color:#1f2937; overflow-wrap:anywhere; }
+  .pe-sum dd.big { font-size:14px; color:#17293d; }
+  .pe-mini-prog { display:flex; align-items:center; gap:8px; font-size:12px; color:#667085; white-space:nowrap; } .pe-mini-prog .pe-prog { flex:1; }
+  .pe-help { display:flex; gap:8px; align-items:center; font-size:12px; color:#667085; } .pe-help .material-symbols-outlined { font-size:18px; color:#98a2b3; }
+  .zsf-thx { display:flex; gap:12px; align-items:center; margin:0 0 14px; } .zsf-thx > .material-symbols-outlined { font-size:34px; color:#0e7a3e; }
+  .zsf-thx b { display:block; font-size:16px; color:#1f2937; } .zsf-thx span { font-size:13px; color:#475467; }
+  .zsf-sgh + .zsf-sg-tabs { margin-top:0 !important; background:none !important; } .zsf-sgh { margin:0 0 4px; font-size:16px; color:#17293d; } .zsf-sgh small { display:block; font-size:12.5px; font-weight:400; color:#667085; margin-top:2px; }
   /* PDF-editor signing */
   .pe { display:flex; flex-direction:column; height:100%; }
-  .pe-bar { display:flex; align-items:center; gap:10px; padding:8px 14px; background:#1f2430; color:#e5e7eb; }
-  .pe-doc { display:inline-flex; align-items:center; gap:8px; min-width:0; margin-inline-end:12px; } .pe-doc > .material-symbols-outlined { color:#f87171; font-size:22px; }
-  .pe-doc b { display:block; font-size:13px; color:#fff; font-weight:600; white-space:nowrap; } .pe-doc small { font-size:11px; color:#9ca3af; }
-  .pe-grp { display:inline-flex; align-items:center; gap:2px; background:#2b3140; border-radius:8px; padding:2px; }
-  .pe-pg { font-size:12px; min-width:52px; text-align:center; color:#e5e7eb; font-variant-numeric:tabular-nums; }
-  .pe-ib { border:0; background:none; color:#d1d5db; width:30px; height:30px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; } .pe-ib:hover { background:#374151; color:#fff; } .pe-ib .material-symbols-outlined { font-size:19px; }
-  .pe-mbtn { display:inline-flex; align-items:center; gap:2px; border:1px solid #4b5563; background:none; color:#e5e7eb; border-radius:6px; padding:5px 8px; font:500 12.5px inherit; cursor:pointer; }
+  .pe-bar { display:flex; align-items:center; gap:10px; padding:8px 14px; background:#fff; color:#1f2937; border-bottom:1px solid #e6e8ec; }
+  .pe-doc { display:inline-flex; align-items:center; gap:8px; min-width:0; margin-inline-end:12px; } .pe-doc > .material-symbols-outlined { color:#b10e1c; font-size:22px; }
+  .pe-doc b { display:block; font-size:13px; color:#1f2937; font-weight:600; white-space:nowrap; } .pe-doc small { font-size:11px; color:#667085; }
+  .pe-grp { display:inline-flex; align-items:center; gap:2px; background:#f2f4f7; border-radius:8px; padding:2px; }
+  .pe-pg { font-size:12px; min-width:52px; text-align:center; color:#1f2937; font-variant-numeric:tabular-nums; }
+  .pe-ib { border:0; background:none; color:#475467; width:30px; height:30px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; } .pe-ib:hover { background:#eaeef3; color:#17293d; } .pe-ib .material-symbols-outlined { font-size:19px; }
+  .pe-mbtn { display:inline-flex; align-items:center; gap:4px; border:1px solid #d0d5dd; background:#fff; color:#1f2937; border-radius:6px; padding:6px 8px 6px 12px; font:600 12.5px inherit; cursor:pointer; } .pe-mbtn:hover { background:#f6f7f9; }
   .pe .zsf-ma summary { list-style:none; }
-  .pe-fin { display:inline-flex; align-items:center; gap:6px; border:0; background:#22c55e; color:#06240f; border-radius:6px; padding:7px 16px; font:700 13px inherit; cursor:pointer; } .pe-fin .material-symbols-outlined { font-size:18px; }
-  .pe-fin:disabled { background:#374151; color:#9ca3af; cursor:default; }
+  .pe-fin { display:inline-flex; align-items:center; gap:6px; border:0; background:#17293d; color:#fff; border-radius:6px; padding:7px 16px; font:700 13px inherit; cursor:pointer; } .pe-fin .material-symbols-outlined { font-size:18px; }
+  .pe-fin:hover:not(:disabled) { background:#0f1d2c; } .pe-fin:disabled { background:#eef0f3; color:#98a2b3; cursor:default; }
   .pe-body { flex:1; min-height:0; display:grid; grid-template-columns:132px minmax(0,1fr) 280px; }
-  .pe-thumbs { background:#2b3140; overflow:auto; padding:12px 14px; display:flex; flex-direction:column; gap:12px; }
+  .pe-thumbs { background:#f6f7f9; border-inline-end:1px solid #e6e8ec; overflow:auto; padding:12px 14px; display:flex; flex-direction:column; gap:12px; }
   .pe-th { border:0; background:none; padding:0; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:5px; }
-  .pe-mini { display:block; width:100px; height:132px; overflow:hidden; background:#fff; border-radius:2px; outline:2px solid transparent; outline-offset:2px; position:relative; }
+  .pe-mini { display:block; width:100px; height:132px; overflow:hidden; background:#fff; border-radius:2px; box-shadow:0 1px 3px rgba(16,24,40,.12); outline:2px solid transparent; outline-offset:2px; position:relative; }
   .pe-mini > .zsf-page { transform:scale(.13); transform-origin:0 0; width:760px; margin:0; box-shadow:none; pointer-events:none; }
-  .pe-th.on .pe-mini { outline-color:#60a5fa; }
-  .pe-th em { font-style:normal; font-size:11px; color:#cbd5e1; display:inline-flex; align-items:center; gap:3px; } .pe-th em .material-symbols-outlined { font-size:13px; color:#fbbf24; }
-  .pe .zsf-canvas { background:#525866; padding:26px; }
-  .pe .zsf-page { box-shadow:0 4px 18px rgba(0,0,0,.35); border-radius:1px; }
+  .pe-th.on .pe-mini { outline-color:#17293d; }
+  .pe-th em { font-style:normal; font-size:11px; color:#475467; display:inline-flex; align-items:center; gap:3px; } .pe-th em .material-symbols-outlined { font-size:13px; color:#fbbf24; }
+  .pe .zsf-canvas { background:#e9ecf1; padding:26px; }
+  .pe .zsf-page { box-shadow:0 2px 12px rgba(16,24,40,.14); border-radius:1px; }
   .pe-f { --c:#2563eb; display:inline-flex; align-items:center; gap:8px; min-width:210px; height:44px; padding:0 10px; border-radius:4px; vertical-align:middle; position:relative; font:500 12px 'Segoe UI', system-ui, sans-serif; }
   .pe-f.now { border:2px solid var(--c); background:color-mix(in srgb, var(--c) 10%, #fff); color:var(--c); cursor:pointer; box-shadow:0 0 0 4px color-mix(in srgb, var(--c) 16%, transparent); }
   .pe-f.now:hover { background:color-mix(in srgb, var(--c) 18%, #fff); }
@@ -199,15 +228,16 @@
   .pe-pt { margin:-6px 0 0; font-size:11.5px; color:#667085; }
   .pe-sl { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
   .pe-sl li { display:flex; align-items:center; gap:10px; padding:8px; border:1px solid #eef0f3; border-radius:10px; }
-  .pe-sl li.now { border-color:#93c5fd; background:#f0f7ff; }
+  .pe-sl li.now { border-color:#98a6b6; background:#eaeef3; }
   .pe-av { --c:#2563eb; width:32px; height:32px; border-radius:50%; background:var(--c); color:#fff; font-size:11.5px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
   .pe-sn { display:flex; flex-direction:column; min-width:0; flex:1; } .pe-sn b { font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .pe-sn small { font-size:11px; color:#667085; }
   .pe-st { display:inline-flex; align-items:center; gap:3px; font-size:10.5px; font-weight:600; white-space:nowrap; } .pe-st .material-symbols-outlined { font-size:14px; }
-  .pe-st.ok { color:#15803d; } .pe-st.now { color:#1d4ed8; } .pe-st.wait { color:#98a2b3; }
+  .pe-st.ok { color:#15803d; } .pe-st.now { color:#17293d; } .pe-st.wait { color:#98a2b3; }
   .pe-call { display:flex; gap:8px; align-items:flex-start; background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:10px; font-size:12.5px; color:#78350f; } .pe-call .material-symbols-outlined { font-size:18px; }
+  .pe-call.host { background:#eef2f7; border-color:#c7d2e0; color:#17293d; }
   .pe-call.ok { background:#f0fdf4; border-color:#bbf7d0; color:#14532d; }
-  .pe-go { display:flex; align-items:center; justify-content:center; gap:6px; border:0; background:#1f7a55; color:#fff; border-radius:8px; padding:10px; font:600 13px inherit; cursor:pointer; } .pe-go:hover { background:#196847; } .pe-go .material-symbols-outlined { font-size:18px; }
-  .pe-link { display:flex; align-items:center; justify-content:center; gap:5px; border:0; background:none; color:#0f6cbd; font:600 12px inherit; cursor:pointer; padding:2px; } .pe-link .material-symbols-outlined { font-size:16px; }
+  .pe-go { display:flex; align-items:center; justify-content:center; gap:8px; border:0; background:#17293d; color:#fff; border-radius:8px; min-height:48px; padding:12px; font:600 14.5px inherit; cursor:pointer; } .pe-go:hover { background:#0f1d2c; } .pe-go .material-symbols-outlined { font-size:18px; }
+  .pe-link { display:flex; align-items:center; justify-content:center; gap:5px; border:0; background:none; color:#2a6797; font:600 12.5px inherit; cursor:pointer; padding:6px; border-radius:6px; } .pe-link:hover { background:#eaeef3; } .pe-link .material-symbols-outlined { font-size:16px; }
   .pe-legal { margin:auto 0 0; display:flex; gap:6px; font-size:11px; color:#667085; line-height:1.4; } .pe-legal .material-symbols-outlined { font-size:14px; }
   /* PandaDoc-style signing page */
   .pe-see { font:italic 11.5px 'Segoe UI', system-ui, sans-serif; color:#667085; }
@@ -271,7 +301,11 @@
       S.seq = true; S.si = o.done || 0; S.signedNow = []; S.agreed = true;
       S.rc = o.seq.map(function (r) { return { name: r.name, email: r.email, role: r.role }; });
       S.fields = S.rc.map(function (r, i) { return { r: i, kind: 'Signature', at: 'g' + i, signed: i < S.si }; });
-      S.cur = 'g' + S.si; S.step = 3; S.page = 3; paint(); focusCur(); return;
+      S.cur = 'g' + S.si; S.step = 3; S.page = 3; paint(); focusCur();
+      // Control always starts with the host: on a resumed session (or when the next signer is not the host)
+      // the host sees the control screen and hands the device over again.
+      if (o.paused || (S.si < S.rc.length && !(o.host && S.rc[S.si].email === o.host.email))) { S.resumed = !!o.paused; if (o.paused) S.resumedAt = today() + ' ' + new Date().toTimeString().slice(0, 5); hostCtl(); }
+      return;
     }
     if (o.direct) { S.step = 2; paint(); passToSigner(); return; }   // already set up — go straight to the in-person session
     paint();
@@ -427,7 +461,7 @@
   /* ── Step 3 · in-person signing session ── */
   function step3() {
     var all = allSigned(), left = S.fields.filter(function (f) { return act(f) && !f.signed; }).length;
-    var more = '<details class="zsf-ma"><summary class="zsf-btn">More actions' + ic('arrow_drop_down') + '</summary><div class="zsf-menu2">' +
+    var more = '<details class="zsf-ma"><summary class="zsf-btn">More actions<span class="material-symbols-outlined zsf-chev">expand_more</span></summary><div class="zsf-menu2">' +
       '<button onclick="ZohoSign._disclosure()">' + ic('description') + 'Read disclosure</button><button onclick="ZohoSign._print()">' + ic('print') + 'Print</button><button onclick="ZohoSign._decline()">' + ic('block') + 'Decline to sign</button></div></details>';
     if (S.seq) return peLayout(all, more);
     var bar = !S.agreed
@@ -440,7 +474,7 @@
   }
 
   /* ── PDF-editor style signing (CRM flow) ── */
-  var PE_C = ['#2563eb', '#7c3aed', '#d97706', '#0d9488'];
+  var PE_C = ['#2a6797', '#5c2e91', '#00838a', '#8a6420'];
   function peColor(i) { return PE_C[i % PE_C.length]; }
   function peField(f, mode, style) {
     var r = S.rc[f.r] || {}, c = peColor(f.r), st = ' style="--c:' + c + (style ? ';' + style : '') + '"';
@@ -484,17 +518,41 @@
       return '<button class="pe-th' + (n === k ? ' on' : '') + '" onclick="ZohoSign._page(' + k + ')" aria-label="Page ' + k + '"><span class="pe-mini">' + page(k, 'thumb') + '</span><em>' + k + (has ? ' ' + ic('draw') : '') + '</em></button>';
     }).join('') + '</div>';
     var list = S.rc.map(function (r, i) {
-      var stt = i < S.si ? ['ok', 'Signed', 'check_circle'] : i === S.si && !all ? ['now', 'Signing now', 'edit'] : ['wait', 'Waiting', 'schedule'];
+      var stt = i < S.si ? ['ok', 'Signed', 'check_circle'] : i === S.si && !all ? (S.withHost ? ['now', 'Next', 'front_hand'] : ['now', 'Signing now', 'edit']) : ['wait', 'Waiting', 'schedule'];
       return '<li class="' + stt[0] + '"><span class="pe-av" style="--c:' + peColor(i) + '">' + esc((r.name || '?').split(' ').map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase()) + '</span>' +
         '<span class="pe-sn"><b>' + esc(r.name) + '</b><small>' + (i + 1) + ' · ' + esc(r.role) + '</small></span><span class="pe-st ' + stt[0] + '">' + ic(stt[2]) + stt[1] + '</span></li>';
     }).join('');
+    var signerHas = !all && !S.withHost && !(S.o.host && cs.email === S.o.host.email);
+    if (signerHas) {
+      var p = S.o.prop || {}, first = esc(cs.name.split(' ')[0]);
+      var rows = [['Document', esc(S.name.split(' · ')[0])], ['Vehicle', esc(p.model || '')], ['Colour', esc(p.color || '')], ['VIN', esc(p.vin || '')], ['Payment', esc(p.pay || '')], ['Down payment', esc(p.down || '')], ['Net price', esc(p.price || ''), 'big']]
+        .filter(function (r) { return r[1]; }).map(function (r) { return '<dt>' + r[0] + '</dt><dd' + (r[2] ? ' class="big"' : '') + '>' + r[1] + '</dd>'; }).join('');
+      var m = (S.meta || {})[S.si] || {}, metaOk = String(m.n || '').trim() && m.d;
+      var before = S.rc.slice(0, S.si).map(function (r) { return esc(r.name.split(' ')[0]); });
+      var sideC = '<aside class="pe-side pe-cust">' +
+        '<div class="pe-wel"><h4>Welcome, ' + first + '</h4><p>Please review your ' + esc(S.name.split(' · ')[0].toLowerCase()) + ' and sign. It takes about a minute.</p></div>' +
+        '<ol class="pe-steps"><li class="' + (S.reviewed ? '' : 'on') + '"><i>' + (S.reviewed ? '✓' : '1') + '</i>Review the details</li><li class="' + (S.reviewed && !metaOk ? 'on' : '') + '"><i>' + (metaOk && S.reviewed ? '✓' : '2') + '</i>Check your name and date</li><li class="' + (S.reviewed && metaOk ? 'on' : '') + '"><i>3</i>Add your signature</li></ol>' +
+        (rows ? '<div class="pe-sum"><h6>What you are signing</h6><dl>' + rows + '</dl></div>' : '') +
+        '<button class="pe-go" onclick="ZohoSign._custSign()">' + ic('draw') + 'Sign now</button>' +
+        '<button class="pe-link" onclick="ZohoSign._reviewed();ZohoSign._page(1)">' + ic('description') + 'Read the full document</button>' +
+        '<div class="pe-mini-prog"><div class="pe-prog"><span style="width:' + Math.round(signedN / S.rc.length * 100) + '%"></span></div>' + signedN + ' of ' + S.rc.length + ' signed</div>' +
+        (before.length ? '<p class="pe-pt" style="margin:0">' + before.join(' and ') + ' signed already.' + (S.si === S.rc.length - 1 ? ' You are the last to sign.' : '') + '</p>' : '') +
+        '<div class="pe-help">' + ic('support_agent') + '<span>Questions? Ask ' + esc(hostName()) + ', your sales executive.</span></div>' +
+        '<p class="pe-legal">' + ic('lock') + 'Your signature is legally binding and protected by Zoho Sign.</p></aside>';
+      return '<div class="zsf-b" style="overflow:hidden"><div class="pe">' + bar + '<div class="pe-body">' + th + pages('sign') + sideC + '</div></div></div>';
+    }
     var side = '<aside class="pe-side"><h5>Signers</h5>' +
       '<div class="pe-prog"><span style="width:' + Math.round(signedN / S.rc.length * 100) + '%"></span></div><p class="pe-pt">' + signedN + ' of ' + S.rc.length + ' signed</p>' +
       '<ol class="pe-sl">' + list + '</ol>' +
-      (all ? '<div class="pe-call ok">' + ic('task_alt') + '<span>Everyone has signed. Click <b>Finish</b> to complete.</span></div>'
-           : '<div class="pe-call">' + ic('front_hand') + '<span>Hand the device to <b>' + esc(cs.name) + '</b>.</span></div>' +
+      (all ? '<div class="pe-call ok">' + ic('task_alt') + '<span>Everyone has signed. ' + esc(hostName()) + ', click <b>Finish</b> to complete the session.</span></div>'
+           : S.withHost
+           ? '<div class="pe-call host">' + ic('admin_panel_settings') + '<span>Control is with the host, <b>' + esc(hostName()) + '</b>. Hand the device to <b>' + esc(cs.name) + '</b> to continue.</span></div>' +
+             '<button class="pe-go" onclick="ZohoSign._handNext()">' + ic('front_hand') + 'Hand device to ' + esc(cs.name.split(' ')[0]) + '</button>' +
+             '<button class="pe-link" onclick="ZohoSign._pause()">' + ic('pause') + 'Pause session</button>' +
+             '<button class="pe-link" onclick="ZohoSign._handoff()">' + ic('forward_to_inbox') + esc(cs.name.split(' ')[0]) + ' not here? Send the link</button>'
+           : '<div class="pe-call">' + ic('front_hand') + '<span><b>' + esc(cs.name) + '</b> is signing. After signing, control passes back to <b>' + esc(hostName()) + '</b>.</span></div>' +
              '<button class="pe-go" onclick="ZohoSign._signAt(\'g' + S.si + '\')">' + ic('draw') + 'Sign as ' + esc(cs.name.split(' ')[0]) + '</button>' +
-             (cs.role !== 'Customer' ? '<button class="pe-link" onclick="ZohoSign._handoff()">' + ic('forward_to_inbox') + esc(cs.name.split(' ')[0]) + ' not here? Email the link</button>' : '')) +
+             '<button class="pe-link" onclick="ZohoSign._handoff()">' + ic('forward_to_inbox') + esc(cs.name.split(' ')[0]) + ' not here? Send the link</button>') +
       '<p class="pe-legal">' + ic('lock') + 'Electronic signatures are legally binding and recorded in the Zoho Sign audit trail.</p></aside>';
     return '<div class="zsf-b" style="overflow:hidden"><div class="pe">' + bar + '<div class="pe-body">' + th + pages('sign') + side + '</div></div></div>';
   }
@@ -506,13 +564,12 @@
 
   function stepDone() {
     var sg = signer(), r = S.result;
-    if (S.seq) return '<div class="zsf-b"><div class="zsf-done"><span class="ic">' + ic('task_alt') + '</span><h3>Document signed by all signers.</h3>' +
+    if (S.seq) return '<div class="zsf-b"><div class="zsf-done"><span class="ic">' + ic('task_alt') + '</span><h3>You have hosted this document.</h3>' +
       '<span class="zsf-valid">' + ic('verified') + 'Signed and all signatures are valid</span>' +
-      '<p>' + esc(S.name) + ' was signed in person. A signed copy goes to ' + esc(sg.email || sg.name) + '; the signed PDF and certificate are attached to the lead.</p>' +
-      '<div class="zsf-dl"><button class="zsf-btn" onclick="ZohoSign._email()">' + ic('mail') + 'Email to me</button><button class="zsf-btn" onclick="ZohoSign._print()">' + ic('print') + 'Print</button><button class="zsf-btn pri" onclick="ZohoSign._download()">' + ic('download') + 'Download</button></div>' +
-      '<div class="zsf-audit">' + S.rc.map(function (x, i) { return '<div><span>Signer ' + (i + 1) + ' · ' + esc(x.role) + '</span><b>' + esc(x.name) + '</b></div>'; }).join('') +
+      '<p>' + esc(S.name) + ' was signed in person, hosted by ' + esc(hostName()) + '. The signed PDF is attached to the lead and goes to F&amp;O.</p>' +
+      '<div class="zsf-audit"><div class="zsf-ah"><span>Signed copy sent to</span></div>' + S.rc.map(function (x, i) { var s2 = (S.signedNow.filter(function (z) { return z.i === i; })[0]) || {}; return '<div><span>' + (i + 1) + ' · ' + esc(x.name) + ' <small>' + esc(x.role) + '</small></span><b>' + esc(s2.copyTo || x.email || '—') + (s2.changed ? ' <em class="zsf-chg">changed</em>' : '') + '</b></div>'; }).join('') +
         '<div><span>Zoho request</span><b style="font:11px ui-monospace,Menlo,monospace">' + esc(S.o.reqId || S.docId) + '</b></div><div><span>Completed</span><b>' + esc(r.signedAt) + '</b></div><div><span>F&amp;O</span><b>Push queued</b></div></div>' +
-    '</div></div><div class="zsf-f"><span class="grow"></span><button class="zsf-btn pri" onclick="ZohoSign._close()">' + (PAGE ? ic('close') + 'Close window' : 'Back to lead') + '</button></div>';
+    '</div></div><div class="zsf-f"><span class="grow"></span><button class="zsf-btn pri" onclick="ZohoSign._close()">' + ic('arrow_back') + 'Back to lead</button></div>';
     return '<div class="zsf-b"><div class="zsf-done"><span class="ic">' + ic('task_alt') + '</span><h3>You have hosted this document.</h3>' +
       '<span class="zsf-valid">' + ic('verified') + 'Signed and all signatures are valid</span>' +
       '<p>' + esc(S.name) + ' was signed in person by ' + esc(sg.name) + '. A signed copy goes to ' + esc(r.copyTo || sg.email) + '.</p>' +
@@ -558,9 +615,9 @@
       : S._tab === 'draw'
       ? '<canvas class="zsf-draw" id="zsfDraw" width="700" height="170" aria-label="Draw your signature"></canvas><div style="display:flex;justify-content:flex-end;margin-top:6px"><button class="zsf-btn" onclick="ZohoSign._clearDraw()">' + ic('ink_eraser') + 'Clear</button></div>'
       : '<label class="zsf-doc up" style="width:auto;min-height:150px">' + ic('upload') + '<b>' + (S._img ? 'Image selected — Ok to apply' : 'Upload an image of your signature') + '</b><span>PNG or JPG</span><input type="file" accept="image/*" hidden onchange="ZohoSign._sigImg(this)"></label>';
-    dlg('', '<div class="zsf-sg-tabs">' + tabs + '</div>' + body +
-      '<label class="zsf-plain"><input type="checkbox" id="zsfAll">fills the signature in all places</label>',
-      '<button class="zsf-btn" onclick="ZohoSign._closeDlg()">Cancel</button><button class="zsf-btn pri" onclick="ZohoSign._applySig()">Ok</button>', true);
+    dlg('', (S.seq ? '<h3 class="zsf-sgh">Add your signature, ' + esc(sg.name.split(' ')[0]) + '<small>Type, draw with your finger, or upload an image.</small></h3>' : '') + '<div class="zsf-sg-tabs">' + tabs + '</div>' + body +
+      (S.seq ? '' : '<label class="zsf-plain"><input type="checkbox" id="zsfAll">fills the signature in all places</label>'),
+      '<button class="zsf-btn" onclick="ZohoSign._closeDlg()">Cancel</button><button class="zsf-btn pri" onclick="ZohoSign._applySig()">' + (S.seq ? ic('draw') + 'Apply signature' : 'Ok') + '</button>', true);
     if (S._tab === 'draw') initDraw();
   }
   function styles() {
@@ -582,12 +639,38 @@
       '<label for="zsfCopy" style="font-size:12px;color:#475467;font-style:italic;display:block;margin-bottom:6px">Email address to receive a copy of the signed document on completion</label><input id="zsfCopy" class="zsf-in" type="email" value="' + esc(sg.email) + '">',
       '<button class="zsf-btn" onclick="ZohoSign._closeDlg()">Cancel</button><button class="zsf-btn pri" onclick="ZohoSign._toHost()">Pass control</button>');
   }
+  // Zoho hosted in-person signing: after every signer, control goes back to the host (the SE).
+  function hostName() { return (S.o.host && S.o.host.name) || 'the sales executive'; }
+  function passBack(i) {
+    var r = S.rc[i];
+    if (S.o.host && r.email && r.email === S.o.host.email) { hostCtl(); return; }
+    dlg('Pass control to host', '<div class="zsf-thx">' + ic('check_circle') + '<div><b>Thank you, ' + esc(r.name.split(' ')[0]) + '!</b><span>You’ve successfully signed the document.</span></div></div><p style="margin:0 0 12px">Please pass the device back to <b>' + esc(hostName()) + '</b>.</p>' +
+      '<label for="zsfCopy" style="font-size:12px;color:#475467;font-style:italic;display:block;margin-bottom:6px">Specify an email address to receive a copy of the signed document upon completion.</label>' +
+      '<input id="zsfCopy" class="zsf-in" type="email" value="' + esc(r.email || '') + '">' +
+      '<p class="zsf-cp">' + ic('contact_mail') + 'Prefilled from the CRM contact. If you change it, the lead is flagged to update the contact.</p>',
+      '<button class="zsf-btn pri" onclick="ZohoSign._passBack()">Pass control</button>');
+  }
+  function hostCtl() {
+    var n = S.si, tot = S.rc.length;
+    if (n >= tot) { finishSession(); return; }
+    if (!S.withHost) { S.withHost = true; paint(); }
+    var nx = S.rc[n];
+    var o = S.o, other = o.startedBy && o.startedBy !== hostName();
+    var intro = S.resumed && !S.handedAny
+      ? '<div class="zsf-res">' + ic('pause_circle') + '<span>Paused session' + (o.pausedAt ? ' · ' + esc(o.pausedAt) : '') + '. Started by <b>' + esc(o.startedBy) + '</b>. Signatures so far are kept.' + (other ? ' You are taking over as host — this is recorded in the audit log.' : '') + '</span></div>'
+      : '';
+    dlg(S.resumed && !S.handedAny ? 'Resume session' : (n ? 'Control is back with you' : 'Start in-person signing'), intro + '<p style="margin:0 0 10px">' + esc(hostName()) + ', ' + n + ' of ' + tot + ' signers have signed. Next to sign: <b>' + esc(nx.name) + '</b> (' + esc(nx.role) + ').</p>' +
+      '<ol class="zsf-hl">' + S.rc.map(function (r, i) { return '<li class="' + (i < n ? 'ok' : i === n ? 'now' : '') + '">' + ic(i < n ? 'check_circle' : i === n ? 'front_hand' : 'schedule') + '<span><b>' + esc(r.name) + '</b> · ' + esc(r.role) + '</span></li>'; }).join('') + '</ol>',
+      '<button class="zsf-btn" onclick="ZohoSign._handoff()">' + ic('forward_to_inbox') + 'Send link instead</button>' +
+      '<button class="zsf-btn" onclick="ZohoSign._pause()">Pause</button>' +
+      '<button class="zsf-btn pri" onclick="ZohoSign._handNext()">' + ic('front_hand') + 'Hand device to ' + esc(nx.name.split(' ')[0]) + '</button>');
+  }
   function handTo(r) {
     dlg('Pass the device to ' + esc(r.name), '<p style="margin:0">Signer ' + (S.si) + ' has signed. Hand the device to <b>' + esc(r.name) + '</b> (' + esc(r.role) + ') to sign next.</p>',
       '<button class="zsf-btn pri" onclick="ZohoSign._nextOk()">Continue as ' + esc(r.name.split(' ')[0]) + '</button>');
   }
   function finishSession() {
-    dlg('Finish session', '<p style="margin:0">Control is back with you. Click Finish to complete the session.</p>',
+    dlg('Finish session', '<p style="margin:0">Click finish to complete the session.</p>',
       '<button class="zsf-btn" onclick="ZohoSign._closeDlg()">Close</button><button class="zsf-btn pri" onclick="ZohoSign._complete()">Finish</button>');
   }
 
@@ -634,7 +717,7 @@
       if (S && S.step === 3 && !S.result) {
         if (S.seq && S.signedNow.length) {
           if (!confirm('Leave the signing session? Signatures so far are kept; the next signer can sign later.')) return;
-          if (S.o.onDone) S.o.onDone({ doc: S.name, mode: 'partial', signed: S.signedNow });
+          if (S.o.onDone) S.o.onDone({ doc: S.name, mode: 'partial', signed: S.signedNow, handed: S.handed, resumedAt: S.resumedAt });
         } else if (!confirm('Leave the signing session? The document stays unsigned.')) return;
       }
       close();
@@ -709,7 +792,7 @@
     },
     _zoom: function (d) { S.zoom = Math.max(.6, Math.min(1.6, (S.zoom || 1) + d)); var c = document.getElementById('zsfCanvas'); if (c) c.style.zoom = S.zoom; var zl = document.getElementById('peZoom'); if (zl) zl.textContent = Math.round(S.zoom * 100) + '%'; },
 
-    _signAt: function (at) { if (!S.agreed) { toast('Agree to the disclosure first'); return; } if (S.seq) { var m = (S.meta || {})[S.si]; if (m && (!String(m.n || '').trim() || !m.d)) { toast('Fill in your name and date first'); return; } } S.cur = at; sigDlg(at); },
+    _signAt: function (at) { if (S.seq && S.withHost) { toast('Hand the device to the signer first'); hostCtl(); return; } if (!S.agreed) { toast('Agree to the disclosure first'); return; } if (S.seq) { var m = (S.meta || {})[S.si]; if (m && (!String(m.n || '').trim() || !m.d)) { toast('Fill in your name and date first'); return; } } S.cur = at; sigDlg(at); },
     _tabTo: function (t) { S._tab = t; sigDlg(S._at); },
     _styleTo: function (c) { S._style = c; document.getElementById('zsfStyles').innerHTML = styles(); },
     _sigText: function (v) { S._text = v; document.getElementById('zsfStyles').innerHTML = styles(); },
@@ -727,7 +810,7 @@
         S.signedNow.push({ i: me, at: at }); S.sig = null; S._text = S._ini = S._img = null; S._tab = 'type'; S._drawn = false;
         S.si = me + 1; S.cur = S.si < S.rc.length ? 'g' + S.si : null;
         closeDlg(); paint();
-        if (S.si < S.rc.length) handTo(S.rc[S.si]); else toast('All signers have signed — click Finish');
+        passBack(me);
         return;
       }
       var all = document.getElementById('zsfAll'), every = !all || all.checked;
@@ -737,11 +820,7 @@
     },
     _finish: function () {
       if (!allSigned()) return;
-      if (S.seq) {
-        S.result = { doc: S.name, mode: 'inperson', via: 'In person', signer: signer().name, signedAt: today(), signed: S.signedNow };
-        S.step = 4; paint(); toast(S.name + ' signed by all signers');
-        if (S.o.onDone) S.o.onDone(S.result); return;
-      }
+      if (S.seq) { finishSession(); return; }
       passToHost();
     },
     _handoff: function () {
@@ -751,14 +830,41 @@
     },
     _handoffGo: function () {
       var cs = S.rc[S.si], o = S.o, signed = S.signedNow; toast('Signing link emailed to ' + cs.name);
-      if (o.onDone) o.onDone({ doc: S.name, mode: 'handoff', rest: 'inperson', signed: signed });
+      if (o.onDone) o.onDone({ doc: S.name, mode: 'handoff', rest: 'inperson', signed: signed, handed: S.handed, resumedAt: S.resumedAt });
       S.result = { handoff: true }; close();
     },
     _nextOk: function () { closeDlg(); focusCur(); },
+    _reviewed: function () { if (!S.reviewed) { S.reviewed = true; paint(); } },
+    _custSign: function () {
+      S.reviewed = true; var m = (S.meta || {})[S.si];
+      if (m && (!String(m.n || '').trim() || !m.d)) { paint(); focusCur(); toast('Check your name and date first'); return; }
+      paint(); ZohoSign._signAt('g' + S.si);
+    },
+    _passBack: function () {
+      var v = document.getElementById('zsfCopy').value.trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { toast('Enter a valid email address'); return; }
+      var last = S.signedNow[S.signedNow.length - 1], r = S.rc[last.i];
+      last.copyTo = v; last.changed = v !== (r.email || ''); last.back = today() + ' ' + new Date().toTimeString().slice(0, 5);
+      closeDlg(); hostCtl();
+    },
+    _handNext: function () {
+      var r = S.rc[S.si]; S.handed = S.handed || {}; S.handed[S.si] = today() + ' ' + new Date().toTimeString().slice(0, 5); S.handedAny = true; S.withHost = false; S.reviewed = false;
+      closeDlg(); paint(); focusCur(); toast('Device handed to ' + r.name);
+    },
+    _pause: function () {
+      var o = S.o; toast('Session paused · ' + S.si + ' of ' + S.rc.length + ' signed');
+      if (o.onDone) o.onDone({ doc: S.name, mode: 'partial', signed: S.signedNow, handed: S.handed, resumedAt: S.resumedAt });
+      S.result = { paused: true }; close();
+    },
     _meta: function (i, k, v) { S.meta = S.meta || {}; (S.meta[i] = S.meta[i] || {})[k] = v; },
     _toHost: function () { var v = document.getElementById('zsfCopy').value.trim(); S.copyTo = v; finishSession(); },
     _complete: function () {
       closeDlg(); var sg = signer();
+      if (S.seq) {
+        S.result = { doc: S.name, mode: 'inperson', via: 'In person', signer: sg.name, signedAt: today(), signed: S.signedNow, handed: S.handed, resumedAt: S.resumedAt, finishedAt: today() + ' ' + new Date().toTimeString().slice(0, 5) };
+        S.step = 4; paint(); toast(S.name + ' signed by all signers');
+        if (S.o.onDone) S.o.onDone(S.result); return;
+      }
       S.result = { doc: S.name, mode: 'inperson', via: 'In person', signer: sg.name, signedAt: today(), copyTo: S.copyTo || sg.email };
       S.step = 4; paint();
       toast(S.name + ' signed in person by ' + sg.name);

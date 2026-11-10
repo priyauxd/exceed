@@ -5305,7 +5305,7 @@
       zsAudit(sq2, 'Signed by Signer 1 · ' + s[0].role, s[0].n, { ts:'03 Nov 2026 09:45' });
       zsAudit(sq2, 'Signed by Signer 2 · ' + s[1].role, s[1].n, { ts:'03 Nov 2026 11:02' });
       zsAudit(sq2, 'Signed by Signer 3 · Customer', cust, { ts:'04 Nov 2026 18:20' });
-      zsAudit(sq2, 'Signed PDF and Zoho certificate attached · pushed to F&O', 'System', { ts:'04 Nov 2026 18:21' });
+      zsAudit(sq2, 'Signed PDF attached · pushed to F&O', 'System', { ts:'04 Nov 2026 18:21' });
       var pa1 = { v:1, gen:'05 Nov 2026', by:h, st:'partial', opt:'remote', via:'WhatsApp', signers:s, done:2, sync:'na', req:'ZS-3HX8PL-60432', audit:[] };
       zsAudit(pa1, 'Generated after advance payment', h, { ts:'05 Nov 2026 12:05' });
       zsAudit(pa1, 'Sent for signature · WhatsApp', h, { ts:'05 Nov 2026 12:07', det:'Zoho request ZS-3HX8PL-60432' });
@@ -5390,7 +5390,7 @@
         sent: 'Signing request sent ' + how + '. ' + (pend ? pend.n + ' (' + pend.role + ') signs next.' : ''),
         viewed: (pend ? pend.n : 'The signer') + ' opened the document but hasn’t signed yet.',
         partial: ver.done + ' of ' + ver.signers.length + ' signed. ' + (pend ? 'Waiting for ' + pend.n + ' (' + pend.role + ') — they have been notified.' : '') + ' Nothing goes to F&O until everyone signs.',
-        signed: 'Everyone has signed. The signed PDF and Zoho Sign certificate are attached to the lead.',
+        signed: 'Everyone has signed. The signed PDF is attached to the lead.',
         declined: (pend ? pend.n : 'A signer') + ' declined to sign. Repush to send a new request.',
         expired: 'The signing link expired before everyone signed. Repush to send a new request.',
         nosig: 'Customer signature not required for this document.'
@@ -5443,7 +5443,7 @@
               }).join('') + '</div></details>';
           var sn = ver.opt === 'inperson' && ['sent','viewed','partial'].indexOf(ver.st) > -1;
           if (sn) rp = rp.replace('<span class="material-symbols-outlined">restart_alt</span>Repush<span class="material-symbols-outlined">expand_more</span>', '<span class="material-symbols-outlined">restart_alt</span>').replace('class="zs-sign"', 'class="zs-sign ic" aria-label="Repush"');
-          acts = (sn ? '<button class="zs-sign pri" onclick="zsSignNow(\'' + k + '\')"><span class="material-symbols-outlined">stylus_note</span>Sign now</button>' : '') + rp;
+          acts = (sn ? '<button class="zs-sign pri" onclick="zsSignNow(\'' + k + '\')"' + (ver.paused ? ' title="Paused · with host ' + dpEsc(ver.hostBy || '') + '. Only the host resumes and hands over again."' : '') + '><span class="material-symbols-outlined">' + (ver.paused ? 'play_arrow' : 'stylus_note') + '</span>' + (ver.paused ? 'Resume' : 'Sign now') + '</button>' : '') + rp;
         }
         else if (ver.st === 'signed') acts = '<button class="zs-sign" onclick="zsDownload(\'' + k + '\',' + d.act + ',true)"><span class="material-symbols-outlined">download</span>Download</button>';
         else if (ver.st === 'nosig') acts = '<button class="zs-sign" onclick="zsDownload(\'' + k + '\',' + d.act + ')"><span class="material-symbols-outlined">download</span>Download</button>';
@@ -5491,7 +5491,7 @@
       var signedLinks = cur && cur.st === 'signed'
         ? '<div class="zs-dh">Signed documents</div><div class="zs-files">' +
             '<button class="zs-file" onclick="zsDownload(\'' + k + '\',' + d.act + ',true)"><span class="zs-fi pdf"><span class="material-symbols-outlined">picture_as_pdf</span></span><span class="zs-fn"><b>Signed PDF</b><small>v' + cur.v + ' · ' + (cur.signedAt || '') + '</small></span><span class="material-symbols-outlined zs-fd">download</span></button>' +
-            '<button class="zs-file" onclick="zsCert(\'' + k + '\')"><span class="zs-fi cert"><span class="material-symbols-outlined">verified</span></span><span class="zs-fn"><b>Zoho Sign certificate</b><small>Completion certificate · PDF</small></span><span class="material-symbols-outlined zs-fd">download</span></button></div>' : '';
+            '</div>' : '';
       var sg = cur && cur.st !== 'nosig' ? '<ul class="zl">' + cur.signers.map(function(s, i){
           var done = i < cur.done, now = !done && i === cur.done && ['sent','viewed','partial'].indexOf(cur.st) > -1;
           return '<li><span class="zl-n">' + (i + 1) + '</span><span class="zl-t"><b>' + dpEsc(s.n) + '</b><small>' + s.role + ' · ' + dpEsc(s.e || s.ph || '') + '</small></span>' +
@@ -5500,7 +5500,7 @@
       return '<div class="zs-det">' +
         '<div class="zs-dh">Versions</div><ul class="zl">' + vers + '</ul>' +
         (sg ? '<div class="zs-dh">Signers · v' + cur.v + (cur.req ? ' <span class="zs-req">Zoho request ' + cur.req + '</span>' : '') + (cur.st !== 'draft' ? '<span class="zs-ro"><span class="material-symbols-outlined">lock</span>Locked after sending</span>' : '') + '</div>' + sg : '') +
-        '<div class="zs-dh">Audit log <span class="zs-ro"><span class="material-symbols-outlined">lock</span>Read-only · kept 10 years</span><button class="zs-exp" onclick="zsExport(\'' + k + '\')"><span class="material-symbols-outlined">download</span>Export</button></div><ul class="zs-tl">' + audit + '</ul>' + signedLinks +
+        '<div class="zs-dh">Audit log <span class="zs-ro"><span class="material-symbols-outlined">lock</span>Read-only · kept 10 years</span></div><ul class="zs-tl">' + audit + '</ul>' + signedLinks +
       '</div>';
     }
     document.addEventListener('click', function(e){
@@ -5642,7 +5642,8 @@
         lead: { name: l.name, email: l.email, phone: l.phone, id: l.id },
         prop: { id: p.id, model: p.model, vin: p.chassis, color: p.extColor, addOns: ons, price: p.nsp ? 'AED ' + propFmt(p.nsp) : '', down: p.nsp ? 'AED ' + propFmt(Math.round(p.nsp * (p.downPct || 0) / 100)) : '', pay: (typeof PAY_LABEL !== 'undefined' && PAY_LABEL[p.payType]) || 'Cash' },
         host: { name: h.n, email: h.e },
-        seq: ver.signers.map(function(s){ return { name: s.n, email: s.e, role: s.role }; }), done: ver.done, reqId: ver.req
+        seq: ver.signers.map(function(s){ return { name: s.n, email: s.e, role: s.role }; }), done: ver.done, reqId: ver.req,
+        paused: !!ver.paused, startedBy: ver.hostBy || h.n, pausedAt: ver.pausedAt || ''
       };
       var req = { id: 'zs' + Date.now(), lead: selectedIdx, row: { k:k, v:d.act }, docName: def.name, opts: opts };
       try { localStorage.setItem('exeedZohoReq', JSON.stringify(req)); } catch(e){}
@@ -5666,10 +5667,20 @@
     }
     window.addEventListener('storage', function(e){ if (e.key === 'exeedZohoResult') zsImportResult(); });
     function zsApply(l, k, ver, res){
+      var host = zsHost(l).n, hd = res.handed || {};
+      if (res.resumedAt) zsAudit(ver, 'Session resumed by host', host, { ts: res.resumedAt, det: (ver.hostBy && ver.hostBy !== host ? 'Took over from ' + ver.hostBy : 'Control with host') });
+      if (!ver.hostBy || res.resumedAt) ver.hostBy = host;
+      ver.paused = false;
       (res.signed || []).forEach(function(s){
         var i = s.i; if (i < ver.done) return;
-        ver.done = i + 1; zsAudit(ver, 'Signed by Signer ' + (i + 1) + ' · ' + ver.signers[i].role + ' · in person', ver.signers[i].n, { ts: s.at });
+        var sg = ver.signers[i];
+        if (sg.n !== host) zsAudit(ver, 'Device handed to Signer ' + (i + 1) + ' · ' + sg.role, host, { ts: hd[i] || s.at, det: 'In person · hosted by ' + host });
+        else zsAudit(ver, 'In-person session started', host);
+        ver.done = i + 1; zsAudit(ver, 'Signed by Signer ' + (i + 1) + ' · ' + sg.role + ' · in person', sg.n, { ts: s.at });
+        if (s.back) zsAudit(ver, 'Control passed back to host', sg.n, { ts: s.back, det: 'Signed copy to ' + (s.copyTo || sg.e) + (s.changed ? ' · email changed from CRM contact' : '') });
       });
+      if (res.finishedAt) zsAudit(ver, 'Session finished by host', host, { ts: res.finishedAt });
+      if (res.mode === 'partial') { ver.paused = true; ver.pausedAt = zsNow(); zsAudit(ver, 'In-person session paused · ' + ver.done + ' of ' + ver.signers.length + ' signed', host, { det: 'Control with host ' + host + ' · only the host resumes' }); }
       if (res.mode === 'declined') { ver.st = 'declined'; zsAudit(ver, 'Declined in person', ver.signers[ver.done] ? ver.signers[ver.done].n : ''); return; }
       if (ver.done >= ver.signers.length) zsComplete(l, k, ver);
       else {
@@ -5679,7 +5690,7 @@
     }
     function zsComplete(l, k, ver){
       ver.st = 'signed'; ver.done = ver.signers.length; ver.signedAt = zsToday(); ver.sync = 'pending';
-      zsAudit(ver, 'Completed · signed PDF and Zoho certificate attached to the lead', 'System');
+      zsAudit(ver, 'Completed · signed PDF attached to the lead', 'System');
       zsAudit(ver, 'Push to F&O queued', 'System');
       if (k === 'pa1') { paTick(l, PA_CHECK_SHARED); paTick(l, PA_CHECK_SIGNED); }
     }
