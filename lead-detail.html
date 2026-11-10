@@ -1293,6 +1293,18 @@
     .zs-sgl { display:grid; grid-template-columns:repeat(auto-fit, minmax(0,1fr)); grid-auto-flow:column; gap:6px; }
     .zs-sgl > div { background:#fff; border:1px solid #eef0f3; border-radius:8px; padding:6px 8px; display:flex; flex-direction:column; gap:1px; font-size:11.5px; min-width:0; } .zs-sgl span { color:#667085; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .zs-sgn { font-size:10.5px; }
     .zs-att { display:flex; gap:14px; margin-top:8px; } .zs-att .zs-link { display:inline-flex; align-items:center; gap:4px; } .zs-att .material-symbols-outlined { font-size:16px; }
+    select.zso-in { appearance:none; -webkit-appearance:none; padding-inline-end:32px; cursor:pointer; background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='%23475467' d='M12 15.4 6 9.4 7.4 8l4.6 4.6L16.6 8 18 9.4z'/%3E%3C/svg%3E") no-repeat right 8px center / 18px; }
+    [dir=rtl] select.zso-in { background-position:left 8px center; }
+    .zs-pg { width:100%; border-collapse:separate; border-spacing:0; background:#fff; border:1px solid #eef0f3; border-radius:8px; overflow:hidden; font-size:12.5px; }
+    .zs-pg th { text-align:start; font-size:10.5px; font-weight:600; color:#667085; background:#f9fafb; padding:7px 12px; border-bottom:1px solid #eef0f3; }
+    .zs-pg td { padding:8px 12px; border-bottom:1px solid #f2f4f7; vertical-align:middle; } .zs-pg tr:last-child td { border-bottom:0; }
+    .zs-pg td b { display:block; font-weight:600; color:#1f2937; } .zs-pg td small { font-size:11px; color:#667085; }
+    .zs-pg th:nth-child(1) { width:38%; } .zs-pg th:nth-child(2) { width:30%; }
+    .zs-pg-na { color:#98a2b3; }
+    .zs-pg-st { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:600; } .zs-pg-st .material-symbols-outlined { font-size:15px; }
+    .zs-pg-st.ok { color:#0e7a3e; } .zs-pg-st.now { color:#17293d; } .zs-pg-st.bad { color:#b42318; } .zs-pg-st.mute { color:#98a2b3; }
+    .zs-pg-v { text-transform:none; letter-spacing:0; font-weight:500; color:#667085; }
+    .zs-pg-empty { font-size:12px; color:#667085; padding:8px 12px; background:#fff; border:1px solid #eef0f3; border-radius:8px; }
     .zs-tl { list-style:none; margin:0; padding:6px 12px 4px; background:#fff; border:1px solid #eef0f3; border-radius:8px; max-height:260px; overflow:auto; }
     .zs-tl-day { font-size:10.5px; font-weight:700; color:#667085; text-transform:uppercase; letter-spacing:.03em; padding:6px 0 4px; }
     .zs-tl-i { position:relative; display:flex; gap:10px; padding:0 0 12px; }
@@ -5475,32 +5487,29 @@
           '<span class="zl-a">' + (!isCur ? '<button class="zl-ib" title="Send this version for signature" aria-label="Send v' + v.v + ' for signature" onclick="zsUseVersion(\'' + k + '\',' + i + ')"><span class="material-symbols-outlined">send</span></button>' : '') +
           '<button class="zl-ib" title="Download v' + v.v + '" aria-label="Download v' + v.v + '" onclick="zsDownload(\'' + k + '\',' + i + ',' + (v.st === 'signed') + ')"><span class="material-symbols-outlined">download</span></button></span></li>';
       }).join('');
-      var log = [];
-      d.vers.forEach(function(v){ (v.audit || []).forEach(function(a){ log.push({ v:v.v, a:a, ver:v }); }); });
-      // Timeline: newest first, grouped by day; each event gets an icon and colour by type.
-      var lastDay = '', audit = log.reverse().sort(function(a, b){ return (Date.parse(b.a.ts) || 0) - (Date.parse(a.a.ts) || 0); }).map(function(x){
-        var ev = x.a.ev, day = x.a.ts.slice(0, 11), time = x.a.ts.slice(12) || '';
-        var t = /declin|expired/i.test(ev) ? ['block','bad'] : /repushed/i.test(ev) ? ['restart_alt','info'] : /recalled/i.test(ev) ? ['undo','warn'] : /not needed/i.test(ev) ? ['person_remove','warn'] : /pushed|F&O/i.test(ev) ? ['cloud_done','sys'] : /^Signed|signed copy|Completed/i.test(ev) ? ['draw','ok']
-          : /sent|released|link emailed|in person signing/i.test(ev) ? ['send','info'] : /viewed/i.test(ev) ? ['visibility','info'] : /superseded/i.test(ev) ? ['history','mute']
-          : /changed/i.test(ev) ? ['swap_horiz','warn'] : /generated|current/i.test(ev) ? ['description','mute'] : /no.*signature|not requiring/i.test(ev) ? ['do_not_disturb_on','mute'] : ['radio_button_checked','mute'];
-        var head = day !== lastDay ? '<li class="zs-tl-day">' + day + '</li>' : ''; lastDay = day;
-        return head + '<li class="zs-tl-i"><span class="zs-tl-dot ' + t[1] + '"><span class="material-symbols-outlined">' + t[0] + '</span></span>' +
-          '<div class="zs-tl-c"><div class="zs-tl-t"><b>' + dpEsc(ev) + '</b><span class="zs-tl-v">v' + x.v + '</span><span class="zs-tl-tm">' + time + '</span></div>' +
-          '<span class="zs-tl-m">' + [x.a.by ? dpEsc(x.a.by) : '', x.a.det ? dpEsc(x.a.det) : ''].filter(Boolean).join(' · ') + '</span></div></li>';
-      }).join('');
-      var signedLinks = cur && cur.st === 'signed'
-        ? '<div class="zs-dh">Signed documents</div><div class="zs-files">' +
-            '<button class="zs-file" onclick="zsDownload(\'' + k + '\',' + d.act + ',true)"><span class="zs-fi pdf"><span class="material-symbols-outlined">picture_as_pdf</span></span><span class="zs-fn"><b>Signed PDF</b><small>v' + cur.v + ' · ' + (cur.signedAt || '') + '</small></span><span class="material-symbols-outlined zs-fd">download</span></button>' +
-            '</div>' : '';
-      var sg = cur && cur.st !== 'nosig' ? '<ul class="zl">' + cur.signers.map(function(s, i){
-          var done = i < cur.done, now = !done && i === cur.done && ['sent','viewed','partial'].indexOf(cur.st) > -1;
-          return '<li><span class="zl-n">' + (i + 1) + '</span><span class="zl-t"><b>' + dpEsc(s.n) + '</b><small>' + s.role + ' · ' + dpEsc(s.e || s.ph || '') + '</small></span>' +
-            '<span class="zl-s ' + (done ? 'ok' : now ? 'now' : '') + '"><span class="material-symbols-outlined">' + (done ? 'check_circle' : now ? 'hourglass_top' : 'schedule') + '</span>' + (done ? 'Signed' : now ? 'Waiting to sign' : 'Not yet') + '</span></li>';
-        }).join('') + '</ul>' : '';
+      // Signing progress: latest version only — name, date & time of signature, status (agreed with Mac, 10 Nov).
+      var prog = '';
+      if (cur && cur.st === 'nosig') prog = '<div class="zs-pg-empty">No signature required for v' + cur.v + '.</div>';
+      else if (cur) {
+        var live = ['sent','viewed','partial'].indexOf(cur.st) > -1;
+        prog = '<table class="zs-pg"><thead><tr><th>Name</th><th>Date &amp; time of signature</th><th>Status</th></tr></thead><tbody>' + cur.signers.map(function(s, i){
+          var done = i < cur.done, re = new RegExp('^Signed by Signer ' + (i + 1) + '\\b');
+          var when = done ? (zsEvNow(cur, re) || zsEv(cur, re) || cur.signedAt || '') : '';
+          var m = String(when).match(/^(\d{2} \w{3} \d{4})(?: (\d{2}:\d{2}))?$/);
+          var st = done ? ['ok','check_circle','Signed']
+            : cur.st === 'declined' && i === cur.done ? ['bad','block','Declined']
+            : cur.st === 'expired' && i === cur.done ? ['bad','timer_off','Expired']
+            : live && i === cur.done ? ['now','hourglass_top', cur.st === 'viewed' ? 'Viewed · waiting to sign' : 'Waiting to sign']
+            : cur.st === 'draft' ? ['mute','radio_button_unchecked','Not sent']
+            : ['mute','schedule','Not yet'];
+          return '<tr><td><b>' + dpEsc(s.n) + '</b><small>' + (i + 1) + ' · ' + s.role + '</small></td>' +
+            '<td>' + (m ? '<span class="zs-pdt">' + m[1] + '</span>' + (m[2] ? ' <span class="zs-ptm">' + m[2] + '</span>' : '') : '<span class="zs-pg-na">—</span>') + '</td>' +
+            '<td><span class="zs-pg-st ' + st[0] + '"><span class="material-symbols-outlined">' + st[1] + '</span>' + st[2] + '</span></td></tr>';
+        }).join('') + '</tbody></table>';
+      }
       return '<div class="zs-det">' +
         '<div class="zs-dh">Versions</div><ul class="zl">' + vers + '</ul>' +
-        (sg ? '<div class="zs-dh">Signers · v' + cur.v + (cur.req ? ' <span class="zs-req">Zoho request ' + cur.req + '</span>' : '') + (cur.st !== 'draft' ? '<span class="zs-ro"><span class="material-symbols-outlined">lock</span>Locked after sending</span>' : '') + '</div>' + sg : '') +
-        '<div class="zs-dh">Audit log <span class="zs-ro"><span class="material-symbols-outlined">lock</span>Read-only · kept 10 years</span></div><ul class="zs-tl">' + audit + '</ul>' + signedLinks +
+        (cur ? '<div class="zs-dh">Signing progress <span class="zs-pg-v">Latest version · v' + cur.v + (cur.opt === 'inperson' || cur.via === 'In person' ? ' · in person' : cur.via ? ' · ' + dpEsc(cur.via) : '') + '</span>' + (cur.req ? '<span class="zs-req">Zoho request ' + cur.req + '</span>' : '') + '</div>' + prog : '') +
       '</div>';
     }
     document.addEventListener('click', function(e){
@@ -5581,24 +5590,16 @@
         (o.mgr === 'other' ? '<div class="zso-two"><input class="zso-in" id="zsoOtherN" placeholder="Name" value="' + dpEsc(o.otherN) + '" oninput="zsOpt.otherN=this.value;zsOptSync()"><input class="zso-in" id="zsoOther" type="email" placeholder="name' + ZS_DOMAIN + '" value="' + dpEsc(o.other) + '" oninput="zsOpt.other=this.value;zsOptSync()"></div><div class="zso-err" id="zsoErr"></div>' : '');
       var ord = zsOrder(), cust = o.opt === 'remote' && (o.via === 'SMS' || o.via === 'WhatsApp') ? s[2].ph : s[2].e;
       var rows = ord.map(function(r, pos){
-        var mv = '<span class="zso-mv"><button type="button" aria-label="Move up"' + (pos ? '' : ' disabled') + ' onclick="zsOptMove(' + r + ',-1)"><span class="material-symbols-outlined">arrow_upward</span></button>' +
-          '<button type="button" aria-label="Move down"' + (pos < ord.length - 1 ? '' : ' disabled') + ' onclick="zsOptMove(' + r + ',1)"><span class="material-symbols-outlined">arrow_downward</span></button></span>';
         var body = r === 0 ? '<div><small>Sales executive</small><b>' + dpEsc(s[0].n) + '</b><span>' + s[0].e + '</span></div>'
           : r === 1 ? '<div style="flex:1"><small>Sales manager · default from CRM settings</small>' + mgrSel + '</div>'
           : '<div><small>Customer</small><b>' + dpEsc(s[2].n) + '</b><span>' + dpEsc(cust || '—') + '</span></div>';
-        return '<li><span class="zso-n">' + (pos + 1) + '</span>' + body + mv + '</li>';
+        return '<li><span class="zso-n">' + (pos + 1) + '</span>' + body + '</li>';
       }).join('');
-      html += '<div class="zso-l">Signers and order <span>· use the arrows to change who signs first</span></div><ol class="zso-sg">' + rows + '</ol>' +
+      html += '<div class="zso-l">Signers and order <span>· set by the system</span></div><ol class="zso-sg">' + rows + '</ol>' +
         '<div class="flow-note"><span class="material-symbols-outlined">lock</span> Signers and order can’t be changed once the document is sent.</div>';
       return html;
     }
     function zsOrder(){ var o = zsOpt; return o.order.filter(function(r){ return r !== 1 || o.mgrOn; }); }
-    function zsOptMove(r, dir){
-      var vis = zsOrder(), i = vis.indexOf(r), j = i + dir; if (j < 0 || j >= vis.length) return;
-      var other = vis[j], a = zsOpt.order.indexOf(r), b = zsOpt.order.indexOf(other);
-      zsOpt.order[a] = other; zsOpt.order[b] = r;
-      zsOptSet('order', zsOpt.order);
-    }
     function zsOptSet(key, val){ zsOpt[key] = val; document.getElementById('zsOptBody').innerHTML = zsOptHtml(); zsOptSync(); }
     function zsOptValid(){
       var o = zsOpt; if (!o.req) return '';
