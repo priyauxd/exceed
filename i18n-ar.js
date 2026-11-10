@@ -942,7 +942,7 @@
     'Did the customer raise any questions or concerns?': 'هل طرح العميل أي أسئلة أو مخاوف؟',
     'Based on the interaction, how likely are they to move forward with a purchase?': 'بناءً على لقائك مع العميل، ما مدى جدية العميل في إتمام الشراء؟',
     'How did the customer respond to the proposal(s) you presented?': 'كيف استجاب العميل لعروض الأسعار التي قدمتها؟',
-    'Which proposal appealed to them the most, and what influenced their preference?': 'ما عرض السعر الذي نال إعجابه أكثر، وما الذي أثّر في تفضيله؟',
+    'Which proposal appealed to them the most, and what influenced their preference?': 'ما عرض السعر الذي فضّله العميل ولماذا؟',
     'How committed does the customer seem to buying at this stage?': 'ما مدى التزام العميل بالشراء في هذه المرحلة؟',
     'Is there anything preventing them from moving ahead with the purchase?': 'هل هناك ما يمنعه من المضي قدمًا في الشراء؟',
     'Has the customer placed the booking deposit? If not, what is holding them back?': 'هل دفع العميل عربون الحجز؟ إذا لم يفعل، فما الذي يمنعه؟',
