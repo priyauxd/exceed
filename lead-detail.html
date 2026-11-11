@@ -13,6 +13,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
+  <script src="duplicates.js?v=3"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -1622,6 +1623,24 @@
     .dp-check-info:hover .dp-check-tip, .dp-check-info:focus .dp-check-tip, .dp-check-info.open .dp-check-tip { opacity: 1; visibility: visible; }
 
     /* Recent activity */
+    .dup-bar { display:flex; align-items:center; gap:10px; border-radius:8px; padding:9px 12px; margin-bottom:10px; font-size:12.5px; line-height:1.4; }
+    .dup-bar > .material-symbols-outlined { font-size:20px; } .dup-bar > div { flex:1; }
+    .dup-bar.warn { background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; } .dup-bar.warn > .material-symbols-outlined { color:#b54708; }
+    .dup-bar.bad { background:#fef3f2; border:1px solid #fecdca; color:#7a271a; } .dup-bar.bad > .material-symbols-outlined { color:#b42318; }
+    .dup-bar a { color:inherit; font-weight:700; } .dup-bar-s { color:#93370d; opacity:.8; }
+    .dup-bar-btn { display:inline-flex; align-items:center; gap:4px; border:1px solid currentColor; background:#fff; color:#17293d; border-color:#17293d; border-radius:6px; padding:5px 12px; font:600 12px inherit; cursor:pointer; white-space:nowrap; }
+    .dup-bar-btn:hover:not(:disabled) { background:#17293d; color:#fff; } .dup-bar-btn:disabled { color:#98a2b3; border-color:#d0d5dd; cursor:not-allowed; background:#f9fafb; } .dup-bar-btn .material-symbols-outlined { font-size:16px; }
+    .dup-tip { position:relative; display:inline-flex; } .dup-tip-t { display:none; position:absolute; bottom:calc(100% + 6px); inset-inline-end:0; width:220px; background:#1f2937; color:#fff; font-size:11.5px; padding:7px 9px; border-radius:6px; z-index:20; }
+    .dup-tip:hover .dup-tip-t, .dup-tip:focus-within .dup-tip-t, .dup-tip:focus .dup-tip-t { display:block; }
+    .dup-sec .dp-act-header { align-items:center; } .dup-n { display:inline-block; min-width:18px; text-align:center; font-size:10.5px; background:#f2f4f7; color:#475467; border-radius:999px; padding:0 6px; margin-inline-start:4px; }
+    .dup-list { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+    .dup-row { display:block; border:1px solid #eef0f3; border-radius:8px; padding:8px 10px; text-decoration:none; color:inherit; } .dup-row:hover { border-color:#98a6b6; background:#fafbfc; }
+    .dup-row.me { background:#f8fafc; cursor:default; }
+    .dup-r1 { display:flex; align-items:center; justify-content:space-between; gap:6px; } .dup-id { font:600 12px ui-monospace,Menlo,monospace; color:#17293d; }
+    .dup-r2 { font-size:11.5px; color:#667085; margin-top:3px; }
+    .dup-rev { margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; border:1px solid #17293d; background:#17293d; color:#fff; border-radius:6px; padding:8px; font:600 12.5px inherit; cursor:pointer; } .dup-rev:hover { background:#0f1d2c; } .dup-rev .material-symbols-outlined { font-size:17px; }
+    .dup-none { display:flex; gap:8px; align-items:flex-start; margin-top:6px; font-size:12px; color:#475467; } .dup-none .material-symbols-outlined { color:#0e7a3e; font-size:18px; } .dup-none b { display:block; color:#1f2937; } .dup-none span { display:block; }
+    .dup-ign { margin-top:8px; border-top:1px dashed #e4e7ec; padding-top:6px; font-size:11.5px; color:#667085; } .dup-ign-h { font-weight:600; color:#475467; margin-bottom:2px; } .dup-ign a { color:#2a6797; }
     .dp-activity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 8px; }
     .dp-act-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .dp-act-title { font-size: 11.5px; font-weight: 700; }
@@ -3148,12 +3167,78 @@
       if (window.innerWidth < 1100) document.getElementById('panelOverlay').classList.add('show');
     }
 
+
+    /* ── Lead duplication (MAI-4776) — rules and data in duplicates.js ── */
+    function dupRec(l){ return (window.DUP && DUP.rec(l.id)) || null; }
+    // Apply the stored decision to the lead (status, reason, link) and add the audit entry once.
+    function dupSync(l){
+      if (!window.DUP) return;
+      var d = DUP.decision(l.id); if (!d) return;
+      l.activities = l.activities || [];
+      if (d.d === 'mark') {
+        l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true; l.disqReason = 'Duplicate'; l.dupOf = d.of;
+      }
+      if (l._dupAud !== d.at + d.d) {
+        l._dupAud = d.at + d.d;
+        l.activities.unshift({ type:'note', text: d.d === 'mark'
+          ? 'Duplicate check · Marked as duplicate of ' + d.of + ' · Disqualified (reason: Duplicate) · by ' + d.by
+          : 'Duplicate check · Continue — kept as a separate lead · by ' + d.by, time: d.at });
+      }
+    }
+    function dupBarHtml(l){
+      if (!window.DUP || !dupRec(l)) return '';
+      var s = DUP.status(l.id); if (!s) return '';
+      if (s.k === 'potential') {
+        var n = DUP.check(dupRec(l)).open.length;
+        return '<div class="dup-bar warn" role="status"><span class="material-symbols-outlined">warning</span><div><b>Potential duplicate.</b> This lead matches ' + n + ' open ' + dupRec(l).brand + ' lead' + (n === 1 ? '' : 's') + ' on ' + DUP.onList(s.on) + '. Review to decide. <span class="dup-bar-s">The lead can still move through the stages.</span></div>' +
+          '<button class="dup-bar-btn" onclick="dupReview()">Review</button></div>';
+      }
+      if (s.k === 'marked') {
+        var o = DUP.rec(s.of) || {};
+        return '<div class="dup-bar bad" role="status"><span class="material-symbols-outlined">block</span><div><b>Disqualified · Duplicate.</b> Duplicate of <a href="' + DUP.link(s.of) + '">' + s.of + '</a>' + (o.name ? ' (' + DUP.esc(o.name) + ')' : '') + '. Marked by ' + DUP.esc(s.d.by) + ' · ' + DUP.esc(s.d.at) + '.</div>' +
+          '<span class="dup-tip" tabindex="0"><button class="dup-bar-btn" disabled aria-disabled="true" aria-describedby="dupTipT"><span class="material-symbols-outlined">restart_alt</span>Reactivate</button><span class="dup-tip-t" id="dupTipT" role="tooltip">Leads disqualified as duplicate can’t be reactivated.</span></span></div>';
+      }
+      return '';
+    }
+    function dupReview(){
+      var l = leads[selectedIdx];
+      DUP.review(l.id, function(v){
+        renderDetail(selectedIdx, currentStep);
+        if (typeof renderList === 'function') { try { renderList(); } catch(e){} }
+        showToast(v.d === 'mark' ? 'Marked as duplicate of ' + v.of + ' · lead disqualified' : 'Kept as a separate lead · potential duplicate cleared');
+      });
+    }
+    function dupSectionHtml(l){
+      if (!window.DUP) return '';
+      DUP.addCss();
+      var r = dupRec(l) || { id:l.id, name:l.name, brand:'EXEED', phone:l.phone, email:l.email, eid:l.emiratesId, created:new Date().toISOString(), stage:l.stage };
+      var g = dupRec(l) ? DUP.group(l.id) : [], me = DUP.status(l.id);
+      var head = '<div class="dp-act-header"><span class="dp-act-title">Duplicate leads' + (g.length ? ' <span class="dup-n">' + (g.length - 1) + '</span>' : '') + '</span>' + (me ? DUP.chip(me) : '') + '</div>';
+      if (!g.length) {
+        var ig = DUP.check(r).ignored;
+        return '<div class="dp-activity dup-sec">' + head + '<div class="dup-none"><span class="material-symbols-outlined">check_circle</span><div><b>No duplicates found</b><span>Checked against open ' + r.brand + ' leads on Email, Phone and EID.</span></div></div>' +
+          (ig.length ? '<div class="dup-ign"><div class="dup-ign-h">Not counted</div>' + ig.map(function(m){ return '<div class="dup-ign-r"><a href="' + DUP.link(m.r.id) + '">' + m.r.id + '</a> · ' + DUP.esc(m.why) + ' · matched on ' + m.on.join(', ') + '</div>'; }).join('') + '</div>' : '') + '</div>';
+      }
+      var mine = DUP.check(r).open.reduce(function(a, m){ a[m.r.id] = m.on; return a; }, {});
+      var rows = g.map(function(x){
+        var s = x.id === l.id ? { k:'me', t:'This lead', ic:'person' } : (DUP.status(x.id) || { k:'kept', t:'Open', ic:'radio_button_checked' });
+        var on = mine[x.id] || [];
+        var orig = DUP.status(x.id); orig = orig && orig.k === 'original';
+        return '<a class="dup-row' + (x.id === l.id ? ' me' : '') + '" href="' + (x.id === l.id ? '#' : DUP.link(x.id)) + '"' + (x.id === l.id ? ' onclick="return false"' : '') + '>' +
+          '<div class="dup-r1"><span class="dup-id">' + x.id + '</span>' + DUP.chip(s) + (x.id !== l.id && orig ? '' : '') + '</div>' +
+          '<div class="dup-r2">' + DUP.esc(x.name) + ' · ' + DUP.esc(x.source) + ' · ' + DUP.fmt(x.created) + '</div>' +
+          '<div class="dup-r2">' + DUP.esc(x.stage === 'Disqualified' && (DUP.decision(x.id) || {}).d === 'mark' ? 'Disqualified · Duplicate' : (DUP.decision(x.id) || {}).d === 'mark' ? 'Disqualified · Duplicate' : x.stage) + ' · ' + DUP.esc(x.owner) + (on.length ? ' · ' + DUP.tags(on) : '') + '</div></a>';
+      }).join('');
+      return '<div class="dp-activity dup-sec">' + head + '<div class="dup-list">' + rows + '</div>' +
+        (me && me.k === 'potential' ? '<button class="dup-rev" onclick="dupReview()"><span class="material-symbols-outlined">fact_check</span>Review · Mark as duplicate or Continue</button>' : '') + '</div>';
+    }
     function renderDetail(idx, stepIdx) {
       var l = leads[idx];
       var sd = stepDetails[stepIdx];
       var slaBoxClass = l.slaClass === 'brch' ? 'danger' : (l.slaClass === 'wrn' ? 'warn' : '');
 
-      var html = '<div class="dp-page">';
+      dupSync(l);
+      var html = '<div class="dp-page">' + dupBarHtml(l);
 
       // Lead identity card — name + badges on line 1, owner/location on line 2, quick fields top-right, KPIs below
       var ownerInit = l.owner.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
@@ -3364,6 +3449,7 @@
           '<div><div class="dp-act-text">'+a.text+'</div><div class="dp-act-time">'+a.time+'</div></div></div>';
       });
       html += '</div>';
+      html += dupSectionHtml(l);
       html += '</div>'; // right col
       html += '</div>'; // content grid
       html += '</div>'; // dp-page
@@ -6226,6 +6312,21 @@
       });
     }, 1000);
 
+    // Duplicate-rule sample leads that aren't in the list open by id from the dashboards.
+    (function(){
+      try {
+        var q = new URLSearchParams(location.search).get('lead'); if (!q || !window.DUP) return;
+        var r = DUP.rec(decodeURIComponent(q).trim()); if (!r) return;
+        if (leads.some(function(x){ return x.id === r.id; })) return;
+        var base = leads.filter(function(x){ return x.bpfStage === 1; })[0] || leads[0];
+        var stg = { New:1, Contact:2, Qualify:3, Discovery:5, Closed:9, Disqualified:1 }[r.stage] || 1;
+        var lead = Object.assign({}, base, { id:r.id, name:r.name, initials:r.name.split(/\s+/).map(function(w){ return w.charAt(0); }).join('').slice(0,2).toUpperCase(),
+          phone:r.phone || '—', email:r.email || '—', emiratesId:r.eid || '—', source:r.source, model:r.model, owner:r.owner, stage:r.stage, stageNum:r.stage, bpfStage:stg,
+          stageClass: /Disqualified|Closed/.test(r.stage) ? 'na' : 'new', disqualified: r.stage === 'Disqualified', activities:[{ type:'note', text:'Lead created · ' + r.source, time: DUP.fmt(r.created) }],
+          proposals: undefined, propState: undefined, zsd: undefined, payments: undefined });
+        leads.push(lead);
+      } catch(e){}
+    })();
     (function() {
       var params = new URLSearchParams(window.location.search);
       if (params.get('new') === '1') { openCreateLead(); }
