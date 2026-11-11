@@ -1641,6 +1641,11 @@
     .dup-rev { margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; border:1px solid #17293d; background:#17293d; color:#fff; border-radius:6px; padding:8px; font:600 12.5px inherit; cursor:pointer; } .dup-rev:hover { background:#0f1d2c; } .dup-rev .material-symbols-outlined { font-size:17px; }
     .dup-none { display:flex; gap:8px; align-items:flex-start; margin-top:6px; font-size:12px; color:#475467; } .dup-none .material-symbols-outlined { color:#0e7a3e; font-size:18px; } .dup-none b { display:block; color:#1f2937; } .dup-none span { display:block; }
     .dup-ign { margin-top:8px; border-top:1px dashed #e4e7ec; padding-top:6px; font-size:11.5px; color:#667085; } .dup-ign-h { font-weight:600; color:#475467; margin-bottom:2px; } .dup-ign a { color:#2a6797; }
+    .dp-biz-tag { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; letter-spacing:.02em; background:#eaeef3; color:#17293d; border-radius:6px; padding:3px 8px; margin-inline-start:6px; }
+    .dp-biz-tag .material-symbols-outlined { font-size:14px; }
+    .dp-if-hint { font-size:11px; color:var(--ink-secondary); margin-top:4px; line-height:1.35; }
+    .dp-if-new { border:0; background:none; color:#2a6797; font:600 11.5px inherit; cursor:pointer; padding:4px 0 0; }
+    .dp-if-b2b .dp-if-label::after { content:'B2B'; margin-inline-start:6px; font-size:9px; font-weight:700; letter-spacing:.04em; color:#17293d; background:#eaeef3; border-radius:4px; padding:1px 5px; vertical-align:1px; }
     .dp-activity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 8px; }
     .dp-act-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
     .dp-act-title { font-size: 11.5px; font-weight: 700; }
@@ -2041,6 +2046,8 @@
       <button class="dp-header-btn" title="Close" onclick="closeCreateLead()"><span class="material-symbols-outlined">close</span></button>
     </div>
     <div class="cp-body">
+      <div class="cp-field"><label class="cp-label">Business Type <span class="req">*</span></label>
+        <div class="dp-if-chips" id="clBiz"><label class="dp-chip-radio on"><input type="radio" name="clBiz" value="B2C" checked onchange="onBizTypeChange()"><span>Individual (B2C)</span></label><label class="dp-chip-radio"><input type="radio" name="clBiz" value="B2B" onchange="onBizTypeChange()"><span>Business (B2B)</span></label></div></div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Lead Source <span class="req">*</span></label><select class="cp-select" id="clSource" onchange="onLeadSourceChange()"><option>Walk In</option><option>Call</option><option>Contact Form</option><option>External Referrals</option><option>Others</option></select></div>
         <div class="cp-field"><label class="cp-label">Mobile Number <span class="req">*</span></label><input class="cp-input" id="clMobile" value="+971 "></div>
@@ -2053,6 +2060,18 @@
         <div class="cp-field"><label class="cp-label">Last Name <span class="req">*</span></label><input class="cp-input" id="clLast" placeholder="e.g. Khalifa"></div>
       </div>
       <div class="cp-field"><label class="cp-label">Email</label><input class="cp-input" id="clEmail" placeholder="name@email.ae"></div>
+      <div id="clB2B" style="display:none">
+        <div class="cp-section-title">Business</div>
+        <div class="cp-grid2">
+          <div class="cp-field"><label class="cp-label">Account <span class="req">*</span></label><select class="cp-select" id="clAccount"><option value="">Search accounts…</option></select></div>
+          <div class="cp-field"><label class="cp-label">Contact</label><input class="cp-input" id="clContact" placeholder="Contact at the company"></div>
+        </div>
+        <div class="cp-grid2">
+          <div class="cp-field"><label class="cp-label">Industry <span class="req">*</span></label><select class="cp-select" id="clIndustry"><option value="">Select…</option></select></div>
+          <div class="cp-field"><label class="cp-label">Emirates <span class="req">*</span></label><select class="cp-select" id="clEmirate"><option value="">Select…</option></select></div>
+        </div>
+        <div class="cp-field" style="max-width:50%"><label class="cp-label">Quantity <span class="req">*</span></label><input class="cp-input" id="clQty" type="number" min="1" value="1"></div>
+      </div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Preferred Language</label><select class="cp-select" id="clLang"><option>English</option><option>Arabic</option></select></div>
         <div class="cp-field"><label class="cp-label">Preferred Contact Channel <span class="req">*</span></label><select class="cp-select" id="clPrefChannel"><option>WhatsApp</option><option>Call</option><option>Email</option><option>SMS</option></select></div>
@@ -2063,7 +2082,7 @@
         <div class="cp-field" id="clBrandField"><label class="cp-label">Brand</label><select class="cp-select" id="clBrand"><option>Exeed</option><option>MHero</option><option>Lepas</option></select></div>
         <div class="cp-field"><label class="cp-label">Model</label><select class="cp-select" id="clModel"><option>RX-Comfort</option><option>VX Luxury</option><option>VX-EXECUTIVE</option><option>ET REEV</option></select></div>
       </div>
-      <div class="cp-field"><label class="cp-label">Assigned Showroom</label><select class="cp-select" id="clShowroom"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
+      <div class="cp-field"><label class="cp-label" id="clShowroomLbl">Assigned Showroom</label><select class="cp-select" id="clShowroom"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
       <div class="cp-field" id="clSalesExecField"><label class="cp-label">Assigned Sales Executive <span class="req">*</span></label><select class="cp-select" id="clSalesExec"><option>Mariam Saeed</option><option>Nadia Al Amiri</option><option>Mariam Khalil</option><option>Priyamvada K.</option><option>Saravanakumar Subramani</option><option>Basel Talalini</option></select></div>
 
       <div class="cp-section-title">Internal</div>
@@ -2152,6 +2171,27 @@
       { id:'L-2026-04790', name:'Noura Al Shamsi', initials:'NS', av:'av4', phone:'+971 50 123 4568', email:'noura.s@email.com', emiratesId:'784-1995-8901234-5', source:'Instagram', srcClass:'ig', srcIcon:'IG', model:'EXEED TXL', sla:'On track', slaClass:'ok', slaTime:'On track', stage:'Visit', stageClass:'nurture', stageNum:'Visit', intent:'Low', intentClass:'low', owner:'Mariam K.', bpfStage:4, score:35, profileComplete:30, convertProb:18, discovery:25, channel:'WhatsApp', lang:'Arabic', campaign:'Instagram Brand', temp:'Cold', existing:'No', showroom:'EXEED Sharjah', handover:'Accepted', preferred:'WhatsApp', nps:'—', activities:[{type:'whatsapp',text:'Sent TXL launch invite for next month event…',time:'2026-07-01 14:00'}] },
       { id:'L-2026-04785', name:'Youssef Khoury', initials:'YK', av:'av6', phone:'+971 55 234 5679', email:'youssef.k@email.com', emiratesId:'784-1992-9012345-6', source:'Facebook', srcClass:'fb', srcIcon:'FB', model:'EXEED RX', sla:'On track', slaClass:'ok', slaTime:'On track', stage:'Visit', stageClass:'nurture', stageNum:'Visit', intent:'Med', intentClass:'med', owner:'Nadia A.', bpfStage:4, score:44, profileComplete:42, convertProb:28, discovery:30, channel:'Email', lang:'English', campaign:'Facebook Retarget', temp:'Warm', existing:'No', showroom:'EXEED Dubai', handover:'Accepted', preferred:'Email', nps:'—', activities:[{type:'email',text:'Sent comparison guide RX vs competition…',time:'2026-07-02 09:00'}] }
     ];
+
+    /* ── B2B lead process (Change 7) ── Business Type switches the lead form. */
+    var BIZ_TYPES = [['B2C','Individual (B2C)'], ['B2B','Business (B2B)']];
+    var B2B_INDUSTRY = ['Rent A Car','Limousine','SME','Government','Corporate','Export'];   // F&O: Classification group
+    var UAE_EMIRATES = ['Abu Dhabi','Dubai','Sharjah','Ajman','Umm Al Quwain','Ras Al Khaimah','Fujairah'];
+    var B2B_LOCATIONS = ['Exeed Fleet','Lepas Fleet'];
+    var B2B_ACCOUNTS = ['شركة النور للتجارة','Emirates Flight Catering','Fast Rent A Car LLC','Dubai Taxi Corporation','Al Ghurair Investment'];
+    leads.forEach(function(l){
+      l.bizType = l.bizType || 'B2C';
+      if (l.id === 'L-2026-04838') {   // demo B2B lead
+        l.bizType = 'B2B'; l.industry = 'Corporate'; l.emirate = 'Dubai'; l.account = l.company || 'شركة النور للتجارة';
+        l.contact = 'Ahmed Al Mansoori'; l.qty = '5'; l.fleetLoc = 'Exeed Fleet';
+      }
+    });
+    function setBizType(v){
+      var l = leads[selectedIdx]; if (!l) return;
+      l.bizType = v;
+      if (v === 'B2B') { l.fleetLoc = l.fleetLoc || B2B_LOCATIONS[0]; l.qty = l.qty || '1'; }
+      renderDetail(selectedIdx, currentStep);
+      showToast(v === 'B2B' ? 'Business lead (B2B) — form updated: account, contact, industry, emirate, quantity, fleet location' : 'Individual lead (B2C) — standard form');
+    }
 
     var journeySteps = [
       {name:'New',icon:'fiber_new'},
@@ -2789,6 +2829,7 @@
         return;
       }
       l[prop] = val;
+      if (prop === 'industry') renderDetail(selectedIdx, currentStep);
       renderLeads('all');
     }
 
@@ -3251,6 +3292,7 @@
             '<div class="dp-name-row">' +
               '<span class="dp-name editable" contenteditable="true" spellcheck="false" data-prop="name" onblur="editField(this)" onkeydown="editKeydown(event)">'+l.name+'</span>' +
               '<span class="dp-lead-tag"><span class="material-symbols-outlined" style="font-size:13px">badge</span>Lead</span>' +
+              (l.bizType === 'B2B' ? '<span class="dp-biz-tag"><span class="material-symbols-outlined">business</span>B2B · ' + dpEsc(l.industry || 'Business') + '</span>' : '') +
             '</div>' +
           '</div>' +
           '<div class="dp-formhead">' +
@@ -3347,6 +3389,11 @@
                 var on = (o.val === x);
                 return '<label class="dp-chip-radio'+(on?' on':'')+'"><input type="radio" name="tradeInInterested" value="'+x+'"'+(on?' checked':'')+' onchange="onTradeInChange(this.value)"><span>'+x+'</span></label>';
               }).join('') + '</div>';
+            } else if (o.bizToggle) {
+              ctrl = '<div class="dp-if-chips">' + BIZ_TYPES.map(function(x){
+                var on = (o.val === x[0]);
+                return '<label class="dp-chip-radio'+(on?' on':'')+'"><input type="radio" name="bizType" value="'+x[0]+'"'+(on?' checked':'')+' onchange="setBizType(this.value)"><span>'+x[1]+'</span></label>';
+              }).join('') + '</div>';
             } else if (o.radioChips) {
               ctrl = '<div class="dp-if-chips">' + o.radioChips.map(function(x){
                 var on = (o.val === x);
@@ -3366,23 +3413,35 @@
           } else {
             ctrl = '<input class="dp-if-input" type="text" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();this.blur();}">';
           }
-          return '<div class="dp-if'+(o.type==='textarea'?' dp-if-wide':'')+(o.ai?' dp-if-ai':'')+'"><label class="dp-if-label">'+o.label+star+(o.lock?'<span class="material-symbols-outlined dp-if-lock">lock</span>':'')+(o.ai?'<span class="dp-if-aitag">✦ AI</span>':'')+'</label>'+ctrl+'</div>';
+          if (o.type === 'number') ctrl = '<input class="dp-if-input" type="number" min="1" step="1" value="'+esc(o.val)+'" data-prop="'+(o.prop||'')+'" onblur="editIntake(this)">';
+          if (o.type === 'lookup' && o.newLabel) ctrl = ctrl.replace('</div>', '</div><button type="button" class="dp-if-new" onclick="showToast(\''+o.newLabel+' — opens the D365 quick-create form\')">+ '+o.newLabel+'</button>');
+          return '<div class="dp-if'+(o.type==='textarea'||o.wide?' dp-if-wide':'')+(o.ai?' dp-if-ai':'')+(o.b2b?' dp-if-b2b':'')+'"><label class="dp-if-label">'+o.label+star+(o.lock?'<span class="material-symbols-outlined dp-if-lock">lock</span>':'')+(o.ai?'<span class="dp-if-aitag">✦ AI</span>':'')+'</label>'+ctrl+(o.hint?'<div class="dp-if-hint">'+o.hint+'</div>':'')+'</div>';
         };
+        var b2b = l.bizType === 'B2B';
         var groups = [
           { title:'Lead Details', moreId:'intakeCustMore', fields:[
+            {label:'Business Type', type:'select', bizToggle:true, wide:true, val:l.bizType || 'B2C', req:true},
             {label:'First Name', prop:'firstName', val:fn, req:true},
             {label:'Last Name', prop:'lastName', val:ln, req:true},
             {label:'Mobile Number', prop:'phone', val:l.phone, type:'phone', req:true},
             {label:'Email', prop:'email', val:l.email}
-          ], more:[
+          ].concat(b2b ? [
+            {label:'Account', prop:'account', type:'lookup', val:l.account || '', req:true, b2b:true},
+            {label:'Contact', prop:'contact', type:'lookup', val:l.contact || '', b2b:true},
+            {label:'Industry', prop:'industry', type:'select', val:l.industry || '', opts:[''].concat(B2B_INDUSTRY), req:true, b2b:true, hint:'Classification group in F&amp;O'},
+            {label:'Emirates', prop:'emirate', type:'select', val:l.emirate || '', opts:[''].concat(UAE_EMIRATES), req:true, b2b:true}
+          ] : []), more: b2b ? [
+            {label:'WhatsApp Number', val:l.phone},
+            {label:'Nationality', type:'lookup', val:'UAE'}
+          ] : [
             {label:'WhatsApp Number', val:l.phone},
             {label:'Emirates ID', val:l.emiratesId},
             {label:'Nationality', type:'lookup', val:'UAE'},
             {label:'Campaign Name', lock:true, val:'EV - Performance 2025'}
           ]},
           { title:'Vehicle', moreId:'intakeVehMore', fields:[
-            {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model)}
-          ], more:[
+            {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model), hint: b2b ? 'More than one model? Add the other models and quantities in Description.' : ''}
+          ].concat(b2b ? [{label:'Quantity', prop:'qty', type:'number', val:l.qty || '1', req:true, b2b:true}] : []), more:[
             {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
             {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
             {label:'Model Year', type:'select', val:'2026', opts:['2026','2025','2024']},
@@ -3395,7 +3454,8 @@
             {label:'Description', val: (l._aiFields && l._aiFields.description) ? (l.aiDescription||'') : '', req:true, ai: !!(l._aiFields && l._aiFields.description)}
           ]},
           { title:'Organization', fields:[
-            {label:'Showroom', type:'lookup', val:'Abudhabi Corniche', req:true}
+            b2b ? {label:'Location', prop:'fleetLoc', type:'select', val:l.fleetLoc || B2B_LOCATIONS[0], opts:B2B_LOCATIONS, req:true, b2b:true}
+                : {label:'Showroom', type:'lookup', val:'Abudhabi Corniche', req:true}
           ]}
         ];
         var renderGroup = function(g){
@@ -4583,7 +4643,7 @@
     }
     function dpFormSections(sections) {
       return '<div class="dp-intake"><div class="dp-intake-groups">' + sections.map(function(g){
-        return '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">'+g.fields.map(dpFieldHtml).join('')+'</div></div>';
+        return '<div class="dp-intake-col"><div class="dp-intake-title">'+g.title+'</div><div class="dp-if-fields">'+g.fields.filter(Boolean).map(dpFieldHtml).join('')+'</div></div>';
       }).join('') + '</div></div>';
     }
 
@@ -4602,13 +4662,21 @@
           {label:'Topic', val:l.model+' enquiry'},
           {label:'Middle Name', val:''},
           {label:'Email', val:l.email},
-          {label:'EID', val:l.emiratesId},
+          l.bizType === 'B2B' ? null : {label:'EID', val:l.emiratesId},
           {label:'Nationality', type:'lookup', val:'UAE'},
           {label:'Trade-in Interested', type:'select', val:l.existing!=='No'?'Yes':'No', opts:['No','Yes','Not sure']},
           {label:'Duplicate Lead', type:'select', val:'No', opts:['No','Yes — flagged']},
           {label:'Call Status', type:'select', val:'Answered', opts:['Not Called','No Answer 1','No Answer 2','Call Back','Follow up','Answered']}
         ]},
-        { title:'Campaign', fields:[
+        l.bizType === 'B2B' ? { title:'Business (B2B)', fields:[
+          {label:'Business Type', val:'Business (B2B)'},
+          {label:'Account', type:'lookup', val:l.account || ''},
+          {label:'Contact', type:'lookup', val:l.contact || ''},
+          {label:'Industry', val:l.industry || ''},
+          {label:'Emirates', val:l.emirate || ''},
+          {label:'Quantity', val:l.qty || ''},
+          {label:'Location', val:l.fleetLoc || ''}
+        ]} : { title:'Campaign', fields:[
           {label:'Campaign ID', val:''},
           {label:'Campaign Name', type:'lookup', val:(l.campaign && l.campaign!=='—')?l.campaign:''}
         ]},
@@ -6174,8 +6242,26 @@
       document.getElementById('clMobile').value = '+971 ';
       ['clLang','clPrefChannel','clSource','clBrand','clModel','clShowroom','clSalesExec','clLeadType','clStage','clTemp','clCallStatus'].forEach(function(id){ var e=document.getElementById(id); if(e) e.selectedIndex=0; });
       document.getElementById('clError').style.display = 'none';
+      var b2c = document.querySelector('input[name=clBiz][value=B2C]'); if (b2c) b2c.checked = true;
+      ['clContact'].forEach(function(id){ document.getElementById(id).value = ''; }); document.getElementById('clQty').value = '1';
+      ['clAccount','clIndustry','clEmirate'].forEach(function(id){ document.getElementById(id).selectedIndex = 0; });
+      onBizTypeChange();
       onLeadSourceChange();
       openLeadPanel();
+    }
+    var CL_SHOWROOMS = null;
+    function clBiz(){ var r = document.querySelector('input[name=clBiz]:checked'); return r ? r.value : 'B2C'; }
+    function onBizTypeChange(){
+      var b2b = clBiz() === 'B2B';
+      document.querySelectorAll('#clBiz .dp-chip-radio').forEach(function(c){ c.classList.toggle('on', c.querySelector('input').checked); });
+      document.getElementById('clB2B').style.display = b2b ? '' : 'none';
+      var fill = function(id, list){ var e = document.getElementById(id); if (e && e.options.length < 2) list.forEach(function(x){ var o = document.createElement('option'); o.textContent = x; e.appendChild(o); }); };
+      fill('clAccount', B2B_ACCOUNTS); fill('clIndustry', B2B_INDUSTRY); fill('clEmirate', UAE_EMIRATES);
+      var sr = document.getElementById('clShowroom');
+      if (!CL_SHOWROOMS) CL_SHOWROOMS = sr.innerHTML;
+      sr.innerHTML = b2b ? B2B_LOCATIONS.map(function(x){ return '<option>' + x + '</option>'; }).join('') : CL_SHOWROOMS;
+      document.getElementById('clShowroomLbl').textContent = b2b ? 'Location' : 'Assigned Showroom';
+      document.getElementById('clDesc').placeholder = b2b ? 'Enquiry details. Need more than one model? List each model and quantity here.' : 'Free text — enquiry details, budget, timeline…';
     }
     function onLeadSourceChange() {
       var src = document.getElementById('clSource').value;
@@ -6243,6 +6329,13 @@
       if (!last) missing.push('Last Name');
       if (!mobile || mobile.replace(/\D/g,'').length < 9) missing.push('Mobile Number');
       if (!desc) missing.push('Description');
+      var isB2B = clBiz() === 'B2B';
+      if (isB2B) {
+        if (!document.getElementById('clAccount').value) missing.push('Account');
+        if (!document.getElementById('clIndustry').value) missing.push('Industry');
+        if (!document.getElementById('clEmirate').value) missing.push('Emirates');
+        if (!(parseInt(document.getElementById('clQty').value, 10) > 0)) missing.push('Quantity');
+      }
       if (missing.length) { err.textContent = 'Please complete: ' + missing.join(', ') + '.'; err.style.display = 'block'; return; }
       err.style.display = 'none';
       var name = (first + ' ' + last).trim();
@@ -6272,8 +6365,15 @@
         temp: document.getElementById('clTemp').value, showroom: showroomVal,
         preferred: prefVal, leadType: document.getElementById('clLeadType').value,
         company: '—', bizOp: showroomVal,
-        callStatus: document.getElementById('clCallStatus').value
+        callStatus: document.getElementById('clCallStatus').value,
+        bizType: isB2B ? 'B2B' : 'B2C'
       };
+      if (isB2B) {
+        fields.account = document.getElementById('clAccount').value; fields.company = fields.account;
+        fields.contact = document.getElementById('clContact').value.trim() || name;
+        fields.industry = document.getElementById('clIndustry').value; fields.emirate = document.getElementById('clEmirate').value;
+        fields.qty = document.getElementById('clQty').value; fields.fleetLoc = showroomVal; fields.emiratesId = '—';
+      }
       if (editingId) {
         var idx = -1;
         for (var k = 0; k < leads.length; k++) { if (leads[k].id === editingId) { idx = k; break; } }
