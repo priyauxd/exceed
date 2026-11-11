@@ -1450,6 +1450,26 @@
     .pa-head .qc-status { padding:5px 10px; white-space:normal; }
     .conf-lock-note { display:flex; align-items:flex-start; gap:6px; margin-top:9px; font-size:11.5px; color:var(--ink-secondary); line-height:1.4; }
     .conf-lock-note .material-symbols-outlined { font-size:16px; color:var(--amber); }
+    .op-sec { margin-top:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); overflow:visible; }
+    .op-h { display:flex; align-items:center; gap:8px; padding:10px 13px; border-bottom:1px solid var(--border); }
+    .op-ic { width:24px; height:24px; border-radius:6px; background:var(--colorBrandBackground2, #eaeef3); color:var(--colorBrandBackground, #17293d); display:inline-flex; align-items:center; justify-content:center; } .op-ic .material-symbols-outlined { font-size:16px; }
+    .op-t { font-size:12.5px; font-weight:700; color:var(--ink); text-transform:uppercase; letter-spacing:.03em; }
+    .op-info { position:relative; display:inline-flex; color:var(--ink-muted); cursor:help; } .op-info .material-symbols-outlined { font-size:16px; }
+    .op-tip { display:none; position:absolute; top:calc(100% + 6px); inset-inline-start:-8px; z-index:30; width:260px; background:#1f2937; color:#fff; font-size:11.5px; line-height:1.4; padding:8px 10px; border-radius:8px; box-shadow:0 8px 20px rgba(15,23,42,.2); text-transform:none; letter-spacing:0; font-weight:400; }
+    .op-info:hover .op-tip, .op-info:focus .op-tip { display:block; }
+    .op-ref { display:inline-flex; align-items:center; gap:4px; border:1px solid var(--border); background:#fff; color:var(--ink); border-radius:6px; padding:4px 10px; font:600 12px inherit; cursor:pointer; } .op-ref:hover { background:var(--bg); } .op-ref .material-symbols-outlined { font-size:16px; }
+    .op-tw { overflow-x:auto; }
+    .op-tb { width:100%; border-collapse:collapse; font-size:12px; }
+    .op-tb th { text-align:start; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.03em; color:#667085; padding:8px 8px; background:#fafbfc; border-bottom:1px solid var(--border); white-space:nowrap; }
+    .op-tb td { padding:9px 8px; border-bottom:1px solid #eef0f3; color:#1f2937; vertical-align:middle; } .op-tb tr:last-child td { border-bottom:0; }
+    .op-tb th:first-child, .op-tb td:first-child { padding-inline-start:13px; } .op-tb .nw { white-space:nowrap; }
+    .op-tb td b { font-weight:600; } .op-cur { font-size:10.5px; color:var(--ink-muted); }
+    .op-na { color:#98a2b3; }
+    .op-d { display:block; white-space:nowrap; } .op-tm { display:block; font-size:11px; color:#98a2b3; }
+    .op-src { display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:600; color:#344054; } .op-src .material-symbols-outlined { font-size:15px; color:#667085; }
+    .op-src.ccavenue .material-symbols-outlined { color:#2a6797; }
+    .op-yn { font-size:11px; font-weight:600; background:#f2f4f7; color:#475467; border-radius:4px; padding:1px 6px; }
+    .op-empty { text-align:center; color:var(--ink-secondary); padding:18px 8px !important; font-size:12.5px; }
     .conf-order { margin-top:12px; border:1px solid var(--border); border-radius:10px; background:var(--surface); overflow:hidden; }
     .conf-order-head { display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; padding:11px 13px; border:none; background:none; font-family:inherit; text-align:start; cursor:pointer; }
     .conf-order-head:hover { background:var(--bg); }
@@ -4918,6 +4938,7 @@
         (canQuote ? '' :
           '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Documents unlock once the advance payment is received.</span></div>') +
         zohoDocsHtml(l) +
+        onlinePaymentHtml(l) +
         confOrderBlock(l, p) +
       '</div>';
     }
@@ -5004,6 +5025,46 @@
       return p.ord;
     }
     var ordOpenKey = null, ordView = [], ordHl = -1;
+
+    /* ── Online payment (MAI-4770, phase 1) ──
+       Same section as production (Requested amount · Status · Response · Notified · Payment date · Created on)
+       plus one column for where the payment came from, so F&O payments (cash, card) show next to CC Avenue. */
+    // TODO MAI-4875: final name and values for this column (working name below).
+    var PAY_SOURCE_LABEL = 'Payment type';
+    var PAY_SOURCES = { ccavenue:'CC Avenue', cash:'Cash payment', card:'Card payment' };
+    function payData(l){
+      if (l.payments) return l.payments;
+      l.payments = [
+        { amt:2000,  src:'ccavenue', st:'pending', resp:'', notified:'No',  paid:'',                 created:'05/11/2026 18:51' },
+        { amt:5000,  src:'ccavenue', st:'paid',    resp:'Success', notified:'Yes', paid:'03/11/2026 14:22', created:'03/11/2026 14:05' },
+        { amt:10000, src:'cash',     st:'paid',    resp:'', notified:'',    paid:'04/11/2026 11:30', created:'04/11/2026 11:30' },
+        { amt:7500,  src:'card',     st:'paid',    resp:'', notified:'',    paid:'06/11/2026 16:05', created:'06/11/2026 16:05' }
+      ];
+      return l.payments;
+    }
+    function payNow(){ var d = new Date(), z = function(n){ return ('0' + n).slice(-2); }; return z(d.getDate()) + '/' + z(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + z(d.getHours()) + ':' + z(d.getMinutes()); }
+    function opDt(v){ if (!v) return '<span class="op-na">–</span>'; var m = String(v).split(' '); return '<span class="op-d">' + m[0] + '</span>' + (m[1] ? '<span class="op-tm">' + m[1] + '</span>' : ''); }
+    function onlinePaymentHtml(l){
+      var rows = payData(l).slice().sort(function(a, b){ var t = function(x){ var m = x.created.match(/(\d+)\/(\d+)\/(\d+) (\d+):(\d+)/); return m ? +new Date(m[3], m[2] - 1, m[1], m[4], m[5]) : 0; }; return t(b) - t(a); });
+      var dash = '<span class="op-na">–</span>';
+      var body = rows.length ? rows.map(function(x){
+        var st = x.st === 'paid' ? ['ok','check_circle','Paid'] : x.st === 'failed' ? ['bad','error','Failed'] : ['wait','hourglass_top','Pending'];
+        var ic = x.src === 'ccavenue' ? 'credit_card' : x.src === 'cash' ? 'payments' : 'contactless';
+        return '<tr><td class="nw"><b>' + propFmt(x.amt) + '.00</b> <span class="op-cur">AED</span></td>' +
+          '<td class="nw"><span class="op-src ' + x.src + '"><span class="material-symbols-outlined">' + ic + '</span>' + PAY_SOURCES[x.src] + '</span></td>' +
+          '<td><span class="zs-chip ' + st[0] + '"><span class="material-symbols-outlined">' + st[1] + '</span>' + st[2] + '</span></td>' +
+          '<td>' + (x.resp || dash) + '</td><td>' + (x.notified ? '<span class="op-yn">' + x.notified + '</span>' : dash) + '</td>' +
+          '<td>' + opDt(x.paid) + '</td><td>' + opDt(x.created) + '</td></tr>';
+      }).join('') : '<tr><td colspan="7" class="op-empty">No payments recorded for this quotation yet.</td></tr>';
+      return '<div class="op-sec">' +
+        '<div class="op-h"><span class="op-ic"><span class="material-symbols-outlined">credit_card</span></span><span class="op-t">Online payment</span>' +
+          '<span class="op-info" tabindex="0" aria-label="About online payment"><span class="material-symbols-outlined">info</span><span class="op-tip">All payments tagged to this quotation — CC Avenue payment links and payments posted in F&amp;O (cash, card).</span></span>' +
+          '<span style="flex:1"></span><button type="button" class="op-ref" onclick="payRefresh()"><span class="material-symbols-outlined">refresh</span>Refresh</button></div>' +
+        '<div class="op-tw"><table class="op-tb"><thead><tr><th>Requested amount</th><th>' + PAY_SOURCE_LABEL + '</th><th>Status</th><th>Response</th><th>Notified</th><th>Payment date</th><th>Created on</th></tr></thead><tbody>' + body + '</tbody></table></div>' +
+      '</div>';
+    }
+    // Refresh: pulls the latest status (demo — production calls CC Avenue / F&O).
+    function payRefresh(){ renderDetail(selectedIdx, currentStep); showToast('Online payments refreshed · ' + payNow()); }
     function confOrderBlock(l, p){
       var ord = ordData(l, p);
       var rows = ORD_FIELDS.map(function(f){
@@ -5137,6 +5198,7 @@
         var chanEl = document.querySelector('input[name=payChan]:checked');
         var chan = chanEl ? chanEl.value : 'Email';
         var p = acceptedProp(); if (p) p.received = (p.received || 0) + amt;
+        payData(leads[selectedIdx]).push({ amt:amt, src:'ccavenue', st:'pending', resp:'', notified:'No', paid:'', created:payNow() });
         renderDetail(selectedIdx, currentStep);
         showToast('Payment link (AED ' + propFmt(amt) + ') sent via ' + chan);
       }, 'Cancel', 'link', true);
