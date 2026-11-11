@@ -13,7 +13,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="duplicates.js?v=3"></script>
+  <script src="duplicates.js?v=4"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -1627,6 +1627,18 @@
     .dup-bar > .material-symbols-outlined { font-size:20px; } .dup-bar > div { flex:1; }
     .dup-bar.warn { background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; } .dup-bar.warn > .material-symbols-outlined { color:#b54708; }
     .dup-bar.bad { background:#fef3f2; border:1px solid #fecdca; color:#7a271a; } .dup-bar.bad > .material-symbols-outlined { color:#b42318; }
+    .dup-bar.sticky { position:sticky; top:0; z-index:21; margin-bottom:0; border-radius:8px 8px 0 0; box-shadow:0 2px 8px rgba(16,24,40,.08); }
+    .dup-bar-lnk { border:none; background:none; padding:0; color:#17293d; font:inherit; font-weight:700; text-decoration:underline; cursor:pointer; }
+    .dup-bar-btn.bad { background:#b42318; border-color:#b42318; color:#fff; } .dup-bar-btn.bad:hover { background:#912018; color:#fff; }
+    .dup-alert { display:block; padding:0; } .dup-alert.stuck .dup-al-b { display:none; }
+    .dup-bar.ok { background:#ecfdf3; border:1px solid #abefc6; color:#054f31; } .dup-bar.ok > .material-symbols-outlined { color:#067647; }
+    .dup-al-h { display:flex; align-items:center; gap:10px; padding:9px 12px; } .dup-al-h > .material-symbols-outlined { font-size:20px; color:#b54708; } .dup-al-h > div { flex:1; }
+    .dup-al-b { border-top:1px solid #fedf89; background:#fff; border-radius:0 0 8px 8px; padding:4px 12px 8px; }
+    .dup-al-tb { width:100%; border-collapse:collapse; font-size:12px; color:#1f2937; }
+    .dup-al-tb th { text-align:start; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:#667085; padding:6px 8px; border-bottom:1px solid #eaecf0; }
+    .dup-al-tb td { padding:7px 8px; border-bottom:1px solid #f2f4f7; vertical-align:middle; } .dup-al-tb td.nw { white-space:nowrap; }
+    .dup-al-tb a { color:#17293d; font-weight:600; } .dup-orig { font-size:10.5px; font-weight:600; color:#344054; background:#f2f4f7; border-radius:10px; padding:1px 7px; margin-inline-start:4px; }
+    .dup-al-n { margin:8px 0 0; font-size:11.5px; color:#475467; }
     .dup-bar a { color:inherit; font-weight:700; } .dup-bar-s { color:#93370d; opacity:.8; }
     .dup-bar-btn { display:inline-flex; align-items:center; gap:4px; border:1px solid currentColor; background:#fff; color:#17293d; border-color:#17293d; border-radius:6px; padding:5px 12px; font:600 12px inherit; cursor:pointer; white-space:nowrap; }
     .dup-bar-btn:hover:not(:disabled) { background:#17293d; color:#fff; } .dup-bar-btn:disabled { color:#98a2b3; border-color:#d0d5dd; cursor:not-allowed; background:#f9fafb; } .dup-bar-btn .material-symbols-outlined { font-size:16px; }
@@ -3228,11 +3240,27 @@
     }
     function dupBarHtml(l){
       if (!window.DUP || !dupRec(l)) return '';
+      DUP.addCss();
       var s = DUP.status(l.id); if (!s) return '';
       if (s.k === 'potential') {
-        var n = DUP.check(dupRec(l)).open.length;
-        return '<div class="dup-bar warn" role="status"><span class="material-symbols-outlined">warning</span><div><b>Potential duplicate.</b> This lead matches ' + n + ' open ' + dupRec(l).brand + ' lead' + (n === 1 ? '' : 's') + ' on ' + DUP.onList(s.on) + '. Review to decide. <span class="dup-bar-s">The lead can still move through the stages.</span></div>' +
-          '<button class="dup-bar-btn" onclick="dupReview()">Review</button></div>';
+        var res = DUP.check(dupRec(l)).open.slice().sort(function(a, b){ return new Date(a.r.created) - new Date(b.r.created); });
+        var o = DUP.original(l.id) || (res[0] || {}).r || {}, n = res.length, open = window._dupOpen !== false;
+        var rows = res.map(function(m){
+          var x = m.r, isO = x.id === o.id;
+          return '<tr><td><a href="' + DUP.link(x.id) + '" target="_blank" rel="noopener">' + x.id + '</a>' + (isO ? ' <span class="dup-orig">Original</span>' : '') + '</td>' +
+            '<td>' + DUP.esc(x.name) + '</td><td>' + DUP.tags(m.on) + '</td><td>' + DUP.esc(x.source) + '</td><td class="nw">' + DUP.fmt(x.created).split(' ').slice(0, 3).join(' ') + '</td><td>' + DUP.esc(x.stage) + '</td><td>' + DUP.esc(x.owner) + '</td></tr>';
+        }).join('');
+        return '<div class="dup-bar warn sticky dup-alert" role="alert"><div class="dup-al-h"><span class="material-symbols-outlined">warning</span>' +
+          '<div><b>' + n + ' possible duplicate' + (n === 1 ? '' : 's') + ' found.</b> Same ' + DUP.onList(s.on) + ' as ' + (n === 1 ? 'an open ' : 'open ') + DUP.esc(dupRec(l).brand) + ' lead' + (n === 1 ? '' : 's') + '. ' +
+          '<button class="dup-bar-lnk" aria-expanded="' + open + '" onclick="window._dupOpen=' + !open + ';renderDetail(selectedIdx,currentStep)">' + (open ? 'Hide' : 'Show') + ' matches</button></div>' +
+          '<button class="dup-bar-btn" onclick="dupQuick(\'continue\')" title="Keep this lead open as a separate lead"><span class="material-symbols-outlined">check</span>Not a duplicate</button>' +
+          '<button class="dup-bar-btn bad" onclick="dupQuick(\'mark\')" title="Disqualify and link to ' + o.id + '"><span class="material-symbols-outlined">block</span>Mark as duplicate</button></div>' +
+          (open ? '<div class="dup-al-b"><table class="dup-al-tb"><thead><tr><th>Lead</th><th>Name</th><th>Matched on</th><th>Source</th><th>Created</th><th>Stage</th><th>Owner</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+            '<p class="dup-al-n"><b>Not a duplicate</b> keeps this lead open. <b>Mark as duplicate</b> disqualifies it (reason: Duplicate) and links it to ' + o.id + ' — it can’t be reactivated.</p></div>' : '') + '</div>';
+      }
+      if (s.k === 'kept' && l._dupJust) {
+        return '<div class="dup-bar ok" role="status"><span class="material-symbols-outlined">task_alt</span><div><b>Resolved · Not a duplicate.</b> This lead stays open as a separate lead. Recorded by ' + DUP.esc(s.d.by) + ' · ' + DUP.esc(s.d.at) + '.</div>' +
+          '<button class="dup-bar-btn" onclick="dupUndo()"><span class="material-symbols-outlined">undo</span>Undo</button></div>';
       }
       if (s.k === 'marked') {
         var o = DUP.rec(s.of) || {};
@@ -3240,6 +3268,38 @@
           '<span class="dup-tip" tabindex="0"><button class="dup-bar-btn" disabled aria-disabled="true" aria-describedby="dupTipT"><span class="material-symbols-outlined">restart_alt</span>Reactivate</button><span class="dup-tip-t" id="dupTipT" role="tooltip">Leads disqualified as duplicate can’t be reactivated.</span></span></div>';
       }
       return '';
+    }
+    // One-click decision from the alert. Mark as duplicate can't be undone, so it asks first.
+    // Keep the duplicate alert and the lead header both pinned: the header sits just under the alert.
+    function dupStick(){
+      var b = document.querySelector('#dpBody .dup-bar.sticky'), c = document.querySelector('#dpBody .dp-idcard');
+      if (!c) return;
+      c.style.top = b ? b.offsetHeight + 'px' : '';
+      if (b && window.ResizeObserver) new ResizeObserver(function(){ c.style.top = b.offsetHeight + 'px'; }).observe(b);
+      // When scrolled, the pinned alert shrinks to its one-line header so it doesn't cover the form.
+      var body = document.querySelector('.dp-body');
+      if (body && !body._dupScroll) { body._dupScroll = true; body.addEventListener('scroll', function(){ var x = document.querySelector('#dpBody .dup-alert'); if (x) x.classList.toggle('stuck', body.scrollTop > 60); }, { passive: true }); }
+      if (b && body) b.classList.toggle('stuck', body.scrollTop > 60);
+    }
+    window.addEventListener('resize', function(){ if (document.getElementById('dpBody')) dupStick(); });
+    function dupUndo(){
+      var l = leads[selectedIdx]; DUP.undo(l.id); l._dupJust = false; l._dupAud = null;
+      l.activities = (l.activities || []).filter(function(a){ return !/^Duplicate check · Continue/.test(a.text); });
+      renderDetail(selectedIdx, currentStep); showToast('Undone · duplicate alert is back');
+    }
+    function dupQuick(d){
+      var l = leads[selectedIdx], o = DUP.original(l.id) || {};
+      var go = function(){
+        DUP._onDone = function(v){
+          l._dupJust = v.d === 'continue';
+          renderDetail(selectedIdx, currentStep);
+          if (typeof renderList === 'function') { try { renderList(); } catch(e){} }
+          showToast(v.d === 'mark' ? 'Marked as duplicate of ' + v.of + ' · lead disqualified' : 'Kept as a separate lead · alert cleared');
+        };
+        DUP._decide(l.id, d);
+      };
+      if (d === 'continue') return go();
+      openConfirm('Mark as duplicate?', 'This lead will be disqualified with reason “Duplicate” and linked to ' + (o.id || 'the original lead') + '. It can’t be reactivated.', 'Mark as duplicate', go, 'Cancel', 'block');
     }
     function dupReview(){
       var l = leads[selectedIdx];
@@ -3515,6 +3575,7 @@
       html += '</div>'; // dp-page
 
       document.getElementById('dpBody').innerHTML = html;
+      dupStick();
 
       updateStepGate();
     }

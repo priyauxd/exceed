@@ -45,9 +45,10 @@
     'L-2026-04838': { d: 'continue', by: 'Priyamvada K.', at: '10 Nov 2026 11:31' },
     'L-2026-04779': { d: 'mark', by: 'Nadia A.', at: '05 Nov 2026 11:20', of: 'L-2026-04702' }
   };
-  var KEY = 'exeedDupDecisions';
+  var KEY = 'exeedDupDecisions2';   // v2: clears decisions saved while testing earlier builds
   function stored() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; } }
-  function decision(id) { var s = stored(); return s[id] || SEED[id] || null; }
+  function decision(id) { var s = stored(); return id in s ? s[id] : SEED[id] || null; }
+  function undo(id) { var s = stored(); s[id] = null; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }   // only 'Not a duplicate' can be undone
   function setDecision(id, v) { var s = stored(); s[id] = v; try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} }
   function reset() { try { localStorage.removeItem(KEY); } catch (e) {} }
 
@@ -222,7 +223,7 @@
 
   window.DUP = {
     POOL: POOL, ME: ME, rec: rec, check: check, group: group, original: original, status: status, decision: decision,
-    potentials: potentials, review: review, openList: openList, mountTile: mountTile, reset: reset, fmt: fmt, esc: esc,
+    potentials: potentials, review: review, openList: openList, mountTile: mountTile, reset: reset, undo: undo, fmt: fmt, esc: esc,
     chip: chip, tags: tags, link: link, onList: onList, addCss: addCss,
     _close: close, _decide: decide, _onDone: null
   };
