@@ -434,6 +434,19 @@
     .c360-nav button { display: inline-flex; align-items: center; gap: 5px; font: 600 12px/1 var(--fontFamilyBase); color: var(--ink-secondary); background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
     .c360-nav button:hover { color: var(--blue); border-color: var(--blue-muted); background: var(--blue-soft); }
     .c360-nav .material-symbols-outlined { font-size: 15px; }
+    .d3-sec { display: flex; align-items: baseline; gap: 10px; padding: 4px 2px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px; scroll-margin-top: 200px; }
+    .d3-sec + .card, .d3-sec + .anchor + .card { margin-top: -4px; }
+    .d3 .d3-sec:not(:first-child) { margin-top: 14px; }
+    .d3-show { display: flex; align-items: center; gap: 16px; padding: 12px 16px; flex-wrap: wrap; }
+    .d3 > .anchor { display: block; height: 0; margin-bottom: -16px; scroll-margin-top: 200px; }
+    .d3-show-t { display: flex; align-items: baseline; gap: 10px; flex: 1; min-width: 0; }
+    .d3-show .dp-if { display: grid; grid-template-columns: auto 220px; align-items: center; gap: 10px; margin: 0; }
+    .d3-show .dp-if-label { margin: 0; }
+    .d3 .d3-show + .d3-sec { margin-top: 0; }
+    .d3-sec-t { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink); }
+    .d3-sec-s { font-size: 11.5px; color: var(--ink-muted); }
+    .d3-vw { font-size: 11.5px; font-weight: 400; color: var(--ink-muted); margin-inline-start: 8px; }
+    .d3 .sg .card-h h3 { display: flex; align-items: baseline; }
     .grp-h { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; margin: 6px 0 12px; scroll-margin-top: 200px; }
     .grp-h.svc { margin-top: 28px; }
     .grp-h .ico { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue); }
@@ -1495,7 +1508,8 @@
     function headSummary(c) {
       var p = curLead(c);
       return '<div class="dp-fh-field"><div class="dp-fh-val">' + c.vehicles.length + '</div><div class="dp-fh-label">Cars owned</div></div>' +
-        '<div class="dp-fh-field"><div class="dp-fh-val">' + (p ? esc(p.model) + ' · ' + esc(p.stage) + moreOpen(c) : '—') + '</div><div class="dp-fh-label">Current lead' + (openLeads(c).length > 1 ? ' (latest)' : '') + '</div></div>';
+        '<div class="dp-fh-field"><div class="dp-fh-val">' + (p ? esc(p.model) + ' · ' + esc(p.stage) : '—') + '</div><div class="dp-fh-label">Current lead</div></div>' +
+        '<div class="dp-fh-field"><div class="dp-fh-val">' + openLeads(c).length + '</div><div class="dp-fh-label">Open leads</div></div>';
     }
     function renderRecord(c) {
       KIND = 'account';
@@ -1533,10 +1547,10 @@
     function saveRecord(close) { var st = document.getElementById('saveSt'); if (st) { st.textContent = '- Saved'; st.classList.remove('dirty'); } toast('Saved'); if (close) setTimeout(function () { nav({ view: state.ct != null ? 'contacts' : 'accounts' }); }, 400); }
     function toggleRel(e) { e.stopPropagation(); var m = document.getElementById('relMenu'), b = document.getElementById('relBtn'); var on = !m.classList.contains('open'); m.classList.toggle('open', on); b.setAttribute('aria-expanded', on); }
     document.addEventListener('click', function () { var m = document.getElementById('relMenu'); if (m) m.classList.remove('open'); });
-    function goRel(tab, id) { setTab(/^(sales|service)$/.test(tab) ? 'c360' : tab); setTimeout(function () { var el = document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1400); } }, 60); }
+    function goRel(tab, id) { if (/^(sales|service)$/.test(tab)) state.c360f = 'all'; setTab(/^(sales|service)$/.test(tab) ? 'c360' : tab); setTimeout(function () { var el = document.getElementById(id); if (el) { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); el.classList.add('flash'); setTimeout(function () { el.classList.remove('flash'); }, 1400); } }, 60); }
     function setTab(t) {
       var part = t === 'sales' ? 'grpSales' : t === 'service' ? 'grpService' : t === 'lead' ? 'secLead' : null;
-      if (part) t = 'c360';
+      if (part) { t = 'c360'; state.c360f = 'all'; }
       state.tab = t; var u = new URL(location.href); u.searchParams.set('tab', t); history.replaceState(null, '', u); render();
       if (part) jumpTo(part, true);
     }
@@ -1613,28 +1627,19 @@
         subgrid('secCS', 'Customer Segmentation', null, [['Segment', function (r) { return '<span class="pill">' + T(r.segment) + '</span>'; }], ['Category', function (r) { return T(r.category); }], ['Source', function (r) { return '<span class="sub">' + T(r.source) + '</span>'; }]], x.segmentation) +
         subgrid('secCInt', 'Customer Interests', null, [['Interest', function (r) { return '<b>' + T(r.interest) + '</b><div class="sub">' + T(r.detail) + '</div>'; }], ['Source', function (r) { return T(r.source); }], ['Date', function (r) { return T(r.date); }]], D.interests);
       var nV = c.vehicles.length, up = c.serviceUpcoming[0], ev = c.timeline[0];
-      var snap = '<div class="card" id="secC360"><div class="card-h"><span class="ico svc"><span class="material-symbols-outlined">hub</span></span><h3>Customer 360</h3><span class="grow"></span><button class="link" onclick="setTab(\'c360\')">Open<span class="material-symbols-outlined">chevron_right</span></button></div>' +
-        (nV || up || ev ? '<div class="snap">' +
-          '<div><span class="material-symbols-outlined">directions_car</span><b>' + nV + '</b> vehicle' + (nV === 1 ? '' : 's') + (nV ? '<div class="sub">' + esc(c.vehicles.map(function (v) { return v.model + ' · ' + v.plate; }).join(', ')) + '</div>' : '') + '</div>' +
-          '<div><span class="material-symbols-outlined">event</span>' + (up ? '<b>' + esc(up.date) + '</b><div class="sub">' + esc(up.type) + '</div>' : 'No upcoming appointment') + '</div>' +
-          '<div><span class="material-symbols-outlined">history</span>' + (ev ? '<b>' + esc(ev.text) + '</b><div class="sub">' + esc(ev.time) + '</div>' : 'No events') + '</div></div>'
-          : '<div class="empty"><span class="material-symbols-outlined">inbox</span>No vehicles, appointments or events found for this contact.</div>') + '</div>';
       var mid = timelineCard(c) +
         section('secPersonal', 'Personal', field('Gender', D.gender, { select: ['Male', 'Female'] }) + field('Marital Status', D.marital, { select: ['None', 'Single', 'Married', 'Divorced', 'Widowed'] }) + field('Spouse/Partner Name', D.spouse) +
           field('Birthday', D.birthday, { req: true, link: 'calendar_month' }) + field('Anniversary', D.anniversary, { link: 'calendar_month' }) + field('Nationality', D.nationality, { chip: 'flag' }) +
           field('Area', D.area) + field('Occupation', D.occupation) + field('Employer', D.employer)) +
-        subgrid('secIdentity', 'Identity', null, [['Type', function (r) { return '<b>' + T(r.type) + '</b>'; }], ['Number', function (r) { return '<span class="mono">' + T(r.number) + '</span>'; }], ['Verification', function (r) { return pill(/✓/.test(r.verified) ? 'Verified · ' + r.verified.replace(' ✓', '') : r.verified); }]], D.identity) + snap;
+        subgrid('secIdentity', 'Identity', null, [['Type', function (r) { return '<b>' + T(r.type) + '</b>'; }], ['Number', function (r) { return '<span class="mono">' + T(r.number) + '</span>'; }], ['Verification', function (r) { return pill(/✓/.test(r.verified) ? 'Verified · ' + r.verified.replace(' ✓', '') : r.verified); }]], D.identity);
       var tds = c.testDrives.map(function (t) { var d = t.date.split(' · '); return { status: t.status, start: t.date, end: d[1] ? d[0] + ' · ' + (String(+d[1].split(':')[0] + 1).padStart(2, '0') + ':' + d[1].split(':')[1]) : '—', actual: t.status === 'Completed' ? t.date : '—', name: t.id + ' — ' + t.model, bu: t.showroom, owner: c.owner }; });
-      var right = '<div class="dp-ai-card" id="secAssist"><div class="dp-ai-label"><span class="material-symbols-outlined">auto_awesome</span>Assistant · Next best action</div><div class="dp-ai-title">' + esc(c.nba.title) + '</div><div class="dp-ai-desc">' + c.nba.desc + '</div>' +
-          '<button class="dp-ai-btn primary" onclick="toast(\'' + esc(c.nba.btns[0]) + '\')">' + esc(c.nba.btns[0]) + '</button><button class="dp-ai-btn secondary" onclick="toast(\'' + esc(c.nba.btns[1]) + '\')">' + esc(c.nba.btns[1]) + '</button></div>' +
-        attention(c) +
-        section('secCompany', 'Company', field('Company', D.company, { chip: 'business', inline: true }) + (D.company ? '<button class="link-btn" onclick="openCustomer(\'' + c.id + '\')"><span class="material-symbols-outlined">open_in_new</span>Open account</button>' : '')) +
+      var right =         section('secCompany', 'Company', field('Company', D.company, { chip: 'business', inline: true }) + (D.company ? '<button class="link-btn" onclick="openCustomer(\'' + c.id + '\')"><span class="material-symbols-outlined">open_in_new</span>Open account</button>' : '')) +
         subgrid('secROpp', 'Recent Opportunities', 'New Opportunity', [['Topic', function (r) { return L(r.topic); }], ['Est. Revenue', function (r) { return '<b>' + T(r.revenue) + '</b>'; }], ['Est. Close Date', function (r) { return T(r.close); }], ['Actual Revenue', function (r) { return r.status === 'Won' ? '<b>' + T(r.revenue) + '</b>' : T('—'); }], ['Actual Close Date', function (r) { return r.status === 'Won' ? T(r.close) : T('—'); }], ['Status', function (r) { return pill(r.status); }], ['Contact', function (r) { return L(D.p.name); }]], A.opps) +
         subgrid('secCTD', 'Test Drives', 'New Test Drive', [['Status', function (r) { return pill(r.status); }], ['Scheduled Start', function (r) { return T(r.start); }], ['Scheduled End', function (r) { return T(r.end); }], ['Actual End', function (r) { return T(r.actual); }], ['Name', function (r) { return L(r.name); }], ['Business Unit', function (r) { return T(r.bu); }], ['Owner', function (r) { return T(r.owner); }]], tds) +
         subgrid('secCCases', 'Recent Cases', 'New Case', [['Case Title', function (r) { return L(r.title); }], ['Case Number', function (r) { return '<span class="mono">' + T(r.id) + '</span>'; }], ['Priority', function (r) { return r.priority === 'High' ? '<span class="pill r">High</span>' : T(r.priority); }], ['Origin', function (r) { return T(r.type === 'Billing' ? 'Email' : 'Phone'); }], ['Customer', function () { return T(c.name); }], ['Owner', function () { return T(c.owner); }]], x.cases, { refresh: true }) +
         subgrid('secCEnt', 'Entitlements', 'New Entitlement', [['Entitlement Name', function (r) { return L(r.name); }], ['Status', function (r) { return pill(r.status); }], ['Customer', function () { return T(c.name); }], ['Start Date', function (r) { return T(r.start); }], ['End Date', function (r) { return T(r.end); }], ['SLA', function () { return T('Standard service SLA'); }]],
           c.serviceContracts.map(function (k) { return { name: k.plan, status: /Expired/.test(k.status) ? 'Expired' : 'Active', start: k.start, end: k.end }; }));
-      return glance(c) + '<div class="sum3" style="margin-top:16px"><div class="col">' + left + '</div><div class="col">' + mid + '</div><div class="col">' + right + '</div></div>';
+      return '<div class="sum3"><div class="col">' + left + '</div><div class="col">' + mid + '</div><div class="col">' + right + '</div></div>';
     }
     /* Contact · Billing tab — summary, billing, shipping, contact preferences, marketing, personal notes, save bar */
     var BF = { key: null, v: null, saved: null, state: 'idle', ctx: null };
@@ -1787,15 +1792,12 @@
         subgrid('secCI', 'Customer Identifiers', null, [['Type', function (r) { return '<b>' + T(r.type) + '</b>'; }], ['Number', function (r) { return '<span class="mono">' + T(r.number) + '</span>'; }], ['Expiry', function (r) { return T(r.expiry); }]], x.identifiers) +
         subgrid('secCS', 'Customer Segmentation', null, [['Segment', function (r) { return '<span class="pill">' + T(r.segment) + '</span>'; }], ['Category', function (r) { return T(r.category); }], ['Source', function (r) { return '<span class="sub">' + T(r.source) + '</span>'; }]], x.segmentation);
       var mid = timelineCard(c);
-      var right = '<div class="dp-ai-card" id="secAssist"><div class="dp-ai-label"><span class="material-symbols-outlined">auto_awesome</span>Assistant · Next best action</div><div class="dp-ai-title">' + esc(c.nba.title) + '</div><div class="dp-ai-desc">' + c.nba.desc + '</div>' +
-          '<button class="dp-ai-btn primary" onclick="toast(\'' + esc(c.nba.btns[0]) + '\')">' + esc(c.nba.btns[0]) + '</button><button class="dp-ai-btn secondary" onclick="toast(\'' + esc(c.nba.btns[1]) + '\')">' + esc(c.nba.btns[1]) + '</button></div>' +
-        attention(c) +
-        section('secPC', 'Primary Contact', field('Primary Contact', c.crmOnly && !c.primaryContact ? '' : (x.contacts[0] || {}).name, { chip: 'person', inline: true })) +
+      var right =         section('secPC', 'Primary Contact', field('Primary Contact', c.crmOnly && !c.primaryContact ? '' : (x.contacts[0] || {}).name, { chip: 'person', inline: true })) +
         subgrid('secContacts', 'Contacts', 'New Contact', [['Full Name', function (r) { return '<a class="lnk" onclick="openContact(\'' + c.id + '\',' + x.contacts.indexOf(r) + ')">' + esc(r.name) + '</a><div class="sub">' + T(r.role) + '</div>'; }], ['Email', function (r) { return '<a class="lnk" href="mailto:' + esc(r.email) + '">' + T(r.email) + '</a>'; }], ['', function (r) { return '<a class="ia" href="tel:' + r.phone.replace(/\s/g, '') + '" title="Call ' + esc(r.phone) + '" aria-label="Call"><span class="material-symbols-outlined">call</span></a>'; }]], x.contacts) +
         subgrid('secROpp', 'Recent Opportunities', 'New Opportunity', [['Topic', function (r) { return L(r.topic); }], ['Est. Revenue', function (r) { return '<b>' + T(r.revenue) + '</b>'; }], ['Est. Close Date', function (r) { return T(r.close); }], ['Actual Revenue', function (r) { return r.status === 'Won' ? '<b>' + T(r.revenue) + '</b>' : T('—'); }], ['Actual Close Date', function (r) { return r.status === 'Won' ? T(r.close) : T('—'); }], ['Status', function (r) { return pill(r.status); }], ['Contact', function (r) { return T(r.contact); }]], A.opps) +
         subgrid('secCases', 'Recent Cases', 'New Case', [['Status', function (r) { return pill(r.status === 'In progress' ? 'Pending — in progress' : r.status); }], ['Case Title', function (r) { return L(r.title) + '<div class="sub">' + T(r.id) + '</div>'; }]], x.cases, { refresh: true }) +
         subgrid('secEnt', 'Active Entitlements', 'New Entitlement', [['Entitlement Name', function (r) { return L(r.name); }], ['Remaining Terms', function (r) { return T(r.remaining); }], ['Status', function (r) { return pill(r.status); }]], A.entitlements);
-      return glance(c) + '<div class="sum3" style="margin-top:16px"><div class="col">' + left + '</div><div class="col">' + mid + '</div><div class="col">' + right + '</div></div>';
+      return '<div class="sum3"><div class="col">' + left + '</div><div class="col">' + mid + '</div><div class="col">' + right + '</div></div>';
     }
     /* Sales 360° — Lead · Opportunity · Deal · Test Drive · Trade In */
     function leadGrid(A, id) {
@@ -1825,19 +1827,68 @@
         subgrid('secSvcCases', 'Cases', 'New Case', [['Case', function (r) { return L(r.id); }], ['Title', function (r) { return T(r.title); }], ['Type', function (r) { return T(r.type); }], ['Priority', function (r) { return r.priority === 'High' ? '<span class="pill r">High</span>' : T(r.priority); }], ['Created', function (r) { return T(r.created); }], ['Status', function (r) { return pill(r.status === 'In progress' ? 'Pending — in progress' : r.status); }]], A.x.cases, { icon: 'support_agent', svc: true }) + '</div>';
     }
     /* Customer 360 — Sales 360° and Service 360° on one tab */
-    function c360Tab(c, A) {
-      var vis = true; // Visual only — the Table toggle was removed
-      var nav = '<div class="c360-nav"><span class="c360-t">Customer 360</span><button onclick="jumpTo(\'grpSales\')"><span class="material-symbols-outlined">trending_up</span>Sales 360°</button><button onclick="jumpTo(\'grpService\')"><span class="material-symbols-outlined">build</span>Service 360°</button>' +
-        '<span class="grow"></span><div class="seg" role="group" aria-label="View"><button class="' + (vis ? 'on' : '') + '" onclick="state.c360v=\'visual\';render()"><span class="material-symbols-outlined">dashboard</span>Visual</button><button class="' + (vis ? '' : 'on') + '" onclick="state.c360v=\'table\';render()"><span class="material-symbols-outlined">table_rows</span>Table</button></div></div>';
-      var gs = '<div class="grp-h" id="grpSales"><span class="ico"><span class="material-symbols-outlined">trending_up</span></span>Sales 360°<span class="sub">Sales process by lead, test drives, surveys and sales orders</span></div>';
-      var gv = '<div class="grp-h svc" id="grpService"><span class="ico"><span class="material-symbols-outlined">build</span></span>Service 360°<span class="sub">' + (KIND === 'contact' ? 'Device registrations' : 'Devices') + ', appointments, contracts and cases</span></div>';
-      if (vis) {
-        var f = state.c360f === 'cx' ? 'all' : state.c360f || 'all', V = [['all', 'All'], ['sales', 'Sales 360°'], ['service', 'Service 360°']];
-        var bar = '<div class="pa-bar2"><div class="pa-seg" role="tablist" aria-label="Customer 360 view">' + V.map(function (v) { return '<button role="tab" aria-selected="' + (f === v[0]) + '" class="' + (f === v[0] ? 'on' : '') + '" onclick="state.c360f=\'' + v[0] + '\';render()">' + v[1] + '</button>'; }).join('') + '</div>' +
-          '<span class="grow"></span><span class="pa-upd">Updated 2 min ago</span></div>';
-        return '<div class="pa">' + bar + '<div class="pa-v">' + (f === 'all' || f === 'sales' ? gs + accSalesVisual(c, A) : '') + (f === 'all' || f === 'service' ? gv + accServiceVisual(c, A) : '') + '</div></div>';
-      }
-      return nav + gs + (vis ? salesVisual(c, A) : salesTab(c, A)) + gv + (vis ? serviceVisual(c, A) : serviceTab(c, A));
+    function c360Tab(c, A) { return d365C360(c, A); }
+
+    /* ── Customer 360 tab in the standard D365 Account / Contact form ──
+       The account form is the out-of-the-box D365 (Auto Sales) structure, so no custom visuals:
+       only form sections, read-only sub-grids (with a view name, + New, Refresh, row count) and lookups.
+       Sales process per lead = Leads sub-grid with the BPF "Active stage" column (no expandable journey). */
+    function d365C360(c, A) {
+      var P = salesProcs(c), co = KIND !== 'contact';
+      var sec = function (id, t, sub) { return '<div class="d3-sec" id="' + id + '"><span class="d3-sec-t">' + t + '</span><span class="d3-sec-s">' + sub + '</span></div>'; };
+      var lk = function (v, id) { return v ? '<a class="lnk" href="lead-detail.html' + (id ? '?lead=' + encodeURIComponent(id) : '') + '">' + esc(v) + '</a>' : T('—'); };
+      var g = function (id, title, view, newL, cols, rows, o) { o = o || {}; o.view = true; return subgrid(id, title + '<span class="d3-vw">' + view + '</span>', newL, cols, rows, o); };
+      // Sales 360°
+      var leads = g('secLead', 'Leads', 'Customer leads · newest first', null, [
+        ['Lead', function (p) { return lk(p.lead.id, p.lead.id) + '<div class="sub">' + T(p.lead.topic) + '</div>'; }],
+        ['Source', function (p) { return T(p.lead.source); }], ['Created On', function (p) { return T(p.lead.created); }],
+        ['Rating', function (p) { return T(p.lead.rating); }], ['Owner', function (p) { return T(p.lead.owner); }],
+        ['Active Stage', function (p) { return p.stage === 'Disqualified' ? T('—') : '<b>' + T(p.stage) + '</b>'; }],
+        ['Est. Value', function (p) { return T(p.value || '—'); }], ['Showroom', function (p) { return T(p.showroom); }],
+        ['Status', function (p) { return pill(p.sold ? 'Won' : p.stage === 'Disqualified' ? 'Disqualified' : 'Open'); }]], P);
+      var tds = g('secTD', 'Test Drives', 'Test drives for this customer', null, [
+        ['Test Drive', function (t) { return L(t.id); }], ['Model', function (t) { return T(t.model); }], ['Scheduled', function (t) { return T(t.date); }],
+        ['Showroom', function (t) { return T(t.showroom); }], ['Originating Lead', function (t) { return lk(t._lead, t._lead); }],
+        ['Outcome', function (t) { return T(t.outcome && t.outcome !== '—' ? t.outcome : '—'); }], ['Status', function (t) { return pill(t.status); }]], c.testDrives);
+      var fb = [];
+      c.deals.forEach(function (d) { var v = csatNum(d.csat); if (v != null) fb.push({ id: 'SV-' + d.id.replace(/\D/g, '').slice(-5), type: 'Vehicle handover', subj: d.vehicle, date: d.delivered, score: v }); });
+      c.testDrives.forEach(function (t) { if (/very positive/i.test(t.outcome || '')) fb.push({ id: 'SV-' + t.id.replace(/\D/g, '').slice(-5), type: 'Test drive', subj: t.model, date: t.date.split(' · ')[0], score: 10, ref: t.id }); });
+      var sx = g('secSX', 'Surveys', 'Qualtrics responses · sales', null, [
+        ['Survey', function (r) { return L(r.id); }], ['Survey Type', function (r) { return T(r.type); }], ['Regarding', function (r) { return T(r.subj); }],
+        ['Responded On', function (r) { return T(r.date); }], ['Score (out of 10)', function (r) { return '<b>' + r.score + '</b>'; }]], fb);
+      var so = g('secSO', 'Sales Orders', 'Orders for this customer', null, [
+        ['Order', function (o) { return L(o.id); }], ['Model', function (o) { return T(o.model); }], ['Order Date', function (o) { return T(o.date); }],
+        ['Originating Lead', function (o) { return lk(o._lead, o._lead); }], ['Total Amount', function (o) { return '<b>' + T(o.amount) + '</b>'; }],
+        ['Payment Terms', function (o) { return T(o.paymentTerms); }], ['Finance Bank', function (o) { return T(o.finance.bank); }], ['EMI', function (o) { return T(o.finance.emi); }],
+        ['Status', function (o) { return pill(o.status); }]], c.salesOrders);
+      // Service 360°
+      var veh = g('secDev', co ? 'Devices / Fleet' : 'Device Registrations', 'Active device registrations', 'New Device Registration', [
+        ['Device', function (v) { return L(v.model + ' ' + v.variant) + '<div class="sub">' + T(v.year + ' · ' + v.color) + '</div>'; }], ['Licence Plate', function (v) { return T(v.plate); }],
+        ['VIN', function (v) { return '<span class="mono">' + T(v.vin) + '</span>'; }], ['Odometer', function (v) { return T(v.odo); }],
+        ['Next Service', function (v) { return T(v.nextService); }], ['Warranty End', function (v) { return T(v.warranty); }], ['Status', function (v) { return pill(v.status); }]], c.vehicles, { refresh: true });
+      var ws = function (id) { return (c.serviceUpcoming.filter(function (x) { return x.id === id; })[0] || {}).workshop; };
+      var up = g('secUp', 'Upcoming Service Appointments', 'Next 30 days', 'New Service Appointment', [
+        ['Appointment', function (r) { return L(r.number); }], ['Service', function (r) { return T(r.name); }], ['Device', function (r) { return '<span class="mono">' + T(r.device) + '</span>'; }],
+        ['Scheduled Start', function (r) { return T(r.start); }], ['Workshop', function (r) { return T(ws(r.number)); }], ['Status', function (r) { return pill(r.status); }]], A.upcoming);
+      var past = g('secPast', 'Past Service Appointments', 'Completed visits', null, [
+        ['Service', function (r) { return L(r.type); }], ['Date', function (r) { return T(r.date); }], ['Vehicle', function (r) { return T(r.vehicle); }],
+        ['Workshop', function (r) { return T(r.workshop); }], ['Amount', function (r) { return T(r.amount); }], ['CSAT', function (r) { return T(r.csat); }], ['Status', function (r) { return pill(r.status); }]], c.servicePast);
+      var con = function (id, t, view, newL, rows, typeLbl) { return g(id, t, view, newL, [['Name', function (r) { return L(r.name); }], ['Description', function (r) { return T(r.desc); }], [typeLbl, function (r) { return T(r.type); }], ['Start Date', function (r) { return T(r.start); }], ['End Date', function (r) { return T(r.end); }], ['Status', function (r) { return pill(r.status || 'Active'); }]], rows); };
+      var cases = g('secSvcCases', 'Cases', 'Active and resolved cases', 'New Case', [
+        ['Case', function (r) { return L(r.id); }], ['Title', function (r) { return T(r.title); }], ['Type', function (r) { return T(r.type); }], ['Priority', function (r) { return T(r.priority); }],
+        ['Created On', function (r) { return T(r.created); }], ['Status', function (r) { return pill(r.status === 'In progress' ? 'Pending — in progress' : r.status); }]], A.x.cases, { refresh: true });
+      // "Show" choice field (All / Sales 360° / Service 360°) — standard choice field; a form script shows/hides the sections
+      var f = /^(sales|service)$/.test(state.c360f) ? state.c360f : 'all', opts = [['all', 'All'], ['sales', 'Sales 360°'], ['service', 'Service 360°']];
+      var ttl = { all: ['Customer 360', 'Sales and service for this ' + (co ? 'account' : 'customer')], sales: ['Sales 360°', 'Leads, test drives, surveys and sales orders'], service: ['Service 360°', (co ? 'Devices' : 'Device registrations') + ', appointments, contracts and cases'] }[f];
+      var show = '<div class="card d3-show" id="secShow"><div class="d3-show-t"><span class="d3-sec-t">' + ttl[0] + '</span><span class="d3-sec-s">' + ttl[1] + '</span></div>' +
+        '<div class="dp-if"><label class="dp-if-label" for="c360Show">Show</label><span class="dp-if-lookup"><select id="c360Show" class="dp-if-input dp-if-select" onchange="event.stopPropagation();state.c360f=this.value;render()">' +
+        opts.map(function (o) { return '<option value="' + o[0] + '"' + (f === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select><span class="material-symbols-outlined dp-if-lk">expand_more</span></span></div></div>';
+      return '<div class="stack d3">' + show +
+        (f === 'service' ? '' : (f === 'sales' ? '<span id="grpSales" class="anchor"></span>' : sec('grpSales', 'Sales 360°', 'Leads, test drives, surveys and sales orders')) + leads + tds + sx + so) +
+        (f === 'sales' ? '' : (f === 'service' ? '<span id="grpService" class="anchor"></span>' : sec('grpService', 'Service 360°', (co ? 'Devices' : 'Device registrations') + ', appointments, contracts and cases')) + '<span id="secVeh" class="anchor"></span>' + veh + up + past +
+        con('secSC', 'Service Contracts', 'Customer’s service contracts', 'New Service Contract', A.serviceContracts, 'Type') +
+        con('secRC', 'Rental Contracts', 'Rental contracts for the customer', 'New Rental Contract', A.rentals, 'Rental Contract Type') +
+        con('secSaC', 'Sales Contracts', 'Customer’s sales contracts', null, A.salesContracts, 'Sales Contract Type') + cases) + '</div>';
     }
 
 
