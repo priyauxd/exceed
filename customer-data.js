@@ -16,7 +16,8 @@
       ],
       leads: [
         { id: 'L-2026-04801', topic: 'EXEED RX — upgrade enquiry', source: 'WhatsApp', created: '02 Jun 2026', rating: 'Hot', status: 'Qualified', owner: 'Mariam Khalil' },
-        { id: 'L-2026-05530', topic: 'EXEED VX — second car for family', source: 'Website', created: '28 Oct 2026', rating: 'Warm', status: 'Contacted', owner: 'Mariam Khalil' }
+        { id: 'L-2026-05530', topic: 'EXEED VX — second car for family', source: 'Website', created: '28 Oct 2026', rating: 'Warm', status: 'Contacted', owner: 'Mariam Khalil' },
+        { id: 'L-2026-05688', topic: 'EXEED LX — car for his wife', source: 'Walk-in', created: '05 Nov 2026', rating: 'Hot', status: 'Qualified', owner: 'Mariam Khalil' }
       ],
       opportunities: [
         { id: 'OP-2026-1188', topic: 'EXEED RX Flagship AWD', stage: 'Won', value: 'AED 189,900', probability: '100%', close: '10 Jul 2026', owner: 'Mariam Khalil' },
@@ -24,7 +25,8 @@
       ],
       testDrives: [
         { id: 'TD-2026-2207', model: 'EXEED RX', date: '20 Jun 2026 · 11:00', showroom: 'SZR Showroom', outcome: 'Very positive', status: 'Completed' },
-        { id: 'TD-2026-3102', model: 'EXEED VX', date: '09 Nov 2026 · 16:30', showroom: 'SZR Showroom', outcome: '—', status: 'Scheduled' }
+        { id: 'TD-2026-3102', model: 'EXEED VX', date: '09 Nov 2026 · 16:30', showroom: 'SZR Showroom', outcome: '—', status: 'Scheduled' },
+        { id: 'TD-2026-3188', model: 'EXEED LX', date: '13 Nov 2026 · 18:00', showroom: 'SZR Showroom', outcome: '—', status: 'Scheduled' }
       ],
       tradeIns: [
         { id: 'TI-2026-0412', vehicle: 'Toyota Land Cruiser 2019', mileage: '96,500 km', appraisal: 'AED 112,000', offered: 'AED 108,000', status: 'Accepted', appraiser: 'Used-car desk' }

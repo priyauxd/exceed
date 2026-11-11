@@ -11,7 +11,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="customer-data.js?v=8"></script>
+  <script src="customer-data.js?v=9"></script>
   <style>
     /* Shell — identical to the Leads page (lead-detail.html) */
     :root { --exeed-navy: #00203f; --exeed-cyan: #00b7bb; --exeed-azure: #2a6797; --sidebar-w: 228px; --topbar-h: 42px; }
@@ -577,6 +577,32 @@
     .pair2 > .vsec { scroll-margin-top: 200px; }
     .pair2 .vgrid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
     .pair2 .td, .pair2 .ti { height: 100%; }
+
+    /* Sales process (one row per lead) */
+    .fh-more { margin-inline-start:6px; border:0; background:#eaeef3; color:#17293d; border-radius:999px; padding:1px 8px; font:600 11px var(--fontFamilyBase, inherit); cursor:pointer; vertical-align:middle; } .fh-more:hover { background:#dde5ec; }
+    .sp-tbl td { vertical-align:middle; }
+    .sp-r { cursor:pointer; } .sp-r.open td { border-bottom-color:transparent; }
+    .sp-car { border:0; background:none; width:26px; height:26px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; color:#475467; }
+    .sp-car:hover { background:#eaeef3; color:#17293d; }
+    .sp-car .material-symbols-outlined { font-size:20px; transition:transform .15s; } .sp-r.open .sp-car .material-symbols-outlined { transform:rotate(90deg); }
+    .sp-st { display:inline-flex; align-items:center; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:600; white-space:nowrap; background:#eaeef3; color:#17293d; }
+    .sp-st.won { background:#e7f6ec; color:#0e7a3e; } .sp-st.dq { background:#f2f4f7; color:#667085; }
+    .sp-r.dq td { color:#98a2b3; }
+    .sp-jr td { padding:4px 12px 14px !important; background:#fafbfc; }
+    .sp-steps { list-style:none; margin:0; padding:6px 0 0; display:flex; position:relative; }
+    .sp-steps li { flex:1; position:relative; display:flex; justify-content:center; }
+    .sp-steps li::before { content:''; position:absolute; top:13px; left:-50%; right:50%; height:2px; background:#e4e7ec; } .sp-steps li:first-child::before { display:none; }
+    .sp-steps li.done::before, .sp-steps li.cur::before { background:#17293d; }
+    .sp-steps button { position:relative; z-index:1; border:0; background:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:5px; padding:0 2px; font:inherit; }
+    .sp-dot { width:26px; height:26px; border-radius:50%; border:2px solid #d0d5dd; background:#fff; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#667085; }
+    .sp-dot .material-symbols-outlined { font-size:15px; }
+    .sp-steps li.done .sp-dot { background:#17293d; border-color:#17293d; color:#fff; }
+    .sp-steps li.cur .sp-dot { border-color:#17293d; color:#17293d; box-shadow:0 0 0 4px #eaeef3; }
+    .sp-lb { font-size:10.5px; color:#667085; text-align:center; line-height:1.2; max-width:76px; } .sp-steps li.cur .sp-lb { color:#17293d; font-weight:700; }
+    .sp-steps button:hover .sp-dot { border-color:#17293d; }
+    .sp-sold { display:flex; align-items:center; gap:8px; font-size:12.5px; color:#0e7a3e; padding-top:6px; } .sp-sold .material-symbols-outlined { font-size:18px; }
+    .sp-lnk { margin-inline-start:auto; border:0; background:none; color:#17293d; font:600 12px inherit; cursor:pointer; display:inline-flex; align-items:center; gap:3px; } .sp-lnk .material-symbols-outlined { font-size:15px; }
+    .sp-note { margin:8px 2px 0; }
     /* Sales journey line (replaces the stage boxes) */
     .jr { display: flex; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-md); box-shadow: var(--shadow2); padding: 18px 10px 14px; overflow-x: auto; }
     .jr-s { flex: 1 0 96px; position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; border: none; background: none; font-family: inherit; cursor: pointer; padding: 0 4px; color: var(--ink-muted); }
@@ -1123,6 +1149,9 @@
     .sx-m em { position: absolute; top: -3px; width: 1.5px; height: 12px; background: #475467; }
     .sx-sc b { width: 22px; text-align: right; font-variant-numeric: tabular-nums; color: #0b1220; } .sx-sc b.mid { color: #b45309; } .sx-sc b.low { color: #b42318; }
     .sx-note { margin-top: 12px; }
+    /* Survey sits in a half-width card next to test drives: stack summary over list, score bar on its own row */
+    .pair2 .sx { grid-template-columns: 1fr; gap: 14px; } .pair2 .sx-sum { border-right: 0; padding-right: 0; border-bottom: 1px solid #eef0f3; padding-bottom: 12px; width: 100%; }
+    .pair2 .sx-list li { grid-template-columns: 32px minmax(0, 1fr) 150px; }
     @media (max-width: 900px) { .sx { grid-template-columns: 1fr; } .sx-sum { border-right: 0; padding-right: 0; } }
     .pl { list-style: none; margin: 0; padding: 0; }
     .pl-row { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) 110px 160px 250px; gap: 16px; align-items: center; padding: 10px 0; border-top: 1px solid #eef0f3; }
@@ -1363,7 +1392,7 @@
             '<button class="btn" onclick="toast(\'Opens WhatsApp with ' + esc(c.name) + '\')"><span class="material-symbols-outlined">chat</span>WhatsApp</button>' +
             '<button class="btn subtle" onclick="toast(\'Opens a new lead pre-filled with this customer\')"><span class="material-symbols-outlined">person_add</span>New lead</button>' +
             '<button class="btn subtle" onclick="toast(\'Opens a service booking\')"><span class="material-symbols-outlined">build</span>Book service</button></div></div>' +
-            '<div class="best-r"><div><div class="k"><span class="material-symbols-outlined">payments</span>Lifetime value</div><div class="v">' + esc(c.ltv) + '</div></div>' +
+            '<div class="best-r"><div><div class="k"><span class="material-symbols-outlined">route</span>Current lead</div><div class="v">' + (curLead(c) ? esc(curLead(c).model) + ' · ' + esc(curLead(c).stage) : '—') + '</div></div>' +
             '<div><div class="k"><span class="material-symbols-outlined">directions_car</span>Vehicles</div><div class="v">' + n.vehicles + '</div></div>' +
             '<div><div class="k"><span class="material-symbols-outlined">trending_up</span>Open sales</div><div class="v">' + n.openSales + '</div></div>' +
             '<div><div class="k"><span class="material-symbols-outlined">build</span>Next service</div><div class="v" style="font-size:12px">' + esc(n.nextService) + '</div></div>' +
@@ -1400,8 +1429,8 @@
     document.addEventListener('click', function () { var t = document.querySelector('.tbl-pop.open'); if (t) t.classList.remove('open'); });
 
     /* ── Account form (D365 Account › Auto Sales structure, our visual style) ── */
-    var REL = [['Activities', 'summary', 'secTimeline'], ['Contacts', 'summary', 'secContacts'], ['Opportunities', 'sales', 'secOpp'], ['Leads', 'sales', 'secLead'], ['Deals', 'sales', 'secDeal'], ['Test drives', 'sales', 'secTD'], ['Trade-ins', 'sales', 'secTI'],
-      ['Devices / fleet', 'service', 'secDev'], ['Service appointments', 'service', 'secUp'], ['Service contracts', 'service', 'secSC'], ['Rental contracts', 'service', 'secRC'], ['Sales contracts', 'service', 'secSaC'], ['Cases', 'summary', 'secCases'], ['Entitlements', 'summary', 'secEnt'], ['Child accounts', 'details', 'secChild'], ['Proposals', 'sales', 'secProp'], ['Quotations', 'sales', 'secQuote'], ['Sales orders', 'sales', 'secSO'], ['Vehicles owned', 'service', 'secVeh']];
+    var REL = [['Activities', 'summary', 'secTimeline'], ['Contacts', 'summary', 'secContacts'], ['Sales process', 'sales', 'secLead'], ['Test drives', 'sales', 'secTD'], ['Survey', 'sales', 'secSX'],
+      ['Devices / fleet', 'service', 'secDev'], ['Service appointments', 'service', 'secUp'], ['Service contracts', 'service', 'secSC'], ['Rental contracts', 'service', 'secRC'], ['Sales contracts', 'service', 'secSaC'], ['Cases', 'summary', 'secCases'], ['Entitlements', 'summary', 'secEnt'], ['Child accounts', 'details', 'secChild'], ['Sales orders', 'sales', 'secSO'], ['Vehicles owned', 'service', 'secVeh']];
     function first(n) { return String(n).split(' ')[0]; }
     function last(n) { var p = String(n).split(' '); return p.slice(1).join(' ') || '—'; }
     // Everything the D365 account form shows, derived from the sample customer.
@@ -1458,6 +1487,16 @@
     }
     function section(id, title, inner, cls) { return '<div class="card fsec' + (cls ? ' ' + cls : '') + '" id="' + id + '"><div class="fsec-t">' + title + '</div>' + inner + '</div>'; }
 
+
+    // Header summary: cars owned + where the current lead is (replaces lifetime value)
+    function openLeads(c) { return salesProcs(c).filter(function (p) { return !p.sold && p.stage !== 'Disqualified'; }); }
+    function curLead(c) { return openLeads(c)[0] || null; }
+    function moreOpen(c) { var n = openLeads(c).length - 1; return n > 0 ? '<button class="fh-more" onclick="event.stopPropagation();state.c360f=\'all\';setTab(\'c360\');setTimeout(function(){jumpTo(\'secLead\')},60)" title="' + openLeads(c).slice(1).map(function (p) { return p.model + ' · ' + p.stage; }).join(', ') + '">+' + n + ' more open</button>' : ''; }
+    function headSummary(c) {
+      var p = curLead(c);
+      return '<div class="dp-fh-field"><div class="dp-fh-val">' + c.vehicles.length + '</div><div class="dp-fh-label">Cars owned</div></div>' +
+        '<div class="dp-fh-field"><div class="dp-fh-val">' + (p ? esc(p.model) + ' · ' + esc(p.stage) + moreOpen(c) : '—') + '</div><div class="dp-fh-label">Current lead' + (openLeads(c).length > 1 ? ' (latest)' : '') + '</div></div>';
+    }
     function renderRecord(c) {
       KIND = 'account';
       cmdbar('record');
@@ -1468,8 +1507,8 @@
         '<div class="dp-idcard"><div class="dp-lead-head"><div class="dp-av" style="background:' + c.av + '">' + c.initials + '</div>' +
         '<div class="dp-head-info"><div class="dp-name-row"><span class="dp-name">' + esc(c.name) + '</span><span class="save-st" id="saveSt">- Saved</span></div>' +
         '<div class="dp-meta-row"><span class="dp-lead-tag' + (c.type === 'Company' ? ' co' : '') + '"><span class="material-symbols-outlined">business</span>Account</span><span class="mono">' + A.x.accountNumber + '</span>' + (c.mobile ? '<a class="dp-call" href="tel:' + c.mobile.replace(/\s/g, '') + '"><span class="material-symbols-outlined">call</span>' + esc(c.mobile) + '</a>' : '') + (c.email ? '<span>' + esc(c.email) + '</span>' : '') + (c.segment && !c.crmOnly ? '<span class="pill n">' + esc(c.segment) + '</span>' : '') + '</div></div>' +
-        '<div class="dp-formhead"><div class="dp-fh-field"><div class="dp-fh-val">' + esc(c.ltv) + '</div><div class="dp-fh-label">Lifetime value</div></div><div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.annualRevenue) + '</div><div class="dp-fh-label">Annual Revenue</div></div>' +
-        '<div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.employees) + '</div><div class="dp-fh-label">Number of Employees</div></div>' +
+        '<div class="dp-formhead">' + headSummary(c) + (A.annualRevenue && A.annualRevenue !== '—' ? '<div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.annualRevenue) + '</div><div class="dp-fh-label">Annual Revenue</div></div>' : '') +
+        (A.employees && A.employees !== '—' ? '<div class="dp-fh-field"><div class="dp-fh-val">' + esc(A.employees) + '</div><div class="dp-fh-label">Number of Employees</div></div>' : '') +
         '<div class="dp-fh-owner"><div class="dp-fh-av">' + own + '<span class="dp-fh-dot"></span></div><div><div class="dp-fh-val" style="color:var(--blue)">' + esc(c.owner) + '</div><div class="dp-fh-label">Owner</div></div></div></div></div>' +
         '<div class="dp-tabs dp-idtabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.tab === t[0] ? ' active' : '') + '" onclick="setTab(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') +
         '<div class="rel-wrap"><button class="dp-tab" id="relBtn" onclick="toggleRel(event)" aria-haspopup="menu" aria-expanded="false">Related <span class="material-symbols-outlined" style="font-size:18px">expand_more</span></button>' +
@@ -1507,7 +1546,7 @@
        Tabs: Details · Customer 360 (Sales 360° + Service 360°) · Billing · Related */
     var KIND = 'account';
     function openContact(id, idx) { S.addViewed(id); nav({ id: id, ct: String(idx), from: state.view === 'contacts' || state.view === 'accounts' ? state.view : (state.id && state.ct == null ? 'accounts' : (state.from || 'contacts')), tab: 'details' }); }
-    var REL_CONTACT = [['Activities', 'details', 'secTimeline'], ['Company', 'details', 'secCompany'], ['Opportunities', 'sales', 'secOpp'], ['Leads', 'sales', 'secLead'], ['Deals', 'sales', 'secDeal'], ['Test drives', 'sales', 'secTD'], ['Trade-ins', 'sales', 'secTI'],
+    var REL_CONTACT = [['Activities', 'details', 'secTimeline'], ['Company', 'details', 'secCompany'], ['Sales process', 'sales', 'secLead'], ['Test drives', 'sales', 'secTD'], ['Survey', 'sales', 'secSX'],
       ['Device registrations', 'service', 'secDev'], ['Service appointments', 'service', 'secUp'], ['Service contracts', 'service', 'secSC'], ['Sales contracts', 'service', 'secSaC'], ['Rental contracts', 'service', 'secRC'],
       ['Cases', 'details', 'secCCases'], ['Entitlements', 'details', 'secCEnt'], ['Identity', 'details', 'secIdentity']];
     function cdata(c, idx) {
@@ -1544,7 +1583,7 @@
         '<div class="dp-head-info"><div class="dp-name-row"><span class="dp-name">' + esc(D.p.name) + '</span><span class="save-st" id="saveSt">- Saved</span></div>' +
         '<div class="dp-meta-row"><span class="dp-lead-tag"><span class="material-symbols-outlined">person</span>Contact</span><span class="mono">' + D.contactId + '</span>' +
         (D.mobile ? '<a class="dp-call" href="tel:' + D.mobile.replace(/\s/g, '') + '"><span class="material-symbols-outlined">call</span>' + esc(D.mobile) + '</a>' : '') + (D.email ? '<span>' + esc(D.email) + '</span>' : '') + '</div></div>' +
-        '<div class="dp-formhead">' + (D.self ? '<div class="dp-fh-field"><div class="dp-fh-val">' + esc(c.ltv) + '</div><div class="dp-fh-label">Lifetime value</div></div>' : '') +
+        '<div class="dp-formhead">' + (D.self ? headSummary(c) : '') +
         '<div class="dp-fh-field"><div class="dp-fh-val" style="color:var(--blue);cursor:pointer" onclick="openCustomer(\'' + c.id + '\')">' + esc(c.name) + '</div><div class="dp-fh-label">' + (D.self ? 'Customer account' : 'Company') + '</div></div>' +
         '<div class="dp-fh-owner"><div class="dp-fh-av">' + own + '<span class="dp-fh-dot"></span></div><div><div class="dp-fh-val" style="color:var(--blue)">' + esc(c.owner) + '</div><div class="dp-fh-label">Owner</div></div></div></div></div>' +
         '<div class="dp-tabs dp-idtabs">' + tabs.map(function (t) { return '<button class="dp-tab' + (state.tab === t[0] ? ' active' : '') + '" onclick="setTab(\'' + t[0] + '\')">' + t[1] + '</button>'; }).join('') +
@@ -1790,7 +1829,7 @@
       var vis = true; // Visual only — the Table toggle was removed
       var nav = '<div class="c360-nav"><span class="c360-t">Customer 360</span><button onclick="jumpTo(\'grpSales\')"><span class="material-symbols-outlined">trending_up</span>Sales 360°</button><button onclick="jumpTo(\'grpService\')"><span class="material-symbols-outlined">build</span>Service 360°</button>' +
         '<span class="grow"></span><div class="seg" role="group" aria-label="View"><button class="' + (vis ? 'on' : '') + '" onclick="state.c360v=\'visual\';render()"><span class="material-symbols-outlined">dashboard</span>Visual</button><button class="' + (vis ? '' : 'on') + '" onclick="state.c360v=\'table\';render()"><span class="material-symbols-outlined">table_rows</span>Table</button></div></div>';
-      var gs = '<div class="grp-h" id="grpSales"><span class="ico"><span class="material-symbols-outlined">trending_up</span></span>Sales 360°<span class="sub">Leads, opportunities, deals, test drives, trade-ins, proposals, quotations and orders</span></div>';
+      var gs = '<div class="grp-h" id="grpSales"><span class="ico"><span class="material-symbols-outlined">trending_up</span></span>Sales 360°<span class="sub">Sales process by lead, test drives, surveys and sales orders</span></div>';
       var gv = '<div class="grp-h svc" id="grpService"><span class="ico"><span class="material-symbols-outlined">build</span></span>Service 360°<span class="sub">' + (KIND === 'contact' ? 'Device registrations' : 'Devices') + ', appointments, contracts and cases</span></div>';
       if (vis) {
         var f = state.c360f === 'cx' ? 'all' : state.c360f || 'all', V = [['all', 'All'], ['sales', 'Sales 360°'], ['service', 'Service 360°']];
@@ -1934,7 +1973,7 @@
         var seg = function (v, cls) { return v ? '<span class="' + cls + '" style="width:' + (v / tot * 100) + '%"></span>' : ''; };
         var leg = function (v, cls, l) { return v ? '<div><i class="' + cls + '"></i><span>' + l + '</span><b>AED ' + Math.round(v).toLocaleString('en-US') + '</b><em>' + Math.round(v / tot * 100) + '%</em></div>' : ''; };
         var row = function (k, v) { return '<div><span>' + k + '</span><b>' + esc(v) + '</b></div>'; };
-        return '<article class="k-receipt"><header><div><div class="k-title">' + esc(o.model) + '</div>' + eyebrow(o.id + ' · ' + esc(o.date)) + '</div><div class="k-total"><span>Order total</span><b><small>AED</small>' + esc(o.amount.replace(/^AED\s?/, '')) + '</b>' + pill(o.status) + '</div></header>' +
+        return '<article class="k-receipt"><header><div><div class="k-title">' + esc(o.model) + '</div>' + eyebrow(o.id + ' · ' + esc(o.date) + (o._lead ? ' · Lead ' + esc(o._lead) : '')) + '</div><div class="k-total"><span>Order total</span><b><small>AED</small>' + esc(o.amount.replace(/^AED\s?/, '')) + '</b>' + pill(o.status) + '</div></header>' +
           '<div class="k-paybar">' + seg(adv, 'a') + seg(tin, 't') + seg(fin, 'f') + seg(rest, 'r') + '</div>' +
           '<div class="k-legend">' + leg(adv, 'a', 'Advance') + leg(tin, 't', 'Trade-in') + leg(fin, 'f', 'Bank finance') + leg(rest, 'r', 'Balance') + '</div>' +
           '<div class="k-rows">' + row('Payment terms', o.paymentTerms) + row('Payment mode', o.paymentMode) + row('Advance', o.advance) + row('Invoice', o.invoice) + '</div>' +
@@ -2106,11 +2145,11 @@
       c.deals.forEach(function (d) { var v = csatNum(d.csat); if (v != null) fb.push({ d: pd(d.delivered), s: v, what: d.vehicle, kind: 'Handover survey', icon: 'key' }); });
       c.testDrives.forEach(function (t) { if (/very positive/i.test(t.outcome || '')) fb.push({ d: pd(t.date), s: 10, what: t.model, kind: 'Test drive feedback', icon: 'directions_car' }); });
       fb.sort(function (a, b) { return (b.d || 0) - (a.d || 0); });
-      if (!fb.length) return paEmpty('secSX', 'sentiment_satisfied', 'Sales experience', '', 'No sales feedback yet', 'Scores arrive after test drives and vehicle handovers.');
+      if (!fb.length) return paEmpty('secSX', 'sentiment_satisfied', 'Survey', '', 'No surveys yet', 'Qualtrics surveys after test drives and vehicle handovers show here.');
       var all = avg(fb.map(function (x) { return x.s; })), vs = all - DEALER_AVG, nps = (c.marketing || {}).nps || '';
       var pct = function (v) { return Math.max(0, Math.min(100, v * 10)); };
       var tone = function (v) { return v >= 9 ? 'ok' : v >= 7 ? 'mid' : 'low'; };
-      return vcard('secSX', 'sentiment_satisfied', 'Sales experience', fb.length, '',
+      return vcard('secSX', 'sentiment_satisfied', 'Survey', fb.length, '',
         '<div class="sx"><div class="sx-sum"><p class="pa-k">Average score</p><p class="pa-big">' + all.toFixed(1) + '<small class="r">/ 10</small></p>' +
           '<p class="pa-s"><span class="' + (vs >= 0 ? 'pa-up' : 'pa-dn') + '">' + (vs >= 0 ? '+' : '−') + Math.abs(vs).toFixed(1) + '</span> vs dealer avg ' + DEALER_AVG + '</p>' +
           (nps && nps !== '—' ? '<span class="pa-nps">NPS ' + esc(String(nps).replace(/\s*\((.*)\)/, ' · $1')) + '</span>' : '') + '</div>' +
@@ -2119,78 +2158,92 @@
             '<div class="sx-sc"><span class="sx-m"><i class="' + tone(x.s) + '" style="width:' + pct(x.s) + '%"></i><em style="left:' + pct(DEALER_AVG) + '%"></em></span><b class="' + tone(x.s) + '">' + x.s + '</b></div></li>';
         }).join('') + '</ul></div><p class="pa-xs sx-note">Tick marks the dealer average · service and call-centre feedback is under Service 360°</p>');
     }
+
+    /* ── Sales process: one row per lead (Mac review, 10 Nov) ──
+       Test drives, proposals, quotations, sales orders and deliveries are linked to the lead with the same model
+       created on or before them. Stage follows the lead BPF. No opportunities. */
+    var BPF = ['New', 'Contact', 'Qualify', 'Visit', 'Propose', 'Accepted', 'Prep for delivery', 'Ready for delivery', 'Close'];
+    function leadModel(l) { return (String(l.topic).match(/EXEED \w+/) || [''])[0]; }
+    function salesProcs(c) {
+      if (c._procs) return c._procs;
+      var ls = c.leads.slice().sort(function (a, b) { return (pd(a.created) || 0) - (pd(b.created) || 0); });
+      var P = ls.map(function (l) { return { lead: l, model: leadModel(l) || 'Enquiry', tds: [], sos: [], deals: [], opps: [], props: [], quotes: [] }; });
+      var pick = function (model, date) {
+        var d = pd(String(date || '').split(' · ')[0]) || NOW;
+        var before = P.filter(function (p) { return (pd(p.lead.created) || 0) <= d; });
+        var same = (before.length ? before : P).filter(function (p) { return p.model && String(model).indexOf(p.model) > -1; });
+        return same[same.length - 1] || before[before.length - 1] || null;
+      };
+      var link = function (list, key, mf, df) { list.forEach(function (x) { var p = pick(mf(x), df(x)); x._lead = p ? p.lead.id : ''; if (p) p[key].push(x); }); };
+      link(c.testDrives, 'tds', function (x) { return x.model; }, function (x) { return x.date; });
+      link(c.salesOrders, 'sos', function (x) { return x.model; }, function (x) { return x.date; });
+      link(c.deals, 'deals', function (x) { return x.vehicle; }, function (x) { return x.delivered; });
+      link(c.opportunities, 'opps', function (x) { return x.topic; }, function () { return ''; });
+      link(c.proposals, 'props', function (x) { return x.model; }, function (x) { return x.date; });
+      link(c.quotations, 'quotes', function (x) { return x.model; }, function () { return ''; });
+      P.forEach(function (p) {
+        var l = p.lead, so = p.sos[p.sos.length - 1], q = p.quotes[p.quotes.length - 1], o = p.opps[p.opps.length - 1], pr = p.props[p.props.length - 1];
+        p.stage = p.deals.length || (so && /Delivered|Closed/.test(so.status)) ? 'Close'
+          : so ? 'Prep for delivery'
+          : (q && /Won|Accepted/.test(q.status)) || (o && o.stage === 'Won') ? 'Accepted'
+          : o && BPF.indexOf(o.stage) > -1 ? o.stage
+          : pr ? 'Propose' : p.tds.length ? 'Visit'
+          : /Disqualified/.test(l.status) ? 'Disqualified' : /Qualified/.test(l.status) ? 'Qualify' : /Contacted/.test(l.status) ? 'Contact' : 'New';
+        p.sold = p.stage === 'Close';
+        p.value = (so && so.amount) || (q && q.amount) || (o && /\d/.test(o.value) && o.value) || (pr && pr.price) || '';
+        p.showroom = (p.tds[0] && p.tds[0].showroom) || String(c.showroom || '').split(' — ')[0] || '—';
+      });
+      c._procs = P.reverse();
+      return c._procs;
+    }
+    function spToggle(id) { state.spOpen = state.spOpen || {}; state.spOpen[id] = !spIsOpen(id); render(); }
+    function spIsOpen(id) { var o = (state.spOpen || {})[id]; if (o != null) return o; var p = (state._procs || []).filter(function (x) { return x.lead.id === id; })[0]; return !!p && (state._procs || [])[0] === p; }   // only the latest lead opens by default
+    function spGo(stage, id) {
+      if (stage === 'Visit') return jumpTo('secTD');
+      if (stage === 'Prep for delivery' || stage === 'Ready for delivery' || stage === 'Close') return jumpTo('secSO');
+      toast('Opens lead ' + id + ' at the ' + stage + ' stage');
+    }
+    function salesProcess(c) {
+      var P = salesProcs(c); state._procs = P;
+      if (!P.length) return paEmpty('secLead', 'route', 'Sales process', '', 'No leads yet', 'Each enquiry becomes a lead. Its stage, value and journey show here.');
+      var rows = P.map(function (p) {
+        var l = p.lead, tone = l.rating === 'Hot' ? 'hot' : l.rating === 'Warm' ? 'warm' : 'cold', open = spIsOpen(l.id), dq = p.stage === 'Disqualified';
+        var src = /whatsapp/i.test(l.source) ? 'chat_bubble' : /web|config/i.test(l.source) ? 'language' : /walk/i.test(l.source) ? 'directions_walk' : /instagram|social/i.test(l.source) ? 'photo_camera' : /corporate/i.test(l.source) ? 'business_center' : 'input';
+        var k = BPF.indexOf(p.stage);
+        var jr = '<tr class="sp-jr"><td colspan="9">' + (p.sold
+            ? '<div class="sp-sold"><span class="material-symbols-outlined">task_alt</span><span>Sold and delivered — ' + esc(p.model) + ' is now under Service 360°.</span><button class="sp-lnk" onclick="jumpTo(\'grpService\')">Go to Service 360°<span class="material-symbols-outlined">arrow_downward</span></button></div>'
+            : '<ol class="sp-steps">' + BPF.map(function (b, i) {
+                var st = dq ? '' : i < k ? 'done' : i === k ? 'cur' : '';
+                return '<li class="' + st + '"><button onclick="event.stopPropagation();spGo(\'' + b + '\',\'' + l.id + '\')" title="' + b + '"><span class="sp-dot">' + (st === 'done' ? '<span class="material-symbols-outlined">check</span>' : i + 1) + '</span><span class="sp-lb">' + b + '</span></button></li>';
+              }).join('') + '</ol>') + '</td></tr>';
+        return '<tr class="sp-r' + (dq ? ' dq' : '') + (open ? ' open' : '') + '" onclick="toast(\'Opens lead ' + esc(l.id) + ' on the lead page\')" title="Open the lead">' +
+          '<td><button class="sp-car" aria-label="' + (open ? 'Hide' : 'Show') + ' journey" aria-expanded="' + open + '" onclick="event.stopPropagation();spToggle(\'' + l.id + '\')"><span class="material-symbols-outlined">chevron_right</span></button></td>' +
+          '<td><span class="pa-tn">' + esc(p.model) + '</span><span class="pa-ts">' + esc(l.id) + '</span></td>' +
+          '<td>' + meta(src, esc(l.source)) + '</td><td class="nw">' + esc(l.created) + '</td><td><span class="k-pill ' + tone + '"><i></i>' + esc(l.rating) + '</span></td>' +
+          '<td>' + ownerChip(l.owner) + '</td><td><span class="sp-st ' + (p.sold ? 'won' : dq ? 'dq' : 'open') + '">' + (p.sold ? 'Delivered' : esc(p.stage)) + '</span></td>' +
+          '<td class="nw"><b>' + (p.value ? esc(p.value) : '<span class="k-nil">—</span>') + '</b></td><td>' + esc(p.showroom) + '</td></tr>' + (open ? jr : '');
+      }).join('');
+      return vcard('secLead', 'route', 'Sales process', P.length, '',
+        '<div class="pa-tw"><table class="pa-tb sp-tbl"><thead><tr><th style="width:34px"></th><th>Lead</th><th>Source</th><th>Created</th><th>Rating</th><th>Owner</th><th>Stage</th><th>Value</th><th>Showroom</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+        '<p class="pa-xs sp-note">One row per lead · open a row to see its journey · click a lead to open it</p>');
+    }
     function accSalesVisual(c, A) {
+      salesProcs(c);   // links test drives and sales orders to their lead first
       var full = salesVisual(c, A), tmp = document.createElement('div'); tmp.innerHTML = full;
       var take = function (id) { var el = tmp.querySelector('#' + id + '.vsec'); return el ? el.outerHTML : ''; };
-      var out = accJourney(c), empty = [];
-      // Leads + Opportunities — keep the light grey cards
-      var emptyCard = paEmpty;
-      out += '<div class="pair2">' + (take('secLead') || emptyCard('secLead', 'leaderboard', 'Leads', 'New Lead', 'No leads yet', 'Enquiries from WhatsApp, web and walk-ins will show here.')) +
-        (take('secOpp') || emptyCard('secOpp', 'trending_up', 'Opportunities', 'New Opportunity', 'No opportunities yet', 'Qualify a lead to start tracking value and probability.')) + '</div>';
-      // Test drives — list with date block
-      var pair = '';
-      if (c.testDrives.length) pair += vcard('secTD', 'directions_car', 'Test drives', c.testDrives.length, 'New Test Drive', '<ul class="pa-list">' + c.testDrives.map(function (t) {
+      var out = salesProcess(c);
+      // Test drives — created from the lead, so no "New test drive" here
+      var td = c.testDrives.length ? vcard('secTD', 'directions_car', 'Test drives', c.testDrives.length, '', '<ul class="pa-list">' + c.testDrives.map(function (t) {
         var d = pd(t.date), time = (t.date.split(' · ')[1] || ''), up = t.status !== 'Completed';
-        return '<li><div class="pa-date' + (up ? ' up' : '') + '"><span>' + (d ? d.toLocaleDateString('en-GB', { month: 'short' }) : '—') + '</span><b>' + (d ? d.getDate() : '—') + '</b><span>' + esc(time) + '</span></div>' +
+        return '<li onclick="toast(\'Opens lead ' + esc(t._lead || '') + ' on the lead page\')" style="cursor:pointer"><div class="pa-date' + (up ? ' up' : '') + '"><span>' + (d ? d.toLocaleDateString('en-GB', { month: 'short' }) : '—') + '</span><b>' + (d ? d.getDate() : '—') + '</b><span>' + esc(time) + '</span></div>' +
           '<div class="pa-li"><span class="pa-t">' + esc(t.model) + '</span>' + eyebrow(t.id) +
           '<p class="pa-d' + (up ? ' up' : '') + '">' + (up ? (d ? rel(d).replace(/^in/, 'In') : 'Date to confirm') : 'Outcome · ' + esc(t.outcome !== '—' ? t.outcome : 'Not recorded')) + '</p>' +
-          '<div class="k-meta">' + meta('location_on', esc(t.showroom)) + '</div></div>' + pill(t.status) + '</li>';
-      }).join('') + '</ul>'); else pair += paEmpty('secTD', 'directions_car', 'Test drives', 'New Test Drive', 'No test drives yet', 'Booked and completed drives will show here.');
-      // Trade-ins — offer vs appraisal
-      if (c.tradeIns.length) pair += vcard('secTI', 'swap_horiz', 'Trade-ins', c.tradeIns.length, 'New Trade In', c.tradeIns.map(function (t) {
-        var ap = amt(t.appraisal), of = amt(t.offered), ok = /Accepted/.test(t.status), r = ap && of ? Math.round(of / ap * 100) : 0;
-        return '<article class="pa-ti"><div class="pa-row st"><div class="k-min"><div class="pa-t">' + esc(t.vehicle) + '</div>' + eyebrow(t.id) + '<div class="k-meta">' + meta('speed', esc(t.mileage)) + meta('person', esc(t.appraiser)) + '</div></div>' + pill(t.status) + '</div>' +
-          (ap ? '<div class="pa-box"><div class="pa-row bot"><div><p class="pa-k">' + (ok ? 'Offer accepted' : 'Offer') + '</p><p class="pa-mid">' + esc(t.offered !== '—' ? t.offered : 'Pending') + '</p></div><div class="r"><p class="pa-k">Appraisal</p><p class="pa-sm">' + esc(t.appraisal) + '</p></div></div>' +
-            (of ? '<div class="pa-bar"><span style="width:' + Math.min(100, r) + '%"></span></div><p class="pa-s"><b>' + r + '% of appraisal</b> · AED ' + Math.abs(ap - of).toLocaleString('en-US') + (of <= ap ? ' below' : ' above') + '</p>' : '') + '</div>'
-            : '<div class="k-wait"><span class="material-symbols-outlined">hourglass_top</span>Appraisal pending — photos received</div>') + '</article>';
-      }).join('')); else pair += paEmpty('secTI', 'swap_horiz', 'Trade-ins', 'New Trade In', 'No trade-ins yet', 'Appraisals and offers for the customer’s current car.');
-      out += '<div class="pair2">' + pair + '</div>';
-      // Proposals & quotations — unchanged (our product cards)
-      out += salesExperience(c);
-      // Proposals & quotations — lead-page proposal cards
-      if (c.proposals.length || c.quotations.length) {
-        var drafts = c.proposals.filter(function (x) { return /Draft/.test(x.status); });
-        var best = drafts.length > 1 ? drafts[drafts.length - 1].id : null, dn = 0;
-        var split = function (m) { var mm = /^(EXEED \w+)\s*(.*)$/.exec(m || ''); return mm ? [mm[1], mm[2]] : [m, '']; };
-        var acts = '<div class="qc-share"><button class="qc-sbtn" onclick="toast(\'Opens the proposal editor\')"><span class="material-symbols-outlined">edit</span>Edit</button><button class="qc-sbtn" onclick="toast(\'Proposal PDF downloaded\')"><span class="material-symbols-outlined">download</span>Download</button><button class="qc-sbtn" onclick="toast(\'Proposal emailed to the customer\')"><span class="material-symbols-outlined">mail</span>Email</button></div>';
-        var qcard = function (o) {
-          var act = o.st === 'Draft' ? ['send', 'Submit for approval', 'Sent to the sales manager for approval'] : o.st === 'Approved quote' ? ['send', 'Send to customer', 'Proposal sent to the customer'] : null;
-          var ib = function (ic, lb, t) { return '<button class="pl-ib" aria-label="' + lb + '" title="' + lb + '" onclick="event.stopPropagation();toast(\'' + t + '\')"><span class="material-symbols-outlined">' + ic + '</span></button>'; };
-          return '<li class="pl-row' + (o.quote ? ' q' : '') + '">' +
-            '<div class="k-min"><span class="pa-tn">' + esc(o.m[0]) + (o.best ? '<span class="pl-best">Best fit</span>' : '') + '</span><span class="pa-ts">' + esc([o.m[1], o.color].filter(Boolean).join(' · ') || '—') + '</span></div>' +
-            '<div class="pl-id"><span>' + esc(o.label) + '</span><span class="pa-ts">' + esc(o.id) + ' · ' + esc(o.date) + '</span></div>' +
-            '<b class="pl-pr">AED ' + esc(String(o.price).replace(/^AED\s?/, '')) + '</b>' +
-            '<span class="qc-st ' + o.stc + '">' + esc(o.st) + '</span>' +
-            '<div class="pl-act">' + (act ? '<button class="pl-btn" onclick="toast(\'' + act[2] + '\')">' + act[1] + '</button>' : '') +
-              ib('edit', 'Edit', 'Opens the proposal editor') + ib('download', 'Download', 'Proposal PDF downloaded') + ib('mail', 'Email', 'Proposal emailed to the customer') + '</div></li>';
-        };
-        var cards = c.proposals.map(function (x) {
-          var draft = /Draft/.test(x.status), conv = /quote/i.test(x.status);
-          return qcard({ id: x.id, label: draft ? 'Draft ' + ('0' + (++dn)).slice(-2) : 'Proposal', st: draft ? 'Draft' : x.status, stc: draft ? 'draft' : conv ? 'quote' : /Cancel|Lost/.test(x.status) ? 'cancelled' : 'draft',
-            m: split(x.model), color: x.color, price: x.price, date: x.date, chips: x.addOns.split(' · ').slice(0, 3), img: carImg(x.color), best: x.id === best, done: !draft,
-            cta: draft ? '<button class="qc-cta" onclick="toast(\'Sent to the sales manager for approval\')">Submit for Approval</button><button class="qc-cancel" onclick="toast(\'Proposal cancelled\')">Cancel proposal</button>'
-              : '<div class="qc-quote-actions"><span class="qc-status ok"><span class="material-symbols-outlined">task_alt</span> ' + esc(x.status) + '</span></div>' });
-        }).concat(c.quotations.map(function (x) {
-          var ok = x.approved && x.approved !== '—', won = /Won|Accepted/.test(x.status);
-          return qcard({ id: x.id, label: 'Quotation', st: won ? x.status : ok ? 'Approved quote' : 'Pending approval', stc: won || ok ? 'quote' : 'wait', quote: true,
-            m: split(x.model), color: ok ? x.approved : '', price: x.amount, date: 'valid to ' + x.valid, chips: [], img: carImg((c.proposals[0] || {}).color || 'white'),
-            cta: '<div class="qc-quote-actions">' + (won ? '<span class="qc-status ok"><span class="material-symbols-outlined">verified_user</span> ' + esc(x.status) + '</span>'
-              : ok ? '<span class="qc-status ok"><span class="material-symbols-outlined">verified_user</span> Approved by manager</span><button class="qc-cta send" onclick="toast(\'Proposal sent to the customer\')"><span class="material-symbols-outlined">send</span> Send Proposal to customer</button>'
-              : '<span class="qc-status wait"><span class="material-symbols-outlined">hourglass_top</span> Pending manager approval</span>') + '</div>' });
-        }));
-        out += vcard('secProp', 'request_page', 'Proposals &amp; quotations', c.proposals.length + c.quotations.length, 'New Proposal', '<span id="secQuote" class="anchor"></span><ul class="pl">' + cards.join('') + '</ul>');
-      } else out += paEmpty('secProp', 'request_page', 'Proposals &amp; quotations', 'New Proposal', 'No proposals yet', 'Vehicle proposals and approved quotations will show here.', false, '<span id="secQuote" class="anchor"></span>');
-      // Sales order (2/3) + Deals delivered (1/3)
-      var so = take('secSO'), dl = '';
-      if (c.deals.length) dl = vcard('secDeal', 'handshake', 'Deals delivered', c.deals.length, 'New Deal', c.deals.map(function (d) {
-        var cs = csatNum(d.csat) || 0, stars = Math.round(cs / 2);
-        return '<article class="pa-dl"><div class="pa-row st0"><span class="pa-ic g"><span class="material-symbols-outlined">local_shipping</span></span><div class="k-min"><div class="pa-t">' + esc(d.vehicle) + '</div>' + eyebrow(d.id + ' · ' + esc(d.delivered)) + '</div></div>' +
-          '<div class="pa-box"><p class="pa-k">Handover satisfaction</p><div class="pa-row base"><span class="pa-xl">' + cs + '</span><span class="pa-s">/ 10</span><span class="grow"></span><span class="pa-stars">' + [1, 2, 3, 4, 5].map(function (k) { return '<span class="' + (k <= stars ? 'on' : '') + '">★</span>'; }).join('') + '</span></div></div>' +
-          '<div class="pa-vas"><div class="pa-row"><span class="pa-s">Value-added services</span><b>' + esc(d.vas) + '</b></div><div class="chips">' + String(d.addOns).split(' · ').map(function (a) { return '<span>' + esc(a) + '</span>'; }).join('') + '</div></div></article>';
-      }).join('')); else dl = paEmpty('secDeal', 'handshake', 'Deals delivered', 'New Deal', 'Nothing delivered yet', 'Handovers, satisfaction and add-ons appear after delivery.');
-      if (!so) so = paEmpty('secSO', 'receipt_long', 'Sales orders — payment &amp; finance', null, 'No sales orders yet', 'Payment split, invoice and bank finance show once an order is placed.');
-      out += '<div class="pa-g32">' + so + dl + '</div>';
-      return '<div class="stack">' + out + nothingYet(empty) + '</div>';
+          '<div class="k-meta">' + meta('location_on', esc(t.showroom)) + (t._lead ? meta('route', 'Lead ' + esc(t._lead)) : '') + '</div></div>' + pill(t.status) + '</li>';
+      }).join('') + '</ul>') : paEmpty('secTD', 'directions_car', 'Test drives', '', 'No test drives yet', 'Test drives are booked from the lead and show here.');
+      out += '<div class="pair2">' + td + salesExperience(c) + '</div>';
+      // Sales orders — each linked to its lead
+      out += take('secSO') || paEmpty('secSO', 'receipt_long', 'Sales orders — payment &amp; finance', null, 'No sales orders yet', 'Payment split, invoice and bank finance show once an order is placed.');
+      return '<div class="stack">' + out + '</div>';
     }
 
     function accServiceVisual(c, A) {
@@ -2235,7 +2288,7 @@
       var lcol = section('secCP', 'Company Profile', field('Industry', A.industry, { select: ['Consumer — individual', 'Trading & distribution', 'Trading', 'Automotive', 'Construction', 'Government', 'Hospitality', 'Logistics'] }) + field('SIC Code', A.sic) + field('Ownership', A.ownership, { select: ['Private', 'Public', 'Subsidiary', 'Government', 'Other'] })) +
         section('secDesc', 'Description', field('Description', A.description, { area: true }));
       var rcol = section('secMkt', 'Marketing', field('Originating Lead', A.originatingLead, { ro: true }) + field('Last Campaign Date', A.lastCampaignDate, { ro: true }) + field('Marketing Materials', A.materials, { select: ['Send', 'Do Not Send'] })) +
-        section('secPref', 'Contact Preferences', field('Contact Method', P.method, { select: ['Any', 'Email', 'Phone', 'Fax', 'Mail'] }) + field('Email', allow(P.email), { select: AD }) + field('Follow Email', allow(P.follow), { select: AD }) + field('Bulk Email', allow(P.bulk), { select: AD }) + field('Phone', allow(P.phone), { select: AD }) + field('Fax', allow(P.fax), { select: AD }) + field('Mail', allow(P.mail), { select: AD }));
+        section('secPref', 'Consent', field('Contact Method', P.method, { select: ['Any', 'Email', 'Phone', 'Fax', 'Mail'] }) + field('Email', allow(P.email), { select: AD }) + field('Follow Email', allow(P.follow), { select: AD }) + field('Bulk Email', allow(P.bulk), { select: AD }) + field('Phone', allow(P.phone), { select: AD }) + field('Fax', allow(P.fax), { select: AD }) + field('Mail', allow(P.mail), { select: AD }));
       return '<div class="det2"><div class="col">' + lcol + '</div><div class="col">' + rcol + '</div></div>' +
         section('secBill', 'Billing', '<div class="inline-form">' + field('Currency', A.currency, { chip: 'payments', inline: true }) + field('Credit Limit', A.creditLimit, { inline: true }) + field('Credit Hold', A.creditHold, { select: ['No', 'Yes'], inline: true }) + field('Payment Terms', A.paymentTerms, { select: ['Net 30', 'Net 45', 'Net 60', 'Pay on invoice', 'Monthly in advance', '2% 10, Net 30'], inline: true }) + '</div>', 'wide') +
         section('secShip', 'Shipping', '<div class="inline-form">' + field('Shipping Method', A.shipping, { select: ['Showroom pickup', 'Delivery to customer', 'Airborne', 'DHL', 'FedEx', 'Postal mail'], inline: true }) + field('Freight Terms', A.freight, { select: ['FOB', 'No charge'], inline: true }) + '</div>', 'wide') +
