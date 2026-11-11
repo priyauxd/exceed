@@ -3213,7 +3213,7 @@
       DUP.addCss();
       var r = dupRec(l) || { id:l.id, name:l.name, brand:'EXEED', phone:l.phone, email:l.email, eid:l.emiratesId, created:new Date().toISOString(), stage:l.stage };
       var g = dupRec(l) ? DUP.group(l.id) : [], me = DUP.status(l.id);
-      var head = '<div class="dp-act-header"><span class="dp-act-title">Duplicate leads' + (g.length ? ' <span class="dup-n">' + (g.length - 1) + '</span>' : '') + '</span>' + (me ? DUP.chip(me) : '') + '</div>';
+      var head = '<div class="dp-act-header"><span class="dp-act-title">Duplicate leads' + (g.length ? ' <span class="dup-n">' + (g.length - 1) + '</span>' : '') + '</span>' + (me ? DUP.chip(me.k === 'potential' ? Object.assign({}, me, { t:'Potential duplicate lead' }) : me) : '') + '</div>';
       if (!g.length) {
         var ig = DUP.check(r).ignored;
         return '<div class="dp-activity dup-sec">' + head + '<div class="dup-none"><span class="material-symbols-outlined">check_circle</span><div><b>No duplicates found</b><span>Checked against open ' + r.brand + ' leads on Email, Phone and EID.</span></div></div>' +
