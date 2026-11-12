@@ -14,6 +14,7 @@
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
   <script src="duplicates.js?v=5"></script>
+  <script src="clone-lead.js?v=1"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
        Only app-shell + EXEED signature vars are kept local here. */
@@ -1726,6 +1727,33 @@
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; font-size: 13px; font-weight: 500; padding: 11px 18px; border-radius: 10px; box-shadow: 0 8px 28px rgba(20,24,34,.12); display: flex; align-items: center; gap: 8px; opacity: 0; visibility: hidden; transition: all .3s ease; z-index: 70; }
     .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
     .toast .material-symbols-outlined { font-size: 18px; color: var(--green); }
+
+    /* Clone lead (MAI-4768) */
+    .dp-act-type.clone { background: var(--blue-soft); color: var(--blue); }
+    .dp-act-text a.cl-link, .dp-kpi-v a.cl-link, .cl-list a.cl-link { color: var(--blue); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+    .dp-act-text a.cl-link:hover, .dp-kpi-v a.cl-link:hover, .cl-list a.cl-link:hover { text-decoration: underline; }
+    .dp-kpi-v .cl-gone { font-family: 'SF Mono','Cascadia Code',Consolas,monospace; font-weight: 600; color: var(--ink-secondary); }
+    .cl-list { display: flex; flex-direction: column; }
+    .cl-list-r { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
+    .cl-list-r:last-child { border-bottom: none; }
+    .cl-list-r span { color: var(--ink-muted); font-size: 11.5px; text-align: end; }
+    .cl-modal { width: 440px; text-align: start; }
+    .cl-modal .confirm-ic { margin: 0 0 10px; }
+    .cl-modal .confirm-title { text-align: start; }
+    .cl-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0 0; }
+    .cl-col h4 { margin: 0 0 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .cl-col ul { margin: 0; padding-inline-start: 16px; font-size: 12px; line-height: 1.6; color: var(--ink-secondary); }
+    .cl-stage { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: var(--blue-soft); font-size: 12.5px; color: var(--ink); }
+    .cl-stage .material-symbols-outlined { font-size: 18px; color: var(--blue); }
+    .cl-err { display: none; align-items: center; gap: 8px; margin-top: 12px; padding: 9px 12px; border-radius: 10px; background: var(--red-soft, #fdecec); color: var(--red); font-size: 12px; }
+    .cl-err.show { display: flex; }
+    .cl-err button { margin-inline-start: auto; border: none; background: none; color: var(--red); font-weight: 700; cursor: pointer; font-family: inherit; text-decoration: underline; }
+    .cl-modal .confirm-actions { justify-content: flex-end; margin-top: 18px; }
+    .cl-modal .cp-btn[disabled] { opacity: .7; cursor: progress; }
+    .cl-spin { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,.5); border-top-color: #fff; border-radius: 50%; animation: clspin .7s linear infinite; vertical-align: -2px; margin-inline-end: 6px; }
+    @keyframes clspin { to { transform: rotate(360deg); } }
+    .toast a { color: #9cc3ff; font-weight: 700; margin-inline-start: 10px; cursor: pointer; text-decoration: underline; }
+    .toast.show { pointer-events: auto; }
     .create-overlay { position: fixed; inset: 0; background: rgba(20,24,34,.35); opacity: 0; visibility: hidden; transition: opacity .25s; z-index: 40; }
     .create-overlay.show { opacity: 1; visibility: visible; }
     .create-panel { position: fixed; top: 0; inset-inline-end: 0; bottom: 0; width: 460px; max-width: 92vw; background: var(--surface); box-shadow: -8px 0 32px rgba(20,24,34,.06); transform: translateX(100%); transition: transform .3s cubic-bezier(.4,0,.2,1); z-index: 50; display: flex; flex-direction: column; }
@@ -2088,6 +2116,7 @@
           <div class="cp-field"><label class="cp-label">Emirates <span class="req">*</span></label><select class="cp-select" id="clEmirate"><option value="">Select…</option></select></div>
         </div>
         <div class="cp-field" style="max-width:50%"><label class="cp-label">Quantity <span class="req">*</span></label><input class="cp-input" id="clQty" type="number" min="1" value="1"></div>
+        <div class="cp-field"><label class="cp-label" for="clComments">Comments</label><textarea class="cp-textarea" id="clComments" placeholder="Other models and quantities, e.g. 3 × EXEED LX, 2 × EXEED TXL"></textarea><div class="cp-hint">If the customer needs more than one model, list each model and quantity here.</div></div>
       </div>
       <div class="cp-grid2">
         <div class="cp-field"><label class="cp-label">Preferred Language</label><select class="cp-select" id="clLang"><option>English</option><option>Arabic</option></select></div>
@@ -2098,7 +2127,7 @@
       <div class="cp-grid2">
         <div class="cp-field" id="clBrandField"><label class="cp-label">Brand</label><select class="cp-select" id="clBrand"><option>Exeed</option><option>MHero</option><option>Lepas</option></select></div>
         <div class="cp-field"><label class="cp-label">Model</label><select class="cp-select" id="clModel" aria-describedby="clModelHint"><option>RX-Comfort</option><option>VX Luxury</option><option>VX-EXECUTIVE</option><option>ET REEV</option></select></div>
-        <div class="cp-hint" id="clModelHint" style="display:none;grid-column:1/-1">More than one model? Pick the main one here and list the others with quantities in Description.</div>
+        <div class="cp-hint" id="clModelHint" style="display:none;grid-column:1/-1">More than one model? Pick the main one here and list the others with quantities in Comments.</div>
       </div>
       <div class="cp-field"><label class="cp-label" id="clShowroomLbl">Assigned Showroom</label><select class="cp-select" id="clShowroom"><option>Abudhabi Corniche</option><option>Dubai SZR</option><option>Etihad Road</option><option>Exeed Sharjah</option></select></div>
       <div class="cp-field" id="clSalesExecField"><label class="cp-label">Assigned Sales Executive <span class="req">*</span></label><select class="cp-select" id="clSalesExec"><option>Mariam Saeed</option><option>Nadia Al Amiri</option><option>Mariam Khalil</option><option>Priyamvada K.</option><option>Saravanakumar Subramani</option><option>Basel Talalini</option></select></div>
@@ -2163,6 +2192,23 @@
   </div>
 
   <div class="create-overlay" id="confirmOverlay" onclick="closeConfirm()"></div>
+  <div class="confirm-overlay" id="cloneOverlay" onclick="closeCloneLead()"></div>
+  <div class="confirm-modal cl-modal" id="cloneModal" role="dialog" aria-modal="true" aria-labelledby="cloneTitle">
+    <div class="confirm-ic neutral"><span class="material-symbols-outlined">content_copy</span></div>
+    <div class="confirm-title" id="cloneTitle">Clone this lead?</div>
+    <div class="confirm-text" id="cloneSub"></div>
+    <div class="cl-cols">
+      <div class="cl-col"><h4>Copied or linked</h4><ul><li>Customer details and lead fields</li><li>Lead source</li><li>Same Account / Contact</li><li>WhatsApp conversation</li><li>Link to this lead</li></ul></div>
+      <div class="cl-col"><h4>Not copied</h4><ul><li>Discovery questions, trade-in</li><li>Opportunity, test drives, proposals</li><li>Activities and timeline</li><li>Owner (you become the owner)</li><li>SLA (starts fresh)</li></ul></div>
+    </div>
+    <div class="cl-stage"><span class="material-symbols-outlined">flag</span><span id="cloneStage"></span></div>
+    <div class="cl-err" id="cloneErr" role="alert"><span class="material-symbols-outlined">error</span><span>Could not clone the lead.</span><button type="button" onclick="runCloneLead()">Retry</button></div>
+    <div class="confirm-actions">
+      <button class="cp-btn" id="cloneCancel" onclick="closeCloneLead()">Cancel</button>
+      <button class="cp-btn primary" id="cloneOk" onclick="runCloneLead()">Clone lead</button>
+    </div>
+  </div>
+
   <div class="confirm-modal" id="confirmModal" role="alertdialog">
     <div class="confirm-ic"><span class="material-symbols-outlined">warning</span></div>
     <div class="confirm-title" id="confirmTitle">Are you sure?</div>
@@ -2201,7 +2247,8 @@
       if (l.id === 'L-2026-04838') {   // demo B2B lead
         l.bizType = 'B2B'; l.industry = 'Corporate'; l.emirate = 'Dubai'; l.account = l.company || 'شركة النور للتجارة';
         l.contact = 'Ahmed Al Mansoori'; l.qty = '5'; l.fleetLoc = 'Exeed Fleet';
-        l.description = 'Fleet quote for staff cars. Also needs: 3 × EXEED LX (sales team), 2 × EXEED TXL (management).';
+        l.description = 'Fleet quote for staff cars.';
+        l.comments = 'Also needs 3 × EXEED LX (sales team) and 2 × EXEED TXL (management).';
       }
     });
     function setBizType(v){
@@ -2961,7 +3008,7 @@
       while (upcoming.length < 2) upcoming.push(journeySteps[Math.min(currentStep, journeySteps.length - 1)].name);
       // Arabic review: near the end of the journey read the current stage first, then the next
       if (I18N.lang === 'ar' && upcoming[0] !== upcoming[1] && journeySteps.map(function(j){ return j.name; }).indexOf(upcoming[1]) < journeySteps.map(function(j){ return j.name; }).indexOf(upcoming[0])) upcoming.reverse();
-      var createdDT = (l.activities && l.activities.length) ? l.activities[l.activities.length-1].time : '—';
+      var createdDT = l.createdOn || ((l.activities && l.activities.length) ? l.activities[l.activities.length-1].time : '—');
       var assignedDT = (l.owner && l.owner !== 'Unassigned') ? (createdDT + ' · ' + l.owner) : 'Pending assignment';
 
       return '<div class="dp-sla-widget">' +
@@ -3231,6 +3278,92 @@
 
 
     /* ── Lead duplication (MAI-4776) — rules and data in duplicates.js ── */
+
+    /* ── Clone lead (MAI-4768) — rules in clone-lead.js ── */
+    var CLONE_KEY = 'exeedClones1', cloneBusy = false, cloneFailNext = false;
+    function clonePersona(){ var v = ''; try { v = localStorage.getItem('exceed_persona') || ''; } catch (e) {} return v || 'call-center-agent.html'; }
+    function cloneFind(id){ for (var i = 0; i < leads.length; i++) if (leads[i].id === id) return i; return -1; }
+    function cloneLeadLink(id, withName){
+      var i = cloneFind(id);
+      if (i < 0) return '<span class="cl-gone">' + dpEsc(id) + '</span>';   // deleted source: plain text, no broken link
+      return '<a class="cl-link" href="lead-detail.html?lead=' + encodeURIComponent(id) + '" onclick="openCloneTarget(\'' + id + '\');return false">' + id + (withName ? ' · ' + dpEsc(leads[i].name) : '') + '</a>';
+    }
+    function cloneActText(a){
+      var id = a.cloneOf || a.cloneTo;
+      return id ? dpEsc(a.text).replace(id, cloneLeadLink(id)) : a.text;
+    }
+    function clonedLeadsHtml(l){
+      var kids = CLONE.clonesOf(leads, l.id); if (!kids.length) return '';
+      return '<div class="dp-kpi-card"><div class="dp-kpi-head">Cloned leads <span class="dup-n">' + kids.length + '</span></div><div class="cl-list">' +
+        kids.map(function(k){ return '<div class="cl-list-r">' + cloneLeadLink(k.id) + '<span>' + dpEsc(k.owner) + ' · ' + dpEsc(k.createdOn || '') + '</span></div>'; }).join('') + '</div></div>';
+    }
+    function openCloneTarget(id){
+      var i = cloneFind(id); if (i < 0) return;
+      try { history.replaceState(null, '', 'lead-detail.html?lead=' + encodeURIComponent(id)); } catch (e) {}
+      openPanelFull(i);
+    }
+    function openCloneLead(){
+      if (selectedIdx < 0) return;
+      var l = leads[selectedIdx], p = clonePersona(), u = CLONE.userFor(p), st = CLONE.cloneStageFor(p);
+      document.getElementById('cloneSub').innerHTML = 'A new lead is created for <b>' + dpEsc(l.name) + '</b> (' + l.id + ') and linked back to this one. You do not need to capture the customer details again.';
+      document.getElementById('cloneStage').innerHTML = 'The new lead starts at <b>' + st + '</b> and is owned by you (' + dpEsc(u.name) + ', ' + u.role + ').';
+      document.getElementById('cloneErr').classList.remove('show');
+      cloneSetBusy(false);
+      document.getElementById('cloneOverlay').classList.add('show');
+      document.getElementById('cloneModal').classList.add('open');
+      setTimeout(function(){ document.getElementById('cloneOk').focus(); }, 50);
+    }
+    function closeCloneLead(){
+      if (cloneBusy) return;
+      document.getElementById('cloneOverlay').classList.remove('show');
+      document.getElementById('cloneModal').classList.remove('open');
+    }
+    function cloneSetBusy(b){
+      cloneBusy = b;
+      var ok = document.getElementById('cloneOk'); ok.disabled = b; document.getElementById('cloneCancel').disabled = b;
+      ok.innerHTML = b ? '<span class="cl-spin"></span>Cloning…' : 'Clone lead';
+    }
+    function cloneSave(c, srcId, srcAct){
+      try { var a = JSON.parse(localStorage.getItem(CLONE_KEY) || '[]'); a.push({ lead: c, src: srcId, act: srcAct }); localStorage.setItem(CLONE_KEY, JSON.stringify(a)); } catch (e) {}
+    }
+    // One transaction: build the clone and the source activity, then commit both or neither.
+    function runCloneLead(){
+      if (cloneBusy) return;   // double click: only one lead
+      var src = leads[selectedIdx]; if (!src) return;
+      document.getElementById('cloneErr').classList.remove('show');
+      cloneSetBusy(true);
+      setTimeout(function(){
+        try {
+          if (cloneFailNext) { cloneFailNext = false; throw new Error('Network error'); }
+          var p = clonePersona(), u = CLONE.userFor(p), now = new Date();
+          var c = CLONE.buildClone(src, { persona: p, user: u, now: now, id: CLONE.nextLeadId(leads, now.getFullYear()) });
+          var sa = CLONE.sourceActivity(src, c, u, now);
+          leads.unshift(c);
+          src.activities = src.activities || []; src.activities.unshift(sa);
+          cloneSave(c, src.id, sa);
+        } catch (e) {
+          cloneSetBusy(false);
+          document.getElementById('cloneErr').classList.add('show');
+          return;
+        }
+        cloneSetBusy(false); closeCloneLead();
+        if (typeof renderLeads === 'function') renderLeads();
+        openCloneTarget(c.id);
+        var t = document.getElementById('toast');
+        t.innerHTML = '<span class="material-symbols-outlined">check_circle</span>Lead cloned. You are now viewing the new lead.<a onclick="openCloneTarget(\'' + src.id + '\')">View original</a>';
+        t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 6000);
+      }, 700);
+    }
+    // Clones made earlier in this browser come back after a reload.
+    (function(){
+      var a; try { a = JSON.parse(localStorage.getItem(CLONE_KEY) || '[]'); } catch (e) { return; }
+      a.forEach(function(x){
+        if (cloneFind(x.lead.id) > -1) return;
+        leads.unshift(x.lead);
+        var s = cloneFind(x.src); if (s > -1) { leads[s].activities = leads[s].activities || []; leads[s].activities.unshift(x.act); }
+      });
+    })();
+
     function dupRec(l){ return (window.DUP && DUP.rec(l.id)) || null; }
     // Apply the stored decision to the lead (status, reason, link) and add the audit entry once.
     function dupSync(l){
@@ -3328,6 +3461,7 @@
     }
     function dupSectionHtml(l){
       if (!window.DUP) return '';
+      if (l.skipDuplicateCheck) { DUP.addCss(); return '<div class="dp-activity dup-sec"><div class="dp-act-header"><span class="dp-act-title">Duplicate leads</span></div><div class="dup-none"><span class="material-symbols-outlined">info</span><div><b>Duplicate check skipped</b><span>This lead was cloned from ' + l.clonedFromLeadId + ', so it is not checked as a duplicate.</span></div></div></div>'; }
       DUP.addCss();
       var r = dupRec(l) || { id:l.id, name:l.name, brand:'EXEED', phone:l.phone, email:l.email, eid:l.emiratesId, created:new Date().toISOString(), stage:l.stage };
       var g = dupRec(l) ? DUP.group(l.id) : [], me = DUP.status(l.id);
@@ -3517,9 +3651,9 @@
             {label:'Campaign Name', lock:true, val:'EV - Performance 2025'}
           ]},
           { title:'Vehicle', moreId:'intakeVehMore', fields:[
-            {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model), hint: b2b ? 'Main model. More than one model? List the others with quantities in Description (comments) below.' : ''}
+            {label:'Model', prop:'model', type:'lookup', val:l.model, ai: !!(l._aiFields && l._aiFields.model), hint: b2b ? 'Main model. More than one model? List the others with quantities in Comments below.' : ''}
           ].concat(b2b ? [{label:'Quantity', prop:'qty', type:'number', val:l.qty || '1', req:true, b2b:true},
-            {label:'Description (comments)', prop:'description', type:'textarea', val: l.description || '', req:true, b2b:true, ph:'e.g. 3 × EXEED LX, 2 × EXEED TXL', hint:'Call centre: add any extra models and quantities the customer needs.'}] : []), more:[
+            {label:'Comments', prop:'comments', type:'textarea', val: l.comments || '', b2b:true, ph:'e.g. 3 × EXEED LX, 2 × EXEED TXL', hint:'Call centre: if the customer needs more than one model, list each model and quantity here.'}] : []), more:[
             {label:'Brand', type:'select', val:'EXEED', opts:['EXEED','MHero','Lepas']},
             {label:'Class', type:'select', val:'SUV', opts:['SUV','Sedan','Crossover','EV']},
             {label:'Model Year', type:'select', val:'2026', opts:['2026','2025','2024']},
@@ -3529,7 +3663,7 @@
             {label:'Lead Type', type:'select', val:'Buy (New)', opts:['Buy (New)','Buy (Used)','Lease'], req:true},
             {label:'Lead Source', type:'lookup', val:l.source, req:true},
             {label:'Channel', prop:'channel', type:'lookup', val:l.channel, req:true, ai: !!(l._aiFields && l._aiFields.channel)}
-          ].concat(b2b ? [] : [
+          ].concat([
             {label:'Description', prop:'description', type:'textarea', val: l.description || ((l._aiFields && l._aiFields.description) ? (l.aiDescription||'') : ''), req:true, ai: !!(l._aiFields && l._aiFields.description)}
           ])},
           { title:'Organization', fields:[
@@ -3564,7 +3698,10 @@
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Rating</span><span class="dp-kpi-v">'+l.temp+'</span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Profile completion</span><span class="dp-kpi-v">'+l.profileComplete+'%</span></div>' +
         '<div class="dp-kpi-item"><span class="dp-kpi-l">Preferred channel</span><span class="dp-kpi-v">'+l.channel+' <span class="dp-kpi-sub">&middot; '+langAbbr+'</span></span></div>' +
+        (l.clonedFromLeadId ? '<div class="dp-kpi-item"><span class="dp-kpi-l">Cloned from</span><span class="dp-kpi-v">'+cloneLeadLink(l.clonedFromLeadId, true)+'</span></div>' : '') +
+        (l.waConversationId && l.clonedFromLeadId ? '<div class="dp-kpi-item"><span class="dp-kpi-l">WhatsApp conversation</span><span class="dp-kpi-v">Linked <span class="dp-kpi-sub">&middot; '+l.waConversationId+'</span></span></div>' : '') +
       '</div>';
+      html += clonedLeadsHtml(l);
       html += slaWidget(l, sd);
       html += '<div class="dp-ai-card">' +
         '<div class="dp-ai-header">' +
@@ -3585,7 +3722,7 @@
       l.activities.forEach(function(a) {
         html += '<div class="dp-act-item">' +
           '<span class="dp-act-type '+a.type+'">'+a.type.charAt(0).toUpperCase()+a.type.slice(1)+'</span>' +
-          '<div><div class="dp-act-text">'+a.text+'</div><div class="dp-act-time">'+a.time+'</div></div></div>';
+          '<div><div class="dp-act-text">'+(a.type === 'clone' ? cloneActText(a) : a.text)+'</div><div class="dp-act-time">'+a.time+'</div></div></div>';
       });
       html += '</div>';
       html += dupSectionHtml(l);
@@ -3871,8 +4008,8 @@
 
     // Outcomes grouped into Internal / External, per stage bucket.
     var laOutcomeGroups = {
-      sales: { Internal: ['Follow up', 'Return to call center', 'Transfer ownership'], External: ['WhatsApp', 'Email', 'Call', 'Disqualify'] },
-      yes:   { Internal: ['Transfer ownership'], External: ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'] }
+      sales: { Internal: ['Follow up', 'Return to call center', 'Transfer ownership', 'Clone lead'], External: ['WhatsApp', 'Email', 'Call', 'Disqualify'] },
+      yes:   { Internal: ['Transfer ownership', 'Clone lead'], External: ['Handover to showroom', 'Book test drive', 'Needs time', 'Not interested'] }
     };
     // Flat list of "action" (non-stage-routing) outcomes for submit/validation.
     var LA_MOVE_PREP = 'Move to Prep for delivery';
@@ -4557,6 +4694,7 @@
 
     function setLaOutcome(btn) {
       laOutcome = btn.getAttribute('data-out');
+      if (laOutcome === 'Clone lead') { laOutcome = null; closeLogActivity(); openCloneLead(); return; }
       if (laOutcome === 'Update') laOutcome = 'WhatsApp';
       if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: TD_TODAY, time: TD_NOW }; tdShowToday(); }
       // re-render the row: the Channel chip opens its channels beneath it, so classes alone are not enough
@@ -6323,7 +6461,7 @@
       ['clLang','clPrefChannel','clSource','clBrand','clModel','clShowroom','clSalesExec','clLeadType','clStage','clTemp','clCallStatus'].forEach(function(id){ var e=document.getElementById(id); if(e) e.selectedIndex=0; });
       document.getElementById('clError').style.display = 'none';
       var b2c = document.querySelector('input[name=clBiz][value=B2C]'); if (b2c) b2c.checked = true;
-      ['clContact'].forEach(function(id){ document.getElementById(id).value = ''; }); document.getElementById('clQty').value = '1';
+      ['clContact','clComments'].forEach(function(id){ document.getElementById(id).value = ''; }); document.getElementById('clQty').value = '1';
       ['clAccount','clIndustry','clEmirate'].forEach(function(id){ document.getElementById(id).selectedIndex = 0; });
       onBizTypeChange();
       onLeadSourceChange();
@@ -6342,7 +6480,6 @@
       sr.innerHTML = b2b ? B2B_LOCATIONS.map(function(x){ return '<option>' + x + '</option>'; }).join('') : CL_SHOWROOMS;
       document.getElementById('clShowroomLbl').textContent = b2b ? 'Location' : 'Assigned Showroom';
       document.getElementById('clModelHint').style.display = b2b ? '' : 'none';
-      document.getElementById('clDesc').placeholder = b2b ? 'Enquiry details. Need more than one model? List each model and quantity here.' : 'Free text — enquiry details, budget, timeline…';
     }
     function onLeadSourceChange() {
       var src = document.getElementById('clSource').value;
@@ -6453,7 +6590,7 @@
         fields.account = document.getElementById('clAccount').value; fields.company = fields.account;
         fields.contact = document.getElementById('clContact').value.trim() || name;
         fields.industry = document.getElementById('clIndustry').value; fields.emirate = document.getElementById('clEmirate').value;
-        fields.qty = document.getElementById('clQty').value; fields.fleetLoc = showroomVal; fields.emiratesId = '—';
+        fields.qty = document.getElementById('clQty').value; fields.comments = val('clComments'); fields.fleetLoc = showroomVal; fields.emiratesId = '—';
       }
       if (editingId) {
         var idx = -1;
