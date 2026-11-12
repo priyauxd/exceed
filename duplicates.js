@@ -228,7 +228,8 @@
     _close: close, _decide: decide, _onDone: null
   };
   if (!/lead-detail/.test(location.pathname)) {
-    var go = function () { mountTile(); setTimeout(mountTile, 400); setTimeout(mountTile, 1500); };
+    // Dashboards draw their sections late (slow networks too) — keep trying for up to 15 s.
+    var go = function () { var n = 0; (function tick() { mountTile(); if (!document.querySelector('.dup-tile') && ++n < 30) setTimeout(tick, 500); })(); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go();
   }
 })();
