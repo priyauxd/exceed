@@ -52,7 +52,12 @@
   function normPhone(p) { var d = String(p || '').replace(/\D/g, ''); if (!d) return ''; if (d.indexOf('00') === 0) d = d.slice(2); if (d.charAt(0) === '0') d = '971' + d.slice(1); return d; }
   function normEmail(e) { return String(e || '').trim().toLowerCase(); }
   function normEid(e) { return String(e || '').replace(/\D/g, ''); }
-  function rec(id) { for (var i = 0; i < POOL.length; i++) if (POOL[i].id === id) return POOL[i]; return null; }
+  // Latest contact details / stage saved from the lead page (edits made in another tab count too).
+  var LIVE = 'exeedDupLive1';
+  function live() { try { return JSON.parse(localStorage.getItem(LIVE) || '{}'); } catch (e) { return {}; } }
+  function saveLive(id, v) { var s = live(); s[id] = v; try { localStorage.setItem(LIVE, JSON.stringify(s)); } catch (e) {} }
+  function cur(o) { var v = live()[o.id]; if (!v) return o; var c = {}; for (var k in o) c[k] = o[k]; for (var j in v) c[j] = v[j]; return c; }
+  function rec(id) { for (var i = 0; i < POOL.length; i++) if (POOL[i].id === id) return cur(POOL[i]); return null; }
   function isOpen(r) { var d = decision(r.id); return !CLOSED.test(r.stage) && !(d && d.d === 'mark'); }
   function matchOn(a, b) {
     var on = [];
@@ -67,6 +72,7 @@
     var open = [], ignored = [];
     POOL.forEach(function (o) {
       if (o.id === r.id) return;
+      o = cur(o);
       var on = matchOn(r, o); if (!on.length) return;
       if (o.brand !== r.brand) ignored.push({ r: o, on: on, why: 'Other brand (' + o.brand + ')' });
       else if (!isOpen(o)) ignored.push({ r: o, on: on, why: (decision(o.id) || {}).d === 'mark' ? 'Disqualified · Duplicate' : o.stage });
@@ -159,7 +165,7 @@
   }
 
   window.DUP = {
-    POOL: POOL, ME: ME, rec: rec, check: check, decision: decision, canView: canView, open: open, reset: reset,
+    POOL: POOL, ME: ME, rec: rec, live: live, saveLive: saveLive, check: check, decision: decision, canView: canView, open: open, reset: reset,
     fmt: fmt, esc: esc, tags: tags, link: link, onList: onList, addCss: addCss,
     _close: close
   };

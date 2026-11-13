@@ -13,7 +13,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="duplicates.js?v=7"></script>
+  <script src="duplicates.js?v=8"></script>
   <script src="clone-lead.js?v=1"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -2888,6 +2888,7 @@
       }
       l[prop] = val;
       if (prop === 'industry') renderDetail(selectedIdx, currentStep);
+      if (/^(phone|email|emiratesId)$/.test(prop)) dupRefresh();
       renderLeads('all');
     }
 
@@ -3377,7 +3378,26 @@
       if (l._dupAud !== d.at) { l._dupAud = d.at; l.activities.unshift({ type:'note', text:'Disqualified as a duplicate of ' + d.of + ' (reason: Duplicate) · by ' + d.by, time: d.at }); }
     }
     // Record the check runs on: the sample record if there is one, otherwise the lead's own fields.
-    function dupSubject(l){ return dupRec(l) || { id:l.id, name:l.name, brand:'EXEED', phone:l.phone, email:l.email, eid:l.emiratesId }; }
+    function dupSubject(l){ var b = function(v){ return v && v !== '—' ? v : ''; };
+      return { id:l.id, name:l.name, brand:(dupRec(l) || {}).brand || 'EXEED', phone:b(l.phone), email:b(l.email), eid:b(l.emiratesId) }; }
+    // Save this lead's contact details and stage so other leads' checks (in any tab) use the latest values.
+    function dupSave(l){
+      if (!window.DUP || !l) return; var b = function(v){ return v && v !== '—' ? v : ''; };
+      var v = { phone:b(l.phone), email:b(l.email), eid:b(l.emiratesId) };
+      if (l.disqualified) v.stage = 'Disqualified'; else if (/^(Won|Lost|Closed)$/i.test(l.stage)) v.stage = l.stage;
+      var o = DUP.live()[l.id]; if (!o || JSON.stringify(o) !== JSON.stringify(v)) DUP.saveLive(l.id, v);
+    }
+    // Back in this tab after editing a matching lead elsewhere: re-check.
+    window.addEventListener('storage', function(e){ if (e.key === 'exeedDupLive1') dupRefresh(); });
+    window.addEventListener('focus', function(){ dupRefresh(); });
+    // Re-run the check after Mobile / Email / Emirates ID changes: the bar appears or clears without a full re-render.
+    function dupRefresh(){
+      var l = leads[selectedIdx], page = document.querySelector('#dpBody .dp-page'); if (!l || !page) return;
+      dupSave(l);
+      var old = page.querySelector(':scope > .dup-ntf'), h = dupNoticeHtml(l);
+      if (old) { if (h) old.outerHTML = h; else old.remove(); }
+      else if (h) page.insertAdjacentHTML('afterbegin', h);
+    }
     function dupCheck(){
       var l = leads[selectedIdx]; if (l && window.DUP) DUP.open(dupSubject(l));
     }
@@ -3394,7 +3414,7 @@
       var sd = stepDetails[stepIdx];
       var slaBoxClass = l.slaClass === 'brch' ? 'danger' : (l.slaClass === 'wrn' ? 'warn' : '');
 
-      dupSync(l);
+      dupSync(l); dupSave(l);
       var html = '<div class="dp-page">' + dupNoticeHtml(l);
 
       // Lead identity card — name + badges on line 1, owner/location on line 2, quick fields top-right, KPIs below
@@ -3551,7 +3571,7 @@
             {label:'Nationality', type:'lookup', val:'UAE'}
           ] : [
             {label:'WhatsApp Number', val:l.phone},
-            {label:'Emirates ID', val:l.emiratesId},
+            {label:'Emirates ID', prop:'emiratesId', val:l.emiratesId},
             {label:'Nationality', type:'lookup', val:'UAE'},
             {label:'Campaign Name', lock:true, val:'EV - Performance 2025'}
           ]},
@@ -6603,6 +6623,14 @@
       });
     }, 1000);
 
+    // Edits saved from another tab (contact details, disqualified) apply to the leads here too.
+    (function(){
+      if (!window.DUP) return; var L = DUP.live();
+      leads.forEach(function(l){ var v = L[l.id]; if (!v) return;
+        l.phone = v.phone || '—'; l.email = v.email || '—'; l.emiratesId = v.eid || '—';
+        if (v.stage === 'Disqualified' && !l.disqualified) { l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true; }
+      });
+    })();
     // Duplicate-rule sample leads that aren't in the list open by id from the dashboards.
     (function(){
       try {
