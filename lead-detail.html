@@ -1730,7 +1730,7 @@
 
     /* Clone lead (MAI-4768) */
     .dp-act-type.clone { background: var(--blue-soft); color: var(--blue); }
-    .dp-act-text a.cl-link, .dp-kpi-v a.cl-link, .cl-list a.cl-link { color: var(--blue); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+    .dp-act-text a.cl-link, .dp-kpi-v a.cl-link, .cl-list a.cl-link, .cl-prev a.cl-link { color: #0f6cbd; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
     .dp-act-text a.cl-link:hover, .dp-kpi-v a.cl-link:hover, .cl-list a.cl-link:hover { text-decoration: underline; }
     .dp-kpi-v .cl-gone { font-family: 'SF Mono','Cascadia Code',Consolas,monospace; font-weight: 600; color: var(--ink-secondary); }
     .cl-list { display: flex; flex-direction: column; }
@@ -1740,6 +1740,11 @@
     .cl-modal { width: 440px; text-align: start; }
     .cl-modal .confirm-ic { margin: 0 0 10px; }
     .cl-modal .confirm-title { text-align: start; }
+    .cl-modal .confirm-text b { white-space: nowrap; }
+    .cl-prev { margin-top: 14px; padding: 4px 12px; border: 1px solid var(--border-soft); border-radius: 10px; background: var(--surface-2, #f7f8fa); }
+    .cl-prev-h { padding: 6px 0 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
+    .cl-modal .confirm-ic.ok { background: var(--green-soft); }
+    .cl-modal .confirm-ic.ok .material-symbols-outlined { color: var(--green); }
     .cl-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0 0; }
     .cl-col h4 { margin: 0 0 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-muted); }
     .cl-col ul { margin: 0; padding-inline-start: 16px; font-size: 12px; line-height: 1.6; color: var(--ink-secondary); }
@@ -2194,18 +2199,14 @@
   <div class="create-overlay" id="confirmOverlay" onclick="closeConfirm()"></div>
   <div class="confirm-overlay" id="cloneOverlay" onclick="closeCloneLead()"></div>
   <div class="confirm-modal cl-modal" id="cloneModal" role="dialog" aria-modal="true" aria-labelledby="cloneTitle">
-    <div class="confirm-ic neutral"><span class="material-symbols-outlined">content_copy</span></div>
+    <div class="confirm-ic neutral" id="cloneIc"><span class="material-symbols-outlined">content_copy</span></div>
     <div class="confirm-title" id="cloneTitle">Clone this lead?</div>
     <div class="confirm-text" id="cloneSub"></div>
-    <div class="cl-cols">
-      <div class="cl-col"><h4>Copied or linked</h4><ul><li>Customer details and lead fields</li><li>Lead source</li><li>Same Account / Contact</li><li>WhatsApp conversation</li><li>Link to this lead</li></ul></div>
-      <div class="cl-col"><h4>Not copied</h4><ul><li>Discovery questions, trade-in</li><li>Opportunity, test drives, proposals</li><li>Activities and timeline</li><li>Owner (you become the owner)</li><li>SLA (starts fresh)</li></ul></div>
-    </div>
-    <div class="cl-stage"><span class="material-symbols-outlined">flag</span><span id="cloneStage"></span></div>
+    <div class="cl-prev" id="clonePrev"></div>
     <div class="cl-err" id="cloneErr" role="alert"><span class="material-symbols-outlined">error</span><span>Could not clone the lead.</span><button type="button" onclick="runCloneLead()">Retry</button></div>
     <div class="confirm-actions">
-      <button class="cp-btn" id="cloneCancel" onclick="closeCloneLead()">Cancel</button>
-      <button class="cp-btn primary" id="cloneOk" onclick="runCloneLead()">Clone lead</button>
+      <button class="cp-btn" id="cloneCancel" onclick="cloneDone ? cloneViewOriginal() : closeCloneLead()">Cancel</button>
+      <button class="cp-btn primary" id="cloneOk" onclick="cloneDone ? closeCloneLead() : runCloneLead()">Clone lead</button>
     </div>
   </div>
 
@@ -3280,7 +3281,15 @@
     /* ── Lead duplication (MAI-4776) — rules and data in duplicates.js ── */
 
     /* ── Clone lead (MAI-4768) — rules in clone-lead.js ── */
-    var CLONE_KEY = 'exeedClones1', cloneBusy = false, cloneFailNext = false;
+    var CLONE_KEY = 'exeedClones1', cloneBusy = false, cloneFailNext = false, cloneDone = null;
+    // Clones already made from this lead, shown in the dialog so nobody clones twice by mistake.
+    function cloneShowPrev(l){
+      var kids = l ? CLONE.clonesOf(leads, l.id) : [], host = document.getElementById('clonePrev');
+      host.innerHTML = kids.length ? '<div class="cl-prev-h">Already cloned <span class="dup-n">' + kids.length + '</span></div>' +
+        kids.map(function(k){ return '<div class="cl-list-r"><a class="cl-link" onclick="closeCloneLead();openCloneTarget(\'' + k.id + '\')">' + k.id + '</a><span>' + dpEsc(k.owner) + ' · ' + dpEsc(k.createdOn || '') + '</span></div>'; }).join('') : '';
+      host.style.display = kids.length ? '' : 'none';
+    }
+    function cloneViewOriginal(){ var id = cloneDone && cloneDone.src; closeCloneLead(); if (id) openCloneTarget(id); }
     function clonePersona(){ var v = ''; try { v = localStorage.getItem('exceed_persona') || ''; } catch (e) {} return v || 'call-center-agent.html'; }
     function cloneFind(id){ for (var i = 0; i < leads.length; i++) if (leads[i].id === id) return i; return -1; }
     function cloneLeadLink(id, withName){
@@ -3306,8 +3315,13 @@
       if (selectedIdx < 0) return;
       var l = leads[selectedIdx], p = clonePersona(), u = CLONE.userFor(p), st = CLONE.cloneStageFor(p);
       document.getElementById('cloneSub').innerHTML = 'A new lead is created for <b>' + dpEsc(l.name) + '</b> (' + l.id + ') and linked back to this one. You do not need to capture the customer details again.';
-      document.getElementById('cloneStage').innerHTML = 'The new lead starts at <b>' + st + '</b> and is owned by you (' + dpEsc(u.name) + ', ' + u.role + ').';
       document.getElementById('cloneErr').classList.remove('show');
+      cloneDone = null;
+      cloneShowPrev(l);
+      document.getElementById('cloneTitle').textContent = 'Clone this lead?';
+      document.getElementById('cloneIc').innerHTML = '<span class="material-symbols-outlined">content_copy</span>';
+      document.getElementById('cloneIc').classList.remove('ok');
+      document.getElementById('cloneCancel').textContent = 'Cancel';
       cloneSetBusy(false);
       document.getElementById('cloneOverlay').classList.add('show');
       document.getElementById('cloneModal').classList.add('open');
@@ -3321,7 +3335,7 @@
     function cloneSetBusy(b){
       cloneBusy = b;
       var ok = document.getElementById('cloneOk'); ok.disabled = b; document.getElementById('cloneCancel').disabled = b;
-      ok.innerHTML = b ? '<span class="cl-spin"></span>Cloning…' : 'Clone lead';
+      ok.innerHTML = b ? '<span class="cl-spin"></span>Cloning…' : (cloneDone ? 'OK' : 'Clone lead');
     }
     function cloneSave(c, srcId, srcAct){
       try { var a = JSON.parse(localStorage.getItem(CLONE_KEY) || '[]'); a.push({ lead: c, src: srcId, act: srcAct }); localStorage.setItem(CLONE_KEY, JSON.stringify(a)); } catch (e) {}
@@ -3346,11 +3360,11 @@
           document.getElementById('cloneErr').classList.add('show');
           return;
         }
-        cloneSetBusy(false); closeCloneLead();
         if (typeof renderLeads === 'function') renderLeads();
         openCloneTarget(c.id);
+        cloneSetBusy(false); closeCloneLead();
         var t = document.getElementById('toast');
-        t.innerHTML = '<span class="material-symbols-outlined">check_circle</span>Lead cloned. You are now viewing the new lead.<a onclick="openCloneTarget(\'' + src.id + '\')">View original</a>';
+        t.innerHTML = '<span class="material-symbols-outlined">check_circle</span><span>The lead ' + dpEsc(src.name) + ' (' + src.id + ') is cloned. New lead is ' + c.id + '.</span><a onclick="openCloneTarget(\'' + src.id + '\')">View original</a>';
         t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 6000);
       }, 700);
     }
