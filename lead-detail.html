@@ -13,7 +13,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="duplicates.js?v=6"></script>
+  <script src="duplicates.js?v=7"></script>
   <script src="clone-lead.js?v=1"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -1221,14 +1221,6 @@
     .fb-ic:hover { background:#e9eef6; color:var(--blue); }
     .fb-ic .material-symbols-outlined { font-size:17px; }
     .fb-ic.sim { color:var(--ink-muted); }
-    .pa-list { margin-top:-4px; border:1px solid var(--border); border-radius:6px; background:var(--surface); padding:2px 8px 2px 14px; }
-    .pa-row { display:flex; align-items:center; min-height:36px; }
-    .pa-row + .pa-row { border-top:1px solid var(--border-soft); }
-    .pa-row .fb-acts { position:static; transform:none; margin-inline-start:auto; }
-    .pa-n { font-size:12px; color:var(--ink); }
-    .pa-row.off .pa-n { color:var(--ink-muted); }
-    .pa-lk { display:inline-flex; align-items:center; gap:4px; margin-inline-end:4px; font-size:11.5px; color:var(--ink-muted); white-space:nowrap; }
-    .pa-lk .material-symbols-outlined { font-size:15px; }
     .zs-empty { display:flex; align-items:center; gap:8px; padding:16px; border:1px dashed var(--border); border-radius:10px; font-size:12.5px; color:var(--ink-muted); }
     .zs-empty .material-symbols-outlined { font-size:20px; }
 
@@ -1722,15 +1714,10 @@
     /* Duplicate leads widget (MAI-4776) — lead page, right column */
     .dup-row-tag { display:inline-flex; align-items:center; gap:3px; margin-top:2px; font-size:10.5px; font-weight:600; color:#b54708; background:#fff8eb; border:1px solid #fedf89; border-radius:10px; padding:0 7px 0 5px; line-height:17px; white-space:nowrap; }
     .dup-row-tag .material-symbols-outlined { font-size:13px; }
-    .dup-sec .dp-act-header { align-items:center; } .dup-n { display:inline-block; min-width:18px; text-align:center; font-size:10.5px; background:#f2f4f7; color:#475467; border-radius:999px; padding:0 6px; margin-inline-start:4px; }
-    .dup-list { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
-    .dup-row { display:block; border:1px solid #eef0f3; border-radius:8px; padding:8px 10px; text-decoration:none; color:inherit; } .dup-row:hover { border-color:#98a6b6; background:#fafbfc; }
-    .dup-row.me { background:#f8fafc; cursor:default; }
-    .dup-r1 { display:flex; align-items:center; justify-content:space-between; gap:6px; } .dup-id { font:600 12px ui-monospace,Menlo,monospace; color:#17293d; }
-    .dup-r2 { font-size:11.5px; color:#667085; margin-top:3px; }
-    .dup-rev { margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; border:1px solid #17293d; background:#17293d; color:#fff; border-radius:6px; padding:8px; font:600 12.5px inherit; cursor:pointer; } .dup-rev:hover { background:#0f1d2c; } .dup-rev .material-symbols-outlined { font-size:17px; }
-    .dup-none { display:flex; gap:8px; align-items:flex-start; margin-top:6px; font-size:12px; color:#475467; } .dup-none .material-symbols-outlined { color:#0e7a3e; font-size:18px; } .dup-none b { display:block; color:#1f2937; } .dup-none span { display:block; }
-    .dup-ign { margin-top:8px; border-top:1px dashed #e4e7ec; padding-top:6px; font-size:11.5px; color:#667085; } .dup-ign-h { font-weight:600; color:#475467; margin-bottom:2px; } .dup-ign a { color:#2a6797; }
+    .dup-n { display:inline-block; min-width:18px; text-align:center; font-size:10.5px; background:#f2f4f7; color:#475467; border-radius:999px; padding:0 6px; margin-inline-start:4px; }
+    .dup-ntf { display:flex; align-items:center; gap:10px; background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:9px 12px; margin-bottom:10px; font-size:12.5px; line-height:1.4; }
+    .dup-ntf > .material-symbols-outlined { font-size:20px; color:#b54708; } .dup-ntf > span:nth-child(2) { flex:1; } .dup-ntf b { font-weight:700; }
+    .dup-ntf-btn { display:inline-flex; align-items:center; gap:4px; border:1px solid #17293d; background:#fff; color:#17293d; border-radius:6px; padding:5px 12px; font:600 12px inherit; cursor:pointer; white-space:nowrap; } .dup-ntf-btn:hover { background:#17293d; color:#fff; } .dup-ntf-btn .material-symbols-outlined { font-size:16px; }
     /* Clone lead (MAI-4768) */
     .dp-act-type.clone { background: var(--blue-soft); color: var(--blue); }
     .dp-act-text a.cl-link, .dp-kpi-v a.cl-link, .cl-list a.cl-link, .cl-prev a.cl-link { color: #0f6cbd; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
@@ -3379,54 +3366,28 @@
       });
     })();
 
-    /* ── Duplicate leads (MAI-4776) — rules and data in duplicates.js; shown only in the right-column widget ── */
+    /* ── Duplicate leads (MAI-4776) — rules and data in duplicates.js; Check notification + pop-up, no widget ── */
     function dupRec(l){ return (window.DUP && DUP.rec(l.id)) || null; }
+    // A matching lead disqualified from the pop-up: apply it when that lead is shown.
     function dupSync(l){
       if (!window.DUP) return;
-      var d = DUP.decision(l.id); if (!d) return;
+      var d = DUP.decision(l.id); if (!d || d.d !== 'mark') return;
+      l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true; l.disqReason = 'Duplicate'; l.dupOf = d.of;
       l.activities = l.activities || [];
-      if (d.d === 'mark') {
-        l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true; l.disqReason = 'Duplicate'; l.dupOf = d.of;
-      }
-      if (l._dupAud !== d.at + d.d) {
-        l._dupAud = d.at + d.d;
-        l.activities.unshift({ type:'note', text: d.d === 'mark'
-          ? 'Duplicate check · Marked as duplicate of ' + d.of + ' · Disqualified (reason: Duplicate) · by ' + d.by
-          : 'Duplicate check · Continue — kept as a separate lead · by ' + d.by, time: d.at });
-      }
+      if (l._dupAud !== d.at) { l._dupAud = d.at; l.activities.unshift({ type:'note', text:'Disqualified as a duplicate of ' + d.of + ' (reason: Duplicate) · by ' + d.by, time: d.at }); }
     }
-    function dupReview(){
-      var l = leads[selectedIdx];
-      DUP.review(l.id, function(v){
-        renderDetail(selectedIdx, currentStep);
-        try { renderLeads(); } catch(e){}
-        showToast(v.d === 'mark' ? 'Marked as duplicate of ' + v.of + ' · lead disqualified' : 'Kept as a separate lead · potential duplicate cleared');
-      });
+    // Record the check runs on: the sample record if there is one, otherwise the lead's own fields.
+    function dupSubject(l){ return dupRec(l) || { id:l.id, name:l.name, brand:'EXEED', phone:l.phone, email:l.email, eid:l.emiratesId }; }
+    function dupCheck(){
+      var l = leads[selectedIdx]; if (l && window.DUP) DUP.open(dupSubject(l));
     }
-    function dupSectionHtml(l){
-      if (!window.DUP) return '';
-      if (l.skipDuplicateCheck) { DUP.addCss(); return '<div class="dp-activity dup-sec"><div class="dp-act-header"><span class="dp-act-title">Duplicate leads</span></div><div class="dup-none"><span class="material-symbols-outlined">info</span><div><b>Duplicate check skipped</b><span>This lead was cloned from ' + l.clonedFromLeadId + ', so it is not checked as a duplicate.</span></div></div></div>'; }
-      DUP.addCss();
-      var r = dupRec(l) || { id:l.id, name:l.name, brand:'EXEED', phone:l.phone, email:l.email, eid:l.emiratesId, created:new Date().toISOString(), stage:l.stage };
-      var g = dupRec(l) ? DUP.group(l.id) : [], me = DUP.status(l.id);
-      var head = '<div class="dp-act-header"><span class="dp-act-title">Duplicate leads' + (g.length ? ' <span class="dup-n">' + (g.length - 1) + '</span>' : '') + '</span>' + (me ? DUP.chip(me.k === 'potential' ? Object.assign({}, me, { t:'Potential duplicate lead' }) : me) : '') + '</div>';
-      if (!g.length) {
-        var ig = DUP.check(r).ignored;
-        return '<div class="dp-activity dup-sec">' + head + '<div class="dup-none"><span class="material-symbols-outlined">check_circle</span><div><b>No duplicates found</b><span>Checked against open ' + r.brand + ' leads on Email, Phone and EID.</span></div></div>' +
-          (ig.length ? '<div class="dup-ign"><div class="dup-ign-h">Not counted</div>' + ig.map(function(m){ return '<div class="dup-ign-r"><a href="' + DUP.link(m.r.id) + '">' + m.r.id + '</a> · ' + DUP.esc(m.why) + ' · matched on ' + m.on.join(', ') + '</div>'; }).join('') + '</div>' : '') + '</div>';
-      }
-      var mine = DUP.check(r).open.reduce(function(a, m){ a[m.r.id] = m.on; return a; }, {});
-      var rows = g.map(function(x){
-        var s = x.id === l.id ? { k:'me', t:'This lead', ic:'person' } : (DUP.status(x.id) || { k:'kept', t:'Open', ic:'radio_button_checked' });
-        var on = mine[x.id] || [];
-        var orig = DUP.status(x.id); orig = orig && orig.k === 'original';
-        return '<a class="dup-row' + (x.id === l.id ? ' me' : '') + '" href="' + (x.id === l.id ? '#' : DUP.link(x.id)) + '"' + (x.id === l.id ? ' onclick="return false"' : '') + '>' +
-          '<div class="dup-r1"><span class="dup-id">' + x.id + '</span>' + DUP.chip(s) + (x.id !== l.id && orig ? '' : '') + '</div>' +
-          '<div class="dup-r2">' + DUP.esc(x.name) + ' · ' + DUP.esc(x.source) + ' · ' + DUP.fmt(x.created) + '</div>' +
-          '<div class="dup-r2">' + DUP.esc(x.stage === 'Disqualified' && (DUP.decision(x.id) || {}).d === 'mark' ? 'Disqualified · Duplicate' : (DUP.decision(x.id) || {}).d === 'mark' ? 'Disqualified · Duplicate' : x.stage) + ' · ' + DUP.esc(x.owner) + (on.length ? ' · ' + DUP.tags(on) : '') + '</div></a>';
-      }).join('');
-      return '<div class="dp-activity dup-sec">' + head + '<div class="dup-list">' + rows + '</div>' +
-        (me && me.k === 'potential' ? '<button class="dup-rev" onclick="dupReview()"><span class="material-symbols-outlined">fact_check</span>Review · Mark as duplicate or Continue</button>' : '') + '</div>';
+    // Notification at the top of the form (where "Review" used to be): prompt to check, with a Check button.
+    function dupNoticeHtml(l){
+      if (!window.DUP || l.skipDuplicateCheck || l.disqualified) return '';
+      // Only leads that match another open lead show the message.
+      var n = DUP.check(dupSubject(l)).open.length; if (!n) return '';
+      return '<div class="dup-ntf" role="alert"><span class="material-symbols-outlined">warning</span><span><b>' + (n === 1 ? 'Possible duplicate found.' : n + ' possible duplicates found.') + '</b> Check before you continue.</span>' +
+        '<button class="dup-ntf-btn" onclick="dupCheck()"><span class="material-symbols-outlined">search</span>Check</button></div>';
     }
     function renderDetail(idx, stepIdx) {
       var l = leads[idx];
@@ -3434,7 +3395,7 @@
       var slaBoxClass = l.slaClass === 'brch' ? 'danger' : (l.slaClass === 'wrn' ? 'warn' : '');
 
       dupSync(l);
-      var html = '<div class="dp-page">';
+      var html = '<div class="dp-page">' + dupNoticeHtml(l);
 
       // Lead identity card — name + badges on line 1, owner/location on line 2, quick fields top-right, KPIs below
       var ownerInit = l.owner.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
@@ -3647,7 +3608,6 @@
       '</div>';
       html += clonedLeadsHtml(l);
       html += slaWidget(l, sd);
-      html += dupSectionHtml(l);
       html += '<div class="dp-ai-card">' +
         '<div class="dp-ai-header">' +
           '<div class="dp-ai-label"><span class="material-symbols-outlined">auto_awesome</span> AI &middot; NEXT BEST ACTION</div>' +
@@ -5735,27 +5695,25 @@
     // locked buttons are greyed with a refresh icon that simulates the milestone.
     function docName(k){ return ZS_DEFS.filter(function(x){ return x.k === k; })[0].name; }
     function fbDocIcons(k, label){
-      return '<button class="fb-ic" onclick="event.stopPropagation();docAct(\'' + k + '\',\'download\')" title="Download" aria-label="Download ' + label + '"><span class="material-symbols-outlined">download</span></button>' +
-        '<button class="fb-ic" onclick="event.stopPropagation();docAct(\'' + k + '\',\'send\')" title="Send to Zoho Sign for approval" aria-label="Send ' + label + ' to Zoho Sign for approval"><span class="material-symbols-outlined">draw</span></button>';
+      return '<button class="fb-ic" onclick="event.stopPropagation();docAct(\'' + k + '\',\'download\')" title="Download ' + label + '" aria-label="Download ' + label + '"><span class="material-symbols-outlined">download</span></button>' +
+        '<button class="fb-ic" onclick="event.stopPropagation();docAct(\'' + k + '\',\'send\')" title="Send ' + label + ' to Zoho Sign for approval" aria-label="Send ' + label + ' to Zoho Sign for approval"><span class="material-symbols-outlined">draw</span></button>';
     }
     function fmtBtn(o){
-      var acts = o.lock ? (o.sim ? simBtn(o.sim) : '') : (o.doc ? fbDocIcons(o.doc, o.label) : '');
+      var acts = (o.lock ? (o.sim ? simBtn(o.sim) : '') : (o.doc ? fbDocIcons(o.doc, docName(o.doc)) : '')) + (o.extra || '');
       var main = o.lock
         ? '<span class="fb-main" title="' + o.lock + '"><span class="material-symbols-outlined">' + o.icon + '</span>' + o.label + '</span>'
-        : '<button class="fb-main" onclick="' + (o.click || (o.doc ? 'docAct(\'' + o.doc + '\',\'download\')' : '')) + '"' + (o.doc ? ' title="Download"' : '') + (o.exp != null ? ' aria-expanded="' + o.exp + '"' : '') + '><span class="material-symbols-outlined">' + o.icon + '</span>' + o.label + (o.exp != null ? '<span class="material-symbols-outlined fb-car">' + (o.exp ? 'expand_less' : 'expand_more') + '</span>' : '') + '</button>';
+        : '<button class="fb-main" onclick="' + (o.click || (o.doc ? 'docAct(\'' + o.doc + '\',\'download\')' : '')) + '"' + (o.doc ? ' title="' + (o.tip || 'Download') + '"' : '') + (o.exp != null ? ' aria-expanded="' + o.exp + '"' : '') + '><span class="material-symbols-outlined">' + o.icon + '</span>' + o.label + (o.exp != null ? '<span class="material-symbols-outlined fb-car">' + (o.exp ? 'expand_less' : 'expand_more') + '</span>' : '') + '</button>';
       return '<div class="fmt-btn' + (o.lock ? ' off' : '') + (o.span ? ' conf-span' : '') + '">' + main + (acts ? '<span class="fb-acts">' + acts + '</span>' : '') + '</div>';
     }
+    // Purchase agreement is one button: it acts on the agreement that is due —
+    // Purchase Agreement 1 until F&O approves the sales order, then Purchase Agreement 2.
     function docBtnsHtml(l){
       var b = function(k, label, icon){ var lk = zsLock(l, k); return fmtBtn(lk ? { label:label, icon:icon, lock:lk, sim:'pay' } : { label:label, icon:icon, doc:k }); };
-      var open = !!l._paOpen;
-      var pa = fmtBtn({ label:'Purchase agreement', icon:'description', click:'leads[selectedIdx]._paOpen=!leads[selectedIdx]._paOpen;renderDetail(selectedIdx,currentStep)', span:true, exp:open });
-      var sub = open ? '<div class="pa-list conf-span">' + ['pa1','pa2','doc'].map(function(k){
-        var lk = zsLock(l, k);
-        return '<div class="pa-row' + (lk ? ' off' : '') + '"><span class="pa-n">' + docName(k) + '</span><span class="fb-acts">' +
-          (lk ? '<span class="pa-lk"><span class="material-symbols-outlined">lock</span>' + lk + '</span>' + simBtn(k === 'pa2' ? 'so' : 'pay') : fbDocIcons(k, docName(k))) +
-          '</span></div>';
-      }).join('') + '</div>' : '';
-      return b('prop', 'Proposal', 'download') + b('sq', 'Sales Quotation', 'download') + pa + sub;
+      var pk = zsLock(l, 'pa2') ? 'pa1' : 'pa2', plk = zsLock(l, pk);
+      var pa = plk ? fmtBtn({ label:'Purchase agreement', icon:'description', lock:plk, sim:'pay', span:true })
+        : fmtBtn({ label:'Purchase agreement', icon:'description', doc:pk, span:true, tip:'Download ' + docName(pk),
+            extra: pk === 'pa1' ? simBtn('so') : '' });
+      return b('prop', 'Proposal', 'download') + b('sq', 'Sales Quotation', 'download') + pa;
     }
     // Download or send: generates the file from the latest data when there is no draft to use.
     function docAct(k, mode){
@@ -6621,7 +6579,11 @@
           activities: [{ type: 'email', text: desc, time: '2026-07-05 12:00' }] };
         for (var q in fields) newLead[q] = fields[q];
         leads.unshift(newLead);
+        newLead.dupBrand = brand;
         renderLeads('all'); updateLeadCount(); closeCreateLead(); openPanel(0);
+        // First save: run the duplicate check and open the pop-up automatically.
+        if (window.DUP) { var dr = { id:newLead.id, name:newLead.name, brand:brand.toUpperCase(), phone:newLead.phone, email:newLead.email, eid:'' };
+          setTimeout(function(){ DUP.open(dr); }, 350); }
       }
     }
 
