@@ -1878,11 +1878,12 @@
         ['Case', function (r) { return L(r.id); }], ['Title', function (r) { return T(r.title); }], ['Type', function (r) { return T(r.type); }], ['Priority', function (r) { return T(r.priority); }],
         ['Created On', function (r) { return T(r.created); }], ['Status', function (r) { return pill(r.status === 'In progress' ? 'Pending — in progress' : r.status); }]], A.x.cases, { refresh: true });
       // "Show" choice field (All / Sales 360° / Service 360°) — standard choice field; a form script shows/hides the sections
-      var f = /^(sales|service)$/.test(state.c360f) ? state.c360f : 'all', opts = [['all', 'All'], ['sales', 'Sales 360°'], ['service', 'Service 360°']];
-      var ttl = { all: ['Customer 360', 'Sales and service for this ' + (co ? 'account' : 'customer')], sales: ['Sales 360°', 'Leads, test drives, surveys and sales orders'], service: ['Service 360°', (co ? 'Devices' : 'Device registrations') + ', appointments, contracts and cases'] }[f];
+      var f = /^(sales|service|leads)$/.test(state.c360f) ? state.c360f : 'all', opts = [['all', 'All'], ['leads', 'Leads'], ['sales', 'Sales 360°'], ['service', 'Service 360°']];
+      var ttl = { all: ['Customer 360', 'Sales and service for this ' + (co ? 'account' : 'customer')], leads: ['Leads', 'All leads for this ' + (co ? 'account' : 'customer') + ', open and closed'], sales: ['Sales 360°', 'Leads, test drives, surveys and sales orders'], service: ['Service 360°', (co ? 'Devices' : 'Device registrations') + ', appointments, contracts and cases'] }[f];
       var show = '<div class="card d3-show" id="secShow"><div class="d3-show-t"><span class="d3-sec-t">' + ttl[0] + '</span><span class="d3-sec-s">' + ttl[1] + '</span></div>' +
         '<div class="dp-if"><label class="dp-if-label" for="c360Show">Show</label><span class="dp-if-lookup"><select id="c360Show" class="dp-if-input dp-if-select" onchange="event.stopPropagation();state.c360f=this.value;render()">' +
         opts.map(function (o) { return '<option value="' + o[0] + '"' + (f === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select><span class="material-symbols-outlined dp-if-lk">expand_more</span></span></div></div>';
+      if (f === 'leads') return '<div class="stack d3">' + show + '<span id="grpSales" class="anchor"></span>' + leads + '</div>';
       return '<div class="stack d3">' + show +
         (f === 'service' ? '' : (f === 'sales' ? '<span id="grpSales" class="anchor"></span>' : sec('grpSales', 'Sales 360°', 'Leads, test drives, surveys and sales orders')) + leads + tds + sx + so) +
         (f === 'sales' ? '' : (f === 'service' ? '<span id="grpService" class="anchor"></span>' : sec('grpService', 'Service 360°', (co ? 'Devices' : 'Device registrations') + ', appointments, contracts and cases')) + '<span id="secVeh" class="anchor"></span>' + veh + up + past +
