@@ -13,7 +13,6 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="duplicates.js?v=5"></script>
   <script src="clone-lead.js?v=1"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -1625,39 +1624,6 @@
     .dp-check-info:hover .dp-check-tip, .dp-check-info:focus .dp-check-tip, .dp-check-info.open .dp-check-tip { opacity: 1; visibility: visible; }
 
     /* Recent activity */
-    .dup-bar { display:flex; align-items:center; gap:10px; border-radius:8px; padding:9px 12px; margin-bottom:10px; font-size:12.5px; line-height:1.4; }
-    .dup-bar > .material-symbols-outlined { font-size:20px; } .dup-bar > div { flex:1; }
-    .dup-bar.warn { background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; } .dup-bar.warn > .material-symbols-outlined { color:#b54708; }
-    .dup-bar.bad { background:#fef3f2; border:1px solid #fecdca; color:#7a271a; } .dup-bar.bad > .material-symbols-outlined { color:#b42318; }
-    .dup-bar.sticky { position:sticky; top:0; z-index:21; margin-bottom:0; border-radius:8px 8px 0 0; box-shadow:0 2px 8px rgba(16,24,40,.08); }
-    .dup-bar-lnk { border:none; background:none; padding:0; color:#17293d; font:inherit; font-weight:700; text-decoration:underline; cursor:pointer; }
-    .dup-bar-btn.bad { background:#b42318; border-color:#b42318; color:#fff; } .dup-bar-btn.bad:hover { background:#912018; color:#fff; }
-    .dup-list-bar { margin:0 24px 10px; }
-    .dup-row-tag { display:inline-flex; align-items:center; gap:3px; margin-top:2px; font-size:10.5px; font-weight:600; color:#b54708; background:#fff8eb; border:1px solid #fedf89; border-radius:10px; padding:0 7px 0 5px; line-height:17px; white-space:nowrap; }
-    .dup-row-tag .material-symbols-outlined { font-size:13px; }
-    .dup-alert { display:block; padding:0; } .dup-alert.stuck .dup-al-b { display:none; }
-    .dup-bar.ok { background:#ecfdf3; border:1px solid #abefc6; color:#054f31; } .dup-bar.ok > .material-symbols-outlined { color:#067647; }
-    .dup-al-h { display:flex; align-items:center; gap:10px; padding:9px 12px; } .dup-al-h > .material-symbols-outlined { font-size:20px; color:#b54708; } .dup-al-h > div { flex:1; }
-    .dup-al-b { border-top:1px solid #fedf89; background:#fff; border-radius:0 0 8px 8px; padding:4px 12px 8px; }
-    .dup-al-tb { width:100%; border-collapse:collapse; font-size:12px; color:#1f2937; }
-    .dup-al-tb th { text-align:start; font-size:10.5px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:#667085; padding:6px 8px; border-bottom:1px solid #eaecf0; }
-    .dup-al-tb td { padding:7px 8px; border-bottom:1px solid #f2f4f7; vertical-align:middle; } .dup-al-tb td.nw { white-space:nowrap; }
-    .dup-al-tb a { color:#17293d; font-weight:600; } .dup-orig { font-size:10.5px; font-weight:600; color:#344054; background:#f2f4f7; border-radius:10px; padding:1px 7px; margin-inline-start:4px; }
-    .dup-al-n { margin:8px 0 0; font-size:11.5px; color:#475467; }
-    .dup-bar a { color:inherit; font-weight:700; } .dup-bar-s { color:#93370d; opacity:.8; }
-    .dup-bar-btn { display:inline-flex; align-items:center; gap:4px; border:1px solid currentColor; background:#fff; color:#17293d; border-color:#17293d; border-radius:6px; padding:5px 12px; font:600 12px inherit; cursor:pointer; white-space:nowrap; }
-    .dup-bar-btn:hover:not(:disabled) { background:#17293d; color:#fff; } .dup-bar-btn:disabled { color:#98a2b3; border-color:#d0d5dd; cursor:not-allowed; background:#f9fafb; } .dup-bar-btn .material-symbols-outlined { font-size:16px; }
-    .dup-tip { position:relative; display:inline-flex; } .dup-tip-t { display:none; position:absolute; bottom:calc(100% + 6px); inset-inline-end:0; width:220px; background:#1f2937; color:#fff; font-size:11.5px; padding:7px 9px; border-radius:6px; z-index:20; }
-    .dup-tip:hover .dup-tip-t, .dup-tip:focus-within .dup-tip-t, .dup-tip:focus .dup-tip-t { display:block; }
-    .dup-sec .dp-act-header { align-items:center; } .dup-n { display:inline-block; min-width:18px; text-align:center; font-size:10.5px; background:#f2f4f7; color:#475467; border-radius:999px; padding:0 6px; margin-inline-start:4px; }
-    .dup-list { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
-    .dup-row { display:block; border:1px solid #eef0f3; border-radius:8px; padding:8px 10px; text-decoration:none; color:inherit; } .dup-row:hover { border-color:#98a6b6; background:#fafbfc; }
-    .dup-row.me { background:#f8fafc; cursor:default; }
-    .dup-r1 { display:flex; align-items:center; justify-content:space-between; gap:6px; } .dup-id { font:600 12px ui-monospace,Menlo,monospace; color:#17293d; }
-    .dup-r2 { font-size:11.5px; color:#667085; margin-top:3px; }
-    .dup-rev { margin-top:8px; width:100%; display:flex; align-items:center; justify-content:center; gap:6px; border:1px solid #17293d; background:#17293d; color:#fff; border-radius:6px; padding:8px; font:600 12.5px inherit; cursor:pointer; } .dup-rev:hover { background:#0f1d2c; } .dup-rev .material-symbols-outlined { font-size:17px; }
-    .dup-none { display:flex; gap:8px; align-items:flex-start; margin-top:6px; font-size:12px; color:#475467; } .dup-none .material-symbols-outlined { color:#0e7a3e; font-size:18px; } .dup-none b { display:block; color:#1f2937; } .dup-none span { display:block; }
-    .dup-ign { margin-top:8px; border-top:1px dashed #e4e7ec; padding-top:6px; font-size:11.5px; color:#667085; } .dup-ign-h { font-weight:600; color:#475467; margin-bottom:2px; } .dup-ign a { color:#2a6797; }
     .dp-biz-tag { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; letter-spacing:.02em; background:#eaeef3; color:#17293d; border-radius:6px; padding:3px 8px; margin-inline-start:6px; }
     .dp-biz-tag .material-symbols-outlined { font-size:14px; }
     .dp-if-hint { font-size:11px; color:var(--ink-secondary); margin-top:4px; line-height:1.35; }
@@ -1733,6 +1699,7 @@
     .dp-act-text a.cl-link, .dp-kpi-v a.cl-link, .cl-list a.cl-link, .cl-prev a.cl-link { color: #0f6cbd; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
     .dp-act-text a.cl-link:hover, .dp-kpi-v a.cl-link:hover, .cl-list a.cl-link:hover { text-decoration: underline; }
     .dp-kpi-v .cl-gone { font-family: 'SF Mono','Cascadia Code',Consolas,monospace; font-weight: 600; color: var(--ink-secondary); }
+    .cl-n { display:inline-block; min-width:18px; text-align:center; font-size:10.5px; font-weight:600; background:#f2f4f7; color:#344054; border-radius:9px; padding:1px 6px; margin-inline-start:4px; }
     .cl-list { display: flex; flex-direction: column; }
     .cl-list-r { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border-soft); font-size: 12px; }
     .cl-list-r:last-child { border-bottom: none; }
@@ -1996,7 +1963,7 @@
               <button class="list-btn primary" onclick="openCreateLead()"><span class="material-symbols-outlined">add</span> New lead</button>
             </div>
           </div>
-          <div id="dupListBar"></div>
+          
           <div class="leads-table-wrap" id="tableWrap">
             <table class="leads-table" id="leadsTable">
               <thead><tr><th class="chk-cell"><input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)"></th><th>Lead</th><th>Lead ID</th><th>Source</th><th>Model Interest</th><th>SLA</th><th>Stage</th><th>Mobile</th><th>Owner</th><th></th></tr></thead>
@@ -2663,7 +2630,6 @@
       if (leadsView === 'calendar') renderLeadsCalendar();
       var tbody = document.getElementById('leadsBody');
       tbody.innerHTML = '';
-      dupListBar();
       var rows = [];
       leads.forEach(function(l, i){ if (leadMatches(l)) rows.push({ l:l, i:i }); });
       if (sortState.key) rows.sort(function(a, b){ return cmpLeads(a.l, b.l, sortState.key) * (sortState.dir === 'desc' ? -1 : 1); });
@@ -2681,7 +2647,6 @@
       }
       rows.forEach(function(o) {
         var l = o.l, i = o.i;
-        var dupS = window.DUP && DUP.rec(l.id) ? DUP.status(l.id) : null;
         var tr = document.createElement('tr');
         if (l.urgent) tr.className = 'urg';
         if (i === selectedIdx) tr.classList.add('selected');
@@ -2690,7 +2655,7 @@
         tr.onclick = function() { openPanelFull(i); };
         tr.innerHTML =
           '<td class="chk-cell" onclick="event.stopPropagation()"><input type="checkbox" class="lead-check" data-id="'+l.id+'" '+(selectedIds.has(l.id)?'checked':'')+' onclick="toggleSelect(\''+l.id+'\',this)"></td>'+
-          '<td><div class="lead-cell"><div class="lead-av '+l.av+'">'+l.initials+'</div><div><div class="c-name">'+l.name+'</div>'+(dupS && dupS.k==='potential'?'<span class="dup-row-tag" title="Same '+DUP.onList(dupS.on)+' as another open lead"><span class="material-symbols-outlined">warning</span>Possible duplicate</span>':'')+'</div></div></td>'+
+          '<td><div class="lead-cell"><div class="lead-av '+l.av+'">'+l.initials+'</div><div><div class="c-name">'+l.name+'</div>'+'</div></div></td>'+
           '<td class="id-cell"><span class="id-copy" title="Click to copy Lead ID" onclick="event.stopPropagation();copyLeadId(\''+l.id+'\',this)"><span class="id-text">'+l.id+'</span><span class="material-symbols-outlined id-copy-ico">content_copy</span></span></td>'+
           '<td><span class="src"><span class="src-dot '+l.srcClass+'">'+l.srcIcon+'</span>'+l.source.split(' —')[0]+'</span></td>'+
           '<td><span class="mdl">'+l.model+'</span></td>'+
@@ -3278,14 +3243,13 @@
     }
 
 
-    /* ── Lead duplication (MAI-4776) — rules and data in duplicates.js ── */
 
     /* ── Clone lead (MAI-4768) — rules in clone-lead.js ── */
     var CLONE_KEY = 'exeedClones1', cloneBusy = false, cloneFailNext = false, cloneDone = null;
     // Clones already made from this lead, shown in the dialog so nobody clones twice by mistake.
     function cloneShowPrev(l){
       var kids = l ? CLONE.clonesOf(leads, l.id) : [], host = document.getElementById('clonePrev');
-      host.innerHTML = kids.length ? '<div class="cl-prev-h">Already cloned <span class="dup-n">' + kids.length + '</span></div>' +
+      host.innerHTML = kids.length ? '<div class="cl-prev-h">Already cloned <span class="cl-n">' + kids.length + '</span></div>' +
         kids.map(function(k){ return '<div class="cl-list-r"><a class="cl-link" onclick="closeCloneLead();openCloneTarget(\'' + k.id + '\')">' + k.id + '</a><span>' + dpEsc(k.owner) + ' · ' + dpEsc(k.createdOn || '') + '</span></div>'; }).join('') : '';
       host.style.display = kids.length ? '' : 'none';
     }
@@ -3303,7 +3267,7 @@
     }
     function clonedLeadsHtml(l){
       var kids = CLONE.clonesOf(leads, l.id); if (!kids.length) return '';
-      return '<div class="dp-kpi-card"><div class="dp-kpi-head">Cloned leads <span class="dup-n">' + kids.length + '</span></div><div class="cl-list">' +
+      return '<div class="dp-kpi-card"><div class="dp-kpi-head">Cloned leads <span class="cl-n">' + kids.length + '</span></div><div class="cl-list">' +
         kids.map(function(k){ return '<div class="cl-list-r">' + cloneLeadLink(k.id) + '<span>' + dpEsc(k.owner) + ' · ' + dpEsc(k.createdOn || '') + '</span></div>'; }).join('') + '</div></div>';
     }
     function openCloneTarget(id){
@@ -3378,133 +3342,12 @@
       });
     })();
 
-    function dupRec(l){ return (window.DUP && DUP.rec(l.id)) || null; }
-    // Apply the stored decision to the lead (status, reason, link) and add the audit entry once.
-    function dupSync(l){
-      if (!window.DUP) return;
-      var d = DUP.decision(l.id); if (!d) return;
-      l.activities = l.activities || [];
-      if (d.d === 'mark') {
-        l.stage = 'Disqualified'; l.stageNum = 'Disqualified'; l.stageClass = 'na'; l.disqualified = true; l.disqReason = 'Duplicate'; l.dupOf = d.of;
-      }
-      if (l._dupAud !== d.at + d.d) {
-        l._dupAud = d.at + d.d;
-        l.activities.unshift({ type:'note', text: d.d === 'mark'
-          ? 'Duplicate check · Marked as duplicate of ' + d.of + ' · Disqualified (reason: Duplicate) · by ' + d.by
-          : 'Duplicate check · Continue — kept as a separate lead · by ' + d.by, time: d.at });
-      }
-    }
-    function dupBarHtml(l){
-      if (!window.DUP || !dupRec(l)) return '';
-      DUP.addCss();
-      var s = DUP.status(l.id); if (!s) return '';
-      if (s.k === 'potential') {
-        var res = DUP.check(dupRec(l)).open.slice().sort(function(a, b){ return new Date(a.r.created) - new Date(b.r.created); });
-        var o = DUP.original(l.id) || (res[0] || {}).r || {}, n = res.length, open = window._dupOpen !== false;
-        var rows = res.map(function(m){
-          var x = m.r, isO = x.id === o.id;
-          return '<tr><td><a href="' + DUP.link(x.id) + '" target="_blank" rel="noopener">' + x.id + '</a>' + (isO ? ' <span class="dup-orig">Original</span>' : '') + '</td>' +
-            '<td>' + DUP.esc(x.name) + '</td><td>' + DUP.tags(m.on) + '</td><td>' + DUP.esc(x.source) + '</td><td class="nw">' + DUP.fmt(x.created).split(' ').slice(0, 3).join(' ') + '</td><td>' + DUP.esc(x.stage) + '</td><td>' + DUP.esc(x.owner) + '</td></tr>';
-        }).join('');
-        return '<div class="dup-bar warn sticky dup-alert" role="alert"><div class="dup-al-h"><span class="material-symbols-outlined">warning</span>' +
-          '<div><b>' + n + ' possible duplicate' + (n === 1 ? '' : 's') + ' found.</b> Same ' + DUP.onList(s.on) + ' as ' + (n === 1 ? 'an open ' : 'open ') + DUP.esc(dupRec(l).brand) + ' lead' + (n === 1 ? '' : 's') + '. ' +
-          '<button class="dup-bar-lnk" aria-expanded="' + open + '" onclick="window._dupOpen=' + !open + ';renderDetail(selectedIdx,currentStep)">' + (open ? 'Hide' : 'Show') + ' matches</button></div>' +
-          '<button class="dup-bar-btn" onclick="dupQuick(\'continue\')" title="Keep this lead open as a separate lead"><span class="material-symbols-outlined">check</span>Not a duplicate</button>' +
-          '<button class="dup-bar-btn bad" onclick="dupQuick(\'mark\')" title="Disqualify and link to ' + o.id + '"><span class="material-symbols-outlined">block</span>Mark as duplicate</button></div>' +
-          (open ? '<div class="dup-al-b"><table class="dup-al-tb"><thead><tr><th>Lead</th><th>Name</th><th>Matched on</th><th>Source</th><th>Created</th><th>Stage</th><th>Owner</th></tr></thead><tbody>' + rows + '</tbody></table>' +
-            '<p class="dup-al-n"><b>Not a duplicate</b> keeps this lead open. <b>Mark as duplicate</b> disqualifies it (reason: Duplicate) and links it to ' + o.id + ' — it can’t be reactivated.</p></div>' : '') + '</div>';
-      }
-      if (s.k === 'kept' && l._dupJust) {
-        return '<div class="dup-bar ok" role="status"><span class="material-symbols-outlined">task_alt</span><div><b>Resolved · Not a duplicate.</b> This lead stays open as a separate lead. Recorded by ' + DUP.esc(s.d.by) + ' · ' + DUP.esc(s.d.at) + '.</div>' +
-          '<button class="dup-bar-btn" onclick="dupUndo()"><span class="material-symbols-outlined">undo</span>Undo</button></div>';
-      }
-      if (s.k === 'marked') {
-        var o = DUP.rec(s.of) || {};
-        return '<div class="dup-bar bad" role="status"><span class="material-symbols-outlined">block</span><div><b>Disqualified · Duplicate.</b> Duplicate of <a href="' + DUP.link(s.of) + '">' + s.of + '</a>' + (o.name ? ' (' + DUP.esc(o.name) + ')' : '') + '. Marked by ' + DUP.esc(s.d.by) + ' · ' + DUP.esc(s.d.at) + '.</div>' +
-          '<span class="dup-tip" tabindex="0"><button class="dup-bar-btn" disabled aria-disabled="true" aria-describedby="dupTipT"><span class="material-symbols-outlined">restart_alt</span>Reactivate</button><span class="dup-tip-t" id="dupTipT" role="tooltip">Leads disqualified as duplicate can’t be reactivated.</span></span></div>';
-      }
-      return '';
-    }
-    // One-click decision from the alert. Mark as duplicate can't be undone, so it asks first.
-    // Keep the duplicate alert and the lead header both pinned: the header sits just under the alert.
-    function dupStick(){
-      var b = document.querySelector('#dpBody .dup-bar.sticky'), c = document.querySelector('#dpBody .dp-idcard');
-      if (!c) return;
-      c.style.top = b ? b.offsetHeight + 'px' : '';
-      if (b && window.ResizeObserver) new ResizeObserver(function(){ c.style.top = b.offsetHeight + 'px'; }).observe(b);
-      // When scrolled, the pinned alert shrinks to its one-line header so it doesn't cover the form.
-      var body = document.querySelector('.dp-body');
-      if (body && !body._dupScroll) { body._dupScroll = true; body.addEventListener('scroll', function(){ var x = document.querySelector('#dpBody .dup-alert'); if (x) x.classList.toggle('stuck', body.scrollTop > 60); }, { passive: true }); }
-      if (b && body) b.classList.toggle('stuck', body.scrollTop > 60);
-    }
-    window.addEventListener('resize', function(){ if (document.getElementById('dpBody')) dupStick(); });
-    // Leads list: one banner naming the leads that need a duplicate check.
-    function dupListBar(){
-      var host = document.getElementById('dupListBar'); if (!host) return;
-      if (!window.DUP) { host.innerHTML = ''; return; }
-      var P = []; leads.forEach(function(l, i){ var s = DUP.rec(l.id) && DUP.status(l.id); if (s && s.k === 'potential') P.push({ l:l, i:i }); });
-      host.innerHTML = P.length ? '<div class="dup-bar warn dup-list-bar" role="status"><span class="material-symbols-outlined">warning</span><div><b>' + P.length + ' lead' + (P.length === 1 ? '' : 's') + ' may be duplicate' + (P.length === 1 ? '' : 's') + '.</b> Open to review: ' +
-        P.map(function(o){ return '<button class="dup-bar-lnk" onclick="openPanelFull(' + o.i + ')">' + DUP.esc(o.l.name) + '</button>'; }).join(', ') + '</div></div>' : '';
-    }
-    function dupUndo(){
-      var l = leads[selectedIdx]; DUP.undo(l.id); l._dupJust = false; l._dupAud = null;
-      l.activities = (l.activities || []).filter(function(a){ return !/^Duplicate check · Continue/.test(a.text); });
-      renderDetail(selectedIdx, currentStep); try { renderLeads(); } catch(e){} showToast('Undone · duplicate alert is back');
-    }
-    function dupQuick(d){
-      var l = leads[selectedIdx], o = DUP.original(l.id) || {};
-      var go = function(){
-        DUP._onDone = function(v){
-          l._dupJust = v.d === 'continue';
-          renderDetail(selectedIdx, currentStep);
-          try { renderLeads(); } catch(e){}
-          showToast(v.d === 'mark' ? 'Marked as duplicate of ' + v.of + ' · lead disqualified' : 'Kept as a separate lead · alert cleared');
-        };
-        DUP._decide(l.id, d);
-      };
-      if (d === 'continue') return go();
-      openConfirm('Mark as duplicate?', 'This lead will be disqualified with reason “Duplicate” and linked to ' + (o.id || 'the original lead') + '. It can’t be reactivated.', 'Mark as duplicate', go, 'Cancel', 'block');
-    }
-    function dupReview(){
-      var l = leads[selectedIdx];
-      DUP.review(l.id, function(v){
-        renderDetail(selectedIdx, currentStep);
-        try { renderLeads(); } catch(e){}
-        showToast(v.d === 'mark' ? 'Marked as duplicate of ' + v.of + ' · lead disqualified' : 'Kept as a separate lead · potential duplicate cleared');
-      });
-    }
-    function dupSectionHtml(l){
-      if (!window.DUP) return '';
-      if (l.skipDuplicateCheck) { DUP.addCss(); return '<div class="dp-activity dup-sec"><div class="dp-act-header"><span class="dp-act-title">Duplicate leads</span></div><div class="dup-none"><span class="material-symbols-outlined">info</span><div><b>Duplicate check skipped</b><span>This lead was cloned from ' + l.clonedFromLeadId + ', so it is not checked as a duplicate.</span></div></div></div>'; }
-      DUP.addCss();
-      var r = dupRec(l) || { id:l.id, name:l.name, brand:'EXEED', phone:l.phone, email:l.email, eid:l.emiratesId, created:new Date().toISOString(), stage:l.stage };
-      var g = dupRec(l) ? DUP.group(l.id) : [], me = DUP.status(l.id);
-      var head = '<div class="dp-act-header"><span class="dp-act-title">Duplicate leads' + (g.length ? ' <span class="dup-n">' + (g.length - 1) + '</span>' : '') + '</span>' + (me ? DUP.chip(me.k === 'potential' ? Object.assign({}, me, { t:'Potential duplicate lead' }) : me) : '') + '</div>';
-      if (!g.length) {
-        var ig = DUP.check(r).ignored;
-        return '<div class="dp-activity dup-sec">' + head + '<div class="dup-none"><span class="material-symbols-outlined">check_circle</span><div><b>No duplicates found</b><span>Checked against open ' + r.brand + ' leads on Email, Phone and EID.</span></div></div>' +
-          (ig.length ? '<div class="dup-ign"><div class="dup-ign-h">Not counted</div>' + ig.map(function(m){ return '<div class="dup-ign-r"><a href="' + DUP.link(m.r.id) + '">' + m.r.id + '</a> · ' + DUP.esc(m.why) + ' · matched on ' + m.on.join(', ') + '</div>'; }).join('') + '</div>' : '') + '</div>';
-      }
-      var mine = DUP.check(r).open.reduce(function(a, m){ a[m.r.id] = m.on; return a; }, {});
-      var rows = g.map(function(x){
-        var s = x.id === l.id ? { k:'me', t:'This lead', ic:'person' } : (DUP.status(x.id) || { k:'kept', t:'Open', ic:'radio_button_checked' });
-        var on = mine[x.id] || [];
-        var orig = DUP.status(x.id); orig = orig && orig.k === 'original';
-        return '<a class="dup-row' + (x.id === l.id ? ' me' : '') + '" href="' + (x.id === l.id ? '#' : DUP.link(x.id)) + '"' + (x.id === l.id ? ' onclick="return false"' : '') + '>' +
-          '<div class="dup-r1"><span class="dup-id">' + x.id + '</span>' + DUP.chip(s) + (x.id !== l.id && orig ? '' : '') + '</div>' +
-          '<div class="dup-r2">' + DUP.esc(x.name) + ' · ' + DUP.esc(x.source) + ' · ' + DUP.fmt(x.created) + '</div>' +
-          '<div class="dup-r2">' + DUP.esc(x.stage === 'Disqualified' && (DUP.decision(x.id) || {}).d === 'mark' ? 'Disqualified · Duplicate' : (DUP.decision(x.id) || {}).d === 'mark' ? 'Disqualified · Duplicate' : x.stage) + ' · ' + DUP.esc(x.owner) + (on.length ? ' · ' + DUP.tags(on) : '') + '</div></a>';
-      }).join('');
-      return '<div class="dp-activity dup-sec">' + head + '<div class="dup-list">' + rows + '</div>' +
-        (me && me.k === 'potential' ? '<button class="dup-rev" onclick="dupReview()"><span class="material-symbols-outlined">fact_check</span>Review · Mark as duplicate or Continue</button>' : '') + '</div>';
-    }
     function renderDetail(idx, stepIdx) {
       var l = leads[idx];
       var sd = stepDetails[stepIdx];
       var slaBoxClass = l.slaClass === 'brch' ? 'danger' : (l.slaClass === 'wrn' ? 'warn' : '');
 
-      dupSync(l);
-      var html = '<div class="dp-page">' + dupBarHtml(l);
+      var html = '<div class="dp-page">';
 
       // Lead identity card — name + badges on line 1, owner/location on line 2, quick fields top-right, KPIs below
       var ownerInit = l.owner.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
@@ -3739,13 +3582,11 @@
           '<div><div class="dp-act-text">'+(a.type === 'clone' ? cloneActText(a) : a.text)+'</div><div class="dp-act-time">'+a.time+'</div></div></div>';
       });
       html += '</div>';
-      html += dupSectionHtml(l);
       html += '</div>'; // right col
       html += '</div>'; // content grid
       html += '</div>'; // dp-page
 
       document.getElementById('dpBody').innerHTML = html;
-      dupStick();
 
       updateStepGate();
     }
@@ -6644,21 +6485,6 @@
       });
     }, 1000);
 
-    // Duplicate-rule sample leads that aren't in the list open by id from the dashboards.
-    (function(){
-      try {
-        var q = new URLSearchParams(location.search).get('lead'); if (!q || !window.DUP) return;
-        var r = DUP.rec(decodeURIComponent(q).trim()); if (!r) return;
-        if (leads.some(function(x){ return x.id === r.id; })) return;
-        var base = leads.filter(function(x){ return x.bpfStage === 1; })[0] || leads[0];
-        var stg = { New:1, Contact:2, Qualify:3, Discovery:5, Closed:9, Disqualified:1 }[r.stage] || 1;
-        var lead = Object.assign({}, base, { id:r.id, name:r.name, initials:r.name.split(/\s+/).map(function(w){ return w.charAt(0); }).join('').slice(0,2).toUpperCase(),
-          phone:r.phone || '—', email:r.email || '—', emiratesId:r.eid || '—', source:r.source, model:r.model, owner:r.owner, stage:r.stage, stageNum:r.stage, bpfStage:stg,
-          stageClass: /Disqualified|Closed/.test(r.stage) ? 'na' : 'new', disqualified: r.stage === 'Disqualified', activities:[{ type:'note', text:'Lead created · ' + r.source, time: DUP.fmt(r.created) }],
-          proposals: undefined, propState: undefined, zsd: undefined, payments: undefined });
-        leads.push(lead);
-      } catch(e){}
-    })();
     (function() {
       var params = new URLSearchParams(window.location.search);
       if (params.get('new') === '1') { openCreateLead(); }
