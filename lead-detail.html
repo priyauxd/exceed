@@ -5823,7 +5823,6 @@
       var to = l.email && l.email !== '—' ? l.email : 'customer@email.ae';
       // Sample history: every status.
       l.esg = [
-        { k:'prop', stage:'', v:1, to:to, sent:'03 Nov 2026 09:42', st:'signed' },
         { k:'sq',   stage:'', v:1, to:to, sent:'04 Nov 2026 11:20', st:'viewed' },
         { k:'doc',  stage:'', v:1, to:to, sent:'27 Oct 2026 16:00', st:'expired' },
         { k:'doc',  stage:'', v:2, to:to, sent:'05 Nov 2026 12:07', st:'declined' }
@@ -5842,7 +5841,7 @@
       var simK = d.k !== 'pa' ? '' : !esgPaid(l) ? 'pay' : (pa1Done && !l.soApproved ? 'so' : ''), sim = simK ? simBtn(simK) : '';
       var sendTip = canSend ? 'Send ' + esgLabel(d.k, stage) + ' for signature' : pa1Done ? 'PA2 – Final: available after F&amp;O sales order approval' : 'Available after advance payment';
       var menu = open ? '<div class="esg-menu" role="menu">' +
-          '<button role="menuitem" onclick="esgDownload(\'' + d.k + '\')"><span class="material-symbols-outlined">picture_as_pdf</span>Download (PDF)</button>' +
+          (d.k === 'prop' ? '' : '<button role="menuitem" onclick="esgDownload(\'' + d.k + '\')"><span class="material-symbols-outlined">picture_as_pdf</span>Download (PDF)</button>') +
           '<button role="menuitem"' + (canSend ? ' onclick="esgSend(\'' + d.k + '\')"' : ' class="off" aria-disabled="true"') + ' title="' + sendTip + '"><span class="material-symbols-outlined">draw</span>Send for signature' + (canSend && stage ? '<em>' + esgLabel(d.k, stage) + '</em>' : '') + '</button>' +
         '</div>' : '';
       return '<div class="fmt-btn esg-b' + (open ? ' on' : '') + '"><button class="fb-main" aria-haspopup="menu" aria-expanded="' + open + '" onclick="esgToggle(\'' + d.k + '\')"><span class="material-symbols-outlined">' + d.icon + '</span>' + d.name +
@@ -5995,7 +5994,7 @@
     function esgView(i){ var l = leads[selectedIdx], r = esgData(l)[i]; window.open(URL.createObjectURL(esgFile(l, r.k, r.stage, r)), '_blank'); }
     function esgSigned(i){ var l = leads[selectedIdx], r = esgData(l)[i]; esgSave(esgFile(l, r.k, r.stage, r), esgLabel(r.k, r.stage).replace(/[^\w]+/g, '-') + '-v' + r.v + '-signed.pdf'); showToast('Signed copy downloaded'); }
     function esgGridHtml(l){
-      var R = esgData(l);
+      var R = esgData(l), shown = R.filter(function(r){ return r.k !== 'prop'; });   // the Proposal isn't listed here
       var head = '<div class="zs-h"><span class="conf-lbl">Documents &amp; e-signature</span></div>';
       // Each Purchase Agreement not sent yet has a placeholder row: waiting for its trigger, or ready to send.
       var hold = [], paid = esgPaid(l), has = function(stg){ return R.some(function(r){ return r.k === 'pa' && r.stage === stg; }); };
@@ -6006,12 +6005,12 @@
           '<td><span class="esg-chip ' + st[1] + '" title="' + h.why + '">' + st[0] + '</span></td>' +
           '<td><div class="esg-acts">' + (h.sim ? simBtn(h.sim) : '') + '<span class="esg-pf">' + h.why + '</span></div></td></tr>';
       }).join('');
-      if (!R.length && !holdRows) return '<div class="zs-sec">' + head + '<div class="zs-empty"><span class="material-symbols-outlined">draft</span>No documents sent for signature yet.</div></div>';
+      if (!shown.length && !holdRows) return '<div class="zs-sec">' + head + '<div class="zs-empty"><span class="material-symbols-outlined">draft</span>No documents sent for signature yet.</div></div>';
       // Latest row per document + stage first, then the rest; newest first inside each group.
       var latest = {};
       R.forEach(function(r, i){ var key = r.k + '|' + r.stage; if ((latest[key] == null || R[latest[key]].v < r.v)) latest[key] = i; });
       var order = ESG_DOCS.map(function(d){ return d.k; });
-      var idx = R.map(function(r, i){ return i; }).sort(function(a, b){
+      var idx = R.map(function(r, i){ return i; }).filter(function(i){ return R[i].k !== 'prop'; }).sort(function(a, b){
         var ta = latest[R[a].k + '|' + R[a].stage] === a ? 0 : 1, tb = latest[R[b].k + '|' + R[b].stage] === b ? 0 : 1;
         if (ta !== tb) return ta - tb;
         var da = order.indexOf(R[a].k) - order.indexOf(R[b].k); if (da) return da;
