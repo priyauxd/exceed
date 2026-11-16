@@ -1235,6 +1235,7 @@
     .esg-warn { display:flex; gap:8px; align-items:flex-start; text-align:start; background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:9px 11px; font-size:12.5px; } .esg-warn .material-symbols-outlined { font-size:18px; color:#b54708; }
     .esg-chip { display:inline-flex; align-items:center; font-size:11px; font-weight:600; border-radius:999px; padding:2px 8px; white-space:nowrap; }
     .esg-chip.ok { background:#e7f6ec; color:#0e7a3e; } .esg-chip.info { background:#e8f1fb; color:#0f6cbd; } .esg-chip.bad { background:#fdecec; color:#b42318; } .esg-chip.na { background:#f2f4f7; color:#667085; } .esg-pv { display:inline-block; margin-top:3px; font-size:10px; font-weight:700; border-radius:999px; padding:1px 7px; } .esg-pv.advance { background:#e8f1fb; color:#0f6cbd; } .esg-pv.final { background:#e7f6ec; color:#0e7a3e; }
+    .esg-fo { display:flex; align-items:center; gap:3px; color:#0e7a3e; } .esg-fo .material-symbols-outlined { font-size:13px; }
     .esg-chip.wait { background:#fff4e0; color:#a15c00; white-space:normal; border-radius:8px; line-height:1.3; } .esg-tb tr.esg-hold td { color:#667085; }
     .esg-tb .esg-to { overflow-wrap:normal; word-break:normal; } .esg-ip { display:flex; align-items:center; gap:3px; font-size:11px; font-weight:600; color:var(--ink-secondary); } .esg-ip .material-symbols-outlined { font-size:14px; }
     .esg-f small { font-weight:500; color:var(--ink-muted); } .esg-f .zso-sg b { font-size:12.5px; } .esg-f .zso-in { margin-top:3px; }
@@ -5253,7 +5254,7 @@
           esgBtnsHtml(l) +
         '</div>' +
         (canQuote ? '' :
-          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Sync quote unlocks once the advance payment is received. Purchase Agreement signing also needs F&amp;O approval.</span></div>') +
+          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Sync quote and PA1 – Advance unlock once the advance payment is received. PA2 – Final unlocks on F&amp;O sales order approval.</span></div>') +
         esgGridHtml(l) +
         onlinePaymentHtml(l) +
         confOrderBlock(l, p) +
@@ -5796,18 +5797,23 @@
       { k:'doc',  name:'Duty of Care', icon:'health_and_safety' }
     ];
     // Pending requests (sent / viewed) show as Partially signed, with how many of the 3 have signed.
-    var ESG_ST = { pend:['Pending advance &amp; F&amp;O','wait'], adv:['Advance received','ok'], sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'] };
+    var ESG_ST = { padv:['Pending advance','wait'], adv:['Advance received','ok'], pfo:['Pending F&amp;O','wait'], fok:['F&amp;O approved','ok'], sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'] };
     var ESG_REASONS = ['Wrong email', 'Document changed', 'Customer didn’t receive', 'Other'];
     var esgMenuOpen = null;
     function esgDoc(k){ return ESG_DOCS.filter(function(d){ return d.k === k; })[0]; }
     function esgPaid(l){ var p = acceptedProp() || {}; return !!p.advanceCash || (p.received || 0) > 0 || !!l._zsPaidSeed; }
     // Stage of a send: only the Purchase Agreement has one.
     // Purchase Agreement is signed once: locked (null) until the advance is paid AND F&O approves the sales order.
-    function esgStage(l, k){ if (k !== 'pa') return ''; return esgPaid(l) && l.soApproved ? '' : null; }
+    // Two agreements: PA – Advance once the advance is paid, PA – Final once F&O approves the sales order. null = locked.
+    // Once PA1 is signed by all, the next document is PA2 – Final: locked until F&O approves the sales order.
+    function esgPa1Done(l){ return esgData(l).some(function(r){ return r.k === 'pa' && r.stage === 'Advance' && r.st === 'signed'; }); }
+    function esgStage(l, k){ if (k !== 'pa') return ''; return l.soApproved ? 'Final' : esgPaid(l) && !esgPa1Done(l) ? 'Advance' : null; }
     // Purchase Agreement version shown to users: Advance until everyone has signed, then Final.
     function esgPaVer(r){ return r.st === 'signed' ? 'Final' : 'Advance'; }
-    function esgPaTag(v){ return '<span class="esg-pv ' + v.toLowerCase() + '">' + v + '</span>'; }
-    function esgLabel(k, stage){ return k === 'pa' && stage ? 'PA – ' + stage : esgDoc(k).name; }
+    // PA1 = Advance (after advance payment), PA2 = Final (after F&O sales order approval).
+    var ESG_PA_NO = { Advance:'PA1', Final:'PA2' };
+    function esgPaTag(v){ return '<span class="esg-pv ' + v.toLowerCase() + '">' + (ESG_PA_NO[v] ? ESG_PA_NO[v] + ' · ' : '') + v + '</span>'; }
+    function esgLabel(k, stage){ return k === 'pa' && stage ? (ESG_PA_NO[stage] || 'PA') + ' – ' + stage : esgDoc(k).name; }
     function esgData(l){
       if (l.esg) return l.esg;
       var to = l.email && l.email !== '—' ? l.email : 'customer@email.ae';
@@ -5826,14 +5832,17 @@
     // Buttons
     function esgBtn(l, d){
       var stage = esgStage(l, d.k), canSend = !(d.k === 'pa' && stage === null), open = esgMenuOpen === d.k;
-      var sim = d.k === 'pa' && stage === null ? simBtn('both') : '';
-      var sendTip = canSend ? 'Send ' + esgLabel(d.k, stage) + ' for signature' : 'Available after advance payment and F&amp;O approval';
+      // Only while the PA is locked (before advance payment). Once PA1 is available, the PA2 wait shows on its grid row.
+      var pa1Done = d.k === 'pa' && esgPa1Done(l);
+      // Locked → simulate payment. PA1 signed by all → now waiting for F&O approval (PA2).
+      var simK = d.k !== 'pa' ? '' : !esgPaid(l) ? 'pay' : (pa1Done && !l.soApproved ? 'so' : ''), sim = simK ? simBtn(simK) : '';
+      var sendTip = canSend ? 'Send ' + esgLabel(d.k, stage) + ' for signature' : pa1Done ? 'PA2 – Final: available after F&amp;O sales order approval' : 'Available after advance payment';
       var menu = open ? '<div class="esg-menu" role="menu">' +
           '<button role="menuitem" onclick="esgDownload(\'' + d.k + '\')"><span class="material-symbols-outlined">picture_as_pdf</span>Download (PDF)</button>' +
           '<button role="menuitem"' + (canSend ? ' onclick="esgSend(\'' + d.k + '\')"' : ' class="off" aria-disabled="true"') + ' title="' + sendTip + '"><span class="material-symbols-outlined">draw</span>Send for signature' + (canSend && stage ? '<em>' + esgLabel(d.k, stage) + '</em>' : '') + '</button>' +
         '</div>' : '';
       return '<div class="fmt-btn esg-b' + (open ? ' on' : '') + '"><button class="fb-main" aria-haspopup="menu" aria-expanded="' + open + '" onclick="esgToggle(\'' + d.k + '\')"><span class="material-symbols-outlined">' + d.icon + '</span>' + d.name +
-        (d.k === 'pa' && stage !== null ? (function(){ var R = esgData(l).filter(function(r){ return r.k === 'pa'; }); return R.length ? esgPaTag(esgPaVer(R[R.length - 1])) : '<span class="esg-pv final">Advance received</span>'; })() : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy('both') : '') + '</button>' +
+        (d.k === 'pa' && (stage || pa1Done) ? esgPaTag(stage || 'Final') : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy(simK === 'pay' ? 'both' : 'so') : '') + '</button>' +
         (sim ? '<span class="fb-acts">' + sim + '</span>' : '') + menu + '</div>';
     }
     function esgBtnsHtml(l){ return ESG_DOCS.map(function(d){ return esgBtn(l, d); }).join(''); }
@@ -5891,7 +5900,7 @@
       var opt = function(m, ic, t, sub){ return '<button type="button" class="zso-o' + (esgMode === m ? ' on' : '') + '" onclick="esgSetMode(\'' + k + '\',\'' + m + '\')"><span class="material-symbols-outlined">' + ic + '</span><span><b>' + t + '</b><small>' + sub + '</small></span></button>'; };
       var how = '<div class="esg-f"><span>Signing option</span><div class="zso-seg two">' + opt('inperson', 'stylus_note', 'In person', 'Signing page opens on this device') + opt('remote', 'send_to_mobile', 'Remote', 'Customer gets a secure link') + '</div></div>';
       var email = '<label class="esg-f"><span>Customer email' + (esgMode === 'inperson' ? ' <small>· signed copy is sent here</small>' : '') + '</span><input class="esg-in" id="esgTo" type="email" value="' + dpEsc(toVal) + '" oninput="esgValid();var c=document.getElementById(\'esgCustE\');if(c)c.textContent=this.value||\'—\'"></label>';
-      var doc = '<div class="esg-f"><span>Document</span><div class="esg-ro">' + dpEsc(esgDoc(k).name) + (stage ? ' · ' + stage : '') + '</div></div>';
+      var doc = '<div class="esg-f"><span>Document</span><div class="esg-ro">' + dpEsc(esgDoc(k).name) + (stage ? ' · ' + esgLabel(k, stage) : '') + '</div></div>';
       if (pend) {
         var whyV = keep && prevWhy ? prevWhy.value : '';
         openConfirm('Resend ' + name + '?', '<div class="esg-warn"><span class="material-symbols-outlined">warning</span>A signature request is already pending. Sending again will cancel the previous request.</div>' +
@@ -5938,6 +5947,7 @@
         var n = (r.signers || []).length || 1; r.done = Math.max(r.done || 0, Math.max.apply(null, e.res.signed.map(function(x){ return x.i + 1; })));
         if (r.done >= n) { r.st = 'signed'; if (r.k === 'pa') paTick(l, PA_CHECK_SIGNED); }
       } else return;
+      if (r.st === 'signed' && r.k === 'pa' && r.stage === 'Final') { r.fo = zsNow(); if (e.lead === selectedIdx) { renderDetail(selectedIdx, currentStep); showToast('PA2 – Final signed by all — F&O triggered · signed agreement pushed to F&O'); } return; }
       if (e.lead === selectedIdx) { renderDetail(selectedIdx, currentStep); showToast(e.docName + ' v' + r.v + (r.st === 'signed' ? ' signed by all 3 signers — synced to F&O' : r.st === 'declined' ? ' declined' : ' · ' + r.done + ' of ' + r.signers.length + ' signed')); }
     }
 
@@ -5949,20 +5959,20 @@
       if (r.done >= (n || 1)) r.st = 'signed';
       if (r.st === 'signed' && r.k === 'pa') paTick(l, PA_CHECK_SIGNED);
       renderDetail(selectedIdx, currentStep);
-      showToast(esgLabel(r.k, r.stage) + ' v' + r.v + ' · ' + (r.st === 'signed' ? 'signed by all' + (r.k === 'pa' ? ' — now the Final version' : '') + ' — synced to F&O' : r.signers[r.done - 1].n + ' signed · ' + r.done + ' of ' + n));
+      if (r.st === 'signed' && r.k === 'pa' && r.stage === 'Final') { r.fo = zsNow(); renderDetail(selectedIdx, currentStep); showToast('PA2 – Final signed by all — F&O triggered · signed agreement pushed to F&O'); return; }
+      showToast(esgLabel(r.k, r.stage) + ' v' + r.v + ' · ' + (r.st === 'signed' ? 'signed by all — synced to F&O' : r.signers[r.done - 1].n + ' signed · ' + r.done + ' of ' + n));
     }
     function esgView(i){ var l = leads[selectedIdx], r = esgData(l)[i]; window.open(URL.createObjectURL(esgFile(l, r.k, r.stage, r)), '_blank'); }
     function esgSigned(i){ var l = leads[selectedIdx], r = esgData(l)[i]; esgSave(esgFile(l, r.k, r.stage, r), esgLabel(r.k, r.stage).replace(/[^\w]+/g, '-') + '-v' + r.v + '-signed.pdf'); showToast('Signed copy downloaded'); }
     function esgGridHtml(l){
       var R = esgData(l);
       var head = '<div class="zs-h"><span class="conf-lbl">Documents &amp; e-signature</span></div>';
-      // Purchase Agreement can't be sent yet: one placeholder row, one status (advance payment + F&O approval).
-      var hold = [];
-      if (!R.some(function(r){ return r.k === 'pa'; }))
-        hold.push(esgStage(l, 'pa') === null ? { st:'pend', sim:'both', why:'Waiting for advance payment and F&amp;O approval' }
-          : { st:'adv', why:'F&amp;O approved · ready to send for signature' });   // after the trigger, until it is sent
+      // Each Purchase Agreement not sent yet has a placeholder row: waiting for its trigger, or ready to send.
+      var hold = [], paid = esgPaid(l), has = function(stg){ return R.some(function(r){ return r.k === 'pa' && r.stage === stg; }); };
+      if (!has('Advance') && !l.soApproved) hold.push(paid ? { stage:'Advance', st:'adv', why:'Ready to send for signature' } : { stage:'Advance', st:'padv', sim:'pay', why:'Waiting for advance payment' });
+      if (!has('Final')) hold.push(l.soApproved ? { stage:'Final', st:'fok', why:'Ready to send for signature' } : { stage:'Final', st:'pfo', sim: paid ? 'so' : '', why:'Waiting for F&amp;O sales order approval' });
       var holdRows = hold.map(function(h){ var st = ESG_ST[h.st];
-        return '<tr class="esg-hold"><td><span class="zs-tn">Purchase Agreement</span></td><td>—</td><td>—</td><td>—</td>' +
+        return '<tr class="esg-hold"><td><span class="zs-tn">Purchase Agreement</span>' + esgPaTag(h.stage) + '</td><td>—</td><td>—</td><td>—</td>' +
           '<td><span class="esg-chip ' + st[1] + '" title="' + h.why + '">' + st[0] + '</span></td>' +
           '<td><div class="esg-acts">' + (h.sim ? simBtn(h.sim) : '') + '<span class="esg-pf">' + h.why + '</span></div></td></tr>';
       }).join('');
@@ -5983,9 +5993,9 @@
       var rows = idx.map(function(i, n){
         var r = R[i], st = ESG_ST[r.st], live = r.st === 'sent' || r.st === 'viewed';
         var pre = !held && n < nTop && r.k === 'doc' ? (held = true, holdRows) : '';
-        return pre + '<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span>' + (r.k === 'pa' ? esgPaTag(esgPaVer(r)) : '') + '</td>' +
+        return pre + '<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span>' + (r.k === 'pa' ? esgPaTag(r.stage || esgPaVer(r)) : '') + '</td>' +
           '<td>v' + r.v + '</td><td class="esg-to">' + (r.mode === 'inperson' ? '<span class="esg-ip"><span class="material-symbols-outlined">stylus_note</span>In person</span>' : '') + dpEsc(r.to).replace('@', '<wbr>@') + '</td><td><span class="nw">' + r.sent.slice(0, 11) + '</span><span class="zs-ts">' + r.sent.slice(12) + '</span></td>' +
-          '<td><span class="esg-chip ' + st[1] + '">' + st[0] + '</span>' + (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + x.n + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed</span>' : '') + '</td>' +
+          '<td><span class="esg-chip ' + st[1] + '">' + st[0] + '</span>' + (r.fo ? '<span class="zs-ts esg-fo"><span class="material-symbols-outlined">cloud_done</span>Pushed to F&amp;O</span>' : '') + (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + x.n + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed</span>' : '') + '</td>' +
           '<td><div class="esg-acts"><button class="fb-ic" onclick="esgView(' + i + ')" title="View" aria-label="View"><span class="material-symbols-outlined">visibility</span></button>' +
             (r.st === 'signed' ? '<button class="fb-ic" onclick="esgSigned(' + i + ')" title="Download signed copy" aria-label="Download signed copy"><span class="material-symbols-outlined">download</span></button>'
               : '<span class="fb-ic esg-na" title="Download signed copy · available once signed" aria-disabled="true"><span class="material-symbols-outlined">download</span></span>') +
@@ -6208,7 +6218,7 @@
       renderDetail(selectedIdx, currentStep);
       zsSignOptions(k);
     }
-    function zsSimSO(){ var l = leads[selectedIdx]; l.soApproved = true; renderDetail(selectedIdx, currentStep); showToast('Sales order approved in F&O — Purchase Agreement can now be sent for signature'); }
+    function zsSimSO(){ var l = leads[selectedIdx]; l.soApproved = true; renderDetail(selectedIdx, currentStep); showToast('Sales order approved in F&O — PA2 – Final can now be sent for signature'); }
 
     // Sign options — the only step before Zoho Sign: signature needed?, in person or remote, fixed signers.
     var zsOpt = null;
