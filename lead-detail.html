@@ -1222,7 +1222,7 @@
     .fb-ic .material-symbols-outlined { font-size:17px; }
     .fb-ic.sim { color:var(--ink-muted); }
     .fmt-btn .fb-main { flex-wrap:wrap; column-gap:7px; row-gap:0; padding-block:5px; } .fb-why { flex-basis:100%; text-align:center; font-size:10.5px; font-weight:500; color:var(--ink-muted); line-height:1.3; }
-    .esg-b .fb-main { padding:0 40px; } .esg-b.on { border-color:var(--blue); }
+    .esg-b .fb-main { padding-inline:12px; } .esg-b.on { border-color:var(--blue); }
     .esg-stg { font-size:10.5px; font-weight:700; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:1px 7px; }
     .esg-menu { position:absolute; top:calc(100% + 4px); inset-inline-start:0; inset-inline-end:0; z-index:30; background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 24px rgba(16,24,40,.14); padding:4px; display:flex; flex-direction:column; }
     .esg-menu button { display:flex; align-items:center; gap:8px; border:0; background:none; border-radius:6px; padding:8px 10px; font:500 12.5px inherit; color:var(--ink); cursor:pointer; text-align:start; }
@@ -1234,7 +1234,8 @@
     .esg-ro { padding:8px 10px; border-radius:6px; background:var(--bg); font-size:13px; color:var(--ink-secondary); }
     .esg-warn { display:flex; gap:8px; align-items:flex-start; text-align:start; background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:9px 11px; font-size:12.5px; } .esg-warn .material-symbols-outlined { font-size:18px; color:#b54708; }
     .esg-chip { display:inline-flex; align-items:center; font-size:11px; font-weight:600; border-radius:999px; padding:2px 8px; white-space:nowrap; }
-    .esg-chip.ok { background:#e7f6ec; color:#0e7a3e; } .esg-chip.info { background:#e8f1fb; color:#0f6cbd; } .esg-chip.bad { background:#fdecec; color:#b42318; } .esg-chip.na { background:#f2f4f7; color:#667085; }
+    .esg-chip.ok { background:#e7f6ec; color:#0e7a3e; } .esg-chip.info { background:#e8f1fb; color:#0f6cbd; } .esg-chip.bad { background:#fdecec; color:#b42318; } .esg-chip.na { background:#f2f4f7; color:#667085; } .esg-pv { display:inline-block; margin-top:3px; font-size:10px; font-weight:700; border-radius:999px; padding:1px 7px; } .esg-pv.advance { background:#e8f1fb; color:#0f6cbd; } .esg-pv.final { background:#e7f6ec; color:#0e7a3e; }
+    .esg-chip.wait { background:#fff4e0; color:#a15c00; white-space:normal; border-radius:8px; line-height:1.3; } .esg-tb tr.esg-hold td { color:#667085; }
     .esg-tb .esg-to { overflow-wrap:normal; word-break:normal; } .esg-ip { display:flex; align-items:center; gap:3px; font-size:11px; font-weight:600; color:var(--ink-secondary); } .esg-ip .material-symbols-outlined { font-size:14px; }
     .esg-f small { font-weight:500; color:var(--ink-muted); } .esg-f .zso-sg b { font-size:12.5px; } .esg-f .zso-in { margin-top:3px; }
     .esg-tw { max-height:232px; overflow:auto; } .esg-tb th { position:sticky; top:0; z-index:1; } .esg-tb td { padding-top:6px; padding-bottom:6px; } .esg-tb .esg-tm { color:#667085; margin-inline-start:4px; }
@@ -5252,7 +5253,7 @@
           esgBtnsHtml(l) +
         '</div>' +
         (canQuote ? '' :
-          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Sync quote and Purchase Agreement signing unlock once the advance payment is received.</span></div>') +
+          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Sync quote unlocks once the advance payment is received. Purchase Agreement signing also needs F&amp;O approval.</span></div>') +
         esgGridHtml(l) +
         onlinePaymentHtml(l) +
         confOrderBlock(l, p) +
@@ -5721,11 +5722,18 @@
     // Download and Send to Zoho Sign sit on each tile, on the page — no menu to open.
     // Demo-only: move a locked step on (payment received in F&O, sales order approved in F&O).
     function simBtn(kind){
-      var t = kind === 'so' ? 'Simulate F&amp;O approval' : 'Simulate payment';
-      return '<button class="fb-ic sim" onclick="event.stopPropagation();' + (kind === 'so' ? 'zsSimSO()' : 'simAdvancePay()') + '" title="' + t + '" aria-label="' + t + '"><span class="material-symbols-outlined">refresh</span></button>';
+      var t = kind === 'both' ? 'Simulate advance payment and F&amp;O approval' : kind === 'so' ? 'Simulate F&amp;O approval' : 'Simulate payment';
+      return '<button class="fb-ic sim" onclick="event.stopPropagation();' + (kind === 'both' ? 'simPaBoth()' : kind === 'so' ? 'zsSimSO()' : 'simAdvancePay()') + '" title="' + t + '" aria-label="' + t + '"><span class="material-symbols-outlined">refresh</span></button>';
     }
     // Small second line under a button label: why it is waiting.
-    function simWhy(kind){ return '<small class="fb-why">' + (kind === 'so' ? 'Waiting for F&amp;O approval' : 'Waiting for advance payment') + '</small>'; }
+    function simWhy(kind){ return '<small class="fb-why">' + (kind === 'both' ? 'Waiting for advance payment &amp; F&amp;O approval' : kind === 'so' ? 'Waiting for F&amp;O approval' : 'Waiting for advance payment') + '</small>'; }
+    // Purchase Agreement trigger: one click = advance payment received + sales order approved in F&O.
+    function simPaBoth(){
+      var p = acceptedProp(), l = leads[selectedIdx]; if (!p) return;
+      p.received = Math.max(p.received || 0, Math.round(p.nsp * p.downPct / 100)); l.soApproved = true;
+      renderDetail(selectedIdx, currentStep);
+      showToast('Advance payment received and sales order approved in F&O — Purchase Agreement can now be sent for signature');
+    }
     function simAdvancePay(){
       var p = acceptedProp(); if (!p) return;
       p.received = Math.max(p.received || 0, Math.round(p.nsp * p.downPct / 100));
@@ -5788,13 +5796,17 @@
       { k:'doc',  name:'Duty of Care', icon:'health_and_safety' }
     ];
     // Pending requests (sent / viewed) show as Partially signed, with how many of the 3 have signed.
-    var ESG_ST = { sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'] };
+    var ESG_ST = { pend:['Pending advance &amp; F&amp;O','wait'], adv:['Advance received','ok'], sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'] };
     var ESG_REASONS = ['Wrong email', 'Document changed', 'Customer didn’t receive', 'Other'];
     var esgMenuOpen = null;
     function esgDoc(k){ return ESG_DOCS.filter(function(d){ return d.k === k; })[0]; }
     function esgPaid(l){ var p = acceptedProp() || {}; return !!p.advanceCash || (p.received || 0) > 0 || !!l._zsPaidSeed; }
     // Stage of a send: only the Purchase Agreement has one.
-    function esgStage(l, k){ if (k !== 'pa') return ''; return l.soApproved ? 'Final' : esgPaid(l) ? 'Advance' : null; }
+    // Purchase Agreement is signed once: locked (null) until the advance is paid AND F&O approves the sales order.
+    function esgStage(l, k){ if (k !== 'pa') return ''; return esgPaid(l) && l.soApproved ? '' : null; }
+    // Purchase Agreement version shown to users: Advance until everyone has signed, then Final.
+    function esgPaVer(r){ return r.st === 'signed' ? 'Final' : 'Advance'; }
+    function esgPaTag(v){ return '<span class="esg-pv ' + v.toLowerCase() + '">' + v + '</span>'; }
     function esgLabel(k, stage){ return k === 'pa' && stage ? 'PA – ' + stage : esgDoc(k).name; }
     function esgData(l){
       if (l.esg) return l.esg;
@@ -5802,10 +5814,9 @@
       // Sample history: every status.
       l.esg = [
         { k:'prop', stage:'', v:1, to:to, sent:'03 Nov 2026 09:42', st:'signed' },
-        { k:'pa',   stage:'Advance', v:1, to:to, sent:'02 Nov 2026 10:14', st:'declined' },
         { k:'sq',   stage:'', v:1, to:to, sent:'04 Nov 2026 11:20', st:'viewed' },
         { k:'doc',  stage:'', v:1, to:to, sent:'27 Oct 2026 16:00', st:'expired' },
-        { k:'doc',  stage:'', v:2, to:to, sent:'05 Nov 2026 12:07', st:'sent' }
+        { k:'doc',  stage:'', v:2, to:to, sent:'05 Nov 2026 12:07', st:'declined' }
       ];
       l.esg.forEach(function(r){ r.signers = esgSigners(l, r.to); r.done = r.st === 'signed' ? 3 : r.st === 'viewed' ? 2 : r.st === 'sent' ? 1 : r.st === 'declined' ? 2 : 0; });
       return l.esg;
@@ -5815,14 +5826,14 @@
     // Buttons
     function esgBtn(l, d){
       var stage = esgStage(l, d.k), canSend = !(d.k === 'pa' && stage === null), open = esgMenuOpen === d.k;
-      var sim = d.k === 'pa' && !l.soApproved ? simBtn(esgPaid(l) ? 'so' : 'pay') : '';
-      var sendTip = canSend ? 'Send ' + esgLabel(d.k, stage) + ' for signature' : 'Available after advance payment';
+      var sim = d.k === 'pa' && stage === null ? simBtn('both') : '';
+      var sendTip = canSend ? 'Send ' + esgLabel(d.k, stage) + ' for signature' : 'Available after advance payment and F&amp;O approval';
       var menu = open ? '<div class="esg-menu" role="menu">' +
           '<button role="menuitem" onclick="esgDownload(\'' + d.k + '\')"><span class="material-symbols-outlined">picture_as_pdf</span>Download (PDF)</button>' +
           '<button role="menuitem"' + (canSend ? ' onclick="esgSend(\'' + d.k + '\')"' : ' class="off" aria-disabled="true"') + ' title="' + sendTip + '"><span class="material-symbols-outlined">draw</span>Send for signature' + (canSend && stage ? '<em>' + esgLabel(d.k, stage) + '</em>' : '') + '</button>' +
         '</div>' : '';
       return '<div class="fmt-btn esg-b' + (open ? ' on' : '') + '"><button class="fb-main" aria-haspopup="menu" aria-expanded="' + open + '" onclick="esgToggle(\'' + d.k + '\')"><span class="material-symbols-outlined">' + d.icon + '</span>' + d.name +
-        (d.k === 'pa' && stage ? '<span class="esg-stg">' + stage + '</span>' : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy(esgPaid(l) ? 'so' : 'pay') : '') + '</button>' +
+        (d.k === 'pa' && stage !== null ? (function(){ var R = esgData(l).filter(function(r){ return r.k === 'pa'; }); return R.length ? esgPaTag(esgPaVer(R[R.length - 1])) : '<span class="esg-pv final">Advance received</span>'; })() : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy('both') : '') + '</button>' +
         (sim ? '<span class="fb-acts">' + sim + '</span>' : '') + menu + '</div>';
     }
     function esgBtnsHtml(l){ return ESG_DOCS.map(function(d){ return esgBtn(l, d); }).join(''); }
@@ -5938,14 +5949,24 @@
       if (r.done >= (n || 1)) r.st = 'signed';
       if (r.st === 'signed' && r.k === 'pa') paTick(l, PA_CHECK_SIGNED);
       renderDetail(selectedIdx, currentStep);
-      showToast(esgLabel(r.k, r.stage) + ' v' + r.v + ' · ' + (r.st === 'signed' ? 'signed by all — synced to F&O' : r.signers[r.done - 1].n + ' signed · ' + r.done + ' of ' + n));
+      showToast(esgLabel(r.k, r.stage) + ' v' + r.v + ' · ' + (r.st === 'signed' ? 'signed by all' + (r.k === 'pa' ? ' — now the Final version' : '') + ' — synced to F&O' : r.signers[r.done - 1].n + ' signed · ' + r.done + ' of ' + n));
     }
     function esgView(i){ var l = leads[selectedIdx], r = esgData(l)[i]; window.open(URL.createObjectURL(esgFile(l, r.k, r.stage, r)), '_blank'); }
     function esgSigned(i){ var l = leads[selectedIdx], r = esgData(l)[i]; esgSave(esgFile(l, r.k, r.stage, r), esgLabel(r.k, r.stage).replace(/[^\w]+/g, '-') + '-v' + r.v + '-signed.pdf'); showToast('Signed copy downloaded'); }
     function esgGridHtml(l){
       var R = esgData(l);
       var head = '<div class="zs-h"><span class="conf-lbl">Documents &amp; e-signature</span></div>';
-      if (!R.length) return '<div class="zs-sec">' + head + '<div class="zs-empty"><span class="material-symbols-outlined">draft</span>No documents sent for signature yet.</div></div>';
+      // Purchase Agreement can't be sent yet: one placeholder row, one status (advance payment + F&O approval).
+      var hold = [];
+      if (!R.some(function(r){ return r.k === 'pa'; }))
+        hold.push(esgStage(l, 'pa') === null ? { st:'pend', sim:'both', why:'Waiting for advance payment and F&amp;O approval' }
+          : { st:'adv', why:'F&amp;O approved · ready to send for signature' });   // after the trigger, until it is sent
+      var holdRows = hold.map(function(h){ var st = ESG_ST[h.st];
+        return '<tr class="esg-hold"><td><span class="zs-tn">Purchase Agreement</span></td><td>—</td><td>—</td><td>—</td>' +
+          '<td><span class="esg-chip ' + st[1] + '" title="' + h.why + '">' + st[0] + '</span></td>' +
+          '<td><div class="esg-acts">' + (h.sim ? simBtn(h.sim) : '') + '<span class="esg-pf">' + h.why + '</span></div></td></tr>';
+      }).join('');
+      if (!R.length && !holdRows) return '<div class="zs-sec">' + head + '<div class="zs-empty"><span class="material-symbols-outlined">draft</span>No documents sent for signature yet.</div></div>';
       // Latest row per document + stage first, then the rest; newest first inside each group.
       var latest = {};
       R.forEach(function(r, i){ var key = r.k + '|' + r.stage; if ((latest[key] == null || R[latest[key]].v < r.v)) latest[key] = i; });
@@ -5957,10 +5978,13 @@
         if (R[a].stage !== R[b].stage) return R[a].stage === 'Final' ? -1 : 1;
         return R[b].v - R[a].v;
       });
-      var rows = idx.map(function(i){
+      var nTop = idx.filter(function(i){ return latest[R[i].k + '|' + R[i].stage] === i; }).length;
+      var held = false;   // placeholders go with the Purchase Agreement rows, before Duty of Care
+      var rows = idx.map(function(i, n){
         var r = R[i], st = ESG_ST[r.st], live = r.st === 'sent' || r.st === 'viewed';
-        return '<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span></td>' +
-          '<td>' + (r.stage || '—') + '</td><td>v' + r.v + '</td><td class="esg-to">' + (r.mode === 'inperson' ? '<span class="esg-ip"><span class="material-symbols-outlined">stylus_note</span>In person</span>' : '') + dpEsc(r.to).replace('@', '<wbr>@') + '</td><td><span class="nw">' + r.sent.slice(0, 11) + '</span><span class="zs-ts">' + r.sent.slice(12) + '</span></td>' +
+        var pre = !held && n < nTop && r.k === 'doc' ? (held = true, holdRows) : '';
+        return pre + '<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span>' + (r.k === 'pa' ? esgPaTag(esgPaVer(r)) : '') + '</td>' +
+          '<td>v' + r.v + '</td><td class="esg-to">' + (r.mode === 'inperson' ? '<span class="esg-ip"><span class="material-symbols-outlined">stylus_note</span>In person</span>' : '') + dpEsc(r.to).replace('@', '<wbr>@') + '</td><td><span class="nw">' + r.sent.slice(0, 11) + '</span><span class="zs-ts">' + r.sent.slice(12) + '</span></td>' +
           '<td><span class="esg-chip ' + st[1] + '">' + st[0] + '</span>' + (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + x.n + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed</span>' : '') + '</td>' +
           '<td><div class="esg-acts"><button class="fb-ic" onclick="esgView(' + i + ')" title="View" aria-label="View"><span class="material-symbols-outlined">visibility</span></button>' +
             (r.st === 'signed' ? '<button class="fb-ic" onclick="esgSigned(' + i + ')" title="Download signed copy" aria-label="Download signed copy"><span class="material-symbols-outlined">download</span></button>'
@@ -5968,10 +5992,10 @@
             (live && r.mode === 'inperson' ? '<button class="fb-ic" onclick="esgSignNow(' + i + ')" title="Continue signing in person" aria-label="Continue signing in person"><span class="material-symbols-outlined">stylus_note</span></button>' : '') +
             (live ? '<button class="fb-ic sim" onclick="esgRowSim(' + i + ')" title="Simulate next signature" aria-label="Simulate next signature"><span class="material-symbols-outlined">refresh</span></button>' +
               (r.signers && r.signers[r.done || 0] ? '<span class="esg-pf" title="Pending from ' + dpEsc(r.signers[r.done || 0].n) + ' · ' + r.signers[r.done || 0].role + '">Pending from ' + dpEsc(r.signers[r.done || 0].n.split(' ')[0]) + '</span>' : '') : '') +
-          '</div></td></tr>';
-      }).join('');
+          '</div></td></tr>' + (!held && n === nTop - 1 ? (held = true, holdRows) : '');
+      }).join('') + (held ? '' : holdRows);
       return '<div class="zs-sec">' + head +
-        '<div class="zs-tw esg-tw"><table class="zs-tb esg-tb"><colgroup><col style="width:14%"><col style="width:9%"><col style="width:9%"><col style="width:19%"><col style="width:13%"><col style="width:16%"><col></colgroup><thead><tr><th>Document</th><th>Stage</th><th>Version</th><th>Sent to</th><th>Sent date</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
+        '<div class="zs-tw esg-tw"><table class="zs-tb esg-tb"><colgroup><col style="width:17%"><col style="width:9%"><col style="width:21%"><col style="width:14%"><col style="width:17%"><col></colgroup><thead><tr><th>Document</th><th>Version</th><th>Sent to</th><th>Sent date</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
     }
 
     // When a document becomes available (business milestone) — null when unlocked.
@@ -6184,7 +6208,7 @@
       renderDetail(selectedIdx, currentStep);
       zsSignOptions(k);
     }
-    function zsSimSO(){ var l = leads[selectedIdx]; l.soApproved = true; renderDetail(selectedIdx, currentStep); showToast('Sales order approved in F&O — Purchase Agreement 2 unlocked'); }
+    function zsSimSO(){ var l = leads[selectedIdx]; l.soApproved = true; renderDetail(selectedIdx, currentStep); showToast('Sales order approved in F&O — Purchase Agreement can now be sent for signature'); }
 
     // Sign options — the only step before Zoho Sign: signature needed?, in person or remote, fixed signers.
     var zsOpt = null;
