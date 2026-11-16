@@ -1231,11 +1231,15 @@
     .esg-menu em { margin-inline-start:auto; font-style:normal; font-size:11px; font-weight:600; color:var(--ink-muted); }
     .esg-f { display:flex; flex-direction:column; gap:4px; margin-top:12px; text-align:start; } .esg-f > span { font-size:12px; font-weight:600; color:var(--ink); } .esg-f i { color:#b42318; font-style:normal; }
     .esg-in { width:100%; box-sizing:border-box; border:1px solid var(--border); border-radius:6px; padding:8px 10px; font:13px inherit; color:var(--ink); background:var(--surface); }
+    select.esg-in { -webkit-appearance:none; appearance:none; padding-inline-end:34px; cursor:pointer; background-repeat:no-repeat; background-position:right 10px center; background-size:16px;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23475467' d='M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z'/%3E%3C/svg%3E"); }
+    [dir="rtl"] select.esg-in { background-position:left 10px center; }
     .esg-ro { padding:8px 10px; border-radius:6px; background:var(--bg); font-size:13px; color:var(--ink-secondary); }
     .esg-warn { display:flex; gap:8px; align-items:flex-start; text-align:start; background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:9px 11px; font-size:12.5px; } .esg-warn .material-symbols-outlined { font-size:18px; color:#b54708; }
     .esg-chip { display:inline-flex; align-items:center; font-size:11px; font-weight:600; border-radius:999px; padding:2px 8px; white-space:nowrap; }
     .esg-chip.ok { background:#e7f6ec; color:#0e7a3e; } .esg-chip.info { background:#e8f1fb; color:#0f6cbd; } .esg-chip.bad { background:#fdecec; color:#b42318; } .esg-chip.na { background:#f2f4f7; color:#667085; } .esg-pv { display:inline-block; margin-top:3px; font-size:10px; font-weight:700; border-radius:999px; padding:1px 7px; } .esg-pv.advance { background:#e8f1fb; color:#0f6cbd; } .esg-pv.final { background:#e7f6ec; color:#0e7a3e; }
     .esg-fo { display:flex; align-items:center; gap:3px; color:#0e7a3e; } .esg-fo .material-symbols-outlined { font-size:13px; }
+    .esg-rm { position:relative; display:inline-flex; } .esg-rmm { top:calc(100% + 2px); inset-inline-start:auto; inset-inline-end:0; min-width:200px; } .esg-p { text-align:start; font-size:12.5px; color:var(--ink-secondary); margin:12px 0 0; line-height:1.45; }
     .esg-chip.wait { background:#fff4e0; color:#a15c00; white-space:normal; border-radius:8px; line-height:1.3; } .esg-tb tr.esg-hold td { color:#667085; }
     .esg-tb .esg-to { overflow-wrap:normal; word-break:normal; } .esg-ip { display:flex; align-items:center; gap:3px; font-size:11px; font-weight:600; color:var(--ink-secondary); } .esg-ip .material-symbols-outlined { font-size:14px; }
     .esg-f small { font-weight:500; color:var(--ink-muted); } .esg-f .zso-sg b { font-size:12.5px; } .esg-f .zso-in { margin-top:3px; }
@@ -5797,7 +5801,7 @@
       { k:'doc',  name:'Duty of Care', icon:'health_and_safety' }
     ];
     // Pending requests (sent / viewed) show as Partially signed, with how many of the 3 have signed.
-    var ESG_ST = { padv:['Pending advance','wait'], adv:['Advance received','ok'], pfo:['Pending F&amp;O','wait'], fok:['F&amp;O approved','ok'], sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'] };
+    var ESG_ST = { padv:['Pending advance','wait'], adv:['Advance received','ok'], pfo:['Pending F&amp;O','wait'], fok:['F&amp;O approved','ok'], sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'], cancelled:['Cancelled','na'] };
     var ESG_REASONS = ['Wrong email', 'Document changed', 'Customer didn’t receive', 'Other'];
     var esgMenuOpen = null;
     function esgDoc(k){ return ESG_DOCS.filter(function(d){ return d.k === k; })[0]; }
@@ -5849,6 +5853,7 @@
     function esgToggle(k){ esgMenuOpen = esgMenuOpen === k ? null : k; renderDetail(selectedIdx, currentStep); }
     document.addEventListener('click', function(e){
       if (esgMenuOpen && !e.target.closest('.esg-b')) { esgMenuOpen = null; if (selectedIdx > -1) renderDetail(selectedIdx, currentStep); }
+      if (esgRowMenu != null && !e.target.closest('.esg-rm')) { esgRowMenu = null; if (selectedIdx > -1) renderDetail(selectedIdx, currentStep); }
     });
 
     // Minimal one-page PDF so Download gives a real PDF.
@@ -5952,6 +5957,31 @@
     }
 
     // Grid
+    // Pending remote request: cancel it, or switch to signing in person (the remote request is cancelled).
+    var esgRowMenu = null;
+    var ESG_CANCEL_REASONS = ['Deal on hold', 'Sent by mistake', 'Customer will sign in person', 'Other'];
+    function esgRowMenuToggle(i){ esgRowMenu = esgRowMenu === i ? null : i; renderDetail(selectedIdx, currentStep); }
+    function esgCancelReq(i){
+      var l = leads[selectedIdx], r = esgData(l)[i]; esgRowMenu = null; renderDetail(selectedIdx, currentStep);
+      openConfirm('Cancel signature request?', '<div class="esg-warn"><span class="material-symbols-outlined">warning</span>The Zoho Sign link sent to the signers stops working.' + (r.done ? ' The ' + r.done + ' signature' + (r.done === 1 ? '' : 's') + ' already collected will be lost.' : '') + '</div>' +
+        '<div class="esg-f"><span>Document</span><div class="esg-ro">' + dpEsc(esgDoc(r.k).name) + (r.stage ? ' · ' + esgLabel(r.k, r.stage) : '') + ' · v' + r.v + '</div></div>' +
+        '<label class="esg-f"><span>Reason <i>*</i></span><select class="esg-in" id="esgWhy" onchange="document.getElementById(\'confirmOkBtn\').classList.toggle(\'locked\', !this.value)"><option value="">Select a reason</option>' + ESG_CANCEL_REASONS.map(function(x){ return '<option>' + x + '</option>'; }).join('') + '</select></label>',
+        'Cancel request', function(){
+          var why = document.getElementById('esgWhy').value; r.st = 'cancelled'; r.reason = why;
+          renderDetail(selectedIdx, currentStep); showToast(esgLabel(r.k, r.stage) + ' v' + r.v + ' · signature request cancelled (' + why + ')');
+        }, 'Keep request', 'cancel');
+      document.getElementById('confirmOkBtn').classList.add('locked');
+    }
+    function esgInPersonInstead(i){
+      var l = leads[selectedIdx], R = esgData(l), r = R[i]; esgRowMenu = null; renderDetail(selectedIdx, currentStep);
+      openConfirm('Sign in person instead?', '<div class="esg-f"><span>Document</span><div class="esg-ro">' + dpEsc(esgDoc(r.k).name) + (r.stage ? ' · ' + esgLabel(r.k, r.stage) : '') + ' · v' + r.v + '</div></div>' +
+        '<p class="esg-p">The remote request is cancelled and Zoho Sign opens on this device. The 3 signers sign here in order: Sales manager, Sales executive, Customer.</p>',
+        'Start signing', function(){
+          r.st = 'cancelled'; r.reason = 'Signing in person instead';
+          R.push({ k:r.k, stage:r.stage, v:r.v + 1, to:r.to, sent:zsNow(), st:'sent', mode:'inperson', signers:esgSigners(l, r.to), done:0 });
+          renderDetail(selectedIdx, currentStep); esgSignNow(R.length - 1);
+        }, 'Cancel', 'stylus_note', true);
+    }
     function esgRowSim(i){
       var l = leads[selectedIdx], r = esgData(l)[i]; if (!r) return;
       var n = (r.signers || []).length;
@@ -5995,11 +6025,13 @@
         var pre = !held && n < nTop && r.k === 'doc' ? (held = true, holdRows) : '';
         return pre + '<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span>' + (r.k === 'pa' ? esgPaTag(r.stage || esgPaVer(r)) : '') + '</td>' +
           '<td>v' + r.v + '</td><td class="esg-to">' + (r.mode === 'inperson' ? '<span class="esg-ip"><span class="material-symbols-outlined">stylus_note</span>In person</span>' : '') + dpEsc(r.to).replace('@', '<wbr>@') + '</td><td><span class="nw">' + r.sent.slice(0, 11) + '</span><span class="zs-ts">' + r.sent.slice(12) + '</span></td>' +
-          '<td><span class="esg-chip ' + st[1] + '">' + st[0] + '</span>' + (r.fo ? '<span class="zs-ts esg-fo"><span class="material-symbols-outlined">cloud_done</span>Pushed to F&amp;O</span>' : '') + (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + x.n + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed</span>' : '') + '</td>' +
+          '<td><span class="esg-chip ' + st[1] + '">' + st[0] + '</span>' + (r.st === 'cancelled' && r.reason ? '<span class="zs-ts">' + dpEsc(r.reason) + '</span>' : '') + (r.fo ? '<span class="zs-ts esg-fo"><span class="material-symbols-outlined">cloud_done</span>Pushed to F&amp;O</span>' : '') + (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + x.n + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed</span>' : '') + '</td>' +
           '<td><div class="esg-acts"><button class="fb-ic" onclick="esgView(' + i + ')" title="View" aria-label="View"><span class="material-symbols-outlined">visibility</span></button>' +
             (r.st === 'signed' ? '<button class="fb-ic" onclick="esgSigned(' + i + ')" title="Download signed copy" aria-label="Download signed copy"><span class="material-symbols-outlined">download</span></button>'
               : '<span class="fb-ic esg-na" title="Download signed copy · available once signed" aria-disabled="true"><span class="material-symbols-outlined">download</span></span>') +
             (live && r.mode === 'inperson' ? '<button class="fb-ic" onclick="esgSignNow(' + i + ')" title="Continue signing in person" aria-label="Continue signing in person"><span class="material-symbols-outlined">stylus_note</span></button>' : '') +
+            (live && r.mode !== 'inperson' ? '<span class="esg-rm"><button class="fb-ic" onclick="esgRowMenuToggle(' + i + ')" title="More actions" aria-label="More actions" aria-haspopup="menu" aria-expanded="' + (esgRowMenu === i) + '"><span class="material-symbols-outlined">more_vert</span></button>' +
+              (esgRowMenu === i ? '<span class="esg-menu esg-rmm" role="menu"><button role="menuitem" onclick="esgInPersonInstead(' + i + ')"><span class="material-symbols-outlined">stylus_note</span>Sign in person instead</button><button role="menuitem" onclick="esgCancelReq(' + i + ')"><span class="material-symbols-outlined">cancel</span>Cancel request</button></span>' : '') + '</span>' : '') +
             (live ? '<button class="fb-ic sim" onclick="esgRowSim(' + i + ')" title="Simulate next signature" aria-label="Simulate next signature"><span class="material-symbols-outlined">refresh</span></button>' +
               (r.signers && r.signers[r.done || 0] ? '<span class="esg-pf" title="Pending from ' + dpEsc(r.signers[r.done || 0].n) + ' · ' + r.signers[r.done || 0].role + '">Pending from ' + dpEsc(r.signers[r.done || 0].n.split(' ')[0]) + '</span>' : '') : '') +
           '</div></td></tr>' + (!held && n === nTop - 1 ? (held = true, holdRows) : '');
