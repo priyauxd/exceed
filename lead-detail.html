@@ -5258,7 +5258,7 @@
           esgBtnsHtml(l) +
         '</div>' +
         (canQuote ? '' :
-          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Sync quote and PA1 – Advance unlock once the advance payment is received. PA2 – Final unlocks on F&amp;O sales order approval.</span></div>') +
+          '<div class="conf-lock-note"><span class="material-symbols-outlined">hourglass_top</span><span>Sync quote and PA1 – Initial unlock once the advance payment is received. PA2 – Final unlocks on F&amp;O sales order approval.</span></div>') +
         esgGridHtml(l) +
         onlinePaymentHtml(l) +
         confOrderBlock(l, p) +
@@ -5814,18 +5814,17 @@
     function esgStage(l, k){ if (k !== 'pa') return ''; return l.soApproved ? 'Final' : esgPaid(l) && !esgPa1Done(l) ? 'Advance' : null; }
     // Purchase Agreement version shown to users: Advance until everyone has signed, then Final.
     function esgPaVer(r){ return r.st === 'signed' ? 'Final' : 'Advance'; }
-    // PA1 = Advance (after advance payment), PA2 = Final (after F&O sales order approval).
-    var ESG_PA_NO = { Advance:'PA1', Final:'PA2' };
-    function esgPaTag(v){ return '<span class="esg-pv ' + v.toLowerCase() + '">' + (ESG_PA_NO[v] ? ESG_PA_NO[v] + ' · ' : '') + v + '</span>'; }
-    function esgLabel(k, stage){ return k === 'pa' && stage ? (ESG_PA_NO[stage] || 'PA') + ' – ' + stage : esgDoc(k).name; }
+    // PA1 – Initial (after advance payment), PA2 – Final (after F&O sales order approval). Internal stage keys stay Advance / Final.
+    var ESG_PA_NO = { Advance:'PA1', Final:'PA2' }, ESG_PA_NAME = { Advance:'Initial', Final:'Final' };
+    function esgPaTag(v){ return '<span class="esg-pv ' + v.toLowerCase() + '">' + (ESG_PA_NO[v] ? ESG_PA_NO[v] + ' · ' : '') + (ESG_PA_NAME[v] || v) + '</span>'; }
+    function esgLabel(k, stage){ return k === 'pa' && stage ? (ESG_PA_NO[stage] || 'PA') + ' – ' + (ESG_PA_NAME[stage] || stage) : esgDoc(k).name; }
     function esgData(l){
       if (l.esg) return l.esg;
       var to = l.email && l.email !== '—' ? l.email : 'customer@email.ae';
       // Sample history: every status.
       l.esg = [
         { k:'sq',   stage:'', v:1, to:to, sent:'04 Nov 2026 11:20', st:'viewed' },
-        { k:'doc',  stage:'', v:1, to:to, sent:'27 Oct 2026 16:00', st:'expired' },
-        { k:'doc',  stage:'', v:2, to:to, sent:'05 Nov 2026 12:07', st:'declined' }
+        { k:'doc',  stage:'', v:1, to:to, sent:'05 Nov 2026 12:07', st:'declined' }
       ];
       l.esg.forEach(function(r){ r.signers = esgSigners(l, r.to); r.done = r.st === 'signed' ? 3 : r.st === 'viewed' ? 2 : r.st === 'sent' ? 1 : r.st === 'declined' ? 2 : 0; });
       return l.esg;
@@ -5845,7 +5844,7 @@
           '<button role="menuitem"' + (canSend ? ' onclick="esgSend(\'' + d.k + '\')"' : ' class="off" aria-disabled="true"') + ' title="' + sendTip + '"><span class="material-symbols-outlined">draw</span>Send for signature' + (canSend && stage ? '<em>' + esgLabel(d.k, stage) + '</em>' : '') + '</button>' +
         '</div>' : '';
       return '<div class="fmt-btn esg-b' + (open ? ' on' : '') + '"><button class="fb-main" aria-haspopup="menu" aria-expanded="' + open + '" onclick="esgToggle(\'' + d.k + '\')"><span class="material-symbols-outlined">' + d.icon + '</span>' + d.name +
-        (d.k === 'pa' && (stage || pa1Done) ? esgPaTag(stage || 'Final') : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy(simK === 'pay' ? 'both' : 'so') : '') + '</button>' +
+        (d.k === 'pa' && (stage || pa1Done) ? esgPaTag(stage || 'Final') : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy(simK) : '') + '</button>' +
         (sim ? '<span class="fb-acts">' + sim + '</span>' : '') + menu + '</div>';
     }
     function esgBtnsHtml(l){ return ESG_DOCS.map(function(d){ return esgBtn(l, d); }).join(''); }
