@@ -659,7 +659,7 @@
     var intro = S.resumed && !S.handedAny
       ? '<div class="zsf-res">' + ic('pause_circle') + '<span>Paused session' + (o.pausedAt ? ' · ' + esc(o.pausedAt) : '') + '. Started by <b>' + esc(o.startedBy) + '</b>. Signatures so far are kept.' + (other ? ' You are taking over as host — this is recorded in the audit log.' : '') + '</span></div>'
       : '';
-    dlg(S.resumed && !S.handedAny ? 'Resume session' : (n ? 'Control is back with you' : 'Start in-person signing'), intro + '<p style="margin:0 0 10px">' + esc(hostName()) + ', ' + n + ' of ' + tot + ' signers have signed. Next to sign: <b>' + esc(nx.name) + '</b> (' + esc(nx.role) + ').</p>' +
+    dlg(S.resumed && !S.handedAny ? 'Resume session' : (n ? 'Control is back with you' : 'Start in-person signing'), intro + '<p style="margin:0 0 10px">Hello ' + esc(hostName()) + ',<br>' + n + ' of ' + tot + ' signers have signed. Next to sign: <b>' + esc(nx.name) + '</b> (' + esc(nx.role.replace(/\b\w/g, function (c) { return c.toUpperCase(); })) + ')</p>' +
       '<ol class="zsf-hl">' + S.rc.map(function (r, i) { return '<li class="' + (i < n ? 'ok' : i === n ? 'now' : '') + '">' + ic(i < n ? 'check_circle' : i === n ? 'front_hand' : 'schedule') + '<span><b>' + esc(r.name) + '</b> · ' + esc(r.role) + '</span></li>'; }).join('') + '</ol>',
       '<button class="zsf-btn" onclick="ZohoSign._handoff()">' + ic('forward_to_inbox') + 'Send link instead</button>' +
       '<button class="zsf-btn" onclick="ZohoSign._pause()">Pause</button>' +
