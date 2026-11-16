@@ -1221,6 +1221,7 @@
     .fb-ic:hover { background:#e9eef6; color:var(--blue); }
     .fb-ic .material-symbols-outlined { font-size:17px; }
     .fb-ic.sim { color:var(--ink-muted); }
+    .fmt-btn .fb-main { flex-wrap:wrap; column-gap:7px; row-gap:0; padding-block:5px; } .fb-why { flex-basis:100%; text-align:center; font-size:10.5px; font-weight:500; color:var(--ink-muted); line-height:1.3; }
     .esg-b .fb-main { padding:0 40px; } .esg-b.on { border-color:var(--blue); }
     .esg-stg { font-size:10.5px; font-weight:700; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:1px 7px; }
     .esg-menu { position:absolute; top:calc(100% + 4px); inset-inline-start:0; inset-inline-end:0; z-index:30; background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 24px rgba(16,24,40,.14); padding:4px; display:flex; flex-direction:column; }
@@ -1234,11 +1235,10 @@
     .esg-warn { display:flex; gap:8px; align-items:flex-start; text-align:start; background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:9px 11px; font-size:12.5px; } .esg-warn .material-symbols-outlined { font-size:18px; color:#b54708; }
     .esg-chip { display:inline-flex; align-items:center; font-size:11px; font-weight:600; border-radius:999px; padding:2px 8px; white-space:nowrap; }
     .esg-chip.ok { background:#e7f6ec; color:#0e7a3e; } .esg-chip.info { background:#e8f1fb; color:#0f6cbd; } .esg-chip.bad { background:#fdecec; color:#b42318; } .esg-chip.na { background:#f2f4f7; color:#667085; }
-    .esg-tb tr.esg-void td { color:#98a2b3; background:#fafafa; } .esg-tb tr.esg-void .zs-tn { color:#98a2b3; }
-    .esg-tb .esg-to { overflow-wrap:anywhere; } .esg-ip { display:flex; align-items:center; gap:3px; font-size:11px; font-weight:600; color:var(--ink-secondary); } .esg-ip .material-symbols-outlined { font-size:14px; }
+    .esg-tb .esg-to { overflow-wrap:normal; word-break:normal; } .esg-ip { display:flex; align-items:center; gap:3px; font-size:11px; font-weight:600; color:var(--ink-secondary); } .esg-ip .material-symbols-outlined { font-size:14px; }
     .esg-f small { font-weight:500; color:var(--ink-muted); } .esg-f .zso-sg b { font-size:12.5px; } .esg-f .zso-in { margin-top:3px; }
     .esg-tw { max-height:232px; overflow:auto; } .esg-tb th { position:sticky; top:0; z-index:1; } .esg-tb td { padding-top:6px; padding-bottom:6px; } .esg-tb .esg-tm { color:#667085; margin-inline-start:4px; }
-    .esg-acts { display:flex; align-items:center; gap:2px; } .esg-na, .esg-na:hover { color:#d0d5dd; background:none; cursor:not-allowed; }
+    .esg-acts { display:flex; align-items:center; gap:2px; } .esg-pf { min-width:0; margin-inline-start:2px; font-size:10.5px; color:#667085; line-height:1.3; } .esg-na, .esg-na:hover { color:#d0d5dd; background:none; cursor:not-allowed; }
     .esg-tb .zs-tn { white-space:normal; overflow:visible; } .zs-tb.esg-tb .zs-ts { white-space:normal; overflow:visible; }
     .zs-empty { display:flex; align-items:center; gap:8px; padding:16px; border:1px dashed var(--border); border-radius:10px; font-size:12.5px; color:var(--ink-muted); }
     .zs-empty .material-symbols-outlined { font-size:20px; }
@@ -5724,6 +5724,8 @@
       var t = kind === 'so' ? 'Simulate F&amp;O approval' : 'Simulate payment';
       return '<button class="fb-ic sim" onclick="event.stopPropagation();' + (kind === 'so' ? 'zsSimSO()' : 'simAdvancePay()') + '" title="' + t + '" aria-label="' + t + '"><span class="material-symbols-outlined">refresh</span></button>';
     }
+    // Small second line under a button label: why it is waiting.
+    function simWhy(kind){ return '<small class="fb-why">' + (kind === 'so' ? 'Waiting for F&amp;O approval' : 'Waiting for advance payment') + '</small>'; }
     function simAdvancePay(){
       var p = acceptedProp(); if (!p) return;
       p.received = Math.max(p.received || 0, Math.round(p.nsp * p.downPct / 100));
@@ -5740,7 +5742,7 @@
     function fmtBtn(o){
       var acts = (o.lock ? (o.sim ? simBtn(o.sim) : '') : (o.doc ? fbDocIcons(o.doc, docName(o.doc)) : '')) + (o.extra || '');
       var main = o.lock
-        ? '<span class="fb-main" title="' + o.lock + '"><span class="material-symbols-outlined">' + o.icon + '</span>' + o.label + '</span>'
+        ? '<span class="fb-main" title="' + o.lock + '"><span class="material-symbols-outlined">' + o.icon + '</span>' + o.label + (o.sim ? simWhy(o.sim) : '') + '</span>'
         : '<button class="fb-main" onclick="' + (o.click || (o.doc ? 'docAct(\'' + o.doc + '\',\'download\')' : '')) + '"' + (o.doc ? ' title="' + (o.tip || 'Download') + '"' : '') + (o.exp != null ? ' aria-expanded="' + o.exp + '"' : '') + '><span class="material-symbols-outlined">' + o.icon + '</span>' + o.label + (o.exp != null ? '<span class="material-symbols-outlined fb-car">' + (o.exp ? 'expand_less' : 'expand_more') + '</span>' : '') + '</button>';
       return '<div class="fmt-btn' + (o.lock ? ' off' : '') + (o.span ? ' conf-span' : '') + '">' + main + (acts ? '<span class="fb-acts">' + acts + '</span>' : '') + '</div>';
     }
@@ -5786,7 +5788,7 @@
       { k:'doc',  name:'Duty of Care', icon:'health_and_safety' }
     ];
     // Pending requests (sent / viewed) show as Partially signed, with how many of the 3 have signed.
-    var ESG_ST = { sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'], voided:['Voided','na'] };
+    var ESG_ST = { sent:['Partially signed','info'], viewed:['Partially signed','info'], signed:['Signed','ok'], declined:['Declined','bad'], expired:['Expired','bad'] };
     var ESG_REASONS = ['Wrong email', 'Document changed', 'Customer didn’t receive', 'Other'];
     var esgMenuOpen = null;
     function esgDoc(k){ return ESG_DOCS.filter(function(d){ return d.k === k; })[0]; }
@@ -5797,12 +5799,11 @@
     function esgData(l){
       if (l.esg) return l.esg;
       var to = l.email && l.email !== '—' ? l.email : 'customer@email.ae';
-      // Sample history: every status, one voided row.
+      // Sample history: every status.
       l.esg = [
-        { k:'prop', stage:'', v:1, to:to, sent:'02 Nov 2026 10:14', st:'declined' },
-        { k:'prop', stage:'', v:2, to:to, sent:'03 Nov 2026 09:42', st:'signed' },
-        { k:'sq',   stage:'', v:1, to:'hiren.p@email.com', sent:'04 Nov 2026 11:05', st:'voided', reason:'Wrong email' },
-        { k:'sq',   stage:'', v:2, to:to, sent:'04 Nov 2026 11:20', st:'viewed' },
+        { k:'prop', stage:'', v:1, to:to, sent:'03 Nov 2026 09:42', st:'signed' },
+        { k:'pa',   stage:'Advance', v:1, to:to, sent:'02 Nov 2026 10:14', st:'declined' },
+        { k:'sq',   stage:'', v:1, to:to, sent:'04 Nov 2026 11:20', st:'viewed' },
         { k:'doc',  stage:'', v:1, to:to, sent:'27 Oct 2026 16:00', st:'expired' },
         { k:'doc',  stage:'', v:2, to:to, sent:'05 Nov 2026 12:07', st:'sent' }
       ];
@@ -5821,7 +5822,7 @@
           '<button role="menuitem"' + (canSend ? ' onclick="esgSend(\'' + d.k + '\')"' : ' class="off" aria-disabled="true"') + ' title="' + sendTip + '"><span class="material-symbols-outlined">draw</span>Send for signature' + (canSend && stage ? '<em>' + esgLabel(d.k, stage) + '</em>' : '') + '</button>' +
         '</div>' : '';
       return '<div class="fmt-btn esg-b' + (open ? ' on' : '') + '"><button class="fb-main" aria-haspopup="menu" aria-expanded="' + open + '" onclick="esgToggle(\'' + d.k + '\')"><span class="material-symbols-outlined">' + d.icon + '</span>' + d.name +
-        (d.k === 'pa' && stage ? '<span class="esg-stg">' + stage + '</span>' : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span></button>' +
+        (d.k === 'pa' && stage ? '<span class="esg-stg">' + stage + '</span>' : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy(esgPaid(l) ? 'so' : 'pay') : '') + '</button>' +
         (sim ? '<span class="fb-acts">' + sim + '</span>' : '') + menu + '</div>';
     }
     function esgBtnsHtml(l){ return ESG_DOCS.map(function(d){ return esgBtn(l, d); }).join(''); }
@@ -5899,13 +5900,14 @@
     }
     function esgDo(k, stage, pend){
       var l = leads[selectedIdx], R = esgData(l), to = document.getElementById('esgTo').value.trim(), why = document.getElementById('esgWhy');
-      if (pend) { pend.st = 'voided'; pend.reason = why ? why.value : ''; }
-      var v = R.filter(function(r){ return r.k === k && (r.stage || '') === (stage || ''); }).length + 1;
+      // Resend cancels the previous request: it's taken off the grid and replaced by the new version.
+      if (pend) R.splice(R.indexOf(pend), 1);
+      var v = R.filter(function(r){ return r.k === k && (r.stage || '') === (stage || ''); }).reduce(function(m, r){ return Math.max(m, r.v); }, pend ? pend.v : 0) + 1;
       R.push({ k:k, stage:stage || '', v:v, to:to, sent:zsNow(), st:'sent', mode:esgMode, signers:esgSigners(l, to), done:0 });
       if (k === 'pa') paTick(l, PA_CHECK_SHARED);
       renderDetail(selectedIdx, currentStep);
       if (esgMode === 'inperson') { esgSignNow(R.length - 1); return; }
-      showToast(esgLabel(k, stage) + ' v' + v + ' sent · ' + R[R.length - 1].signers[0].n + ' (Sales manager) signs first' + (pend ? ' · previous request voided' : ''));
+      showToast(esgLabel(k, stage) + ' v' + v + ' sent · ' + R[R.length - 1].signers[0].n + ' (Sales manager) signs first' + (pend ? ' · previous request cancelled (' + why.value + ')' : ''));
     }
     // In person: Zoho Sign's signing page opens on this device; the customer signs there.
     function esgSignNow(i){
@@ -5944,9 +5946,9 @@
       var R = esgData(l);
       var head = '<div class="zs-h"><span class="conf-lbl">Documents &amp; e-signature</span></div>';
       if (!R.length) return '<div class="zs-sec">' + head + '<div class="zs-empty"><span class="material-symbols-outlined">draft</span>No documents sent for signature yet.</div></div>';
-      // Latest non-voided row per document + stage first, then the rest; newest first inside each group.
+      // Latest row per document + stage first, then the rest; newest first inside each group.
       var latest = {};
-      R.forEach(function(r, i){ var key = r.k + '|' + r.stage; if (r.st !== 'voided' && (latest[key] == null || R[latest[key]].v < r.v)) latest[key] = i; });
+      R.forEach(function(r, i){ var key = r.k + '|' + r.stage; if ((latest[key] == null || R[latest[key]].v < r.v)) latest[key] = i; });
       var order = ESG_DOCS.map(function(d){ return d.k; });
       var idx = R.map(function(r, i){ return i; }).sort(function(a, b){
         var ta = latest[R[a].k + '|' + R[a].stage] === a ? 0 : 1, tb = latest[R[b].k + '|' + R[b].stage] === b ? 0 : 1;
@@ -5957,18 +5959,19 @@
       });
       var rows = idx.map(function(i){
         var r = R[i], st = ESG_ST[r.st], live = r.st === 'sent' || r.st === 'viewed';
-        return '<tr class="' + (r.st === 'voided' ? 'esg-void' : '') + '"><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span></td>' +
-          '<td>' + (r.stage || '—') + '</td><td>v' + r.v + '</td><td class="esg-to">' + (r.mode === 'inperson' ? '<span class="esg-ip"><span class="material-symbols-outlined">stylus_note</span>In person</span>' : '') + dpEsc(r.to) + '</td><td class="nw">' + r.sent.slice(0, 11) + '<span class="esg-tm">' + r.sent.slice(12) + '</span></td>' +
-          '<td><span class="esg-chip ' + st[1] + '"' + (r.reason ? ' title="Voided · ' + dpEsc(r.reason) + '"' : '') + '>' + st[0] + '</span>' + (r.reason ? '<span class="zs-ts">' + dpEsc(r.reason) + '</span>' : '') + (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + x.n + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed</span>' : '') + '</td>' +
+        return '<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span></td>' +
+          '<td>' + (r.stage || '—') + '</td><td>v' + r.v + '</td><td class="esg-to">' + (r.mode === 'inperson' ? '<span class="esg-ip"><span class="material-symbols-outlined">stylus_note</span>In person</span>' : '') + dpEsc(r.to).replace('@', '<wbr>@') + '</td><td><span class="nw">' + r.sent.slice(0, 11) + '</span><span class="zs-ts">' + r.sent.slice(12) + '</span></td>' +
+          '<td><span class="esg-chip ' + st[1] + '">' + st[0] + '</span>' + (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + x.n + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed</span>' : '') + '</td>' +
           '<td><div class="esg-acts"><button class="fb-ic" onclick="esgView(' + i + ')" title="View" aria-label="View"><span class="material-symbols-outlined">visibility</span></button>' +
             (r.st === 'signed' ? '<button class="fb-ic" onclick="esgSigned(' + i + ')" title="Download signed copy" aria-label="Download signed copy"><span class="material-symbols-outlined">download</span></button>'
               : '<span class="fb-ic esg-na" title="Download signed copy · available once signed" aria-disabled="true"><span class="material-symbols-outlined">download</span></span>') +
             (live && r.mode === 'inperson' ? '<button class="fb-ic" onclick="esgSignNow(' + i + ')" title="Continue signing in person" aria-label="Continue signing in person"><span class="material-symbols-outlined">stylus_note</span></button>' : '') +
-            (live ? '<button class="fb-ic sim" onclick="esgRowSim(' + i + ')" title="Simulate next signature" aria-label="Simulate next signature"><span class="material-symbols-outlined">refresh</span></button>' : '') +
+            (live ? '<button class="fb-ic sim" onclick="esgRowSim(' + i + ')" title="Simulate next signature" aria-label="Simulate next signature"><span class="material-symbols-outlined">refresh</span></button>' +
+              (r.signers && r.signers[r.done || 0] ? '<span class="esg-pf" title="Pending from ' + dpEsc(r.signers[r.done || 0].n) + ' · ' + r.signers[r.done || 0].role + '">Pending from ' + dpEsc(r.signers[r.done || 0].n.split(' ')[0]) + '</span>' : '') : '') +
           '</div></td></tr>';
       }).join('');
       return '<div class="zs-sec">' + head +
-        '<div class="zs-tw esg-tw"><table class="zs-tb esg-tb"><colgroup><col style="width:18%"><col style="width:9%"><col style="width:9%"><col style="width:19%"><col style="width:16%"><col style="width:16%"><col></colgroup><thead><tr><th>Document</th><th>Stage</th><th>Version</th><th>Sent to</th><th>Sent date</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
+        '<div class="zs-tw esg-tw"><table class="zs-tb esg-tb"><colgroup><col style="width:14%"><col style="width:9%"><col style="width:9%"><col style="width:19%"><col style="width:13%"><col style="width:16%"><col></colgroup><thead><tr><th>Document</th><th>Stage</th><th>Version</th><th>Sent to</th><th>Sent date</th><th>Status</th><th>Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
     }
 
     // When a document becomes available (business milestone) — null when unlocked.
