@@ -1214,7 +1214,8 @@
     .fmt-btn .fb-main { flex:1; display:inline-flex; align-items:center; justify-content:center; gap:7px; align-self:stretch; padding:0 72px; border:none; background:none; border-radius:6px; font-family:inherit; font-size:12px; font-weight:600; color:var(--ink); cursor:pointer; }
     .fmt-btn .fb-main .material-symbols-outlined { font-size:16px; color:var(--ink-secondary); }
     .fmt-btn:hover:not(.off) { border-color:var(--blue); background:#f6f9fd; }
-    .fmt-btn .fb-car { margin-inline-start:2px; }
+    .fmt-btn .fb-main { position:relative; } .fmt-btn .fb-car { position:absolute; inset-inline-end:10px; top:50%; transform:translateY(-50%); margin:0; }
+    .fmt-btn .fb-acts ~ .fb-car, .fmt-btn:has(.fb-acts) > .fb-main .fb-car { inset-inline-end:44px; }
     .fmt-btn.off { background:#f5f5f5; border-color:#f0f0f0; }
     .fmt-btn.off .fb-main, .fmt-btn.off .fb-main .material-symbols-outlined { color:#c2c2c2; cursor:not-allowed; }
     .fb-acts { position:absolute; inset-inline-end:5px; top:50%; transform:translateY(-50%); display:inline-flex; align-items:center; gap:2px; }
@@ -1223,7 +1224,9 @@
     .fb-ic .material-symbols-outlined { font-size:17px; }
     .fb-ic.sim { color:var(--ink-muted); }
     .fmt-btn .fb-main { flex-wrap:wrap; column-gap:7px; row-gap:0; padding-block:5px; } .fb-why { flex-basis:100%; text-align:center; font-size:10.5px; font-weight:500; color:var(--ink-muted); line-height:1.3; }
-    .esg-b .fb-main { padding-inline:12px; } .esg-b.on { border-color:var(--blue); }
+    .esg-b { flex-direction:column; align-items:stretch; justify-content:center; } .esg-b .fb-main { position:static; padding-inline:30px; flex:none; min-height:26px; }
+    .esg-why { display:flex; align-items:center; justify-content:center; gap:2px; margin-top:-5px; padding-bottom:3px; cursor:pointer; } .esg-why .fb-why { flex-basis:auto; }
+    .esg-why .fb-ic { width:22px; height:22px; } .esg-why .fb-ic .material-symbols-outlined { font-size:15px; } .esg-b.on { border-color:var(--blue); }
     .esg-stg { font-size:10.5px; font-weight:700; color:var(--blue); background:var(--blue-soft); border-radius:999px; padding:1px 7px; }
     .esg-menu { position:absolute; top:calc(100% + 4px); inset-inline-start:0; inset-inline-end:0; z-index:30; background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 24px rgba(16,24,40,.14); padding:4px; display:flex; flex-direction:column; }
     .esg-menu button { display:flex; align-items:center; gap:8px; border:0; background:none; border-radius:6px; padding:8px 10px; font:500 12.5px inherit; color:var(--ink); cursor:pointer; text-align:start; }
@@ -5901,8 +5904,9 @@
             : '<button role="menuitem" class="off" aria-disabled="true" title="' + (canSend ? 'Managers, sales admins and admins only · exceptions when Zoho Sign can\'t be used' : sendTip) + '"><span class="material-symbols-outlined">upload_file</span>Upload signed copy</button>') +
         '</div>' : '';
       return '<div class="fmt-btn esg-b' + (open ? ' on' : '') + '"><button class="fb-main" aria-haspopup="menu" aria-expanded="' + open + '" onclick="esgToggle(\'' + d.k + '\')"><span class="material-symbols-outlined">' + d.icon + '</span>' + d.name +
-        (d.k === 'pa' && (stage || pa1Done) ? esgPaTag(stage || 'Final') : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span>' + (sim ? simWhy(simK) : '') + '</button>' +
-        (sim ? '<span class="fb-acts">' + sim + '</span>' : '') + menu + '</div>';
+        (d.k === 'pa' && (stage || pa1Done) ? esgPaTag(stage || 'Final') : '') + '<span class="material-symbols-outlined fb-car">' + (open ? 'expand_less' : 'expand_more') + '</span></button>' +
+        // Waiting reason with its simulator right next to the text.
+        (sim ? '<div class="esg-why" onclick="esgToggle(\'' + d.k + '\')">' + simWhy(simK) + sim + '</div>' : '') + menu + '</div>';
     }
     // Purchase Agreement dropdown: PA1 – Initial and PA2 – Final listed separately.
     // PA1 opens after the advance payment; PA2 opens after F&O approves the sales order (once PA1 is signed).
