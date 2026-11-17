@@ -3454,7 +3454,7 @@
       if (!window.DUP || l.skipDuplicateCheck || l.disqualified) return '';
       // Only leads that match another open lead show the message.
       var n = DUP.check(dupSubject(l)).open.length; if (!n) return '';
-      return '<div class="dup-ntf" role="alert"><span class="material-symbols-outlined">warning</span><span><b>' + (n === 1 ? 'Possible duplicate found.' : n + ' possible duplicates found.') + '</b> Check before you continue.</span>' +
+      return '<div class="dup-ntf" role="alert"><span class="material-symbols-outlined">warning</span><span><b>' + (n === 1 ? 'Possible duplicate found.' : n + ' possible duplicates found.') + '</b> Check for duplicate leads before you continue.</span>' +
         '<button class="dup-ntf-btn" onclick="dupCheck()"><span class="material-symbols-outlined">search</span>Check</button></div>';
     }
     function renderDetail(idx, stepIdx) {
