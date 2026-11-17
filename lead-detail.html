@@ -13,7 +13,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="duplicates.js?v=9"></script>
+  <script src="duplicates.js?v=8"></script>
   <script src="clone-lead.js?v=1"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -1761,17 +1761,9 @@
     .dup-row-tag { display:inline-flex; align-items:center; gap:3px; margin-top:2px; font-size:10.5px; font-weight:600; color:#b54708; background:#fff8eb; border:1px solid #fedf89; border-radius:10px; padding:0 7px 0 5px; line-height:17px; white-space:nowrap; }
     .dup-row-tag .material-symbols-outlined { font-size:13px; }
     .dup-n { display:inline-block; min-width:18px; text-align:center; font-size:10.5px; background:#f2f4f7; color:#475467; border-radius:999px; padding:0 6px; margin-inline-start:4px; }
-    .dup-ntf { display:grid; grid-template-columns:auto 1fr; column-gap:12px; row-gap:10px; align-items:start; background:#fdf8f4; border:1px solid #f6d3b4; border-radius:8px; padding:14px 16px; margin-bottom:12px; }
-    .dup-ntf-ic { color:#b54708; line-height:0; } .dup-ntf-ic .material-symbols-outlined { font-size:22px; font-variation-settings:'FILL' 1; }
-    .dup-ntf-tx { font-size:13px; line-height:1.55; color:#1d2939; padding-top:1px; }
-    .dup-ntf-tt { font-weight:700; color:#101828; margin-inline-end:4px; }
-    .dup-ntf-tx b { font-weight:400; } .dup-ntf-tx .dup-ntf-on { display:inline-block; font-size:11px; font-weight:600; color:#b54708; background:#fef0c7; border-radius:10px; padding:0 7px; margin-inline-start:2px; }
-    .dup-ntf-more { color:#667085; }
-    .dup-ntf-acts { grid-column:1 / -1; display:flex; justify-content:flex-end; flex-wrap:wrap; gap:10px; }
-    .dup-ntf-btn { display:inline-flex; align-items:center; gap:5px; height:32px; border:1px solid #d0d5dd; background:#fff; color:var(--ink); border-radius:8px; padding:0 14px; font:600 12.5px inherit; cursor:pointer; white-space:nowrap; text-decoration:none; }
-    .dup-ntf-btn:hover { background:#f9fafb; border-color:#98a2b3; } .dup-ntf-btn .material-symbols-outlined { display:none; }
-    .dup-ntf-btn.pri { background:var(--ink); border-color:var(--ink); color:#fff; } .dup-ntf-btn.pri:hover { background:#000; border-color:#000; }
-    .dup-ntf-btn:focus-visible { outline:2px solid #0f6cbd; outline-offset:2px; }
+    .dup-ntf { display:flex; align-items:center; gap:10px; background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:9px 12px; margin-bottom:10px; font-size:12.5px; line-height:1.4; }
+    .dup-ntf > .material-symbols-outlined { font-size:20px; color:#b54708; } .dup-ntf > span:nth-child(2) { flex:1; } .dup-ntf b { font-weight:700; }
+    .dup-ntf-btn { display:inline-flex; align-items:center; gap:4px; border:1px solid #17293d; background:#fff; color:#17293d; border-radius:6px; padding:5px 12px; font:600 12px inherit; cursor:pointer; white-space:nowrap; } .dup-ntf-btn:hover { background:#17293d; color:#fff; } .dup-ntf-btn .material-symbols-outlined { font-size:16px; }
     /* Clone lead (MAI-4768) */
     .dp-act-type.clone { background: var(--blue-soft); color: var(--blue); }
     .dp-act-text a.cl-link, .dp-kpi-v a.cl-link, .cl-list a.cl-link, .cl-prev a.cl-link { color: #0f6cbd; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
@@ -3443,7 +3435,7 @@
       var o = DUP.live()[l.id]; if (!o || JSON.stringify(o) !== JSON.stringify(v)) DUP.saveLive(l.id, v);
     }
     // Back in this tab after editing a matching lead elsewhere: re-check.
-    window.addEventListener('storage', function(e){ if (e.key === 'exeedDupLive1' || e.key === 'exeedDupNot1' || e.key === 'exeedDupDecisions3') dupRefresh(); });
+    window.addEventListener('storage', function(e){ if (e.key === 'exeedDupLive1') dupRefresh(); });
     window.addEventListener('focus', function(){ dupRefresh(); });
     // Re-run the check after Mobile / Email / Emirates ID changes: the bar appears or clears without a full re-render.
     function dupRefresh(){
@@ -3457,46 +3449,13 @@
       var l = leads[selectedIdx]; if (l && window.DUP) DUP.open(dupSubject(l));
     }
     // Notification at the top of the form (where "Review" used to be): prompt to check, with a Check button.
-    // "Not a duplicate" decisions, per pair of leads (shared across tabs).
-    var DUP_NOT = 'exeedDupNot1';
-    function dupNotList(){ try { return JSON.parse(localStorage.getItem(DUP_NOT) || '[]'); } catch (e) { return []; } }
-    function dupIsNot(a, b){ var k = [a, b].sort().join('|'); return dupNotList().indexOf(k) > -1; }
-    function dupMatches(l){
-      return DUP.check(dupSubject(l)).open.filter(function(m){ return !dupIsNot(l.id, m.r.id); })
-        .sort(function(x, y){ return (Date.parse(x.r.created) || 0) - (Date.parse(y.r.created) || 0); });
-    }
-    function dupNotDup(other){
-      var l = leads[selectedIdx], list = dupNotList(), k = [l.id, other].sort().join('|');
-      if (list.indexOf(k) < 0) list.push(k);
-      try { localStorage.setItem(DUP_NOT, JSON.stringify(list)); } catch (e) {}
-      l.activities.unshift({ type:'note', text:'Marked not a duplicate of ' + other + ' · by ' + CLONE.userFor(clonePersona()).name, time: DUP.fmt(new Date().toISOString()) });
-      dupRefresh(); showToast(other + ' marked as not a duplicate');
-    }
-    // Consolidate: the other lead is disqualified as a duplicate of this one (reason: Duplicate).
-    function dupConsolidate(other){
-      var l = leads[selectedIdx], who = CLONE.userFor(clonePersona()).name, at = DUP.fmt(new Date().toISOString());
-      DUP.setDecision(other, { d:'mark', by:who, at:at, of:l.id });
-      l.activities.unshift({ type:'note', text:other + ' consolidated into this lead (disqualified · reason: Duplicate) · by ' + who, time: at });
-      dupRefresh(); showToast(other + ' consolidated into ' + l.id);
-    }
-    function dupAgo(iso){
-      var d = Math.floor((Date.now() - (Date.parse(iso) || Date.now())) / 864e5);
-      return d <= 0 ? 'today' : d < 31 ? d + 'd ago' : 'on ' + DUP.fmt(iso).slice(0, 11);
-    }
-    // Notification at the top of the lead: earliest open match, with Open / Consolidate / Not a duplicate.
+    // Notification at the top of the form (where "Review" used to be): prompt to check, with a Check button.
     function dupNoticeHtml(l){
       if (!window.DUP || l.skipDuplicateCheck || l.disqualified) return '';
-      var ms = dupMatches(l); if (!ms.length) return '';
-      var m = ms[0], r = m.r, ok = DUP.canView(r), e = DUP.esc, n = ms.length, id = e(r.id);
-      var txt = (ok ? id + ' (' + e(r.name) + ')' : 'A lead') + ' was created via ' + e(r.source) + ' ' + dupAgo(r.created) + ' at ' + e(r.showroom) +
-        ': same ' + DUP.onList(m.on).toLowerCase().replace('eid', 'EID') + '.' + (n > 1 ? ' <span class="dup-ntf-more">' + (n - 1) + ' more after this.</span>' : '');
-      return '<div class="dup-ntf" role="alert"><span class="dup-ntf-ic" aria-hidden="true"><span class="material-symbols-outlined">warning</span></span>' +
-        '<div class="dup-ntf-tx"><span class="dup-ntf-tt">Possible duplicate lead</span> ' + txt + '</div>' +
-        '<div class="dup-ntf-acts">' +
-          (ok ? '<a class="dup-ntf-btn" href="' + DUP.link(r.id) + '" target="_blank" rel="noopener">Open ' + id + '</a>' +
-                '<button class="dup-ntf-btn pri" onclick="dupConsolidate(\'' + id + '\')">Consolidate ' + id + ' into this lead</button>' : '') +
-          '<button class="dup-ntf-btn" onclick="dupNotDup(\'' + id + '\')">Not a duplicate</button>' +
-        '</div></div>';
+      // Only leads that match another open lead show the message.
+      var n = DUP.check(dupSubject(l)).open.length; if (!n) return '';
+      return '<div class="dup-ntf" role="alert"><span class="material-symbols-outlined">warning</span><span><b>' + (n === 1 ? 'Possible duplicate found.' : n + ' possible duplicates found.') + '</b> Check before you continue.</span>' +
+        '<button class="dup-ntf-btn" onclick="dupCheck()"><span class="material-symbols-outlined">search</span>Check</button></div>';
     }
     function renderDetail(idx, stepIdx) {
       var l = leads[idx];
