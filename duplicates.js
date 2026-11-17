@@ -165,7 +165,7 @@
   }
 
   window.DUP = {
-    POOL: POOL, ME: ME, rec: rec, live: live, saveLive: saveLive, check: check, decision: decision, canView: canView, open: open, reset: reset,
+    POOL: POOL, ME: ME, rec: rec, live: live, saveLive: saveLive, check: check, decision: decision, setDecision: setDecision, canView: canView, open: open, reset: reset,
     fmt: fmt, esc: esc, tags: tags, link: link, onList: onList, addCss: addCss,
     _close: close
   };

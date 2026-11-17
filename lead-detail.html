@@ -13,7 +13,7 @@
   <link href="rtl.css?v=15" rel="stylesheet" />
   <script src="i18n-ar.js?v=25"></script>
   <script src="i18n.js?v=13"></script>
-  <script src="duplicates.js?v=8"></script>
+  <script src="duplicates.js?v=9"></script>
   <script src="clone-lead.js?v=1"></script>
   <style>
     /* Theme tokens now inherit from fluent-tokens.css (Fluent v9 web light, EXEED brand ramp).
@@ -1768,9 +1768,9 @@
     .dup-ntf-tx b { font-weight:400; } .dup-ntf-tx .dup-ntf-on { display:inline-block; font-size:11px; font-weight:600; color:#b54708; background:#fef0c7; border-radius:10px; padding:0 7px; margin-inline-start:2px; }
     .dup-ntf-more { color:#667085; }
     .dup-ntf-acts { grid-column:1 / -1; display:flex; justify-content:flex-end; flex-wrap:wrap; gap:10px; }
-    .dup-ntf-btn { display:inline-flex; align-items:center; gap:5px; height:30px; border:1px solid #d0d5dd; background:#fff; color:#1d2939; border-radius:4px; padding:0 14px; font:500 13px inherit; cursor:pointer; white-space:nowrap; text-decoration:none; }
+    .dup-ntf-btn { display:inline-flex; align-items:center; gap:5px; height:32px; border:1px solid #d0d5dd; background:#fff; color:var(--ink); border-radius:8px; padding:0 14px; font:600 12.5px inherit; cursor:pointer; white-space:nowrap; text-decoration:none; }
     .dup-ntf-btn:hover { background:#f9fafb; border-color:#98a2b3; } .dup-ntf-btn .material-symbols-outlined { display:none; }
-    .dup-ntf-btn.pri { background:#2f6fbf; border-color:#2f6fbf; color:#fff; } .dup-ntf-btn.pri:hover { background:#255ea6; }
+    .dup-ntf-btn.pri { background:var(--ink); border-color:var(--ink); color:#fff; } .dup-ntf-btn.pri:hover { background:#000; border-color:#000; }
     .dup-ntf-btn:focus-visible { outline:2px solid #0f6cbd; outline-offset:2px; }
     /* Clone lead (MAI-4768) */
     .dp-act-type.clone { background: var(--blue-soft); color: var(--blue); }
@@ -3443,7 +3443,7 @@
       var o = DUP.live()[l.id]; if (!o || JSON.stringify(o) !== JSON.stringify(v)) DUP.saveLive(l.id, v);
     }
     // Back in this tab after editing a matching lead elsewhere: re-check.
-    window.addEventListener('storage', function(e){ if (e.key === 'exeedDupLive1') dupRefresh(); });
+    window.addEventListener('storage', function(e){ if (e.key === 'exeedDupLive1' || e.key === 'exeedDupNot1' || e.key === 'exeedDupDecisions3') dupRefresh(); });
     window.addEventListener('focus', function(){ dupRefresh(); });
     // Re-run the check after Mobile / Email / Emirates ID changes: the bar appears or clears without a full re-render.
     function dupRefresh(){
@@ -3457,25 +3457,45 @@
       var l = leads[selectedIdx]; if (l && window.DUP) DUP.open(dupSubject(l));
     }
     // Notification at the top of the form (where "Review" used to be): prompt to check, with a Check button.
+    // "Not a duplicate" decisions, per pair of leads (shared across tabs).
+    var DUP_NOT = 'exeedDupNot1';
+    function dupNotList(){ try { return JSON.parse(localStorage.getItem(DUP_NOT) || '[]'); } catch (e) { return []; } }
+    function dupIsNot(a, b){ var k = [a, b].sort().join('|'); return dupNotList().indexOf(k) > -1; }
+    function dupMatches(l){
+      return DUP.check(dupSubject(l)).open.filter(function(m){ return !dupIsNot(l.id, m.r.id); })
+        .sort(function(x, y){ return (Date.parse(x.r.created) || 0) - (Date.parse(y.r.created) || 0); });
+    }
+    function dupNotDup(other){
+      var l = leads[selectedIdx], list = dupNotList(), k = [l.id, other].sort().join('|');
+      if (list.indexOf(k) < 0) list.push(k);
+      try { localStorage.setItem(DUP_NOT, JSON.stringify(list)); } catch (e) {}
+      l.activities.unshift({ type:'note', text:'Marked not a duplicate of ' + other + ' · by ' + CLONE.userFor(clonePersona()).name, time: DUP.fmt(new Date().toISOString()) });
+      dupRefresh(); showToast(other + ' marked as not a duplicate');
+    }
+    // Consolidate: the other lead is disqualified as a duplicate of this one (reason: Duplicate).
+    function dupConsolidate(other){
+      var l = leads[selectedIdx], who = CLONE.userFor(clonePersona()).name, at = DUP.fmt(new Date().toISOString());
+      DUP.setDecision(other, { d:'mark', by:who, at:at, of:l.id });
+      l.activities.unshift({ type:'note', text:other + ' consolidated into this lead (disqualified · reason: Duplicate) · by ' + who, time: at });
+      dupRefresh(); showToast(other + ' consolidated into ' + l.id);
+    }
     function dupAgo(iso){
       var d = Math.floor((Date.now() - (Date.parse(iso) || Date.now())) / 864e5);
-      return d <= 0 ? 'today' : d === 1 ? '1 day ago' : d < 31 ? d + ' days ago' : 'on ' + (window.DUP ? DUP.fmt(iso).slice(0, 11) : iso);
+      return d <= 0 ? 'today' : d < 31 ? d + 'd ago' : 'on ' + DUP.fmt(iso).slice(0, 11);
     }
+    // Notification at the top of the lead: earliest open match, with Open / Consolidate / Not a duplicate.
     function dupNoticeHtml(l){
       if (!window.DUP || l.skipDuplicateCheck || l.disqualified) return '';
-      // Only leads that match another open lead show the message. Summary names the earliest match.
-      var ms = DUP.check(dupSubject(l)).open; if (!ms.length) return '';
-      ms.sort(function(x, y){ return (Date.parse(x.r.created) || 0) - (Date.parse(y.r.created) || 0); });
-      var m = ms[0], r = m.r, ok = DUP.canView(r), e = DUP.esc, n = ms.length;
-      var who = ok ? '<b>' + e(r.id) + '</b> · ' + e(r.name) : 'A lead in <b>' + e(r.showroom) + '</b>';
-      var txt = who + ' was created ' + dupAgo(r.created) + ' via ' + e(r.source) + (ok ? ' at ' + e(r.showroom) + ' · Owner: ' + e(r.owner) : '') +
-        ' <span class="dup-ntf-on">Same ' + DUP.onList(m.on).toLowerCase().replace('eid', 'EID') + '</span>' +
-        (n > 1 ? ' <span class="dup-ntf-more">+ ' + (n - 1) + ' more</span>' : '');
+      var ms = dupMatches(l); if (!ms.length) return '';
+      var m = ms[0], r = m.r, ok = DUP.canView(r), e = DUP.esc, n = ms.length, id = e(r.id);
+      var txt = (ok ? id + ' (' + e(r.name) + ')' : 'A lead') + ' was created via ' + e(r.source) + ' ' + dupAgo(r.created) + ' at ' + e(r.showroom) +
+        ': same ' + DUP.onList(m.on).toLowerCase().replace('eid', 'EID') + '.' + (n > 1 ? ' <span class="dup-ntf-more">' + (n - 1) + ' more after this.</span>' : '');
       return '<div class="dup-ntf" role="alert"><span class="dup-ntf-ic" aria-hidden="true"><span class="material-symbols-outlined">warning</span></span>' +
-        '<div class="dup-ntf-tx"><span class="dup-ntf-tt">' + (n === 1 ? 'Possible duplicate lead' : n + ' possible duplicate leads') + '</span> ' + txt + '</div>' +
+        '<div class="dup-ntf-tx"><span class="dup-ntf-tt">Possible duplicate lead</span> ' + txt + '</div>' +
         '<div class="dup-ntf-acts">' +
-          (ok && n === 1 ? '<a class="dup-ntf-btn" href="' + DUP.link(r.id) + '" target="_blank" rel="noopener"><span class="material-symbols-outlined">open_in_new</span>Open ' + e(r.id) + '</a>' : '') +
-          '<button class="dup-ntf-btn pri" onclick="dupCheck()"><span class="material-symbols-outlined">compare</span>' + (n === 1 ? 'Review duplicate' : 'Review ' + n + ' duplicates') + '</button>' +
+          (ok ? '<a class="dup-ntf-btn" href="' + DUP.link(r.id) + '" target="_blank" rel="noopener">Open ' + id + '</a>' +
+                '<button class="dup-ntf-btn pri" onclick="dupConsolidate(\'' + id + '\')">Consolidate ' + id + ' into this lead</button>' : '') +
+          '<button class="dup-ntf-btn" onclick="dupNotDup(\'' + id + '\')">Not a duplicate</button>' +
         '</div></div>';
     }
     function renderDetail(idx, stepIdx) {
@@ -4023,9 +4043,6 @@
       }
       if (stepName === 'Ready for delivery') {
         groups = { Internal: groups.Internal, External: ['Schedule delivery'].concat(groups.External) };
-      }
-      if (stepName === 'Accepted') {
-        groups = { Internal: groups.Internal.concat([LA_MOVE_PREP]), External: groups.External };
       }
       // A closing deal is won or lost on the opportunity, not disqualified as a lead.
       if (stepName === 'Close') {
