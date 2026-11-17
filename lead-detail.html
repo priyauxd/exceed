@@ -1247,7 +1247,7 @@
     .esg-warn { display:flex; gap:8px; align-items:flex-start; text-align:start; background:#fff8eb; border:1px solid #fedf89; color:#7a2e0e; border-radius:8px; padding:9px 11px; font-size:12.5px; } .esg-warn .material-symbols-outlined { font-size:18px; color:#b54708; }
     .esg-chip { display:inline-flex; align-items:center; font-size:11px; font-weight:600; border-radius:999px; padding:2px 8px; white-space:nowrap; }
     .esg-chip.ok { background:#e7f6ec; color:#0e7a3e; } .esg-chip.info { background:#e8f1fb; color:#0f6cbd; } .esg-chip.bad { background:#fdecec; color:#b42318; } .esg-chip.na { background:#f2f4f7; color:#667085; } .esg-pv { display:inline-block; margin-top:3px; font-size:10px; font-weight:700; border-radius:999px; padding:1px 7px; } .esg-pv.advance { background:#e8f1fb; color:#0f6cbd; } .esg-pv.final { background:#e7f6ec; color:#0e7a3e; }
-    .esg-fo { display:flex; align-items:center; gap:3px; color:#0e7a3e; } .esg-fo .material-symbols-outlined { font-size:13px; }
+    .esg-chip .material-symbols-outlined { font-size:13px; vertical-align:-2px; margin-inline-end:3px; } .esg-fo { display:flex; align-items:center; gap:3px; color:#0e7a3e; } .esg-fo .material-symbols-outlined { font-size:13px; }
     .esg-rm { position:relative; display:inline-flex; } .esg-rmm { top:calc(100% + 2px); inset-inline-start:auto; inset-inline-end:0; min-width:200px; } .esg-p { text-align:start; font-size:12.5px; color:var(--ink-secondary); margin:12px 0 0; line-height:1.45; }
     .esg-tb .zs-tn { white-space:nowrap; } .esg-tb td.esg-wait { color:#667085; font-size:12px; } .esg-tb tr.esg-hold td { padding-top:10px; padding-bottom:10px; }
     .esg-beh { margin-top:6px; font-size:11.5px; color:#475467; } .esg-beh label { display:inline-flex; align-items:center; gap:6px; cursor:pointer; } .esg-beh select { margin-top:6px; }
@@ -1265,7 +1265,7 @@
     .esg-tb .esg-to { overflow-wrap:normal; word-break:normal; } .esg-ip { display:flex; align-items:center; gap:3px; font-size:11px; font-weight:600; color:var(--ink-secondary); } .esg-ip .material-symbols-outlined { font-size:14px; }
     .esg-f small { font-weight:500; color:var(--ink-muted); } .esg-f .zso-sg b { font-size:12.5px; } .esg-f .zso-in { margin-top:3px; }
     .esg-tw { max-height:360px; overflow:auto; } .esg-tb th { position:sticky; top:0; z-index:1; } .esg-tb td { padding-top:6px; padding-bottom:6px; } .esg-tb .esg-tm { color:#667085; margin-inline-start:4px; }
-    .esg-acts { display:flex; align-items:center; gap:2px; } .esg-pf { min-width:0; margin-inline-start:2px; font-size:10.5px; color:#667085; line-height:1.3; } .esg-na, .esg-na:hover { color:#d0d5dd; background:none; cursor:not-allowed; }
+    .esg-acts { display:flex; align-items:center; gap:2px; } .esg-acts .fb-ic.sim { margin-inline-start:auto; } .esg-chip.fo { white-space:normal; line-height:1.3; border-radius:10px; } .esg-pf { min-width:0; margin-inline-start:2px; font-size:10.5px; color:#667085; line-height:1.3; } .esg-na, .esg-na:hover { color:#d0d5dd; background:none; cursor:not-allowed; }
     .esg-tb .zs-tn { white-space:nowrap; overflow:visible; } .zs-tb.esg-tb .zs-ts { white-space:normal; overflow:visible; }
     .zs-empty { display:flex; align-items:center; gap:8px; padding:16px; border:1px dashed var(--border); border-radius:10px; font-size:12.5px; color:var(--ink-muted); }
     .zs-empty .material-symbols-outlined { font-size:20px; }
@@ -6159,8 +6159,8 @@
     }
     function esgStatusHtml(r){
       var st = ESG_ST[r.st], live = r.st === 'sent' || r.st === 'viewed';
-      return '<span class="esg-chip ' + st[1] + '">' + st[0] + '</span>' + (r.manual ? '<span class="zs-ts">Manual upload</span>' : '') + (r.st === 'cancelled' && r.reason ? '<span class="zs-ts">' + dpEsc(r.reason) + '</span>' : '') +
-        (r.fo ? '<span class="zs-ts esg-fo" title="Attached to the sales quotation in F&amp;O"><span class="material-symbols-outlined">cloud_done</span>Pushed to F&amp;O</span>' : '') +
+      // Signed and attached in F&O: one status, "Signed & pushed to F&O".
+      return '<span class="esg-chip ' + st[1] + (r.fo ? ' fo' : '') + '"' + (r.fo ? ' title="Attached to the sales quotation in F&amp;O"' : '') + '>' + (r.fo ? '<span class="material-symbols-outlined">cloud_done</span>Signed &amp; pushed to F&amp;O' : st[0]) + '</span>' + (r.manual ? '<span class="zs-ts">Manual upload</span>' : '') + (r.st === 'cancelled' && r.reason ? '<span class="zs-ts">' + dpEsc(r.reason) + '</span>' : '') +
         (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + esgSignerName(x) + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed' +
           (r.signers[r.done || 0] ? ' · next: ' + dpEsc(r.signers[r.done || 0].n.split(' ')[0]) : '') + '</span>' : '');
     }
