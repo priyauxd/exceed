@@ -1264,6 +1264,24 @@
     .esg-chip.wait { background:#fff4e0; color:#a15c00; white-space:normal; border-radius:8px; line-height:1.3; } .esg-tb tr.esg-hold td { color:#667085; }
     .esg-tb .esg-to { overflow-wrap:normal; word-break:normal; } .esg-ip { display:flex; align-items:center; gap:3px; font-size:11px; font-weight:600; color:var(--ink-secondary); } .esg-ip .material-symbols-outlined { font-size:14px; }
     .esg-f small { font-weight:500; color:var(--ink-muted); } .esg-f .zso-sg b { font-size:12.5px; } .esg-f .zso-in { margin-top:3px; }
+    .esg-fw { position:relative; margin-inline-start:auto; }
+    .esg-fbtn { display:inline-flex; align-items:center; gap:5px; height:30px; border:1px solid var(--border); border-radius:6px; background:var(--surface); padding:0 10px; font:600 12px inherit; color:var(--ink); cursor:pointer; }
+    .esg-fbtn .material-symbols-outlined { font-size:16px; color:var(--ink-secondary); } .esg-fbtn:hover { border-color:var(--ink-muted); }
+    .esg-fbtn.on { border-color:var(--ink); } .esg-fbtn em, .esg-fp em { font-style:normal; font-size:10.5px; font-weight:700; background:var(--ink); color:#fff; border-radius:999px; min-width:17px; height:17px; display:inline-grid; place-items:center; padding:0 5px; }
+    .esg-fp { position:absolute; top:calc(100% + 4px); inset-inline-end:0; z-index:40; width:230px; background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:0 8px 24px rgba(16,24,40,.14); padding:4px; display:flex; flex-direction:column; }
+    .esg-fp > button { display:flex; align-items:center; gap:8px; border:0; background:none; border-radius:6px; padding:8px 10px; font:500 12.5px inherit; color:var(--ink); cursor:pointer; text-align:start; }
+    .esg-fp > button:hover { background:var(--bg); } .esg-fp .material-symbols-outlined { font-size:17px; color:var(--ink-secondary); } .esg-fp > button em { margin-inline-start:auto; } .esg-fp > button em + .material-symbols-outlined { margin-inline-start:4px; } .esg-fp > button > .material-symbols-outlined:last-child { margin-inline-start:auto; }
+    .esg-fp > button em ~ .material-symbols-outlined:last-child { margin-inline-start:4px; }
+    .esg-fph { display:flex; align-items:center; gap:4px; padding:2px 4px 6px; border-bottom:1px solid var(--border); margin-bottom:4px; font-size:12.5px; } .esg-fph .fb-ic { width:26px; height:26px; }
+    .esg-fo2 { display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:6px; font-size:12.5px; color:var(--ink); cursor:pointer; } .esg-fo2:hover { background:var(--bg); }
+    .esg-fo2 input { width:15px; height:15px; margin:0; accent-color:var(--ink); cursor:pointer; }
+    .esg-fpf { display:flex; justify-content:flex-end; border-top:1px solid var(--border); margin-top:4px; padding:4px 2px 0; }
+    .esg-chips { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:-2px 0 8px; }
+    .esg-fc { display:inline-flex; align-items:center; gap:3px; height:26px; border:1px solid var(--border); background:var(--surface); border-radius:999px; padding:0 4px 0 10px; font-size:12px; color:var(--ink-secondary); }
+    .esg-fc b { font-weight:600; color:var(--ink); } .esg-fc button { display:inline-grid; place-items:center; width:18px; height:18px; border:0; border-radius:50%; background:none; cursor:pointer; color:var(--ink-muted); padding:0; }
+    .esg-fc button:hover { background:#e4e7ec; color:var(--ink); } .esg-fc button .material-symbols-outlined { font-size:14px; }
+    .esg-flx { border:0; background:none; color:var(--blue); font:600 12px inherit; cursor:pointer; padding:4px 6px; } .esg-flx:hover { text-decoration:underline; }
+    .esg-none { text-align:center; color:var(--ink-muted); padding:22px 10px !important; }
     .esg-tw { max-height:260px; overflow-y:scroll; overflow-x:auto; scrollbar-width:thin; scrollbar-color:#c1c7d0 transparent; }
     .esg-tw::-webkit-scrollbar { width:8px; height:8px; } .esg-tw::-webkit-scrollbar-track { background:#f2f4f7; border-radius:0 10px 10px 0; } .esg-tw::-webkit-scrollbar-thumb { background:#c1c7d0; border-radius:8px; border:2px solid #f2f4f7; } .esg-tw::-webkit-scrollbar-thumb:hover { background:#98a2b3; }
      .esg-tb th { position:sticky; top:0; z-index:1; } .esg-tb td { padding-top:6px; padding-bottom:6px; } .esg-tb .esg-tm { color:#667085; margin-inline-start:4px; }
@@ -6154,6 +6172,15 @@
       }).join('') + '</div></td></tr>';
     }
     var esgSort = { col:'', dir:1 };
+    // Filter: one button → pick Document or Status → tick values (applied straight away, each on top of the other).
+    // Applied values show as chips with × and "Clear all".
+    var esgFilt = { doc:[], st:[] }, esgFp = null;
+    function esgRender(){ renderDetail(selectedIdx, currentStep); }
+    function esgFpOpen(v){ esgFp = v; esgRender(); }
+    function esgFTog(k, v){ var a = esgFilt[k], i = a.indexOf(v); if (i > -1) a.splice(i, 1); else a.push(v); esgRender(); }
+    function esgFDel(k, i){ esgFilt[k].splice(i, 1); esgRender(); }
+    function esgFClear(){ esgFilt = { doc:[], st:[] }; esgFp = null; esgRender(); }
+    document.addEventListener('click', function(e){ if (esgFp && !e.target.closest('.esg-fw')) { esgFp = null; if (selectedIdx > -1) esgRender(); } });
     function esgSortBy(c){ esgSort = esgSort.col !== c ? { col:c, dir:1 } : esgSort.dir > 0 ? { col:c, dir:-1 } : { col:'', dir:1 }; renderDetail(selectedIdx, currentStep); }
     function esgGridHtml(l){
       var R = esgData(l), paid = esgPaid(l);
@@ -6165,13 +6192,14 @@
         (d.k === 'pa' ? ['Advance', 'Final'] : ['']).forEach(function(stg){ slots.push({ k:d.k, stage:stg }); });
       });
       var rows = [], any = false;
+      var fkOf = function(sl){ return sl.k === 'pa' ? ESG_PA_NO[sl.stage] + ' · ' + ESG_PA_NAME[sl.stage] : esgDoc(sl.k).name; };
       slots.forEach(function(sl, slot){
         var list = R.map(function(r, i){ return i; }).filter(function(i){ return R[i].k === sl.k && (R[i].stage || '') === sl.stage; })
           .sort(function(a, b){ return R[b].v - R[a].v; });
         if (!list.length) {
           if (sl.k === 'doc') {
             var hd = paid ? { st:'adv', why:'Ready to send for signature' } : { st:'padv', sim:'pay', why:'Waiting for advance payment' }, hds = ESG_ST[hd.st]; any = true;
-            rows.push({ slot:slot, doc:'Duty of Care', v:0, to:'', t:0, st:hds[0], html:'<tr class="esg-hold"><td><span class="zs-tn">Duty of Care</span></td><td colspan="3" class="esg-wait">' + hd.why + '</td>' +
+            rows.push({ slot:slot, fk:fkOf(sl), doc:'Duty of Care', v:0, to:'', t:0, st:hds[0], html:'<tr class="esg-hold"><td><span class="zs-tn">Duty of Care</span></td><td colspan="3" class="esg-wait">' + hd.why + '</td>' +
               '<td><span class="esg-chip ' + hds[1] + '">' + hds[0] + '</span></td><td><div class="esg-acts">' + (hd.sim ? simBtn(hd.sim) : '') + '</div></td></tr>' });
             return;
           }
@@ -6181,7 +6209,7 @@
             : (l.soApproved ? { st:'fok', why:'Ready to send for signature' } : { st:'pfo', sim: paid ? 'so' : '', why:'Waiting for F&amp;O sales order approval' });
           if (!h) return;
           var hs = ESG_ST[h.st]; any = true;
-          rows.push({ slot:slot, doc:'Purchase Agreement ' + sl.stage, v:0, to:'', t:0, st:hs[0], html:'<tr class="esg-hold"><td><span class="zs-tn">Purchase Agreement</span>' + esgPaTag(sl.stage) + '</td>' +
+          rows.push({ slot:slot, fk:fkOf(sl), doc:'Purchase Agreement ' + sl.stage, v:0, to:'', t:0, st:hs[0], html:'<tr class="esg-hold"><td><span class="zs-tn">Purchase Agreement</span>' + esgPaTag(sl.stage) + '</td>' +
             '<td colspan="3" class="esg-wait">' + h.why + '</td>' +
             '<td><span class="esg-chip ' + hs[1] + '">' + hs[0] + '</span></td>' +
             '<td><div class="esg-acts">' + (h.sim ? simBtn(h.sim) : '') + '</div></td></tr>' });
@@ -6189,7 +6217,7 @@
         }
         any = true;
         var i = list[0], r = R[i];
-        rows.push({ slot:slot, doc:esgDoc(r.k).name + ' ' + (r.stage || ''), v:r.v, to:r.manual ? '' : r.to, t:Date.parse(r.sent) || 0, st:ESG_ST[r.st][0], html:'<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span>' + (r.k === 'pa' ? esgPaTag(r.stage || esgPaVer(r)) : '') + '</td>' +
+        rows.push({ slot:slot, fk:fkOf(sl), doc:esgDoc(r.k).name + ' ' + (r.stage || ''), v:r.v, to:r.manual ? '' : r.to, t:Date.parse(r.sent) || 0, st:ESG_ST[r.st][0], html:'<tr><td><span class="zs-tn">' + dpEsc(esgDoc(r.k).name) + '</span>' + (r.k === 'pa' ? esgPaTag(r.stage || esgPaVer(r)) : '') + '</td>' +
           '<td>v' + r.v + '</td><td class="esg-to">' + (r.mode === 'inperson' ? '<span class="esg-ip"><span class="material-symbols-outlined">stylus_note</span>In person</span>' : r.manual ? '<span class="esg-ip"><span class="material-symbols-outlined">upload_file</span>Paper · uploaded</span>' : '') + (r.manual ? '<span class="zs-ts">' + dpEsc(r.reason || '') + '</span>' : dpEsc(r.to).replace('@', '<wbr>@')) + '</td>' +
           '<td><span class="nw">' + r.sent.slice(0, 11) + '</span><span class="zs-ts">' + r.sent.slice(12) + '</span></td>' +
           '<td>' + esgStatusHtml(r) + '</td>' + esgRowHtml(R, i, {}) + '</tr>' });
@@ -6208,7 +6236,31 @@
         var on = esgSort.col === c, ic = on ? (esgSort.dir > 0 ? 'arrow_upward' : 'arrow_downward') : 'unfold_more';
         return '<th aria-sort="' + (on ? (esgSort.dir > 0 ? 'ascending' : 'descending') : 'none') + '"><button class="esg-sort' + (on ? ' on' : '') + '" onclick="esgSortBy(\'' + c + '\')">' + label + '<span class="material-symbols-outlined">' + ic + '</span></button></th>';
       };
-      rows = rows.map(function(x){ return x.html; }).join('');
+      // Document options: every listed document. Status options: those left after the Document filter.
+      var uniq = function(x, j, arr){ return arr.indexOf(x) === j; };
+      var docOpts = slots.map(fkOf).filter(uniq);
+      var byDoc = rows.filter(function(x){ return !esgFilt.doc.length || esgFilt.doc.indexOf(x.fk) > -1; });
+      var stOpts = byDoc.map(function(x){ return x.st; }).concat(esgFilt.st).filter(uniq);
+      rows = byDoc.filter(function(x){ return !esgFilt.st.length || esgFilt.st.indexOf(x.st) > -1; });
+      var nF = esgFilt.doc.length + esgFilt.st.length, ic = function(n){ return '<span class="material-symbols-outlined">' + n + '</span>'; };
+      var CAT = { doc:'Document', st:'Status' }, pop = '';
+      if (esgFp === 'menu') pop = '<div class="esg-fp" role="menu">' + ['doc', 'st'].map(function(k){
+          return '<button role="menuitem" onclick="esgFpOpen(\'' + k + '\')">' + ic(k === 'doc' ? 'description' : 'radio_button_checked') + CAT[k] +
+            (esgFilt[k].length ? '<em>' + esgFilt[k].length + '</em>' : '') + ic('chevron_right') + '</button>';
+        }).join('') + '</div>';
+      else if (esgFp) pop = '<div class="esg-fp"><div class="esg-fph"><button class="fb-ic" onclick="esgFpOpen(\'menu\')" aria-label="Back">' + ic('arrow_back') + '</button><b>' + CAT[esgFp] + '</b></div>' +
+          (esgFp === 'doc' ? docOpts : stOpts).map(function(o){
+            return '<label class="esg-fo2"><input type="checkbox"' + (esgFilt[esgFp].indexOf(o) > -1 ? ' checked' : '') + ' onchange="esgFTog(\'' + esgFp + '\', \'' + o.replace(/'/g, "\\'") + '\')"><span>' + o + '</span></label>';
+          }).join('') +
+          '<div class="esg-fpf"><button class="esg-flx" onclick="esgFpOpen(null)">Done</button></div></div>';
+      var filt = any ? '<div class="esg-fw"><button class="esg-fbtn' + (nF ? ' on' : '') + '" aria-haspopup="menu" aria-expanded="' + !!esgFp + '" onclick="esgFpOpen(esgFp ? null : \'menu\')">' + ic('filter_list') + 'Filter' + (nF ? '<em>' + nF + '</em>' : '') + '</button>' + pop + '</div>' : '';
+      var chips = !nF ? '' : '<div class="esg-chips">' + ['doc', 'st'].map(function(k){
+          return esgFilt[k].map(function(v, i){ return '<span class="esg-fc">' + CAT[k] + ': <b>' + v + '</b><button onclick="esgFDel(\'' + k + '\',' + i + ')" aria-label="Remove ' + CAT[k] + ' ' + v + '">' + ic('close') + '</button></span>'; }).join('');
+        }).join('') + '<button class="esg-flx" onclick="esgFClear()">Clear all</button></div>';
+      head = '<div class="zs-h"><span class="conf-lbl">Documents &amp; e-signature</span>' + filt + '</div>' + chips;
+      var shown = rows.length;
+      rows = rows.map(function(x){ return x.html; }).join('') ||
+        '<tr><td colspan="6" class="esg-none">No documents match these filters. <button class="esg-flx" onclick="esgFClear()">Clear all</button></td></tr>';
       if (!any) return '<div class="zs-sec">' + head + '<div class="zs-empty"><span class="material-symbols-outlined">draft</span>No documents sent for signature yet.</div></div>';
       return '<div class="zs-sec">' + head +
         '<div class="zs-tw esg-tw"><table class="zs-tb esg-tb"><colgroup><col style="width:22%"><col style="width:11%"><col style="width:19%"><col style="width:14%"><col style="width:19%"><col></colgroup><thead><tr>' + th('doc', 'Document') + th('v', 'Version') + th('to', 'Sent to') + th('t', 'Sent date') + th('st', 'Status') + '<th>Actions</th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
