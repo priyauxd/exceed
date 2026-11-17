@@ -1232,7 +1232,7 @@
     .esg-menu button { display:flex; align-items:center; gap:8px; border:0; background:none; border-radius:6px; padding:8px 10px; font:500 12.5px inherit; color:var(--ink); cursor:pointer; text-align:start; }
     .esg-menu button:hover:not(.off) { background:var(--bg); } .esg-menu button .material-symbols-outlined { font-size:17px; color:var(--ink-secondary); }
     .esg-menu button.off { color:#a0a0a0; cursor:not-allowed; } .esg-menu button.off .material-symbols-outlined { color:#c2c2c2; }
-    .esg-menu.esg-pam { inset-inline-end:auto; min-width:290px; padding:4px; gap:4px; }
+    .esg-menu.esg-pam { min-width:290px; padding:4px; gap:4px; }
     .esg-ms { border-radius:6px; padding:2px 0 2px; } .esg-ms + .esg-ms { border-top:1px solid var(--border); padding-top:6px; }
     .esg-mh { display:flex; align-items:center; gap:8px; padding:6px 10px 4px; } .esg-mh .esg-pv { margin-top:0; font-size:10.5px; }
     .esg-ms:not(.on) .esg-mh .esg-pv { background:#f2f4f7; color:#667085; }
@@ -1761,17 +1761,16 @@
     .dup-row-tag { display:inline-flex; align-items:center; gap:3px; margin-top:2px; font-size:10.5px; font-weight:600; color:#b54708; background:#fff8eb; border:1px solid #fedf89; border-radius:10px; padding:0 7px 0 5px; line-height:17px; white-space:nowrap; }
     .dup-row-tag .material-symbols-outlined { font-size:13px; }
     .dup-n { display:inline-block; min-width:18px; text-align:center; font-size:10.5px; background:#f2f4f7; color:#475467; border-radius:999px; padding:0 6px; margin-inline-start:4px; }
-    .dup-ntf { display:flex; align-items:center; gap:14px; flex-wrap:wrap; background:#fffaf5; border:1px solid #f9dbaf; border-inline-start:4px solid #e47911; border-radius:10px; padding:12px 14px 12px 12px; margin-bottom:12px; box-shadow:0 1px 2px rgba(16,24,40,.04); }
-    .dup-ntf-ic { flex:none; width:34px; height:34px; border-radius:50%; background:#feefc6; color:#b54708; display:grid; place-items:center; }
-    .dup-ntf-ic .material-symbols-outlined { font-size:20px; font-variation-settings:'FILL' 1; }
-    .dup-ntf-tx { flex:1 1 380px; min-width:0; font-size:12.5px; line-height:1.5; color:#344054; }
-    .dup-ntf-tt { display:block; font-size:13.5px; font-weight:700; color:#7a2e0e; margin-bottom:1px; }
-    .dup-ntf-tx b { font-weight:600; color:#101828; } .dup-ntf-tx .dup-ntf-on { display:inline-block; font-size:11px; font-weight:600; color:#b54708; background:#fef0c7; border-radius:10px; padding:0 7px; margin-inline-start:2px; }
+    .dup-ntf { display:grid; grid-template-columns:auto 1fr; column-gap:12px; row-gap:10px; align-items:start; background:#fdf8f4; border:1px solid #f6d3b4; border-radius:8px; padding:14px 16px; margin-bottom:12px; }
+    .dup-ntf-ic { color:#b54708; line-height:0; } .dup-ntf-ic .material-symbols-outlined { font-size:22px; font-variation-settings:'FILL' 1; }
+    .dup-ntf-tx { font-size:13px; line-height:1.55; color:#1d2939; padding-top:1px; }
+    .dup-ntf-tt { font-weight:700; color:#101828; margin-inline-end:4px; }
+    .dup-ntf-tx b { font-weight:400; } .dup-ntf-tx .dup-ntf-on { display:inline-block; font-size:11px; font-weight:600; color:#b54708; background:#fef0c7; border-radius:10px; padding:0 7px; margin-inline-start:2px; }
     .dup-ntf-more { color:#667085; }
-    .dup-ntf-acts { display:flex; gap:8px; flex:none; margin-inline-start:auto; }
-    .dup-ntf-btn { display:inline-flex; align-items:center; gap:5px; height:32px; border:1px solid #d0d5dd; background:#fff; color:#344054; border-radius:6px; padding:0 12px; font:600 12.5px inherit; cursor:pointer; white-space:nowrap; text-decoration:none; }
-    .dup-ntf-btn:hover { background:#f9fafb; border-color:#98a2b3; } .dup-ntf-btn .material-symbols-outlined { font-size:16px; }
-    .dup-ntf-btn.pri { background:#0f6cbd; border-color:#0f6cbd; color:#fff; } .dup-ntf-btn.pri:hover { background:#115ea3; }
+    .dup-ntf-acts { grid-column:1 / -1; display:flex; justify-content:flex-end; flex-wrap:wrap; gap:10px; }
+    .dup-ntf-btn { display:inline-flex; align-items:center; gap:5px; height:30px; border:1px solid #d0d5dd; background:#fff; color:#1d2939; border-radius:4px; padding:0 14px; font:500 13px inherit; cursor:pointer; white-space:nowrap; text-decoration:none; }
+    .dup-ntf-btn:hover { background:#f9fafb; border-color:#98a2b3; } .dup-ntf-btn .material-symbols-outlined { display:none; }
+    .dup-ntf-btn.pri { background:#2f6fbf; border-color:#2f6fbf; color:#fff; } .dup-ntf-btn.pri:hover { background:#255ea6; }
     .dup-ntf-btn:focus-visible { outline:2px solid #0f6cbd; outline-offset:2px; }
     /* Clone lead (MAI-4768) */
     .dp-act-type.clone { background: var(--blue-soft); color: var(--blue); }
@@ -3473,7 +3472,7 @@
         ' <span class="dup-ntf-on">Same ' + DUP.onList(m.on).toLowerCase().replace('eid', 'EID') + '</span>' +
         (n > 1 ? ' <span class="dup-ntf-more">+ ' + (n - 1) + ' more</span>' : '');
       return '<div class="dup-ntf" role="alert"><span class="dup-ntf-ic" aria-hidden="true"><span class="material-symbols-outlined">warning</span></span>' +
-        '<div class="dup-ntf-tx"><span class="dup-ntf-tt">' + (n === 1 ? 'Possible duplicate lead' : n + ' possible duplicate leads') + '</span>' + txt + '</div>' +
+        '<div class="dup-ntf-tx"><span class="dup-ntf-tt">' + (n === 1 ? 'Possible duplicate lead' : n + ' possible duplicate leads') + '</span> ' + txt + '</div>' +
         '<div class="dup-ntf-acts">' +
           (ok && n === 1 ? '<a class="dup-ntf-btn" href="' + DUP.link(r.id) + '" target="_blank" rel="noopener"><span class="material-symbols-outlined">open_in_new</span>Open ' + e(r.id) + '</a>' : '') +
           '<button class="dup-ntf-btn pri" onclick="dupCheck()"><span class="material-symbols-outlined">compare</span>' + (n === 1 ? 'Review duplicate' : 'Review ' + n + ' duplicates') + '</button>' +
