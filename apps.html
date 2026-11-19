@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apps — Auto Sales icon</title>
+<style>
+  :root{
+    --navy:#0d1b4b; --cyan:#4fc8f0; --white:#fff;
+    --bg:#f0f0f0; --ink:#323130; --muted:#605e5c; --faint:#8a8886; --line:#d2d0ce;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',-apple-system,system-ui,sans-serif}
+  .top{background:#fff;padding:14px 16px;font-size:16px;font-weight:600;border-bottom:1px solid #e1dfdd}
+  .bar{display:flex;align-items:center;gap:20px;padding:24px 28px 8px}
+  .search{display:flex;align-items:center;gap:6px;width:260px;border-bottom:1px solid #8a8886;padding:4px 2px;font-size:12px;color:var(--muted)}
+  .search svg{width:14px;height:14px}
+  .bar .sp{flex:1}
+  .act{display:flex;align-items:center;gap:6px;color:var(--ink);background:none;border:0;font:inherit;font-size:12px;cursor:pointer}
+  .act svg{width:14px;height:14px}
+  .grp{padding:12px 28px 6px;font-size:15px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px}
+  .grp i{font-style:normal;font-size:10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;padding:8px 28px 28px}
+
+  .card{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;transition:box-shadow .15s}
+  .card:hover{box-shadow:0 3px 10px rgba(0,0,0,.18)}
+  .card__hd{background:var(--navy);height:92px;display:grid;place-items:center}
+  .card__hd svg{width:62px;height:62px}
+  .card__bd{position:relative;padding:12px 12px 10px;height:136px;display:flex;flex-direction:column}
+  .card__more{position:absolute;right:10px;top:0;color:var(--faint);font-size:12px;letter-spacing:1px;line-height:1}
+  .card__t{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:2px 0 6px}
+  .card__d{font-size:11px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card__p{margin-top:auto;font-size:9px;color:var(--muted);line-height:1.5}
+  .card__b{align-self:flex-start;margin-top:4px;background:#323130;color:#fff;font-size:8px;font-weight:700;letter-spacing:.03em;padding:2px 5px;text-transform:uppercase}
+
+  /* icons: white line work with a cyan accent; strokes scale with the icon */
+  .ic{fill:none;stroke:var(--white);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+  .ic .c{stroke:var(--cyan)}
+  .ic .cf{fill:var(--cyan);stroke:none}
+  .ic .nf{fill:var(--navy)}
+
+  .opts{background:#fff;border-top:1px solid #e1dfdd;padding:24px 28px 40px}
+  .opts h2{margin:0 0 4px;font-size:18px;font-weight:600}
+  .opts p.sub{margin:0 0 20px;font-size:13px;color:var(--muted);max-width:760px}
+  .ogrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+  .opt{display:flex;flex-direction:column;border:1px solid var(--line);background:#fff}
+  .opt.on{outline:2px solid var(--navy);outline-offset:-1px}
+  .opt__tile{background:var(--navy);height:150px;display:grid;place-items:center}
+  .opt__tile svg{width:72px;height:72px}
+  .opt__bd{padding:10px 12px 12px;display:flex;flex-direction:column;gap:4px;flex:1}
+  .opt__bd b{font-size:13px;font-weight:600}
+  .opt__bd p{margin:0;font-size:12px;color:var(--muted);line-height:1.4;flex:1}
+  .use{align-self:flex-start;margin-top:6px;white-space:nowrap;font:inherit;font-size:12px;border:1px solid #8a8886;background:#fff;color:var(--ink);padding:4px 10px;border-radius:2px;cursor:pointer}
+  .use[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff;cursor:default}
+
+  .pals{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+  .pal{display:inline-flex;align-items:center;gap:8px;font:inherit;font-size:13px;padding:6px 14px 6px 8px;border:1px solid #8a8886;border-radius:999px;background:#fff;color:var(--ink);cursor:pointer}
+  .pal i{width:18px;height:18px;border-radius:50%}
+  .pal[aria-pressed="true"]{border-color:var(--navy);box-shadow:inset 0 0 0 1px var(--navy);font-weight:600}
+  @media (max-width:600px){.bar,.grp,.grid,.opts{padding-left:16px;padding-right:16px}.search{width:auto;flex:1}.bar .sp{display:none}}
+</style>
+</head>
+<body>
+<div class="top">Apps</div>
+<div class="bar">
+  <div class="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="9.5" cy="6.5" r="4.5"/><path d="M6.3 9.7 1.5 14.5"/></svg>Search my apps...</div>
+  <span class="sp"></span>
+  <button class="act" type="button"><svg viewBox="0 0 16 16" stroke="currentColor" stroke-width="1.3"><path d="M8 1v14M1 8h14"/></svg>Create new App</button>
+  <button class="act" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M13.5 8A5.5 5.5 0 1 1 11 3.4"/><path d="M11.5 1v3h-3"/></svg>Refresh</button>
+</div>
+<div class="grp"><i>▼</i>Published Apps (1)</div>
+<div class="grid" id="grid"></div>
+
+<section class="opts">
+  <h2>Auto Sales: icon motifs</h2>
+  <p class="sub">Abstract marks in the same family as the Dynamics app icons (like Sales Hub): one motif per icon, built from deep, mid and light tones of one colour on a dark tile. Pick a colour set, then click “Use this” to apply the icon to the card above.</p>
+  <div class="pals" id="pals" role="group" aria-label="Colour"></div>
+  <div class="ogrid" id="ogrid"></div>
+</section>
+
+<script>
+/* Abstract brand marks in the Dynamics app-icon style: overlapping geometric
+   layers in deep blue (G), mid blue (M) and light (L). 48 × 48 grid. */
+// polar helpers (0° = right, clockwise, as SVG draws)
+function P(cx, cy, r, deg){ var a = deg * Math.PI / 180; return (cx + Math.cos(a) * r).toFixed(2) + ' ' + (cy + Math.sin(a) * r).toFixed(2); }
+function ARC(cx, cy, r, a0, a1){ return 'M' + P(cx, cy, r, a0) + 'A' + r + ' ' + r + ' 0 ' + (a1 - a0 > 180 ? 1 : 0) + ' 1 ' + P(cx, cy, r, a1); }
+// large alloy wheel: gradient tyre, light rim lip, five light spokes over a dark dish, mid-blue caliper, hub cap
+function ALLOY(){
+  var cx = 24, cy = 24, sp = '';
+  for (var i = 0; i < 5; i++) {
+    var a = i * 72 - 90;
+    sp += 'M' + P(cx, cy, 3.8, a - 22) + 'L' + P(cx, cy, 12.3, a - 8) + 'L' + P(cx, cy, 12.3, a + 8) + 'L' + P(cx, cy, 3.8, a + 22) + 'Z';
+  }
+  return '<circle cx="24" cy="24" r="18" fill="url(#G)"/>' +
+    '<circle cx="24" cy="24" r="15.3" fill="#071233"/>' +
+    '<circle cx="24" cy="24" r="13.7" fill="url(#L)"/>' +
+    '<circle cx="24" cy="24" r="12.2" fill="#0d1b4b"/>' +
+    '<path d="' + ARC(cx, cy, 9.6, 195, 255) + '" stroke="url(#M)" stroke-width="3.6" stroke-linecap="round" fill="none"/>' +
+    '<path d="' + sp + '" fill="url(#L)"/>' +
+    '<circle cx="24" cy="24" r="4.4" fill="url(#M)"/><circle cx="24" cy="24" r="1.9" fill="#0d1b4b"/>';
+}
+// price tag pointing left, eyelet, light coupé silhouette with windows and wheels cut in tag blue
+function CARTAG(){
+  var cut = '#1a63d6';
+  return '<path fill="url(#G)" d="M14.5 11H40a3 3 0 0 1 3 3v20a3 3 0 0 1-3 3H14.5a3 3 0 0 1-2.3-1.1L5.4 25.9a3 3 0 0 1 0-3.8l6.8-10a3 3 0 0 1 2.3-1.1z"/>' +
+    '<circle cx="12.6" cy="24" r="2.3" fill="#0d1b4b"/>' +
+    '<g transform="translate(15.6 10.4) scale(.6)">' +
+      '<path fill="url(#L)" d="M5 31.5C5 28.5 6.5 27 9 26.3L14 25C17 20.5 21 18 27 18C31.5 18 34.5 20 37.5 23.5L41 24.5C43 25.2 44 26.8 44 29V31.5C44 32.6 43.1 33.5 42 33.5H7C5.9 33.5 5 32.6 5 31.5Z"/>' +
+      '<path fill="' + cut + '" d="M15.8 25C18.5 21.3 21.7 19.8 26.5 19.8C30 19.8 32.5 21.2 35 24.3L35.5 25Z"/>' +
+      '<path d="M27.3 19.6L26.6 25.2" stroke="url(#L)" stroke-width="2"/>' +
+      '<circle cx="13.5" cy="33.5" r="5.4" fill="' + cut + '"/><circle cx="13.5" cy="33.5" r="3.4" fill="url(#L)"/>' +
+      '<circle cx="35" cy="33.5" r="5.4" fill="' + cut + '"/><circle cx="35" cy="33.5" r="3.4" fill="url(#L)"/>' +
+    '</g>';
+}
+// donut chart: three segments with clean gaps, deep → light, largest share first
+function DONUT(){
+  var cx = 24, cy = 24, r = 13.5, w = 8;
+  return '<path d="' + ARC(cx, cy, r, -90, 112) + '" stroke="#1667d9" stroke-width="' + w + '" fill="none"/>' +
+    '<path d="' + ARC(cx, cy, r, 118, 208) + '" stroke="#45a6f2" stroke-width="' + w + '" fill="none"/>' +
+    '<path d="' + ARC(cx, cy, r + 1.2, 214, 264) + '" stroke="#bfeaff" stroke-width="' + (w + 2.4) + '" fill="none"/>';
+}
+// speedometer: dim track, mid-blue value arc, light ticks, needle and hub
+function SPEEDO(){
+  var cx = 24, cy = 27, t = '';
+  for (var d = 150; d <= 390; d += 30) t += 'M' + P(cx, cy, 10.2, d) + 'L' + P(cx, cy, 12, d);
+  return '<path d="' + ARC(cx, cy, 16, 150, 390) + '" stroke="#1f3f86" stroke-width="5" stroke-linecap="round" fill="none"/>' +
+    '<path d="' + ARC(cx, cy, 16, 150, 320) + '" stroke="url(#G)" stroke-width="5" stroke-linecap="round" fill="none"/>' +
+    '<circle cx="' + P(cx, cy, 16, 320).split(' ')[0] + '" cy="' + P(cx, cy, 16, 320).split(' ')[1] + '" r="3.4" fill="url(#L)"/>' +
+    '<path d="' + t + '" stroke="url(#L)" stroke-width="1.4" stroke-linecap="round" opacity=".75"/>' +
+    '<path d="M' + P(cx, cy, 0, 0) + 'L' + P(cx, cy, 10.5, 320) + '" stroke="url(#L)" stroke-width="2.6" stroke-linecap="round"/>' +
+    '<circle cx="24" cy="27" r="3.4" fill="url(#M)"/><circle cx="24" cy="27" r="1.3" fill="#0d1b4b"/>';
+}
+// front-view car with a price tag hanging off the windscreen
+function FRONTTAG(){
+  return '<rect x="10" y="35.5" width="6" height="6" rx="1.8" fill="url(#M)"/><rect x="32" y="35.5" width="6" height="6" rx="1.8" fill="url(#M)"/>' +
+    '<path fill="url(#L)" d="M13.2 26.5L15.3 18.2C15.6 17 16.6 16.2 17.9 16.1C22 15.8 26 15.8 30.1 16.1C31.4 16.2 32.4 17 32.7 18.2L34.8 26.5Z"/>' +
+    '<path fill="url(#G)" d="M6.5 31C6.5 27.8 8 26.2 11 25.8C19.7 24.7 28.3 24.7 37 25.8C40 26.2 41.5 27.8 41.5 31V35.5C41.5 37.2 40.2 38.5 38.5 38.5H9.5C7.8 38.5 6.5 37.2 6.5 35.5Z"/>' +
+    '<circle cx="13.2" cy="31.4" r="2.4" fill="url(#L)"/><circle cx="34.8" cy="31.4" r="2.4" fill="url(#L)"/>' +
+    '<g transform="translate(14.8 13.6) rotate(-40) scale(1.45)">' +
+      '<path fill="url(#M)" stroke="#0d1b4b" stroke-width="1.6" paint-order="stroke" stroke-linejoin="round" d="M-4.6 -3.2L-1 -7.2C-.5 -7.8.5 -7.8 1 -7.2L4.6 -3.2V5.8C4.6 6.9 3.7 7.8 2.6 7.8H-2.6C-3.7 7.8-4.6 6.9-4.6 5.8Z"/>' +
+      '<circle cx="0" cy="-4.5" r="1.2" fill="#0d1b4b"/>' +
+      '<path transform="translate(0 2.75) scale(1.18) translate(0 -2.8)" d="M1.9 .6C1.4-.2.7-.5 0-.5C-1.2-.5-2 .2-2 1.1C-2 2.1-1.1 2.5 0 2.8C1.2 3.1 2 3.5 2 4.5C2 5.4 1.2 6.1 0 6.1C-.8 6.1-1.5 5.7-2 5M0-1.5V-.5M0 6.1V7.1" stroke="url(#L)" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
+    '</g>';
+}
+// one-line car outline (open at the back) with a bold $ inside
+var DOLLAR = 'M1.9 .6C1.4-.2.7-.5 0-.5C-1.2-.5-2 .2-2 1.1C-2 2.1-1.1 2.5 0 2.8C1.2 3.1 2 3.5 2 4.5C2 5.4 1.2 6.1 0 6.1C-.8 6.1-1.5 5.7-2 5M0-1.5V-.5M0 6.1V7.1';
+function CAROUTLINE(){
+  var o = 'stroke="url(#L)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+  return '<path ' + o + ' d="M39.4 31H40C41.1 31 42 30.1 42 29V26.6C42 25 41 23.8 39.4 23.4L34.6 22.2C32.4 19.4 29.2 17 24.6 17H19.4C17.2 17 15.4 17.8 13.8 19.2L10.4 22.4C8.6 22.9 7 24 7 26.2V29C7 30.1 7.9 31 9 31M20 31H28.4"/>' +
+    '<circle ' + o + ' cx="14.4" cy="31" r="3.6"/><circle ' + o + ' cx="34" cy="31" r="3.6"/>';
+}
+var BIG = '<g transform="translate(24 25) scale(1.12) translate(-24.2 -25)">';
+function LINECAR(){
+  return BIG + CAROUTLINE() +
+    '<path transform="translate(24.2 20.4) scale(1.12)" d="' + DOLLAR + '" stroke="url(#M)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" fill="none"/></g>';
+}
+// car outline and a smart car key (fob, buttons, flip blade) in front
+// half car, half key: left half is the car seen head-on, right half is a smart key
+function LINEKEY(){
+  return '<g transform="translate(1.6 0)">' +
+    '<rect x="9" y="33" width="5.4" height="5.6" rx="1.6" fill="url(#M)"/>' +
+    '<path fill="url(#G)" d="M24 11.6C21.2 11.6 18.4 11.8 15.8 12C14.4 12.1 13.3 13 12.9 14.2L10.4 22.2C8 22.8 6.6 24.4 6.6 27.2V32C6.6 33.4 7.7 34.5 9.1 34.5H24.2V11.6ZM24 11.6H31.6C35.3 11.6 38.4 14.7 38.4 18.4V21.6C38.4 25.3 35.3 28.4 31.6 28.4H30.2V31.4L28.8 32.6L30.2 33.8V35.8L28.8 37L30.2 38.2V39.2L28.6 40.8H24Z"/>' +
+    '<path fill="url(#L)" d="M24 21.6H13.4L15.2 15.6C15.5 14.7 16.2 14.1 17.1 14C19.4 13.8 21.7 13.7 24 13.7Z"/>' +
+    '<circle cx="11.8" cy="28.2" r="2.3" fill="url(#L)"/>' +
+    '<rect x="18" y="27.3" width="6" height="1.9" rx=".95" fill="url(#L)"/>' +
+    '<rect x="28.2" y="15.6" width="6.4" height="2.4" rx="1.2" fill="url(#L)"/><rect x="28.2" y="20.4" width="6.4" height="2.4" rx="1.2" fill="url(#L)"/>' +
+    '</g>';
+}
+// steering wheel: deep rim, light spokes on a flat bottom, mid hub
+function STEER(){
+  var cx = 24, cy = 27.6, g = '', tones = ['#dff6ff','#bfeaff','#62c6ff','#45a6f2','#2f8ff0'];
+  for (var k = 0; k < 5; k++) g += '<path d="' + ARC(cx, cy, 15.6, 196 + k * 30, 218 + k * 30) + '" stroke="' + tones[k] + '" stroke-width="2.8" fill="none"/>';
+  return g +
+    '<circle cx="24" cy="27.6" r="9.4" stroke="url(#L)" stroke-width="3.4" fill="none"/>' +
+    '<path fill="url(#L)" d="M15.2 26H32.8V28.8C29.6 29 27.6 30.2 26.4 32.4V36.4H21.6V32.4C20.4 30.2 18.4 29 15.2 28.8Z"/>' +
+    '<circle cx="24" cy="28.4" r="3.4" fill="url(#L)" stroke="#0d1b4b" stroke-width="1.4" paint-order="stroke"/>';
+}
+// abstract car: a tapered roof swoosh, a belt-line swoosh and two ring wheels
+function SWOOSH(){
+  return '<g transform="translate(24 24) scale(1.12) translate(-24 -25)">' +
+    '<path fill="url(#L)" d="M6.2 29.2C10.8 21.8 18.6 18.2 26.4 18.2C32.4 18.2 37.8 20.6 41.8 25.8C37.4 22.8 32.2 21.6 26.4 21.6C19 21.6 12.4 24.2 6.2 29.2Z"/>' +
+    '<path fill="url(#L)" d="M15.4 31.6C20.6 27.6 27.2 26.2 34 28.2C27.4 28 21.2 29.4 15.4 31.6Z"/>' +
+    '<circle cx="11.8" cy="31.8" r="3.1" fill="none" stroke="url(#L)" stroke-width="2.6"/>' +
+    '<circle cx="37.2" cy="30.8" r="3.1" fill="none" stroke="url(#L)" stroke-width="2.6"/></g>';
+}
+// half car, half key: the rear of a car runs forward into a key blade with teeth
+function CARKEYHALF(){
+  var w = 'fill="url(#L)" stroke="#0d1b4b" stroke-width="1.8" paint-order="stroke"';
+  return '<path fill="url(#G)" d="M7 30.5C5.9 30.5 5 29.6 5 28.5V26.5C5 25 6 24 7.5 23.6L11 22.6L15 17.8C15.8 16.8 17 16.3 18.3 16.3H24.5C26 16.3 27.2 17 28 18.2L30.6 22H41.6C42.6 22 43.4 22.8 43.4 23.8V26C43.4 26.6 43 27 42.4 27H41.6V29.2L40.4 30.4L39.2 29.2V27H37.4V28.6L36.2 29.8L35 28.6V27H32V28.5C32 29.6 31.1 30.5 30 30.5Z"/>' +
+    '<path fill="url(#L)" d="M16 22L18.2 19C18.6 18.5 19.2 18.2 19.8 18.2H24C24.8 18.2 25.4 18.5 25.8 19.1L27.6 22Z"/>' +
+    '<path d="M32.4 24.5H41" stroke="#0d1b4b" stroke-width="1.1" stroke-linecap="round"/>' +
+    '<circle cx="11.4" cy="30.6" r="3.6" ' + w + '/><circle cx="25" cy="30.6" r="3.6" ' + w + '/>';
+}
+// speeding car: solid body facing left, wheel cut-outs, speed lines trailing behind
+function FASTCAR(){
+  var sl = 'stroke="#bfeaff" stroke-linecap="round"';
+  return '<g transform="translate(24 24) scale(.94) translate(-24.9 -26.4)">' +
+    '<path fill="url(#G)" d="M3.6 30.2C3.2 28 4.4 26.4 6.8 25.6C12.2 24 17.4 22.2 21.6 19.8C24.8 18 28.2 16.8 31.6 16.8C34.6 16.8 37.4 18.2 39.6 20.4L40.8 21.6C41.3 22.1 41.4 22.9 41.2 23.6L40.2 29.4C40 31.2 38.6 32.6 36.8 32.6H6.6C5.1 32.6 3.9 31.6 3.6 30.2Z"/>' +
+    '<path fill="url(#M)" d="M37.8 18.4L41.4 17.8C42.2 17.7 42.6 18.6 42.1 19.2L40.6 21Z"/>' +
+    '<path fill="url(#L)" d="M18.8 23C22.2 21.2 25.6 19.4 29.2 19C31.6 18.8 33.6 19.4 35.4 20.6L36.2 21.4C36.6 21.9 36.3 22.7 35.6 22.7Z"/>' +
+    '<path d="M15.6 27.6C22 26.4 29 26 39.4 26.6" stroke="url(#M)" stroke-width="1.3" stroke-linecap="round" fill="none"/>' +
+    '<ellipse cx="7.4" cy="27.6" rx="2.2" ry="1" transform="rotate(-16 7.4 27.6)" fill="url(#L)"/>' +
+    '<circle cx="13.6" cy="31.6" r="4.6" fill="#0d1b4b"/><circle cx="13.6" cy="31.6" r="2.9" fill="url(#L)"/><circle cx="13.6" cy="31.6" r="1.1" fill="url(#M)"/>' +
+    '<path d="M43.6 23.4H46.6" ' + sl + ' stroke-width="1.8"/><path d="M42.8 27H46.6" ' + sl + ' stroke-width="1.6" opacity=".8"/><path d="M42.6 30.6H45.6" ' + sl + ' stroke-width="1.4" opacity=".6"/></g>';
+}
+// tilted price tag on a string, with an upright car seen head-on across it
+function TAGCAR(){
+  var nv = '#0d1b4b';
+  return '<g transform="translate(22 25.4) rotate(32) scale(1.08)">' +
+      '<path fill="url(#G)" d="M-10.5-4.6L-3.4-12.2C-1.6-14.1 1.6-14.1 3.4-12.2L10.5-4.6V13C10.5 15.2 8.7 17 6.5 17H-6.5C-8.7 17-10.5 15.2-10.5 13Z"/>' +
+      '<circle cx="0" cy="-8" r="1.9" fill="' + nv + '"/>' +
+      '<path d="M0-8C1.4-13.4 5.4-17.6 9-16.4C12.4-15.2 11.6-10.4 7.4-10.8" stroke="url(#L)" stroke-width="1.6" stroke-linecap="round" fill="none"/>' +
+      '<path transform="translate(0 4.2) scale(1.7) translate(0 -2.8)" d="' + DOLLAR + '" stroke="url(#L)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>' +
+    '</g>';
+}
+// car seen head-on whose lower half is two sleeves meeting in a handshake
+// handshake: two sleeves, one hand's thumb across the top, the other's four fingers wrapped below
+function HANDSHAKE(tf){
+  var e = 'stroke="#0d1b4b" stroke-width="2.4" paint-order="stroke" stroke-linejoin="round"';
+  function f(cx, cy, len){ return '<rect x="' + (cx - len / 2) + '" y="' + (cy - 1.6) + '" width="' + len + '" height="3.2" rx="1.6" transform="rotate(45 ' + cx + ' ' + cy + ')" fill="url(#L)" ' + e + '/>'; }
+  return '<g transform="' + tf + '">' +
+    '<path fill="url(#M)" ' + e + ' d="M3 23L11 15.4L17 21.4L9 29Z"/>' +
+    '<path fill="url(#M)" ' + e + ' d="M45 23L37 15.4L31 21.4L39 29Z"/>' +
+    '<path fill="url(#L)" ' + e + ' d="M37 15.4L30.6 13.4C29.2 13 27.8 13.4 26.8 14.4L20 21L26.4 27.4L31 21.4Z"/>' +
+    '<path fill="url(#L)" ' + e + ' d="M11 15.4L16.4 13.6C17.6 13.2 19 13.4 20 14.2L23 16.6L17 21.4Z"/>' +
+    f(18.2, 23.4, 7.4) + f(21.6, 25.2, 7.8) + f(25, 26.8, 7) + f(28.4, 28, 5.4) +
+    '<path fill="url(#L)" ' + e + ' d="M30.4 16.6L23.4 18.4C22.2 18.7 21.6 20 22.3 21C22.8 21.7 23.7 22 24.5 21.7L31.6 19.4Z"/>' +
+  '</g>';
+}
+function DEALCAR(){
+  var nv = '#0d1b4b', e = 'stroke="' + nv + '" stroke-width="1.5" paint-order="stroke" stroke-linejoin="round"';
+  return '<rect x="5.4" y="19.2" width="5.6" height="3.2" rx="1.6" fill="url(#M)"/><rect x="37" y="19.2" width="5.6" height="3.2" rx="1.6" fill="url(#M)"/>' +
+    '<path fill="url(#G)" d="M10.6 22.4L13.8 13.6C14.2 12.4 15.3 11.6 16.6 11.5C21.5 11.1 26.5 11.1 31.4 11.5C32.7 11.6 33.8 12.4 34.2 13.6L37.4 22.4Z"/>' +
+    '<path fill="url(#L)" d="M14.2 21L16.2 14.8C16.5 14 17.1 13.5 17.9 13.4C22 13.1 26 13.1 30.1 13.4C30.9 13.5 31.5 14 31.8 14.8L33.8 21Z"/>' +
+    '<path fill="url(#G)" d="M5.6 27.2C5.6 24.2 7 22.8 10 22.4C19.3 21.3 28.7 21.3 38 22.4C41 22.8 42.4 24.2 42.4 27.2V31C42.4 32.4 41.3 33.5 39.9 33.5H8.1C6.7 33.5 5.6 32.4 5.6 31Z"/>' +
+    '<circle cx="10.2" cy="26.8" r="2" fill="url(#L)"/><circle cx="37.8" cy="26.8" r="2" fill="url(#L)"/>' +
+    HANDSHAKE('translate(24 33.4) scale(.66) translate(-24 -22.5)');
+}
+// simple wheel: dark tyre, light rim
+function WHEEL(cx, cy){
+  return '<circle cx="' + cx + '" cy="' + cy + '" r="5.6" fill="#071233"/>' +
+    '<circle cx="' + cx + '" cy="' + cy + '" r="3.3" fill="url(#L)"/>';
+}
+// modern SUV-coupé, side profile facing right
+var COUPE =
+  '<path fill="url(#G)" d="M5 31.5C5 28.5 6.5 27 9 26.3L14 25C17 20.5 21 18 27 18C31.5 18 34.5 20 37.5 23.5L41 24.5C43 25.2 44 26.8 44 29V31.5C44 32.6 43.1 33.5 42 33.5H7C5.9 33.5 5 32.6 5 31.5Z"/>' +
+  '<path fill="url(#L)" d="M15.8 25C18.5 21.3 21.7 19.8 26.5 19.8C30 19.8 32.5 21.2 35 24.3L35.5 25Z"/>' +
+  WHEEL(13.5, 33.5) + WHEEL(35, 33.5);
+var FOB = function (x, y, w, h, body, btn) {
+  return '<circle cx="' + (x + w / 2) + '" cy="' + (y - 2.6) + '" r="3" stroke="url(#L)" stroke-width="1.8" fill="none"/>' +
+    '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (w * .42) + '" fill="url(#' + body + ')"/>' +
+    '<circle cx="' + (x + w / 2) + '" cy="' + (y + h * .32) + '" r="' + (w * .16) + '" fill="url(#' + btn + ')"/>' +
+    '<circle cx="' + (x + w / 2) + '" cy="' + (y + h * .64) + '" r="' + (w * .16) + '" fill="url(#' + btn + ')"/>';
+};
+var ICONS = [
+  { name: 'Swoosh car', note: 'An abstract car in three strokes: a long tapered roof swoosh, a belt line and two ring wheels. Fast and modern.', svg: SWOOSH() },
+  { name: 'Fast car', note: 'A sleek car racing left, one wheel, a slim window and light speed lines trailing behind: quick deals, fast delivery.', svg: FASTCAR() },
+  { name: 'Price tag', note: 'A tilted price tag on a string with a bold $: every car on the lot, priced and ready to sell.', svg: TAGCAR() },
+  { name: 'Car key', note: 'A modern car key on its own: smart fob with buttons, flip-out blade with cuts and a key ring. Handover, ownership, delivery.', svg:
+    '<g transform="rotate(-32 24 25)">' +
+      '<circle cx="24" cy="7.2" r="3.6" fill="none" stroke="url(#L)" stroke-width="2"/>' +
+      '<path fill="url(#L)" d="M20.6 32h6.8v8.6a1.6 1.6 0 0 1-.5 1.1l-1.8 1.8h-3a1.5 1.5 0 0 1-1.5-1.5z"/>' +
+      '<rect x="25.4" y="35.2" width="2.2" height="1.7" fill="#0d1b4b"/><rect x="25.4" y="38.6" width="2.2" height="1.7" fill="#0d1b4b"/>' +
+      '<rect x="14.5" y="10.5" width="19" height="23" rx="7.5" fill="url(#G)"/>' +
+      '<circle cx="24" cy="17.6" r="3" fill="url(#L)"/>' +
+      '<rect x="17.8" y="24" width="5.4" height="3.2" rx="1.6" fill="url(#M)"/><rect x="24.8" y="24" width="5.4" height="3.2" rx="1.6" fill="url(#M)"/>' +
+    '</g>' },
+  { name: 'Sales analytics', note: 'A segmented donut chart: sales split by model, source or showroom. One clean analytics shape that still reads at 20px.', svg: DONUT() },
+  { name: 'Alloy wheel', note: 'A premium five-spoke alloy: gradient tyre, light rim and spokes, a brake caliper behind. Automotive at a glance.', svg: '<g transform="translate(24 24) scale(1.16) translate(-24 -24)">' + ALLOY() + '</g>' },
+  { name: 'Steering wheel', note: 'A steering wheel under a segmented gauge that brightens left to right: driving performance, the sales dashboard.', svg: STEER() },
+  { name: 'Speedometer', note: 'A dial running high, light needle and tip: performance and pace, the dashboard of the business.', svg: SPEEDO() }
+];
+var DEFS = '<defs><linearGradient id="G" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0b53bf"/><stop offset="1" stop-color="#2f8ff0"/></linearGradient>' +
+  '<linearGradient id="M" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#2a8cf0"/><stop offset="1" stop-color="#62c6ff"/></linearGradient>' +
+  '<linearGradient id="L" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#8fdcff"/><stop offset="1" stop-color="#dff6ff"/></linearGradient></defs>';
+
+var pick = 0;
+try { var s = parseInt(localStorage.getItem('autoSalesIcon11'), 10); if (s >= 0 && s < ICONS.length) pick = s; } catch (e) {}
+// colour sets: each blue the icons use, swapped per palette (the black set also turns the tile black)
+var BLUE = ['#0b53bf','#2f8ff0','#2a8cf0','#62c6ff','#8fdcff','#dff6ff','#1a63d6','#1667d9','#45a6f2','#bfeaff','#1f3f86'];
+var PALETTES = {
+  blue:   { label: 'Blue',   c: BLUE },
+  orange: { label: 'Orange', c: ['#d9480f','#ff8a3d','#f2741f','#ffb36b','#ffc489','#fff0df','#e35d17','#e0561a','#ff9a4d','#ffd9b0','#4a3550'] },
+  green:  { label: 'Green',  c: ['#0e7a4f','#2fbf71','#25a865','#6fe0a0','#9ff0c2','#e3fbee','#1a9a5e','#18925a','#4fd08a','#c4f5d9','#22503f'] },
+  purple: { label: 'Purple', c: ['#5b2bc4','#9b6bff','#8455f0','#c3a3ff','#d5c0ff','#f3ecff','#6e3ad6','#6a36d4','#a57cff','#e0d1ff','#3b3070'] },
+  black:  { label: 'Black',  tile: '#111111', dark: '#000000', c: ['#5a5a5a','#9a9a9a','#8a8a8a','#c9c9c9','#d9d9d9','#ffffff','#6a6a6a','#777777','#b0b0b0','#f0f0f0','#333333'] }
+};
+var pal = 'blue';
+try { var sp = localStorage.getItem('autoSalesPalette'); if (PALETTES[sp]) pal = sp; } catch (e) {}
+var qp = (location.search.match(/[?&]pal=(\w+)/) || [])[1]; if (PALETTES[qp]) pal = qp;
+function paint(svg){
+  var to = PALETTES[pal].c;
+  var P = PALETTES[pal];
+  return svg.replace(/#[0-9a-fA-F]{6}/g, function (h) {
+    h = h.toLowerCase();
+    if (P.tile && h === '#0d1b4b') return P.tile;
+    if (P.dark && h === '#071233') return P.dark;
+    var i = BLUE.indexOf(h); return i < 0 ? h : to[i];
+  });
+}
+var uid = 0;
+// each svg gets its own gradient ids so many icons can share the page
+function ico(i, size){
+  var k = 'g' + (++uid);
+  return '<svg viewBox="0 0 48 48"' + (size ? ' width="' + size + '" height="' + size + '"' : '') + ' aria-hidden="true">' +
+    paint(DEFS + ICONS[i].svg).replace(/id="G"/g, 'id="' + k + 'G"').replace(/id="L"/g, 'id="' + k + 'L"').replace(/url\(#G\)/g, 'url(#' + k + 'G)').replace(/url\(#L\)/g, 'url(#' + k + 'L)').replace(/id="M"/g, 'id="' + k + 'M"').replace(/url\(#M\)/g, 'url(#' + k + 'M)') + '</svg>';
+}
+
+function render(){
+  document.documentElement.style.setProperty('--navy', PALETTES[pal].tile || '#0d1b4b');
+  document.getElementById('grid').innerHTML =
+    '<div class="card">' +
+      '<div class="card__hd">' + ico(pick) + '</div>' +
+      '<div class="card__bd"><span class="card__more">···</span>' +
+        '<div class="card__t">Auto Sales</div>' +
+        '<div class="card__d">Auto Sale</div>' +
+        '<div class="card__p">AGI</div>' +
+        '<span class="card__b">Unified Interface</span>' +
+      '</div></div>';
+  document.getElementById('pals').innerHTML = Object.keys(PALETTES).map(function (k) {
+    return '<button type="button" class="pal" data-p="' + k + '" aria-pressed="' + (k === pal) + '"><i style="background:linear-gradient(135deg,' + PALETTES[k].c[0] + ',' + PALETTES[k].c[3] + ')"></i>' + PALETTES[k].label + '</button>';
+  }).join('');
+  document.getElementById('ogrid').innerHTML = ICONS.map(function (o, i) {
+    var on = i === pick;
+    return '<div class="opt' + (on ? ' on' : '') + '">' +
+      '<div class="opt__tile">' + ico(i) + '</div>' +
+      '<div class="opt__bd"><b>' + (i + 1) + '. ' + o.name + '</b><p>' + o.note + '</p>' +
+      '<button class="use" type="button" data-i="' + i + '" aria-pressed="' + on + '">' + (on ? 'In use' : 'Use this') + '</button></div>' +
+    '</div>';
+  }).join('');
+}
+document.getElementById('pals').addEventListener('click', function (e) {
+  var b = e.target.closest('.pal'); if (!b) return;
+  pal = b.dataset.p;
+  try { localStorage.setItem('autoSalesPalette', pal); } catch (err) {}
+  render();
+});
+document.getElementById('ogrid').addEventListener('click', function (e) {
+  var b = e.target.closest('.use'); if (!b) return;
+  pick = +b.dataset.i;
+  try { localStorage.setItem('autoSalesIcon11', pick); } catch (err) {}
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+render();
+</script>
+</body>
+</html>
