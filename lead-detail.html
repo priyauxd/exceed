@@ -5419,8 +5419,8 @@
           '<td>' + opDt(x.paid) + '</td><td>' + opDt(x.created) + '</td></tr>';
       }).join('') : '<tr><td colspan="7" class="op-empty">No payments recorded for this quotation yet.</td></tr>';
       return '<div class="op-sec">' +
-        '<div class="op-h"><span class="op-ic"><span class="material-symbols-outlined">credit_card</span></span><span class="op-t">Online payment</span>' +
-          '<span class="op-info" tabindex="0" aria-label="About online payment"><span class="material-symbols-outlined">info</span><span class="op-tip">All payments tagged to this quotation — CC Avenue payment links and payments posted in F&amp;O (cash, card).</span></span>' +
+        '<div class="op-h"><span class="op-ic"><span class="material-symbols-outlined">credit_card</span></span><span class="op-t">Customer payment</span>' +
+          '<span class="op-info" tabindex="0" aria-label="About customer payment"><span class="material-symbols-outlined">info</span><span class="op-tip">All payments tagged to this quotation — CC Avenue payment links and payments posted in F&amp;O (cash, card).</span></span>' +
           '<span style="flex:1"></span><button type="button" class="op-ref" onclick="payRefresh()"><span class="material-symbols-outlined">refresh</span>Refresh</button></div>' +
         '<div class="op-tw"><table class="op-tb"><thead><tr><th>Requested amount</th><th>' + PAY_SOURCE_LABEL + '</th><th>Status</th><th>Response</th><th>Notified</th><th>Payment date</th><th>Created on</th></tr></thead><tbody>' + body + '</tbody></table></div>' +
       '</div>';
