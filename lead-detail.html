@@ -1281,7 +1281,7 @@
     .esg-fc b { font-weight:600; color:var(--ink); } .esg-fc button { display:inline-grid; place-items:center; width:18px; height:18px; border:0; border-radius:50%; background:none; cursor:pointer; color:var(--ink-muted); padding:0; }
     .esg-fc button:hover { background:#e4e7ec; color:var(--ink); } .esg-fc button .material-symbols-outlined { font-size:14px; }
     .esg-flx { border:0; background:none; color:var(--blue); font:600 12px inherit; cursor:pointer; padding:4px 6px; } .esg-flx:hover { text-decoration:underline; }
-    .esg-none { text-align:center; color:var(--ink-muted); padding:22px 10px !important; }
+    .esg-tb td .zs-ts.esg-prog { display:block; white-space:nowrap !important; overflow:hidden; text-overflow:ellipsis; max-width:100%; } .esg-none { text-align:center; color:var(--ink-muted); padding:22px 10px !important; }
     .esg-tw { max-height:260px; overflow-y:scroll; overflow-x:auto; scrollbar-width:thin; scrollbar-color:#c1c7d0 transparent; }
     .esg-tw::-webkit-scrollbar { width:8px; height:8px; } .esg-tw::-webkit-scrollbar-track { background:#f2f4f7; border-radius:0 10px 10px 0; } .esg-tw::-webkit-scrollbar-thumb { background:#c1c7d0; border-radius:8px; border:2px solid #f2f4f7; } .esg-tw::-webkit-scrollbar-thumb:hover { background:#98a2b3; }
      .esg-tb th { position:sticky; top:0; z-index:1; } .esg-tb td { padding-top:6px; padding-bottom:6px; } .esg-tb .esg-tm { color:#667085; margin-inline-start:4px; }
@@ -6156,8 +6156,8 @@
       var st = ESG_ST[r.st], live = r.st === 'sent' || r.st === 'viewed';
       // Signed and attached in F&O: one status, "Signed & pushed to F&O".
       return '<span class="esg-chip ' + st[1] + (r.fo ? ' fo' : '') + '"' + (r.fo ? ' title="Attached to the sales quotation in F&amp;O"' : '') + '>' + (r.fo ? '<span class="material-symbols-outlined">cloud_done</span>Signed &amp; pushed to F&amp;O' : st[0]) + '</span>' + (r.manual ? '<span class="zs-ts">Manual upload</span>' : '') + (r.st === 'cancelled' && r.reason ? '<span class="zs-ts">' + dpEsc(r.reason) + '</span>' : '') +
-        (live && r.signers ? '<span class="zs-ts" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + esgSignerName(x) + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + ' of ' + r.signers.length + ' signed' +
-          (r.signers[r.done || 0] ? ' · next: ' + dpEsc(r.signers[r.done || 0].n.split(' ')[0]) : '') + '</span>' : '');
+        (live && r.signers ? '<span class="zs-ts esg-prog" title="' + r.signers.map(function(x, j){ return (j + 1) + '. ' + esgSignerName(x) + ' · ' + x.role + (j < r.done ? ' — signed' : ''); }).join('&#10;') + '">' + (r.done || 0) + '/' + r.signers.length +
+          (r.signers[r.done || 0] ? ' · Next: ' + dpEsc(r.signers[r.done || 0].n.split(' ')[0]) : '') + '</span>' : '');
     }
     function esgHistHtml(R, list){
       return '<tr class="esg-hx"><td colspan="6"><div class="esg-hl">' + list.map(function(i){
