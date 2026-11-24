@@ -360,6 +360,13 @@
     .mc-tag.live .lv-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: pulse-dot 1.4s ease-in-out infinite; }
     .mc-tag.ok { background: var(--green-soft); color: #3d8a5b; }
     .mc-tag.wrn { background: var(--amber-soft); color: #8a6420; }
+    .mc-tag.inl { position: static; vertical-align: middle; margin-inline-start: 6px; padding: 1px 7px; font-size: 9px; letter-spacing: .04em; }
+    /* New leads to assign: single-line cells, left-aligned actions, even row padding */
+    #nlTable td { white-space: nowrap; vertical-align: middle; padding-top: 12px; padding-bottom: 12px; }
+    #nlTable td .avt-text { display: flex; align-items: baseline; gap: 8px; }
+    #nlTable td.nl-act { text-align: start; }
+    #nlTable td.nl-act .tbl-btn { vertical-align: middle; }
+    #nlTable td.nl-act .why { vertical-align: middle; margin-inline-start: 10px; }
     @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     /* ── Dial cards (percentage KPIs) ── */
@@ -938,7 +945,7 @@
           <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Actions</span><span class="kpi-sec-sub">&middot; What to move now</span></div>
           <div class="kpi-grid g4 kpi-group">
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newAssign');}"><div class="mc-lbl">New to Assign</div><div class="mc-val txt-red">5</div><div class="mc-sub">Direct-to-showroom</div></div>
-            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('waiting')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('waiting');}"><span class="mc-tag live"><span class="lv-dot"></span> LIVE</span><div class="mc-lbl">Customers Waiting</div><div class="mc-val txt-amber">3</div><div class="mc-sub">Longest 18m</div></div>
+            <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('waiting')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('waiting');}"><div class="mc-lbl">Customers Waiting <span class="mc-tag live inl"><span class="lv-dot"></span> LIVE</span></div><div class="mc-val txt-amber">3</div><div class="mc-sub">Longest 18m</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('overdue')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('overdue');}"><div class="mc-lbl">Overdue Commitments</div><div class="mc-val txt-red">2</div><div class="mc-sub">By executive</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('newLeads')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('newLeads');}"><div class="mc-lbl">New Leads</div><div class="mc-val">0</div><div class="mc-sub">Created today</div></div>
             <div class="metric-card mdr-open" role="button" tabindex="0" onclick="openMetric('pending1c')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pending1c');}"><div class="mc-lbl">Pending 1st Contact</div><div class="mc-val txt-red">34</div><div class="mc-sub">Awaiting first contact</div></div>
@@ -1072,7 +1079,7 @@
             </div>
             <div class="q-scroll">
             <table class="qt-table" id="nlTable">
-              <thead><tr><th>Age</th><th>Customer</th><th>Source</th><th>Model</th><th>Temp</th><th>Language</th><th>Showroom</th><th>Suggested exec</th><th>SLA</th><th style="text-align:end">Action</th></tr></thead>
+              <thead><tr><th>Age</th><th>Customer</th><th>Source</th><th>Model</th><th>Temp</th><th>Language</th><th>Showroom</th><th>Suggested exec</th><th>SLA</th><th>Action</th></tr></thead>
               <tbody>
                 <tr class="urg">
                   <td class="num">25m</td>
@@ -1080,7 +1087,7 @@
                   <td><span class="src-chip">WhatsApp</span></td><td>EXEED TXL</td>
                   <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>DEI</td><td><a href="#" class="row-link">Layla Habib</a></td>
                   <td><span class="sla-tag brch">5m left</span></td>
-                  <td style="text-align:end"><button class="tbl-btn red" onclick="openAssignLead('Omar Nasser')">Assign</button></td>
+                  <td class="nl-act"><button class="tbl-btn red" onclick="openAssignLead('Omar Nasser')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">22m</td>
@@ -1088,7 +1095,7 @@
                   <td><span class="src-chip">Website</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>AUH</td><td><span class="none-txt">&mdash;</span></td>
                   <td><span class="sla-tag wrn">8m left</span></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="openAssignLead('Grace Onu')">Assign</button></td>
+                  <td class="nl-act"><button class="tbl-btn" onclick="openAssignLead('Grace Onu')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">15m</td>
@@ -1096,7 +1103,7 @@
                   <td><span class="src-chip">Social Form</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip hot">Hot</span></td><td>English</td><td>SZR</td><td><a href="#" class="row-link">Ahmad Nasr</a></td>
                   <td><span class="sla-tag wrn">15m left</span></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="openAssignLead('Mira Nabil')">Assign</button></td>
+                  <td class="nl-act"><button class="tbl-btn" onclick="openAssignLead('Mira Nabil')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">0m</td>
@@ -1104,7 +1111,7 @@
                   <td><span class="src-chip">WhatsApp</span></td><td>EXEED LX</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
                   <td><span class="sla-tag ok">30m left</span></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="openAssignLead('Amir Zaki')">Assign</button></td>
+                  <td class="nl-act"><button class="tbl-btn" onclick="openAssignLead('Amir Zaki')">Assign</button></td>
                 </tr>
                 <tr>
                   <td class="num">0m</td>
@@ -1112,7 +1119,7 @@
                   <td><span class="src-chip">Social Form</span></td><td>EXEED TXL</td>
                   <td><span class="tag-chip warm">Warm</span></td><td>English</td><td>SZR</td><td>Ahmad Nasr</td>
                   <td><span class="sla-tag ok">45m left</span></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="openAssignLead('Maya Hassan')">Assign</button></td>
+                  <td class="nl-act"><button class="tbl-btn" onclick="openAssignLead('Maya Hassan')">Assign</button></td>
                 </tr>
               </tbody>
             </table>
