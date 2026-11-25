@@ -365,8 +365,8 @@
     #nlTable td { white-space: nowrap; vertical-align: middle; padding-top: 12px; padding-bottom: 12px; }
     #nlTable td .avt-text { display: flex; align-items: baseline; gap: 8px; }
     #nlTable td.nl-act { text-align: start; }
-    #nlTable td.nl-act .tbl-btn { vertical-align: middle; }
-    #nlTable td.nl-act .why { vertical-align: middle; margin-inline-start: 10px; }
+    #nlTable td.nl-act .tbl-btn { vertical-align: middle; min-width: 108px; box-sizing: border-box; text-align: center; }
+    #nlTable td.nl-act .why { vertical-align: middle; display: inline-block; width: 44px; margin-inline-start: 8px; text-align: center; }
     @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     /* ── Dial cards (percentage KPIs) ── */
@@ -1085,6 +1085,7 @@
     .act-cell { display:flex; align-items:center; gap:6px; }
     .act-cell .kebab { margin-inline-start:auto; }
     #seTable .act-cell .tbl-btn { min-width:108px; box-sizing:border-box; text-align:center; }
+    #seTable .act-cell .kebab { margin-inline-start:2px; width:44px; }
     .kebab{ border:none; background:none; cursor:pointer; color:var(--ink-muted); padding:2px 4px; border-radius:6px; vertical-align:middle; margin-inline-start:2px; }
     .kebab:hover{ background:var(--bg); color:var(--ink); }
     .kebab .material-symbols-outlined{ font-size:18px; }
