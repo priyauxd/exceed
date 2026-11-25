@@ -969,7 +969,7 @@
             </div>
             <div class="q-scroll">
             <table class="qt-table" id="cwTable">
-<thead><tr><th>Customer</th><th>Arrived</th><th>Wait</th><th>Purpose</th><th>Executive</th><th>Bottleneck</th><th style="text-align:end">Action</th></tr></thead>
+<thead><tr><th>Customer</th><th>Arrived</th><th>Wait</th><th>Purpose</th><th>Executive</th><th>Bottleneck</th><th>Action</th></tr></thead>
               <tbody>
                 <tr class="urg">
                   <td><div class="c-name">Maya Hassan</div></td>
@@ -977,7 +977,7 @@
                   <td><span class="sla-tag brch">18m</span></td>
                   <td>Test drive</td><td>Ahmad Nasr</td>
                   <td><a href="#" class="row-link">Vehicle prep &mdash; VIN pending</a></td>
-                  <td style="text-align:end"><button class="tbl-btn red" onclick="showToast('Notifying Ahmad Nasr')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Maya Hassan')">Reassign</button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn red" onclick="showToast('Notifying Ahmad Nasr')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Maya Hassan')">Reassign</button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Bilal Qureshi</div></td>
@@ -985,7 +985,7 @@
                   <td><span class="sla-tag wrn">11m</span></td>
                   <td>Delivery</td><td>Rania Khoury</td>
                   <td><a href="#" class="row-link">Insurance doc missing</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="showToast('Notifying Rania Khoury')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Bilal Qureshi')">Reassign</button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="showToast('Notifying Rania Khoury')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Bilal Qureshi')">Reassign</button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Elena Costa</div></td>
@@ -993,7 +993,7 @@
                   <td><span class="sla-tag ok">6m</span></td>
                   <td>Enquiry</td><td><span class="none-txt">&mdash;</span></td>
                   <td><a href="#" class="row-link">Awaiting assignment</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="assign(event,'Elena Costa')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Elena Costa')">Reassign</button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="assign(event,'Elena Costa')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Elena Costa')">Reassign</button></div></td>
                 </tr>
               </tbody>
             </table>
@@ -1081,6 +1081,9 @@
     .st-tip{ position:fixed; z-index:300; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 28px rgba(20,24,34,.18); padding:11px 13px; max-width:280px; display:none; pointer-events:none; }
     .st-tip-h{ font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink); margin-bottom:4px; }
     .st-tip-b{ font-size:12px; color:var(--ink-secondary); line-height:1.5; }
+    .qt-table td.act { white-space:nowrap; width:1%; }
+    .act-cell { display:flex; align-items:center; gap:6px; }
+    .act-cell .kebab { margin-inline-start:auto; }
     .kebab{ border:none; background:none; cursor:pointer; color:var(--ink-muted); padding:2px 4px; border-radius:6px; vertical-align:middle; margin-inline-start:2px; }
     .kebab:hover{ background:var(--bg); color:var(--ink); }
     .kebab .material-symbols-outlined{ font-size:18px; }
@@ -1118,7 +1121,7 @@
             <div class="q-scroll">
             <table class="qt-table" id="seTable">
               <thead><tr>
-                <th>Executive</th><th>Status <span class="material-symbols-outlined st-info" data-title="STATUS" data-tip="On Track / Due Soon / Blocked / Stalled / At Capacity / Offline — derived from availability, workload and SLA risk." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Active</th><th>New</th><th>Pend. FC <span class="material-symbols-outlined st-info" data-title="PENDING FIRST CONTACT" data-tip="Assigned leads where the executive has not made first contact yet — SLA-critical." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Overdue <span class="material-symbols-outlined st-info" data-title="OVERDUE COMMITMENTS" data-tip="Promised follow-ups, callbacks or actions past their due time." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Appt</th><th>Test Drive</th><th>Languages</th><th>Recommendation <span class="material-symbols-outlined st-info" data-title="RECOMMENDATION" data-tip="Rule-based next action for the manager. Click 'Why?' on any row for the reasoning." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th style="text-align:end">Action</th>
+                <th>Executive</th><th>Status <span class="material-symbols-outlined st-info" data-title="STATUS" data-tip="On Track / Due Soon / Blocked / Stalled / At Capacity / Offline — derived from availability, workload and SLA risk." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Active</th><th>New</th><th>Pend. FC <span class="material-symbols-outlined st-info" data-title="PENDING FIRST CONTACT" data-tip="Assigned leads where the executive has not made first contact yet — SLA-critical." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Overdue <span class="material-symbols-outlined st-info" data-title="OVERDUE COMMITMENTS" data-tip="Promised follow-ups, callbacks or actions past their due time." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Appt</th><th>Test Drive</th><th>Languages</th><th>Recommendation <span class="material-symbols-outlined st-info" data-title="RECOMMENDATION" data-tip="Rule-based next action for the manager. Click 'Why?' on any row for the reasoning." onmouseenter="stTip(this)" onmouseleave="stTipHide()">info</span></th><th>Action</th>
               </tr></thead>
               <tbody id="seTbody">
                 <tr class="urg">
@@ -1127,7 +1130,7 @@
                   <td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num red">3</td><td class="num">0</td><td class="num">0</td>
                   <td>English, Arabic</td>
                   <td><a href="#" class="row-link">Escalate &mdash; offline</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn red" onclick="showToast('Escalating Fadi Haddad')">Escalate</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn red" onclick="showToast('Escalating Fadi Haddad')">Escalate</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Omar Al Khoury</div><div class="c-shift">AUH</div></td>
@@ -1135,7 +1138,7 @@
                   <td class="num">18</td><td class="num">3</td><td class="num">2</td><td class="num">2</td><td class="num">3</td><td class="num">2</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Sara Ali</div><div class="c-shift">SHJ</div></td>
@@ -1143,7 +1146,7 @@
                   <td class="num">17</td><td class="num">2</td><td class="num">1</td><td class="num">2</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr class="urg">
                   <td><div class="c-name">Karim Mostafa</div><div class="c-shift">DEI</div></td>
@@ -1151,7 +1154,7 @@
                   <td class="num">27</td><td class="num">5</td><td class="num red">4</td><td class="num red">4</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Arabic, Hindi</td>
                   <td><a href="#" class="row-link">Reassign 3 leads</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="showToast('Reassigning 3 leads')">Reassign 3</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="showToast('Reassigning 3 leads')">Reassign 3</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Mariam Saeed</div><div class="c-shift">SZR</div></td>
@@ -1159,7 +1162,7 @@
                   <td class="num">22</td><td class="num">4</td><td class="num">2</td><td class="num">1</td><td class="num">3</td><td class="num">2</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">At capacity</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Nour Jaber</div><div class="c-shift">AUH</div></td>
@@ -1167,7 +1170,7 @@
                   <td class="num">11</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td>
                   <td>English, Arabic</td>
                   <td><a href="#" class="row-link">Back at 14:30</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn ghost" onclick="showToast('Reminder set for Nour Jaber')">Remind</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="showToast('Reminder set for Nour Jaber')">Remind</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Ahmad Nasr</div><div class="c-shift">SZR</div></td>
@@ -1175,7 +1178,7 @@
                   <td class="num">15</td><td class="num">2</td><td class="num">1</td><td class="num">3</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Arabic</td>
                   <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="showToast('Assigning next to Ahmad Nasr')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="showToast('Assigning next to Ahmad Nasr')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Rania Khoury</div><div class="c-shift">SZR</div></td>
@@ -1183,7 +1186,7 @@
                   <td class="num">12</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
                   <td>English, Arabic, French</td>
                   <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="showToast('Assigning next to Rania Khoury')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="showToast('Assigning next to Rania Khoury')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Layla Habib</div><div class="c-shift">DEI</div></td>
@@ -1191,7 +1194,7 @@
                   <td class="num">14</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">1</td><td class="num">0</td>
                   <td>English, Arabic</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Yousef Rahman</div><div class="c-shift">SHJ</div></td>
@@ -1199,7 +1202,7 @@
                   <td class="num">9</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
                   <td>English, Urdu, Hindi</td>
                   <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="showToast('Assigning next to Yousef Rahman')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="showToast('Assigning next to Yousef Rahman')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Zahra Iqbal</div><div class="c-shift">AAN</div></td>
@@ -1207,7 +1210,7 @@
                   <td class="num">10</td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">1</td>
                   <td>English, Urdu, Arabic</td>
                   <td><a href="#" class="row-link">Assign next</a> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="showToast('Assigning next to Zahra Iqbal')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="showToast('Assigning next to Zahra Iqbal')">Assign</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Talal Baig</div><div class="c-shift">DEI</div></td>
@@ -1215,7 +1218,7 @@
                   <td class="num">13</td><td class="num">2</td><td class="num">1</td><td class="num">1</td><td class="num">2</td><td class="num">1</td>
                   <td>English, Urdu, Hindi</td>
                   <td><span class="none-txt">Balanced</span> <a href="#" class="why" onclick="showToast('Recommendation reasoning shown');return false">Why?</a></td>
-                  <td style="text-align:end"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                  <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openWorkload(this)">View workload</button> <button class="kebab" onclick="rowMenu(event,this)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
                 </tr>
               </tbody>
             </table>
@@ -2031,7 +2034,7 @@
           '<td class="'+(l.slaU?'ml-sla-u':'ml-sla')+'">'+l.sla+'</td>'+
           extras.map(function(c){ return '<td>'+(leadCell(l,c)||'&mdash;')+'</td>'; }).join('')+
           '<td>'+l.act+'</td>'+
-          '<td style="text-align:end"><a href="#" class="ml-assign" onclick="openAssignLead(\''+l.n.replace(/'/g,"\\'")+'\');return false">Assign &rsaquo;</a></td>'+
+          '<td><a href="#" class="ml-assign" onclick="openAssignLead(\''+l.n.replace(/'/g,"\\'")+'\');return false">Assign &rsaquo;</a></td>'+
         '</tr>';
       }).join('');
       var host=document.getElementById('mdrLeadsHost'); if(host) host.innerHTML='<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
@@ -2068,7 +2071,7 @@
       var body=m.rows.map(function(r){
         var _q=r.id?('?id='+encodeURIComponent(r.id)):(r.cust?('?lead='+encodeURIComponent(r.cust)):'');
         var href='lead-detail.html'+_q;
-        var act=m.action ? '<td style="text-align:end"><a href="'+href+'" class="ml-assign" style="position:relative;z-index:5">'+m.action+' &rsaquo;</a></td>' : '<td></td>';
+        var act=m.action ? '<td><a href="'+href+'" class="ml-assign" style="position:relative;z-index:5">'+m.action+' &rsaquo;</a></td>' : '<td></td>';
         var rowClick=m.action ? ' style="cursor:pointer" onclick="if(!(event.target.closest&&event.target.closest(\'a\')))window.location.href=\''+href+'\'"' : '';
         return '<tr'+rowClick+'>'+mlVisibleCols(m).map(function(c){return mlCell(c.k,r)+((c.k==='cust')?mlIdCell(r.id):'');}).join('')+act+'</tr>';
       }).join('');
@@ -2156,7 +2159,7 @@
       if(has){
         var body=m.tx.map(function(r){
           return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r);}).join('')+
-            '<td style="text-align:end"><a href="lead-detail.html'+(r.id?'?id='+encodeURIComponent(r.id):'')+'" class="ml-assign">'+m.action+'</a></td></tr>';
+            '<td><a href="lead-detail.html'+(r.id?'?id='+encodeURIComponent(r.id):'')+'" class="ml-assign">'+m.action+'</a></td></tr>';
         }).join('');
         txHtml='<div class="mdr-leadswrap"><table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
       } else {
