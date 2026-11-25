@@ -1334,66 +1334,91 @@
             .cfun-tgt { font-size:11px; color:#9a9a9a; font-weight:500; }
             .cfun-card.warn .cfun-val { color:#e8952c; }
             .cfun-card.cfun-bad .cfun-val { color:#d1544f; }
+            .cfun-card.cfun-good .cfun-val { color:#2e9e5b; }
             .side2 .cfun-card { border:none; padding:15px 16px; text-align:center; min-height:94px; display:flex; flex-direction:column; justify-content:center; }
             .kpi-grid.g3 .metric-card { min-height:94px; display:flex; flex-direction:column; justify-content:center; }
           </style>
           <div class="cfun-grid">
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadsVisits')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadsVisits');}"><div class="cfun-lbl">Leads &rarr; Visits</div><div class="cfun-val">52%</div><div class="cfun-tgt">Target 55%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsTestDrives')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsTestDrives');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Test Drives</div><div class="cfun-val">58%</div><div class="cfun-tgt">Target 60%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsBooking');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Booking</div><div class="cfun-val">27%</div><div class="cfun-tgt">Target 30%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadBooking');}"><div class="cfun-lbl">Lead &rarr; Booking</div><div class="cfun-val">11.4%</div><div class="cfun-tgt">Target 12%</div></div>
-            <div class="cfun-card warn mdr-open" role="button" tabindex="0" onclick="openMetric('fBookingInvoice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fBookingInvoice');}"><div class="cfun-lbl">Booking &rarr; Invoice</div><div class="cfun-val">82%</div><div class="cfun-tgt">Target 85%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fInvoiceDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fInvoiceDelivery');}"><div class="cfun-lbl">Invoice &rarr; Delivery</div><div class="cfun-val">88%</div><div class="cfun-tgt">Target 90%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fCancellationBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fCancellationBooking');}"><div class="cfun-lbl">Cancellation &rarr; Booking</div><div class="cfun-val">17%</div><div class="cfun-tgt">Target 20%</div></div>
+            <div class="cfun-card cfun-good mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadsVisits')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadsVisits');}"><div class="cfun-lbl">Leads &rarr; Visits</div><div class="cfun-val">100%</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card cfun-bad mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsTestDrives')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsTestDrives');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Test Drives</div><div class="cfun-val">0%</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card cfun-bad mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsBooking');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Booking</div><div class="cfun-val">0%</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card cfun-bad mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadBooking');}"><div class="cfun-lbl">Lead &rarr; Booking</div><div class="cfun-val">0%</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fBookingInvoice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fBookingInvoice');}"><div class="cfun-lbl">Booking &rarr; Invoice</div><div class="cfun-val">TBD</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fInvoiceDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fInvoiceDelivery');}"><div class="cfun-lbl">Invoice &rarr; Delivery</div><div class="cfun-val">TBD</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fCancellationBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fCancellationBooking');}"><div class="cfun-lbl">Cancellation &rarr; Booking</div><div class="cfun-val">TBD</div><div class="cfun-tgt">Target 25%</div></div>
           </div>
         </div>
         </div>
 
         <!-- SECTION — Network Pipeline (separate) -->
         <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Network pipeline — All</span><span class="kpi-sec-sub">&middot; Stage volume &amp; conversion</span></div>
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Network pipeline — <span id="npScope">All</span></span><span class="kpi-sec-sub">&middot; Stage volume &amp; conversion</span><label class="np-filter">Sales consultant <select id="npFilter" onchange="npRender()"><option value="all">All</option><option>Rania Khoury</option><option>Mariam Saeed</option><option>Ahmad Nasr</option><option>Layla Habib</option><option>Karim Mostafa</option><option>Omar Al Khoury</option></select></label></div>
           <style>
             .np-wrap { background:#fafafa; border-radius:14px; padding:18px 20px 14px; }
-            .np-chart { display:flex; align-items:flex-end; gap:14px; height:250px; padding:0 4px; }
+            .np-chart { display:flex; align-items:flex-end; gap:12px; height:250px; padding:0 4px; }
             .np-col { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-width:0; }
             .np-val { font-size:13px; font-weight:800; color:var(--ink); margin-bottom:6px; white-space:nowrap; }
             .np-val .conv { font-size:10px; font-weight:600; color:var(--ink-muted); }
             .np-bar { width:100%; max-width:66px; border-radius:8px 8px 0 0; min-height:6px; transition:height .8s cubic-bezier(.4,0,.2,1); }
-            .np-axis { display:flex; gap:14px; padding:9px 4px 0; border-top:1px solid var(--border); margin-top:8px; }
+            .np-axis { display:flex; gap:12px; padding:9px 4px 0; border-top:1px solid var(--border); margin-top:8px; }
             .np-axis-lbl { flex:1; min-width:0; text-align:center; font-size:11px; font-weight:600; color:var(--ink-secondary); }
             .np-foot { display:flex; justify-content:space-between; padding-top:12px; gap:10px; flex-wrap:wrap; }
             .np-foot-l { font-size:11px; color:var(--ink-muted); font-style:italic; }
             .np-foot-r { font-size:11px; color:var(--ink-secondary); font-weight:600; }
+            .np-filter { margin-inline-start:auto; display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600; color:var(--ink-secondary); }
+            .np-filter select { border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-family:inherit; font-size:12.5px; font-weight:600; color:var(--ink); background:var(--surface); cursor:pointer; min-width:140px; }
           </style>
           <div class="np-wrap">
-            <div class="np-chart">
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeNew')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeNew');}"><div class="np-val">340</div><div class="np-bar" style="height:100%;background:#b4aef0"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeAssign');}"><div class="np-val">300 <span class="conv">88%</span></div><div class="np-bar" style="height:88.2%;background:#f0b6a3"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeContact')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeContact');}"><div class="np-val">260 <span class="conv">87%</span></div><div class="np-bar" style="height:76.5%;background:#a6ddd2"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeNurture')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeNurture');}"><div class="np-val">180 <span class="conv">69%</span></div><div class="np-bar" style="height:52.9%;background:#f2dca3"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeTestDrive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeTestDrive');}"><div class="np-val">102 <span class="conv">57%</span></div><div class="np-bar" style="height:30%;background:#cfa7b5"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeOffer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeOffer');}"><div class="np-val">64 <span class="conv">63%</span></div><div class="np-bar" style="height:18.8%;background:#bcd6f4"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeBooking');}"><div class="np-val">39 <span class="conv">61%</span></div><div class="np-bar" style="height:11.5%;background:#aad9bd"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeInvoicing')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeInvoicing');}"><div class="np-val">34 <span class="conv">87%</span></div><div class="np-bar" style="height:9.8%;background:#c9c2ef"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeDelivery');}"><div class="np-val">28 <span class="conv">82%</span></div><div class="np-bar" style="height:8.2%;background:#eec6db"></div></div>
-            </div>
-            <div class="np-axis">
-              <span class="np-axis-lbl">New Leads</span>
-              <span class="np-axis-lbl">Lead Assignment</span>
-              <span class="np-axis-lbl">Contact</span>
-              <span class="np-axis-lbl">Nurture</span>
-              <span class="np-axis-lbl">Test Drive</span>
-              <span class="np-axis-lbl">Offer</span>
-              <span class="np-axis-lbl">Booking</span>
-              <span class="np-axis-lbl">Invoicing</span>
-              <span class="np-axis-lbl">Delivery</span>
-            </div>
+            <div class="np-chart" id="npChart"></div>
+            <div class="np-axis" id="npAxis"></div>
             <div class="np-foot">
               <span class="np-foot-l">Bar height = stage volume &middot; % = stage-to-stage conversion</span>
-              <span class="np-foot-r">340 in pipeline &middot; 28 delivered &middot; Overall 8%</span>
+              
             </div>
           </div>
         </div>
+
+        <script>
+          // Network pipeline — stage volumes for the showroom; the filter narrows to one consultant.
+          // conv: stage-to-stage % against the stage(s) it comes from (Walk-in enters directly, no chip).
+          var NP_STAGES = [
+            {k:'pipeNew',          l:'New Leads',       c:'#b4aef0'},
+            {k:'pipeAssign',       l:'Lead Assignment', c:'#f0b6a3', from:['pipeNew']},
+            {k:'pipeContact',      l:'Contact',         c:'#a6ddd2', from:['pipeAssign']},
+            {k:'pipeVisit',        l:'Visit',           c:'#9cc3e6', from:['pipeContact']},
+            {k:'pipeWalkin',       l:'Walk-in',         c:'#f2dca3'},
+            {k:'pipeTestDrive',    l:'Test Drive',      c:'#cfa7b5', from:['pipeVisit','pipeWalkin']},
+            {k:'pipeOffer',        l:'Offer',           c:'#bcd6f4', from:['pipeTestDrive']},
+            {k:'pipeBooking',      l:'Booking',         c:'#aad9bd', from:['pipeOffer']},
+            {k:'pipeCancellation', l:'Cancellation',    c:'#eec6db', from:['pipeBooking']}
+          ];
+          var NP_DATA = {
+            'all':            [0,0,0,1,0,0,7,0,0],
+            'Rania Khoury':   [0,0,0,1,0,0,2,0,0],
+            'Mariam Saeed':   [0,0,0,0,0,0,1,0,0],
+            'Ahmad Nasr':     [0,0,0,0,0,0,2,0,0],
+            'Layla Habib':    [0,0,0,0,0,0,1,0,0],
+            'Karim Mostafa':  [0,0,0,0,0,0,0,0,0],
+            'Omar Al Khoury': [0,0,0,0,0,0,1,0,0]
+          };
+          function npRender(){
+            var sel = document.getElementById('npFilter'), who = sel ? sel.value : 'all';
+            var v = NP_DATA[who] || NP_DATA.all, by = {}, mx = Math.max.apply(null, v);
+            NP_STAGES.forEach(function(st, i){ by[st.k] = v[i]; });
+            document.getElementById('npChart').innerHTML = NP_STAGES.map(function(st, i){
+              var chip = '';
+              if (st.from){ var base = st.from.reduce(function(a, k){ return a + by[k]; }, 0);
+                if (base) chip = ' <span class="conv">' + Math.round(v[i] / base * 100) + '%</span>'; }
+              var h = v[i] ? Math.max(3, Math.round(v[i] / mx * 1000) / 10) : 3;
+              return '<div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric(\'' + st.k + '\')"' +
+                ' onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openMetric(\'' + st.k + '\');}">' +
+                '<div class="np-val">' + v[i] + chip + '</div><div class="np-bar" style="height:' + h + '%;background:' + st.c + '"></div></div>';
+            }).join('');
+            document.getElementById('npAxis').innerHTML = NP_STAGES.map(function(st){ return '<span class="np-axis-lbl">' + st.l + '</span>'; }).join('');
+            document.getElementById('npScope').textContent = who === 'all' ? 'All' : who;
+          }
+          npRender();
+        </script>
 
         <!-- SECTION — Volumetrics -->
         <div class="kpi-section" style="margin-top:22px">
@@ -2658,8 +2683,11 @@
         {cust:'Hiren Patel',  id:'L-2026-05001', temp:'Hot',  owner:'Mariam Saeed', source:'Website',     model:'EXEED LX Luxury',    sla:'12 min left',    slaC:'amber', act:'Call customer'},
         {cust:'Karim Saleh',  id:'L-2026-05004', temp:'Warm', owner:'Ahmad Nasr',   source:'Website',     model:'EXEED VX',           sla:'1h 20m left',    act:'Call customer'}
       ]),
-      pipeNurture: S('Nurture', [
+      pipeWalkin: S('Walk-in', [
         {cust:'Aisha Khalifa',id:'L-2026-05005', temp:'Warm', owner:'Rania Khoury',  source:'Walk-in',     model:'EXEED RX', sla:'25 min left', act:'Greet & discovery'},
+        {cust:'Hassan Jaber', id:'L-2026-05031', temp:'Warm', owner:'Layla Habib',   source:'Walk-in',     model:'EXEED LX', sla:'40 min left', act:'Book test drive'}
+      ]),
+      pipeVisit: S('Visit', [
         {cust:'Nadia Farouk', id:'L-2026-05012', temp:'Warm', owner:'Sara Ali',      source:'WhatsApp',    model:'EXEED LX', sla:'30 min left', act:'Send BYD comparison'},
         {cust:'Huda Baker',   id:'L-2026-05018', temp:'Warm', owner:'Talal Baig',    source:'Website',     model:'EXEED LX', sla:'30 min left', act:'Re-engage — stalled 11 days'},
         {cust:'Rita Sami',    id:'L-2026-05025', temp:'Warm', owner:'Mariam Saeed',  source:'WhatsApp',    model:'EXEED LX', sla:'30 min left', act:'Match service package'},
@@ -2685,6 +2713,10 @@
         {cust:'Salma Idris',  id:'L-2026-05015', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Confirm booking'},
         {cust:'Sana Rehman',  id:'L-2026-05027', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Collect booking deposit'},
         {cust:'Bilal Qureshi',id:'L-2026-05014', temp:'Warm', owner:'Yousef Rahman',  source:'Referral', model:'EXEED TXL', sla:'30 min left', act:'Finance approval follow-up'}
+      ]),
+      pipeCancellation: S('Cancellation', [
+        {cust:'Ziad Baroudi', id:'L-2026-07001', temp:'Cold', owner:'Ahmad Nasr',   source:'Website',  model:'EXEED LX', sla:'—', act:'Recover — competitor selected'},
+        {cust:'Vera Kim',     id:'L-2026-07002', temp:'Cold', owner:'Rania Khoury', source:'WhatsApp', model:'EXEED LX', sla:'—', act:'Recover — price'}
       ]),
       pipeInvoicing: S('Invoicing', [
         {cust:'Salma Idris',  id:'L-2026-05015', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Confirm booking'},

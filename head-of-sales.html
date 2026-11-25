@@ -1024,15 +1024,15 @@
 
         <!-- SECTION — Network pipeline funnel -->
         <div class="kpi-section">
-          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Network pipeline funnel</span><span class="kpi-sec-sub">&middot; Stage volume &amp; conversion</span></div>
+          <div class="kpi-sec-head"><span class="kpi-sec-dot" style="background:var(--blue)"></span><span class="kpi-sec-title">Network pipeline funnel</span><span class="kpi-sec-sub">&middot; Stage volume</span></div>
           <style>
             .np-wrap { background:#fafafa; border-radius:14px; padding:18px 20px 14px; }
-            .np-chart { display:flex; align-items:flex-end; gap:14px; height:250px; padding:0 4px; }
+            .np-chart { display:flex; align-items:flex-end; gap:10px; height:250px; padding:0 4px; }
             .np-col { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-width:0; }
             .np-val { font-size:13px; font-weight:800; color:var(--ink); margin-bottom:6px; white-space:nowrap; }
             .np-val .conv { font-size:10px; font-weight:600; color:var(--ink-muted); }
-            .np-bar { width:100%; max-width:66px; border-radius:8px 8px 0 0; min-height:6px; transition:height .8s cubic-bezier(.4,0,.2,1); }
-            .np-axis { display:flex; gap:14px; padding:9px 4px 0; border-top:1px solid var(--border); margin-top:8px; }
+            .np-bar { width:100%; max-width:66px; border-radius:8px 8px 0 0; min-height:4px; transition:height .8s cubic-bezier(.4,0,.2,1); }
+            .np-axis { display:flex; gap:10px; padding:9px 4px 0; border-top:1px solid var(--border); margin-top:8px; }
             .np-axis-lbl { flex:1; min-width:0; text-align:center; font-size:11px; font-weight:600; color:var(--ink-secondary); }
             .np-foot { display:flex; justify-content:space-between; padding-top:12px; gap:10px; flex-wrap:wrap; }
             .np-foot-l { font-size:11px; color:var(--ink-muted); font-style:italic; }
@@ -1040,30 +1040,33 @@
           </style>
           <div class="np-wrap">
             <div class="np-chart">
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeNew')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeNew');}"><div class="np-val">8</div><div class="np-bar" style="height:36%;background:#b4aef0"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeAssign');}"><div class="np-val">0 <span class="conv">0%</span></div><div class="np-bar" style="height:6%;background:#f0b6a3"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeContact')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeContact');}"><div class="np-val">22 <span class="conv">2200%</span></div><div class="np-bar" style="height:100%;background:#a6ddd2"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeNurture')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeNurture');}"><div class="np-val">8 <span class="conv">36%</span></div><div class="np-bar" style="height:36%;background:#f2dca3"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeTestDrive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeTestDrive');}"><div class="np-val">4 <span class="conv">50%</span></div><div class="np-bar" style="height:18%;background:#cfa7b5"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeOffer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeOffer');}"><div class="np-val">5 <span class="conv">125%</span></div><div class="np-bar" style="height:23%;background:#bcd6f4"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeBooking');}"><div class="np-val">3 <span class="conv">60%</span></div><div class="np-bar" style="height:14.3%;background:#aad9bd"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeInvoicing')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeInvoicing');}"><div class="np-val">2 <span class="conv">67%</span></div><div class="np-bar" style="height:10.4%;background:#c9c2ef"></div></div>
-              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeDelivery');}"><div class="np-val">1 <span class="conv">50%</span></div><div class="np-bar" style="height:6.5%;background:#eec6db"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeNew')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeNew');}"><div class="np-val">33</div><div class="np-bar" style="height:100%;background:#b4aef0"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeAssign')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeAssign');}"><div class="np-val">5</div><div class="np-bar" style="height:15.2%;background:#f0b6a3"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeContact')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeContact');}"><div class="np-val">6</div><div class="np-bar" style="height:18.2%;background:#a6ddd2"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeVisit')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeVisit');}"><div class="np-val">29</div><div class="np-bar" style="height:87.9%;background:#9cc3e6"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeWalkin')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeWalkin');}"><div class="np-val">8</div><div class="np-bar" style="height:24.2%;background:#f2dca3"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeTestDrive')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeTestDrive');}"><div class="np-val">0</div><div class="np-bar" style="height:3%;background:#cfa7b5"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeOffer')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeOffer');}"><div class="np-val">4</div><div class="np-bar" style="height:12.1%;background:#bcd6f4"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeBooking');}"><div class="np-val">1</div><div class="np-bar" style="height:3%;background:#aad9bd"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeCancellation')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeCancellation');}"><div class="np-val">0</div><div class="np-bar" style="height:3%;background:#f3b8b8"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeInvoicing')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeInvoicing');}"><div class="np-val">TBD</div><div class="np-bar" style="height:3%;background:#c9c2ef"></div></div>
+              <div class="np-col" style="cursor:pointer" role="button" tabindex="0" onclick="openMetric('pipeDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('pipeDelivery');}"><div class="np-val">TBD</div><div class="np-bar" style="height:3%;background:#eec6db"></div></div>
             </div>
             <div class="np-axis">
-              <span class="np-axis-lbl">New Leads</span>
+              <span class="np-axis-lbl">New Leads (CC)</span>
               <span class="np-axis-lbl">Lead Assignment</span>
               <span class="np-axis-lbl">Contact</span>
-              <span class="np-axis-lbl">Nurture</span>
+              <span class="np-axis-lbl">Visit</span>
+              <span class="np-axis-lbl">Walk-in</span>
               <span class="np-axis-lbl">Test Drive</span>
               <span class="np-axis-lbl">Offer</span>
               <span class="np-axis-lbl">Booking</span>
+              <span class="np-axis-lbl">Cancellation</span>
               <span class="np-axis-lbl">Invoicing</span>
               <span class="np-axis-lbl">Delivery</span>
             </div>
             <div class="np-foot">
-              <span class="np-foot-l">Bar height = volume &middot; chip = stage-to-stage conversion</span>
-              <span class="np-foot-r">Top 8 &middot; Delivered 1 &middot; Overall 13%</span>
+              <span class="np-foot-l">Bar height = volume</span>
             </div>
           </div>
         </div>
@@ -2556,8 +2559,7 @@
         {cust:'Hiren Patel',  id:'L-2026-05001', temp:'Hot',  owner:'Mariam Saeed', source:'Website',     model:'EXEED LX Luxury',    sla:'12 min left',    slaC:'amber', act:'Call customer'},
         {cust:'Karim Saleh',  id:'L-2026-05004', temp:'Warm', owner:'Ahmad Nasr',   source:'Website',     model:'EXEED VX',           sla:'1h 20m left',    act:'Call customer'}
       ]),
-      pipeNurture: S('Nurture', [
-        {cust:'Aisha Khalifa',id:'L-2026-05005', temp:'Warm', owner:'Rania Khoury',  source:'Walk-in',     model:'EXEED RX', sla:'25 min left', act:'Greet & discovery'},
+      pipeVisit: S('Visit', [
         {cust:'Nadia Farouk', id:'L-2026-05012', temp:'Warm', owner:'Sara Ali',      source:'WhatsApp',    model:'EXEED LX', sla:'30 min left', act:'Send BYD comparison'},
         {cust:'Huda Baker',   id:'L-2026-05018', temp:'Warm', owner:'Talal Baig',    source:'Website',     model:'EXEED LX', sla:'30 min left', act:'Re-engage — stalled 11 days'},
         {cust:'Rita Sami',    id:'L-2026-05025', temp:'Warm', owner:'Mariam Saeed',  source:'WhatsApp',    model:'EXEED LX', sla:'30 min left', act:'Match service package'},
@@ -2565,6 +2567,11 @@
         {cust:'Reem Al Zaabi',id:'L-2026-05008', temp:'Warm', owner:'Layla Habib',   source:'Social Form', model:'EXEED RX', sla:'3h 20m left', act:'Complete discovery'},
         {cust:'Talal Baig',   id:'L-2026-05011', temp:'Cold', owner:'Karim Mostafa', source:'Website',     model:'EXEED LX', sla:'30 min left', act:'Re-engage — stalled 9 days'},
         {cust:'Faisal Doha',  id:'L-2026-05024', temp:'Cold', owner:'Nour Jaber',    source:'Website',     model:'EXEED LX', sla:'30 min left', act:'Re-engage'}
+      ]),
+      pipeWalkin: S('Walk-in', [
+        {cust:'Aisha Khalifa',id:'L-2026-05005', temp:'Warm', owner:'Rania Khoury',  source:'Walk-in',     model:'EXEED RX', sla:'25 min left', act:'Greet & discovery'},
+        {cust:'Hassan Jaber', id:'L-2026-05031', temp:'Warm', owner:'Layla Habib',   source:'Walk-in',     model:'EXEED LX', sla:'40 min left', act:'Book test drive'},
+        {cust:'Noor Saleem',  id:'L-2026-05032', temp:'Cold', owner:'Talal Baig',    source:'Walk-in',     model:'EXEED TXL', sla:'1h 10m left', act:'Send brochure & follow up'}
       ]),
       pipeTestDrive: S('Test Drive', [
         {cust:'Ahmed Mansoor',id:'L-2026-05013', temp:'Hot',  owner:'Ahmad Nasr',    source:'Website',     model:'EXEED VX', sla:'30 min left', act:'Position VX on comfort & safety'},
@@ -2583,6 +2590,10 @@
         {cust:'Salma Idris',  id:'L-2026-05015', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Confirm booking'},
         {cust:'Sana Rehman',  id:'L-2026-05027', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Collect booking deposit'},
         {cust:'Bilal Qureshi',id:'L-2026-05014', temp:'Warm', owner:'Yousef Rahman',  source:'Referral', model:'EXEED TXL', sla:'30 min left', act:'Finance approval follow-up'}
+      ]),
+      pipeCancellation: S('Cancellation', [
+        {cust:'Ziad Baroudi', id:'L-2026-07001', temp:'Cold', owner:'Ahmad Nasr',     source:'Website',  model:'EXEED LX',  sla:'—', act:'Recover — competitor selected'},
+        {cust:'Vera Kim',     id:'L-2026-07002', temp:'Cold', owner:'Rania Khoury',   source:'WhatsApp', model:'EXEED LX',  sla:'—', act:'Recover — price'}
       ]),
       pipeInvoicing: S('Invoicing', [
         {cust:'Salma Idris',  id:'L-2026-05015', temp:'Hot',  owner:'Rania Khoury',   source:'Walk-in',  model:'EXEED LX',  sla:'30 min left', act:'Confirm booking'},

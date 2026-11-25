@@ -1893,6 +1893,7 @@
 
     .la-hint { font-size: 11.5px; color: var(--blue); margin-top: 4px; }
     .la-hint.ok { color: #2f7a4f; font-weight: 600; }
+    .la-hint-note { display:block; margin-top:6px; color:var(--ink-secondary); font-weight:500; }
     .la-hint.danger { color: var(--red); font-weight: 600; }
     .la-attempts { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: var(--ink-secondary); background: var(--bg); border: 1px solid var(--border-soft); border-radius: var(--borderRadiusCircular); padding: 5px 12px; margin-bottom: 14px; }
     .la-attempts .material-symbols-outlined { font-size: 15px; color: var(--blue); }
@@ -4006,7 +4007,9 @@
     };
     // Flat list of "action" (non-stage-routing) outcomes for submit/validation.
     var LA_MOVE_PREP = 'Move to Prep for delivery';
-    var laSalesOutcomes = ['Follow up', 'Return to call center', 'Transfer ownership', 'WhatsApp', 'Email', 'Call', 'Disqualify', 'Meet customer', 'Schedule delivery', LA_MOVE_PREP];
+    var LA_CAR_DELIVERY = 'Car Delivery';
+    var laSalesOutcomes = ['Follow up', 'Return to call center', 'Transfer ownership', 'WhatsApp', 'Email', 'Call', 'Disqualify', 'Meet customer', 'Schedule delivery', LA_MOVE_PREP, 'Update', LA_CAR_DELIVERY];
+    function laIsCloseStage(){ return !!(journeySteps[currentStep] && journeySteps[currentStep].name === 'Close'); }
     // Manual stage moves are manager-only; the persona switcher in the top bar decides who is looking.
     var LA_MANAGER_PERSONAS = ['showroom-manager.html', 'head-of-sales.html'];
     function laIsManager(){ var v = ''; try { v = localStorage.getItem('exceed_persona') || ''; } catch (e) {} return LA_MANAGER_PERSONAS.indexOf(v) > -1; }
@@ -4036,8 +4039,10 @@
         var ext = groups.External.filter(function(o){ return LA_UPDATE_CHANNELS.indexOf(o) === -1; });
         var at = ext.indexOf('Disqualify');
         ext.splice(at > -1 ? at : ext.length, 0, 'Update');
+        // Close: the customer-facing action is the delivery itself; Update logs without a channel pick.
+        if (stepName === 'Close') ext.splice(ext.indexOf('Update') + 1, 0, LA_CAR_DELIVERY);
         groups = { Internal: groups.Internal, External: ext };
-        hasChannel = true;
+        hasChannel = stepName !== 'Close';
       }
       var channelOn = (laOutcome === 'Update' || LA_UPDATE_CHANNELS.indexOf(laOutcome) > -1);
       var groupLabels = { Internal: 'Internal', External: 'Customer related' };
@@ -4600,6 +4605,12 @@
           }).join('') + '</div></div>';
         if (laNoReason !== 'Invalid number') { html += laDateTime('Retry call'); }
         html += laNotesField();
+      } else if (laOutcome === 'Update' && laIsCloseStage()) {
+        html += laNotesField();
+        html += laDateTime('Next follow-up');
+      } else if (laOutcome === LA_CAR_DELIVERY) {
+        html += laNotesField();
+        html += laDateTime('Delivery Date');
       } else if (laOutcome === 'Update') {
         html += '<div class="la-hint2">Pick a channel to log the update.</div>';
       } else if (laAnswer === 'yes' && laOutcome) {
@@ -4695,6 +4706,12 @@
         if (laOutcome === 'Follow up') { h.textContent = 'Saving will raise a follow-up note for the agent.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         if (laOutcome === 'Transfer ownership') { h.textContent = 'Saving will transfer ownership of this lead.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         if (laOutcome === LA_MOVE_PREP) { h.textContent = 'Saving will move the lead to Prep for delivery.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
+        if (laOutcome === LA_CAR_DELIVERY) {
+          h.innerHTML = 'Saving will log the delivery activity and close the lead as Won.' +
+            '<span class="la-hint-note">Note: A survey for post delivery purchase will be shared to the customer after closing the lead.</span>';
+          h.className = 'la-hint ok'; h.style.display = ''; return;
+        }
+        if (laOutcome === 'Update') { h.textContent = 'Saving will log the update and schedule a follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return; }
         h.textContent = 'Saving will log the outreach and schedule a follow-up.'; h.className = 'la-hint ok'; h.style.display = ''; return;
       }
       if (laAnswer === 'yes' && laOutcome && laRoutes[laOutcome]) {
@@ -4722,7 +4739,7 @@
     function setLaOutcome(btn) {
       laOutcome = btn.getAttribute('data-out');
       if (laOutcome === 'Clone lead') { laOutcome = null; closeLogActivity(); openCloneLead(); return; }
-      if (laOutcome === 'Update') laOutcome = 'WhatsApp';
+      if (laOutcome === 'Update' && !laIsCloseStage()) laOutcome = 'WhatsApp';
       if (laOutcome === 'Book test drive') { tdSched = { model: leads[selectedIdx].model, date: TD_TODAY, time: TD_NOW }; tdShowToday(); }
       // re-render the row: the Channel chip opens its channels beneath it, so classes alone are not enough
       renderOutcomeChips();
@@ -4799,6 +4816,21 @@
           currentStep = 6;
           l.activities.unshift({ type: 'note', text: ['Moved to Prep for delivery by manager', docUp.move.name, notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
           showToast('Moved to Prep for delivery');
+        } else if (laOutcome === 'Update') {
+          l.nextCall = { date: f.date, time: f.time, note: notes };
+          l.activities.unshift({ type: 'note', text: ['Update', when ? 'follow-up ' + when : '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          showToast('Update logged' + (when ? ' · follow-up ' + when : ''));
+        } else if (laOutcome === LA_CAR_DELIVERY) {
+          if (!f.date) { e.textContent = 'Please pick the delivery date.'; e.style.display = 'block'; return; }
+          l.delivered = { date: f.date, time: f.time, note: notes };
+          l.nextCall = null;
+          l.activities.unshift({ type: 'visit', text: ['Car delivered', when || '', notes].filter(Boolean).join(' · '), time: '2026-07-07 12:00' });
+          if (!l.won) {
+            l.won = true; l.bpfStage = journeySteps.length;
+            l.stage = 'Won'; l.stageNum = 'Won'; l.stageClass = 'qualified';
+            l.activities.unshift({ type: 'email', text: 'Post-delivery purchase survey shared with the customer · lead closed as Won', time: '2026-07-07 12:00' });
+          }
+          showToast('Car delivery logged — lead closed as Won');
         } else if (laOutcome === 'Schedule delivery') {
           l.deliveryBooking = { date: f.date, time: f.time, note: notes };
           l.checks = l.checks || {}; l.checks[currentStep + '-0'] = true;
