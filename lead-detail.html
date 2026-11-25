@@ -935,6 +935,8 @@
       background:var(--colorNeutralBackground3); border:1px solid transparent; border-bottom-color:var(--colorNeutralStrokeAccessible);
       border-radius:var(--borderRadiusMedium); outline:none; transition:background .1s, border-color .1s; }
     select.dq-select { display:block; }
+    input.dq-select.dq-text { display:block; cursor:text; }
+    input.dq-select.dq-text::placeholder { color:var(--ink-muted); }
     .dq-select:hover { background:var(--colorNeutralBackground4); }
     .dq-select:focus-visible { background:var(--surface); border-color:var(--border); border-bottom:2px solid var(--colorCompoundBrandStroke); padding-bottom:5px; }
     .dq-select.is-blank { color:var(--ink-muted); }
@@ -4094,6 +4096,16 @@
       { q:'What would make you feel completely confident moving forward?', subs:[
         { multi:true, opts:['Test drive experience','Clear final offer','Vehicle availability/color','Warranty/service clarity','Safety proof/reviews','Product comparison','Trade-in valuation','Family/decision-maker approval','Delivery timing','More time to think','Ready to proceed','Other'] } ], free:true }
     ];
+    // B2B (business / fleet) leads ask a different set — from the B2B discovery sheet.
+    // Free-text answers use text:true; showIf nests a follow-up under one answer.
+    var discoveryB2BQs = [
+      { q:'What is the current fleet size?', subs:[ { text:true, ph:'e.g. 25 vehicles' } ] },
+      { q:'Are you looking to replace the current fleet?', subs:[
+        { opts:['Yes','No'], noSkip:true },
+        { l:'If yes, when are you planning to replace the fleet?', opts:['0-3 Months','3-6 Months','6-12 Months','N/A'], showIf:'Yes' } ] },
+      { q:'How do you plan to purchase / own the vehicles?', subs:[ { opts:['Cash','Bank Finance','In House Credit'] } ] },
+      { q:'Decision authority and approvers', subs:[ { text:true, ph:'Who decides and who approves the purchase' } ] }
+    ];
     var laDisqualifyReasons = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands'];
     var laReasons     = ['Doesn\'t fit my budget', 'Maintenance is a concern', 'Already got a car', 'I\'m considering a different model', 'I\'m looking at other brands', 'Others'];
     var laReasonsNewContact = ['Out of Scope', 'Wrong Number', 'Not Interested', 'Submitted by Mistake', 'High Price', 'Inconvenient Location', 'Duplicate', 'General', 'Others'];
@@ -4124,8 +4136,20 @@
 
     // One flat list of everything askable, so visibility and progress are
     // computed the same way for both question sets.
+    function dqIsB2B(){ var l = dqLead(); return !!(l && l.bizType === 'B2B'); }
     function dqDefs(){
       var out = [];
+      if (dqIsB2B()){
+        discoveryB2BQs.forEach(function(q, i){
+          q.subs.forEach(function(s, j){
+            out.push({ set:'b2b', k:'b2b'+i+'.'+j, grp:'b2b'+i, step:j,
+              num: j === 0 ? (i + 1) : 0, label: j === 0 ? q.q : s.l, cap:'', tag:'',
+              opts: s.opts || [], text: !!s.text, noSkip: !!s.noSkip, ph: s.ph || '', showIf: s.showIf || null,
+              multi: false, req: true });
+          });
+        });
+        return out;
+      }
       if (currentStep >= 2) discoverySalesExecQs.forEach(function(q, i){
         q.subs.forEach(function(s, j){
           out.push({ set:'se', k:'se'+i+'.'+j, grp:'se'+i, step:j,
@@ -4150,14 +4174,16 @@
         if (f.step === 0){ vis[f.k] = true; return; }
         var prior = null;
         defs.forEach(function(g){ if (g.grp === f.grp && g.step === f.step - 1) prior = g; });
-        vis[f.k] = !!(prior && vis[prior.k] && (prior.note || dqHas(l, prior.k)));
+        vis[f.k] = !!(prior && vis[prior.k] && (prior.note || dqHas(l, prior.k)) &&
+          (!f.showIf || dqSel(l, prior.k).indexOf(f.showIf) > -1));
       });
       return vis;
     }
     // English counts answer fields; the Arabic review asked for questions (a question with follow-ups is done once all its fields are answered).
     function dqProgress(l, defs, set){
       if (I18N.lang !== 'ar'){
-        var qs = defs.filter(function(f){ return f.set === set && !f.note; });
+        var vis = dqVisible(l, defs);
+        var qs = defs.filter(function(f){ return f.set === set && !f.note && (!f.showIf || vis[f.k]); });
         var dn = 0, sk = 0;
         qs.forEach(function(f){ if (dqHas(l, f.k)){ dn++; if (dqSkipped(l, f.k)) sk++; } });
         return { total: qs.length, done: dn, skip: sk };
@@ -4167,7 +4193,7 @@
       var done = 0, skip = 0;
       order.forEach(function(g){
         var fs = groups[g];
-        if (fs.every(function(f){ return dqHas(l, f.k); })){ done++; if (dqSkipped(l, fs[0].k)) skip++; }
+        if (fs.every(function(f){ return (f.showIf && !dqVisible(l, defs)[f.k]) || dqHas(l, f.k); })){ done++; if (dqSkipped(l, fs[0].k)) skip++; }
       });
       return { total: order.length, done: done, skip: skip };
     }
@@ -4186,6 +4212,10 @@
     function dqControlHtml(l, f){
       var sel = dqSel(l, f.k);
       var cls = (sel.length ? '' : ' is-blank') + (dqSkipped(l, f.k) ? ' is-skip' : '');
+      if (f.text){
+        return '<input type="text" class="dq-select dq-text" placeholder="'+dpEsc(f.ph || 'Type the answer')+'"' +
+          ' value="'+dpEsc(dqText(l, f.k))+'" oninput="dqNote(this,\''+f.k+'\')" onchange="dqRender()">';
+      }
       if (f.multi){
         var open = dqOpenKey === f.k;
         return '<button type="button" class="dq-select'+cls+'" aria-haspopup="listbox" aria-expanded="'+open+'" onclick="dqMenu(this)">' +
@@ -4198,7 +4228,7 @@
       }
       var opt = function(o){ return '<option'+(sel.indexOf(o) > -1 ? ' selected' : '')+'>'+dpEsc(o)+'</option>'; };
       return '<select class="dq-select'+cls+'" onchange="dqSet(this)">' +
-        '<option value="">'+dpEsc(DISC_NONE)+'</option>' + f.opts.map(opt).join('') + opt(DQ_SKIP) +
+        '<option value="">'+dpEsc(DISC_NONE)+'</option>' + f.opts.map(opt).join('') + (f.noSkip ? '' : opt(DQ_SKIP)) +
       '</select>';
     }
     function dqBlockHtml(l, f, visible){
@@ -4234,8 +4264,11 @@
 
     function dqInner(l){
       var defs = dqDefs(), vis = dqVisible(l, defs), sets = [];
-      if (currentStep >= 2) sets.push(['se', 'Sales Executive — Discovery Questions']);
-      sets.push(['cc', 'Call Center — Discovery Questions']);
+      if (l.bizType === 'B2B') sets.push(['b2b', 'Business (B2B) — Discovery Questions']);
+      else {
+        if (currentStep >= 2) sets.push(['se', 'Sales Executive — Discovery Questions']);
+        sets.push(['cc', 'Call Center — Discovery Questions']);
+      }
       return '<div class="dp-intake-groups">' + sets.map(function(pair){
         var set = pair[0], p = dqProgress(l, defs, set);
         var pct = p.total ? Math.round(p.done / p.total * 100) : 0;
@@ -4279,8 +4312,14 @@
     // Clearing an answer takes its follow-ups with it — a stale follow-up
     // sitting under a blank parent reads as something the customer said.
     function dqRollback(l, k){
-      if (dqHas(l, k)) return;
       var defs = dqDefs(), me = null;
+      if (dqHas(l, k)){
+        var vis = dqVisible(l, defs);
+        defs.forEach(function(f){
+          if (f.showIf && !vis[f.k] && f.grp === k.split('.')[0] && dqHas(l, f.k)){ delete dqBag(l)[f.k]; }
+        });
+        return;
+      }
       defs.forEach(function(f){ if (f.k === k) me = f; });
       if (!me) return;
       defs.forEach(function(f){
