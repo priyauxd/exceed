@@ -741,7 +741,7 @@
     }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
-  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; }</style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; } .cfun-card{ text-align:center; } .mt-card{ text-align:center; } .mt-card .mt-top{ justify-content:center; gap:8px; }</style>
 </head>
 <body>
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
@@ -1266,7 +1266,7 @@
             </div>
             <div class="q-scroll">
             <table class="qt-table" id="cwTable">
-<thead><tr><th>Customer</th><th>Arrived</th><th>Wait</th><th>Purpose</th><th>Executive</th><th>Bottleneck</th><th style="text-align:end">Action</th></tr></thead>
+<thead><tr><th>Customer</th><th>Arrived</th><th>Wait</th><th>Purpose</th><th>Executive</th><th>Bottleneck</th><th>Action</th></tr></thead>
               <tbody>
                 <tr class="urg">
                   <td><div class="c-name">Maya Hassan</div></td>
@@ -1274,7 +1274,7 @@
                   <td><span class="sla-tag brch">18m</span></td>
                   <td>Test drive</td><td>Ahmad Nasr</td>
                   <td><a href="#" class="row-link">Vehicle prep &mdash; VIN pending</a></td>
-                  <td style="text-align:end"><button class="tbl-btn red" onclick="showToast('Notifying Ahmad Nasr')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Maya Hassan')">Reassign</button></td>
+                  <td><button class="tbl-btn red" onclick="showToast('Notifying Ahmad Nasr')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Maya Hassan')">Reassign</button></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Bilal Qureshi</div></td>
@@ -1282,7 +1282,7 @@
                   <td><span class="sla-tag wrn">11m</span></td>
                   <td>Delivery</td><td>Rania Khoury</td>
                   <td><a href="#" class="row-link">Insurance doc missing</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="showToast('Notifying Rania Khoury')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Bilal Qureshi')">Reassign</button></td>
+                  <td><button class="tbl-btn" onclick="showToast('Notifying Rania Khoury')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Bilal Qureshi')">Reassign</button></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Elena Costa</div></td>
@@ -1290,7 +1290,7 @@
                   <td><span class="sla-tag ok">6m</span></td>
                   <td>Enquiry</td><td><span class="none-txt">&mdash;</span></td>
                   <td><a href="#" class="row-link">Awaiting assignment</a></td>
-                  <td style="text-align:end"><button class="tbl-btn" onclick="assign(event,'Elena Costa')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Elena Costa')">Reassign</button></td>
+                  <td><button class="tbl-btn" onclick="assign(event,'Elena Costa')">Notify exec</button> <button class="tbl-btn ghost" onclick="showToast('Reassigning Elena Costa')">Reassign</button></td>
                 </tr>
               </tbody>
             </table>
@@ -1935,7 +1935,7 @@
           '<td class="'+(l.slaU?'ml-sla-u':'ml-sla')+'">'+l.sla+'</td>'+
           extras.map(function(c){ return '<td>'+(leadCell(l,c)||'&mdash;')+'</td>'; }).join('')+
           '<td>'+l.act+'</td>'+
-          '<td style="text-align:end"><a href="#" class="ml-assign" onclick="openAssignLead(\''+l.n.replace(/'/g,"\\'")+'\');return false">Assign &rsaquo;</a></td>'+
+          '<td><a href="#" class="ml-assign" onclick="openAssignLead(\''+l.n.replace(/'/g,"\\'")+'\');return false">Assign &rsaquo;</a></td>'+
         '</tr>';
       }).join('');
       var host=document.getElementById('mdrLeadsHost'); if(host) host.innerHTML='<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
@@ -1972,7 +1972,7 @@
       var body=m.rows.map(function(r){
         var _q=r.id?('?id='+encodeURIComponent(r.id)):(r.cust?('?lead='+encodeURIComponent(r.cust)):'');
         var href='lead-detail.html'+_q;
-        var act=m.action ? '<td style="text-align:end"><a href="'+href+'" class="ml-assign" style="position:relative;z-index:5">'+m.action+' &rsaquo;</a></td>' : '<td></td>';
+        var act=m.action ? '<td><a href="'+href+'" class="ml-assign" style="position:relative;z-index:5">'+m.action+' &rsaquo;</a></td>' : '<td></td>';
         var rowClick=m.action ? ' style="cursor:pointer" onclick="if(!(event.target.closest&&event.target.closest(\'a\')))window.location.href=\''+href+'\'"' : '';
         return '<tr'+rowClick+'>'+mlVisibleCols(m).map(function(c){return mlCell(c.k,r)+((c.k==='cust')?mlIdCell(r.id):'');}).join('')+act+'</tr>';
       }).join('');
@@ -2060,7 +2060,7 @@
       if(has){
         var body=m.tx.map(function(r){
           return '<tr>'+m.cols.map(function(c){return mlCell(c.k,r);}).join('')+
-            '<td style="text-align:end"><a href="lead-detail.html'+(r.id?'?id='+encodeURIComponent(r.id):'')+'" class="ml-assign">'+m.action+'</a></td></tr>';
+            '<td><a href="lead-detail.html'+(r.id?'?id='+encodeURIComponent(r.id):'')+'" class="ml-assign">'+m.action+'</a></td></tr>';
         }).join('');
         txHtml='<div class="mdr-leadswrap"><table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table></div>';
       } else {

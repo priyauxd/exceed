@@ -1126,7 +1126,7 @@
       .topbar .copilot:hover .cp-icon { transform:none; }
     }
     </style>
-  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; }</style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; } .cfun-card{ text-align:center; } .mt-card{ text-align:center; } .mt-card .mt-top{ justify-content:center; gap:8px; }</style>
 </head>
 <body data-role="cc-agent">
   <!-- Copilot mark: steering wheel + sparkle. Defined once, referenced via <use>. -->
@@ -1488,7 +1488,7 @@
             </div>
             <table class="qt-table" id="qtTableEl">
               <thead><tr>
-                <th>Lead</th><th>Status</th><th>Source</th><th>Model</th><th>SLA</th><th>Qual %</th><th style="text-align:end">Next Action</th>
+                <th>Lead</th><th>Status</th><th>Source</th><th>Model</th><th>SLA</th><th>Qual %</th><th>Next Action</th>
               </tr></thead>
               <tbody>
                 <tr class="urg">
@@ -1497,7 +1497,7 @@
                   <td>800 Number</td><td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag brch"><span class="blink"></span>8m left</span></td>
                   <td><span class="pct-r">20%</span></td>
-                  <td style="text-align:end"><a class="q-next" href="lead-detail.html?lead=Meera+Shah&copilot=1">Start call &rsaquo;</a></td>
+                  <td><a class="q-next" href="lead-detail.html?lead=Meera+Shah&copilot=1">Start call &rsaquo;</a></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Sam Fadi</div><div class="c-id">L-2026-06006</div></td>
@@ -1505,7 +1505,7 @@
                   <td>800 Number</td><td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag ok">25m left</span></td>
                   <td><span class="pct-g">100%</span></td>
-                  <td style="text-align:end"><a class="q-next" href="lead-detail.html?lead=Sam+Fadi">Hand over to Sales &rsaquo;</a></td>
+                  <td><a class="q-next" href="lead-detail.html?lead=Sam+Fadi">Hand over to Sales &rsaquo;</a></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Sara Ali</div><div class="c-id">L-2026-06101</div></td>
@@ -1513,7 +1513,7 @@
                   <td>Call Center Inbound</td><td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag wrn">30m left</span></td>
                   <td><span class="pct-a">90%</span></td>
-                  <td style="text-align:end"><a class="q-next" href="lead-detail.html?lead=Sara+Ali">Complete missing field &rsaquo;</a></td>
+                  <td><a class="q-next" href="lead-detail.html?lead=Sara+Ali">Complete missing field &rsaquo;</a></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Mira Khaled</div><div class="c-id">L-2026-06102</div></td>
@@ -1521,7 +1521,7 @@
                   <td>Manual CC Queue</td><td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag wrn">30m left</span></td>
                   <td><span class="pct-a">70%</span></td>
-                  <td style="text-align:end"><a class="q-next" href="lead-detail.html?lead=Mira+Khaled">Verify number &rsaquo;</a></td>
+                  <td><a class="q-next" href="lead-detail.html?lead=Mira+Khaled">Verify number &rsaquo;</a></td>
                 </tr>
                 <tr>
                   <td><div class="c-name">Dana Alwan</div><div class="c-id">L-2026-06013</div></td>
@@ -1529,7 +1529,7 @@
                   <td>Call Center Inbound</td><td><span class="mdl">EXEED LX</span></td>
                   <td><span class="sla-tag ok">250m left</span></td>
                   <td><span class="pct-g">100%</span></td>
-                  <td style="text-align:end"><a class="q-next" href="lead-detail.html?lead=Dana+Alwan">Hand over to Sales &rsaquo;</a></td>
+                  <td><a class="q-next" href="lead-detail.html?lead=Dana+Alwan">Hand over to Sales &rsaquo;</a></td>
                 </tr>
               </tbody>
             </table>
@@ -1598,12 +1598,12 @@
               <span class="q-cnt">Separate SLA &middot; never counted with Sales</span>
             </div>
             <table class="qt-table">
-              <thead><tr><th>Ticket</th><th>Customer</th><th>Type</th><th>Agent</th><th>Age</th><th>SLA</th><th style="text-align:end">Next Action</th></tr></thead>
+              <thead><tr><th>Ticket</th><th>Customer</th><th>Type</th><th>Agent</th><th>Age</th><th>SLA</th><th>Next Action</th></tr></thead>
               <tbody>
-                <tr><td><span class="c-id">AS-3001</span></td><td><div class="c-name">Ravi Kumar</div></td><td>Service booking</td><td>Nadia Al Suwaidi</td><td>20m</td><td><span class="sla-tag ok">On Track</span></td><td style="text-align:end"><a class="q-next" href="#">Confirm slot &rsaquo;</a></td></tr>
-                <tr class="urg"><td><span class="c-id">AS-3002</span></td><td><div class="c-name">Marwa El Sayed</div></td><td>Complaint</td><td>Aisha Hussein</td><td>240m</td><td><span class="sla-tag brch">SLA Breached</span></td><td style="text-align:end"><a class="q-next" href="#">Escalate to service manager &rsaquo;</a></td></tr>
-                <tr><td><span class="c-id">AS-3003</span></td><td><div class="c-name">Simon Wu</div></td><td>Parts enquiry</td><td>Farhan Aslam</td><td>90m</td><td><span class="sla-tag wrn">Due Soon</span></td><td style="text-align:end"><a class="q-next" href="#">Send parts availability &rsaquo;</a></td></tr>
-                <tr><td><span class="c-id">AS-3004</span></td><td><div class="c-name">Amina Yousef</div></td><td>Warranty</td><td>Ivan Petrov</td><td>45m</td><td><span class="sla-tag ok">On Track</span></td><td style="text-align:end"><a class="q-next" href="#">Collect proof of purchase &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3001</span></td><td><div class="c-name">Ravi Kumar</div></td><td>Service booking</td><td>Nadia Al Suwaidi</td><td>20m</td><td><span class="sla-tag ok">On Track</span></td><td><a class="q-next" href="#">Confirm slot &rsaquo;</a></td></tr>
+                <tr class="urg"><td><span class="c-id">AS-3002</span></td><td><div class="c-name">Marwa El Sayed</div></td><td>Complaint</td><td>Aisha Hussein</td><td>240m</td><td><span class="sla-tag brch">SLA Breached</span></td><td><a class="q-next" href="#">Escalate to service manager &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3003</span></td><td><div class="c-name">Simon Wu</div></td><td>Parts enquiry</td><td>Farhan Aslam</td><td>90m</td><td><span class="sla-tag wrn">Due Soon</span></td><td><a class="q-next" href="#">Send parts availability &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3004</span></td><td><div class="c-name">Amina Yousef</div></td><td>Warranty</td><td>Ivan Petrov</td><td>45m</td><td><span class="sla-tag ok">On Track</span></td><td><a class="q-next" href="#">Collect proof of purchase &rsaquo;</a></td></tr>
               </tbody>
             </table>
           </div>

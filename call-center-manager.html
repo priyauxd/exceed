@@ -616,7 +616,7 @@
     }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
-  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; }</style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; } .cfun-card{ text-align:center; } .mt-card{ text-align:center; } .mt-card .mt-top{ justify-content:center; gap:8px; }</style>
 </head>
 <body data-role="cc-manager">
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
@@ -832,6 +832,11 @@
     .ra-check, .ra-radio, .ra-lead-check{ accent-color:var(--blue); width:16px; height:16px; cursor:pointer; }
     .kebab{ border:none; background:none; cursor:pointer; color:var(--ink-muted); padding:2px 4px; border-radius:6px; vertical-align:middle; margin-inline-start:4px; }
     .kebab:hover{ background:var(--bg); color:var(--ink); }
+    /* Agents table actions: start-aligned under the header, equal-width buttons, ⋯ right after */
+    .qt-table td.act { white-space:nowrap; width:1%; }
+    .act-cell { display:flex; align-items:center; gap:6px; }
+    .act-cell .tbl-btn { min-width:132px; box-sizing:border-box; text-align:center; }
+    .act-cell .kebab { margin-inline-start:0; }
     .kebab .material-symbols-outlined{ font-size:18px; }
     .row-menu{ position:fixed; z-index:300; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 10px 30px rgba(20,24,34,.16); padding:5px; min-width:210px; display:none; }
     .row-menu button{ display:block; width:100%; text-align:start; background:none; border:none; font-family:inherit; font-size:13px; color:var(--ink-secondary); padding:9px 11px; border-radius:7px; cursor:pointer; }
@@ -1128,7 +1133,7 @@
           </div>
           <table class="qt-table">
             <thead><tr>
-              <th>Agent</th><th>Assigned</th><th>Not Act.</th><th>Callback</th><th>Contact</th><th>Returned</th><th>SLA Brk</th><th>AHT</th><th>Quality</th><th>Status</th><th>Next Manager Action</th><th style="text-align:end">Actions</th>
+              <th>Agent</th><th>Assigned</th><th>Not Act.</th><th>Callback</th><th>Contact</th><th>Returned</th><th>SLA Brk</th><th>AHT</th><th>Quality</th><th>Status</th><th>Next Manager Action</th><th>Actions</th>
             </tr></thead>
             <tbody>
               <tr class="urg">
@@ -1137,7 +1142,7 @@
                 <td><button type="button" class="score-link" data-agent="Rahul Krishnan" title="Review agent scores" onclick="openQuality('Rahul Krishnan')"><span class="pct-a">72</span></button></td>
                 <td><span class="st-badge brch">SLA Breached</span></td>
                 <td><a href="#" class="row-link" onclick="openReassign('Rahul Krishnan');return false">Reassign 3 leads + coach</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:end"><button class="tbl-btn red" onclick="openReassign('Rahul Krishnan')">Reassign + coach</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn red" onclick="openReassign('Rahul Krishnan')">Reassign + coach</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
               <tr class="urg">
                 <td><div class="c-name">Lina Osman</div><div class="c-shift">10:00&ndash;19:00</div></td>
@@ -1145,7 +1150,7 @@
                 <td><button type="button" class="score-link" data-agent="Lina Osman" title="Review agent scores" onclick="openQuality('Lina Osman')"><span class="pct-a">78</span></button></td>
                 <td><span class="st-badge blk">Blocked</span></td>
                 <td><a href="#" class="row-link" onclick="openReassign('Lina Osman');return false">Reassign 5 leads</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:end"><button class="tbl-btn" onclick="openReassign('Lina Osman')">Reassign 5</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="openReassign('Lina Osman')">Reassign 5</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
               <tr>
                 <td><div class="c-name">Mohammed Zaid</div><div class="c-shift">09:00&ndash;18:00</div></td>
@@ -1153,7 +1158,7 @@
                 <td><button type="button" class="score-link" data-agent="Mohammed Zaid" title="Review agent scores" onclick="openQuality('Mohammed Zaid')"><span class="pct-r">65</span></button></td>
                 <td><span class="st-badge ret">Returned</span></td>
                 <td><a href="#" class="row-link" onclick="openQuality('Mohammed Zaid');return false">Quality review</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:end"><button class="tbl-btn" onclick="openQuality('Mohammed Zaid')">Review quality</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn" onclick="openQuality('Mohammed Zaid')">Review quality</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
               <tr>
                 <td><div class="c-name">Aisha Hussein</div><div class="c-shift">11:00&ndash;20:00</div></td>
@@ -1161,7 +1166,7 @@
                 <td><button type="button" class="score-link" data-agent="Aisha Hussein" title="Review agent scores" onclick="openQuality('Aisha Hussein')"><span class="pct-a">70</span></button></td>
                 <td><span class="st-badge wrn">Due Soon</span></td>
                 <td><a href="#" class="row-link" onclick="openCoaching('Aisha Hussein');return false">1:1 coaching</a><a href="#" class="why">Why?</a></td>
-                <td style="text-align:end"><button class="tbl-btn ghost" onclick="openCoaching('Aisha Hussein')">Add coaching note</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openCoaching('Aisha Hussein')">Add coaching note</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
               <tr>
                 <td><div class="c-name">Nadia Al Suwaidi</div><div class="c-shift">08:00&ndash;17:00</div></td>
@@ -1169,7 +1174,7 @@
                 <td><button type="button" class="score-link" data-agent="Nadia Al Suwaidi" title="Review agent scores" onclick="openQuality('Nadia Al Suwaidi')"><span class="pct-g">92</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
               <tr>
                 <td><div class="c-name">Priya Nair</div><div class="c-shift">09:00&ndash;18:00</div></td>
@@ -1177,7 +1182,7 @@
                 <td><button type="button" class="score-link" data-agent="Priya Nair" title="Review agent scores" onclick="openQuality('Priya Nair')"><span class="pct-g">88</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
               <tr>
                 <td><div class="c-name">Farhan Aslam</div><div class="c-shift">10:00&ndash;19:00</div></td>
@@ -1185,7 +1190,7 @@
                 <td><button type="button" class="score-link" data-agent="Farhan Aslam" title="Review agent scores" onclick="openQuality('Farhan Aslam')"><span class="pct-g">90</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
               <tr>
                 <td><div class="c-name">Ivan Petrov</div><div class="c-shift">13:00&ndash;22:00</div></td>
@@ -1193,7 +1198,7 @@
                 <td><button type="button" class="score-link" data-agent="Ivan Petrov" title="Review agent scores" onclick="openQuality('Ivan Petrov')"><span class="pct-g">85</span></button></td>
                 <td><span class="st-badge ok">On Track</span></td>
                 <td><span class="none-txt">None</span></td>
-                <td style="text-align:end"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button> <button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></td>
+                <td class="act"><div class="act-cell"><button class="tbl-btn ghost" onclick="openMetric('ccAllLeads')">View queue</button><button class="kebab" onclick="agentMenu(event)" aria-label="More"><span class="material-symbols-outlined">more_horiz</span></button></div></td>
               </tr>
             </tbody>
           </table>
@@ -1218,7 +1223,7 @@
               <a href="#" class="lq-addcol" onclick="return false"><span class="material-symbols-outlined" style="font-size:15px;vertical-align:-2px">view_column</span> Add column</a>
             </div>
             <div class="q-scroll"><table class="qt-table lq-table"><thead><tr>
-              <th>Lead</th><th>Agent</th><th>Source</th><th>Status</th><th>SLA</th><th>Qual %</th><th>Next Action</th><th style="text-align:end">Actions</th>
+              <th>Lead</th><th>Agent</th><th>Source</th><th>Status</th><th>SLA</th><th>Qual %</th><th>Next Action</th><th>Actions</th>
             </tr></thead><tbody id="lqBody"></tbody></table></div>
           </div>
         </div>
@@ -1232,12 +1237,12 @@
               <span class="q-cnt">Separate SLA &middot; never counted with Sales</span>
             </div>
             <table class="qt-table">
-              <thead><tr><th>Ticket</th><th>Customer</th><th>Type</th><th>Agent</th><th>Age</th><th>SLA</th><th style="text-align:end">Next Action</th></tr></thead>
+              <thead><tr><th>Ticket</th><th>Customer</th><th>Type</th><th>Agent</th><th>Age</th><th>SLA</th><th>Next Action</th></tr></thead>
               <tbody>
-                <tr><td><span class="c-id">AS-3001</span></td><td><div class="c-name">Ravi Kumar</div></td><td>Service booking</td><td>Nadia Al Suwaidi</td><td>20m</td><td><span class="sla-tag ok">On Track</span></td><td style="text-align:end"><a class="row-link" href="#">Confirm slot &rsaquo;</a></td></tr>
-                <tr class="urg"><td><span class="c-id">AS-3002</span></td><td><div class="c-name">Marwa El Sayed</div></td><td>Complaint</td><td>Aisha Hussein</td><td>240m</td><td><span class="sla-tag brch">SLA Breached</span></td><td style="text-align:end"><a class="row-link" href="#">Escalate to service manager &rsaquo;</a></td></tr>
-                <tr><td><span class="c-id">AS-3003</span></td><td><div class="c-name">Simon Wu</div></td><td>Parts enquiry</td><td>Farhan Aslam</td><td>90m</td><td><span class="sla-tag wrn">Due Soon</span></td><td style="text-align:end"><a class="row-link" href="#">Send parts availability &rsaquo;</a></td></tr>
-                <tr><td><span class="c-id">AS-3004</span></td><td><div class="c-name">Amina Yousef</div></td><td>Warranty</td><td>Ivan Petrov</td><td>45m</td><td><span class="sla-tag ok">On Track</span></td><td style="text-align:end"><a class="row-link" href="#">Collect proof of purchase &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3001</span></td><td><div class="c-name">Ravi Kumar</div></td><td>Service booking</td><td>Nadia Al Suwaidi</td><td>20m</td><td><span class="sla-tag ok">On Track</span></td><td><a class="row-link" href="#">Confirm slot &rsaquo;</a></td></tr>
+                <tr class="urg"><td><span class="c-id">AS-3002</span></td><td><div class="c-name">Marwa El Sayed</div></td><td>Complaint</td><td>Aisha Hussein</td><td>240m</td><td><span class="sla-tag brch">SLA Breached</span></td><td><a class="row-link" href="#">Escalate to service manager &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3003</span></td><td><div class="c-name">Simon Wu</div></td><td>Parts enquiry</td><td>Farhan Aslam</td><td>90m</td><td><span class="sla-tag wrn">Due Soon</span></td><td><a class="row-link" href="#">Send parts availability &rsaquo;</a></td></tr>
+                <tr><td><span class="c-id">AS-3004</span></td><td><div class="c-name">Amina Yousef</div></td><td>Warranty</td><td>Ivan Petrov</td><td>45m</td><td><span class="sla-tag ok">On Track</span></td><td><a class="row-link" href="#">Collect proof of purchase &rsaquo;</a></td></tr>
               </tbody>
             </table>
           </div>
@@ -1394,7 +1399,7 @@
     function mlListTable(m){
       var head='<tr>'+mlVisibleCols(m).map(function(c){return '<th'+(c.l.length>14?' class="wrap"':'')+'>'+c.l+'</th>'+((c.k==='lead')?'<th>Lead ID</th>':'');}).join('')+(m.action?'<th></th>':'')+'</tr>';
       var body=m.rows.map(function(r){
-        var act=m.action?'<td style="text-align:end"><a href="lead-detail.html?lead='+encodeURIComponent(r.lead)+'" class="ml-assign">'+m.action+' &rsaquo;</a></td>':'';
+        var act=m.action?'<td><a href="lead-detail.html?lead='+encodeURIComponent(r.lead)+'" class="ml-assign">'+m.action+' &rsaquo;</a></td>':'';
         return '<tr>'+mlVisibleCols(m).map(function(c){return mlCell(c.k,r)+((c.k==='lead')?mlIdCell(r.id):'');}).join('')+act+'</tr>';
       }).join('');
       return '<table class="mdr-leads"><thead>'+head+'</thead><tbody>'+body+'</tbody></table>';
@@ -1708,7 +1713,7 @@
           '<td class="'+slaCls+'">'+slaTxt+'</td>'+
           '<td class="'+qcls+'" style="font-weight:700">'+l.qual+'</td>'+
           '<td class="ml-next">'+l.next+'</td>'+
-          '<td style="text-align:end"><span class="lq-act"><a href="#" class="lq-reassign" onclick="return false">Reassign</a><a href="#" class="lq-escalate" onclick="return false">Escalate</a><a href="lead-detail.html?lead='+encodeURIComponent(l.lead)+'" class="lq-open">Open &rarr;</a></span></td></tr>';
+          '<td><span class="lq-act"><a href="#" class="lq-reassign" onclick="return false">Reassign</a><a href="#" class="lq-escalate" onclick="return false">Escalate</a><a href="lead-detail.html?lead='+encodeURIComponent(l.lead)+'" class="lq-open">Open &rarr;</a></span></td></tr>';
       }).join('');
       var cnt=document.getElementById('lqCount'); if(cnt) cnt.textContent=rows.length+' of '+CC.length;
       var chips=document.getElementById('lqChips'); if(chips){

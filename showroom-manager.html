@@ -741,7 +741,7 @@
     }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
-  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; }</style>
+  <style>/* kpi-center */ .metric-card{ text-align:center; display:flex; flex-direction:column; justify-content:center; align-items:center; } .metric-card .mc-tag{ text-align:start; } .metric-card .mc-val{ font-size:20px; } .kpi-group .metric-card, .metric-card, .kpi-group .dial-card, .dial-card, .cfun-card, .mt-card{ border:1px solid #f5f5f5; } .cfun-card{ text-align:center; } .mt-card{ text-align:center; } .mt-card .mt-top{ justify-content:center; gap:8px; }</style>
 </head>
 <body data-role="sm">
   <div class="copilot-dd-overlay" id="copilotOverlay" onclick="toggleCopilot()"></div>
@@ -1320,9 +1320,9 @@
             <div class="cfun-card cfun-bad mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsTestDrives')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsTestDrives');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Test Drives</div><div class="cfun-val">0%</div><div class="cfun-tgt">Target 25%</div></div>
             <div class="cfun-card cfun-bad mdr-open" role="button" tabindex="0" onclick="openMetric('fVisitsBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fVisitsBooking');}"><div class="cfun-lbl">(Visits + Walk-ins) &rarr; Booking</div><div class="cfun-val">0%</div><div class="cfun-tgt">Target 25%</div></div>
             <div class="cfun-card cfun-bad mdr-open" role="button" tabindex="0" onclick="openMetric('fLeadBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fLeadBooking');}"><div class="cfun-lbl">Lead &rarr; Booking</div><div class="cfun-val">0%</div><div class="cfun-tgt">Target 25%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fBookingInvoice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fBookingInvoice');}"><div class="cfun-lbl">Booking &rarr; Invoice</div><div class="cfun-val">TBD</div><div class="cfun-tgt">Target 25%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fInvoiceDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fInvoiceDelivery');}"><div class="cfun-lbl">Invoice &rarr; Delivery</div><div class="cfun-val">TBD</div><div class="cfun-tgt">Target 25%</div></div>
-            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fCancellationBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fCancellationBooking');}"><div class="cfun-lbl">Cancellation &rarr; Booking</div><div class="cfun-val">TBD</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card warn mdr-open" role="button" tabindex="0" onclick="openMetric('fBookingInvoice')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fBookingInvoice');}"><div class="cfun-lbl">Booking &rarr; Invoice</div><div class="cfun-val">82%</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fInvoiceDelivery')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fInvoiceDelivery');}"><div class="cfun-lbl">Invoice &rarr; Delivery</div><div class="cfun-val">88%</div><div class="cfun-tgt">Target 25%</div></div>
+            <div class="cfun-card mdr-open" role="button" tabindex="0" onclick="openMetric('fCancellationBooking')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMetric('fCancellationBooking');}"><div class="cfun-lbl">Cancellation &rarr; Booking</div><div class="cfun-val">17%</div><div class="cfun-tgt">Target 25%</div></div>
           </div>
         </div>
         </div>
