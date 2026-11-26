@@ -236,6 +236,10 @@
         var ico = a.querySelector('.material-symbols-outlined');
         if (ico && ico.textContent.trim().toLowerCase() === 'dashboard') dash = a;
       });
+      if (!dash) document.querySelectorAll('.sidebar a, .sb-nav a, .sidebar-nav a').forEach(function (a) {
+        var ico = a.querySelector('.material-symbols-outlined');
+        if (!dash && ico && ico.textContent.trim().toLowerCase() === 'home') dash = a;
+      });
       if (!dash || !dash.parentNode) return;
       var conv = dash.className.indexOf('nav-item') >= 0 ? 'nav-item' : 'sb-item';
       function load(key, seed) {

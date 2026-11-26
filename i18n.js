@@ -99,8 +99,7 @@
     if (!ours) n.__en = n.__ar = null;
     if (lang !== 'ar') { if (ours) { n.__ar = null; n.data = src; n.__en = null; } return; }
     if (ours) return;
-    var t = null, out;
-    for (var c = 0; c < contexts.length; c++) if (norm(src) === contexts[c][1] && p.closest(contexts[c][0])) { t = contexts[c][2]; break; }
+    var t = ctxTr(norm(src), p), out;
     if (t == null) t = tr(src);
     if (t != null) {
       var m = src.match(/^(\s*)[\s\S]*?(\s*)$/);
@@ -112,7 +111,31 @@
     n.__en = src; n.__ar = out; n.data = out;
     if (p.tagName === 'OPTION' && !p.hasAttribute('value')) p.setAttribute('value', norm(src));
   }
+  // Scoped wording: [selector, 'exact text' | /pattern/, arabic]. Like tr(), it also matches through
+  // a leading "· " or a trailing " ›", so "· Compliance vs targets" picks up the dashboard's wording.
+  function ctxTr(key, p) {
+    if (!key) return null;
+    for (var c = 0; c < contexts.length; c++) {
+      var k = contexts[c][1], hit = typeof k === 'string' ? key === k : k.test(key);
+      if (hit && p.closest(contexts[c][0])) return typeof k === 'string' ? contexts[c][2] : key.replace(k, contexts[c][2]);
+    }
+    var lead = key.match(/^([·•—–|✓✗]\s*)(.+)$/), tail = key.match(/^(.+?)(\s*[›→…:·.—]+)$/);
+    if (lead) { var t1 = ctxTr(lead[2], p); if (t1 != null) return lead[1] + t1; }
+    if (tail) { var t2 = ctxTr(tail[1], p); if (t2 != null) return t2 + tail[2].replace('→', '←'); }
+    return null;
+  }
+  // Pre-filled demo values in read-back forms (e.g. the CCA end-of-call summary) read in Arabic too.
+  var VALUE_SEL = '[data-role="cc-agent"] .es-fld input';
+  function doValue(el) {
+    if (!el.matches || !el.matches(VALUE_SEL) || !el.hasAttribute('value')) return;
+    var cur = el.getAttribute('value'), ours = el.__ar_value != null && el.__ar_value === cur, src = ours ? el.__en_value : cur;
+    if (lang !== 'ar') { if (ours) { el.__ar_value = null; el.setAttribute('value', src); el.value = src; } return; }
+    if (ours || !src) return;
+    var t = ctxTr(norm(src), el) || tr(src);
+    if (t != null && t !== src) { el.__en_value = src; el.__ar_value = t; el.setAttribute('value', t); if (el.value === src) el.value = t; }
+  }
   function doAttrs(el) {
+    doValue(el);
     if (el.closest('[data-i18n-skip]')) return;
     for (var i = 0; i < ATTRS.length; i++) {
       var a = ATTRS[i]; if (!el.hasAttribute(a)) continue;
