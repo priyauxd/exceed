@@ -122,6 +122,16 @@
     var lead = key.match(/^([·•—–|✓✗]\s*)(.+)$/), tail = key.match(/^(.+?)(\s*[›→…:·.—]+)$/);
     if (lead) { var t1 = ctxTr(lead[2], p); if (t1 != null) return lead[1] + t1; }
     if (tail) { var t2 = ctxTr(tail[1], p); if (t2 != null) return t2 + tail[2].replace('→', '←'); }
+    // a " · " list: scoped wording for the parts that have it, the general dictionary for the rest
+    var seps = [' · ', ' — ', ' | '];
+    for (var s = 0; s < seps.length; s++) {
+      if (key.indexOf(seps[s]) < 0) continue;
+      var any = false, parts = key.split(seps[s]).map(function (q) {
+        var c = ctxTr(q, p); if (c != null) { any = true; return c; }
+        var g = tr(q); return g != null ? g : q;
+      });
+      if (any) return parts.join(seps[s]);
+    }
     return null;
   }
   // Pre-filled demo values in read-back forms (e.g. the CCA end-of-call summary) read in Arabic too.
