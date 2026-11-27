@@ -514,7 +514,7 @@
     .ao-block { background: transparent; padding: 0; }
     .cal-block { background: transparent; padding: 0; margin-bottom: 14px; }
     .kpi-group .metric-card, .kpi-group .dial-card { border-color: transparent; }
-    .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
+    .kpi-grid.g5 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
     .kpi-grid.g4, .kpi-grid.g7, .kpi-grid.g3 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
     .kpi-grid .metric-card { padding: 15px 16px; }
     .kpi-grid .mc-val { font-size: 20px; }
@@ -526,8 +526,6 @@
     .pg-num:hover, .pg-nav:hover:not(:disabled) { background:var(--bg); }
     .pg-num.on { background:var(--blue); color:#fff; border-color:var(--blue); }
     .pg-nav:disabled { opacity:.4; cursor:default; }
-    @media (max-width: 1200px) { .kpi-grid.g5 { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 768px) { .kpi-grid.g5 { grid-template-columns: repeat(2, 1fr); } }
 
     /* ── Queue / table panel ── */
     .q-panel {

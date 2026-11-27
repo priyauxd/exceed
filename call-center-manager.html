@@ -398,11 +398,9 @@
     .kpi-sec-title { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
     .kpi-sec-sub { font-size: 11px; color: var(--ink-muted); }
     .kpi-grid { display: grid; gap: 10px; }
-    .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
-    .kpi-grid.g7 { grid-template-columns: repeat(7, 1fr); }
-    .kpi-grid.g8 { grid-template-columns: repeat(4, 1fr); }
-    @media (max-width: 1200px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g8 { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 768px) { .kpi-grid.g5, .kpi-grid.g7, .kpi-grid.g8 { grid-template-columns: repeat(2, 1fr); } }
+    .kpi-grid.g5 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    .kpi-grid.g7 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    .kpi-grid.g8 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
 
     /* ── Queue / table panel ── */
     .q-panel {

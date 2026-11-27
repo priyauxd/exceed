@@ -773,8 +773,8 @@
     .kpi-grid { display: grid; gap: 10px; }
     .kpi-group { background: transparent; padding: 0; }
     .kpi-group .metric-card, .kpi-group .dial-card { border-color: transparent; }
-    .kpi-grid.g5 { grid-template-columns: repeat(5, 1fr); }
-    .kpi-grid.g7 { grid-template-columns: repeat(7, 1fr); }
+    .kpi-grid.g5 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    .kpi-grid.g7 { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
     .metric-card.clk:hover { border-color: #d5d9e0; }
     .dial-card.clk { cursor: pointer; }
     .stream-bar { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
@@ -1008,7 +1008,6 @@
     .tc-send { background:var(--blue); color:#fff; border:none; border-radius:8px; padding:0 16px; font-weight:600; font-family:inherit; cursor:pointer; }
     .tc-complete { background:var(--blue); color:#fff; border:none; border-radius:9px; padding:12px 20px; font-size:13.5px; font-weight:700; font-family:inherit; cursor:pointer; display:inline-flex; align-items:center; gap:7px; align-self:flex-start; opacity:.5; pointer-events:none; }
     .tc-complete.ready { opacity:1; pointer-events:auto; }
-    @media (max-width: 1200px) { .kpi-grid.g5, .kpi-grid.g7 { grid-template-columns: repeat(3, 1fr); } }
 
     .train-banner { display:flex; align-items:center; gap:10px; background: var(--blue-soft); border:1px solid #d5e0ec; border-radius: var(--radius); padding: 11px 16px; margin-bottom: 14px; font-size: 12.5px; color: var(--ink-secondary); }
     .train-banner > .material-symbols-outlined { color: var(--blue); font-size: 18px; }
