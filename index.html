@@ -7,6 +7,8 @@
   <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AGM Sales — EXEED CRM</title>
+  <script>/* The bare site link lands on the Call Center Agent dashboard; the in-app Home link (index.html) still opens this page. */
+    if (/\/$/.test(location.pathname)) location.replace("call-center-agent.html" + location.search + location.hash);</script>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
