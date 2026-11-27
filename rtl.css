@@ -86,3 +86,8 @@
 }
 /* "Send Proposal to customer": text at the right, the send arrow after it on the left. */
 [dir="rtl"] .qc-cta.send { display: flex; flex-direction: row-reverse; align-items: center; justify-content: center; gap: 6px; }
+
+/* Charts are drawn in LTR SVG coordinates. Keep text anchoring LTR so labels
+   with text-anchor="end" finish before the bars instead of running into them;
+   Arabic glyphs still read right-to-left inside each label. */
+[dir="rtl"] svg text { direction: ltr; unicode-bidi: plaintext; }

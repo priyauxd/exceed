@@ -8,8 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
-  <link href="rtl.css?v=15" rel="stylesheet" />
-  <script src="i18n-ar.js?v=41"></script>
+  <link href="rtl.css?v=16" rel="stylesheet" />
+  <script src="i18n-ar.js?v=45"></script>
   <script src="i18n.js?v=15"></script>
   <script src="customer-data.js?v=9"></script>
   <style>
@@ -48,6 +48,11 @@
     body.sb-rail .sb-group, body.sb-rail .sb-name, body.sb-rail .sb-sub { display: none; }
     body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; } body.sb-rail .sb-toggle { margin: 2px auto 10px; }
     body.sb-rail .sb-toggle .material-symbols-outlined { transform: rotate(180deg); }
+    /* toggle sits on the sidebar's edge line, nav starts at the top */
+    .sb-toggle, body.sb-rail .sb-toggle { position: fixed; top: calc(var(--topbar-h) + 14px); inset-inline-start: calc(var(--sidebar-w) - 13px); z-index: 30;
+      width: 26px; height: 26px; margin: 0; transition: inset-inline-start .25s ease, background .15s ease, box-shadow .15s ease, color .15s ease; }
+    .sb-toggle .material-symbols-outlined { font-size: 18px; }
+    body.sb-rail .sb-toggle { inset-inline-start: 47px; }
     .main { margin-inline-start: var(--sidebar-w); margin-top: var(--topbar-h); flex: 1; display: flex; flex-direction: column; min-width: 0; height: calc(100vh - var(--topbar-h)); overflow: hidden; }
     .cmdbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 16px; height: 34px; display: flex; align-items: center; gap: 3px; font-size: 11px; color: var(--ink-muted); overflow-x: auto; flex-shrink: 0; }
     .cmd-sep { width: 1px; height: 14px; background: var(--border); margin: 0 3px; }

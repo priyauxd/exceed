@@ -1447,6 +1447,11 @@
     body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
     body.sb-rail .sb-toggle { margin: 2px auto 10px; }
     body.sb-rail .sb-toggle .material-symbols-outlined { transform: rotate(180deg); }
+    /* toggle sits on the sidebar's edge line, nav starts at the top */
+    .sb-toggle, body.sb-rail .sb-toggle { position: fixed; top: calc(var(--topbar-h) + 14px); inset-inline-start: calc(var(--sidebar-w) - 13px); z-index: 30;
+      width: 26px; height: 26px; margin: 0; transition: inset-inline-start .25s ease, background .15s ease, box-shadow .15s ease, color .15s ease; }
+    .sb-toggle .material-symbols-outlined { font-size: 18px; }
+    body.sb-rail .sb-toggle { inset-inline-start: 47px; }
     @media (max-width: 640px) { .topbar .search { display: none; } }
     </style>
 </head>

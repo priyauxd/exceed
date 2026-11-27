@@ -10,8 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
-  <link href="rtl.css?v=15" rel="stylesheet" />
-  <script src="i18n-ar.js?v=41"></script>
+  <link href="rtl.css?v=16" rel="stylesheet" />
+  <script src="i18n-ar.js?v=45"></script>
   <script src="i18n.js?v=15"></script>
   <style>
     :root {
@@ -602,6 +602,11 @@
     body.sb-rail .sb-brand { justify-content: center; padding: 14px 0; }
     body.sb-rail .sb-toggle { margin: 2px auto 10px; }
     body.sb-rail .sb-toggle .material-symbols-outlined { transform: rotate(180deg); }
+    /* toggle sits on the sidebar's edge line, nav starts at the top */
+    .sb-toggle, body.sb-rail .sb-toggle { position: fixed; top: calc(var(--topbar-h) + 14px); inset-inline-start: calc(var(--sidebar-w) - 13px); z-index: 30;
+      width: 26px; height: 26px; margin: 0; transition: inset-inline-start .25s ease, background .15s ease, box-shadow .15s ease, color .15s ease; }
+    .sb-toggle .material-symbols-outlined { font-size: 18px; }
+    body.sb-rail .sb-toggle { inset-inline-start: 47px; }
     @media (max-width: 768px) {
       .sidebar { width: 60px; }
       .main { margin-inline-start: 60px; }
@@ -1443,7 +1448,7 @@
     function fmtPct(v){ return (Math.round(v*10)/10) + '%'; }
 
     function trendSVG(m){
-      var W=520,H=200,padL=32,padR=14,padT=14,padB=26;
+      var W=(function(){var c=document.querySelector('.mdr-chart'),w=c&&c.clientWidth?c.clientWidth-24:0;return w>=360?w:820;})(),H=200,padL=32,padR=14,padT=14,padB=26;
       var pw=W-padL-padR, ph=H-padT-padB, n=m.trend.length, yMax=m.yTrendMax;
       var X=function(i){ return padL + pw*(i/(n-1)); };
       var Y=function(v){ return padT + ph*(1 - v/yMax); };
@@ -1458,13 +1463,14 @@
       var poly='<polyline class="mdr-line" points="'+pts.join(' ')+'"/>';
       var dots=m.trend.map(function(v,i){ return '<circle cx="'+X(i)+'" cy="'+Y(v)+'" r="3" class="mdr-dot"/>'; }).join('');
       var xl=['-6w','-5w','-4w','-3w','-2w','-1w','Now'];
-      var xlab=xl.map(function(l,i){ return '<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="middle">'+l+'</text>'; }).join('');
+      var _ev=xl.length>8?2:1, xlab=xl.map(function(l,i){ return ((xl.length-1-i)%_ev)?'':'<text x="'+X(i)+'" y="'+(H-8)+'" class="mdr-axl" text-anchor="'+(i===0?'start':i===xl.length-1?'end':'middle')+'">'+l+'</text>'; }).join('');
       return '<svg viewBox="0 0 '+W+' '+H+'" class="mdr-trend-svg">'+grid+ylab+tline+poly+dots+xlab+'</svg>';
     }
 
     function branchSVG(m){
       var sorted=m.branches.slice().sort(function(a,b){ return m.higherIsBetter ? b.v-a.v : a.v-b.v; });
-      var W=520,padL=118,padR=22,padT=6,padB=24, rowH=34;
+      var _hc=document.querySelector('.mdr-chart'), _hw=_hc&&_hc.clientWidth?_hc.clientWidth-24:0;
+      var W=_hw>=360?_hw:820,padL=128,padR=22,padT=6,padB=24, rowH=34;
       var H=padT+padB+rowH*sorted.length, pw=W-padL-padR, xMax=m.xMax;
       var BX=function(v){ return pw*(v/xMax); };
       var gl='',ax='';
@@ -1538,7 +1544,9 @@
     document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeMetric(); });
   </script>
   <style>
-    .avt-td{display:flex;align-items:center;gap:9px;}
+    .avt-td{display:table-cell;white-space:nowrap;}
+    .avt-td>.avt{vertical-align:middle;margin-inline-end:9px;}
+    .avt-td>.avt-text{display:inline-block;vertical-align:middle;white-space:normal;}
     .avt{width:26px;height:26px;border-radius:50%;flex-shrink:0;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;letter-spacing:.02em;}
     .avt-text{min-width:0;}
     .avt.own{background:#e6e7ea;color:#5b6472;font-weight:700;}
@@ -1602,14 +1610,14 @@
   (function(){
     if(typeof METRICS==='undefined') return;
     var CC = [
-      {lead:'Zayed Al Nuaimi',id:'L-2026-06015',temp:'Hot', source:'Call Center Inbound',stage:'New Leads',owner:'Unassigned',      sla:'5 min overdue', slaC:'red',  qual:'0%',  next:'Assign to agent — SLA breached', routing:'Call center',  status:'SLA Breached'},
+      {lead:'Zayed Al Nuaimi',id:'L-2026-06015',temp:'Hot', source:'Call Center Inbound',stage:'New',owner:'Unassigned',      sla:'5 min overdue', slaC:'red',  qual:'0%',  next:'Assign to agent — SLA breached', routing:'Call center',  status:'SLA Breached'},
       {lead:'Farida Zohra',   id:'L-2026-06007',temp:'Warm',source:'Campaign Callback',   stage:'Contact',  owner:'Aisha Hussein',    sla:'40 min overdue',slaC:'red',  qual:'30%', next:'Escalate — 40 min overdue',     routing:'Call center',  status:'SLA Breached'},
       {lead:'Ali Kassem',     id:'L-2026-06001',temp:'Warm',source:'Call Center Inbound',stage:'Contact',  owner:'Rahul Krishnan',   sla:'12 min overdue',slaC:'red',  qual:'40%', next:'Start call — SLA breached',     routing:'Call center',  status:'SLA Breached'},
       {lead:'Meera Shah',     id:'L-2026-06002',temp:'Hot', source:'800 Number',         stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'8 min left',    slaC:'amber',qual:'20%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
-      {lead:'Hana Barakat',   id:'L-2026-06016',temp:'Warm',source:'800 Number',         stage:'New Leads',owner:'Unassigned',      sla:'4 min left',    slaC:'amber',qual:'0%',  next:'Assign to agent — SLA due soon', routing:'Call center',  status:'Not Actioned'},
+      {lead:'Hana Barakat',   id:'L-2026-06016',temp:'Warm',source:'800 Number',         stage:'New',owner:'Unassigned',      sla:'4 min left',    slaC:'amber',qual:'0%',  next:'Assign to agent — SLA due soon', routing:'Call center',  status:'Not Actioned'},
       {lead:'Layan Otaibi',   id:'L-2026-06011',temp:'Hot', source:'Campaign Callback',   stage:'Contact',  owner:'Ivan Petrov',      sla:'15 min left',   slaC:'',     qual:'50%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
       {lead:'Sam Fadi',       id:'L-2026-06006',temp:'Hot', source:'800 Number',         stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'25 min left',   slaC:'',     qual:'100%',next:'Hand over to Sales',             routing:'Call center',  status:'Contact'},
-      {lead:'Ranya Al Amir',  id:'L-2026-06017',temp:'Warm',source:'Campaign Callback',   stage:'New Leads',owner:'Unassigned',      sla:'22 min left',   slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'Not Actioned'},
+      {lead:'Ranya Al Amir',  id:'L-2026-06017',temp:'Warm',source:'Campaign Callback',   stage:'New',owner:'Unassigned',      sla:'22 min left',   slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'Not Actioned'},
       {lead:'Rerouted Web',   id:'L-2026-06014',temp:'Warm',source:'Website',            stage:'Contact',  owner:'Priya Nair',       sla:'30 min left',   slaC:'',     qual:'20%', next:'Start call · CC qualification',  routing:'Rerouted to CC',status:'Not Actioned'},
       {lead:'Sara Ali',       id:'L-2026-06101',temp:'Warm',source:'Call Center Inbound',stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'30 min left',   slaC:'',     qual:'90%', next:'Complete missing field',         routing:'Returned by sales',status:'Returned'},
       {lead:'Mira Khaled',    id:'L-2026-06102',temp:'Warm',source:'Manual CC Queue',    stage:'Contact',  owner:'Nadia Al Suwaidi', sla:'30 min left',   slaC:'',     qual:'70%', next:'Verify number',                  routing:'Returned by sales',status:'Returned'},
@@ -1620,9 +1628,9 @@
       {lead:'Rita Fernandez', id:'L-2026-06005',temp:'Cold',source:'Call Center Inbound',stage:'Contact',  owner:'Mohammed Zaid',    sla:'2h left',       slaC:'',     qual:'100%',next:'Callback tomorrow',              routing:'Call center',  status:'Callback'},
       {lead:'Karim Mansour',  id:'L-2026-06008',temp:'Warm',source:'Website',            stage:'Contact',  owner:'Priya Nair',       sla:'45 min left',   slaC:'',     qual:'60%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
       {lead:'Noor Fahad',     id:'L-2026-06010',temp:'Hot', source:'800 Number',         stage:'Contact',  owner:'Ivan Petrov',      sla:'50 min left',   slaC:'',     qual:'70%', next:'Start call',                     routing:'Call center',  status:'Not Actioned'},
-      {lead:'Bassel Nasr',    id:'L-2026-06012',temp:'Warm',source:'Manual CC Queue',    stage:'New Leads',owner:'Unassigned',      sla:'1h left',       slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'New'},
+      {lead:'Bassel Nasr',    id:'L-2026-06012',temp:'Warm',source:'Manual CC Queue',    stage:'New',owner:'Unassigned',      sla:'1h left',       slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'New'},
       {lead:'Dina Salah',     id:'L-2026-06018',temp:'Warm',source:'Campaign Callback',   stage:'Contact',  owner:'Mohammed Zaid',    sla:'1h 10m left',   slaC:'',     qual:'80%', next:'Start call',                     routing:'Call center',  status:'Contact'},
-      {lead:'Omar Zaki',      id:'L-2026-06019',temp:'Cold',source:'Website',            stage:'New Leads',owner:'Unassigned',      sla:'1h 20m left',   slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'New'}
+      {lead:'Omar Zaki',      id:'L-2026-06019',temp:'Cold',source:'Website',            stage:'New',owner:'Unassigned',      sla:'1h 20m left',   slaC:'',     qual:'0%',  next:'Assign to agent',                routing:'Call center',  status:'New'}
     ];
     CC.forEach(function(l){ l.channel='WhatsApp · English'; });
 
