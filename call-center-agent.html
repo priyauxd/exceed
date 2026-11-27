@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <link href="rtl.css?v=17" rel="stylesheet" />
-  <script src="i18n-ar.js?v=47"></script>
+  <script src="i18n-ar.js?v=48"></script>
   <script src="i18n.js?v=15"></script>
   <style>
     :root {
@@ -2429,6 +2429,9 @@
     .avt-td{display:table-cell;white-space:nowrap;}
     .avt-td>.avt{vertical-align:middle;margin-inline-end:9px;}
     .avt-td>.avt-text{display:inline-block;vertical-align:middle;white-space:normal;}
+    /* drawer lists: owner names stay on one line so the column widens instead of running into Source */
+    .mdr-leads .avt-td>.avt-text{white-space:nowrap;}
+    .mdr-leads td.avt-td{padding-inline-end:18px;}
     .avt{width:26px;height:26px;border-radius:50%;flex-shrink:0;color:#fff;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;line-height:1;letter-spacing:.02em;}
     .avt-text{min-width:0;}
     .avt.own{background:#e6e7ea;color:#5b6472;font-weight:700;}

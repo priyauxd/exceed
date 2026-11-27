@@ -2550,7 +2550,7 @@
     'EV': 'كهربائية',
     'Exeed': 'EXEED',
     'SZR': 'شارع الشيخ زايد', 'DEI': 'ديرة', 'AUH': 'أبوظبي', 'SHJ': 'الشارقة', 'AAN': 'العين',
-    'SZR — Sheikh Zayed Road': 'شارع الشيخ زايد',
+    'SZR — Sheikh Zayed Road': 'SZR — شارع الشيخ زايد',
     'COPILOT': 'Copilot',
     'Capture needs, budget and finance discussion from this session.': 'سجّل العرض المقدَّم وشروط التمويل وردّ العميل.',
     'Record deposit collection and order confirmation.': 'سجّل تاريخ التسليم ووقته المتفق عليهما مع العميل.',
