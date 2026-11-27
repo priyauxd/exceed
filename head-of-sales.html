@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="fluent-tokens.css?v=3" rel="stylesheet" />
   <link href="rtl.css?v=17" rel="stylesheet" />
-  <script src="i18n-ar.js?v=49"></script>
+  <script src="i18n-ar.js?v=51"></script>
   <script src="i18n.js?v=15"></script>
   <style>
     :root {
@@ -2193,6 +2193,9 @@
           '<button class="cs-btn pri" onclick="showToast(\'Coaching invite sent to '+name.replace(/\x27/g,'')+'\');closeCoachingSchedule()">Send invite</button></div>'+
       '</div>';
       box.classList.add('open');
+      // the agenda is an editable textarea, which the page translator leaves alone; prefill it in Arabic
+      var csTa=box.querySelector('.cs-ta');
+      if(csTa && window.I18N && I18N.lang==='ar'){ var csAr=I18N.t(csTa.value); csTa.value=(window.I18N_AR&&I18N_AR.post)?I18N_AR.post(csAr):csAr; }
     };
     function openAdvisorMetric(m){
       var cards=m.advisors.map(function(a){
